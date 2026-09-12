@@ -5,6 +5,8 @@ Main application with GUI
 import tkinter as tk
 from tkinter import ttk, messagebox, scrolledtext, filedialog
 import threading
+import tempfile
+from contextlib import contextmanager
 import json
 import os
 import sys
@@ -751,219 +753,110 @@ class LekmodInstaller:
             self.hide_progress()
             self.refresh_btn.config(state=tk.NORMAL)
             
-    def install_update(self):
-        """Install or update Lekmod"""
-        selected_version_display = self.version_var.get()
-        if not selected_version_display:
-            messagebox.showwarning("No Version", 
-                                  "Please select a version to install")
-            return
-            
-        # Extract version number (format: "v35.2 - 2025-01-15 (150 MB)")
-        selected_version = selected_version_display.split(' - ')[0]
-        
-        # Get UI type
-        ui_type = "Enhanced UI (EUI)" if self.use_eui.get() else "Standard UI"
-            
-        # Confirm installation
-        confirm = messagebox.askyesno(
-            "Confirm Installation",
-            f"Install Lekmod {selected_version}\n"
-            f"UI Mode: {ui_type}\n\n"
-            f"This will replace any existing installation.\n"
-            f"Continue?"
-        )
-        
-        if not confirm:
-            return
-            
-        self.log(f"Starting installation of Lekmod {selected_version}...")
-        self.log(f"UI Mode: {ui_type}")
-        self.log("=" * 50)
-        self._set_action_buttons(False)
-        
-        # Show indeterminate progress for now
-        self.show_indeterminate_progress()
-        
-        threading.Thread(target=self._install_thread, 
-                        args=(selected_version, ui_type),
-                        daemon=True).start()
-        
-    def _install_thread(self, version, ui_type):
-        try:
-            # Get and verify path
-            civ5_path = self.install_path_var.get()
-            if not civ5_path or not os.path.exists(civ5_path):
-                raise Exception("Invalid Civilization V path! Please verify the installation path.")
-            
-            self.ui_manager.civ5_path = civ5_path
-            
-            # Check for existing LEKMOD installations
-            existing_folders = self.ui_manager.find_existing_lekmod_folders(civ5_path)
-            
-            if existing_folders:
-                # Ask user what to do
-                folder_list = "\n  - ".join(existing_folders)
-                
-                response = messagebox.askyesnocancel(
-                    "Existing LEKMOD Installation Found",
-                    f"Found existing LEKMOD installation(s):\n\n  - {folder_list}\n\n"
-                    f"These will be replaced after {version} is ready to install.\n\n"
-                    f"Replace and continue?\n\n"
-                    f"(Click 'No' to cancel installation)",
-                    icon='warning'
-                )
-                
-                if response is None or response is False:
-                    # User clicked Cancel or No
-                    self.log("Installation cancelled by user")
-                    return
-                
-            # 1. Download from Google Drive
-            self.log(f"📥 Downloading Lekmod {version} from Google Drive...")
-            
-            # Get version info from GitHub (not bundled config)
-            all_versions = self.updater.get_available_versions()
-            if version not in all_versions:
-                raise Exception(f"Version {version} not found in available versions!")
-            
-            version_info = all_versions[version]
-            download_path = self.downloader.download_version_with_info(
-                version, version_info, self.log, self.set_progress
-            )
-            
-            # 2. Extract
+    @contextmanager
+    def _download_release(self, version, info, prefix):
+        # Own the download and extraction together, including partially written files.
+        with tempfile.TemporaryDirectory(prefix='lekmod-install-') as temporary:
+            archive = self.downloader.download_version_with_info(
+                version, info, self.log, self.set_progress,
+                filename_prefix=prefix, download_dir=temporary)
             self.show_indeterminate_progress()
-            self.log("📦 Extracting files...")
-            extract_path = self.ui_manager.extract_mod(download_path, self.log)
-            
-            # 3. Configure UI files
-            self.log(f"⚙️ Configuring for {ui_type}...")
-            self.ui_manager.configure_ui_files(extract_path, ui_type, self.log, civ5_path=civ5_path)
-            
-            # 4. Install to Civ 5
-            self.log(f"📂 Installing to Civilization V as LEKMOD_{version}...")
-            self.ui_manager.install_mod(extract_path, civ5_path, version, self.log)
-            
-            # 5. Cleanup
-            self.log("🧹 Cleaning up temporary files...")
-            import shutil
-            try:
-                os.remove(download_path)
-                shutil.rmtree(extract_path)
-            except:
-                pass
-            
-            self.log("=" * 50)
-            self.log("✅ Installation complete!")
-            self.log("=" * 50)
-            messagebox.showinfo("Success", 
-                               f"Lekmod {version} installed successfully!\n\n"
-                               f"UI Mode: {ui_type}\n"
-                               f"Location: {civ5_path}/Assets/DLC/LEKMOD_{version}")
-            
-        except Exception as e:
-            self.log("=" * 50)
-            self.log(f"❌ Installation failed: {e}")
-            self.log("=" * 50)
-            messagebox.showerror("Installation Failed", 
-                               f"Installation failed:\n\n{str(e)}\n\n"
-                               f"Please check the log for details.")
-        finally:
+            self.log('Extracting files...')
+            yield self.ui_manager.extract_mod(archive, self.log, extract_name=prefix.lower() + '_temp')
+
+    def _start_install(self, operation):
+        self._set_action_buttons(False)
+        self.show_indeterminate_progress()
+        threading.Thread(target=self._run_install, args=(operation,), daemon=True).start()
+
+    def _run_install(self, operation):
+        error = None
+        message = None
+        try:
+            message = operation()
+            self.log('Installation complete!')
+        except Exception as exception:
+            error = str(exception)
+            self.log(f'Installation failed: {error}')
+
+        def finish():
             self.hide_progress()
             self._set_action_buttons(True)
             self.check_installed_version()
+            if error is None:
+                messagebox.showinfo('Success', message)
+            else:
+                messagebox.showerror('Installation Failed',
+                                     f'Installation failed:\n\n{error}\n\nPlease check the log for details.')
+        self.root.after(0, finish)
+
+    def install_update(self):
+        """Collect UI choices and confirmations before starting the worker."""
+        selected = self.version_var.get()
+        if not selected:
+            messagebox.showwarning('No Version', 'Please select a version to install')
+            return
+        version = selected.split(' - ')[0]
+        ui_type = 'Enhanced UI (EUI)' if self.use_eui.get() else 'Standard UI'
+        civ5_path = self.install_path_var.get()
+        if not civ5_path or not os.path.exists(civ5_path):
+            messagebox.showerror('Invalid Path', 'Please verify the Civilization V installation path first.')
+            return
+        if not messagebox.askyesno('Confirm Installation',
+                f'Install Lekmod {version}\nUI Mode: {ui_type}\n\nThis will replace any existing installation.\nContinue?'):
+            return
+        existing = self.ui_manager.find_existing_lekmod_folders(civ5_path)
+        if existing:
+            folders = '\n  - '.join(existing)
+            if not messagebox.askyesnocancel('Existing LEKMOD Installation Found',
+                    f'Found existing LEKMOD installation(s):\n\n  - {folders}\n\nReplace after the new files are ready?', icon='warning'):
+                self.log('Installation cancelled by user')
+                return
+        self.log(f'Starting installation of Lekmod {version} ({ui_type})...')
+        self._start_install(lambda: self._install_thread(version, ui_type, civ5_path))
+
+    def _install_thread(self, version, ui_type, civ5_path):
+        versions = self.updater.get_available_versions()
+        if version not in versions:
+            raise RuntimeError(f'Version {version} not found in available versions!')
+        with self._download_release(version, versions[version], 'LEKMOD') as extracted:
+            self.ui_manager.configure_ui_files(extracted, ui_type, self.log, civ5_path=civ5_path)
+            # install_mod stages the replacement and rolls back any failed commit.
+            self.ui_manager.install_mod(extracted, civ5_path, version, self.log)
+        return (f'Lekmod {version} installed successfully!\n\nUI Mode: {ui_type}\n'
+                f'Location: {civ5_path}/Assets/DLC/LEKMOD_{version}')
 
     def install_lekmap_update(self):
-        """Install or update Lekmap map scripts"""
-        selected_version_display = self.lekmap_version_var.get()
-        if not selected_version_display:
-            messagebox.showwarning("No Version",
-                                  "Please select a Lekmap version to install")
+        selected = self.lekmap_version_var.get()
+        if not selected:
+            messagebox.showwarning('No Version', 'Please select a Lekmap version to install')
             return
-
-        selected_version = selected_version_display.split(' - ')[0]
+        version = selected.split(' - ')[0]
         civ5_path = self.install_path_var.get()
         maps_dir = self.ui_manager.find_civ5_maps_folder(civ5_path)
         if not maps_dir:
-            messagebox.showerror("Invalid Path",
-                                 "Please verify the Civilization V installation path first.")
+            messagebox.showerror('Invalid Path', 'Please verify the Civilization V installation path first.')
             return
-
-        dest, _folder_name = self.ui_manager._lekmap_dest_folder(maps_dir, selected_version)
-        confirm = messagebox.askyesno(
-            "Confirm Installation",
-            f"Install {selected_version}\n\n"
-            f"The map folder will be copied to:\n{dest}\n\n"
-            f"An existing folder with that name will be replaced.\n"
-            f"Continue?"
-        )
-        if not confirm:
+        destination, _ = self.ui_manager._lekmap_dest_folder(maps_dir, version)
+        if not messagebox.askyesno('Confirm Installation',
+                f'Install {version}\n\nThe map folder will be copied to:\n{destination}\n\n'
+                'An existing folder with that name will be replaced.\nContinue?'):
             return
+        versions = dict(self.lekmap_versions_data)
+        self.log(f'Starting installation of {version}...')
+        self._start_install(lambda: self._install_lekmap_thread(version, civ5_path, versions))
 
-        self.log(f"Starting installation of {selected_version}...")
-        self.log("=" * 50)
-        self._set_action_buttons(False)
-        self.show_indeterminate_progress()
-        threading.Thread(target=self._install_lekmap_thread,
-                        args=(selected_version,),
-                        daemon=True).start()
-
-    def _install_lekmap_thread(self, version):
-        try:
-            all_versions = self.lekmap_versions_data or self.updater.get_available_versions(
-                url=self.config.get('lekmap_version_check_url'),
-                fallback_key='lekmap_versions',
-                allow_empty=True
-            )
-            if version not in all_versions:
-                alt = version[6:].strip() if version.lower().startswith("lekmap") else f"Lekmap {version}"
-                if alt in all_versions:
-                    version = alt
-                else:
-                    raise Exception(f"Version {version} not found in available Lekmap versions!")
-
-            version_info = all_versions[version]
-            self.log(f"📥 Downloading {version} from Google Drive...")
-            download_path = self.downloader.download_version_with_info(
-                version, version_info, self.log, self.set_progress, filename_prefix="LEKMAP"
-            )
-
-            self.show_indeterminate_progress()
-            self.log("📦 Extracting files...")
-            extract_path = self.ui_manager.extract_mod(download_path, self.log, extract_name="lekmap_temp")
-
-            self.log("📂 Installing map scripts...")
-            civ5_path = self.install_path_var.get()
-            maps_dir = self.ui_manager.install_lekmap(
-                extract_path, version, self.log, civ5_path=civ5_path
-            )
-
-            self.log("🧹 Cleaning up temporary files...")
-            import shutil
-            try:
-                os.remove(download_path)
-                shutil.rmtree(extract_path)
-            except Exception:
-                pass
-
-            self.log("=" * 50)
-            self.log("✅ Lekmap installation complete!")
-            self.log("=" * 50)
-            messagebox.showinfo("Success",
-                               f"{version} installed successfully!\n\n"
-                               f"Location: {maps_dir}")
-        except Exception as e:
-            self.log("=" * 50)
-            self.log(f"❌ Lekmap installation failed: {e}")
-            self.log("=" * 50)
-            messagebox.showerror("Installation Failed",
-                               f"Lekmap installation failed:\n\n{str(e)}\n\n"
-                               f"Please check the log for details.")
-        finally:
-            self.hide_progress()
-            self._set_action_buttons(True)
-            self.check_installed_version()
+    def _install_lekmap_thread(self, version, civ5_path, versions):
+        versions = versions or self.updater.get_available_versions(
+            url=self.config.get('lekmap_version_check_url'), fallback_key='lekmap_versions', allow_empty=True)
+        if version not in versions:
+            alternate = version[6:].strip() if version.lower().startswith('lekmap') else f'Lekmap {version}'
+            if alternate not in versions:
+                raise RuntimeError(f'Version {version} not found in available Lekmap versions!')
+            version = alternate
+        with self._download_release(version, versions[version], 'LEKMAP') as extracted:
+            maps_dir = self.ui_manager.install_lekmap(extracted, version, self.log, civ5_path=civ5_path)
+        return f'{version} installed successfully!\n\nLocation: {maps_dir}'
 
     def _create_text_header(self, header):
         """Fallback text header if banner image not found"""

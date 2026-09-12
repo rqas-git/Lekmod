@@ -56,7 +56,8 @@ class InstallTests(unittest.TestCase):
         worker.ui_manager = self.manager
         worker.install_path_var.get.return_value = str(self.game)
         worker.updater.get_available_versions.side_effect = RuntimeError('offline')
-        scope['_install_thread'](worker, 'v2', 'standard')
+        with self.assertRaisesRegex(RuntimeError, 'offline'):
+            scope['_install_thread'](worker, 'v2', 'standard', str(self.game))
         self.assertEqual((self.old / 'old.txt').read_text(), 'working')
 
     def test_commit_failure_restores_all_previous_versions(self):

@@ -10,7 +10,7 @@ class GoogleDriveDownloader:
         self.config = config
         self.base_url = "https://drive.google.com/uc?export=download"
         
-    def download_version_with_info(self, version, version_info, log_callback, progress_callback=None, filename_prefix="LEKMOD"):
+    def download_version_with_info(self, version, version_info, log_callback, progress_callback=None, filename_prefix="LEKMOD", download_dir=None):
         """Download version from Google Drive using provided version info"""
         if not version_info:
             raise Exception(f"No configuration found for version {version}")
@@ -19,7 +19,7 @@ class GoogleDriveDownloader:
         if not file_id:
             raise Exception(f"No Google Drive file ID found for version {version}")
             
-        return self._download_file(file_id, version, log_callback, progress_callback, filename_prefix=filename_prefix)
+        return self._download_file(file_id, version, log_callback, progress_callback, filename_prefix=filename_prefix, download_dir=download_dir)
         
     def download_version(self, version, log_callback):
         """Download version from Google Drive (legacy method)"""
@@ -36,7 +36,7 @@ class GoogleDriveDownloader:
         
         return self._download_file(file_id, version, log_callback, filename_prefix="LEKMOD")
     
-    def _download_file(self, file_id, version, log_callback, progress_callback=None, filename_prefix="LEKMOD"):
+    def _download_file(self, file_id, version, log_callback, progress_callback=None, filename_prefix="LEKMOD", download_dir=None):
         """Internal method to download file from Google Drive"""
         log_callback(f"Connecting to Google Drive...")
         log_callback(f"File ID: {file_id}")
@@ -116,7 +116,7 @@ class GoogleDriveDownloader:
         total_size = int(response.headers.get('content-length', 0))
         
         # Save file
-        download_dir = Path.cwd() / "downloads"
+        download_dir = Path(download_dir) if download_dir is not None else Path.cwd() / "downloads"
         download_dir.mkdir(exist_ok=True)
         
         # Use version-specific filename

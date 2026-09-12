@@ -43,3 +43,19 @@ development files:
 ```sh
 python3 -B -m unittest discover -s tests -p test_yield_matrix.py -v
 ```
+
+## Installer lifecycle
+
+The Windows installer captures choices and confirmations on the UI thread before
+starting work. Lekmod and Lekmap share temporary download/extraction ownership and
+schedule completion dialogs and controls through `root.after`. The Lekmod worker
+calls the transactional `UIManager.install_mod` directly: it must never delete old
+installations before staging the replacement. Self-update validation and rollback
+remain in `installer_updater.py`.
+
+Run both controller integration and filesystem rollback checks:
+
+```sh
+python3 -B -m unittest discover -s tests -p test_installer_flow.py -v
+python3 -B -m unittest discover -s LekmodInstaller/tests -v
+```
