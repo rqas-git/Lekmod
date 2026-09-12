@@ -5165,6 +5165,46 @@ UnitTypes CvPlayerTrade::GetTradeUnit (DomainTypes eDomain)
 	return eUnitType;
 }
 
+// Same eligibility as a nonempty GetPlotToolTips result, without formatting strings.
+bool CvPlayerTrade::HasPlotToolTips(CvPlot* pPlot) const
+{
+	if(!pPlot)
+	{
+		return false;
+	}
+
+	CvGameTrade* pTrade = GC.getGame().GetGameTrade();
+	PlayerTypes ePlayer = m_pPlayer->GetID();
+	int iX = pPlot->getX();
+	int iY = pPlot->getY();
+	for(uint ui = 0; ui < pTrade->m_aTradeConnections.size(); ui++)
+	{
+		if(pTrade->IsTradeRouteIndexEmpty(ui))
+		{
+			continue;
+		}
+		const TradeConnection& kConnection = pTrade->m_aTradeConnections[ui];
+		if(kConnection.m_eOriginOwner != ePlayer && kConnection.m_eDestOwner != ePlayer)
+		{
+			// Third-party routes expose only their trade unit's current plot.
+			const TradeConnectionPlot& kUnitPlot = kConnection.m_aPlotList[kConnection.m_iTradeUnitLocationIndex];
+			if(kUnitPlot.m_iX == iX && kUnitPlot.m_iY == iY)
+			{
+				return true;
+			}
+			continue;
+		}
+		for(uint uiPlot = 0; uiPlot < kConnection.m_aPlotList.size(); uiPlot++)
+		{
+			if(kConnection.m_aPlotList[uiPlot].m_iX == iX && kConnection.m_aPlotList[uiPlot].m_iY == iY)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 //	--------------------------------------------------------------------------------
 #ifdef AUI_CONSTIFY
 std::vector<CvString> CvPlayerTrade::GetPlotToolTips(CvPlot* pPlot) const
@@ -5997,7 +6037,7 @@ int CvTradeAI::ScoreProductionTR (const TradeConnection& kTradeConnection, std::
 // sort player numbers
 struct TRSortElement
 {
-	TradeConnection m_kTradeConnection;
+	uint m_uiConnectionIndex;
 	int m_iScore;
 };
 
@@ -6021,6 +6061,7 @@ void CvTradeAI::PrioritizeTradeRoutes(TradeConnectionList& aTradeConnectionList)
 		return;
 	}
 
+	// Rank indices so sorting does not repeatedly copy complete route paths.
 	// score TR
 	std::vector<TRSortElement> aProductionSortedTR;
 	std::vector<TRSortElement> aFoodSortedTR;
@@ -6053,13 +6094,13 @@ void CvTradeAI::PrioritizeTradeRoutes(TradeConnectionList& aTradeConnectionList)
 			for (TradeConnectionList::iterator it = aTradeConnectionList.begin(); it != aTradeConnectionList.end(); ++it)
 			{
 				TRSortElement kElement;
-				kElement.m_kTradeConnection = *it;
+				kElement.m_uiConnectionIndex = static_cast<uint>(it - aTradeConnectionList.begin());
 				kElement.m_iScore = ScoreFoodTR(*it, pSmallestCity);
 #else
 			for (uint ui = 0; ui < aTradeConnectionList.size(); ui++)
 			{
 				TRSortElement kElement;
-				kElement.m_kTradeConnection = aTradeConnectionList[ui];
+				kElement.m_uiConnectionIndex = ui;
 				kElement.m_iScore = ScoreFoodTR(aTradeConnectionList[ui], pSmallestCity);
 #endif
 				if (kElement.m_iScore > 0)
@@ -6068,7 +6109,7 @@ void CvTradeAI::PrioritizeTradeRoutes(TradeConnectionList& aTradeConnectionList)
 				}
 			}
 
-			std::stable_sort(aFoodSortedTR.begin(), aFoodSortedTR.end(), SortTR());
+			// Only the first positive minimum is consumed; select it below.
 		}
 	}
 
@@ -6109,13 +6150,13 @@ void CvTradeAI::PrioritizeTradeRoutes(TradeConnectionList& aTradeConnectionList)
 		for (TradeConnectionList::iterator it = aTradeConnectionList.begin(); it != aTradeConnectionList.end(); ++it)
 		{
 			TRSortElement kElement;
-			kElement.m_kTradeConnection = *it;
+			kElement.m_uiConnectionIndex = static_cast<uint>(it - aTradeConnectionList.begin());
 			kElement.m_iScore = ScoreProductionTR(*it, apProductionTargetCities);
 #else
 		for (uint ui = 0; ui < aTradeConnectionList.size(); ui++)
 		{
 			TRSortElement kElement;
-			kElement.m_kTradeConnection = aTradeConnectionList[ui];
+			kElement.m_uiConnectionIndex = ui;
 			kElement.m_iScore = ScoreProductionTR(aTradeConnectionList[ui], apProductionTargetCities);
 #endif
 			if (kElement.m_iScore > 0)
@@ -6123,7 +6164,7 @@ void CvTradeAI::PrioritizeTradeRoutes(TradeConnectionList& aTradeConnectionList)
 				aProductionSortedTR.push_back(kElement);
 			}
 		}
-		std::stable_sort(aProductionSortedTR.begin(), aProductionSortedTR.end(), SortTR());
+		// Only the first positive minimum is consumed; select it below.
 	}
 
 	// GOLD GOLD GOLD GOLD
@@ -6132,13 +6173,13 @@ void CvTradeAI::PrioritizeTradeRoutes(TradeConnectionList& aTradeConnectionList)
 	for (TradeConnectionList::iterator it = aTradeConnectionList.begin(); it != aTradeConnectionList.end(); ++it)
 	{
 		TRSortElement kElement;
-		kElement.m_kTradeConnection = *it;
+		kElement.m_uiConnectionIndex = static_cast<uint>(it - aTradeConnectionList.begin());
 		kElement.m_iScore = ScoreInternationalTR(*it);
 #else
 	for (uint ui = 0; ui < aTradeConnectionList.size(); ui++)
 	{
 		TRSortElement kElement;
-		kElement.m_kTradeConnection = aTradeConnectionList[ui];
+		kElement.m_uiConnectionIndex = ui;
 		kElement.m_iScore = ScoreInternationalTR(aTradeConnectionList[ui]);
 #endif
 		if (kElement.m_iScore > 0)
@@ -6149,8 +6190,9 @@ void CvTradeAI::PrioritizeTradeRoutes(TradeConnectionList& aTradeConnectionList)
 	std::stable_sort(aGoldSortedTR.begin(), aGoldSortedTR.end(), SortTR());
 	uint uiNumInternationalTradesToAdd = 2;
 
-	// clear list
-	aTradeConnectionList.clear();
+	// Ranking indices refer into the candidates. Materialize before clearing them.
+	std::vector<TradeConnection> aPrioritizedTR;
+	aPrioritizedTR.reserve(aGoldSortedTR.size() + (aFoodSortedTR.empty() ? 0 : 1) + (aProductionSortedTR.empty() ? 0 : 1));
 
 	// add all the gold trs
 #ifdef AUI_ITERATORIZE
@@ -6158,45 +6200,47 @@ void CvTradeAI::PrioritizeTradeRoutes(TradeConnectionList& aTradeConnectionList)
 	uint ui = 0;
 	for (it = aGoldSortedTR.begin(); ui < uiNumInternationalTradesToAdd && it < aGoldSortedTR.end(); ++it)
 	{
-		aTradeConnectionList.push_back(it->m_kTradeConnection);
+		aPrioritizedTR.push_back(aTradeConnectionList[it->m_uiConnectionIndex]);
 		ui++;
 #else
 	for (uint ui = 0; ui < uiNumInternationalTradesToAdd && ui < aGoldSortedTR.size(); ui++)
 	{
-		aTradeConnectionList.push_back(aGoldSortedTR[ui].m_kTradeConnection);
+		aPrioritizedTR.push_back(aTradeConnectionList[aGoldSortedTR[ui].m_uiConnectionIndex]);
 #endif
 	}
 
 	// add first food
 	if (aFoodSortedTR.size() > 0) 
 	{
-#ifdef AUI_ITERATORIZE
-		aTradeConnectionList.push_back(aFoodSortedTR.begin()->m_kTradeConnection);
-#else
-		aTradeConnectionList.push_back(aFoodSortedTR[0].m_kTradeConnection);
-#endif
+		// min_element retains the first equal score, matching the former stable sort.
+		const TRSortElement& kBest = *std::min_element(aFoodSortedTR.begin(), aFoodSortedTR.end(), SortTR());
+		aPrioritizedTR.push_back(aTradeConnectionList[kBest.m_uiConnectionIndex]);
 	}
 	
 	// add first production tr
 	if (aProductionSortedTR.size() > 0)
 	{
-#ifdef AUI_ITERATORIZE
-		aTradeConnectionList.push_back(aProductionSortedTR.begin()->m_kTradeConnection);
-#else
-		aTradeConnectionList.push_back(aProductionSortedTR[0].m_kTradeConnection);
-#endif
+		// min_element retains the first equal score, matching the former stable sort.
+		const TRSortElement& kBest = *std::min_element(aProductionSortedTR.begin(), aProductionSortedTR.end(), SortTR());
+		aPrioritizedTR.push_back(aTradeConnectionList[kBest.m_uiConnectionIndex]);
 	}
 
 	// add all the gold trs
 #ifdef AUI_ITERATORIZE
 	for (;it < aGoldSortedTR.end(); ++it)
 	{
-		aTradeConnectionList.push_back(it->m_kTradeConnection);
+		aPrioritizedTR.push_back(aTradeConnectionList[it->m_uiConnectionIndex]);
 #else
 	for (uint ui = uiNumInternationalTradesToAdd; ui < aGoldSortedTR.size(); ui++)
 	{
-		aTradeConnectionList.push_back(aGoldSortedTR[ui].m_kTradeConnection);
+		aPrioritizedTR.push_back(aTradeConnectionList[aGoldSortedTR[ui].m_uiConnectionIndex]);
 #endif
+	}
+
+	aTradeConnectionList.clear();
+	for(uint ui = 0; ui < aPrioritizedTR.size(); ui++)
+	{
+		aTradeConnectionList.push_back(aPrioritizedTR[ui]);
 	}
 }
 

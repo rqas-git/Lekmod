@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic differential checks for all seven performance edits.
+"""Deterministic differential checks for the performance edits.
 
 Uses actual Lua scripts and source-extracted C++ methods with controlled engine
 doubles. These tests measure eliminated operations, not whole-game turn times.
@@ -17,6 +17,7 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 CORE = ROOT / 'LEKMOD_DLL/CvGameCoreDLL_Expansion2'
 BASE = '1bc2ff423a51a0b5740acf77c7b6c31d1d245c8b'
+TRADE_BASE = 'a90d5bbe07a9cbf521190cdcc33304739f5375f2'
 
 
 def source(path, baseline=False):
@@ -39,16 +40,61 @@ def instrument(method, counter):
     return method.replace('{', '{ ++' + counter + ';', 1)
 
 
-def compile_run(template, substitutions, directory):
+def compile_run(template, substitutions, directory, flags=()):
     text = (HERE / template).read_text()
     for key, value in substitutions.items():
         text = text.replace('@' + key + '@', value)
     file = directory / template.removesuffix('.in')
     file.write_text(text)
     executable = file.with_suffix('')
-    subprocess.run(['clang++', '-std=c++14', '-O2', '-Wall', '-Wextra',
+    subprocess.run(['clang++', '-std=c++14', '-O2', '-Wall', '-Wextra', *flags,
                     str(file), '-o', str(executable)], check=True, timeout=60)
     return json.loads(subprocess.check_output([str(executable)], text=True, timeout=60))
+
+
+def trade_checks(directory, address_sanitizer=False):
+    path = 'LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvTradeClasses.cpp'
+    current = source(path)
+    baseline = subprocess.check_output(['git', 'show', f'{TRADE_BASE}:{path}'], cwd=ROOT).decode(errors='replace')
+    start, end = baseline.index('/// Get all available TR'), baseline.index('// sort player numbers')
+    current_start, current_end = current.index('/// Get all available TR'), current.index('// sort player numbers')
+    assert baseline[start:end] == current[current_start:current_end]
+    def ranking(text):
+        start = text.index('// sort player numbers\nstruct TRSortElement')
+        return text[start:text.index('/// ChooseTradeUnitTargetPlot', start)]
+    old = ranking(baseline).replace('TRSortElement', 'BaselineTRSortElement').replace('SortTR', 'BaselineSortTR')
+    old = old.replace('::PrioritizeTradeRoutes(', '::PrioritizeTradeRoutesBaseline(')
+    start = baseline.index('#ifdef AUI_CONSTIFY\nstd::vector<CvString> CvPlayerTrade::GetPlotToolTips(')
+    end = baseline.index('#ifdef AUI_CONSTIFY\nstd::vector<CvString> CvPlayerTrade::GetPlotMouseoverToolTips(', start)
+    tooltip = baseline[start:end]
+    assert tooltip in current  # The oracle and UI tooltip implementation stay untouched.
+    start = baseline.index('{', baseline.index('bool CvGameTrade::IsTradeRouteIndexEmpty(int iIndex)'))
+    empty = 'bool CvGameTrade::IsTradeRouteIndexEmpty(int iIndex) const\n' + baseline[start:baseline.index('\n}\n', start)+3]
+    substitutions = {
+        'BASELINE_RANKING': old, 'CURRENT_RANKING': ranking(current),
+        'IS_EMPTY': empty, 'TOOLTIP': tooltip,
+        'PREDICATE': extract(current, 'bool CvPlayerTrade::HasPlotToolTips('),
+    }
+    results = {'baseline': TRADE_BASE}
+    modes = [
+            ('default', ()),
+            ('iterator_const', ('-DAUI_ITERATORIZE', '-DAUI_CONSTIFY')),
+            ('ubsan_checked', ('-fsanitize=undefined', '-fno-sanitize-recover=all',
+                               '-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG')),
+    ]
+    if address_sanitizer:
+        modes.append(('asan', ('-fsanitize=address,undefined', '-fno-sanitize-recover=all',
+                              '-fno-omit-frame-pointer', '-DTRADE_SANITIZER_FIXTURES')))
+    for name, flags in modes:
+        results[name] = compile_run('trade.cpp.in', substitutions, directory, flags)
+    assert results['default'] == results['iterator_const'] == results['ubsan_checked']
+    cpp, header = (source('LEKMOD_DLL/CvGameCoreDLL_Expansion2/Lua/CvLuaPlayer.' + ext) for ext in ('cpp', 'h'))
+    assert 'Method(HasInternationalTradeRoutePlotToolTip);' in cpp
+    assert 'static int lHasInternationalTradeRoutePlotToolTip(lua_State* L);' in header
+    binding = extract(cpp, 'int CvLuaPlayer::lHasInternationalTradeRoutePlotToolTip(')
+    assert 'CvLuaPlot::GetInstance(L, 2, false)' in binding
+    assert 'lua_pushboolean(L, pkPlayer->GetTrade()->HasPlotToolTips(pPlot))' in binding
+    return results
 
 
 def connections(directory):
@@ -126,16 +172,19 @@ def lua_checks(lua_path):
     assert new_writes < old_writes
     result['dummy'] = {'cases': cases, 'building_setter_calls': [old_writes,new_writes]}
     current, baseline = (source('LEKMOD/Lua/Civilizations/Lekmod_uae.lua', b) for b in (False,True))
-    cases = before_calls = after_calls = 0
+    cases = before_calls = after_calls = fallback_calls = predicate_calls = 0
     for count in (0,1,2,8,32,128):
         for mask in range(12):
             for active in (True,False):
-                old,before = funcs.run_uae(baseline,count,mask,active)
-                now,after = funcs.run_uae(current,count,mask,active)
-                assert old==now
+                old,before,_ = funcs.run_uae(baseline,count,mask,active,False)
+                now,after,predicates = funcs.run_uae(current,count,mask,active,True)
+                fallback,fallback_reads,_ = funcs.run_uae(current,count,mask,active,False)
+                assert old==now==fallback
                 cases+=1; before_calls+=before; after_calls+=after
+                fallback_calls+=fallback_reads; predicate_calls+=predicates
     assert after_calls < before_calls
-    result['uae'] = {'cases': cases, 'tooltip_calls': [before_calls,after_calls]}
+    result['uae'] = {'cases': cases, 'tooltip_calls': [before_calls,after_calls],
+                     'predicate_calls': predicate_calls, 'legacy_fallback_tooltip_calls': fallback_calls}
     current, baseline = (source('LEKMOD/Lua/Lekmod_policies.lua', b) for b in (False,True))
     cases = before_calls = after_calls = 0
     for count in (0,1,2,10,50):
@@ -152,15 +201,31 @@ def lua_checks(lua_path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--lua-python-path', type=Path)
+    parser.add_argument('--address-sanitizer', action='store_true',
+                        help='Also run ASan fixtures; requires a working local ASan runtime')
     parser.add_argument('--output', type=Path, default=ROOT/'macos/build/performance-validation.json')
     args = parser.parse_args()
     result = {'baseline': BASE}
     with tempfile.TemporaryDirectory(prefix='lekmod-performance-') as temp:
         result['connections'] = connections(Path(temp))
         result['metadata_and_coast'] = metadata(Path(temp))
+        result['trade'] = trade_checks(Path(temp), args.address_sanitizer)
     result['lua'] = lua_checks(args.lua_python_path)
-    paths = subprocess.check_output(['git','diff','--name-only'],cwd=ROOT,text=True).splitlines()
+    # Include committed validated sources too, rather than only current dirty files.
+    paths = [
+        'LEKMOD/Lua/Civilizations/Lekmod_uae.lua', 'LEKMOD/Lua/Lekmod_global_dummies.lua',
+        'LEKMOD/Lua/Lekmod_policies.lua', 'Lekmap/HBMapmakerUtilities.lua',
+        'LEKMOD/Lua/Civilizations/Lekmod_kilwa.lua', 'LEKMOD/Lua/Lekmod_units.lua',
+        'LEKMOD/Lua/tmp/eui/NotificationPanel/NotificationPanel.lua.ignore', 'macos/build.py',
+    ] + ['LEKMOD_DLL/CvGameCoreDLL_Expansion2/' + name for name in (
+        'CvCityConnections.cpp', 'CvDllDatabaseUtility.cpp', 'CvDllDatabaseUtility.h',
+        'CvDatabaseUtility.cpp', 'CvAStar.cpp', 'CvAStar.h', 'CvBuilderTaskingAI.h',
+        'CvImprovementClasses.cpp', 'CvImprovementClasses.h', 'CvPlot.cpp', 'CvGameCoreUtils.h',
+        'CvPromotionClasses.cpp', 'CvPromotionClasses.h', 'CvBuilderTaskingAI.cpp',
+        'CvTradeClasses.cpp', 'CvTradeClasses.h', 'Lua/CvLuaPlayer.cpp', 'Lua/CvLuaPlayer.h')]
     result['source_sha256'] = {p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in paths}
+    result['fixture_sha256'] = {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
+                               for p in sorted(HERE.iterdir()) if p.suffix in ('.py', '.lua', '.in')}
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(result,indent=2)+'\n')
     print(json.dumps(result,indent=2))

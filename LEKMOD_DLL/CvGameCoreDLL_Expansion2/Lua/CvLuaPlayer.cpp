@@ -1011,6 +1011,7 @@ void CvLuaPlayer::PushMethods(lua_State* L, int t)
 
 	Method(GetTradeRouteRange);
 	Method(GetInternationalTradeRoutePlotToolTip);
+	Method(HasInternationalTradeRoutePlotToolTip);
 	Method(GetInternationalTradeRoutePlotMouseoverToolTip);
 	Method(GetNumInternationalTradeRoutesUsed);
 	Method(GetNumInternationalTradeRoutesAvailable);
@@ -3833,6 +3834,15 @@ int CvLuaPlayer::lGetCityConnectionTradeRouteGoldModifier(lua_State* L)
 	CvPlayerAI* pkPlayer = GetInstance(L);
 	const int iResult = pkPlayer->GetTreasury()->GetCityConnectionTradeRouteGoldModifier();
 	lua_pushinteger(L, iResult);
+	return 1;
+}
+//------------------------------------------------------------------------------
+//bool HasInternationalTradeRoutePlotToolTip(CvPlot* pPlot)
+int CvLuaPlayer::lHasInternationalTradeRoutePlotToolTip(lua_State* L)
+{
+	CvPlayerAI* pkPlayer = GetInstance(L);
+	CvPlot* pPlot = CvLuaPlot::GetInstance(L, 2, false);
+	lua_pushboolean(L, pkPlayer->GetTrade()->HasPlotToolTips(pPlot));
 	return 1;
 }
 //------------------------------------------------------------------------------

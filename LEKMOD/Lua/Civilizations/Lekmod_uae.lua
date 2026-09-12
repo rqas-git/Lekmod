@@ -41,9 +41,14 @@ function lekmod_uae_trade_route_gold(player_id)
 
       if loop_unit:IsCombatUnit() then
          local unit_plot = loop_unit:GetPlot()
-         local trade_route_plot_info = player:GetInternationalTradeRoutePlotToolTip(unit_plot)
+         local has_trade_route
+         if player.HasInternationalTradeRoutePlotToolTip then
+            has_trade_route = player:HasInternationalTradeRoutePlotToolTip(unit_plot)
+         else -- Retain compatibility with gameplay libraries predating the predicate.
+            has_trade_route = #player:GetInternationalTradeRoutePlotToolTip(unit_plot) > 0
+         end
 
-         if #trade_route_plot_info > 0 then
+         if has_trade_route then
             player:ChangeGold(3)
             loop_unit:ChangeExperience(1)
 

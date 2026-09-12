@@ -90,9 +90,9 @@ function run_dummy(source, count, capital, flags, duplicate)
     return table.concat(state,','), writes
 end
 
-function run_uae(source, count, mask, active)
+function run_uae(source, count, mask, active, native_predicate)
     local e=environment(); local p=e.Players[0]; p.alive=true
-    local calls, popups=0,{}
+    local calls, predicates, popups=0,0,{}
     e.include=function() end
     e.LekmodUtilities={is_civilization_active=function() return true end}
     e.Game={GetActivePlayer=function() return active and 0 or 1 end}
@@ -101,6 +101,11 @@ function run_uae(source, count, mask, active)
     e.Events.AddPopupTextEvent=function(pos,text) popups[#popups+1]=pos.x..':'..text end
     function p:GetInternationalTradeRoutePlotToolTip(plot)
         calls=calls+1; return plot.route and {'route'} or {}
+    end
+    if native_predicate then
+        function p:HasInternationalTradeRoutePlotToolTip(plot)
+            predicates=predicates+1; return plot.route
+        end
     end
     for i=1,count do
         local u={id=i, xp=0, combat=(i+mask)%3~=0}
@@ -116,7 +121,7 @@ function run_uae(source, count, mask, active)
     e.GameEvents.PlayerDoTurn.Fire(0)
     local state={tostring(p.gold)}
     for _,u in ipairs(p.units) do state[#state+1]=tostring(u.xp) end
-    return table.concat(state,',')..'|'..table.concat(popups,','),calls
+    return table.concat(state,',')..'|'..table.concat(popups,','),calls,predicates
 end
 
 function run_policies(source, count, reordered, alternate_rules)

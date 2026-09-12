@@ -1014,6 +1014,7 @@ protected:
 	// International Trade
 	static int lGetTradeRouteRange(lua_State* L);
 	static int lGetInternationalTradeRoutePlotToolTip(lua_State* L);
+	static int lHasInternationalTradeRoutePlotToolTip(lua_State* L);
 	static int lGetInternationalTradeRoutePlotMouseoverToolTip(lua_State* L);
 	static int lGetNumInternationalTradeRoutesUsed(lua_State* L);
 	static int lGetNumInternationalTradeRoutesAvailable(lua_State* L);

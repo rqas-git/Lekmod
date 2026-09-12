@@ -399,6 +399,8 @@ public:
 	std::vector<CvString> GetPlotMouseoverToolTips (CvPlot* pPlot);
 #endif
 
+	bool HasPlotToolTips(CvPlot* pPlot) const;
+
 	TradeConnectionList m_aRecentlyExpiredConnections;
 	TradeConnectionWasPlunderedList m_aTradeConnectionWasPlundered;
 
