@@ -74,3 +74,19 @@ desktop.ini
 
 # Build artifacts
 *.exe (except in releases)
+# Materialized UI/bootstrap files; canonical sources live in Lua/tmp.
+/LEKMOD/Lua/UI/FrontEnd.lua
+/LEKMOD/Lua/UI/MainMenu.lua
+/LEKMOD/Lua/UI/JoiningRoom.lua
+/LEKMOD/Lua/UI/MPGameOptions.lua
+/LEKMOD/Lua/UI/MPGameSetupScreen.lua
+/LEKMOD/Lua/UI/StagingRoom.lua
+/LEKMOD/Lua/UI/StagingRoom.xml
+/LEKMOD/Lua/tmp/ui/CultureOverview/EconomicGeneralInfo.lua.ignore
+/LEKMOD/Lua/tmp/eui/EconomicGeneralInfo.lua.ignore
+/LEKMOD/Lua/tmp/ui/CultureOverview/EconomicGeneralInfo.xml.ignore
+/LEKMOD/Lua/tmp/eui/EconomicGeneralInfo.xml.ignore
+/LEKMOD/Lua/tmp/ui/TechTree/TechTree.xml.ignore
+/LEKMOD/Lua/tmp/eui/TechTree/TechTree.xml.ignore
+
+/LEKMOD/ui_check.bat

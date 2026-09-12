@@ -8,12 +8,12 @@ ROOT = Path(__file__).resolve().parents[1]
 BASELINE = '1bc2ff42'
 
 
-def original(path):
-    return subprocess.check_output(['git', 'show', f'{BASELINE}:{path}'], cwd=ROOT)
+def original(path, revision=BASELINE):
+    return subprocess.check_output(['git', 'show', f'{revision}:{path}'], cwd=ROOT)
 
 
-def extract_lua(destination):
-    archive = subprocess.check_output(['git', 'archive', BASELINE, 'LEKMOD/Lua'], cwd=ROOT)
+def extract_lua(destination, revision=BASELINE):
+    archive = subprocess.check_output(['git', 'archive', revision, 'LEKMOD/Lua'], cwd=ROOT)
     with tarfile.open(fileobj=io.BytesIO(archive)) as files:
         for member in files:
             if member.isfile():

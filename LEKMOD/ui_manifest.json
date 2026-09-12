@@ -1,0 +1,61 @@
+{
+  "format": 1,
+  "preserve": [
+    "CityStatePersonalityHelper.lua",
+    "LegalScreen.lua",
+    "LegalScreen.xml"
+  ],
+  "bootstrap": [
+    "FrontEnd.lua",
+    "MainMenu.lua",
+    "JoiningRoom.lua",
+    "MPGameOptions.lua",
+    "MPGameSetupScreen.lua",
+    "StagingRoom.lua",
+    "StagingRoom.xml"
+  ],
+  "aliases": {
+    "ui/CultureOverview/EconomicGeneralInfo.lua": "shared/CultureOverview/EconomicGeneralInfo.lua",
+    "eui/EconomicGeneralInfo.lua": "shared/CultureOverview/EconomicGeneralInfo.lua",
+    "ui/CultureOverview/EconomicGeneralInfo.xml": "shared/CultureOverview/EconomicGeneralInfo.xml",
+    "eui/EconomicGeneralInfo.xml": "shared/CultureOverview/EconomicGeneralInfo.xml",
+    "ui/TechTree/TechTree.xml": "shared/TechTree/TechTree.xml",
+    "eui/TechTree/TechTree.xml": "shared/TechTree/TechTree.xml"
+  },
+  "rules": [
+    {"files": ["ui/AncientRuins/GoodyHutPopup.lua"]},
+    {"eui": "CityBanners/CityBannerManager.lua", "files": ["ui/CityBanners/CityBannerManager.lua", "ui/CityBanners/CityBannerManager.xml"], "overlay": [["eui/CityBanners/CityBannerManager_1.lua", "CityBannerManager.lua"], ["eui/CityBanners/CityBannerManager_1.xml", "CityBannerManager.xml"]], "contains": "CityBannerProductionBox = function( city )", "fallback_overlay": [["eui/CityBanners/CityBannerManager_2.lua", "CityBannerManager.lua"], ["eui/CityBanners/CityBannerManager_2.xml", "CityBannerManager.xml"]]},
+    {"eui": "CityStatePopup/CityStateDiploPopup.lua", "files": ["ui/CityStatePopup/CityStateDiploPopup.lua"], "overlay": ["eui/CityStatePopup/CityStateDiploPopup.lua"]},
+    {"eui": "CityView/CityView.lua", "files": ["ui/CityView/CityView.lua", "ui/CityView/CityView.xml", "ui/CityView/CityView_small.xml"], "overlay": ["eui/CityView/CityView.lua", "eui/CityView/CityView.xml", "eui/CityView/CityView_small.xml"], "contains": "-- coded by bc1 from 1.0.3.276 brave new world code"},
+    {"eui": "CityView/ProductionPopup.lua", "files": ["ui/CityView/ProductionPopup.lua", "ui/CityView/ProductionPopup.xml"], "overlay": []},
+    {"eui": "Core/CityStateStatusHelper.lua", "files": ["ui/Core/CityStateStatusHelper.lua"], "overlay": [], "batch_overlay": ["eui/Core/CityStateStatusHelper.lua"]},
+    {"eui": "Core/EUI_tooltip_library.lua", "files": [], "overlay": ["eui/Core/EUI_tooltip_library.lua"]},
+    {"eui": "Core/EUI_unit_include.lua", "files": [], "overlay": ["eui/Core/EUI_unit_include.lua"]},
+    {"files": ["ui/Core/IconSupport.lua", "ui/CultureOverview/CultureOverview.lua", "ui/CultureOverview/CultureOverview.xml"]},
+    {"eui": "EconomicGeneralInfo.lua", "files": ["ui/CultureOverview/EconomicGeneralInfo.lua", "ui/CultureOverview/EconomicGeneralInfo.xml"], "overlay": ["eui/EconomicGeneralInfo.lua", "eui/EconomicGeneralInfo.xml"]},
+    {"files": ["ui/FrontEnd/EULA.lua", "ui/FrontEnd/FrontEnd.lua", "ui/FrontEnd/MainMenu.lua", "ui/FrontEnd/MainMenu.xml"]},
+    {"eui": "GameSetup/SelectCivilization.lua", "files": ["ui/GameSetup/SelectCivilization.lua"], "overlay": ["eui/GameSetup/SelectCivilization.lua"]},
+    {"files": ["ui/GPList/GPList.lua", "ui/GPList/GPList.xml"]},
+    {"eui": "Improvements/WorldView.lua", "files": ["ui/Improvements/WorldView.lua"], "overlay": ["eui/Improvements/WorldView.lua"]},
+    {"eui": "LeaderHead/TradeLogic.lua", "files": ["ui/LeaderHead/TradeLogic.lua"], "overlay": ["eui/LeaderHead/TradeLogic.lua"]},
+    {"files": ["ui/LeaderHead/SimpleDiploTrade.lua", "ui/LeaderHead/SimpleDiploTrade.xml"]},
+    {"files": ["ui/Lobby/AdvancedSetup.lua", "ui/Lobby/JoiningRoom.lua", "ui/Lobby/JoiningRoom.xml", "ui/Lobby/LoadMenu.lua", "ui/Lobby/Lobby.lua", "ui/Lobby/Lobby.xml", "ui/Lobby/MPGameOptions.lua", "ui/Lobby/MPGameSetupScreen.lua", "ui/Lobby/MPGameSetupScreen.xml", "ui/Lobby/StagingRoom.lua", "ui/Lobby/StagingRoom.xml", "ui/PlotMouseoverInclude.lua"]},
+    {"files": ["ui/MiniMapPanel/MiniMapPanel.lua", "ui/MiniMapPanel/MiniMapPanel.xml", "ui/MPTurnPanel/MPTurnPanel.lua", "ui/MPTurnPanel/MPTurnPanel.xml"]},
+    {"eui": "NotificationPanel/DiploCorner.xml", "files": ["ui/NotificationPanel/DiploCorner.lua", "ui/NotificationPanel/DiploCorner.xml"], "overlay": ["eui/NotificationPanel/DiploCorner.lua", "eui/NotificationPanel/DiploCorner.xml"]},
+    {"eui": "NotificationPanel/NotificationPanel.lua", "files": ["ui/NotificationPanel/NotificationPanel.lua", "ui/NotificationPanel/NotificationPanel.xml"], "overlay": ["eui/NotificationPanel/NotificationPanel.lua", "eui/NotificationPanel/NotificationPanel.xml"]},
+    {"eui": "Options/OptionsMenu.lua", "files": ["ui/Options/OptionsMenu.lua", "ui/Options/OptionsMenu.xml"], "overlay": ["eui/Options/OptionsMenu.lua", "eui/Options/OptionsMenu.xml"]},
+    {"files": ["ui/Replays/Demographics.lua", "ui/Replays/GameMenu.lua", "ui/Replays/ReplayViewer.lua", "ui/Replays/ReplayViewer.xml"]},
+    {"eui": "TechTree/TechTree.lua", "files": ["ui/TechTree/TechPopup.lua", "ui/TechTree/TechTree.lua", "ui/TechTree/TechTree.xml"], "overlay": ["eui/TechTree/TechPopup.lua", "eui/TechTree/TechPopup.xml", "eui/TechTree/TechTree.lua", "eui/TechTree/TechTree.xml"]},
+    {"eui": "ToolTips/TechButtonInclude.lua", "files": ["ui/ToolTips/TechButtonInclude.lua"], "overlay": ["eui/ToolTips/TechButtonInclude.lua"]},
+    {"eui": "ToolTips/InfoTooltipInclude.lua", "files": ["ui/ToolTips/InfoTooltipInclude.lua"], "overlay": ["eui/ToolTips/InfoTooltipInclude.lua"]},
+    {"eui": "UnitFlagManager/UnitFlagManager.lua", "files": ["ui/UnitFlagManager/UnitFlagManager.lua", "ui/UnitFlagManager/UnitFlagManager.xml"], "overlay": ["eui/UnitFlagManager/UnitFlagManager.lua", "eui/UnitFlagManager/UnitFlagManager.xml"]},
+    {"files": ["ui/UnitList/UnitList.lua", "ui/UnitList/UnitList.xml", "ui/UnitPanel/EnemyUnitPanel.lua", "ui/UnitPanel/EnemyUnitPanel.xml", "ui/UnitPanel/EnemyUnitPanel_small.xml"]},
+    {"eui": "UnitPanel/UnitPanel.lua", "files": ["ui/UnitPanel/UnitPanel.lua"], "overlay": ["eui/UnitPanel/UnitPanel.lua"], "contains": "-- modified by bc1 from Civ V 1.0.3.276 code"},
+    {"files": ["ui/VotingSystem/CCVotePopup.lua", "ui/VotingSystem/CCVotePopup.xml", "ui/VotingSystem/NetworkKickedPopup.lua", "ui/VotingSystem/ProposalChartPopup.lua", "ui/VotingSystem/ProposalChartPopup.xml", "ui/VotingSystem/VictoryProgress.lua", "ui/VotingSystem/VictoryProgress.xml"]},
+    {"files": ["ui/Bombardment.lua", "ui/DiscussionDialog.lua", "ui/EndGameMenu.lua", "ui/Highlights.xml", "ui/InGame.lua", "ui/ActionInfoPanel.lua", "ui/ActionInfoPanel.xml", "ui/prophetreplace.lua"]},
+    {"eui": "Improvements/YieldIconManager.lua", "files": ["ui/YieldIconManager.lua"], "overlay": ["eui/Improvements/YieldIconManager.lua"]},
+    {"eui": "TopPanel/TopPanel.lua", "files": ["ui/TopPanel.lua"], "overlay": ["eui/TopPanel.lua", "eui/TopPanel.xml"]},
+    {"eui": "Improvements/SocialPolicyPopup.lua", "files": ["ui/Popups/SocialPolicyPopup.lua"], "overlay": ["eui/Improvements/SocialPolicyPopup.lua"]},
+    {"files": ["ui/Popups/ChooseInternationalTradeRoutePopup.lua", "ui/Popups/TradeRouteOverview.lua", "ui/ToolTips/TradeRouteHelpers.lua"]}
+  ]
+}

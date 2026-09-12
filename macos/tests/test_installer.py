@@ -1,5 +1,6 @@
 """Filesystem regression tests; compiler, ABI checks and signing are mocked."""
 from contextlib import ExitStack
+import json
 from pathlib import Path
 import subprocess
 import sys
@@ -51,16 +52,18 @@ class InstallerTests(unittest.TestCase):
             'LEKMOD/Lua/Utilities/Lekmod_version.lua':
                 'return Network ~= nil and type(Network.HttpRequest) == "function"',
             'LEKMOD/Windows.DLL': 'windows',
+            'LEKMOD/ui_check.bat': 'Windows checker',
             'Lekmap/LekmapPangaea.lua': 'map',
             'Lekmap/HBHelper.lua': 'helper',
             'macos/build/' + game.CORE.name: 'native',
         }
         for name, text in files.items():
             write(self.repo / name, text)
-        write(self.repo / 'LEKMOD/ui_check.bat', '\n'.join(
-            f'copy /y "%patchfolder%\\Lua\\tmp\\ui\\{source}" "%patchfolder%\\Lua\\UI\\{dest}"'
-            for source, dest in [('FrontEnd.lua.ignore', 'FrontEnd.lua'),
-                                 ('IconSupport.lua', 'IconSupport.lua')]))
+        write(self.repo / 'LEKMOD/ui_manifest.json', json.dumps({
+            'format': 1, 'preserve': ['LegalScreen.lua'], 'aliases': {},
+            'rules': [{'files': [['ui/FrontEnd.lua', 'FrontEnd.lua'],
+                                 ['ui/IconSupport.lua', 'IconSupport.lua']]}],
+        }))
         stack = ExitStack()
         self.addCleanup(stack.close)
         digest = game.sha256(self.app / game.CORE)

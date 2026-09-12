@@ -29,7 +29,7 @@ def preflight(app, component):
         if any(p.name.lower() in ('ui_bc1', 'ui_bc1_xits') for p in dlc.iterdir()):
             raise RuntimeError('This Mac installer supports the standard UI. Remove EUI '
                                '(UI_bc1/UI_bc1_xits) from the game before installing Lekmod.')
-        if not (ROOT / 'LEKMOD/ui_check.bat').is_file():
+        if not (ROOT / 'LEKMOD/ui_manifest.json').is_file():
             raise RuntimeError('The checkout is missing LEKMOD assets.')
     if component in ('lekmap', 'both') and not any((ROOT / 'Lekmap').glob('Lekmap*.lua')):
         raise RuntimeError('The checkout is missing Lekmap scripts.')

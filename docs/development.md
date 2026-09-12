@@ -59,3 +59,40 @@ Run both controller integration and filesystem rollback checks:
 python3 -B -m unittest discover -s tests -p test_installer_flow.py -v
 python3 -B -m unittest discover -s LekmodInstaller/tests -v
 ```
+
+## UI assets and release packaging
+
+`LEKMOD/ui_manifest.json` is the shared standard/EUI selection plan for the
+Windows and Mac installers and the generated Windows batch checker. Edit the
+canonical templates under `LEKMOD/Lua/tmp`. Bootstrap files in `LEKMOD/Lua/UI`,
+duplicate template aliases, and `ui_check.bat` are generated and ignored by Git.
+
+Build a complete release directory with Python 3.9+:
+
+```sh
+python3 tools/package_lekmod.py --destination build/package/LEKMOD
+```
+
+The destination must not exist. Packaging restores legacy template paths and
+bootstrap files from canonical sources, even if the checkout had EUI configured.
+Published packages include the batch checker and need no Python interpreter.
+Use `--materialize` to regenerate these files in a development checkout instead.
+The Mac installer assembles its standard UI automatically and retains its native
+HTTP compatibility patch. Its source fingerprint includes the shared Python
+packager as well as the manifest and templates.
+
+The installer executable bundles the manifest for older archives. Both executable
+build entry points and CI release packaging use this workflow. UI regression
+fixtures compare six standard/EUI scenarios against the pre-port `perf` commit
+`41a1d154`, retaining our existing UI optimizations. They also check legacy
+archives, repeated packaging, missing sources, and stale generated files.
+
+```sh
+python3 -B -m unittest discover -s tests -p test_ui_assets.py -v
+python3 -B -m unittest discover -s macos/tests -v
+```
+
+The batch/PowerShell comparison runs on Windows. CI runs the Python suites on
+Linux and Windows, the native fixtures on Linux, and Windows Debug/Release DLL
+builds with Visual Studio 2008. The performance fixtures additionally require
+`tests/performance/requirements.txt`; installer tests require `requests`.

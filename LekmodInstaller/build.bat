@@ -85,7 +85,7 @@ echo.
 
 REM Build the executable with all resources
 REM Note: Images (background.png, banner.png, icon.ico) will be bundled if they exist
-python -m PyInstaller --noconfirm --onefile --windowed --name="LekmodInstaller" --icon=icon.ico --add-data "config.json;." --hidden-import=tkinter --hidden-import=tkinter.ttk --hidden-import=tkinter.messagebox --hidden-import=tkinter.filedialog --hidden-import=tkinter.scrolledtext --hidden-import=requests --hidden-import=urllib3 --hidden-import=certifi --hidden-import=charset_normalizer --hidden-import=idna installer.py
+python -m PyInstaller --noconfirm --onefile --windowed --name="LekmodInstaller" --icon=icon.ico --add-data "config.json;." --add-data "../LEKMOD/ui_manifest.json;." --hidden-import=tkinter --hidden-import=tkinter.ttk --hidden-import=tkinter.messagebox --hidden-import=tkinter.filedialog --hidden-import=tkinter.scrolledtext --hidden-import=requests --hidden-import=urllib3 --hidden-import=certifi --hidden-import=charset_normalizer --hidden-import=idna installer.py
 
 if errorlevel 1 (
     echo.

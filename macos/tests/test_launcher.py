@@ -14,7 +14,7 @@ from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import crossplay
 import game_install as game
-from integrity import tree_digest
+from integrity import source_digest, tree_digest
 import launcher
 from menu_art import read_texture
 
@@ -197,6 +197,23 @@ class LauncherTests(unittest.TestCase):
         self.source.return_value = 'new-source'
         report = launcher.inspect(self.app, True)
         self.assertEqual({c['id'] for c in report['checks'] if c['state'] == 'repair'}, {'lekmap_assets', 'source'})
+
+    def test_shared_packager_and_manifest_changes_require_update(self):
+        for name in ('LEKMOD_DLL/CvGameCoreDLL_Expansion2/core.cpp', 'macos/include/native.hpp',
+                     'macos/build.py', 'macos/package_assets.py', 'macos/crossplay.py',
+                     'macos/integrity.py', 'LekmodInstaller/ui_assets.py', 'LEKMOD/ui_manifest.json'):
+            write(self.repo / name, 'original')
+        with patch.object(launcher, 'source_digest', wraps=source_digest):
+            for name in ('LekmodInstaller/ui_assets.py', 'LEKMOD/ui_manifest.json'):
+                with self.subTest(name=name):
+                    state = game.installed_state(self.app)
+                    state['validation']['source_sha256'] = source_digest(self.repo)
+                    write(self.app / game.MANIFEST, json.dumps(state))
+                    self.assertTrue(launcher.inspect(self.app, True)['ready'])
+                    write(self.repo / name, 'changed packaging behavior')
+                    report = launcher.inspect(self.app, True)
+                    self.assertFalse(report['ready'])
+                    self.assertEqual({c['id'] for c in report['checks'] if c['state'] == 'repair'}, {'source'})
 
     def test_switch_off_is_applied_by_repair(self):
         report = launcher.inspect(self.app, False)

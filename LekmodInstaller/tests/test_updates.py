@@ -27,7 +27,6 @@ class InstallTests(unittest.TestCase):
         (self.source / 'new.txt').write_text('replacement')
         self.manager = UIManager()
         self.manager._find_lekmod_folder = lambda _: str(self.source)
-        self.manager._write_ui_check_stamp = lambda *args, **kwargs: None
 
     def install(self, version='v2'):
         self.manager.install_mod(str(self.source), str(self.game), version, lambda _: None)

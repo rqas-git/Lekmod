@@ -22,6 +22,11 @@
 
 ## LEKMOD Installation 
 
+Release downloads include the generated UI files and Windows checker. If you are
+installing from a source checkout, first follow the
+[package-building instructions](development.md#ui-assets-and-release-packaging).
+The experimental [Mac installer](../macos/README.md) assembles its assets directly.
+
 ### Windows
 #### Option A. LEKMOD v33 and higher *- with Custom EUI and Standard UI support*
 1. Download the version you wish to install

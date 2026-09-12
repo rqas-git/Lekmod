@@ -51,4 +51,6 @@ def source_digest(root):
     for name in ('build.py', 'package_assets.py', 'crossplay.py', 'integrity.py'):
         path = root / 'macos' / name
         files.append(('macos/' + name, path))
+    # The Mac packager shares its UI selection and stamping implementation.
+    files.append(('LekmodInstaller/ui_assets.py', root / 'LekmodInstaller/ui_assets.py'))
     return _fingerprint(files)
