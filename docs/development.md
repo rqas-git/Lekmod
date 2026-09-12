@@ -130,3 +130,21 @@ tracks `.inc` dependencies in both normal and experimental output directories.
 python3 -B -m unittest discover -s tests -p test_global_defines.py -v
 python3 -B -m unittest discover -s macos/tests -p test_build.py -v
 ```
+
+## Integrated validation
+
+After all six refactors, the root regression suite passed 16 tests (including
+756 map scenarios and 12 metadata comparisons), the Mac suite passed 49, and
+the Windows installer Python suite passed 9. The Windows-only batch/PowerShell
+comparison was skipped on this Mac; Windows DLL builds and live game behavior
+were not validated locally.
+
+Both the normal Mac Release build and the combined ThinLTO/neighbor-precomputation
+Release build passed compilation, linking, engine-import checks, and all six
+pregame ABI anchors. No game installation was changed. The performance fixture
+suite also passed; `performance-validation.json` records the results and hashes
+of the integrated source and regression fixtures.
+
+The existing hot-path optimizations, cached `MaxRows`, map shuffle, transactional
+installer rollback, and self-updater remain in place. Broad removal of disabled
+C++ branches remains deferred.

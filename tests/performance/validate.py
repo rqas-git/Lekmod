@@ -229,9 +229,22 @@ def main():
         'CvImprovementClasses.cpp', 'CvImprovementClasses.h', 'CvPlot.cpp', 'CvGameCoreUtils.h',
         'CvPromotionClasses.cpp', 'CvPromotionClasses.h', 'CvBuilderTaskingAI.cpp',
         'CvTradeClasses.cpp', 'CvTradeClasses.h', 'Lua/CvLuaPlayer.cpp', 'Lua/CvLuaPlayer.h')]
+    # Record the shared implementations introduced by the integrated refactors.
+    paths += ['LEKMOD_DLL/CvGameCoreDLL_Expansion2/' + name for name in (
+        'CvDatabaseUtility.h', 'CvBeliefClasses.cpp', 'CvBuildingClasses.cpp',
+        'CvInfos.cpp', 'CvMinorCivAI.cpp', 'CvPolicyClasses.cpp', 'CvTechClasses.cpp',
+        'CvTraitClasses.cpp', 'CvUnitClasses.cpp', 'CvGlobals.cpp', 'CvGlobals.h',
+        'CvGlobalDefines.inc', '_Defines.h')]
+    paths += [str(p.relative_to(ROOT)) for p in sorted((ROOT/'Lekmap').glob('*.lua'))]
+    paths += ['LEKMOD/ui_manifest.json', 'LekmodInstaller/ui_assets.py',
+              'LekmodInstaller/installer.py', 'LekmodInstaller/ui_manager.py',
+              'LekmodInstaller/google_drive_api.py', 'tools/package_lekmod.py',
+              'macos/package_assets.py', 'macos/install.py', 'macos/integrity.py']
     result['source_sha256'] = {p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in paths}
+    fixtures = sorted(set(HERE.iterdir()) | set((ROOT/'tests').iterdir()) |
+                      set((ROOT/'macos/tests').iterdir()) | set((ROOT/'LekmodInstaller/tests').iterdir()))
     result['fixture_sha256'] = {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
-                               for p in sorted(HERE.iterdir()) if p.suffix in ('.py', '.lua', '.in')}
+                               for p in fixtures if p.suffix in ('.py', '.lua', '.in', '.cpp')}
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(result,indent=2)+'\n')
     print(json.dumps(result,indent=2))
