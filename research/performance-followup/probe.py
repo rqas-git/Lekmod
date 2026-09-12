@@ -1,4 +1,4 @@
-"""Reproduce follow-up audit evidence without changing production files."""
+
 import hashlib
 import json
 from pathlib import Path

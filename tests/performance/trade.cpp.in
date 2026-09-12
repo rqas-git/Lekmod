@@ -1,4 +1,4 @@
-// Actual old/new trade methods with controlled game, score, container and localization doubles.
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -153,13 +153,13 @@ int main(){
             for(auto& point:r.m_aPlotList){point.m_iX=random()%20;point.m_iY=random()%20;}
             for(auto& value:ai.scores[i]){
                 value=int(random()%9)-3;
-                if(scenario%5==0)value=1; // Equal positives: stable ties in all categories.
+                if(scenario%5==0)value=1;
                 if(scenario%11==0)value=0;
                 if(scenario%13==0)value=-1;
                 if(scenario%17==0)value=i%2?INT_MAX:INT_MIN;
             }
         }
-        // Ranking must follow candidate order, not IDs; revisit after scores/cities change.
+
         std::shuffle(ai.candidates.begin(),ai.candidates.end(),random);
         TradeConnectionList before,after;
         for(int update=0;update<2;++update){
@@ -176,7 +176,7 @@ int main(){
     }
     assert(newCopies<oldCopies&&newElements<oldElements);
 
-    // Predicate oracle is the unchanged production tooltip method, including third-party rules.
+
     int predicateCases=0;long formatted=0;
     CvPlayerTrade playerTrade;CvCity endpoint;GC.map.endpoint.city=&endpoint;
     for(int scenario=0;scenario<predicateScenarios;++scenario){

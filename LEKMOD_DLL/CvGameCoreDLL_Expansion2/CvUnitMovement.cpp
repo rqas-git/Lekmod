@@ -5,7 +5,7 @@
 #include "CvGlobals.h"
 #include "CvUnitMovement.h"
 #include "CvGameCoreUtils.h"
-//	---------------------------------------------------------------------------
+
 void CvUnitMovement::GetCostsForMove(const CvUnit* pUnit, const CvPlot* pFromPlot, const CvPlot* pToPlot, int iBaseMoves, int& iRegularCost, int& iRouteCost, int& iRouteFlatCost)
 {
 	CvPlayerAI& kPlayer = GET_PLAYER(pUnit->getOwner());
@@ -13,14 +13,14 @@ void CvUnitMovement::GetCostsForMove(const CvUnit* pUnit, const CvPlot* pFromPlo
 	bool bFasterAlongRiver = pTraits->IsFasterAlongRiver();
 	bool bFasterInHills = pTraits->IsFasterInHills();
 	bool bIgnoreTerrainCost = pUnit->ignoreTerrainCost();
-	//int iBaseMoves = pUnit->baseMoves(isWater()?DOMAIN_SEA:NO_DOMAIN);
+
 	TeamTypes eUnitTeam = pUnit->getTeam();
 	CvTeam& kUnitTeam = GET_TEAM(eUnitTeam);
 	int iMoveDenominator = GC.getMOVE_DENOMINATOR();
 	bool bRiverCrossing = pFromPlot->isRiverCrossing(directionXY(pFromPlot, pToPlot));
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
-	// Pontoon/shallows are the crossing. A coastal river edge must not burn all MP
-	// (that forces a stop on the first land tile and blocks 1UPT pass-through).
+
+
 	if (bRiverCrossing && (pFromPlot->IsAllowsWalkWater() || pToPlot->IsAllowsWalkWater()))
 	{
 		bRiverCrossing = false;
@@ -43,7 +43,7 @@ void CvUnitMovement::GetCostsForMove(const CvUnit* pUnit, const CvPlot* pFromPlo
 	{
 		iRegularCost = ((eFeature == NO_FEATURE) ? (pTerrainInfo ? pTerrainInfo->getMovementCost() : 0) : (pFeatureInfo ? pFeatureInfo->getMovementCost() : 0));
 
-		// Hill cost, except for when a City is present here, then it just counts as flat land
+
 		if((PlotTypes)pToPlot->getPlotType() == PLOT_HILLS && !pToPlot->isCity())
 		{
 			iRegularCost += GC.getHILLS_EXTRA_MOVEMENT();
@@ -57,7 +57,7 @@ void CvUnitMovement::GetCostsForMove(const CvUnit* pUnit, const CvPlot* pFromPlo
 		
 	}
 
-	// Is a unit's movement consumed for entering rough terrain?
+
 	if ((pToPlot->isRoughGround() && pUnit->IsRoughTerrainEndsTurn()) || (!(bIgnoreTerrainCost || bFasterAlongRiver) && bRiverCrossing))
 	{
 		iRegularCost = INT_MAX;
@@ -127,7 +127,7 @@ void CvUnitMovement::GetCostsForMove(const CvUnit* pUnit, const CvPlot* pFromPlo
 	}
 
 	if(pUnit->getDomainType() == DOMAIN_SEA && pToPlot->IsAllowsSailLand())
-	{ // from Izy
+	{
 			iRegularCost = iMoveDenominator*3;
 			iRouteCost = iRegularCost;
 			iRouteFlatCost = iRegularCost;
@@ -140,8 +140,8 @@ void CvUnitMovement::GetCostsForMove(const CvUnit* pUnit, const CvPlot* pFromPlo
 	}
 }
 
-//	---------------------------------------------------------------------------
-int CvUnitMovement::MovementCost(const CvUnit* pUnit, const CvPlot* pFromPlot, const CvPlot* pToPlot, int iBaseMoves, int iMaxMoves, int iMovesRemaining /*= 0*/)
+
+int CvUnitMovement::MovementCost(const CvUnit* pUnit, const CvPlot* pFromPlot, const CvPlot* pToPlot, int iBaseMoves, int iMaxMoves, int iMovesRemaining        )
 {
 	int iRegularCost;
 	int iRouteCost;
@@ -173,8 +173,8 @@ int CvUnitMovement::MovementCost(const CvUnit* pUnit, const CvPlot* pFromPlot, c
 	return std::max(1, std::min(iRegularCost, std::min(iRouteCost, iRouteFlatCost)));
 }
 
-//	---------------------------------------------------------------------------
-int CvUnitMovement::MovementCostNoZOC(const CvUnit* pUnit, const CvPlot* pFromPlot, const CvPlot* pToPlot, int iBaseMoves, int iMaxMoves, int iMovesRemaining /*= 0*/)
+
+int CvUnitMovement::MovementCostNoZOC(const CvUnit* pUnit, const CvPlot* pFromPlot, const CvPlot* pToPlot, int iBaseMoves, int iMaxMoves, int iMovesRemaining        )
 {
 	int iRegularCost;
 	int iRouteCost;
@@ -199,7 +199,7 @@ int CvUnitMovement::MovementCostNoZOC(const CvUnit* pUnit, const CvPlot* pFromPl
 	return std::max(1, std::min(iRegularCost, std::min(iRouteCost, iRouteFlatCost)));
 }
 
-//	---------------------------------------------------------------------------
+
 bool CvUnitMovement::ConsumesAllMoves(const CvUnit* pUnit, const CvPlot* pFromPlot, const CvPlot* pToPlot)
 {
 
@@ -211,8 +211,8 @@ bool CvUnitMovement::ConsumesAllMoves(const CvUnit* pUnit, const CvPlot* pFromPl
 	}
 
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
-	// Walk-water is land-like for movement. Use plot state only (not isEmbarked) so pathfinding
-	// mid-route matches after a virtual disembark onto pontoon/shallows.
+
+
 	if (pUnit->CanEverEmbark() && !pUnit->IsHoveringUnit() && !pUnit->canMoveAllTerrain())
 	{
 		const bool bFromLandLike = !pFromPlot->isWater() || pFromPlot->IsAllowsWalkWater();
@@ -220,13 +220,13 @@ bool CvUnitMovement::ConsumesAllMoves(const CvUnit* pUnit, const CvPlot* pFromPl
 
 		if (bFromLandLike != bToLandLike)
 		{
-			// Denmark: open water -> true land OR walk-water costs 1 MP
+
 			if (bToLandLike && !bFromLandLike && GET_PLAYER(pUnit->getOwner()).GetPlayerTraits()->IsEmbarkedToLandFlatCost())
 			{
 				return false;
 			}
 #ifdef LEKMOD_TRAIT_CIVILIAN_EMBARK_ONE_MOVE
-			// Civilian embark (land/walk-water -> open water) costs 1 MP; military burns all
+
 			if (!bToLandLike && bFromLandLike && !pUnit->IsCombatUnit() &&
 				GET_PLAYER(pUnit->getOwner()).GetPlayerTraits()->IsCiviliansEmbarkOneMove())
 			{
@@ -236,7 +236,7 @@ bool CvUnitMovement::ConsumesAllMoves(const CvUnit* pUnit, const CvPlot* pFromPl
 			return true;
 		}
 
-		// Same land-like state on both sides (e.g. pontoon <-> pontoon / land): not an embark transition
+
 		if (pFromPlot->IsAllowsWalkWater() || pToPlot->IsAllowsWalkWater())
 		{
 			return false;
@@ -252,7 +252,7 @@ bool CvUnitMovement::ConsumesAllMoves(const CvUnit* pUnit, const CvPlot* pFromPl
 
 	if(!pFromPlot->isValidDomainForLocation(*pUnit))
 	{
-		// If we are a land unit that can embark, then do further tests.
+
 		if(pUnit->getDomainType() != DOMAIN_LAND || pUnit->IsHoveringUnit() || pUnit->canMoveAllTerrain() || !pUnit->CanEverEmbark())
 			return true;
 	}
@@ -266,9 +266,9 @@ bool CvUnitMovement::ConsumesAllMoves(const CvUnit* pUnit, const CvPlot* pFromPl
 #endif
 
 	{
-		//
+
 		
-		// Denmark: open water -> land/walk-water does not burn all MP
+
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
 		if (bFromWaterForEmbark && !bToWaterForEmbark && GET_PLAYER(pUnit->getOwner()).GetPlayerTraits()->IsEmbarkedToLandFlatCost())
 #else
@@ -279,7 +279,7 @@ bool CvUnitMovement::ConsumesAllMoves(const CvUnit* pUnit, const CvPlot* pFromPl
 		}
 
 #ifdef LEKMOD_TRAIT_CIVILIAN_EMBARK_ONE_MOVE
-    // New: Civilian embark does not consume all moves if trait present
+
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
     if (bToWaterForEmbark && !bFromWaterForEmbark)
 #else
@@ -305,13 +305,13 @@ bool CvUnitMovement::ConsumesAllMoves(const CvUnit* pUnit, const CvPlot* pFromPl
 	return false;
 }
 
-//	---------------------------------------------------------------------------
+
 bool CvUnitMovement::CostsOnlyOne(const CvUnit* pUnit, const CvPlot* pFromPlot, const CvPlot* pToPlot)
 {
 	
 	if(!pToPlot->isValidDomainForAction(*pUnit))
 	{
-		// If we are a land unit that can embark, then do further tests.
+
 		if(pUnit->getDomainType() != DOMAIN_LAND || pUnit->IsHoveringUnit() || pUnit->canMoveAllTerrain() || !pUnit->CanEverEmbark())
 			return true;
 	}
@@ -324,8 +324,8 @@ bool CvUnitMovement::CostsOnlyOne(const CvUnit* pUnit, const CvPlot* pFromPlot, 
 		return true;
 	}
 
-	// Denmark UA: open water -> land or walk-water costs 1 MP.
-	// Do not gate on isEmbarked() — pathfinder evaluates mid-route segments.
+
+
 	if (pUnit->CanEverEmbark() && GET_PLAYER(pUnit->getOwner()).GetPlayerTraits()->IsEmbarkedToLandFlatCost())
 	{
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
@@ -343,8 +343,8 @@ bool CvUnitMovement::CostsOnlyOne(const CvUnit* pUnit, const CvPlot* pFromPlot, 
 #endif
 	}
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
-	// Embark from walk-water onto open water: civilian one-move trait (plot-based; ignore isEmbarked
-	// so pathfinding after a virtual disembark still costs 1 MP for civilians).
+
+
 #ifdef LEKMOD_TRAIT_CIVILIAN_EMBARK_ONE_MOVE
 	if (!pToPlot->IsAllowsWalkWater() && pToPlot->isWater() && pFromPlot->IsAllowsWalkWater() &&
 		pUnit->CanEverEmbark() && !pUnit->IsCombatUnit() &&
@@ -355,7 +355,7 @@ bool CvUnitMovement::CostsOnlyOne(const CvUnit* pUnit, const CvPlot* pFromPlot, 
 #endif
 #endif
 #ifdef LEKMOD_TRAIT_CIVILIAN_EMBARK_ONE_MOVE
-    // New: Only civilian units embarking cost 1 move
+
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
     if (pToPlot->isWater() && !pToPlot->IsAllowsWalkWater() && !pFromPlot->isWater() && pUnit->CanEverEmbark())
 #else
@@ -372,7 +372,7 @@ bool CvUnitMovement::CostsOnlyOne(const CvUnit* pUnit, const CvPlot* pFromPlot, 
 	return false;
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvUnitMovement::IsSlowedByZOC(const CvUnit* pUnit, const CvPlot* pFromPlot, const CvPlot* pToPlot)
 {
 	if (pUnit->IsIgnoreZOC() || CostsOnlyOne(pUnit, pFromPlot, pToPlot))
@@ -380,7 +380,7 @@ bool CvUnitMovement::IsSlowedByZOC(const CvUnit* pUnit, const CvPlot* pFromPlot,
 		return false;
 	}
 
-	// Zone of Control
+
 	if(GC.getZONE_OF_CONTROL_ENABLED() > 0)
 	{
 		IDInfo* pAdjUnitNode;
@@ -400,17 +400,17 @@ bool CvUnitMovement::IsSlowedByZOC(const CvUnit* pUnit, const CvPlot* pFromPlot,
 			CvPlot* pAdjPlot = plotDirection(iFromPlotX, iFromPlotY, ((DirectionTypes)iDirection0));
 			if(NULL != pAdjPlot)
 			{
-				// check city zone of control
+
 
 				if (pAdjPlot->isEnemyCity(*pUnit) && (pAdjPlot->isRevealed(pUnit->getTeam()) || pUnit->plot() == pFromPlot))
 				{
-					// Loop through plots adjacent to the enemy city and see if it's the same as our unit's Destination Plot
+
 					for(int iDirection = 0; iDirection < NUM_DIRECTION_TYPES; iDirection++)
 					{
 						CvPlot* pEnemyAdjPlot = plotDirection(pAdjPlot->getX(), pAdjPlot->getY(), ((DirectionTypes)iDirection));
 						if(NULL != pEnemyAdjPlot)
 						{
-							// Destination adjacent to enemy city?
+
 							if(pEnemyAdjPlot->getX() == iToPlotX && pEnemyAdjPlot->getY() == iToPlotY)
 							{
 								return true;
@@ -422,7 +422,7 @@ bool CvUnitMovement::IsSlowedByZOC(const CvUnit* pUnit, const CvPlot* pFromPlot,
 					continue;
 
 				pAdjUnitNode = pAdjPlot->headUnitNode();
-				// Loop through all units to see if there's an enemy unit here
+
 				while(pAdjUnitNode != NULL)
 				{
 					if((pAdjUnitNode->eOwner >= 0) && pAdjUnitNode->eOwner < MAX_PLAYERS)
@@ -446,25 +446,25 @@ bool CvUnitMovement::IsSlowedByZOC(const CvUnit* pUnit, const CvPlot* pFromPlot,
 
 					if(pLoopUnit->isInvisible(unit_team_type,false)) continue;
 
-					// Combat unit?
+
 					if(!pLoopUnit->IsCombatUnit())
 					{
 						continue;
 					}
 
-					// At war with this unit's team?
+
 					if(unit_loop_team_type == BARBARIAN_TEAM || kUnitTeam.isAtWar(unit_loop_team_type))
 					{
 
-						// Same Domain?
+
 
 						DomainTypes loop_unit_domain_type = pLoopUnit->getDomainType();
 						if(loop_unit_domain_type != unit_domain_type)
 						{
-							// this is valid
+
 							if(loop_unit_domain_type == DOMAIN_SEA && unit_domain_type)
 							{
-								// continue on
+
 							}
 							else
 							{
@@ -472,13 +472,13 @@ bool CvUnitMovement::IsSlowedByZOC(const CvUnit* pUnit, const CvPlot* pFromPlot,
 							}
 						}
 
-						// Embarked?
+
 						if(unit_domain_type == DOMAIN_LAND && pLoopUnit->isEmbarked())
 						{
 							continue;
 						}
 
-						// Loop through plots adjacent to the enemy unit and see if it's the same as our unit's Destination Plot
+
 						for(int iDirection2 = 0; iDirection2 < NUM_DIRECTION_TYPES; iDirection2++)
 						{
 							CvPlot* pEnemyAdjPlot = plotDirection(pAdjPlot->getX(), pAdjPlot->getY(), ((DirectionTypes)iDirection2));
@@ -487,10 +487,10 @@ bool CvUnitMovement::IsSlowedByZOC(const CvUnit* pUnit, const CvPlot* pFromPlot,
 								continue;
 							}
 
-							// Don't check Enemy Unit's plot
+
 							if(!bIsVisibleEnemyUnit)
 							{
-								// Destination adjacent to enemy unit?
+
 								if(pEnemyAdjPlot->getX() == iToPlotX && pEnemyAdjPlot->getY() == iToPlotY)
 								{
 									return true;

@@ -1,4 +1,4 @@
--- Author: EnormousApplePie
+
 
 include("Lekmod_utilities.lua")
 include("FLuaVector.lua")
@@ -6,9 +6,9 @@ include("FLuaVector.lua")
 local this_civ = GameInfoTypes["CIVILIZATION_NEW_ZEALAND"]
 local is_active = LekmodUtilities:is_civilization_active(this_civ)
 
-------------------------------------------------------------------------------------------------------------------------
--- New Zealand UA. Give a bonus to the player when they meet a new civ.
-------------------------------------------------------------------------------------------------------------------------
+
+
+
 function lekmod_new_zealand_ua_award_bonus(player, other_player)
 
    if not player:IsAlive() or player:GetCivilizationType() ~= this_civ then return end
@@ -22,9 +22,9 @@ function lekmod_new_zealand_ua_award_bonus(player, other_player)
 
 	local random = LekmodUtilities:get_random_between(1, 4)
 
-   -- Science is handled on team level
+
    if rewards[random].method == "ChangeResearchProgress" then
-      -- if the player is not currently researching anything, add the science to the overflow
+
       if player:GetCurrentResearch() == -1 then
          Teams[player:GetTeam()]:GetTeamTechs():ChangeResearchProgress(player:GetOverflowResearch(), rewards[random].reward, player:GetID())
       else
@@ -53,9 +53,9 @@ function lekmod_new_zealand_ua_on_meet(team_met_id, player_team_id)
 	lekmod_new_zealand_ua_award_bonus(Players[met_player_id], Players[player_id])
 
 end
-------------------------------------------------------------------------------------------------------------------------
--- New Zealand Maori Battalion. Yields 1 influence with a city state per turn if within their borders.
-------------------------------------------------------------------------------------------------------------------------
+
+
+
 function lekmod_is_in_city_state_borders(player_id, unit)
 
 	local plot = unit:GetPlot()
@@ -75,7 +75,7 @@ function lekmod_new_zealand_uu_batallion(player_id)
 
    for unit in player:Units() do
 
-      if not unit:IsHasPromotion(maori_promotion_id) then -- skip
+      if not unit:IsHasPromotion(maori_promotion_id) then
       elseif lekmod_is_in_city_state_borders(player_id, unit) then
          local city_state_id = unit:GetPlot():GetOwner()
          local city_state = Players[city_state_id]
@@ -88,9 +88,9 @@ function lekmod_new_zealand_uu_batallion(player_id)
    end
 
 end
-------------------------------------------------------------------------------------------------------------------------
--- New Zealand UU ironclad. Set a promotion that ignores ZoC on the unit if it is a near a friendly city.
-------------------------------------------------------------------------------------------------------------------------
+
+
+
 function lekmod_new_zealand_uu_defender(player_id)
 
    local defender_promotion_zoc_id = GameInfoTypes["PROMOTION_JFD_DEFENDER_ACTIVE"]
@@ -111,7 +111,7 @@ function lekmod_new_zealand_uu_defender(player_id)
 			else
 				for loop_player_id = 0, GameDefines.MAX_MAJOR_CIVS-1, 1 do
 					local loop_player = Players[loop_player_id]
-					if not loop_player:IsAlive() or loop_player == player_id then -- skip
+					if not loop_player:IsAlive() or loop_player == player_id then
                elseif loop_player:IsDoF(player:GetTeam()) then
                   if plot:IsPlayerCityRadius(loop_player) then
                      is_promotion_valid = true
@@ -132,10 +132,10 @@ function lekmod_new_zealand_uu_defender(player_id)
 	end
 
 end
-------------------------------------------------------------------------------------------------------------------------
+
 if is_active then
 	GameEvents.TeamMeet.Add(lekmod_new_zealand_ua_on_meet)
 end
--- Unique units should work even if the civ is not active
+
 GameEvents.PlayerDoTurn.Add(lekmod_new_zealand_uu_batallion)
 GameEvents.PlayerDoTurn.Add(lekmod_new_zealand_uu_defender)

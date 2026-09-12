@@ -1,4 +1,4 @@
--- Compare complete menu metadata from actual map scripts, including fresh-table ownership.
+
 assert(_VERSION == 'Lua 5.1')
 local directory = assert(arg[1])
 local function serialize(value)

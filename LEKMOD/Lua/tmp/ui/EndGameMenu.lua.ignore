@@ -1,15 +1,15 @@
-----------------------------------------------------------------
--- edit: MP voting system for EUI & vanilla UI
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
+
+
 include( "IconSupport" );
 include( "CommonBehaviors" );
 
 local m_strAudio = "";
 local m_bAllowBack = true;
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnMainMenu()
 	UIManager:DequeuePopup( ContextPtr );
 
@@ -17,8 +17,8 @@ function OnMainMenu()
 		local iActivePlayer = Game.GetActivePlayer();
 		local pPlayer = Players[iActivePlayer];
 
-		-- If the player is not alive, but there are other humans in the game that are
-		-- find the next human player alive and make them the active player
+
+
 		if (not pPlayer:IsAlive()) then
 			local bFound = false;
 			
@@ -30,7 +30,7 @@ function OnMainMenu()
 				pPlayer = Players[iNextPlayer];
 				if (iActivePlayer ~= iNextPlayer and pPlayer:IsAlive() and pPlayer:IsHuman()) then
 					Game.SetActivePlayer( iNextPlayer );
-					-- Restore the game state
+
 					Game.SetGameState(GameplayGameStateTypes.GAMESTATE_ON);
 					bFound = true;
 					break;
@@ -42,7 +42,7 @@ function OnMainMenu()
 			Controls.BackgroundImage:UnloadTexture();	
 			
 			if (not bFound) then
-				-- Fail safe
+
 				Events.ExitToMainMenu();
 			end
 		else
@@ -54,8 +54,8 @@ function OnMainMenu()
 end
 Controls.MainMenuButton:RegisterCallback( Mouse.eLClick, OnMainMenu );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnBack()
 	if (m_bAllowBack) then
 		Network.SendExtendedGame();
@@ -75,22 +75,22 @@ function GetVictoryAudio (strName)
 	return nil;
 end
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 local m_fTime = 0;
 local deferredDisplayTime = 0;
 
 function OnUpdate( fDTime )
 	
-	-- Cap the delta time to eliminate overshooting because of delays in processing.
+
 	local fMaxDTime = fDTime;
 	if (fMaxDTime > 0.1) then
 		fMaxDTime = 0.1;
 	end
 
-	-- Delaying the display so we can see some animation?	
+
 	if (deferredDisplayTime > 0) then
-		-- Yes, hide the UI
+
 		Controls.BGBlock:SetHide(true);
 		Controls.BGWin:SetHide(true);
 		deferredDisplayTime = deferredDisplayTime - fMaxDTime;
@@ -102,7 +102,7 @@ function OnUpdate( fDTime )
 	else
 		local fNewTime = m_fTime + fMaxDTime;
 		if (m_strAudio and m_fTime < 2 and fNewTime >= 2) then
-			-- print("Play audio: " .. m_strAudio);
+
 			Events.AudioPlay2DSound(m_strAudio);
 		end
 		
@@ -119,8 +119,8 @@ end
 ContextPtr:SetUpdate( OnUpdate );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnDisplay( type, team )
 
 	if(not ContextPtr:IsHidden()) then
@@ -134,7 +134,7 @@ function OnDisplay( type, team )
 	local playerID = Game.GetActivePlayer();
 	local player = Players[playerID];
 
-	-- Hide the Beyond Earth button by default.
+
 	if(Controls.BeyondButton ~= nil) then
 		Controls.BeyondButton:SetHide(true);
 		Controls.ButtonStack:CalculateSize();
@@ -164,7 +164,7 @@ function OnDisplay( type, team )
 	    	victoryType = "VICTORY_SPACE_RACE";
 	    	deferredDisplayTime = 7;
 	    	
-	    	-- Space victory, show BE button.
+
 	    	if(Controls.BeyondButton ~= nil) then
 	    		Controls.BeyondButton:SetHide(false);
 	    		Controls.ButtonStack:CalculateSize();
@@ -184,7 +184,7 @@ function OnDisplay( type, team )
 	    	Controls.EndGameText:SetText( Locale.ConvertTextKey( "TXT_KEY_VICTORY_FLAVOR_TIME" ) );
 	    	victoryType = "VICTORY_TIME";
 	    end
-	    -- NEW: scrap victory
+
 		if( Game.GetVictory() == GameInfoTypes.VICTORY_SCRAP ) then
 	    	Controls.EndGameText:SetText( Locale.ConvertTextKey( "TXT_KEY_VICTORY_FLAVOR_SCRAP" ) );
 	    	victoryType = "VICTORY_SCRAP";
@@ -197,7 +197,7 @@ function OnDisplay( type, team )
 			m_bAllowBack = false;
 		end
 			
-		--print(victoryType);
+
 		if(victoryType)then
 			m_strAudio = GetVictoryAudio(victoryType);
 			Controls.BackgroundImage:SetTexture(GameInfo.Victories[victoryType].VictoryBackground);    		
@@ -259,8 +259,8 @@ end
 Events.EndGameShow.Add( OnDisplay );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnGameOver()
     Controls.Ranking:SetHide( true );
     Controls.EndGameReplay:SetHide( true );
@@ -271,8 +271,8 @@ end
 Controls.GameOverButton:RegisterCallback( Mouse.eLClick, OnGameOver );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnDemographics()
     Controls.Ranking:SetHide( true );
     Controls.EndGameReplay:SetHide( true );
@@ -283,8 +283,8 @@ end
 Controls.DemographicsButton:RegisterCallback( Mouse.eLClick, OnDemographics );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnReplay()
     Controls.Ranking:SetHide( true );
     Controls.EndGameReplay:SetHide( false );
@@ -295,8 +295,8 @@ end
 Controls.ReplayButton:RegisterCallback( Mouse.eLClick, OnReplay );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnRanking()
     Controls.Ranking:SetHide( false );
     Controls.EndGameReplay:SetHide( true );
@@ -307,9 +307,9 @@ end
 Controls.RankingButton:RegisterCallback( Mouse.eLClick, OnRanking );
 
 
-----------------------------------------------------------------
--- Key Down Processing
-----------------------------------------------------------------
+
+
+
 function InputHandler( uiMsg, wParam, lParam )
     if( uiMsg == KeyEvents.KeyDown )
     then
@@ -322,15 +322,15 @@ end
 ContextPtr:SetInputHandler( InputHandler );
 
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function ShowHideHandler( bIsHide, bIsInit )
 
 	CivIconHookup( Game.GetActivePlayer(), 80, Controls.CivIcon, Controls.CivIconBG, Controls.CivIconShadow, false, true );
     if( not bIsInit ) then
         if( not bIsHide ) then
             UI.incTurnTimerSemaphore();
-			-- Display a continue button if there are other players left in the game
+
 			local pPlayer = Players[Game.GetActivePlayer()];
 			if (Game.IsHotSeat() and Game.CountHumanPlayersAlive() > 0 and not pPlayer:IsAlive()) then
 				Controls.MainMenuButton:SetText( Locale.ConvertTextKey( "TXT_KEY_MP_PLAYER_CHANGE_CONTINUE" ) );

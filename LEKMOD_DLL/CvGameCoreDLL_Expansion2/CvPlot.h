@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	ù 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_PLOT_H
@@ -14,7 +14,7 @@
 
 #ifdef _MSC_VER
 #pragma warning ( push )
-#pragma warning ( disable : 6385 ) // Possible invalid data access
+#pragma warning ( disable : 6385 )
 #endif
 #include <bitset>
 #ifdef _MSC_VER
@@ -28,7 +28,7 @@
 #include "CvGame.h"
 #include "CvEnums.h"
 
-#pragma warning( disable: 4251 )		// needs to have dll-interface to be used by clients of class
+#pragma warning( disable: 4251 )
 
 class CvArea;
 class CvMap;
@@ -39,20 +39,20 @@ class CvCity;
 typedef bool (*ConstPlotUnitFunc)(const CvUnit* pUnit, int iData1, int iData2);
 typedef bool (*PlotUnitFunc)(CvUnit* pUnit, int iData1, int iData2);
 
-// please don't change this
+
 #define NUM_INVISIBLE_TYPES 1
 
 typedef FFastVector<IDInfo, true, c_eCiv5GameplayDLL, 0> IDInfoVector;
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  STRUCT: CvArchaeologyData
-//!  \brief All the archaeological data stored for a plot
-//
-//!  Key Attributes:
-//!  - Stored in CvPlot class
-//!  - Stores creation info (GP, year, era, player)
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 struct CvArchaeologyData
 {
 	GreatWorkArtifactClass m_eArtifactType;
@@ -463,13 +463,13 @@ public:
 	bool IsAllowsSailLand() const;
 
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
-	/// Effective route from ActsAsRoute improvement (road/rail by team tech), else NO_ROUTE
+
 	RouteTypes GetImprovementActsAsRouteType(TeamTypes eTeam) const;
-	/// Best of plot route and improvement-as-route
+
 	RouteTypes GetEffectiveRouteType(const CvUnit* pUnit) const;
 	RouteTypes GetEffectiveRouteType(TeamTypes eTeam) const;
 	bool HasStackedLandAndNavalUnits() const;
-	/// True if pUnit arriving on this walk-water plot would create a land+naval combat lock
+
 	bool WouldBlockAttacksWithUnit(const CvUnit* pUnit) const;
 	void DoHandleUnitsAfterWaterWalkLost();
 	void DoHandleUnitsAfterWaterWalkGained();
@@ -519,17 +519,17 @@ public:
 	bool IsImprovementPillaged() const;
 	void SetImprovementPillaged(bool bPillaged);
 
-	// Someone gifted an improvement in an owned plot? (major civ gift to city-state)
+
 	bool IsImprovedByGiftFromMajor() const;
 	void SetImprovedByGiftFromMajor(bool bValue);
 
 	bool HasSpecialImprovement() const;
 
-	// Who built the improvement in this plot?
+
 	PlayerTypes GetPlayerThatBuiltImprovement() const;
 	void SetPlayerThatBuiltImprovement(PlayerTypes eBuilder);
 	
-	// Someone footing the bill for an improvement/route in an unowned plot?
+
 	PlayerTypes GetPlayerResponsibleForImprovement() const;
 	void SetPlayerResponsibleForImprovement(PlayerTypes eNewValue);
 	PlayerTypes GetPlayerResponsibleForRoute() const;
@@ -684,14 +684,14 @@ public:
 	bool getAnyBuildProgress() const;
 	void SilentlyResetAllBuildProgress();
 
-	bool isLayoutDirty() const;							// The plot layout contains resources, routes, and improvements
+	bool isLayoutDirty() const;
 	void setLayoutDirty(bool bDirty);
 	bool isLayoutStateDifferent() const;
 	void setLayoutStateToCurrent();
 	void updateLayout(bool bDebug);
 
-	void getVisibleImprovementState(ImprovementTypes& eType, bool& bWorked);				// determines how the improvement state is shown in the engine
-	void getVisibleResourceState(ResourceTypes& eType, bool& bImproved, bool& bWorked);		// determines how the resource state is shown in the engine
+	void getVisibleImprovementState(ImprovementTypes& eType, bool& bWorked);
+	void getVisibleResourceState(ResourceTypes& eType, bool& bImproved, bool& bWorked);
 
 	UnitHandle getCenterUnit();
 	const UnitHandle getCenterUnit() const;
@@ -726,7 +726,7 @@ public:
 	int getNumLayerUnits(int iLayerID = -1) const;
 	CvUnit* getLayerUnit(int iIndex, int iLayerID = -1) const;
 
-	// Script data needs to be a narrow string for pickling in Python
+
 	CvString getScriptData() const;
 	void setScriptData(const char* szNewValue);
 
@@ -781,7 +781,7 @@ public:
 	std::string debugDump(const FAutoVariableBase&) const;
 	std::string stackTraceRemark(const FAutoVariableBase&) const;
 
-	// Validate the contents of the plot.  This will attempt to clean up inconsistencies
+
 	int Validate(CvMap& kParentMap);
 
 	bool MustPayMaintenanceHere(PlayerTypes ePlayer) const;
@@ -856,9 +856,9 @@ protected:
 #else
 	short m_iX;
 	short m_iY;
-	char /*PlayerTypes*/  m_eOwner;
-	char /*PlotTypes*/    m_ePlotType;
-	char /*TerrainTypes*/ m_eTerrainType;
+	char                  m_eOwner;
+	char                  m_ePlotType;
+	char                  m_eTerrainType;
 #endif
 
 	PlotBoolField m_bfRevealed;
@@ -878,20 +878,20 @@ protected:
 	int* m_aiPlayerCityRadiusCount;
 	int* m_aiVisibilityCount;
 	int* m_aiRevealedOwner;
-	//bool *m_abRevealed;
 
-	int /*ImprovementTypes*/ *m_aeRevealedImprovementType;
-	int /*RouteTypes*/ *m_aeRevealedRouteType;
+
+	int                      *m_aeRevealedImprovementType;
+	int                *m_aeRevealedRouteType;
 #else
 	short* m_aiYield;
 	int* m_aiFoundValue;
 	char* m_aiPlayerCityRadiusCount;
 	short* m_aiVisibilityCount;
 	char* m_aiRevealedOwner;
-	//bool *m_abRevealed;
 
-	short /*ImprovementTypes*/ *m_aeRevealedImprovementType;
-	short /*RouteTypes*/ *m_aeRevealedRouteType;
+
+	short                      *m_aeRevealedImprovementType;
+	short                *m_aeRevealedRouteType;
 #endif
 	bool* m_abNoSettling;
 
@@ -916,9 +916,9 @@ protected:
 	int m_iArea;
 	int m_iLandmass;
 
-	// This is a variable that you can use for whatever nefarious deeds you need to do
-	// it will not be saved or loaded - you should assume that it is filled with garbage
-	// when you get it
+
+
+
 	int m_iScratchPad;
 #ifdef AUI_WARNING_FIXES
 	int m_cBuilderAIScratchPadPlayer;
@@ -948,7 +948,7 @@ protected:
 	uint m_uiTradeRouteBitFlags;
 
 
-	FAutoArchiveClassContainer<CvPlot> m_syncArchive; // this must appear before the first auto variable in the class
+	FAutoArchiveClassContainer<CvPlot> m_syncArchive;
 #ifdef AUI_WARNING_FIXES
 	FAutoVariable<int, CvPlot> m_eFeatureType;
 	int m_eResourceType;
@@ -961,9 +961,9 @@ protected:
 	int m_eRouteType;
 	int m_eWorldAnchor;
 	int m_cWorldAnchorData;
-	int m_eRiverEFlowDirection; // flow direction on the E edge (isWofRiver)
-	int m_eRiverSEFlowDirection; // flow direction on the SE edge (isNWofRiver)
-	int m_eRiverSWFlowDirection; // flow direction on the SW edge (isNEofRiver)
+	int m_eRiverEFlowDirection;
+	int m_eRiverSEFlowDirection;
+	int m_eRiverSWFlowDirection;
 	int m_iFeatureVariety;
 	int m_iNumMajorCivsRevealed;
 	int m_iCityRadiusCount;
@@ -971,22 +971,22 @@ protected:
 	int m_iRiverCrossingCount;
 	int m_iResourceNum;
 	int m_cContinentType;
-	int m_cRiverCrossing;	// bit field
+	int m_cRiverCrossing;
 #else
-	FAutoVariable<char, CvPlot> /*FeatureTypes*/ m_eFeatureType;
-	char /*ResourceTypes*/ m_eResourceType;
-	char /*ImprovementTypes*/ m_eImprovementType;
-	char /*ImprovementTypes*/ m_eImprovementTypeUnderConstruction;
-	char /*PlayerTypes*/ m_ePlayerBuiltImprovement;
-	char /*PlayerTypes*/ m_ePlayerResponsibleForImprovement;
-	char /*PlayerTypes*/ m_ePlayerResponsibleForRoute;
-	char /*PlayerTypes*/ m_ePlayerThatClearedBarbCampHere;
-	char /*RouteTypes*/ m_eRouteType;
-	char /*GenericWorldAnchorTypes*/ m_eWorldAnchor;
-	char /*int*/ m_cWorldAnchorData;
-	char /*FlowDirectionTypes*/ m_eRiverEFlowDirection; // flow direction on the E edge (isWofRiver)
-	char /*FlowDirectionTypes*/ m_eRiverSEFlowDirection; // flow direction on the SE edge (isNWofRiver)
-	char /*FlowDirectionTypes*/ m_eRiverSWFlowDirection; // flow direction on the SW edge (isNEofRiver)
+	FAutoVariable<char, CvPlot>                  m_eFeatureType;
+	char                   m_eResourceType;
+	char                      m_eImprovementType;
+	char                      m_eImprovementTypeUnderConstruction;
+	char                 m_ePlayerBuiltImprovement;
+	char                 m_ePlayerResponsibleForImprovement;
+	char                 m_ePlayerResponsibleForRoute;
+	char                 m_ePlayerThatClearedBarbCampHere;
+	char                m_eRouteType;
+	char                             m_eWorldAnchor;
+	char         m_cWorldAnchorData;
+	char                        m_eRiverEFlowDirection;
+	char                        m_eRiverSEFlowDirection;
+	char                        m_eRiverSWFlowDirection;
 	char m_iFeatureVariety;
 	char m_iNumMajorCivsRevealed;
 	char m_iCityRadiusCount;
@@ -994,7 +994,7 @@ protected:
 	char m_iRiverCrossingCount;
 	char m_iResourceNum;
 	char m_cContinentType;
-	char m_cRiverCrossing;	// bit field
+	char m_cRiverCrossing;
 #endif
 #if defined(LEKMOD_BUGANDA_LAKE)
 	bool m_bPseudoLake : 1;
@@ -1016,8 +1016,8 @@ protected:
 	bool m_bRoughFeature:1;
 	bool m_bResourceLinkedCityActive:1;
 	bool m_bImprovedByGiftFromMajor:1;
-	bool m_bIsAdjacentToLand:1;				// Cached value, do not serialize
-	bool m_bIsImpassable:1;					// Cached value, do not serialize
+	bool m_bIsAdjacentToLand:1;
+	bool m_bIsImpassable:1;
 
 #ifdef LEKMOD_NEW_LUA_METHODS
 	bool m_bIsSetFreshWater:1;
@@ -1034,7 +1034,7 @@ protected:
 	void updateImpassable();
 
 
-	// added so under cheat mode we can access protected stuff
+
 	friend class CvGameTextMgr;
 };
 

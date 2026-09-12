@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check that each game-engine import is exported by the installed Mac host."""
+
 from pathlib import Path
 import subprocess
 
@@ -22,7 +22,7 @@ def check_imports(library, app=DEFAULT_APP):
 
 
 def check_pregame_abi(library):
-    """Check Mac 180925 pre-game slots in the linked binary, not just class size."""
+
     import struct
     data = Path(library).read_bytes()
     if struct.unpack_from('<I', data)[0] != 0xfeedfacf:
@@ -39,14 +39,14 @@ def check_pregame_abi(library):
     offset = 32
     for _ in range(struct.unpack_from('<I', data, 16)[0]):
         command, size = struct.unpack_from('<II', data, offset)
-        if command == 0x19:  # LC_SEGMENT_64
+        if command == 0x19:
             vmaddr, _, fileoff, filesize = struct.unpack_from('<QQQQ', data, offset + 24)
             segments.append((vmaddr, fileoff, filesize))
         offset += size
-    address = symbols['__ZTV12CvDllPreGame'] + 16  # skip offset-to-top and RTTI
+    address = symbols['__ZTV12CvDllPreGame'] + 16
     table = next(fileoff + address - vmaddr for vmaddr, fileoff, filesize in segments
                  if vmaddr <= address < vmaddr + filesize)
-    # Anchors reconstructed from the stock Aspyr 180925 vtable and host callers.
+
     expected = {
         28: '__ZN12CvDllPreGame6eraKeyEv',
         29: '__ZN12CvDllPreGame20findPlayerByNicknameEPKc',

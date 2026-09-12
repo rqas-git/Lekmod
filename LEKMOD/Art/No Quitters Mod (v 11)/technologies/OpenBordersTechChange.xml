@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 4/22/2016 9:09:36 AM -->
+
 <GameData>
 
-	<!-- Open Borders allowed from game start. -->
+
 	<Technologies>
 		<Update>
 			<Set OpenBordersTradingAllowed="false" />

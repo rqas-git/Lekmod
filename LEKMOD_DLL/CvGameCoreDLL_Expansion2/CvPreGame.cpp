@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvGameCoreUtils.h"
 #include "CvPreGame.h"
@@ -17,24 +17,24 @@
 
 #include <unordered_map>
 
-// Include this after all other headers.
+
 #include "LintFree.h"
 
-//////////////////////////////////////////////////////////////////////////
-//
-// WARNING: Do not use any of the GC.*Info tables in this file.
-//			These Game Core tables are not always current to what the loaded
-//			database set contains.  This is the case when setting up a multiplayer
-//			game or even in a single player game if you have returned from a multiplayer game.
-//			The reason the Game Core data is not kept in sync is because the caching of all the data
-//			can take a significant amount of time.
+
+
+
+
+
+
+
+
 
 #define PREGAMEVARDEFAULT(a, b) FAutoVariable<a, Phony> b("CvPreGame::"#b, s_preGameArchive);
 #define PREGAMEVAR(a, b, c) FAutoVariable<a, Phony> b("CvPreGame::"#b, s_preGameArchive, c, false);
 
 
-//Basic translation function to help with the glue between the old
-//GameOptionTypes enumeration usage vs the newer system that uses strings.
+
+
 const char* ConvertGameOptionTypeToString(GameOptionTypes eOption)
 {
 	switch(eOption)
@@ -92,34 +92,34 @@ namespace CvPreGame
 static const GUID s_emptyGUID = { 0x00000000, 0x0000, 0x0000, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00} };
 static PackageIDList s_emptyGUIDList;
 
-//------------------------------------------------------------------------------
-// CustomOption
-//------------------------------------------------------------------------------
+
+
+
 CustomOption::CustomOption()
 	: m_iValue(-1)
 {
 	memset(m_szOptionName, 0, 64);
 }
-//------------------------------------------------------------------------------
+
 CustomOption::CustomOption(const char* szOptionName, int iVal)
 	: m_iValue(iVal)
 {
 	strcpy_s(m_szOptionName, 64, szOptionName);
 }
-//------------------------------------------------------------------------------
+
 CustomOption::CustomOption(const CustomOption& copy)
 {
 	m_iValue = copy.m_iValue;
 	strcpy_s(m_szOptionName, copy.m_szOptionName);
 }
-//------------------------------------------------------------------------------
+
 CustomOption& CustomOption::operator=(const CustomOption& rhs)
 {
 	m_iValue = rhs.m_iValue;
 	strcpy_s(m_szOptionName, rhs.m_szOptionName);
 	return (*this);
 }
-//------------------------------------------------------------------------------
+
 bool CustomOption::operator ==(const CustomOption& option) const
 {
 	if(m_iValue == option.m_iValue)
@@ -130,23 +130,23 @@ bool CustomOption::operator ==(const CustomOption& option) const
 
 	return false;
 }
-//------------------------------------------------------------------------------
+
 const char* CustomOption::GetName(size_t& bytes) const
 {
 	bytes = strlen(m_szOptionName);
 	return m_szOptionName;
 }
-//------------------------------------------------------------------------------
+
 const char* CustomOption::GetName() const
 {
 	return m_szOptionName;
 }
-//------------------------------------------------------------------------------
+
 int CustomOption::GetValue() const
 {
 	return m_iValue;
 }
-//------------------------------------------------------------------------------
+
 FDataStream& operator>>(FDataStream& stream, CustomOption& option)
 {
 	FString optionName;
@@ -158,7 +158,7 @@ FDataStream& operator>>(FDataStream& stream, CustomOption& option)
 
 	return stream;
 }
-//------------------------------------------------------------------------------
+
 FDataStream& operator<<(FDataStream& stream, const CustomOption& option)
 {
 	FString optionName(option.m_szOptionName, strlen(option.m_szOptionName));
@@ -167,8 +167,8 @@ FDataStream& operator<<(FDataStream& stream, const CustomOption& option)
 
 	return stream;
 }
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+
+
 #ifdef AUI_WARNING_FIXES
 void StringToBools(const char* szString, uint* iNumBools, bool** ppBools);
 #else
@@ -213,7 +213,7 @@ PREGAMEVAR(EraTypes,                           s_era,                    NO_ERA)
 PREGAMEVAR(std::vector<CvString>,              s_emailAddresses,         MAX_PLAYERS);
 PREGAMEVAR(float,                              s_endTurnTimerLength,     0.0f);
 PREGAMEVAR(std::vector<CvString>,              s_flagDecals,             MAX_PLAYERS);
-PREGAMEVAR(std::vector<bool>,                  s_DEPRECATEDforceControls, 7);			//This was removed during the Day 0 patch since it is no longer used anywhere.
+PREGAMEVAR(std::vector<bool>,                  s_DEPRECATEDforceControls, 7);
 PREGAMEVAR(GameMode,                           s_gameMode,               NO_GAMEMODE);
 PREGAMEVARDEFAULT(CvString,                           s_gameName);
 PREGAMEVAR(GameSpeedTypes,                     s_gameSpeed,              NO_GAMESPEED);
@@ -289,10 +289,10 @@ typedef std::map<uint, uint> HashToOptionMap;
 HashToOptionMap s_GameOptionsHash;
 HashToOptionMap s_MapOptionsHash;
 
-bool s_multiplayerAIEnabled = true; // default for RTM, change to true on street patch
+bool s_multiplayerAIEnabled = true;
 
 
-std::map<PlayerTypes, CvString> s_displayNicknames; // JAR - workaround duplicate IDs vs display names
+std::map<PlayerTypes, CvString> s_displayNicknames;
 
 const std::vector<TeamTypes>& sr_TeamTypes = s_teamTypes;
 
@@ -317,8 +317,8 @@ GameStartTypes	s_gameStartType;
 
 StorageLocation	s_loadFileStorage;
 
-//	-----------------------------------------------------------------------
-//	Bind a leader head key to the leader head using the current leader head ID
+
+
 bool bindLeaderKeys(PlayerTypes p)
 {
 	LeaderHeadTypes l = leaderHead(p);
@@ -326,7 +326,7 @@ bool bindLeaderKeys(PlayerTypes p)
 	bool bFailed = false;
 	if(l != NO_LEADER)
 	{
-		// During the pre-game, we can't be sure the cached *Infos are current, so query the database
+
 		Database::Connection* pDB = GC.GetGameDatabase();
 		if(pDB)
 		{
@@ -361,14 +361,14 @@ bool bindLeaderKeys(PlayerTypes p)
 	return bFailed;
 }
 
-// Set the unique key value for the civilization
+
 bool bindCivilizationKeys(PlayerTypes p)
 {
 	bool bFailed = false;
 	CivilizationTypes c = civilization(p);
 	if(c != NO_CIVILIZATION)
 	{
-		// During the pre-game, we can't be sure the cached *Infos are current, so query the database
+
 		Database::Connection* pDB = GC.GetGameDatabase();
 		if(pDB)
 		{
@@ -408,12 +408,12 @@ bool bindCivilizationKeys(PlayerTypes p)
 void writeCivilizations(FDataStream& saveTo)
 {
 	if(s_gameStarted || !isNetworkMultiplayerGame()){
-		//full save, preserve everything.
+
 		saveTo << s_civilizations;
 	}
 	else{
-		//game cfg save only.  Scrub player specific data from our save output.
-		//reset all non-AI players to random civ.
+
+
 		int i = 0;
 		std::vector<CivilizationTypes> civsTemp = s_civilizations;
 		for(std::vector<CivilizationTypes>::iterator civIter = civsTemp.begin(); civIter != civsTemp.end(); ++civIter, ++i){
@@ -428,11 +428,11 @@ void writeCivilizations(FDataStream& saveTo)
 void writeNicknames(FDataStream& saveTo)
 {
 	if(s_gameStarted || !isNetworkMultiplayerGame()){
-		//full save, preserve everything.
+
 		saveTo << s_nicknames;
 	}
 	else{
-		//game cfg save only.  Scrub player specific data from our save output.
+
 		std::vector<CvString> nicksTemp = s_nicknames;
 		for(std::vector<CvString>::iterator nickIter = nicksTemp.begin(); nickIter != nicksTemp.end(); ++nickIter){
 			*nickIter = "";
@@ -444,12 +444,12 @@ void writeNicknames(FDataStream& saveTo)
 void writeSlotStatus(FDataStream& saveTo)
 {
 	if(s_gameStarted || !isNetworkMultiplayerGame()){
-		//full save, preserve everything.
+
 		saveTo << s_slotStatus;
 	}
 	else{
-		//game cfg save only.  Scrub player specific data from our save output.
-		//Revert human occupied slots to open.
+
+
 		std::vector<SlotStatus> slotTemp = s_slotStatus;
 		for(std::vector<SlotStatus>::iterator slotIter = slotTemp.begin(); slotIter != slotTemp.end(); ++slotIter){
 			if(*slotIter == SS_TAKEN){
@@ -460,7 +460,7 @@ void writeSlotStatus(FDataStream& saveTo)
 	}
 }
 
-//	-----------------------------------------------------------------------
+
 void saveSlotHints(FDataStream& saveTo)
 {
 	uint uiVersion = 3;
@@ -481,14 +481,14 @@ void saveSlotHints(FDataStream& saveTo)
 }
 
 void ReseatConnectedPlayers()
-{//This function realigns network connected players into the correct slots for the current pregame data. (Typically after loading in saved data)
-	//A network player's pregame data can and will be totally wrong until this function is run and the resulting net messages are processed.
+{
+
 	if(isNetworkMultiplayerGame()){
 		int i = 0;
 		for(i = 0; i < MAX_PLAYERS; ++i){
-			// reseat the network connected player in this slot.
+
 			if(gDLL->ReseatConnectedPlayer((PlayerTypes)i)){
-				//a player needs to be reseated.  We need to wait for the net message to come from the host.  We will rerun ReseatConnectedPlayers then.
+
 				return;
 			}
 		}
@@ -513,7 +513,7 @@ int calcActiveSlotCount(const std::vector<SlotStatus>& slotStatus, const std::ve
 	return iCount;
 }
 
-//	---------------------------------------------------------------------------
+
 static void loadSlotsHelper(
     FDataStream& loadFrom,
     uint uiVersion,
@@ -605,14 +605,14 @@ void loadSlotHints(FDataStream& loadFrom, bool bReadVersion)
 	s_mapScriptName = mapScriptName;
 	if (uiVersion >= 3)
 	{
-		// Set the civilizations and leaders from the key values
+
 		if (civilizationKeys.size() > 0)
 		{
 			for (uint i = 0; i < civilizationKeys.size(); ++i)	
 				setCivilizationKey((PlayerTypes)i, civilizationKeys[i]);
 		}
 		else
-			// Fall back to using the indices.  This shouldn't happen.
+
 			s_civilizations = civilizations;
 
 		if (leaderKeys.size() > 0)
@@ -623,7 +623,7 @@ void loadSlotHints(FDataStream& loadFrom, bool bReadVersion)
 	}
 	else
 	{
-		// Civilization saved as indices, not a good idea.
+
 		s_civilizations = civilizations;
 	}
 
@@ -632,7 +632,7 @@ void loadSlotHints(FDataStream& loadFrom, bool bReadVersion)
 	s_slotStatus = slotStatus;
 	s_slotClaims = slotClaims;
 
-	// The slots hints handicaps may be invalid, only copy them over if they are not
+
 	if(handicapTypes.size() == MAX_PLAYERS)
 		s_handicaps = handicapTypes;
 
@@ -640,7 +640,7 @@ void loadSlotHints(FDataStream& loadFrom, bool bReadVersion)
 	for(i = 0; i < s_nicknames.size(); ++i)
 	{
 		PlayerTypes p = static_cast<PlayerTypes>(i);
-		setNickname(p, s_nicknames[i]); // fix display names
+		setNickname(p, s_nicknames[i]);
 	}
 
 	ReseatConnectedPlayers();
@@ -697,13 +697,13 @@ CvString bandwidthDescription()
 {
 	if(bandwidth() == BANDWIDTH_BROADBAND)
 	{
-		//return CvString("broadband");
+
 		return GetLocalizedText("broadband");
 	}
 	else
 	{
 		return GetLocalizedText("modem");
-		//return CvString("modem");
+
 	}
 }
 
@@ -818,8 +818,8 @@ void closeInactiveSlots()
 {
 	s_gameStarted = true;
 
-	// Open inactive slots mean different things to different game modes and types...
-	// Let's figure out what they mean for us
+
+
 	gDLL->BeginSendBundle();
 	for(int i = 0; i < MAX_CIV_PLAYERS; i++)
 	{
@@ -828,12 +828,12 @@ void closeInactiveSlots()
 		{
 			if(gameType() == GAME_NETWORK_MULTIPLAYER && gameMapType() == GAME_SCENARIO)
 			{
-				// Multiplayer scenario - all "open" slots should be filled with an AI player
+
 				setSlotStatus(eID, SS_COMPUTER);
 			}
 			else
 			{
-				// If it's a normal game, all "open" slots should be closed.
+
 				setSlotStatus(eID, SS_CLOSED);
 			}
 			setSlotClaim(eID, SLOTCLAIM_UNASSIGNED);
@@ -895,15 +895,15 @@ const CvString& gameName()
 	return s_gameName;
 }
 
-//! This does not need to be an auto var!
-//! The actual game options vector s_GameOptions is an auto var.
-//! This is only here to make retrieving enum-based options fast
-//! since GameCore does it way to effing often.
+
+
+
+
 int s_EnumBasedGameOptions[NUM_GAMEOPTION_TYPES];
 
-//! This method sync's up an enum-based array of game options w/ the actual
-//! game options structure.  This should be called every time new options
-//! are set.
+
+
+
 void SyncGameOptionsWithEnumList()
 {
 	const char* str;
@@ -920,7 +920,7 @@ void SyncGameOptionsWithEnumList()
 		switch(i)
 		{
 		case GAMEOPTION_QUICK_COMBAT:
-			s_quickCombat = v;	// set directly, to avoid infinite recursion.
+			s_quickCombat = v;
 			break;
 		default:
 			break;
@@ -945,7 +945,7 @@ bool GetGameOption(const char* szOptionName, int& iValue)
 		}
 	}
 
-	//Try and lookup the default value.
+
 	Database::Results kLookup;
 	if(GC.GetGameDatabase()->Execute(kLookup, "Select \"Default\" from GameOptions where Type = ? LIMIT 1"))
 	{
@@ -973,7 +973,7 @@ bool GetGameOption(GameOptionTypes eOption, int& iValue)
 	}
 	else
 	{
-		// Hash lookup
+
 		HashToOptionMap::const_iterator itr = s_GameOptionsHash.find((uint)eOption);
 		if(itr != s_GameOptionsHash.end())
 		{
@@ -984,14 +984,14 @@ bool GetGameOption(GameOptionTypes eOption, int& iValue)
 			}
 		}
 
-		// Must get the string from the hash
+
 		GameOptionTypes eOptionIndex = (GameOptionTypes)GC.getInfoTypeForHash((uint)eOption);
 		if(eOptionIndex >= 0)
 		{
 			CvGameOptionInfo* pkInfo = GC.getGameOptionInfo(eOptionIndex);
 			if(pkInfo)
 			{
-				//Try and lookup the default value.
+
 				Database::Results kLookup;
 				if(GC.GetGameDatabase()->Execute(kLookup, "Select \"Default\" from GameOptions where Type = ? LIMIT 1"))
 				{
@@ -1016,7 +1016,7 @@ const std::vector<CustomOption>& GetGameOptions()
 
 bool SetGameOption(const char* szOptionName, int iValue)
 {
-	//Do not allow NULL entries :P
+
 #ifdef AUI_WARNING_FIXES
 	if (szOptionName == NULL || szOptionName[0] == '\0')
 #else
@@ -1031,8 +1031,8 @@ bool SetGameOption(const char* szOptionName, int iValue)
 		const char* szCurrentOptionName = option.GetName(bytes);
 		if(strncmp(szCurrentOptionName, szOptionName, bytes) == 0)
 		{
-			//I'd like to just set the value here, but that doesn't seem possible
-			//so instead, create a new CustomOption type and assign it to this index.
+
+
 			s_GameOptions.setAt(i, CustomOption(szOptionName, iValue));
 			SyncGameOptionsWithEnumList();
 			return true;
@@ -1040,7 +1040,7 @@ bool SetGameOption(const char* szOptionName, int iValue)
 
 	}
 
-	//Didn't find the option, push it.
+
 	s_GameOptions.push_back(CustomOption(szOptionName, iValue));
 	s_GameOptionsHash[FString::Hash(szOptionName)] = s_GameOptions.size() - 1;
 	SyncGameOptionsWithEnumList();
@@ -1208,7 +1208,7 @@ bool isPlayable(PlayerTypes p)
 			}
 			else
 			{
-				// Don't allow people to play the barbarian civ
+
 				return (p < MAX_CIV_PLAYERS);
 			}
 		}
@@ -1336,7 +1336,7 @@ const CvString& leaderKey(PlayerTypes p)
 	return empty;
 }
 
-// Get the package ID the player's leader is from.  If empty, it comes from the base installation.
+
 const GUID& leaderKeyPackageID(PlayerTypes p)
 {
 	if(p >= 0 && p < MAX_PLAYERS)
@@ -1369,7 +1369,7 @@ void loadFromIni(FIGameIniParser& iniParser)
 	setQuickCombatDefault(iHolder != 0);
 	setQuickCombat(quickCombatDefault());
 
-	FString szGameDefault = "";//FString(GC.getSetupData().getAlias().GetCString());
+	FString szGameDefault = "";
 	if(szGameDefault.IsEmpty())
 	{
 		Localization::String strGameName = Localization::Lookup("TXT_KEY_DEFAULT_GAMENAME");
@@ -1383,27 +1383,27 @@ void loadFromIni(FIGameIniParser& iniParser)
 	iniParser.GetKeyValue("GAME", "GameName", &szHolder, "Game Name", szGameDefault);
 	tempString = szHolder;
 	setGameName(tempString);
-	// World Size
+
 	iniParser.GetKeyValue("GAME", "WorldSize", &szHolder, "Worldsize options are WORLDSIZE_DUEL/WORLDSIZE_TINY/WORLDSIZE_SMALL/WORLDSIZE_STANDARD/WORLDSIZE_LARGE/WORLDSIZE_HUGE", "WORLDSIZE_SMALL");
 	tempString = szHolder;
 	setWorldSize(tempString);
-	// Climate
+
 	iniParser.GetKeyValue("GAME", "Climate", &szHolder, "Climate options are CLIMATE_ARID/CLIMATE_TEMPERATE/CLIMATE_TROPICAL", "CLIMATE_TEMPERATE");
 	tempString = szHolder;
 	setClimate(tempString);
-	// Sea Level
+
 	iniParser.GetKeyValue("GAME", "SeaLevel", &szHolder, "Sealevel options are SEALEVEL_LOW/SEALEVEL_MEDIUM/SEALEVEL_HIGH", "SEALEVEL_MEDIUM");
 	tempString = szHolder;
 	setSeaLevel(tempString);
-	// Era
+
 	iniParser.GetKeyValue("GAME", "Era", &szHolder, "Era options are ERA_ANCIENT/ERA_CLASSICAL/ERA_MEDIEVAL/ERA_RENAISSANCE/ERA_INDUSTRIAL/ERA_MODERN", "ERA_ANCIENT");
 	tempString = szHolder;
 	setEra(tempString);
-	// Game speed
+
 	iniParser.GetKeyValue("GAME", "GameSpeed", &szHolder, "GameSpeed options are GAMESPEED_QUICK/GAMESPEED_STANDARD/GAMESPEED_EPIC/GAMESPEED_MARATHON", "GAMESPEED_STANDARD");
 	tempString = szHolder;
 	setGameSpeed(tempString);
-	// Quick Handicap
+
 
 #ifdef AUI_WARNING_FIXES
 	uint iNumBools;
@@ -1412,7 +1412,7 @@ void loadFromIni(FIGameIniParser& iniParser)
 #endif
 	bool* pbBools;
 
-	// Victory Conditions
+
 	iniParser.GetKeyValue("GAME", "VictoryConditions", &szHolder, "Victory Conditions", "11111111");
 	if(szHolder != "EMPTY")
 	{
@@ -1437,8 +1437,8 @@ void loadFromIni(FIGameIniParser& iniParser)
 		SAFE_DELETE_ARRAY(pbBools);
 	}
 
-	// Game Options
-	//if (!CIV.GetModName())
+
+
 	{
 		iniParser.GetKeyValue("GAME", "GameOptions", &szHolder, "Game Options", "EMPTY");
 		if(szHolder != "EMPTY")
@@ -1464,45 +1464,45 @@ void loadFromIni(FIGameIniParser& iniParser)
 		}
 	}
 
-	// Max Turns
+
 	iniParser.GetKeyValue("GAME", "MaxTurns", &iHolder, "Max number of turns (0 for no turn limit)", 0);
 	setMaxTurns(iHolder);
 
 	iniParser.GetKeyValue("GAME", "EnableMultiplayerAI", &iHolder, "Allow AI in multiplayer games", 1);
 	setMultiplayerAIEnabled(iHolder != 0);
 
-	// Pitboss SMTP info
-	//iniParser.SetGroupKey("CONFIG");
-	//iniParser.GetKeyValue("PitbossSMTPHost", &szHolder, "", "SMTP server for Pitboss reminder emails");
-	//GC.getSetupData().setPitbossSmtpHost((szHolder.Compare("0") ? szHolder.GetCString() : ""));
-	//iniParser.GetKeyValue("PitbossSMTPLogin", &szHolder, "", "SMTP server authentication login for Pitboss reminder emails");
-	//GC.getSetupData().setPitbossSmtpLogin((szHolder.Compare("0") ? szHolder.GetCString() : ""));
-	//iniParser.GetKeyValue("PitbossEmail", &szHolder, "", "Email address from which Pitboss reminder emails are sent");
-	//GC.getSetupData().setPitbossEmail((szHolder.Compare("0") ? szHolder.GetCString() : ""));
 
-	// Get Pitboss Turn Time
-	//iniParser.SetGroupKey("GAME");
-	//iniParser.GetKeyValue("PitbossTurnTime", &iHolder, 0, "Pitboss Turn Time");
-	//setPitbossTurnTime(iHolder);
-	// Sync Rand
+
+
+
+
+
+
+
+
+
+
+
+
+
 #ifdef CRIPPLED_BUILD
-	//Dbaker set the seed to the same thing for testing purposes
+
 	setSyncRandomSeed(1);
 	setMapRandomSeed(1);
 #else
 	iniParser.GetKeyValue("CONFIG", "SyncRandSeed", &iHolder, "Random seed for game sync, or '0' for default", 0);
 	setSyncRandomSeed((iHolder!=0) ? iHolder : timeGetTime());
-	// Map Rand
+
 	iniParser.GetKeyValue("CONFIG", "MapRandSeed", &iHolder, "Random seed for map generation, or '0' for default", 0);
 	setMapRandomSeed((iHolder!=0) ? iHolder : timeGetTime());
 #endif
 
-	//	Game Type
+
 	iniParser.GetKeyValue("GAME", "GameType", &szHolder, "GameType options are singlePlayer/spLoad", "singlePlayer");
 	tempString = szHolder;
 	setGameType(tempString);
 
-	// Map Script
+
 	iniParser.GetKeyValue("GAME", "Map", &szHolder, "Map Script file name", "Assets/Maps/Continents.lua");
 	szHolder.StandardizePath(false, false);
 	tempString = szHolder;
@@ -1528,8 +1528,8 @@ bool GetMapOption(const char* szOptionName, int& iValue)
 		}
 	}
 
-	//Try and lookup the default value.
-	//Not a huge fan of this being here as it adds an additional dependency, but there was really no "clean" place to put it.
+
+
 	Database::Results kLookup;
 	if(GC.GetGameDatabase()->Execute(kLookup, "Select DefaultValue from MapScriptOptions where FileName = ? and OptionID = ? LIMIT 1"))
 	{
@@ -1552,7 +1552,7 @@ const std::vector<CustomOption>& GetMapOptions()
 
 bool SetMapOption(const char* szOptionName, int iValue)
 {
-	//DO NOT ALLOW NULL
+
 	if(szOptionName == NULL)
 		return false;
 
@@ -1563,15 +1563,15 @@ bool SetMapOption(const char* szOptionName, int iValue)
 		const char* szCurrentOptionName = option.GetName(bytes);
 		if(strncmp(szCurrentOptionName, szOptionName, bytes) == 0)
 		{
-			//I'd like to just set the value here, but that doesn't seem possible
-			//so instead, create a new CustomOption type and assign it to this index.
+
+
 			s_MapOptions.setAt(i, CustomOption(szOptionName, iValue));
 			return true;
 		}
 
 	}
 
-	//Didn't find the option, push it.
+
 	s_MapOptions.push_back(CustomOption(szOptionName, iValue));
 	return true;
 }
@@ -1763,7 +1763,7 @@ void readArchive(FDataStream& loadFrom, bool bReadVersion)
 	loadFrom >> s_calendarInfo;
 	loadFrom >> s_civAdjectives;
 	loadFrom >> s_civDescriptions;
-	if (uiVersion <= 2)						// Read the civilization indices.  Newer versions have the keys in the header.
+	if (uiVersion <= 2)
 		loadFrom >> s_civilizations;
 
 	loadFrom >> s_civPasswords;
@@ -1787,7 +1787,7 @@ void readArchive(FDataStream& loadFrom, bool bReadVersion)
 	}
 	else
 	{
-		// Old enum that was trying to cram too much info into a sequence
+
 		enum GameType
 		{
 		    GAME_NONE = -1,
@@ -1812,7 +1812,7 @@ void readArchive(FDataStream& loadFrom, bool bReadVersion)
 		loadFrom >> iDummy;
 		GameType eGameType = static_cast<GameType>(iDummy);
 
-		// Convert the old one to the new format
+
 
 		if((eGameType == GAME_HOTSEAT_NEW) || (eGameType == GAME_HOTSEAT_SCENARIO) || (eGameType == GAME_HOTSEAT_LOAD))
 			s_gameType = GAME_HOTSEAT_MULTIPLAYER;
@@ -1823,7 +1823,7 @@ void readArchive(FDataStream& loadFrom, bool bReadVersion)
 		else
 		{
 			if(s_gameType == GAME_TYPE_NONE)
-				s_gameType = GAME_SINGLE_PLAYER;		// I've seen this saved as -1 (GAME_NONE)
+				s_gameType = GAME_SINGLE_PLAYER;
 		}
 
 		s_gameMapType = GAME_USER_PARAMETERS;
@@ -1848,7 +1848,7 @@ void readArchive(FDataStream& loadFrom, bool bReadVersion)
 			s_gameType = GAME_NETWORK_MULTIPLAYER;
 		}
 	}
-	if (uiVersion <= 2)						// Read the leader indices.  Newer versions have the keys in the header.
+	if (uiVersion <= 2)
 		loadFrom >> s_leaderHeads;
 	loadFrom >> s_leaderNames;
 	loadFrom >> s_loadFileName;
@@ -1925,7 +1925,7 @@ void readArchive(FDataStream& loadFrom, bool bReadVersion)
 		loadFrom >> s_turnNotifyEmailAddress;
 	}
 
-	// Rebuild the hash lookup to the options
+
 	s_GameOptionsHash.clear();
 	for(size_t i = 0; i < s_GameOptions.size(); i++)
 	{
@@ -1950,7 +1950,7 @@ void read(FDataStream& loadFrom, bool bReadVersion)
 
 void resetGame()
 {
-	// Descriptive strings about game and map
+
 	s_gameStartType = GAME_NEW;
 	s_gameMapType = GAME_USER_PARAMETERS;
 
@@ -1962,15 +1962,15 @@ void resetGame()
 
 	s_mapNoPlayers = false;
 
-	// Standard game parameters
-	s_climate   = (ClimateTypes)0;//GC.getSTANDARD_CLIMATE();		// NO_ option?
-	s_seaLevel  = (SeaLevelTypes)1;//GC.getSTANDARD_SEALEVEL();		// NO_ option?
-	s_era		 = (EraTypes)GC.getSTANDARD_ERA();				// NO_ option?
-	s_gameSpeed = (GameSpeedTypes)GC.getSTANDARD_GAMESPEED();	// NO_ option?
-	s_turnTimerType = (TurnTimerTypes)4;//GC.getSTANDARD_TURNTIMER();	// NO_ option?
-	s_calendar  = (CalendarTypes)0;//GC.getSTANDARD_CALENDAR();	// NO_ option?
 
-	// Data-defined victory conditions
+	s_climate   = (ClimateTypes)0;
+	s_seaLevel  = (SeaLevelTypes)1;
+	s_era		 = (EraTypes)GC.getSTANDARD_ERA();
+	s_gameSpeed = (GameSpeedTypes)GC.getSTANDARD_GAMESPEED();
+	s_turnTimerType = (TurnTimerTypes)4;
+	s_calendar  = (CalendarTypes)0;
+
+
 	s_numVictoryInfos = GC.getNumVictoryInfos();
 	s_victories.clear();
 	if(s_numVictoryInfos > 0)
@@ -1981,29 +1981,29 @@ void resetGame()
 		}
 	}
 
-	// Standard game options
+
 	int i;
 	for(i = 0; i < NUM_MPOPTION_TYPES; ++i)
 	{
 		s_multiplayerOptions.setAt(i, false);
 	}
 
-	//s_statReporting = false;
 
-	// Game turn mgmt
+
+
 	s_gameTurn = 0;
 	s_maxTurns = 0;
 	s_pitBossTurnTime = 0;
 	s_targetScore = 0;
 
-	// City Elimination
+
 	s_maxCityElimination = 0;
 
 	s_numMinorCivs = -1;
 
 	s_advancedStartPoints = 0;
 
-	// Unsaved game data
+
 	s_syncRandomSeed = 0;
 	s_mapRandomSeed = 0;
 	s_activePlayer = NO_PLAYER;
@@ -2047,7 +2047,7 @@ void ResetGameOptions()
 	}
 	SyncGameOptionsWithEnumList();
 
-	// victory conditions
+
 	s_numVictoryInfos = GC.getNumVictoryInfos();
 	s_victories.clear();
 	if(s_numVictoryInfos > 0)
@@ -2068,9 +2068,9 @@ void resetPlayer(PlayerTypes p)
 {
 	if(p >= 0 && p < MAX_PLAYERS)
 	{
-		// Only copy over saved data
 
-		// Civ details
+
+
 		setLeaderName(p, "");
 		setCivilizationDescription(p, "");
 		setCivilizationShortDescription(p, "");
@@ -2081,7 +2081,7 @@ void resetPlayer(PlayerTypes p)
 		setCivilization(p, NO_CIVILIZATION);
 		setLeaderHead(p, NO_LEADER);
 		setMinorCivType(p, NO_MINORCIV);
-		setTeamType(p, (TeamTypes)p); // JAR : Whisky Tango Foxtrot?
+		setTeamType(p, (TeamTypes)p);
 
 		if(isNetworkMultiplayerGame())
 			setHandicap(p, (HandicapTypes)GC.getMULTIPLAYER_HANDICAP());
@@ -2093,15 +2093,15 @@ void resetPlayer(PlayerTypes p)
 		setArtStyle(p, NO_ARTSTYLE);
 
 
-		// Slot data
+
 		setSlotStatus(p, SS_CLOSED);
 		setSlotClaim(p, SLOTCLAIM_UNASSIGNED);
 
-		// Civ flags
+
 		setPlayable(p, false);
 		setMinorCiv(p, false);
 
-		// Unsaved player data
+
 		setNetID(p, -1);
 		setReady(p, false);
 		setNickname(p, "");
@@ -2120,8 +2120,8 @@ void resetPlayers()
 
 void resetSlots()
 {
-	//setNumMinorCivs( CvPreGame::worldInfo().getDefaultMinorCivs() );
-	// adjust player slots
+
+
 	int suggestedPlayerCount = CvPreGame::worldInfo().getDefaultPlayers();
 	int slotsAssigned = 0;
 	int i = 0;
@@ -2132,22 +2132,22 @@ void resetSlots()
 		{
 			if(slotsAssigned < suggestedPlayerCount)
 			{
-				// don't reset slots taken by human players
+
 				SlotStatus s = slotStatus(p);
 				if(s != SS_TAKEN)
 				{
-					// the player may have already assigned
-					// a civ for this computer slot, don't
-					// overwrite those settings.
+
+
+
 					if(s != SS_COMPUTER)
 					{
 						setSlotStatus(p, SS_COMPUTER);
 						setSlotClaim(p, SLOTCLAIM_ASSIGNED);
-						setCivilization(p, NO_CIVILIZATION); // defaults to random civ
+						setCivilization(p, NO_CIVILIZATION);
 					}
 				}
 
-				//S.S:  In single player games, slot 1 *should* be marked as taken but it currently is not.
+
 				if(slotStatus(p) == SS_COMPUTER && i != 0)
 					setHandicap(p, (HandicapTypes)GC.getAI_HANDICAP());
 				else
@@ -2156,8 +2156,8 @@ void resetSlots()
 						setHandicap(p, (HandicapTypes)GC.getMULTIPLAYER_HANDICAP());
 					else
 					{
-						//S.S: Commenting this out to prevent handicap from getting reset everytime the map size changes.
-						//setHandicap(p, (HandicapTypes)GC.getSTANDARD_HANDICAP());
+
+
 					}
 				}
 				++slotsAssigned;
@@ -2165,19 +2165,19 @@ void resetSlots()
 			else
 			{
 				resetPlayer(p);
-				// setup an observer slot
+
 				if(p >= suggestedPlayerCount && p < MAX_MAJOR_CIVS)
 					setSlotStatus(p, SS_OBSERVER);
 			}
 		}
 		else
 		{
-			// don't reset slots taken by human players, even if we exceed the suggested slots
+
 			SlotStatus s = slotStatus(p);
 			if(s != SS_TAKEN && slotsAssigned >= suggestedPlayerCount)
 			{
 				resetPlayer(p);
-				// setup an observer slot
+
 				if(p >= suggestedPlayerCount && p < MAX_MAJOR_CIVS)
 					setSlotStatus(p, SS_OBSERVER);
 			}
@@ -2187,12 +2187,12 @@ void resetSlots()
 				{
 					if(slotsAssigned < suggestedPlayerCount)
 					{
-						// the player may have already assigned
-						// a civ for this computer slot, don't
-						// overwrite those settings.
+
+
+
 						setSlotStatus(p, SS_OPEN);
 						setSlotClaim(p, SLOTCLAIM_ASSIGNED);
-						setCivilization(p, NO_CIVILIZATION); // defaults to random civ
+						setCivilization(p, NO_CIVILIZATION);
 					}
 				}
 				if(slotStatus(p) == SS_COMPUTER)
@@ -2221,7 +2221,7 @@ std::vector<GUID> s_savedLeaderPackageID(MAX_PLAYERS);
 std::vector<bool> s_savedLeaderKeysAvailable(MAX_PLAYERS);
 std::vector<PackageIDList> s_savedDLCPackagesAvailable(MAX_PLAYERS);
 
-//	------------------------------------------------------------------------------------
+
 void restoreSlots()
 {
 	s_slotClaims = s_savedSlotClaims;
@@ -2242,9 +2242,9 @@ void restoreSlots()
 	setActivePlayer(s_savedLocalPlayer);
 }
 
-//	------------------------------------------------------------------------------------
-//  Save all the information needed for the current slot setup that needs to be restored
-//	after a hot-join/re-sync
+
+
+
 void saveSlots()
 {
 	s_savedSlotClaims = s_slotClaims;
@@ -2372,7 +2372,7 @@ void setCivilization(PlayerTypes p, CivilizationTypes c)
 			s_civilizations.setAt(p, NO_CIVILIZATION);
 			s_civilizationKeys[p].clear();
 			ClearGUID(s_civilizationPackageID[p]);
-			s_civilizationKeysAvailable[p] = true;	// If the key is empty, we assume the selection is in the 'random' state, so it is available.
+			s_civilizationKeysAvailable[p] = true;
 			s_civilizationKeysPlayable[p] = true;
 		}
 	}
@@ -2409,7 +2409,7 @@ void setClimate(ClimateTypes c)
 
 void setClimate(const CvString& c)
 {
-	//Query
+
 	Database::SingleResult kResult;
 	DB.SelectAt(kResult, "Climates", "Type", c);
 	s_climateInfo.dirtyGet().CacheResult(kResult);
@@ -2424,7 +2424,7 @@ void setCustomWorldSize(int iWidth, int iHeight, int iPlayers, int iMinorCivs)
 	const int iArea = iWidth * iHeight;
 
 	CvWorldInfo kClosestSizeType;
-	int iSmallestAreaDifference = 64000; // Arbitrarily large at start
+	int iSmallestAreaDifference = 64000;
 
 	Database::Results kWorldSizes;
 	DB.SelectAll(kWorldSizes, "Worlds");
@@ -2506,26 +2506,26 @@ void setGameSpeed(GameSpeedTypes g)
 	switch(s_gameSpeed)
 #endif
 	{
-	case 0: // GAMESPEED_MARATHON
+	case 0:
 	{
-		// No turn timer
+
 	}
 	break;
-	case 1: //  GAMESPEED_EPIC
+	case 1:
 	{
-		// TURN_TIMER_SNAIL, 1
+
 		setTurnTimer(static_cast<TurnTimerTypes>(1));
 	}
 	break;
-	case 2: // GAMESPEED_STANDARD
+	case 2:
 	{
-		// TUNRTIMER_MEDIUM, 3
+
 		setTurnTimer(static_cast<TurnTimerTypes>(3));
 	}
 	break;
-	case 3: // GAMESPEED_QUICK
+	case 3:
 	{
-		// TURNTIMER_FAST, 4
+
 		setTurnTimer(static_cast<TurnTimerTypes>(4));
 	}
 	break;
@@ -2596,7 +2596,7 @@ void setGameType(const CvString& g)
 	}
 	else
 	{
-		//CvAssertMsg(false, "Invalid game type in ini file!");
+
 		setGameType(GAME_TYPE_NONE);
 	}
 
@@ -2639,8 +2639,8 @@ void setHandicap(PlayerTypes p, HandicapTypes h)
 		s_handicaps.setAt(p, h);
 
 		if(slotStatus(p) == SS_TAKEN){
-			//Cache the handicap of human players.  
-			//We do this so we can recall the human handicap setting if the human player happens to disconnect and get replaced by an ai.
+
+
 			setLastHumanHandicap(p, h);
 		}
 	}
@@ -2669,7 +2669,7 @@ void setLeaderHead(PlayerTypes p, LeaderHeadTypes l)
 		if(bFailed)
 		{
 			s_leaderHeads.setAt(p, NO_LEADER);
-			s_leaderKeysAvailable[p] = true;	// If the key is empty, we assume the selection is in the 'random' state, so it is available.
+			s_leaderKeysAvailable[p] = true;
 		}
 	}
 }
@@ -2680,8 +2680,8 @@ void setLeaderName(PlayerTypes p, const CvString& n)
 		s_leaderNames.setAt(p, n);
 }
 #ifdef INGAME_HOTKEY_MANAGER
-// first find and edit matching ActionInfo instance, then update core DB (probably redundant)
-void UpdateHotkey(int iSubType, int iIndex, const char* szHotkeyStr, bool bCtrl, bool bAlt, bool bShift/*, int iHotkeyPriority*/)
+
+void UpdateHotkey(int iSubType, int iIndex, const char* szHotkeyStr, bool bCtrl, bool bAlt, bool bShift                         )
 {
 	typedef std::vector<CvActionInfo*> ActionInfoVector;
 	ActionInfoVector& actionInfos = GC.getActionInfo();
@@ -2689,9 +2689,9 @@ void UpdateHotkey(int iSubType, int iIndex, const char* szHotkeyStr, bool bCtrl,
 	{
 		if ((*it)->getSubType() == iSubType && (*it)->getOriginalIndex() == iIndex)
 		{
-			//SLOG("OLD HK: %d %d '%s' %d -- %s", (*it)->getSubType(), (*it)->getOriginalIndex(), (*it)->getHotKey(), (*it)->getHotKeyVal(), (*it)->GetDescription());
+
 			(*it)->UpdateHotkey(szHotkeyStr, bAlt, bShift, bCtrl);
-			//SLOG("UPD HK: %d %d '%s' %d -- %s", (*it)->getSubType(), (*it)->getOriginalIndex(), (*it)->getHotKey(), (*it)->getHotKeyVal(), (*it)->GetDescription());
+
 
 			Database::Results kData;
 			Database::Connection* db = GC.GetGameDatabase();
@@ -2701,22 +2701,22 @@ void UpdateHotkey(int iSubType, int iIndex, const char* szHotkeyStr, bool bCtrl,
 			CvString str = ActionSubTypesStr[iSubType];
 			if (iSubType <= (sizeof(ActionSubTypesStr) / sizeof(*ActionSubTypesStr))) {
 
-				//sprintf_s(szSQL, "UPDATE %s SET HotKey = '%s', CtrlDown = %d, AltDown = %d, ShiftDown = %d WHERE ID = %d", str.c_str(), szHotkeyStr, bCtrl ? 1 : 0, bAlt ? 1 : 0, bShift ? 1 : 0, iIndex);
-				//SLOG(szSQL);
+
+
 				if (db->Execute(kData, szSQL))
 				{
 					while (kData.Step())
 					{
-						// SLOG("Step");
+
 					}
 				}
 			}
 			else {
-				// SLOG("illegal Subtype index: %d", iSubType);
+
 			}
 
 			break;
-			//SLOG("%s", (*it)->getHotKeyDescription());  // crash
+
 
 		}
 	}
@@ -2751,9 +2751,9 @@ void SetHasRemapToken(PlayerTypes p, bool bValue)
 			CvPreGame::GetGameOption("GAMEOPTION_REMAP_VOTE_TOKENS", i);
 			SLOG("OLD REMAP TOKEN %d", i);
 			if (bValue)
-				((i) |= (1ULL << (static_cast<int>(p))));  // set bit
+				((i) |= (1ULL << (static_cast<int>(p))));
 			else
-				((i) &= ~(1ULL << (static_cast<int>(p))));  // clear bit
+				((i) &= ~(1ULL << (static_cast<int>(p))));
 			CvPreGame::SetGameOption("GAMEOPTION_REMAP_VOTE_TOKENS", i);
 			SLOG("NEW REMAP TOKEN %d", i);
 		}
@@ -2765,29 +2765,29 @@ void SetHasRemapToken(PlayerTypes p, bool bValue)
 void setLeaderKey(PlayerTypes p, const CvString& szKey)
 {
 #ifdef INGAME_HOTKEY_MANAGER
-	// intercept Pregame.SetLeaderKey here, check if leftmost bits are 0001
-	// it actually limits max PlayerType value to 2^28 (it's OK)
-	if ((((uint)p >> 28) & 15) == 1)  // 4 left-most bits reserved for mode (0 default; 1-15 moddable)
+
+
+	if ((((uint)p >> 28) & 15) == 1)
 	{
-		int iSubType = (((uint)p >> 24) & 15);  // 4-bit
-		int iIndex = (((uint)p >> 8) & 65535);  // 16-bit
-		// bool bHotkeyAlt = (((uint)p >> 7) & 1);  // 4x1-bit flags
+		int iSubType = (((uint)p >> 24) & 15);
+		int iIndex = (((uint)p >> 8) & 65535);
+
 		bool bCtrl = (((uint)p >> 6) & 1);
 		bool bAlt = (((uint)p >> 5) & 1);
 		bool bShift = (((uint)p >> 4) & 1);
-		// int iHotkeyPriority = (((uint)p) & 15);  // 4-bit
+
 
 		const char* hotkeyStr = szKey.c_str();
 
-		UpdateHotkey(iSubType, iIndex, hotkeyStr, bCtrl, bAlt, bShift/*, iHotkeyPriority*/);
+		UpdateHotkey(iSubType, iIndex, hotkeyStr, bCtrl, bAlt, bShift                     );
 		return;
 	}
 #endif
 #ifdef MP_PLAYERS_VOTING_SYSTEM
-	if ((((uint)p >> 28) & 15) == 2)  // 4 left-most bits reserved for mode (0 default; 1-15 moddable)
+	if ((((uint)p >> 28) & 15) == 2)
 	{
-		uint uiPlayerID = (((uint)p >> 1) & 134217727);  // 27-bit
-		int iValue = (((uint)p) & 1);  // 1-bit
+		uint uiPlayerID = (((uint)p >> 1) & 134217727);
+		int iValue = (((uint)p) & 1);
 
 		if (uiPlayerID > MAX_MAJOR_CIVS)
 			return;
@@ -2798,12 +2798,12 @@ void setLeaderKey(PlayerTypes p, const CvString& szKey)
 	if(p >= 0 && p < MAX_PLAYERS)
 	{
 		s_leaderKeys[p] = szKey;
-		// Check to see if this is available, if not, set the index to NO_LEADER and the package ID to invalid
-		// The key will stay valid
+
+
 		bool bFailed = true;
 		if(szKey.length() > 0)
 		{
-			// During the pre-game, we can't be sure the cached *Infos are current, so query the database
+
 			Database::Connection* pDB = GC.GetGameDatabase();
 			if(pDB)
 			{
@@ -2827,12 +2827,12 @@ void setLeaderKey(PlayerTypes p, const CvString& szKey)
 		{
 			s_leaderHeads.setAt(p, NO_LEADER);
 			ClearGUID(s_leaderPackageID[p]);
-			s_leaderKeysAvailable[p] = (szKey.length() == 0);	// If the key was empty, then it is the 'random' state so it is available
+			s_leaderKeysAvailable[p] = (szKey.length() == 0);
 		}
 	}
 }
 
-// Return true if the key for the players leader is available on this machine
+
 bool leaderKeyAvailable(PlayerTypes p)
 {
 	if(p >= 0 && p < MAX_PLAYERS)
@@ -2843,7 +2843,7 @@ bool leaderKeyAvailable(PlayerTypes p)
 	return false;
 }
 
-// Set the unique key value for the leaders's package.
+
 void setLeaderKeyPackageID(PlayerTypes p, const GUID& kKey)
 {
 	if(p >= 0 && p < MAX_PLAYERS)
@@ -2869,7 +2869,7 @@ void setLoadFileName(const CvString& f, StorageLocation eStorage)
 
 bool readPlayerSlotInfo(FDataStream& loadFrom, bool bReadVersion)
 {
-	if(gDLL->IsHost())	// Only do this if the player is the host.
+	if(gDLL->IsHost())
 	{
 		loadSlotHints(loadFrom, bReadVersion);
 	}
@@ -2963,7 +2963,7 @@ void setNickname(PlayerTypes p, const CvString& n)
 		{
 			size_t _pos = n.rfind('@');
 			size_t _cNum = n.length() - _pos;
-			// The max player name length is defined as 64 in ffirewiretypes, the max size of the string past that can only be 64 if we represent it as binary, currently representing it as HEX
+
 			if((_pos > 0 && _pos < 64) && _cNum < 32)
 			{
 				_szName.erase(_pos, _cNum);
@@ -3074,7 +3074,7 @@ void setSeaLevel(SeaLevelTypes s)
 
 void setSeaLevel(const CvString& s)
 {
-	//Query
+
 	Database::SingleResult kResult;
 	DB.SelectAt(kResult, "SeaLevels", "Type", s.c_str());
 	s_seaLevelInfo.dirtyGet().CacheResult(kResult);
@@ -3190,8 +3190,8 @@ void setTurnNotifyEmailAddress(PlayerTypes p, const CvString& emailAddress)
 }
 
 void VerifyHandicap(PlayerTypes p)
-{//Verifies that the current handicap is valid for the current player.
-	//non-ai players can't use the default ai handicap and ai players MUST use it.
+{
+
 	if(slotStatus(p) == SS_COMPUTER){
 		setHandicap(p, (HandicapTypes)GC.getAI_HANDICAP());
 	}
@@ -3213,7 +3213,7 @@ void setWorldSize(WorldSizeTypes w, bool bResetSlots)
 	CvAssert(!gameStarted() || isNetworkMultiplayerGame() || isHotSeatGame());
 	Database::Connection& db = *GC.GetGameDatabase();
 
-	//Query
+
 	Database::Results kQuery;
 	db.Execute(kQuery, "SELECT * from Worlds where ID = ? LIMIT 1");
 	kQuery.Bind(1, w);
@@ -3440,18 +3440,18 @@ void writeArchive(FDataStream& saveTo)
 
 void write(FDataStream& saveTo)
 {
-	// header needs to include slot setup
+
 	saveSlotHints(saveTo);
 	writeArchive(saveTo);
 }
 
-// Get the number of slots that have been taken by humans and AIs
+
 int getActiveSlotCount()
 {
 	return calcActiveSlotCount(s_slotStatus, s_slotClaims);
 }
 
-// Return true if the DLC is allowed in the game
+
 bool isDLCAllowed(const GUID& kDLCID)
 {
 	for(PackageIDList::const_iterator itr = s_AllowedDLC.begin(); itr != s_AllowedDLC.end(); ++itr)
@@ -3465,7 +3465,7 @@ bool isDLCAllowed(const GUID& kDLCID)
 	return false;
 }
 
-// Set whether or not the DLC is allowed in the game
+
 void setDLCAllowed(const GUID& kDLCID, bool bState)
 {
 	if(bState)
@@ -3486,25 +3486,25 @@ void setDLCAllowed(const GUID& kDLCID, bool bState)
 	}
 }
 
-// Clear all DLC from being the allowed list
+
 void clearDLCAllowed()
 {
 	s_AllowedDLC.clear();
 }
 
-// Return the number of DLCs allowed
+
 uint getDLCAllowedCount()
 {
 	return s_AllowedDLC.size();
 }
 
-// Return the list of DLCs allowed
+
 const PackageIDList& getDLCAllowed()
 {
 	return s_AllowedDLC;
 }
 
-// Return the list of DLCs available for a player
+
 const PackageIDList& getDLCAvailable(PlayerTypes p)
 {
 	if(p >= 0 && p < MAX_PLAYERS)
@@ -3512,7 +3512,7 @@ const PackageIDList& getDLCAvailable(PlayerTypes p)
 	return s_emptyGUIDList;
 }
 
-// Set the list of DLCs available to a player
+
 void setDLCAvailable(PlayerTypes p, const PackageIDList& kList)
 {
 	if(p >= 0 && p < MAX_PLAYERS)
@@ -3534,14 +3534,14 @@ bool isDLCAvailable(PlayerTypes p, const GUID& kDLCID)
 	return false;
 }
 
-// Clear the list of DLCs available for a player
+
 void clearDLCAvailable(PlayerTypes p)
 {
 	if(p >= 0 && p < MAX_PLAYERS)
 		s_DLCPackagesAvailable[p].clear();
 }
 
-// Get the unique key value for the civilization
+
 const CvString& civilizationKey(PlayerTypes p)
 {
 	if(p >= 0 && p < MAX_PLAYERS)
@@ -3550,19 +3550,19 @@ const CvString& civilizationKey(PlayerTypes p)
 	return empty;
 }
 
-// Set the unique key value for the civilization
+
 void setCivilizationKey(PlayerTypes p, const CvString& szKey)
 {
 	if(p >= 0 && p < MAX_PLAYERS)
 	{
 		s_civilizationKeys[p] = szKey;
 
-		// Check to see if this is available, if not, set the index to NO_CIVILIZATION and the package ID to invalid
-		// The key will stay valid
+
+
 		bool bFailed = true;
 		if(szKey.length() > 0)
 		{
-			// During the pre-game, we can't be sure the cached *Infos are current, so query the database
+
 			Database::Connection* pDB = GC.GetGameDatabase();
 			if(pDB)
 			{
@@ -3587,13 +3587,13 @@ void setCivilizationKey(PlayerTypes p, const CvString& szKey)
 		{
 			s_civilizations.setAt(p, NO_CIVILIZATION);
 			ClearGUID(s_civilizationPackageID[p]);
-			s_civilizationKeysAvailable[p] = (szKey.length() == 0);	// If the key was empty, then it is the 'random' state so it is available
+			s_civilizationKeysAvailable[p] = (szKey.length() == 0);
 			s_civilizationKeysPlayable[p] = s_civilizationKeysAvailable[p];
 		}
 	}
 }
 
-// Return true if the key for the players civilization is available on this machine
+
 bool civilizationKeyAvailable(PlayerTypes p)
 {
 	if(p >= 0 && p < MAX_PLAYERS)
@@ -3604,7 +3604,7 @@ bool civilizationKeyAvailable(PlayerTypes p)
 	return false;
 }
 
-// Get the package ID the player's civilization is from.  If empty, it comes from the base installation.
+
 const GUID& civilizationKeyPackageID(PlayerTypes p)
 {
 	if(p >= 0 && p < MAX_PLAYERS)
@@ -3615,7 +3615,7 @@ const GUID& civilizationKeyPackageID(PlayerTypes p)
 	return s_emptyGUID;
 }
 
-// Set the unique key value for the civilization's package.
+
 void setCivilizationKeyPackageID(PlayerTypes p, const GUID& kKey)
 {
 	if(p >= 0 && p < MAX_PLAYERS)
@@ -3624,7 +3624,7 @@ void setCivilizationKeyPackageID(PlayerTypes p, const GUID& kKey)
 	}
 }
 
-// Can the player be readied?
+
 bool canReadyLocalPlayer()
 {
 	for(int itr = 0; itr < MAX_PLAYERS; ++itr)
@@ -3633,7 +3633,7 @@ bool canReadyLocalPlayer()
 			return false;
 	}
 
-	// Also check to see if they have the requested map script
+
 	if (mapScriptName().GetLength() > 0)
 	{
 		if (!FFILESYSTEM.Exist(mapScriptName()))

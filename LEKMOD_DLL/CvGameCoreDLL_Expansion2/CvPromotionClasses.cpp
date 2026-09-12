@@ -1,19 +1,19 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "ICvDLLUserInterface.h"
 #include "CvGameCoreUtils.h"
 #include "CvUnitClasses.h"
 
-// include this after all other headers!
+
 #include "LintFree.h"
 
-/// Constructor
+
 namespace
 {
 	int s_iPromotionVisibilityChange = 0;
@@ -102,7 +102,7 @@ CvPromotionEntry::CvPromotionEntry():
 	m_bGreatAdmiral(false),
 	m_iGreatGeneralModifier(0),
 	m_bGreatGeneralReceivesMovement(false),
-	m_bEmbarkedUnitReceivesMovement(false), // NQMP GJS - Danish Longship
+	m_bEmbarkedUnitReceivesMovement(false),
 #ifdef LEKMOD_DIFFERENT_IDEO_COMBAT_BONUS
 	m_iCombatDifferentIdeology(0),
 #endif
@@ -204,11 +204,11 @@ CvPromotionEntry::CvPromotionEntry():
 	m_bPostCombatPromotionsExclusive(false),
 	m_bSapper(false),
 
-	// CMP
+
 	m_iGiveDomain(NO_DOMAIN),
 	m_iConvertDomainUnit(NO_UNIT),
 	m_iConvertDomain(NO_DOMAIN),
-	//
+
 
 	m_bCanHeavyCharge(false),
 #ifdef NQ_HEAVY_CHARGE_DOWNHILL
@@ -255,7 +255,7 @@ CvPromotionEntry::CvPromotionEntry():
 	InvalidateVisibilityChangeCache();
 }
 
-/// Destructor
+
 CvPromotionEntry::~CvPromotionEntry(void)
 {
 	InvalidateVisibilityChangeCache();
@@ -300,7 +300,7 @@ CvPromotionEntry::~CvPromotionEntry(void)
 	SAFE_DELETE_ARRAY(m_pbCivilianUnitType);
 	SAFE_DELETE_ARRAY(m_pbPostCombatRandomPromotion);
 }
-//------------------------------------------------------------------------------
+
 bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	InvalidateVisibilityChangeCache();
@@ -309,7 +309,7 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 
 	SetSound(kResults.GetText("Sound"));
 
-	//Basic Properties
+
 	m_bCannotBeChosen = kResults.GetBool("CannotBeChosen");
 	m_bLostWithUpgrade = kResults.GetBool("LostWithUpgrade");
 	m_bNotWithUpgrade = kResults.GetBool("NotWithUpgrade");
@@ -361,14 +361,14 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 	m_bPostCombatPromotionsExclusive = kResults.GetBool("PostCombatPromotionsExclusive");
 	m_bSapper = kResults.GetBool("Sapper");
 
-	// CMP
+
 	const char* szGiveDomain = kResults.GetText("GiveDomain");
 	m_iGiveDomain = (DomainTypes)GC.getInfoTypeForString(szGiveDomain, true);
 	const char* szConvertDomainUnit = kResults.GetText("ConvertDomainUnit");
 	m_iConvertDomainUnit = (UnitTypes)GC.getInfoTypeForString(szConvertDomainUnit, true);
 	const char* szConvertDomain = kResults.GetText("ConvertDomain");
 	m_iConvertDomain = (DomainTypes)GC.getInfoTypeForString(szConvertDomain, true);
-	//
+
 
 	m_bCanHeavyCharge = kResults.GetBool("HeavyCharge");
 #ifdef NQ_HEAVY_CHARGE_DOWNHILL
@@ -421,9 +421,9 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 	m_bGreatAdmiral = kResults.GetBool("GreatAdmiral");
 	m_iGreatGeneralModifier = kResults.GetInt("GreatGeneralModifier");
 	m_bGreatGeneralReceivesMovement = kResults.GetBool("GreatGeneralReceivesMovement");
-	m_bEmbarkedUnitReceivesMovement = kResults.GetBool("EmbarkedUnitReceivesMovement"); // NQMP GJS - Danish Longship
+	m_bEmbarkedUnitReceivesMovement = kResults.GetBool("EmbarkedUnitReceivesMovement");
 #ifdef LEKMOD_LONGSHIP_ALL_PROMO
-	m_bLandUnitReceivesMovement = kResults.GetBool("LandUnitReceivesMovement"); //LEKMOD - Same longship promo for land civilian units
+	m_bLandUnitReceivesMovement = kResults.GetBool("LandUnitReceivesMovement");
 #endif
 #ifdef NQ_ART_OF_WAR_PROMOTION
 	m_iGreatGeneralOnOrAdjacentConfersMovement = kResults.GetInt("GreatGeneralOnOrAdjacentConfersMovement");
@@ -472,7 +472,7 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 	m_bKillRefreshAttack = kResults.GetBool("KillRefreshAttack");
 #endif
 
-	//References
+
 	const char* szLayerAnimationPath = kResults.GetText("LayerAnimationPath");
 	m_iLayerAnimationPath = GC.getInfoTypeForString(szLayerAnimationPath, true);
 
@@ -518,7 +518,7 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 	const char* szPromotionPrereqOr10 = kResults.GetText("PromotionPrereqOr10");
 	m_iPrereqOrPromotion10 = GC.getInfoTypeForString(szPromotionPrereqOr10, true);
 #endif
-	//Arrays
+
 	const int iNumUnitClasses = kUtility.MaxRows("UnitClasses");
 	const int iNumTerrains = GC.getNumTerrainInfos();
 	const int iNumFeatures = GC.getNumFeatureInfos();
@@ -644,7 +644,7 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 #endif
 #if defined(LEKMOD_RELOCATE_PROMOTION_PREREQ_ORS)
 	{
-		// Clear any existing prerequisites
+
 		m_vPromotionPrereqOrs.clear();
 		
 		std::string sqlKey = "UnitPromotions_PromotionPrereqOrs";
@@ -664,7 +664,7 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 	}
 
 #endif
-	//UnitPromotions_Terrains
+
 	{
 		kUtility.InitializeArray(m_piTerrainAttackPercent, iNumTerrains, 0);
 		kUtility.InitializeArray(m_piTerrainDefensePercent, iNumTerrains, 0);
@@ -706,7 +706,7 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 		}
 	}
 
-	//UnitPromotions_Features
+
 	{
 		kUtility.InitializeArray(m_piFeatureAttackPercent, iNumFeatures, 0);
 		kUtility.InitializeArray(m_piFeatureDefensePercent, iNumFeatures, 0);
@@ -745,7 +745,7 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 		}
 	}
 
-	//UnitPromotions_UnitClasses
+
 	{
 		kUtility.InitializeArray(m_piUnitClassModifierPercent, iNumUnitClasses, 0);
 		kUtility.InitializeArray(m_piUnitClassAttackModifier, iNumUnitClasses, 0);
@@ -778,7 +778,7 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 		pResults->Reset();
 	}
 
-	//UnitPromotions_Domains
+
 	{
 		kUtility.InitializeArray(m_piDomainModifierPercent, NUM_DOMAIN_TYPES, 0);
 #if defined(LEKMOD_DOMAIN_PROMO_ATTACK_DEFENSE)
@@ -832,7 +832,7 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 #endif
 	}
 
-	//UnitPromotions_UnitCombatMods
+
 	{
 		kUtility.InitializeArray(m_piUnitCombatModifierPercent, iNumUnitCombatClasses, 0);
 
@@ -857,7 +857,7 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 		pResults->Reset();
 	}
 
-	//UnitPromotions_UnitCombats
+
 	{
 		kUtility.InitializeArray(m_pbUnitCombat, iNumUnitCombatClasses, false);
 
@@ -881,7 +881,7 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 		pResults->Reset();
 	}
 
-	//UnitPromotions_CivilianUnitType
+
 	{
 		kUtility.InitializeArray(m_pbCivilianUnitType, iNumUnitTypes, false);
 
@@ -915,431 +915,431 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 	return true;
 }
 
-/// Accessor: The granny animation index used to indicate that a unit has leveled up
+
 int CvPromotionEntry::GetLayerAnimationPath() const
 {
 	return m_iLayerAnimationPath;
 }
 #if !defined(LEKMOD_RELOCATE_PROMOTION_PREREQ_ORS)
-/// Accessor: The promotion required before this promotion is available
+
 int CvPromotionEntry::GetPrereqPromotion() const
 {
 	return m_iPrereqPromotion;
 }
 
-/// Set the promotion required before this promotion is available
+
 void CvPromotionEntry::SetPrereqPromotion(int i)
 {
 	m_iPrereqPromotion = i;
 }
 
-/// Accessor: Gets promotion 1 of an either/or promotion prerequisite.
+
 int CvPromotionEntry::GetPrereqOrPromotion1() const
 {
 	return m_iPrereqOrPromotion1;
 }
 
-/// Accessor: Sets promotion 1 of an either/or promotion prerequisite.
+
 void CvPromotionEntry::SetPrereqOrPromotion1(int i)
 {
 	m_iPrereqOrPromotion1 = i;
 }
 
-/// Accessor: Gets promotion 2 of an either/or promotion prerequisite.
+
 int CvPromotionEntry::GetPrereqOrPromotion2() const
 {
 	return m_iPrereqOrPromotion2;
 }
 
-/// Accessor: Sets promotion 2 of an either/or promotion prerequisite.
+
 void CvPromotionEntry::SetPrereqOrPromotion2(int i)
 {
 	m_iPrereqOrPromotion2 = i;
 }
 
-/// Accessor: Gets promotion 3 of an either/or promotion prerequisite.
+
 int CvPromotionEntry::GetPrereqOrPromotion3() const
 {
 	return m_iPrereqOrPromotion3;
 }
 
-/// Accessor: Sets promotion 3 of an either/or promotion prerequisite.
+
 void CvPromotionEntry::SetPrereqOrPromotion3(int i)
 {
 	m_iPrereqOrPromotion3 = i;
 }
 
-/// Accessor: Gets promotion 4 of an either/or promotion prerequisite.
+
 int CvPromotionEntry::GetPrereqOrPromotion4() const
 {
 	return m_iPrereqOrPromotion4;
 }
 
-/// Accessor: Sets promotion 4 of an either/or promotion prerequisite.
+
 void CvPromotionEntry::SetPrereqOrPromotion4(int i)
 {
 	m_iPrereqOrPromotion4 = i;
 }
 
-/// Accessor: Gets promotion 5 of an either/or promotion prerequisite.
+
 int CvPromotionEntry::GetPrereqOrPromotion5() const
 {
 	return m_iPrereqOrPromotion5;
 }
 
-/// Accessor: Sets promotion 5 of an either/or promotion prerequisite.
+
 void CvPromotionEntry::SetPrereqOrPromotion5(int i)
 {
 	m_iPrereqOrPromotion5 = i;
 }
 
-/// Accessor: Gets promotion 6 of an either/or promotion prerequisite.
+
 int CvPromotionEntry::GetPrereqOrPromotion6() const
 {
 	return m_iPrereqOrPromotion6;
 }
 
-/// Accessor: Sets promotion 6 of an either/or promotion prerequisite.
+
 void CvPromotionEntry::SetPrereqOrPromotion6(int i)
 {
 	m_iPrereqOrPromotion6 = i;
 }
 
-/// Accessor: Gets promotion 7 of an either/or promotion prerequisite.
+
 int CvPromotionEntry::GetPrereqOrPromotion7() const
 {
 	return m_iPrereqOrPromotion7;
 }
 
-/// Accessor: Sets promotion 7 of an either/or promotion prerequisite.
+
 void CvPromotionEntry::SetPrereqOrPromotion7(int i)
 {
 	m_iPrereqOrPromotion7 = i;
 }
 
-/// Accessor: Gets promotion 8 of an either/or promotion prerequisite.
+
 int CvPromotionEntry::GetPrereqOrPromotion8() const
 {
 	return m_iPrereqOrPromotion8;
 }
 
-/// Accessor: Sets promotion 8 of an either/or promotion prerequisite.
+
 void CvPromotionEntry::SetPrereqOrPromotion8(int i)
 {
 	m_iPrereqOrPromotion8 = i;
 }
 
-/// Accessor: Gets promotion 9 of an either/or promotion prerequisite.
+
 int CvPromotionEntry::GetPrereqOrPromotion9() const
 {
 	return m_iPrereqOrPromotion9;
 }
 
-/// Accessor: Sets promotion 9 of an either/or promotion prerequisite.
+
 void CvPromotionEntry::SetPrereqOrPromotion9(int i)
 {
 	m_iPrereqOrPromotion9 = i;
 }
 
-///////////////////////////
-//EAP: Adding promotion 10
-/// Accessor: Gets promotion 10 of an either/or promotion prerequisite.
+
+
+
 int CvPromotionEntry::GetPrereqOrPromotion10() const
 {
 	return m_iPrereqOrPromotion10;
 }
 
-/// Accessor: Sets promotion 10 of an either/or promotion prerequisite.
+
 void CvPromotionEntry::SetPrereqOrPromotion10(int i)
 {
 	m_iPrereqOrPromotion10 = i;
 }
 #endif
-///////////////////////////
 
-/// Accessor: Gets the tech prerequisite for this promotion
+
+
 int CvPromotionEntry::GetTechPrereq() const
 {
 	return m_iTechPrereq;
 }
 
-/// Accessor: What type of invisible this unit is
+
 int CvPromotionEntry::GetInvisibleType() const
 {
 	return m_iInvisibleType;
 }
 
-/// Accessor: What type of invisible this unit can see
+
 int CvPromotionEntry::GetSeeInvisibleType() const
 {
 	return m_iSeeInvisibleType;
 }
 
-/// Accessor: How many additional tiles this promotion allows a unit to see (can be negative)
+
 int CvPromotionEntry::GetVisibilityChange() const
 {
 	return m_iVisibilityChange;
 }
 
-/// Accessor: How many additional tiles a unit may move
+
 int CvPromotionEntry::GetMovesChange() const
 {
 	return m_iMovesChange;
 }
 
-/// Accessor: How much movement is discounted
+
 int CvPromotionEntry::GetMoveDiscountChange() const
 {
 	return m_iMoveDiscountChange;
 }
 
-/// Accessor: How much the air range of the unit is modified
+
 int CvPromotionEntry::GetRangeChange() const
 {
 	return m_iRangeChange;
 }
 
-/// Accessor: How much the ranged strength of the unit is modified
+
 int CvPromotionEntry::GetRangedAttackModifier() const
 {
 	return m_iRangedAttackModifier;
 }
 
-/// Accessor: How much the strength of the unit is modified when intercepting
+
 int CvPromotionEntry::GetInterceptionCombatModifier() const
 {
 	return m_iInterceptionCombatModifier;
 }
 
-/// Accessor: Mod to Damage taken if intercepted
+
 int CvPromotionEntry::GetInterceptionDefenseDamageModifier() const
 {
 	return m_iInterceptionDefenseDamageModifier;
 }
 
-/// Accessor: How much the strength of the unit is modified when air sweeping
+
 int CvPromotionEntry::GetAirSweepCombatModifier() const
 {
 	return m_iAirSweepCombatModifier;
 }
 
-/// Accessor: How much the intercept chance changes for an air unit
+
 int CvPromotionEntry::GetInterceptChanceChange() const
 {
 	return m_iInterceptChanceChange;
 }
 
-/// Accessor: Numbe rof extra interceptions that may be made on one turn
+
 int CvPromotionEntry::GetNumInterceptionChange() const
 {
 	return m_iNumInterceptionChange;
 }
 
-/// Accessor: How well an air unit can evade interception
+
 int CvPromotionEntry::GetEvasionChange() const
 {
 	return m_iEvasionChange;
 }
 
-/// Accessor: The amount of cargo a unit can carry
+
 int CvPromotionEntry::GetCargoChange() const
 {
 	return m_iCargoChange;
 }
 
-/// Accessor: Damage/health bonus per turn in enemy lands
+
 int CvPromotionEntry::GetEnemyHealChange() const
 {
 	return m_iEnemyHealChange;
 }
 
-/// Accessor: Damage/health bonus per turn in neutral lands
+
 int CvPromotionEntry::GetNeutralHealChange() const
 {
 	return m_iNeutralHealChange;
 }
 
-/// Accessor: Damage/health bonus per turn in friendly lands
+
 int CvPromotionEntry::GetFriendlyHealChange() const
 {
 	return m_iFriendlyHealChange;
 }
 
-/// Accessor: Heals units in the same tile
+
 int CvPromotionEntry::GetSameTileHealChange() const
 {
 	return m_iSameTileHealChange;
 }
 
-/// Accessor: Heals units in adjacent tiles
+
 int CvPromotionEntry::GetAdjacentTileHealChange() const
 {
 	return m_iAdjacentTileHealChange;
 }
 
-/// Accessor: Chance per turn to take damage in enemy lands
+
 int CvPromotionEntry::GetEnemyDamageChance() const
 {
 	return m_iEnemyDamageChance;
 }
 
-/// Accessor: Chance per turn to take damage in neutral lands
+
 int CvPromotionEntry::GetNeutralDamageChance() const
 {
 	return m_iNeutralDamageChance;
 }
 
-/// Accessor: Amount of damage taken by being in enemy lands
+
 int CvPromotionEntry::GetEnemyDamage() const
 {
 	return m_iEnemyDamage;
 }
 
-/// Accessor: Amount of damage taken by being in neutral lands
+
 int CvPromotionEntry::GetNeutralDamage() const
 {
 	return m_iNeutralDamage;
 }
 
-/// Accessor: Bonus strength percent
+
 int CvPromotionEntry::GetCombatPercent() const
 {
 	return m_iCombatPercent;
 }
 
-/// Accessor: Bonus city attack percent
+
 int CvPromotionEntry::GetCityAttackPercent() const
 {
 	return m_iCityAttackPercent;
 }
 
-/// Accessor: Bonus city defense percent
+
 int CvPromotionEntry::GetCityDefensePercent() const
 {
 	return m_iCityDefensePercent;
 }
 
-/// Accessor: Bonus ranged defense percent
+
 int CvPromotionEntry::GetRangedDefenseMod() const
 {
 	return m_iRangedDefenseMod;
 }
 
-/// Accessor: Bonus hills attack percent
+
 int CvPromotionEntry::GetHillsAttackPercent() const
 {
 	return m_iHillsAttackPercent;
 }
 
-/// Accessor: Bonus hills defense percent
+
 int CvPromotionEntry::GetHillsDefensePercent() const
 {
 	return m_iHillsDefensePercent;
 }
 
-/// Accessor: Bonus open terrain attack percent
+
 int CvPromotionEntry::GetOpenAttackPercent() const
 {
 	return m_iOpenAttackPercent;
 }
 
-/// Accessor: Bonus open terrain ranged attack mod
+
 int CvPromotionEntry::GetOpenRangedAttackMod() const
 {
 	return m_iOpenRangedAttackMod;
 }
 
-/// Accessor: Bonus open terrain attack percent
+
 int CvPromotionEntry::GetRoughAttackPercent() const
 {
 	return m_iRoughAttackPercent;
 }
 
-/// Accessor: Bonus rough terrain ranged attack mod
+
 int CvPromotionEntry::GetRoughRangedAttackMod() const
 {
 	return m_iRoughRangedAttackMod;
 }
 
-/// Accessor: Bonus when attacking fortified units
+
 int CvPromotionEntry::GetAttackFortifiedMod() const
 {
 	return m_iAttackFortifiedMod;
 }
 
-/// Accessor: Bonus when attacking wounded units
+
 int CvPromotionEntry::GetAttackWoundedMod() const
 {
 	return m_iAttackWoundedMod;
 }
 
-/// Accessor: Bonus when making a flank attack
+
 int CvPromotionEntry::GetFlankAttackModifier() const
 {
 	return m_iFlankAttackModifier;
 }
 
-/// Accessor: Modifier on nearby enemy combat units
+
 int CvPromotionEntry::GetNearbyEnemyCombatMod() const
 {
 	return m_iNearbyEnemyCombatMod;
 }
 
-/// Accessor: Range of modifier on nearby enemy combat units
+
 int CvPromotionEntry::GetNearbyEnemyCombatRange() const
 {
 	return m_iNearbyEnemyCombatRange;
 }
 
-/// Accessor: Bonus open terrain defense percent
+
 int CvPromotionEntry::GetOpenDefensePercent() const
 {
 	return m_iOpenDefensePercent;
 }
 
-/// Accessor: Bonus open terrain defense percent
+
 int CvPromotionEntry::GetRoughDefensePercent() const
 {
 	return m_iRoughDefensePercent;
 }
 
-/// Accessor: Does the unit have more than 1 attack?
+
 int CvPromotionEntry::GetExtraAttacks() const
 {
 	return m_iExtraAttacks;
 }
 
-/// Accessor: Does this Promotion make a Unit a Great General?
+
 bool CvPromotionEntry::IsGreatGeneral() const
 {
 	return m_bGreatGeneral;
 }
 
-/// Accessor: Does this Promotion make a Unit a Great Admiral?
+
 bool CvPromotionEntry::IsGreatAdmiral() const
 {
 	return m_bGreatAdmiral;
 }
 
-/// Accessor: Increase in rate of great general creation
+
 int CvPromotionEntry::GetGreatGeneralModifier() const
 {
 	return m_iGreatGeneralModifier;
 }
 
-/// Accessor: Does this Promotion make a Great General move at this unit's rate?
+
 bool CvPromotionEntry::IsGreatGeneralReceivesMovement() const
 {
 	return m_bGreatGeneralReceivesMovement;
 }
 
-// NQMP GJS - Danish Longship BEGIN
-/// Accessor: Does this Promotion make a Great General move at this unit's rate?
+
+
 bool CvPromotionEntry::IsEmbarkedUnitReceivesMovement() const
 {
 	return m_bEmbarkedUnitReceivesMovement;
 }
-// NQMP GJS - Danish Longship END
+
 #ifdef LEKMOD_LONGSHIP_ALL_PROMO
 bool CvPromotionEntry::IsLandUnitReceivesMovement() const
 {
@@ -1349,7 +1349,7 @@ bool CvPromotionEntry::IsLandUnitReceivesMovement() const
 
 
 #ifdef NQ_ART_OF_WAR_PROMOTION
-/// Accessor: Does this Promotion grant bonus movement when starting turn on or adjacent to great general?
+
 int CvPromotionEntry::GetGreatGeneralOnOrAdjacentConfersMovement() const
 {
 	return m_iGreatGeneralOnOrAdjacentConfersMovement;
@@ -1357,32 +1357,32 @@ int CvPromotionEntry::GetGreatGeneralOnOrAdjacentConfersMovement() const
 #endif
 
 
-/// Accessor: Combat bonus when stacked with Great General
+
 int CvPromotionEntry::GetGreatGeneralCombatModifier() const
 {
 	return m_iGreatGeneralCombatModifier;
 }
 
-/// Accessor: Combat mod for fighting in friendly territory
+
 int CvPromotionEntry::GetFriendlyLandsModifier() const
 {
 	return m_iFriendlyLandsModifier;
 }
 
-/// Accessor: Attack mod for fighting in friendly territory
+
 int CvPromotionEntry::GetFriendlyLandsAttackModifier() const
 {
 	return m_iFriendlyLandsAttackModifier;
 }
 
-/// Accessor: Combat mod for fighting outside friendly territory
+
 int CvPromotionEntry::GetOutsideFriendlyLandsModifier() const
 {
 	return m_iOutsideFriendlyLandsModifier;
 }
 
 #ifdef NQ_GOLDEN_AGE_FOREIGN_ATTACK_BONUS
-/// Accessor: Combat mod for attacking outside friendly territory during golden ages
+
 int CvPromotionEntry::GetGoldenAgeForeignAttackBonus() const
 {
 	return m_iGoldenAgeForeignAttackBonus;
@@ -1390,116 +1390,116 @@ int CvPromotionEntry::GetGoldenAgeForeignAttackBonus() const
 #endif
 
 #ifdef NQ_COMBAT_STRENGTH_NEAR_FRIENDLY_MINOR
-/// Accessor: Combat mod for being within 3 tiles of a friendly city state or a city state conquered by another civ
+
 int CvPromotionEntry::GetCombatStrengthNearFriendlyMinor() const
 {
 	return m_iCombatStrengthNearFriendlyMinor;
 }
 #endif
 #if defined(LEKMOD_SUBMERGE_MISSION)
-/// Accessor: Is this given to submarines when they submerge?
+
 bool CvPromotionEntry::IsSubmergePromotion() const
 {
 	return m_bSubmergePromotion;
 }
 #endif
-/// Accessor: Returns the command type for this HotKeyInfo class (which would be COMMAND_PROMOTION)
+
 int CvPromotionEntry::GetCommandType() const
 {
 	return m_iCommandType;
 }
 
-/// Sets the command type for this class.
+
 void CvPromotionEntry::SetCommandType(int iNewType)
 {
 	m_iCommandType = iNewType;
 }
 
-/// Accessor: How much upgrading this unit is discounted
+
 int CvPromotionEntry::GetUpgradeDiscount() const
 {
 	return m_iUpgradeDiscount;
 }
 
-/// Accessor: Increased rate of gaining experience
+
 int CvPromotionEntry::GetExperiencePercent() const
 {
 	return m_iExperiencePercent;
 }
 
-/// Accessor: Bonus when adjacent to a friendly Unit
+
 int CvPromotionEntry::GetAdjacentMod() const
 {
 	return m_iAdjacentMod;
 }
 
-/// Accessor: Percent attack change
+
 int CvPromotionEntry::GetAttackMod() const
 {
 	return m_iAttackMod;
 }
 
-/// Accessor: Percent defense change
+
 int CvPromotionEntry::GetDefenseMod() const
 {
 	return m_iDefenseMod;
 }
 
-/// Accessor: Number of tiles away a unit may paradrop
+
 int CvPromotionEntry::GetDropRange() const
 {
 	return m_iDropRange;
 }
 
-/// Accessor: Number of extra tiles of movement for naval vessels
+
 int CvPromotionEntry::GetExtraNavalMoves() const
 {
 	return m_iExtraNavalMoves;
 }
 
-/// Accessor: HP healed after defeating enemy (up to 10 for full heal)
+
 int CvPromotionEntry::GetHPHealedIfDefeatEnemy() const
 {
 	return m_iHPHealedIfDefeatEnemy;
 }
 
-/// Accessor: percent of defeated enemy strenth awarded as points toward next Golden Age
+
 int CvPromotionEntry::GetGoldenAgeValueFromKills() const
 {
 	return m_iGoldenAgeValueFromKills;
 }
 
-/// Accessor: maximum chance to withdraw before melee
+
 int CvPromotionEntry::GetExtraWithdrawal() const
 {
 	return m_iExtraWithdrawal;
 }
 
-/// Accessor: extra sight range when embarked
+
 int CvPromotionEntry::GetEmbarkExtraVisibility() const
 {
 	return m_iEmbarkExtraVisibility;
 }
 
-/// Accessor: extra defense when embarked
+
 int CvPromotionEntry::GetEmbarkDefenseModifier() const
 {
 	return m_iEmbarkDefenseModifier;
 }
 
-/// Accessor: bonus defending near capital
+
 int CvPromotionEntry::GetCapitalDefenseModifier() const
 {
 	return m_iCapitalDefenseModifier;
 }
 
-/// Accessor: drop per hex away from capital of CapitalDefenseModifier
+
 int CvPromotionEntry::GetCapitalDefenseFalloff() const
 {
 	return m_iCapitalDefenseFalloff;
 }
 
-/// Accessor: gold earned from damage on an attacked city
+
 int CvPromotionEntry::GetCityAttackPlunderModifier() const 
 {
 	return m_iCityAttackPlunderModifier;
@@ -1507,292 +1507,292 @@ int CvPromotionEntry::GetCityAttackPlunderModifier() const
 
 
 #ifdef LEKMOD_MOVE_PENALTY_CITY_COMBAT
-/// Accessor: movement penalty when attacking a city
+
 int CvPromotionEntry::GetCityAttackMovePenalty() const
 {
 	return m_iCityAttackMovePenalty;
 }
 #endif
 
-/// Accessor: loss of strength at end of each turn in rival territory without open borders
+
 int CvPromotionEntry::GetReligiousStrengthLossRivalTerritory() const
 {
 	return m_iReligiousStrengthLossRivalTerritory;
 }
 
-/// Accessor: This is for great merchants for when they complete their mission in a city state.
+
 int CvPromotionEntry::GetTradeMissionInfluenceModifier() const
 {
 	return m_iTradeMissionInfluenceModifier;
 }
 
-/// Accessor: This is for great merchants for when they complete their mission in a city state.
+
 int CvPromotionEntry::GetTradeMissionGoldModifier() const
 {
 	return m_iTradeMissionGoldModifier;
 }
 
-/// Accessor: Can this Promotion be earned through normal leveling?
+
 bool CvPromotionEntry::IsCannotBeChosen() const
 {
 	return m_bCannotBeChosen;
 }
 
-/// Accessor: Is this lost with upgrading?
+
 bool CvPromotionEntry::IsLostWithUpgrade() const
 {
 	return m_bLostWithUpgrade;
 }
 
-/// Accessor: Is this a promotion that is not given out when a unit is upgrading?
+
 bool CvPromotionEntry::IsNotWithUpgrade() const
 {
 	return m_bNotWithUpgrade;
 }
 
-/// Accessor: Does this promotion instantly heal a Unit?
+
 bool CvPromotionEntry::IsInstaHeal() const
 {
 	return m_bInstaHeal;
 }
 
-/// Accessor: Does this unit have a warlord attached to it?
+
 bool CvPromotionEntry::IsLeader() const
 {
 	return m_bLeader;
 }
 
-/// Accessor: Can this unit attack multiple times a turn?
+
 bool CvPromotionEntry::IsBlitz() const
 {
 	return m_bBlitz;
 }
 
-/// Accessor: Can this unit attack from the sea without penalty?
+
 bool CvPromotionEntry::IsAmphib() const
 {
 	return m_bAmphib;
 }
 
-/// Accessor: Can this unit attack across rivers without penalty?
+
 bool CvPromotionEntry::IsRiver() const
 {
 	return m_bRiver;
 }
 
-/// Accessor: Can this unit use enemy roads?
+
 bool CvPromotionEntry::IsEnemyRoute() const
 {
 	return m_bEnemyRoute;
 }
 
-/// Accessor: Can enter rival territory
+
 bool CvPromotionEntry::IsRivalTerritory() const
 {
 	return m_bRivalTerritory;
 }
 
-/// Accessor: Must this unit set up multiple turns for a ranged attack
+
 bool CvPromotionEntry::IsMustSetUpToRangedAttack() const
 {
 	return m_bMustSetUpToRangedAttack;
 }
 
-/// Accessor: Can this Unit provide Ranged Support Fire?
+
 bool CvPromotionEntry::IsRangedSupportFire() const
 {
 	return m_bRangedSupportFire;
 }
 
-/// Accessor: Unit can heal while moving
+
 bool CvPromotionEntry::IsAlwaysHeal() const
 {
 	return m_bAlwaysHeal;
 }
 
-/// Accessor: Unit can heal outside friendly territory (naval units)
+
 bool CvPromotionEntry::IsHealOutsideFriendly() const
 {
 	return m_bHealOutsideFriendly;
 }
 
-/// Accessor: Double movement in hills
+
 bool CvPromotionEntry::IsHillsDoubleMove() const
 {
 	return m_bHillsDoubleMove;
 }
 
-/// Accessor: Ignores terrain movement penalties
+
 bool CvPromotionEntry::IsIgnoreTerrainCost() const
 {
 	return m_bIgnoreTerrainCost;
 }
 
-/// Accessor: Entering rough terrain uses up a unit's movement? (regardless of how many moves he has)
+
 bool CvPromotionEntry::IsRoughTerrainEndsTurn() const
 {
 	return m_bRoughTerrainEndsTurn;
 }
 
-/// Accessor: Unit may pass over coast and Mountains
+
 bool CvPromotionEntry::IsHoveringUnit() const
 {
 	return m_bHoveringUnit;
 }
 
-/// Accessor: All terrain costs 1 to enter
+
 bool CvPromotionEntry::IsFlatMovementCost() const
 {
 	return m_bFlatMovementCost;
 }
 
-/// Accessor: May enter ice tiles
+
 bool CvPromotionEntry::IsCanMoveImpassable() const
 {
 	return m_bCanMoveImpassable;
 }
 
-/// Accessor: Unable to capture cities
+
 bool CvPromotionEntry::IsNoCapture() const
 {
 	return m_bNoCapture;
 }
 
-/// Accessor: Unable to attack enemy units
+
 bool CvPromotionEntry::IsOnlyDefensive() const
 {
 	return m_bOnlyDefensive;
 }
 
-/// Accessor: No defensive bonuses
+
 bool CvPromotionEntry::IsNoDefensiveBonus() const
 {
 	return m_bNoDefensiveBonus;
 }
 
 #if defined(LEKMOD_NO_FORTIFY_VS_RANGED_PROMO)
-/// Accessor: Fortify bonus does not apply vs ranged/bombard attacks
+
 bool CvPromotionEntry::IsNoFortifyVsRanged() const
 {
 	return m_bNoFortifyVsRanged;
 }
 #endif
 
-/// Accessor: Cannot be hurt by nukes?
+
 bool CvPromotionEntry::IsNukeImmune() const
 {
 	return m_bNukeImmune;
 }
 
-/// Accessor: Nationality is hidden from other players
+
 bool CvPromotionEntry::IsHiddenNationality() const
 {
 	return m_bHiddenNationality;
 }
 
-/// Accessor: Can attack without declaring war
+
 bool CvPromotionEntry::IsAlwaysHostile() const
 {
 	return m_bAlwaysHostile;
 }
 
-/// Accessor: Cannot reveal terrain unless it is inside a player's territory
+
 bool CvPromotionEntry::IsNoRevealMap() const
 {
 	return m_bNoRevealMap;
 }
 
-/// Accessor: Is this a Recon unit? (free sight all around it)
+
 bool CvPromotionEntry::IsRecon() const
 {
 	return m_bRecon;
 }
 
-/// Accessor: Can move through all terrain?
+
 bool CvPromotionEntry::CanMoveAllTerrain() const
 {
 	return m_bCanMoveAllTerrain;
 }
 
-/// Accessor: Can move after attacking another Unit?
+
 bool CvPromotionEntry::IsCanMoveAfterAttacking() const
 {
 	return m_bCanMoveAfterAttacking;
 }
 
-/// Accessor: Can this unit air sweep?
+
 bool CvPromotionEntry::IsAirSweepCapable() const
 {
 	return m_bAirSweepCapable;
 }
 
-/// Accessor: Can this unit embark?
+
 bool CvPromotionEntry::IsAllowsEmbarkation() const
 {
 	return m_bAllowsEmbarkation;
 }
 
-/// Accessor: Can this unit shoot over obstacles?
+
 bool CvPromotionEntry::IsRangeAttackIgnoreLOS() const
 {
 	return m_bRangeAttackIgnoreLOS;
 }
 
-/// Accessor: Lose no movement when pillaging?
+
 bool CvPromotionEntry::IsFreePillageMoves() const
 {
 	return m_bFreePillageMoves;
 }
 
-/// Accessor: When pillaging, does the unit heal?
+
 bool CvPromotionEntry::IsHealOnPillage() const
 {
 	return m_bHealOnPillage;
 }
 
-/// Accessor: Do we only get healed after a combat win if fighting a real civ or minor?
+
 bool CvPromotionEntry::IsHealIfDefeatExcludeBarbarians() const
 {
 	return m_bHealIfDefeatExcludesBarbarians;
 }
 
-/// Accessor: Do we not get run over by naval units when embarked at sea?
+
 bool CvPromotionEntry::IsEmbarkedAllWater() const
 {
 	return m_bEmbarkedAllWater;
 }
 
-/// Accessor: Does this unit only attack cities
+
 bool CvPromotionEntry::IsCityAttackOnly() const
 {
 	return m_bCityAttackOnly;
 }
 
-/// Accessor: Is a defeated enemy captured?
+
 bool CvPromotionEntry::IsCaptureDefeatedEnemy() const
 {
 	return m_bCaptureDefeatedEnemy;
 }
 
-/// Accessor: Should this infantry ignore benefits from great generals
+
 bool CvPromotionEntry::IsIgnoreGreatGeneralBenefit() const
 {
 	return m_bIgnoreGreatGeneralBenefit;
 }
 
-/// Accessor: Can this unit ignore ZOC when moving?
+
 bool CvPromotionEntry::IsIgnoreZOC() const
 {
 	return m_bIgnoreZOC;
 }
 
-/// Accessor: Is this a Sapper unit (when next to a city, provides city attack bonus to nearby units)?
+
 bool CvPromotionEntry::IsSapper() const
 {
 	return m_bSapper;
 }
 
-/// EAP: From CMP
+
 
 int CvPromotionEntry::GetConvertDomainUnit() const
 {
@@ -1811,14 +1811,14 @@ int CvPromotionEntry::GetGiveDomain() const
 	return m_iGiveDomain;
 }
 
-/// Accessor: Can this unit doa heavy charge (which either force an enemy to retreat or take extra damage)
+
 bool CvPromotionEntry::IsCanHeavyCharge() const
 {
 	return m_bCanHeavyCharge;
 }
 
 #ifdef NQ_HEAVY_CHARGE_DOWNHILL
-/// Accessor: Does this unit heavy charge downhill? (higher elvation to lower elevation, +X% and force an enemy to retreat or take extra damage)
+
 int CvPromotionEntry::GetHeavyChargeDownhill() const
 {
 	return m_iHeavyChargeDownhill;
@@ -1826,39 +1826,39 @@ int CvPromotionEntry::GetHeavyChargeDownhill() const
 #endif
 
 #ifdef LEKMOD_DIFFERENT_IDEO_COMBAT_BONUS
-//	--------------------------------------------------------------------------------
+
 int CvPromotionEntry::GetCombatDifferentIdeology() const
 {
 	return m_iCombatDifferentIdeology;
 }
 #endif
 
-/// Accessor: Does this promotion change into another after combat?
+
 bool CvPromotionEntry::HasPostCombatPromotions() const
 {
 	return m_bHasPostCombatPromotions;
 }
 
-/// Accessor: Do we have to pick a post-combat promotion that hasn't been used yet?
+
 bool CvPromotionEntry::ArePostCombatPromotionsExclusive() const
 {
 	return m_bPostCombatPromotionsExclusive;
 }
 
-/// Accessor: Sound to play when the promotion is gained
+
 const char* CvPromotionEntry::GetSound() const
 {
 	return m_strSound;
 }
 
-/// Set the sound to be played when the promotion is gained
+
 void CvPromotionEntry::SetSound(const char* szVal)
 {
 	m_strSound = szVal;
 }
 
-// ARRAYS
-// Returns an array of yields gained from killing other units
+
+
 #if defined(FULL_YIELD_FROM_KILLS)
 int CvPromotionEntry::GetYieldFromKills(int i) const
 {
@@ -1937,7 +1937,7 @@ int CvPromotionEntry::GetUpgradeConversionPromotion(int i) const
 	return NO_PROMOTION;
 }
 #endif
-/// Returns an array of bonuses when attacking a tile of a given terrain
+
 #ifdef AUI_WARNING_FIXES
 int CvPromotionEntry::GetTerrainAttackPercent(uint i) const
 {
@@ -1959,7 +1959,7 @@ int CvPromotionEntry::GetTerrainAttackPercent(int i) const
 	return -1;
 }
 
-/// Returns an array of bonuses when defending a tile of a given terrain
+
 #ifdef AUI_WARNING_FIXES
 int CvPromotionEntry::GetTerrainDefensePercent(uint i) const
 {
@@ -1981,7 +1981,7 @@ int CvPromotionEntry::GetTerrainDefensePercent(int i) const
 	return-1;
 }
 
-/// Returns an array of bonuses when attacking a tile with a terrain feature
+
 #ifdef AUI_WARNING_FIXES
 int CvPromotionEntry::GetFeatureAttackPercent(uint i) const
 {
@@ -2003,7 +2003,7 @@ int CvPromotionEntry::GetFeatureAttackPercent(int i) const
 	return -1;
 }
 
-/// Returns an array of bonuses when defending a tile with a terrain feature
+
 #ifdef AUI_WARNING_FIXES
 int CvPromotionEntry::GetFeatureDefensePercent(uint i) const
 {
@@ -2025,7 +2025,7 @@ int CvPromotionEntry::GetFeatureDefensePercent(int i) const
 	return -1;
 }
 
-/// Returns an array of bonuses when fighting against a certain unit
+
 #ifdef AUI_WARNING_FIXES
 int CvPromotionEntry::GetUnitCombatModifierPercent(uint i) const
 {
@@ -2047,7 +2047,7 @@ int CvPromotionEntry::GetUnitCombatModifierPercent(int i) const
 	return -1;
 }
 
-/// Returns an array of bonuses when fighting against a type of unit
+
 #ifdef AUI_WARNING_FIXES
 int CvPromotionEntry::GetUnitClassModifierPercent(uint i) const
 {
@@ -2069,7 +2069,7 @@ int CvPromotionEntry::GetUnitClassModifierPercent(int i) const
 	return -1;
 }
 
-/// Returns an array of bonuses when I have no idea
+
 #ifdef AUI_WARNING_FIXES
 int CvPromotionEntry::GetDomainModifierPercent(uint i) const
 {
@@ -2092,7 +2092,7 @@ int CvPromotionEntry::GetDomainModifierPercent(int i) const
 }
 
 #if defined(LEKMOD_DOMAIN_PROMO_ATTACK_DEFENSE)
-/// Percentage bonus when attacking a specific domain
+
 #ifdef AUI_WARNING_FIXES
 int CvPromotionEntry::GetDomainAttackPercent(uint i) const
 {
@@ -2114,7 +2114,7 @@ int CvPromotionEntry::GetDomainAttackPercent(int i) const
 	return -1;
 }
 
-/// Percentage bonus when defending against a specific domain
+
 #ifdef AUI_WARNING_FIXES
 int CvPromotionEntry::GetDomainDefensePercent(uint i) const
 {
@@ -2137,7 +2137,7 @@ int CvPromotionEntry::GetDomainDefensePercent(int i) const
 }
 #endif
 
-/// Percentage bonus when attacking a specific unit class
+
 #ifdef AUI_WARNING_FIXES
 int CvPromotionEntry::GetUnitClassAttackModifier(uint i) const
 {
@@ -2159,7 +2159,7 @@ int CvPromotionEntry::GetUnitClassAttackModifier(int i) const
 	return -1;
 }
 
-/// Percentage bonus when defending against a specific unit class
+
 #ifdef AUI_WARNING_FIXES
 int CvPromotionEntry::GetUnitClassDefenseModifier(uint i) const
 {
@@ -2181,7 +2181,7 @@ int CvPromotionEntry::GetUnitClassDefenseModifier(int i) const
 	return -1;
 }
 
-/// Returns an array that indicates if a feature type is traversable by the unit
+
 #ifdef AUI_WARNING_FIXES
 int CvPromotionEntry::GetFeaturePassableTech(uint i) const
 {
@@ -2203,7 +2203,7 @@ int CvPromotionEntry::GetFeaturePassableTech(int i) const
 	return -1;
 }
 
-/// Returns an array that indicates if a unit can move twice in a type of terrain
+
 #ifdef AUI_WARNING_FIXES
 bool CvPromotionEntry::GetTerrainDoubleMove(uint i) const
 {
@@ -2225,7 +2225,7 @@ bool CvPromotionEntry::GetTerrainDoubleMove(int i) const
 	return false;
 }
 
-/// Returns an array that indicates if a unit can move twice in a type of terrain feature
+
 #ifdef AUI_WARNING_FIXES
 bool CvPromotionEntry::GetFeatureDoubleMove(uint i) const
 {
@@ -2247,7 +2247,7 @@ bool CvPromotionEntry::GetFeatureDoubleMove(int i) const
 	return false;
 }
 
-/// Returns an array that indicates if a terrain type is impassable
+
 #ifdef AUI_WARNING_FIXES
 bool CvPromotionEntry::GetTerrainImpassable(uint i) const
 {
@@ -2269,7 +2269,7 @@ bool CvPromotionEntry::GetTerrainImpassable(int i) const
 	return false;
 }
 
-/// Returns an array that indicates what tech is needed to pass through a terrain type
+
 #ifdef AUI_WARNING_FIXES
 int CvPromotionEntry::GetTerrainPassableTech(uint i) const
 {
@@ -2291,7 +2291,7 @@ int CvPromotionEntry::GetTerrainPassableTech(int i) const
 	return -1;
 }
 
-/// Returns an array that indicates what tech is needed to pass through a terrain feature type
+
 #ifdef AUI_WARNING_FIXES
 bool CvPromotionEntry::GetFeatureImpassable(uint i) const
 {
@@ -2313,7 +2313,7 @@ bool CvPromotionEntry::GetFeatureImpassable(int i) const
 	return false;
 }
 
-/// Returns the combat classes that this promotion is available for
+
 #ifdef AUI_WARNING_FIXES
 bool CvPromotionEntry::GetUnitCombatClass(uint i) const
 {
@@ -2335,7 +2335,7 @@ bool CvPromotionEntry::GetUnitCombatClass(int i) const
 	return false;
 }
 
-/// Returns the civilian unit type that this promotion is available for
+
 #ifdef AUI_WARNING_FIXES
 bool CvPromotionEntry::GetCivilianUnitType(uint i) const
 {
@@ -2357,7 +2357,7 @@ bool CvPromotionEntry::GetCivilianUnitType(int i) const
 	return false;
 }
 
-/// If this a promotion that can randomly turn into other c
+
 #ifdef AUI_WARNING_FIXES
 bool CvPromotionEntry::IsPostCombatRandomPromotion(uint i) const
 {
@@ -2376,28 +2376,28 @@ bool CvPromotionEntry::IsPostCombatRandomPromotion(int i) const
 #endif
 }
 
-//=====================================
-// CvPromotionEntryXMLEntries
-//=====================================
-/// Constructor
+
+
+
+
 CvPromotionXMLEntries::CvPromotionXMLEntries(void)
 {
 
 }
 
-/// Destructor
+
 CvPromotionXMLEntries::~CvPromotionXMLEntries(void)
 {
 	DeleteArray();
 }
 
-/// Returns vector of promotion entries
+
 std::vector<CvPromotionEntry*>& CvPromotionXMLEntries::GetPromotionEntries()
 {
 	return m_paPromotionEntries;
 }
 
-/// Number of defined projects
+
 #ifdef AUI_WARNING_FIXES
 uint CvPromotionXMLEntries::GetNumPromotions() const
 #else
@@ -2407,7 +2407,7 @@ int CvPromotionXMLEntries::GetNumPromotions()
 	return m_paPromotionEntries.size();
 }
 
-/// Get a specific entry
+
 #ifdef AUI_WARNING_FIXES
 _Ret_maybenull_ CvPromotionEntry* CvPromotionXMLEntries::GetEntry(uint index)
 #else
@@ -2417,7 +2417,7 @@ CvPromotionEntry* CvPromotionXMLEntries::GetEntry(int index)
 	return m_paPromotionEntries[index];
 }
 
-/// Clear promotion entries
+
 void CvPromotionXMLEntries::DeleteArray()
 {
 	for(std::vector<CvPromotionEntry*>::iterator it = m_paPromotionEntries.begin(); it != m_paPromotionEntries.end(); ++it)
@@ -2428,22 +2428,22 @@ void CvPromotionXMLEntries::DeleteArray()
 	m_paPromotionEntries.clear();
 }
 
-//=====================================
-// CvUnitPromotions
-//=====================================
-/// Constructor
+
+
+
+
 CvUnitPromotions::CvUnitPromotions():
 	m_pPromotions(NULL),
 	m_pUnit(NULL)
 {
 }
 
-/// Destructor
+
 CvUnitPromotions::~CvUnitPromotions(void)
 {
 }
 
-/// Initialize
+
 void CvUnitPromotions::Init(CvPromotionXMLEntries* pPromotions, CvUnit* pUnit)
 {
 	CvAssert(pPromotions);
@@ -2460,28 +2460,28 @@ void CvUnitPromotions::Init(CvPromotionXMLEntries* pPromotions, CvUnit* pUnit)
 	Reset();
 }
 
-/// Deallocate memory created in initialize
+
 void CvUnitPromotions::Uninit()
 {
 	m_kHasPromotion.SetSize(0);
 }
 
-/// Reset unit promotion array to all false
+
 void CvUnitPromotions::Reset()
 {
 	m_kHasPromotion.SetSize(0);
 }
 
-/// Serialization read
+
 void CvUnitPromotions::Read(FDataStream& kStream)
 {
 	Reset();
 
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion;
 	kStream >> uiVersion;
 
-	// Read number of promotions
+
 	int iNumPromotions;
 	kStream >> iNumPromotions;
 	CvAssertMsg(m_pPromotions != NULL && m_pPromotions->GetNumPromotions() > 0, "Number of promotions to serialize is expected to greater than 0");
@@ -2489,14 +2489,14 @@ void CvUnitPromotions::Read(FDataStream& kStream)
 	PromotionArrayHelpers::Read(kStream, m_kHasPromotion);
 }
 
-/// Serialization write
+
 void CvUnitPromotions::Write(FDataStream& kStream) const
 {
-	// Current version number
+
 	uint uiVersion = 1;
 	kStream << uiVersion;
 
-	// Write out number of promotions to save
+
 	int iNumPromotions = m_pPromotions->GetNumPromotions();
 	kStream << iNumPromotions;
 	CvAssertMsg(iNumPromotions > 0, "Number of promotions to serialize is expected to greater than 0");
@@ -2504,13 +2504,13 @@ void CvUnitPromotions::Write(FDataStream& kStream) const
 	PromotionArrayHelpers::Write(kStream, m_kHasPromotion, iNumPromotions);
 }
 
-/// Accessor: Unit object
+
 CvUnit* CvUnitPromotions::GetUnit()
 {
 	return m_pUnit;
 }
 
-/// Accessor: Does the unit have a certain promotion
+
 bool CvUnitPromotions::HasPromotion(PromotionTypes eIndex) const
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -2528,7 +2528,7 @@ bool CvUnitPromotions::HasPromotion(PromotionTypes eIndex) const
 	return false;
 }
 
-/// Sets the promotion to a certain value
+
 void CvUnitPromotions::SetPromotion(PromotionTypes eIndex, bool bValue)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -2544,7 +2544,7 @@ void CvUnitPromotions::SetPromotion(PromotionTypes eIndex, bool bValue)
 	}
 }
 
-/// determines if the terrain feature is passable given the unit's current promotions
+
 bool CvUnitPromotions::GetAllowFeaturePassable(FeatureTypes eFeatureType) const
 {
 	CvTeamTechs* teamTechs = GET_TEAM(m_pUnit->getTeam()).GetTeamTechs();
@@ -2576,7 +2576,7 @@ bool CvUnitPromotions::GetAllowFeaturePassable(FeatureTypes eFeatureType) const
 	return false;
 }
 
-/// determines if the terrain type is passable given the unit's current promotions
+
 bool CvUnitPromotions::GetAllowTerrainPassable(TerrainTypes eTerrainType) const
 {
 	CvTeamTechs* teamTechs = GET_TEAM(m_pUnit->getTeam()).GetTeamTechs();
@@ -2608,7 +2608,7 @@ bool CvUnitPromotions::GetAllowTerrainPassable(TerrainTypes eTerrainType) const
 	return false;
 }
 
-/// returns the advantage percent when attacking the specified unit class
+
 int CvUnitPromotions::GetUnitClassAttackMod(UnitClassTypes eUnitClass) const
 {
 	int iSum = 0;
@@ -2628,7 +2628,7 @@ int CvUnitPromotions::GetUnitClassAttackMod(UnitClassTypes eUnitClass) const
 	return iSum;
 }
 
-/// returns the advantage percent when defending against the specified unit class
+
 int CvUnitPromotions::GetUnitClassDefenseMod(UnitClassTypes eUnitClass) const
 {
 	int iSum = 0;
@@ -2649,7 +2649,7 @@ int CvUnitPromotions::GetUnitClassDefenseMod(UnitClassTypes eUnitClass) const
 }
 
 #if defined(LEKMOD_DOMAIN_PROMO_ATTACK_DEFENSE)
-/// Advantage percent when attacking units of the specified domain
+
 int CvUnitPromotions::GetDomainAttackMod(DomainTypes eDomain) const
 {
 	int iSum = 0;
@@ -2669,7 +2669,7 @@ int CvUnitPromotions::GetDomainAttackMod(DomainTypes eDomain) const
 	return iSum;
 }
 
-/// Advantage percent when defending against units of the specified domain
+
 int CvUnitPromotions::GetDomainDefenseMod(DomainTypes eDomain) const
 {
 	int iSum = 0;
@@ -2690,7 +2690,7 @@ int CvUnitPromotions::GetDomainDefenseMod(DomainTypes eDomain) const
 }
 #endif
 
-// Swap to a new promotion after a combat - returns new promotion we switched to
+
 PromotionTypes CvUnitPromotions::ChangePromotionAfterCombat(PromotionTypes eIndex)
 {
 	std::vector<int> aPossiblePromotions;
@@ -2721,9 +2721,9 @@ PromotionTypes CvUnitPromotions::ChangePromotionAfterCombat(PromotionTypes eInde
 	return NO_PROMOTION;
 }
 
-// PRIVATE METHODS
 
-// Is this (post-combat) promotion already present for some unit of this player?
+
+
 bool CvUnitPromotions::IsInUseByPlayer(PromotionTypes eIndex, PlayerTypes ePlayer)
 {
 	bool bRtnValue = false;
@@ -2742,7 +2742,7 @@ bool CvUnitPromotions::IsInUseByPlayer(PromotionTypes eIndex, PlayerTypes ePlaye
 	return bRtnValue;
 }
 
-// Read the saved promotions.  Entries are saved as string values, all entries are saved.
+
 void PromotionArrayHelpers::ReadV3(FDataStream& kStream, CvBitfield& kPromotions)
 {
 	int iNumEntries;
@@ -2791,7 +2791,7 @@ void PromotionArrayHelpers::ReadV3(FDataStream& kStream, CvBitfield& kPromotions
 	}
 }
 
-// Read the saved promotions.  Entries are saved as hash values
+
 void PromotionArrayHelpers::Read(FDataStream& kStream, CvBitfield& kPromotions)
 {
 	int iNumEntries;
@@ -2833,10 +2833,10 @@ void PromotionArrayHelpers::Read(FDataStream& kStream, CvBitfield& kPromotions)
 	}
 }
 
-// Save the promotions.  Entries are saved as hash values and only the entries that are 'on' are saved
+
 void PromotionArrayHelpers::Write(FDataStream& kStream, const CvBitfield& kPromotions, int iArraySize)
 {
-	// We are only going to save the 'on' bit, so we have to count them
+
 	int iCount = 0;
 
 	for(int iI = 0; iI < iArraySize; iI++)
@@ -2857,7 +2857,7 @@ void PromotionArrayHelpers::Write(FDataStream& kStream, const CvBitfield& kPromo
 			CvPromotionEntry* pkPromotionInfo = GC.getPromotionInfo(ePromotion);
 			if(pkPromotionInfo)
 			{
-				uint uiHash = FString::Hash( pkPromotionInfo->GetType() );		// Save just the hash
+				uint uiHash = FString::Hash( pkPromotionInfo->GetType() );
 				kStream << uiHash;
 				kStream << bValue;
 			}

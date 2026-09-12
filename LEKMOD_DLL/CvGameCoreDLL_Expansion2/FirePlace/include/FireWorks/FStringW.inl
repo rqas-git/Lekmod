@@ -1,13 +1,13 @@
-//---------------------------------------------------------------------------------------
-//  Copyright (c) 2007 Firaxis Games, Inc. All rights reserved.
-//---------------------------------------------------------------------------------------
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Classes
+
+
+
+
+
 
 inline FStringW::FStringWHashTraits::FStringWHashTraits( void )
 {
-	// does nothing
+
 }
 
 inline size_t FStringW::FStringWHashTraits::operator()( const FStringW& str ) const
@@ -22,7 +22,7 @@ inline bool FStringW::FStringWHashTraits::operator()( const FStringW& str1, cons
 
 inline FStringW::FStringWHashTraitsNoCase::FStringWHashTraitsNoCase( void )
 {
-	// does nothing
+
 }
 
 inline size_t FStringW::FStringWHashTraitsNoCase::operator()( const FStringW& str ) const
@@ -64,7 +64,7 @@ inline FStringW::FStringWFixedBuffer< nLENGTH >::FStringWFixedBuffer( FStringW& 
 	m_szStringBuffer[ 0 ] = 0;
 	str.SetFixedBuffer( &m_kStringData );
 }
-#endif	//	!_NDS
+#endif
 
 template < size_t nLENGTH >
 inline FStringW::FStringWFixedBuffer< nLENGTH >::FStringWFixedBuffer()
@@ -77,33 +77,33 @@ inline FStringW::FStringWFixedBuffer< nLENGTH >::FStringWFixedBuffer()
 	m_szStringBuffer[ 0 ] = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Constructors
 
-// Default constructor
+
+
+
 inline FStringW::FStringW( void )
 {
 	Init();
 }
 
 #ifdef		_NDS
-// Construct STATIC type
-inline FStringW::FStringW( FlagType /* ignored */ )
+
+inline FStringW::FStringW( FlagType               )
 {
-	static int strEmpty[] = { FIXED | STATIC, 0 };	// Empty string
+	static int strEmpty[] = { FIXED | STATIC, 0 };
 
 	m_pszString = (LPWSTR)&strEmpty[1];
 }
 #endif
 
-// Copy constructor
+
 inline FStringW::FStringW( const FStringW& strSource )
 {
 	Init();
 	Copy( strSource.GetLength(), strSource );
 }
 
-// Construct from a unicode character
+
 inline FStringW::FStringW( wchar ch, int iRepeat )
 {
 	Init();
@@ -116,44 +116,44 @@ inline FStringW::FStringW( wchar ch, int iRepeat )
 	}
 }
 
-// Convert from a unicode string
+
 inline FStringW::FStringW( LPCWSTR lpszSource )
 {
 	Init();
 	Copy( SafeStrlen( lpszSource ), lpszSource );
 }
 
-// Convert from a unicode string of the specified length
+
 inline FStringW::FStringW( LPCWSTR lpszSource, int iLength )
 {
 	Init();
 	Copy( iLength, lpszSource );
 }
 
-// Construct from std::wstring
+
 inline FStringW::FStringW( const std::wstring& strSource )
 {
 	Init();
 	Copy( (int)strSource.size(), strSource.c_str() );
 }
 
-// Construct with a specified length -- string remains uninitialized
+
 inline FStringW::FStringW( int iLength )
 {
 	Init();
 	Reserve( iLength );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Destructor
+
+
 
 inline FStringW::~FStringW( void )
 {
 	Release();
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Assignment Operators
+
+
 
 inline const FStringW& FStringW::operator=( const FStringW& strSource )
 {
@@ -176,8 +176,8 @@ inline const FStringW& FStringW::operator=( LPCWSTR lpszSource )
 	return ( *this );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Addition + Assignment Operators
+
+
 
 inline const FStringW& FStringW::operator+=( const FStringW& strSource )
 {
@@ -200,8 +200,8 @@ inline const FStringW& FStringW::operator+=( LPCWSTR lpszSource )
 	return ( *this );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Addition Operators
+
+
 
 inline FStringW FStringW::operator+( const FStringW& s2 )
 {
@@ -253,8 +253,8 @@ inline FStringW operator+( LPCWSTR s1, const FStringW& s2 )
 	return ( str );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Subtraction + Assignment Operators
+
+
 
 inline const FStringW& FStringW::operator-=( const FStringW& strSource )
 {
@@ -290,8 +290,8 @@ inline const FStringW& FStringW::operator-=( LPCWSTR lpszSource )
 	return ( *this );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Subtraction Operators
+
+
 
 inline FStringW FStringW::operator-( const FStringW& s2 )
 {
@@ -355,8 +355,8 @@ inline FStringW operator-( LPCWSTR s1, const FStringW& s2 )
 	return ( str );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Equality Operators
+
+
 
 inline bool FStringW::operator==( const FStringW& s2 ) const
 {
@@ -373,8 +373,8 @@ inline bool operator==( LPCWSTR s1, const FStringW& s2 )
 	return ( s2.Compare( s1 ) == 0 );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Inequality Operators
+
+
 
 inline bool FStringW::operator!=( const FStringW& s2 ) const
 {
@@ -391,8 +391,8 @@ inline bool operator!=( LPCWSTR s1, const FStringW& s2 )
 	return ( s2.Compare( s1 ) != 0 );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Less Than Operators
+
+
 
 inline bool FStringW::operator<( const FStringW& s2 ) const
 {
@@ -409,8 +409,8 @@ inline bool operator<( LPCWSTR s1, const FStringW& s2 )
 	return ( s2.Compare( s1 ) > 0 );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Less Than Or Equal Operators
+
+
 
 inline bool FStringW::operator<=( const FStringW& s2 ) const
 {
@@ -427,8 +427,8 @@ inline bool operator<=( LPCWSTR s1, const FStringW& s2 )
 	return ( s2.Compare( s1 ) >= 0 );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Greater Than Operators
+
+
 
 inline bool FStringW::operator>( const FStringW& s2 ) const
 {
@@ -445,8 +445,8 @@ inline bool operator>( LPCWSTR s1, const FStringW& s2 )
 	return ( s2.Compare( s1 ) < 0 );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Greater Than Or Equal Operators
+
+
 
 inline bool FStringW::operator>=( const FStringW& s2 ) const
 {
@@ -463,8 +463,8 @@ inline bool operator>=( LPCWSTR s1, const FStringW& s2 )
 	return ( s2.Compare( s1 ) <= 0 );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Shifting Operators
+
+
 
 inline FStringW FStringW::operator<<( int iCount ) const
 {
@@ -488,8 +488,8 @@ inline FStringW& FStringW::operator>>=( int iCount )
 	return ( *this );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Subscript Operators
+
+
 
 inline wchar& FStringW::operator[]( int iIndex )
 {
@@ -515,16 +515,16 @@ inline wchar FStringW::operator[]( uint uiIndex ) const
 	return ( GetAt( uiIndex ) );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Casting Operators
+
+
 
 inline FStringW::operator LPCWSTR( void ) const
 {
 	return ( GetCString() );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Character Operations
+
+
 
 inline wchar FStringW::First( void ) const
 {
@@ -545,8 +545,8 @@ inline wchar FStringW::GetAt( int iIndex ) const
 	return ( m_pszString[ iIndex ] );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// String Comparison
+
+
 
 inline int FStringW::Compare( LPCWSTR lpsz ) const
 {
@@ -584,8 +584,8 @@ inline int FStringW::CollateNoCase( LPCWSTR lpsz ) const
 	return ( _wcsicoll( m_pszString, lpsz ) );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Simple Sub-String Extraction
+
+
 
 inline FStringW FStringW::Mid( int iFirst ) const
 {
@@ -617,8 +617,8 @@ inline void FStringW::Right( FStringW & szDest, int iCount ) const
 	return ( Mid( szDest, GetLength() - iCount, iCount ) );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Advanced Sub-String Extraction
+
+
 
 inline FStringW FStringW::SpanIncluding( LPCWSTR lpszCharSet, int iStart ) const
 {
@@ -666,8 +666,8 @@ inline void FStringW::SpanExcluding( FStringW & szDest, LPCWSTR lpszCharSet, int
 	Left( szDest, (int)wcscspn( m_pszString, lpszCharSet ) );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Path Extraction
+
+
 
 inline void FStringW::ReplaceDriveLetter( LPCWSTR lpszNewDrive, wchar chPathDelimiter )
 {
@@ -711,19 +711,19 @@ inline void FStringW::StandardizePath( bool bChangeCase, bool bTerminate )
 {
 #ifdef		_PS3
 	Replace( L'\\', L'/' );
-#else	//	_PS3
+#else
 	Replace( L'/', L'\\' );
-#endif	//	_PS3
+#endif
 
 	if ( bChangeCase )
 	{
 #ifdef		_PS3
 		MakeLower();
-#else	//	_PS3
+#else
 #ifdef		_XBOX
 		MakeUpper();
-#endif	//	_XBOX
-#endif	//	_PS3
+#endif
+#endif
 	}
 
 	if ( bTerminate && ( Last() != DEFAULT_PATH_DELIMITER_W ) )
@@ -737,10 +737,10 @@ inline void FStringW::StripDriveLetter( wchar chPathDelimiter )
 	#ifdef		_NDS
 	FStringSTKW( szTempDir,  MAX_PATH );
 	FStringSTKW( szTempName, MAX_PATH );
-	#else	//	_NDS
+	#else
 	FStringFixedBufferW( szTempDir, 512 );
 	FStringFixedBufferW( szTempName, 512 );
-	#endif	//	_NDS	
+	#endif
 	ExtractFileDir(  szTempDir,  chPathDelimiter );
 	ExtractFileName( szTempName, chPathDelimiter );
 	szTempDir += szTempName;
@@ -752,10 +752,10 @@ inline void FStringW::StripFileDir( wchar chPathDelimiter )
 	#ifdef		_NDS
 	FStringSTKW( szTempDrive, MAX_PATH );
 	FStringSTKW( szTempName,  MAX_PATH );
-	#else	//	_NDS
+	#else
 	FStringFixedBufferW(szTempDrive, 16 );
 	FStringFixedBufferW(szTempName, 512 );
-	#endif	//	_NDS
+	#endif
 	ExtractDriveLetter(szTempDrive);
 	ExtractFileName( szTempName, chPathDelimiter );
 	szTempDrive += szTempName;
@@ -767,10 +767,10 @@ inline void FStringW::StripFileExtension( wchar chPathDelimiter )
 	#ifdef		_NDS
 	FStringSTKW( szTempPath,  MAX_PATH );
 	FStringSTKW( szTempTitle, MAX_PATH );
-	#else	//	_NDS
+	#else
 	FStringFixedBufferW(szTempPath, 512 );
 	FStringFixedBufferW(szTempTitle, 512 );
-	#endif	//	_NDS
+	#endif
 	ExtractFilePath(  szTempPath,  chPathDelimiter );
 	ExtractFileTitle( szTempTitle, chPathDelimiter );
 	szTempPath += szTempTitle;
@@ -781,9 +781,9 @@ inline void FStringW::StripFileName( wchar chPathDelimiter )
 {
 	#ifdef		_NDS
 	FStringSTKW( szTempPath, MAX_PATH );
-	#else	//	_NDS
+	#else
 	FStringFixedBufferW(szTempPath, 512);
-	#endif	//	_NDS
+	#endif
 	ExtractFilePath( szTempPath, chPathDelimiter );
 	*this = szTempPath;
 }
@@ -792,9 +792,9 @@ inline void FStringW::StripFilePath( wchar chPathDelimiter )
 {
 	#ifdef		_NDS
 	FStringSTKW( szTempName, MAX_PATH );
-	#else	//	_NDS
+	#else
 	FStringFixedBufferW(szTempName, 512);
-	#endif	//	_NDS
+	#endif
 	ExtractFileName( szTempName, chPathDelimiter );
 	*this = szTempName;
 }
@@ -804,18 +804,18 @@ inline void FStringW::StripFileTitle( wchar chPathDelimiter )
 	#ifdef		_NDS
 	FStringSTKW( szTempPath, MAX_PATH );
 	FStringSTKW( szTempExt,  MAX_PATH );
-	#else	//	_NDS
+	#else
 	FStringFixedBufferW(szTempPath, 512 );
 	FStringFixedBufferW(szTempExt, 512 );
-	#endif	//	_NDS
+	#endif
 	ExtractFilePath( szTempPath, chPathDelimiter );
 	ExtractFileExtension( szTempExt, chPathDelimiter );
 	szTempPath += szTempExt;
 	*this = szTempPath;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Upper/Lower/Reverse Conversion
+
+
 
 inline void FStringW::MakeUpper( void )
 {
@@ -835,8 +835,8 @@ inline void FStringW::MakeReverse( void )
 	_wcsrev( m_pszString );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Trimming Whitespace
+
+
 
 inline void FStringW::Trim( void )
 {
@@ -863,8 +863,8 @@ inline void FStringW::TrimWhitespace( void )
 	RemoveRepeated( L' ' );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Advanced manipulation
+
+
 
 inline int FStringW::Replace( wchar chOld, LPCWSTR lpszNew )
 {
@@ -880,8 +880,8 @@ inline int FStringW::Replace( LPCWSTR lpszOld, wchar chNew )
 	return ( Replace( lpszOld, szNew ) );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// String concatenation
+
+
 
 inline void FStringW::Concat( int iLength, LPCWSTR lpszSource, int iFirst )
 {
@@ -893,33 +893,33 @@ inline void FStringW::Concat( LPCWSTR lpszSource )
 	Concat( SafeStrlen( lpszSource ), lpszSource );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Numeric conversion
 
-// Calculates a hash value for the string
+
+
+
 inline uint FStringW::Hash( void ) const
 {
 	FSTRING_CHECK_BUFFER;
 	return ( g_CRC32.Calc( ( void* )m_pszString, GetLength() * sizeof ( wchar ) ) );
 }
 
-// Calculates a hash value for the string
-// static 
+
+
 inline uint FStringW::Hash( LPCWSTR pszStr )
 {
 	FAssert(pszStr != NULL);
 	return ( g_CRC32.Calc( ( void* )pszStr, SafeStrlen(pszStr) * sizeof ( wchar ) ) );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Access to string implementation buffer as "C" character array
+
+
 
 #ifndef		_NDS
 inline int FStringW::GetAllocLength( void ) const
 {
 	return ( GetData()->m_iAllocLength );
 }
-#endif	//	!_NDS
+#endif
 
 inline LPCWSTR FStringW::GetCString( void ) const
 { 
@@ -927,14 +927,14 @@ inline LPCWSTR FStringW::GetCString( void ) const
 	return ( m_pszString );
 }
 
-// stl-style accessor
+
 inline LPCWSTR FStringW::c_str( void ) const
 {
 	return ( GetCString() );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Static Methods
+
+
 
 inline int FStringW::SafeStrlen( LPCWSTR lpsz )
 {
@@ -968,20 +968,20 @@ inline size_t FStringW::SizeofFStringData( void )
 {
 	return ( sizeof ( FStringWData ) );
 }
-#endif	//	!_NDS
+#endif
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// FStringAData
+
+
 
 #ifndef		_NDS
 inline LPWSTR FStringW::FStringWData::StringData( void )
 {
 	return ( ( LPWSTR )( this + 1 ) );
 }
-#endif	//	!_NDS
+#endif
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Protected methods
+
+
 
 #ifndef		_NDS
 inline FStringW::FStringWData* FStringW::GetData( void ) const
@@ -990,17 +990,17 @@ inline FStringW::FStringWData* FStringW::GetData( void ) const
 
 	return ( ( ( FStringWData* )m_pszString ) - 1 );
 }
-#endif	//	!_NDS
+#endif
 
 inline void FStringW::Init( void )
 {
 #ifdef		_NDS
-	static int strEmpty[] = { FIXED, 0 };	// Empty string
+	static int strEmpty[] = { FIXED, 0 };
 
 	m_pszString = (LPWSTR)&strEmpty[1];
-#else	//	_NDS
+#else
 	m_pszString = FStringW_GetStringInitData()->StringData();
-#endif	//	_NDS
+#endif
 }
 
 #ifndef		_NDS
@@ -1009,7 +1009,7 @@ inline void FStringW::Release( void )
 	Release( GetData() );
 	Init();
 }
-#endif	//	!_NDS
+#endif
 
 #ifndef		_NDS
 inline void FStringW::Release( FStringWData* pkData )
@@ -1020,13 +1020,13 @@ inline void FStringW::Release( FStringWData* pkData )
 #ifdef		ENABLE_FSTRING_STATS
 		extern uint g_uiFStringBytesCurrent;
 		g_uiFStringBytesCurrent -= sizeof ( FStringWData ) + ( sizeof ( char ) * pkData->m_iAllocLength + 1 );
-#endif	//	ENABLE_FSTRING_STATS
+#endif
 
-		// Free any memory associated with the string
+
 		delete [] ( byte* )pkData;
 	}
 }
-#endif	//	!_NDS
+#endif
 
 #ifndef		_NDS
 inline void FStringW::SetFixedBuffer( FStringWData* pkData )
@@ -1038,39 +1038,39 @@ inline void FStringW::SetFixedBuffer( FStringWData* pkData )
 	Release();
 	m_pszString = pkData->StringData();
 }
-#endif	//	!_NDS
+#endif
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Attributes and Operations
+
+
 
 inline void FStringW::Empty( void )
 {
 	SetLength( 0 );
 }
 
-//------------------------------------------------------------------------------------------------
+
 inline bool FStringW::IsEmpty( void ) const
 {
 	return ( GetLength() == 0 );
 }
 
-//------------------------------------------------------------------------------------------------
+
 #ifdef		_NDS
 inline uint& FStringW::Header( int index )
 {
 	return ((uint*)m_pszString)[-index];
 }
-#endif	//	_NDS
+#endif
 
-//------------------------------------------------------------------------------------------------
+
 #ifdef		_NDS
 inline const uint& FStringW::Header( int index ) const
 {
 	return ((uint*)m_pszString)[-index];
 }
-#endif	//	_NDS
+#endif
 
-//------------------------------------------------------------------------------------------------
+
 #ifdef		_NDS
 inline void* FStringW::GetAllocPtr( void )
 {
@@ -1078,9 +1078,9 @@ inline void* FStringW::GetAllocPtr( void )
 
 	return ( (LPSTR)m_pszString - header );
 }
-#endif	//	_NDS
+#endif
 
-//------------------------------------------------------------------------------------------------
+
 #ifdef		_NDS
 inline int FStringW::GetMaxLength( void ) const
 {
@@ -1091,13 +1091,13 @@ inline int FStringW::GetMaxLength( void ) const
 }
 #endif
 
-//------------------------------------------------------------------------------------------------
+
 inline void FStringW::DecLength( size_t iLength )
 {
 	SetLength( GetLength() - iLength );
 }
 
-//------------------------------------------------------------------------------------------------
+
 inline int FStringW::GetLength( void ) const
 {
 	#ifdef		_NDS
@@ -1105,13 +1105,13 @@ inline int FStringW::GetLength( void ) const
 		return Header(2);
 	else
 		return Header(1) >> 16;
-	#else	//	_NDS
+	#else
 	FSTRING_CHECK_BUFFER;
 	return ( GetData()->m_iDataLength );
-	#endif	//	_NDS
+	#endif
 }
 
-//------------------------------------------------------------------------------------------------
+
 #ifdef		_NDS
 inline void FStringW::SetCharCount( int iLength )
 {
@@ -1122,9 +1122,9 @@ inline void FStringW::SetCharCount( int iLength )
 	else
 		Header(1) = ((uint)iLength<<16) + (Header(1) & 0xFFFF);
 }
-#endif	//	_NDS
+#endif
 
-//------------------------------------------------------------------------------------------------
+
 #ifdef		_NDS
 inline int FStringW::GetAllocLength( void ) const
 {
@@ -1136,83 +1136,83 @@ inline int FStringW::GetAllocLength( void ) const
 
 	return length;
 }
-#endif	//	_NDS
+#endif
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Protected methods
 
-//------------------------------------------------------------------------------------------------
+
+
+
 inline bool FStringW::IsFixed( void ) const
 {
 #ifdef		_NDS
 	return ( Header(1) & FIXED );
-#else	//	_NDS
+#else
 	return ( GetData()->m_bFixed ? true : false );
-#endif	//	_NDS
+#endif
 }
 
-//------------------------------------------------------------------------------------------------
+
 inline bool FStringW::IsLocked( void ) const
 {
 #ifdef		_NDS
 	return ( Header(1) & LOCKED );
-#else	//	_NDS
+#else
 	return ( GetData()->m_bLocked ? true : false );
-#endif	//	_NDS
+#endif
 }
 
-//------------------------------------------------------------------------------------------------
+
 #ifdef		_NDS
 inline bool FStringW::IsStatic( void ) const
 {
 	return ( Header(1) & STATIC );
 }
-#endif	//	_NDS
+#endif
 
-//------------------------------------------------------------------------------------------------
+
 #ifdef		_NDS
 inline bool FStringW::IsLarge( void ) const
 {
 	return ( Header(1) & LARGE );
 }
-#endif	//	_NDS
+#endif
 
-//------------------------------------------------------------------------------------------------
+
 inline void FStringW::LockBuffer( void )
 {
 	assert( !IsLocked() );
 #ifdef		_NDS
 	Header(1) |= LOCKED;
-#else	//	_NDS
+#else
 	GetData()->m_bLocked = 1;
-#endif	//	_NDS
+#endif
 }
 
-//------------------------------------------------------------------------------------------------
+
 inline void FStringW::UnlockBuffer( void )
 {
 	assert( IsLocked() );
 #ifdef		_NDS
 	Header(1) &= ~LOCKED;
-#else	//	_NDS
+#else
 	GetData()->m_bLocked = 0;
-#endif	//	_NDS
+#endif
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// AllocBuffer
+
+
 #ifdef		_NDS
 inline void FStringW::AllocBuffer( int nChars )
 {
-	int flags  = (IsStatic() && GetAllocLength()==0) ? STATIC+FIXED : 0;	// only create new STATIC if null
-	int header = 4;								// header bytes
-	int buffer = (nChars + 1) * sizeof(wchar);	// buffer bytes
-	int nAlloc = header + buffer;				// malloc bytes
+	int flags  = (IsStatic() && GetAllocLength()==0) ? STATIC+FIXED : 0;
+	int header = 4;
+	int buffer = (nChars + 1) * sizeof(wchar);
+	int nAlloc = header + buffer;
 
-	int maxAlloc = (0xFFFF & ~31) / (flags ? 8 : 1);	// max SMALL alloc
+	int maxAlloc = (0xFFFF & ~31) / (flags ? 8 : 1);
 
-	int maxSmall = (maxAlloc - header) / sizeof(wchar) - 1;	// largest nChars for SMALL header
+	int maxSmall = (maxAlloc - header) / sizeof(wchar) - 1;
 
 	if (nChars > maxSmall)
 	{
@@ -1225,38 +1225,38 @@ inline void FStringW::AllocBuffer( int nChars )
 
 	if (flags & STATIC)
 	{
-		nAlloc = (nAlloc +  3) &  ~3;	// round UP to 4-byte block
+		nAlloc = (nAlloc +  3) &  ~3;
 		pkData = MallocX( nAlloc );
-		nAlloc *= 8;					// shift #blocks up past flags
+		nAlloc *= 8;
 	}
 	else
 	{
-		nAlloc = (nAlloc + 31) & ~31;	// round UP to 32-byte block
+		nAlloc = (nAlloc + 31) & ~31;
 		pkData = Malloc( nAlloc );
 	}
 	FAssert( pkData != NULL );
 
-	m_pszString = (LPWSTR)((LPSTR)pkData + header);	// assign new string, overwrite old, will orphan if FIXED
+	m_pszString = (LPWSTR)((LPSTR)pkData + header);
 
 	Header(1) = nAlloc | flags;
 	SetCharCount( 0 );
 	m_pszString[0] = L'\0';
 }
-#endif	//	_NDS
+#endif
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Construct FIXED from an external buffer
+
+
 #ifdef		_NDS
 inline FStringW::FStringW( int iLength, void* pBuffer )
 {
-	Init();	// safety
+	Init();
 
 	if (!pBuffer)  return;
 
-	iLength &= ~31;	// total FString block MUST be multiple of 32-bytes
+	iLength &= ~31;
 
 	int flags  = FIXED;
-	int header = 4;		// assume SMALL
+	int header = 4;
 
 	if ((uint)iLength >= 65536)	
 	{
@@ -1270,4 +1270,4 @@ inline FStringW::FStringW( int iLength, void* pBuffer )
 	SetCharCount( 0 );
 	m_pszString[0] = L'\0';
 }
-#endif	//	_NDS
+#endif

@@ -1,13 +1,13 @@
--- Shared Teamer/Four Corners river flow, including top and left map-edge handling.
--- Copyright (c) 2010 Firaxis Games, Inc. All rights reserved.
+
+
 function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
-	-- Customizing to handle problems in top row of the map. Only this aspect has been altered.
+
 
 	local iW, iH = Map.GetGridSize()
 	thisFlowDirection = thisFlowDirection or FlowDirectionTypes.NO_FLOWDIRECTION;
 	originalFlowDirection = originalFlowDirection or FlowDirectionTypes.NO_FLOWDIRECTION;
 
-	-- pStartPlot = the plot at whose SE corner the river is starting
+
 	if (riverID == nil) then
 		riverID = nextRiverID;
 		nextRiverID = nextRiverID + 1;
@@ -15,7 +15,7 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 
 	local otherRiverID = _rivers[startPlot]
 	if (otherRiverID ~= nil and otherRiverID ~= riverID and originalFlowDirection == FlowDirectionTypes.NO_FLOWDIRECTION) then
-		return; -- Another river already exists here; can't branch off of an existing river!
+		return;
 	end
 
 	local riverPlot;
@@ -43,7 +43,7 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 
 		_rivers[riverPlot] = riverID;
 		riverPlot:SetNWOfRiver(true, thisFlowDirection);
-		-- riverPlot does not change
+
 
 	elseif (thisFlowDirection == FlowDirectionTypes.FLOWDIRECTION_SOUTHEAST) then
 
@@ -59,7 +59,7 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 
 		_rivers[riverPlot] = riverID;
 		riverPlot:SetNEOfRiver(true, thisFlowDirection);
-		-- riverPlot does not change
+
 
 	elseif (thisFlowDirection == FlowDirectionTypes.FLOWDIRECTION_SOUTH) then
 
@@ -75,7 +75,7 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 
 		_rivers[riverPlot] = riverID;
 		riverPlot:SetWOfRiver(true, thisFlowDirection);
-		-- riverPlot does not change
+
 
 	elseif (thisFlowDirection == FlowDirectionTypes.FLOWDIRECTION_SOUTHWEST) then
 
@@ -87,7 +87,7 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 
 		_rivers[riverPlot] = riverID;
 		riverPlot:SetNWOfRiver(true, thisFlowDirection);
-		-- riverPlot does not change
+
 
 	elseif (thisFlowDirection == FlowDirectionTypes.FLOWDIRECTION_NORTHWEST) then
 
@@ -103,20 +103,20 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 		riverPlot = Map.PlotDirection(riverPlot:GetX(), riverPlot:GetY(), DirectionTypes.DIRECTION_WEST);
 
 	else
-		-- River is starting here, set the direction in the next step
+
 		riverPlot = startPlot;
 	end
 
 	if (riverPlot == nil or riverPlot:IsWater()) then
-		-- The river has flowed off the edge of the map or into the ocean. All is well.
+
 		return;
 	end
 
-	-- Storing X,Y positions as locals to prevent redundant function calls.
+
 	local riverPlotX = riverPlot:GetX();
 	local riverPlotY = riverPlot:GetY();
 
-	-- Table of methods used to determine the adjacent plot.
+
 	local adjacentPlotFunctions = {
 		[FlowDirectionTypes.FLOWDIRECTION_NORTH] = function()
 			return Map.PlotDirection(riverPlotX, riverPlotY, DirectionTypes.DIRECTION_NORTHWEST);
@@ -145,7 +145,7 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 
 	if(bestFlowDirection == FlowDirectionTypes.NO_FLOWDIRECTION) then
 
-		-- Attempt to calculate the best flow direction.
+
 		local bestValue = math.huge;
 		for flowDirection, getAdjacentPlot in pairs(adjacentPlotFunctions) do
 
@@ -169,8 +169,8 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 							bestFlowDirection = flowDirection;
 						end
 
-					-- Custom addition for Highlands, to fix river problems in top row of the map. Any other all-land map may need similar special casing.
-					elseif adjacentPlot == nil and riverPlotY == iH - 1 then -- Top row of map, needs special handling
+
+					elseif adjacentPlot == nil and riverPlotY == iH - 1 then
 						if flowDirection == FlowDirectionTypes.FLOWDIRECTION_NORTH or
 						   flowDirection == FlowDirectionTypes.FLOWDIRECTION_NORTHWEST or
 						   flowDirection == FlowDirectionTypes.FLOWDIRECTION_NORTHEAST then
@@ -185,8 +185,8 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 							end
 						end
 
-					-- Custom addition for Highlands, to fix river problems in left column of the map. Any other all-land map may need similar special casing.
-					elseif adjacentPlot == nil and riverPlotX == 0 then -- Left column of map, needs special handling
+
+					elseif adjacentPlot == nil and riverPlotX == 0 then
 						if flowDirection == FlowDirectionTypes.FLOWDIRECTION_NORTH or
 						   flowDirection == FlowDirectionTypes.FLOWDIRECTION_SOUTH or
 						   flowDirection == FlowDirectionTypes.FLOWDIRECTION_NORTHWEST or
@@ -206,7 +206,7 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 			end
 		end
 
-		-- Try a second pass allowing the river to "flow backwards".
+
 		if(bestFlowDirection == FlowDirectionTypes.NO_FLOWDIRECTION) then
 
 			local bestValue = math.huge;
@@ -231,7 +231,7 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 		end
 	end
 
-	--Recursively generate river.
+
 	if (bestFlowDirection ~= FlowDirectionTypes.NO_FLOWDIRECTION) then
 		if  (originalFlowDirection == FlowDirectionTypes.NO_FLOWDIRECTION) then
 			originalFlowDirection = bestFlowDirection;

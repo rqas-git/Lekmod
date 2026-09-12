@@ -1,5 +1,5 @@
-----------------------------------------------------------------        
-------<!-- Override to enable save menu in Multiplayer -->------      
+
+
 include("IconSupport");
 include("SupportFunctions");
 include("InstanceManager");
@@ -20,31 +20,31 @@ local g_ActivatedModsIM = InstanceManager:new( "ModEntryInstance", "Text", Contr
 local g_bEntered = false;
 m_ExitToMain = true;
 
-----------------------------------------------------------------        
----------------------------------------------------------------- 
+
+
 function OnEnter()
 	if (not g_bEntered) then
-		-- Moving between sub-menus causes this screen to be shown and hidden
-		-- multiple times. Want to maintain the fact that there is an active popup
-		-- by incrementing the turn timer semaphore once on entering the screen and
-		-- have the semaphore decremented on leaving the screen.
+
+
+
+
 		UI.incTurnTimerSemaphore();
 		g_bEntered = true;
 	end
 end
 
-----------------------------------------------------------------        
-----------------------------------------------------------------  
+
+
 function OnLeave()
 	if (g_bEntered) then
-		-- Leaving the screen (via Return To Game or Exit to Main Menu/Windows).
+
 		UI.decTurnTimerSemaphore();
 		g_bEntered = false;
 	end
 end
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnQuickSave()
     OnReturn();
 	UI.QuickSave();
@@ -52,41 +52,41 @@ end
 Controls.QuickSaveButton:RegisterCallback( Mouse.eLClick, OnQuickSave );
 
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnSave()
     UIManager:QueuePopup( Controls.SaveMenu, PopupPriority.SaveMenu );
 end
 Controls.SaveGameButton:RegisterCallback( Mouse.eLClick, OnSave );
 
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnLoad()
     UIManager:QueuePopup( Controls.LoadMenu, PopupPriority.LoadMenu );
 end
 Controls.LoadGameButton:RegisterCallback( Mouse.eLClick, OnLoad );
 
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnExitGame()
     Events.UserRequestClose();
 end
 Controls.ExitGameButton:RegisterCallback( Mouse.eLClick, OnExitGame );
 
 
--------------------------------------------------
--- Options Button Handler
--------------------------------------------------
+
+
+
 
 function OnOptions()
     UIManager:QueuePopup( Controls.OptionsMenu_InGame, PopupPriority.OptionsMenu );
 end
 Controls.OptionsButton:RegisterCallback( Mouse.eLClick, OnOptions );
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnMainMenu()
 	m_ExitToMain = true;
 	Controls.Message:SetText( Locale.ConvertTextKey("TXT_KEY_MENU_RETURN_MM_WARN") );
@@ -113,8 +113,8 @@ function OnRetire()
 	end
 end
 Controls.RetireButton:RegisterCallback(Mouse.eLClick, OnRetire);
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnReturn()
 	OnLeave();
 	UIManager:DequeuePopup( ContextPtr );
@@ -135,8 +135,8 @@ function OnGameMods()
 end
 Controls.ModsButton:RegisterCallback( Mouse.eLClick, OnGameMods);
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnShowHide( isHide, isInit )
 
 	local bDisableQuickSave = false;
@@ -154,13 +154,13 @@ function OnShowHide( isHide, isInit )
 		end
 	end
 	
-	-- Modding can disable saving functionality.
+
 	bDisableQuickSave = bDisableQuickSave		or Modding.AnyActivatedModsContainPropertyValue("DisableQuickSave", "1");
 	bHideLoadGameOption = bHideLoadGameOption	or Modding.AnyActivatedModsContainPropertyValue("DisableLoadGameOption", "1");
 	bHideSaveGameOption = bHideSaveGameOption	or Modding.AnyActivatedModsContainPropertyValue("DisableSaveGameOption", "1");
 	
 	
-	--For now, do not allow retiring from multiplayer games or the tutorial.
+
 	local isTutorialOrMultiplayer = Game and (Game.IsGameMultiPlayer() or Game.IsStaticTutorialActive());
 	local isScenario = PreGame.GetLoadWBScenario();
 	
@@ -191,30 +191,30 @@ function OnShowHide( isHide, isInit )
 end
 ContextPtr:SetShowHideHandler( OnShowHide );
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function PopulateGameData()
 
 	local iPlayer = Game.GetActivePlayer();
 	local pPlayer = Players[iPlayer];
 	
-	-- Set Civ Leader
+
     local leader = GameInfo.Leaders[pPlayer:GetLeaderType()];
     local leaderDescription = leader.Description;
 	local leaderTrait = GameInfo.Leader_Traits( "LeaderType ='" .. leader.Type .. "'" )();
 	local gameTrait = GameInfo.Traits[ leaderTrait.TraitType ];
-	--controlTable.BonusTitle:SetText( Locale.ConvertTextKey( gameTrait.ShortDescription ) );
-	--controlTable.BonusDescription:SetText( Locale.ConvertTextKey( gameTrait.Description ) );
+
+
 
     
 	IconHookup( leader.PortraitIndex, 128, leader.IconAtlas, Controls.Portrait );
 	
-	-- Set Civ Icon
+
 	local pTeam = Teams[pPlayer:GetTeam()];
 
 	CivIconHookup( iPlayer, 64, Controls.CivIcon, Controls.CivIconBG, Controls.CivIconShadow, false, true );
 	
-	-- Set Civ Leader & Icon Tool tips
+
 	if(Game:IsNetworkMultiPlayer() and pPlayer:GetNickName() ~= "") then
 		local myCivType = pPlayer:GetCivilizationType();
 		local myCivInfo = GameInfo.Civilizations[myCivType];
@@ -232,7 +232,7 @@ function PopulateGameData()
 		Controls.LeaderFrame:SetToolTipString( Locale.ConvertTextKey( leaderDescription ) );
 	end
 	
-	-- Set Map Type
+
 	local mapScript = PreGame.GetMapScript();
 	
 	local mapInfo = MapUtilities.GetBasicInfo(mapScript);
@@ -240,7 +240,7 @@ function PopulateGameData()
 	IconHookup( mapInfo.IconIndex, 64, mapInfo.IconAtlas, Controls.TypeIcon );
 	Controls.TypeFrame:SetToolTipString(Locale.Lookup(mapInfo.Name));
 		
-	-- Set Map Size
+
 	local info = GameInfo.Worlds[ PreGame.GetWorldSize() ];
 	if ( info ~= nil ) then
 		IconHookup( info.PortraitIndex, 64, info.IconAtlas, Controls.SizeIcon );
@@ -250,7 +250,7 @@ function PopulateGameData()
 		Controls.SizeFrame:SetToolTipString( Locale.ConvertTextKey( "TXT_KEY_RANDOM_MAP_SIZE" ) );
 	end
 	
-	-- Set Difficulty
+
 	info = GameInfo.HandicapInfos[ Players[Game.GetActivePlayer()]:GetHandicapType() ];
     if ( info ~= nil ) then
         IconHookup( info.PortraitIndex, 64, info.IconAtlas, Controls.DifficultyIcon );
@@ -259,7 +259,7 @@ function PopulateGameData()
 		Controls.DifficultyFrame:SetHide(true);
     end
     
-    -- Set Game Pace
+
     info = GameInfo.GameSpeeds[ PreGame.GetGameSpeed() ];
     if ( info ~= nil ) then
         IconHookup( info.PortraitIndex, 64, info.IconAtlas, Controls.SpeedIcon );
@@ -268,8 +268,8 @@ function PopulateGameData()
 		Controls.SpeedFrame:SetHide(true);
     end
 end
-----------------------------------------------------------------        
-----------------------------------------------------------------
+
+
 function PopulateGameOptions()
 	g_GameOptionIM:ResetInstances();
 	g_VictoryConditionsIM:ResetInstances();
@@ -281,7 +281,7 @@ function PopulateGameOptions()
 	local iPlayer = Game.GetActivePlayer();
 	local pPlayer = Players[iPlayer];
 	
-	-- Set Civ Leader & Icon Tool tips
+
     local leader = GameInfo.Leaders[pPlayer:GetLeaderType()];
     local leaderDescription = leader.Description;
 	local pTeam = Teams[pPlayer:GetTeam()];
@@ -310,7 +310,7 @@ function PopulateGameOptions()
 		count = count + 1;
 	end
 	
-	-- Set Map Type
+
 	local mapScriptFileName = PreGame.GetMapScript();
 	local mapScript = nil;
     
@@ -328,7 +328,7 @@ function PopulateGameOptions()
 		count = count + 1;
 	end
 	
-	-- Set Map Size
+
 	local info = GameInfo.Worlds[ PreGame.GetWorldSize() ];
 	if ( info ~= nil ) then
 		local controlTable = g_GameOptionIM:GetInstance();
@@ -337,7 +337,7 @@ function PopulateGameOptions()
 		count = count + 1;
 	end
 	
-	-- Set Difficulty
+
 	info = GameInfo.HandicapInfos[ PreGame.GetHandicap( Game.GetActivePlayer() ) ];
     if ( info ~= nil ) then
 		local controlTable = g_GameOptionIM:GetInstance();
@@ -346,7 +346,7 @@ function PopulateGameOptions()
 		count = count + 1;
     end
     
-    -- Set Game Pace
+
     info = GameInfo.GameSpeeds[ PreGame.GetGameSpeed() ];
     if ( info ~= nil ) then
 		local controlTable = g_GameOptionIM:GetInstance();
@@ -355,7 +355,7 @@ function PopulateGameOptions()
 		count = count + 1;
     end
     
-    -- List Victory Conditions
+
     local controlTable = g_VictoryConditionsIM:GetInstance();
     g_VictoryConditionsList[count] = controlTable;
 	controlTable.Text:LocalizeAndSetText("TXT_KEY_VICTORYS_FORMAT");
@@ -369,7 +369,7 @@ function PopulateGameOptions()
 		end
 	end
     
-    -- Game Options
+
     count = 1;
     
     local conditions = {
@@ -410,8 +410,8 @@ function PopulateGameOptions()
 	Controls.ScrollPanel:CalculateInternalSize();
 end
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function PopulateModData()
 	
 	g_ActivatedModsIM:ResetInstances();
@@ -441,9 +441,9 @@ function PopulateModData()
 	Controls.ModsButton:SetHide(#activatedMods == 0);
 end
 
-----------------------------------------------------------------        
--- Key Down Processing
-----------------------------------------------------------------        
+
+
+
 function InputHandler( uiMsg, wParam, lParam )
     if( uiMsg == KeyEvents.KeyDown )
     then
@@ -460,8 +460,8 @@ function InputHandler( uiMsg, wParam, lParam )
 end
 ContextPtr:SetInputHandler( InputHandler );
 
-----------------------------------------------------------------        
-----------------------------------------------------------------
+
+
 function OnYes( )
 	OnLeave();
 	Controls.ExitConfirm:SetHide( true );
@@ -483,9 +483,9 @@ function OnNo( )
 end
 Controls.No:RegisterCallback( Mouse.eLClick, OnNo );
 
-----------------------------------------------------------------
--- 'Active' (local human) player has changed
-----------------------------------------------------------------
+
+
+
 function OnGameMenuActivePlayerChanged( iActivePlayer, iPrevActivePlayer )
 	PopulateGameData();
 	PopulateGameOptions();
@@ -500,12 +500,12 @@ function OnGameMenuActivePlayerChanged( iActivePlayer, iPrevActivePlayer )
 end
 Events.GameplaySetActivePlayer.Add(OnGameMenuActivePlayerChanged);
 
--- Do the initial population of the data, it can change during hotseat games.
+
 PopulateGameData();
 PopulateGameOptions();
 PopulateModData();
 
-----------------------------------------------------------------        
+
 if (UI.IsTouchScreenEnabled()) then
 	function OnTouchHelpButton()
 		Controls.TouchControlsMenu:SetHide( false );

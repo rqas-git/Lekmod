@@ -1,4 +1,4 @@
--- Load actual map entry points with a small host facade; compare observable calls and state.
+
 assert(_VERSION == 'Lua 5.1')
 local directory = assert(arg[1])
 local function serialize(value)
@@ -61,8 +61,8 @@ local function environment(name, seed, options)
     local includes = {HBMapGenerator=true, HBMapGeneratorRectangular=true, HBFractalWorld=true,
         HBRiverGenerator=true, HBRegionalStartPlotSystem=true}
     env.include = function(module)
-        -- The legacy mirrored dependency is not in the repo; use its common globals
-        -- solely to exercise the map's own DoRiver override on both sides.
+
+
         if module=='HBMapGeneratorMirrored' then module='HBMapGenerator' end
         if includes[module] then
             local chunk=assert(loadfile(directory..'/'..module..'.lua'))
@@ -97,7 +97,7 @@ for _,name in ipairs({'LekmapTeamerMapLegacy','LekmapFourCornersv1.2'}) do
             for _,position in ipairs({{5,4},{5,7},{0,4},{9,0}}) do
                 local env,plot,snapshot = environment(name,seed,{})
                 env.DoRiver(plot(position[1],position[2]),flow)
-                -- A fresh river cannot branch from a plot already owned by another river.
+
                 env._rivers[plot(5,4)]=99
                 env.DoRiver(plot(5,4))
                 print(name..':'..seed..':'..flow..':'..serialize(position)..':'..env.nextRiverID..':'..snapshot())

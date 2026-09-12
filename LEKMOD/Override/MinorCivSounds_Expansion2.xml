@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MinorCivsSounds>
-<!-- Cape Town music fix -->
+
 	<MinorCivSound>
 		<ID>MINOR_CIV_CAPE_TOWN</ID>
 		<AudioScript>AS2D_MINOR_CIV_CAPE_TOWN</AudioScript>
 	</MinorCivSound>
-<!-- Expansion 2 City-States -->
+
   <MinorCivSound>
     <ID>MINOR_CIV_ANTANANARIVO</ID>
     <AudioScript>AS2D_MINOR_CIV_ANTANANARIVO</AudioScript>
@@ -102,7 +102,7 @@
     <ID>MINOR_CIV_WELLINGTON</ID>
     <AudioScript>AS2D_MINOR_CIV_WELLINGTON</AudioScript>
   </MinorCivSound>
-  <!-- Expansion 2 scenarios City-States -->
+
  <MinorCivSound>
     <ID>MINOR_CIV_BORNU</ID>
     <AudioScript>AS2D_MINOR_CIV_BORNU</AudioScript>

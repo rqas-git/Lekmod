@@ -1,13 +1,13 @@
-/*
-Two fast list classes designed to be as simple as possible while retaining 
-the basic behavior of std::list.  These class work correctly with aligned data
-types, which STL does not always do.
 
-Author: John Kloetzli
-9/9/2008
 
-version 1.4
-*/
+
+
+
+
+
+
+
+
 
 #ifndef FAST_LIST
 #define FAST_LIST
@@ -24,19 +24,19 @@ version 1.4
 #define DELETED_MASK (0x80000000)
 
 
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-// Helper structures to handle connectivity between nodes in lists
-////////////////////////////////////////////////////////////////////////
 
 
 
-////////////////////////////////////////////////////////////////////////
-// Policy for each list in a FMultiList.  Basically holds the size, start
-// and end pointers of a single list.
-////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
 struct NullListPolicy
 {
 	NullListPolicy() : uiSize( 0 ),uiFirst( ANCHOR_NODE_INDEX ),uiLast( ANCHOR_NODE_INDEX ){};
@@ -46,19 +46,19 @@ struct NullListPolicy
 };
 
 
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
+
+
 struct ListNode{
-	unsigned int uiNext;		//The index of the next node (top bit is whether the node has been deleted)
-	unsigned uiPrev : 31;		//The index of the prev node
+	unsigned int uiNext;
+	unsigned uiPrev : 31;
 	unsigned bValid : 1;
 };
 struct NullMultiListNodePolicy
 {
-	//Array of list connectivity
+
 	ListNode node;
 
-	//These six functions are required for the policy to work
+
 	unsigned int LIST_GetNext() const{ return node.uiNext; };
 	unsigned int LIST_GetPrev() const{ return node.uiPrev; };
 	void LIST_SetNext(unsigned int uiNodeIndex){ node.uiNext = uiNodeIndex; };
@@ -66,7 +66,7 @@ struct NullMultiListNodePolicy
 	bool LIST_GetDeleted() const{ return !node.bValid; };
 	void LIST_SetDeleted(bool bDeleted){ node.bValid = !bDeleted; };
 
-	//These six functions are required for the node to be allocated correctly
+
 	unsigned int ALLOC_GetNext() const{ return node.uiNext; };
 	void ALLOC_SetNext(unsigned int uiNodeIndex){ node.uiNext = uiNodeIndex; };
 	bool ALLOC_GetDeleted() const{ return LIST_GetDeleted(); };
@@ -77,17 +77,17 @@ template<class T> struct MultiListNodePolicy : public NullMultiListNodePolicy
 	MultiListNodePolicy(){};
 	MultiListNodePolicy( const T& x ) : data( x ){};
 
-	//User data
+
 	T data;
 };
 
 
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-//Pre-declarations
-////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
 
 template< 
 	class T,
@@ -102,32 +102,32 @@ template<
 > class FCustomList;
 
 
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
 
 
-////////////////////////////////////////////////////////////////////////
-// Basic linked list class.  Implemented with an FCustomList with default settings.
-// This is basically a convenience class to hide the underlying policy for each 
-// node.  If you know what you are doing, you should really use FCustomList directly.
-////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
 template< class T, unsigned int AllocPool, unsigned int SubID > class FFastList 
 	: protected FCustomList< MultiListNodePolicy< T >, FFastAllocator< MultiListNodePolicy< T >, false, AllocPool, SubID > >
 {
 public:
-	// Typdefs for this type and the base type
+
 	typedef FFastList< T, AllocPool, SubID > TYPE;
 	typedef FFastAllocator< MultiListNodePolicy< T >, false, AllocPool, SubID > ALLOC_TYPE;
 	typedef FCustomList< MultiListNodePolicy< T >, ALLOC_TYPE > BASE_TYPE;
 
 
-	////////////////////////////////////////////////////////////////////////
-	// Override the iterators to return the data type without the containing structure
-	////////////////////////////////////////////////////////////////////////
 
-	// non-const iterator
+
+
+
+
 	class iterator : public BASE_TYPE::iterator{
 	public:
 		explicit iterator(){};
@@ -139,7 +139,7 @@ public:
 		T* operator->(){  return &( BASE_TYPE::iterator::operator*().data );  };
 	};
 
-	// const iterator
+
 	class const_iterator : public BASE_TYPE::const_iterator{
 	public:
 		explicit const_iterator(){};
@@ -153,9 +153,9 @@ public:
 
 
 
-	////////////////////////////////////////////////////////////////////////
-	// Constructors and copy constructor
-	////////////////////////////////////////////////////////////////////////
+
+
+
 	explicit FFastList() : BASE_TYPE() {};
 	explicit FFastList( unsigned int uiCapacity ) : BASE_TYPE(uiCapacity) {};
 #if defined(LEKMOD_MACOS)
@@ -164,14 +164,14 @@ public:
 	explicit TYPE( const TYPE& rhs ) : BASE_TYPE( rhs ) {};
 #endif
 
-	//Copy operator
+
 	const TYPE& operator = ( const TYPE& rhs ){  
 		return BASE_TYPE::operator= ( rhs );  
 	};
 
-	////////////////////////////////////////////////////////////////////////
-	// Methods to insert/remove elements from the list.
-	////////////////////////////////////////////////////////////////////////
+
+
+
 	unsigned int insert( iterator it, const T& x ){
 		return BASE_TYPE::insert( it, MultiListNodePolicy< T >( x ) );
 	};
@@ -182,9 +182,9 @@ public:
 		return BASE_TYPE::push_back( MultiListNodePolicy< T >(x) );
 	};
 
-	////////////////////////////////////////////////////////////////////////
-	//Getters
-	////////////////////////////////////////////////////////////////////////
+
+
+
 	T& front() { return BASE_TYPE::front().data; };
 	T& back() { return BASE_TYPE::back().data; };
 	const T& front() const { return BASE_TYPE::front().data; };
@@ -192,14 +192,14 @@ public:
 	bool empty() const{ return BASE_TYPE::empty(); };
 	unsigned int size() const{ return BASE_TYPE::size(); };
 
-	////////////////////////////////////////////////////////////////////////
-	//Clear the entire list
-	////////////////////////////////////////////////////////////////////////
+
+
+
 	void clear(){ BASE_TYPE::clear(); };
 
-	////////////////////////////////////////////////////////////////////////
-	// Member functions which get/use various iterators
-	////////////////////////////////////////////////////////////////////////
+
+
+
 #if defined(LEKMOD_MACOS)
 	iterator begin(){ return iterator( this->m_uiFirst, this ); };
 #else
@@ -225,13 +225,13 @@ public:
 	};
 
 
-	////////////////////////////////////////////////////////////////////////
-	// Methods to remove nodes
-	//
-	// NOTE: For erase(), not using get_iterator because the returned iterator
-	// may refer to the ANCHOR_NODE_INDEX, which would cause an assert if the
-	// get_iterator function were used.
-	////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
 	iterator erase( unsigned int uiIndex ){ 
 		return iterator( BASE_TYPE::erase( uiIndex ).get_index(), this ); 
 	};
@@ -244,12 +244,12 @@ public:
 	void pop_front(){ return BASE_TYPE::pop_front(); };
 	void pop_back(){ return BASE_TYPE::pop_back(); };
 
-	////////////////////////////////////////////////////////////////////////
-	// Accessors to direct elements in the array.  These accessors are not in the STL but
-	// make the list much more useful because you can keep references to individual elements.
-	// NOTE: These indices are valid as long as you do not delete the item stored at that
-	// index, even if you add/remove other items.
-	////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
 	bool is_element_valid( unsigned int i ) const{ return BASE_TYPE::is_element_valid( i ); };
 	T& get_element( unsigned int i ) { return BASE_TYPE::get_element( i ).data; };
 	const T& get_element( unsigned int i ) const{ return BASE_TYPE::get_element( i ).data; };
@@ -266,24 +266,24 @@ public:
 
 
 
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////
-// The core class contains all functionality without an allocator or 
-// public constructors.  It gets "sandwiched" between the head and tail
-// classes, which provide constructors and allocator, respectively.
-////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
 template< class T, class T_ALLOCATOR, class TAIL >class FCustomList_Core : public TAIL
 {
 public:
 	typedef FCustomList_Core< T, T_ALLOCATOR, TAIL > TYPE;
 
-	////////////////////////////////////////////////////////////////////////
-	// iterator tail determines whether the iterator has const or non-const access
-	////////////////////////////////////////////////////////////////////////
+
+
+
 	class base_iterator_tail_const{
 	public:
 		base_iterator_tail_const( const TYPE* pFastList ) : m_pFastList( pFastList ) {};
@@ -296,10 +296,10 @@ public:
 	};
 
 
-	////////////////////////////////////////////////////////////////////////
-	// Base iterator class which defined all iterator-ness except whether
-	// access is const or non-const.
-	////////////////////////////////////////////////////////////////////////
+
+
+
+
 #if defined(LEKMOD_MACOS)
 	template< class IteratorTail >
 #else
@@ -397,12 +397,12 @@ public:
 			return m_uiCurrPos != rhs.m_uiCurrPos;
 		};
 
-		//Determine if this position is valid, or if it has been deleted.
+
 		bool is_valid(){
 			return !m_pFastList->get_allocator()[ m_uiCurrPos ].LIST_IsDeleted();
 		};
 
-		//Get the index into the array that the iterator is currently pointing to.
+
 		unsigned int get_index() const{
 			return m_uiCurrPos;
 		};
@@ -416,9 +416,9 @@ public:
 #endif
 	};
 
-	////////////////////////////////////////////////////////////////////////
-	// non-const iterator
-	////////////////////////////////////////////////////////////////////////
+
+
+
 	class iterator : public base_iterator< base_iterator_tail >{
 	public:
 		typedef base_iterator< base_iterator_tail > BASE;
@@ -440,9 +440,9 @@ public:
 		};
 	};
 
-	////////////////////////////////////////////////////////////////////////
-	// const iterator
-	////////////////////////////////////////////////////////////////////////
+
+
+
 	class const_iterator : public base_iterator< base_iterator_tail_const >{
 	public:
 		typedef base_iterator< base_iterator_tail_const > BASE;
@@ -464,9 +464,9 @@ public:
 		};
 	};
 
-	////////////////////////////////////////////////////////////////////////
-	// Protected constructors are only called by the "head" superclass.
-	////////////////////////////////////////////////////////////////////////
+
+
+
 protected:
 	explicit FCustomList_Core()
 		: TAIL(), m_uiFirst( ANCHOR_NODE_INDEX ), m_uiLast( ANCHOR_NODE_INDEX ), m_uiSize(0) {};
@@ -482,7 +482,7 @@ protected:
 
 public:
 
-	//Copy operator
+
 	const TYPE& operator = ( const TYPE& rhs )
 	{
 		m_uiFirst = rhs.m_uiFirst;
@@ -494,17 +494,17 @@ public:
 		return *this;
 	};
 
-	////////////////////////////////////////////////////////////////////////
-	// Methods to insert/remove elements from the list
-	////////////////////////////////////////////////////////////////////////
 
-	//Insert a new element
+
+
+
+
 	unsigned int insert( iterator it, const T& x ){
 		unsigned int uiNewIndex = this->get_allocator().Alloc( x );
 		insert_existing( it, uiNewIndex );
 		return uiNewIndex;
 	};
-	//Insert an element which has already been allocated
+
 	void insert_existing( iterator it, unsigned int uiNewIndex ){
 		assert( this->get_allocator().is_element_valid(uiNewIndex) );
 		unsigned int uiCurrIndex = it.get_index();
@@ -523,13 +523,13 @@ public:
 	};
 
 
-	//Push a new element to the front of a list
+
 	unsigned int push_front( const T& x ){
 		unsigned int uiNewIndex = get_allocator().Alloc( x );
 		push_front_existing( uiNewIndex );
 		return uiNewIndex;
 	};
-	//Push an already-allocated element to the front of a list
+
 	void push_front_existing( unsigned int uiNewIndex ){
 		unsigned int uiOldFirst = m_uiFirst;
 		m_uiFirst = uiNewIndex;
@@ -539,7 +539,7 @@ public:
 	};
 
 
-	//Push a new element to the back of a list
+
 	unsigned int push_back( const T& x )
 	{
 #if defined(LEKMOD_MACOS)
@@ -550,7 +550,7 @@ public:
 		push_back_existing( uiNewIndex );
 		return uiNewIndex;
 	};
-	//Push an already-allocated element to the back of a list
+
 	void push_back_existing( unsigned int uiNewIndex ){
 		unsigned int uiOldLast = m_uiLast;
 		m_uiLast = uiNewIndex;
@@ -582,14 +582,14 @@ public:
 		return m_uiSize;
 	};
 
-	//Clear the entire list
+
 	void clear(){
 		UnLink( m_uiFirst, ANCHOR_NODE_INDEX );
 	};
 
-	////////////////////////////////////////////////////////////////////////
-	// Member functions which get/use various iterators
-	////////////////////////////////////////////////////////////////////////
+
+
+
 	iterator begin(){ return iterator( m_uiFirst, this ); };
 	iterator end(){ return iterator( ANCHOR_NODE_INDEX, this ); };
 	const_iterator begin() const{ return const_iterator( m_uiFirst, this ); };
@@ -609,13 +609,13 @@ public:
 	};
 
 
-	////////////////////////////////////////////////////////////////////////
-	// Methods to remove nodes
-	//
-	// NOTE: For erase(), not using get_iterator because the returned iterator
-	// may refer to the ANCHOR_NODE_INDEX, which would cause an assert if the
-	// get_iterator function were used.
-	////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
 	iterator erase( unsigned int uiIndex ){
 		const unsigned int uiNext = get_allocator()[uiIndex].LIST_GetNext();
 		UnLink( uiIndex, uiNext );
@@ -653,9 +653,9 @@ public:
 		}
 	};
 
-	////////////////////////////////////////////////////////////////////////
-	//Accessors which are not in the STL but should be because the STL is stupid.
-	////////////////////////////////////////////////////////////////////////
+
+
+
 	bool is_element_valid(unsigned int i) const{
 		return get_allocator().is_element_valid(i);
 	};
@@ -668,7 +668,7 @@ public:
 
 protected:
 
-	//Set the internal links to add element i before element j
+
 	void InsertBefore(unsigned int i, unsigned int j)
 	{
 		assert( get_allocator().is_element_valid(i) );
@@ -680,19 +680,19 @@ protected:
 		}else{
 			T* b = &get_allocator()[j];
 
-			//Set the links for the new node
+
 			unsigned int uiBPrev = b->LIST_GetPrev();
 			a->LIST_SetNext(j);
 			a->LIST_SetPrev( uiBPrev);
 
-			//Fix the links for the next and previous nodes
+
 			if( uiBPrev != ANCHOR_NODE_INDEX )
 				get_allocator()[uiBPrev].LIST_SetNext(i);
 			b->LIST_SetPrev(i);
 		}
 	};
 
-	//Set the internal links to add element i after element j
+
 	void InsertAfter(unsigned int i, unsigned int j)
 	{
 		assert( get_allocator().is_element_valid(i) );
@@ -712,12 +712,12 @@ protected:
 			T* b = &get_allocator()[j];
 #endif
 
-			//Set the links for the new node
+
 			unsigned int uiBNext = b->LIST_GetNext();
 			a->LIST_SetPrev(j);
 			a->LIST_SetNext(uiBNext);
 
-			//Fix the links for the next and previous nodes
+
 			if( uiBNext != ANCHOR_NODE_INDEX )
 #if defined(LEKMOD_MACOS)
 				this->get_allocator()[uiBNext].LIST_SetPrev(i);
@@ -728,7 +728,7 @@ protected:
 		}
 	};
 
-	//Reverse-Unlink an internal chain of elements and add them to the free space.
+
 	void UnLink( unsigned int uiStart, unsigned int uiEnd ){
 		if( uiStart == ANCHOR_NODE_INDEX ){ return; }
 		assert( get_allocator().is_element_valid(uiStart) );
@@ -782,10 +782,10 @@ protected:
 	unsigned int m_uiSize, m_uiFirst, m_uiLast;
 };
 
-////////////////////////////////////////////////////////////////////////
-// Head/Tail pair with the allocator as a data member.  This is the default
-// behavior.
-////////////////////////////////////////////////////////////////////////
+
+
+
+
 template< class T_ALLOCATOR > class FCustomList_Tail_Member
 {
 protected:
@@ -803,7 +803,7 @@ protected:
 	T_ALLOCATOR m_kAllocator;
 
 public:
-	//Functions to access the allocator
+
 	const T_ALLOCATOR& get_allocator() const{ return m_kAllocator; };
 	T_ALLOCATOR& get_allocator(){ return m_kAllocator; };
 };
@@ -828,11 +828,11 @@ public:
 	};
 };
 
-////////////////////////////////////////////////////////////////////////
-// Head/Tail pair with the allocator as a pointer which has to be 
-// passed to the constructor.  This behavior is selected through
-// partial template specialization.
-////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 template< class T_ALLOCATOR > class FCustomList_Tail_Pointer
 {
 protected:
@@ -850,7 +850,7 @@ protected:
 	mutable T_ALLOCATOR* m_pAlloc;
 
 public:
-	//Functions to access/swap out the allocator
+
 	void set_allocator( T_ALLOCATOR* pAlloc ){ m_pAlloc = pAlloc; };
 	T_ALLOCATOR& get_allocator() const { return *m_pAlloc; };
 
@@ -873,37 +873,37 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
 
 
-////////////////////////////////////////////////////////////////////////
-//Class for holding multiple list instances efficiently.  This class
-// is a much more efficient representation for a set of parallel lists 
-// than creating multiple FFastList or std::list instances.  
-//
-//Under the hood this class uses two FFastVectors for memory allocation - 
-// one for holding the info about each list (start and end pointers, etc)
-// and one to hold all of the elements in all lists.
-//
-//Template parameters:
-//T - the type to store in the FMultiList.  Needs to have the functionality
-// of ListFunctions in order to work correctly, so other objects will have
-// to be wrapped in a ListFunctions object.
-//
-//L - The number of elements to statically allocate.
-//
-//M - The number of lists to statically allocate.  If the number of lists
-// to store is known at compile time you can reserve the space for the info
-// about each list in the class statically, avoiding a memory allocation and
-// possible cache misses.  This will increase the size of the class 
-// by L*3*sizeof(unsigned int)
-//
-//M - The type to store for each list.
-// 
-////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 template< 
 	class T,
@@ -918,9 +918,9 @@ public:
 	typedef FFastVector< LIST_TYPE, true, AllocPool, nSubID > VECTOR_TYPE;
 	typedef typename VECTOR_TYPE::iterator list_iterator;
 
-	////////////////////////////////////////////////////////////////////////
-	// non-const iterator
-	////////////////////////////////////////////////////////////////////////
+
+
+
 	class iterator : public LIST_TYPE::iterator{
 	public:
 		explicit iterator(){};
@@ -940,9 +940,9 @@ public:
 		friend TYPE;
 	};
 
-	////////////////////////////////////////////////////////////////////////
-	// const iterator
-	////////////////////////////////////////////////////////////////////////
+
+
+
 	class const_iterator : public LIST_TYPE::const_iterator{
 	public:
 		explicit const_iterator(){};
@@ -963,11 +963,11 @@ public:
 		friend TYPE;
 	};
 
-	////////////////////////////////////////////////////////////////////////
-	// Constructor takes the initial number of lists to initialize.  Any lists
-	// referenced outside of this range will return an error unless the number of
-	// lists has been changed using set_min_num_lists()
-	////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 	explicit FMultiList( T_ALLOCATOR& kAlloc )
 		:m_pAlloc( & kAlloc ) {};
 	explicit FMultiList( unsigned int uiNumLists, T_ALLOCATOR& kAlloc )
@@ -980,42 +980,42 @@ public:
 
 	~FMultiList(){};
 
-	//Copy operator
+
 	const TYPE& operator = ( const TYPE& rhs )
 	{
 		m_pAlloc = rhs.m_pAlloc;
 		m_kVector = rhs.m_kVector;
 	};
 
-	////////////////////////////////////////////////////////////////////////
-	// Methods to insert/remove elements from the list
-	////////////////////////////////////////////////////////////////////////
 
-	//Insert a new element
+
+
+
+
 	unsigned int insert( iterator it, const T& x, unsigned int uiList){
 		return m_kVector[uiList].insert( it, x );
 	};
-	//Insert an element which has already been allocated
+
 	void insert_existing( iterator it, unsigned int uiNewIndex, unsigned int uiList){
 		return m_kVector[uiList].insert_existing( it, uiNewIndex );
 	};
 
 
-	//Push a new element to the front of a list
+
 	unsigned int push_front( const T& x, unsigned int uiList){
 		return m_kVector[uiList].push_front(x);
 	};
-	//Push an already-allocated element to the front of a list
+
 	void push_front_existing( unsigned int uiNewIndex, unsigned int uiList){
 		return m_kVector[uiList].push_front_existing( uiNewIndex );
 	};
 
 
-	//Push a new element to the back of a list
+
 	unsigned int push_back( const T& x, unsigned int uiList){
 		return m_kVector[uiList].push_back(x);
 	};
-	//Push an already-allocated element to the back of a list
+
 	void push_back_existing( unsigned int uiNewIndex, unsigned int uiList ){
 		return m_kVector[uiList].push_back_existing( uiNewIndex );
 	};
@@ -1044,14 +1044,14 @@ public:
 		return m_kVector.size();
 	};
 
-	//Extend the FMultiLists to include at least this many lists
+
 	void set_min_num_lists(unsigned int uiNumLists){
 		while( m_kVector.size() < uiNumLists ){
 			new( m_kVector ) LIST_TYPE( m_pAlloc );
 		}
 	};
 
-	//Iterators for the list set
+
 	list_iterator list_begin(){
 		return m_kVector.begin();	
 	};
@@ -1059,27 +1059,27 @@ public:
 		return m_kVector.end();
 	};
 
-	//Clear a specific sublist
+
 	void clear(unsigned int uiList){
 		m_kVector[uiList].clear();
 	};
 
-	//Clear all sublists
+
 	void clear(){
 		for( unsigned int i = 0; i < m_kVector.size(); i++ ){
 			m_kVector[i].clear();
 		}
 	};
 
-	//Clear the vector of lists
+
 	void clear_lists_vec(){
 		clear();
 		m_kVector.clear();
 	};
 
-	////////////////////////////////////////////////////////////////////////
-	// Member functions which get/use various iterators
-	////////////////////////////////////////////////////////////////////////
+
+
+
 	iterator begin( unsigned int uiList ){  return iterator( m_kVector[uiList].begin(), uiList );  };
 	iterator end( unsigned int uiList ){  return iterator( m_kVector[uiList].end(), uiList );  };
 	const_iterator begin( unsigned int uiList ) const{  return const_iterator( m_kVector[uiList].begin(), uiList );  };
@@ -1096,13 +1096,13 @@ public:
 	};
 
 
-	////////////////////////////////////////////////////////////////////////
-	// Methods to remove nodes
-	//
-	// NOTE: For erase(), not using get_iterator because the returned iterator
-	// may refer to the ANCHOR_NODE_INDEX, which would cause an assert if the
-	// get_iterator function were used.
-	////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
 	iterator erase( unsigned int uiIndex, unsigned int uiList ){
 		return iterator( m_kVector[uiList].erase( uiIndex ), uiList );
 	};
@@ -1120,9 +1120,9 @@ public:
 		return m_kVector[ uiList ].pop_back();
 	};
 
-	////////////////////////////////////////////////////////////////////////
-	//Accessors which are not in the STL but should be because the STL is stupid.
-	////////////////////////////////////////////////////////////////////////
+
+
+
 	bool is_element_valid(unsigned int i) const{
 		return m_pAlloc->is_element_valid(i);
 	};
@@ -1132,7 +1132,7 @@ public:
 
 protected:
 
-	VECTOR_TYPE m_kVector;	//Data for each element of the list
+	VECTOR_TYPE m_kVector;
 	T_ALLOCATOR* m_pAlloc;
 };
 
@@ -1153,16 +1153,16 @@ template<
 {
 public:
 	typedef FMultiList2< T, T_ALLOCATOR, J, M > TYPE;
-	typedef M* list_iterator;	//Iterator through the lists
+	typedef M* list_iterator;
 
 private:
 
 protected:
 
-	////////////////////////////////////////////////////////////////////////
-	// Base iterator class which defined all iterator-ness except whether
-	// access is const or non-const.
-	////////////////////////////////////////////////////////////////////////
+
+
+
+
 	class base_iterator : public std::iterator<std::bidirectional_iterator_tag, T>{
 	public:
 		explicit base_iterator() : m_uiCurrPos(ANCHOR_NODE_INDEX), m_uiCurrList(0){};
@@ -1215,12 +1215,12 @@ protected:
 			return m_uiCurrPos != rhs.m_uiCurrPos;
 		};
 
-		//Determine if this position is valid, or if it has been deleted.
+
 		bool is_valid(){
 			return !m_pFastList->get_element(m_uiCurrPos).LIST_IsDeleted();
 		};
 
-		//Get the index into the array that the iterator is currently pointing to.
+
 		unsigned int get_index() const{
 			return m_uiCurrPos;
 		};
@@ -1241,9 +1241,9 @@ protected:
 
 public:
 
-	////////////////////////////////////////////////////////////////////////
-	// non-const iterator
-	////////////////////////////////////////////////////////////////////////
+
+
+
 	class iterator : public base_iterator{
 	public:
 		explicit iterator(){};
@@ -1259,9 +1259,9 @@ public:
 		};
 	};
 
-	////////////////////////////////////////////////////////////////////////
-	// const iterator
-	////////////////////////////////////////////////////////////////////////
+
+
+
 	class const_iterator : public base_iterator{
 	public:
 		explicit const_iterator(){};
@@ -1277,11 +1277,11 @@ public:
 		};
 	};
 
-	////////////////////////////////////////////////////////////////////////
-	// Constructor takes the initial number of lists to initialize.  Any lists
-	// referenced outside of this range will return an error unless the number of
-	// lists has been changed using set_min_num_lists()
-	////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 	explicit FMultiList2()
 		: m_pVec( &m_DefaultVec ) 
 	{
@@ -1307,7 +1307,7 @@ public:
 		m_DefaultVec( rhs.m_DefaultVec ),
 		m_pVec( &m_DefaultVec )
 	{
-		//If the allocator was overridden, use the overridden one
+
 		if( rhs.m_pVec != &rhs.m_DefaultVec ){
 			m_pVec = rhs.m_pVec;
 		}
@@ -1321,13 +1321,13 @@ public:
 	};
 	~FMultiList2(){};
 
-	//Copy operator
+
 	const TYPE& operator = ( const TYPE& rhs )
 	{
 		m_DefaultVec = rhs.m_DefaultVec;
 		m_aLD = rhs.m_aLD;
 		
-		//Overridden allocators are preserved across assignment
+
 		m_pVec = &m_DefaultVec;
 		if( rhs.m_pVec != &rhs.m_DefaultVec ){
 			m_pVec = rhs.m_pVec;
@@ -1336,17 +1336,17 @@ public:
 		return *this;
 	};
 
-	////////////////////////////////////////////////////////////////////////
-	// Methods to insert/remove elements from the list
-	////////////////////////////////////////////////////////////////////////
 
-	//Insert a new element
+
+
+
+
 	unsigned int insert( iterator it, const T& x, unsigned int uiList){
 		unsigned int uiNewIndex = m_pVec->Alloc(x);
 		insert_existing( it, uiNewIndex, uiList );
 		return uiNewIndex;
 	};
-	//Insert an element which has already been allocated
+
 	void insert_existing( iterator it, unsigned int uiNewIndex, unsigned int uiList){
 		assert( m_pVec->is_element_valid(uiNewIndex) );
 		unsigned int uiCurrIndex = it.get_index();
@@ -1361,13 +1361,13 @@ public:
 	};
 
 
-	//Push a new element to the front of a list
+
 	unsigned int push_front( const T& x, unsigned int uiList){
 		unsigned int uiNewIndex = m_pVec->Alloc(x);
 		push_front_existing(uiNewIndex, uiList);
 		return uiNewIndex;
 	};
-	//Push an already-allocated element to the front of a list
+
 	void push_front_existing( unsigned int uiNewIndex, unsigned int uiList){
 		M& kLD = m_aLD[uiList];
 		unsigned int uiOldFirst = kLD.uiFirst;
@@ -1378,14 +1378,14 @@ public:
 	};
 
 
-	//Push a new element to the back of a list
+
 	unsigned int push_back( const T& x, unsigned int uiList)
 	{
 		unsigned int uiNewIndex = m_pVec->Alloc(x);
 		push_back_existing(uiNewIndex, uiList);
 		return uiNewIndex;
 	};
-	//Push an already-allocated element to the back of a list
+
 	void push_back_existing( unsigned int uiNewIndex, unsigned int uiList ){
 		M& kLD = m_aLD[uiList];
 		unsigned int uiOldLast = kLD.uiLast;
@@ -1419,7 +1419,7 @@ public:
 		return m_aLD.size();
 	};
 
-	//Extend the FMultiLists to include at least this many lists
+
 	void set_min_num_lists(unsigned int uiNumLists){
 		if( uiNumLists > num_lists() ){
 			m_aLD.push_back_copy(M(), uiNumLists - num_lists() );
@@ -1427,7 +1427,7 @@ public:
 	};
 
 
-	//Get the list policy for a specific list
+
 	M& get_list( unsigned int uiList ){
 		return m_aLD[uiList];
 	};
@@ -1438,7 +1438,7 @@ public:
 		return m_aLD.push_back(kListData);
 	};
 
-	//Iterators for the list set
+
 	list_iterator list_begin(){
 		return m_aLD.begin();
 	};
@@ -1446,12 +1446,12 @@ public:
 		return m_aLD.end();
 	};
 
-	//Clear a specific sublist
+
 	void clear(unsigned int uiList){
 		UnLink(m_aLD[uiList].uiFirst, ANCHOR_NODE_INDEX, uiList);
 	};
 
-	//Clear all sublists
+
 	void clear(){
 		unsigned int uiSize = m_aLD.size();
 		for( unsigned int i = 0; i <uiSize; ++i){
@@ -1461,15 +1461,15 @@ public:
 		}
 	};
 
-	//Clear the vector of lists
+
 	void clear_lists_vec(){
 		clear();
 		m_aLD.clear();
 	};
 
-	////////////////////////////////////////////////////////////////////////
-	// Member functions which get/use various iterators
-	////////////////////////////////////////////////////////////////////////
+
+
+
 	iterator begin(unsigned int uiList){ return iterator(m_aLD[uiList].uiFirst, this, uiList); };
 	iterator end(unsigned int uiList){ return iterator(ANCHOR_NODE_INDEX, this, uiList); };
  	const_iterator begin(unsigned int uiList) const{ return const_iterator(m_aLD[uiList].uiFirst, this, uiList); };
@@ -1489,13 +1489,13 @@ public:
 	};
     
 
-	////////////////////////////////////////////////////////////////////////
-	// Methods to remove nodes
-	//
-	// NOTE: For erase(), not using get_iterator because the returned iterator
-	// may refer to the ANCHOR_NODE_INDEX, which would cause an assert if the
-	// get_iterator function were used.
-	////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
 	iterator erase( unsigned int uiIndex, unsigned int uiList){
 		const unsigned int uiNext = (*m_pVec)[uiIndex].LIST_GetNext();
 		UnLink(uiIndex, uiNext, uiList);
@@ -1535,9 +1535,9 @@ public:
 		}
 	};
 
-	////////////////////////////////////////////////////////////////////////
-	//Accessors which are not in the STL but should be because the STL is stupid.
-	////////////////////////////////////////////////////////////////////////
+
+
+
 	bool is_element_valid(unsigned int i) const{
 		return m_pVec->is_element_valid(i);
 	};
@@ -1547,7 +1547,7 @@ public:
 
 protected:
 
-	//Set the internal links to add element i before element j
+
 	void InsertBefore(unsigned int i, unsigned int j)
 	{
 		assert( m_pVec->is_element_valid(i) );
@@ -1559,19 +1559,19 @@ protected:
 		}else{
 			T* b = &(*m_pVec)[j];
 
-			//Set the links for the new node
+
 			unsigned int uiBPrev = b->LIST_GetPrev();
 			a->LIST_SetNext(j);
 			a->LIST_SetPrev( uiBPrev);
 
-			//Fix the links for the next and previous nodes
+
 			if( uiBPrev != ANCHOR_NODE_INDEX )
 				(*m_pVec)[uiBPrev].LIST_SetNext(i);
 			b->LIST_SetPrev(i);
 		}
 	};
 
-	//Set the internal links to add element i after element j
+
 	void InsertAfter(unsigned int i, unsigned int j)
 	{
 		assert( m_pVec->is_element_valid(i) );
@@ -1583,19 +1583,19 @@ protected:
 		}else{
 			T* b = &(*m_pVec)[j];
 
-			//Set the links for the new node
+
 			unsigned int uiBNext = b->LIST_GetNext();
 			a->LIST_SetPrev(j);
 			a->LIST_SetNext(uiBNext);
 
-			//Fix the links for the next and previous nodes
+
 			if( uiBNext != ANCHOR_NODE_INDEX )
 				(*m_pVec)[uiBNext].LIST_SetPrev(i);
 			b->LIST_SetNext(i);
 		}
 	};
 
-	//Reverse-Unlink an internal chain of elements and add them to the free space.
+
 	void UnLink(unsigned int uiStart, unsigned int uiEnd, unsigned int uiList){
 		if( uiStart == ANCHOR_NODE_INDEX ){ return; }
 		assert( m_pVec->is_element_valid(uiStart) );
@@ -1626,9 +1626,9 @@ protected:
 		}
 	};
 
-	FStaticVector<M, J> m_aLD;	//Data for each element of the list
+	FStaticVector<M, J> m_aLD;
 	T_ALLOCATOR m_DefaultVec;
-	T_ALLOCATOR* m_pVec;					//The currently used allocator
+	T_ALLOCATOR* m_pVec;
 };
 
 #endif

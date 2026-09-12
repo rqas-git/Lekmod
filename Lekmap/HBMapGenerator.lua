@@ -1,18 +1,18 @@
-------------------------------------------------------------------------------
---	FILE:	 MapGenerator.lua
---	AUTHORS: Shaun Seckman
---	         Bob Thomas
---	PURPOSE: Base logic for map generation.
-------------------------------------------------------------------------------
---	Copyright (c) 2010 Firaxis Games, Inc. All rights reserved.
-------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 
 include("HBAssignStartingPlots");
 
-------------------------------------------------------------------------------
---	Various Map utility functions
-------------------------------------------------------------------------------
--- Iterate through plots
+
+
+
+
 function Shuffle(t)
 	local len = #t;
 	local random = Map.Rand;
@@ -22,7 +22,7 @@ function Shuffle(t)
 	end
 end
 
-local _plots = {}; --memoize table of plots
+local _plots = {};
 function Plots(sort)
 	local _indices = {};
 	for i = 1, Map.GetNumPlots(), 1 do
@@ -49,7 +49,7 @@ function Plots(sort)
 	return it;
 end
 
--- For maps whose custom options 11/12 select the same dimensions at every world size.
+
 function GetCustomSizeMapInitData(worldSize)
 
 	local LandSizeX = 28 + (Map.GetCustomOption(11) * 2);
@@ -59,16 +59,16 @@ function GetCustomSizeMapInitData(worldSize)
 
 	worldsizes = {
 
-		[GameInfo.Worlds.WORLDSIZE_DUEL.ID] = {LandSizeX, LandSizeY}, -- 720
-		[GameInfo.Worlds.WORLDSIZE_TINY.ID] = {LandSizeX, LandSizeY}, -- 1664
-		[GameInfo.Worlds.WORLDSIZE_SMALL.ID] = {LandSizeX, LandSizeY}, -- 2480
-		[GameInfo.Worlds.WORLDSIZE_STANDARD.ID] = {LandSizeX, LandSizeY}, -- 3900
-		[GameInfo.Worlds.WORLDSIZE_LARGE.ID] = {LandSizeX, LandSizeY}, -- 6076
-		[GameInfo.Worlds.WORLDSIZE_HUGE.ID] = {LandSizeX, LandSizeY} -- 9424
+		[GameInfo.Worlds.WORLDSIZE_DUEL.ID] = {LandSizeX, LandSizeY},
+		[GameInfo.Worlds.WORLDSIZE_TINY.ID] = {LandSizeX, LandSizeY},
+		[GameInfo.Worlds.WORLDSIZE_SMALL.ID] = {LandSizeX, LandSizeY},
+		[GameInfo.Worlds.WORLDSIZE_STANDARD.ID] = {LandSizeX, LandSizeY},
+		[GameInfo.Worlds.WORLDSIZE_LARGE.ID] = {LandSizeX, LandSizeY},
+		[GameInfo.Worlds.WORLDSIZE_HUGE.ID] = {LandSizeX, LandSizeY}
 		}
 
 	local grid_size = worldsizes[worldSize];
-	--
+
 	local world = GameInfo.Worlds[worldSize];
 	if (world ~= nil) then
 		return {
@@ -81,10 +81,10 @@ function GetCustomSizeMapInitData(worldSize)
 end
 
 function GetCoreMapOptions()
-	--[[ All options have a default SortPriority of 0. Lower values will be shown above
-	higher values. Negative integers are valid. So the Core Map Options, which should 
-	always be at the top of the list, are getting negative values from -99 to -95. Note
-	that any set of options with identical SortPriority will be sorted alphabetically. ]]--
+
+
+
+
 	local world_age = {
 		Name = "TXT_KEY_MAP_OPTION_WORLD_AGE",
 		Values = {
@@ -145,11 +145,11 @@ function GetCoreMapOptions()
 	return world_age, temperature, rainfall, sea_level, resources
 end
 
-------------------------------------------------------------------------------
--- Map Generator Data
-------------------------------------------------------------------------------
 
---Used to determine the next direction when turning
+
+
+
+
 if(FlowDirectionTypes ~= nil) then
 	TurnRightFlowDirections = {
 		[FlowDirectionTypes.FLOWDIRECTION_NORTH] 
@@ -192,15 +192,15 @@ if(FlowDirectionTypes ~= nil) then
 	};
 end
 
-------------------------------------------------------------------------------
--- Map Generator Methods
-------------------------------------------------------------------------------
+
+
+
 function SetPlotTypes(plotTypes)
 	print("Setting Plot Types (MapGenerator.Lua)");
 	
-	-- NOTE: Plots() is indexed from 0, the way the plots are indexed in C++
-	-- However, Lua tables are indexed from 1, and all incoming plot tables should be indexed this way.
-	-- So we add 1 to the Plots() index to find the matching plot data in plotTypes.
+
+
+
 	for i, plot in Plots() do
 		plot:SetPlotType(plotTypes[i + 1], false, false);
 	end
@@ -234,8 +234,8 @@ function GenerateCoasts(args, defaultExpansionDice)
 		local shallowWaterPlots = {};
 		for i, plot in Plots() do
 			if(plot:GetTerrainType() == deepWater) then
-				-- Chance for each eligible plot to become an expansion is 1 / iExpansionDiceroll.
-				-- Default is two passes at 1/4 chance per eligible plot on each pass.
+
+
 				if(plot:IsAdjacentToShallowWater() and Map.Rand(iExpansionDiceroll, "add shallows") == 0) then
 					table.insert(shallowWaterPlots, plot);
 				end
@@ -257,10 +257,10 @@ function SetTerrainTypes(terrainTypes)
 end
 
 function GeneratePlotTypes()
-	-- This is a basic, empty shell. All map scripts should replace this function with their own.
+
 	print("Generating Plot Types (MapGenerator.Lua)");
 	
-	--plotTypes is 0-based to map directly to Map.GetPlotByIndex
+
 	local plotLand = PlotTypes.PLOT_LAND;
 	local plotTypes = {};
 	for i = 0, Map.GetNumPlots() - 1, 1 do
@@ -273,10 +273,10 @@ function GeneratePlotTypes()
 end
 
 function GenerateTerrain()
-	-- This is a basic, empty shell. All map scripts should replace this function with their own.
+
 	print("Generating Terrain Types (MapGenerator.Lua)");
 	
-	--terrainTypes is 0-based to map directly to Map.GetPlotByIndex
+
 	local terrainGrass = GameInfo.Terrains.TERRAIN_GRASS.ID;
 	local terrainTypes = {};
 	for i = 0, Map.GetNumPlots() - 1, 1 do
@@ -287,7 +287,7 @@ function GenerateTerrain()
 end
 
 function GetOppositeFlowDirection(dir)
-	--DOCUMENT Method uses magic numbers...
+
 	local numTypes = FlowDirectionTypes.NUM_FLOWDIRECTION_TYPES;
 	return ((dir + 3) % numTypes);
 end
@@ -315,7 +315,7 @@ function GetRiverValueAtPlot(plot)
 	return sum;
 end
 
-----------------------------------------------------------------------------------------------------------------------
+
 nextRiverID = 0;
 _rivers = {};
 function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
@@ -323,7 +323,7 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 	thisFlowDirection = thisFlowDirection or FlowDirectionTypes.NO_FLOWDIRECTION;
 	originalFlowDirection = originalFlowDirection or FlowDirectionTypes.NO_FLOWDIRECTION;
 
-	-- pStartPlot = the plot at whose SE corner the river is starting
+
 	if (riverID == nil) then
 		riverID = nextRiverID;
 		nextRiverID = nextRiverID + 1;
@@ -331,7 +331,7 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 
 	local otherRiverID = _rivers[startPlot]
 	if (otherRiverID ~= nil and otherRiverID ~= riverID and originalFlowDirection == FlowDirectionTypes.NO_FLOWDIRECTION) then
-		return; -- Another river already exists here; can't branch off of an existing river!
+		return;
 	end
 
 	local riverPlot;
@@ -359,7 +359,7 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 
 		_rivers[riverPlot] = riverID;
 		riverPlot:SetNWOfRiver(true, thisFlowDirection);
-		-- riverPlot does not change
+
 	
 	elseif (thisFlowDirection == FlowDirectionTypes.FLOWDIRECTION_SOUTHEAST) then
 	
@@ -375,7 +375,7 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 
 		_rivers[riverPlot] = riverID;
 		riverPlot:SetNEOfRiver(true, thisFlowDirection);
-		-- riverPlot does not change
+
 	
 	elseif (thisFlowDirection == FlowDirectionTypes.FLOWDIRECTION_SOUTH) then
 	
@@ -391,7 +391,7 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 		
 		_rivers[riverPlot] = riverID;
 		riverPlot:SetWOfRiver(true, thisFlowDirection);
-		-- riverPlot does not change
+
 	
 	elseif (thisFlowDirection == FlowDirectionTypes.FLOWDIRECTION_SOUTHWEST) then
 
@@ -403,7 +403,7 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 		
 		_rivers[riverPlot] = riverID;
 		riverPlot:SetNWOfRiver(true, thisFlowDirection);
-		-- riverPlot does not change
+
 
 	elseif (thisFlowDirection == FlowDirectionTypes.FLOWDIRECTION_NORTHWEST) then
 		
@@ -420,21 +420,21 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 
 	else
 	
-		--error("Illegal direction type"); 
-		-- River is starting here, set the direction in the next step
+
+
 		riverPlot = startPlot;		
 	end
 
 	if (riverPlot == nil or riverPlot:IsWater()) then
-		-- The river has flowed off the edge of the map or into the ocean. All is well.
+
 		return; 
 	end
 
-	-- Storing X,Y positions as locals to prevent redundant function calls.
+
 	local riverPlotX = riverPlot:GetX();
 	local riverPlotY = riverPlot:GetY();
 	
-	-- Table of methods used to determine the adjacent plot.
+
 	local adjacentPlotFunctions = {
 		[FlowDirectionTypes.FLOWDIRECTION_NORTH] = function() 
 			return Map.PlotDirection(riverPlotX, riverPlotY, DirectionTypes.DIRECTION_NORTHWEST); 
@@ -463,7 +463,7 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 	
 	if(bestFlowDirection == FlowDirectionTypes.NO_FLOWDIRECTION) then
 
-		-- Attempt to calculate the best flow direction.
+
 		local bestValue = math.huge;
 		for flowDirection, getAdjacentPlot in pairs(adjacentPlotFunctions) do
 			
@@ -491,7 +491,7 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 			end
 		end
 		
-		-- Try a second pass allowing the river to "flow backwards".
+
 		if(bestFlowDirection == FlowDirectionTypes.NO_FLOWDIRECTION) then
 		
 			local bestValue = math.huge;
@@ -517,7 +517,7 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 		
 	end
 	
-	--Recursively generate river.
+
 	if (bestFlowDirection ~= FlowDirectionTypes.NO_FLOWDIRECTION) then
 		if  (originalFlowDirection == FlowDirectionTypes.NO_FLOWDIRECTION) then
 			originalFlowDirection = bestFlowDirection;
@@ -528,7 +528,7 @@ function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
 	
 end
 
-----------------------------------------------------------------------------------------------------------------------
+
 function AddRivers()
 	local riverSourceRangeDefault = 1.5;
 	local seaWaterRangeDefault = 0.75;
@@ -585,11 +585,11 @@ function AddRivers()
 		for i = 0, (iW * iH) - 1, 1 do
 			plot = Map.GetPlotByIndex(i);
 			if(not plot:IsWater()) then
-				if(passCondition(plot)) then -- and plot:IsNaturalWonder() == false and AdjacentToNaturalWonder(plot) == false) then
+				if(passCondition(plot)) then
 					if (not Map.FindWater(plot, riverSourceRange, true)) then
 						if (not Map.FindWater(plot, seaWaterRange, false)) then
 							local inlandCorner = plot:GetInlandCorner();
-							if(inlandCorner) then -- and plot:IsNaturalWonder() == false and AdjacentToNaturalWonder(plot) == false) then
+							if(inlandCorner) then
 								local riverChance = Map.Rand(riverRnd, "MapGenerator AddRivers");
 								if riverChance > 178 then
 									DoRiver(inlandCorner);
@@ -603,7 +603,7 @@ function AddRivers()
 	end		
 end
 
-----------------------------------------------------------------------------------------------------------------------
+
 function AddLakes()
 
 	print("Map Generation - Adding Lakes");
@@ -625,16 +625,16 @@ function AddLakes()
 		end
 	end
 	
-	-- this is a minimalist update because lakes have been added
+
 	if numLakesAdded > 0 then
 		print(tostring(numLakesAdded).." lakes added")
 		Map.CalculateAreas();
 	end
 end
 
-----------------------------------------------------------------------------------------------------------------------
+
 function AddFeatures()
-	-- This is a basic, empty shell. All map scripts should replace this function with their own.
+
 	print("Map Generation - Adding Features");
 	
 	for i, plot in Plots() do
@@ -676,7 +676,7 @@ function CanPlaceGoodyAt(improvement, plot)
 		return false;
 	end
 	
-	-- Don't allow on tiny islands.
+
 	local areaID = plot:GetArea();
 	local area = Map.GetArea(areaID);	
 	local numTiles = area:GetNumTiles();
@@ -684,7 +684,7 @@ function CanPlaceGoodyAt(improvement, plot)
 		return false;
 	end
 
-	-- Check for being too close to another of this goody type.
+
 	local uniqueRange = improvement.GoodyRange;
 	local plotX = plot:GetX();
 	local plotY = plot:GetY();
@@ -697,16 +697,16 @@ function CanPlaceGoodyAt(improvement, plot)
 		end
 	end 
 
-	-- Check for being too close to a civ start.
+
 	for dx = -3, 3 do
 		for dy = -3, 3 do
 			local otherPlot = Map.PlotXYWithRangeCheck(plotX, plotY, dx, dy, 4);
 			if(otherPlot) then
-				if otherPlot:IsStartingPlot() then -- Loop through all ever-alive major civs, check if their start plot matches "otherPlot"
+				if otherPlot:IsStartingPlot() then
 					for player_num = 0, GameDefines.MAX_CIV_PLAYERS - 1 do
 						local player = Players[player_num];
 						if player:IsEverAlive() then
-							-- Need to compare otherPlot with this civ's start plot and return false if a match.
+
 							local playerStartPlot = player:GetStartingPlot();
 							if otherPlot == playerStartPlot then
 								return false;
@@ -726,7 +726,7 @@ function AddGoodies()
 	print("-------------------------------");
 	print("Map Generation - Adding Goodies");
 	
-	-- If an era setting wants no goodies, don't place any.
+
 	local startEra = Game.GetStartEra();
 	if(GameInfo.Eras[startEra].NoGoodies) then
 		print("** The Era specified NO GOODY HUTS");
@@ -738,7 +738,7 @@ function AddGoodies()
 		return false;
 	end
 
-	-- Check XML for any and all Improvements flagged as "Goody" and distribute them.
+
 	for improvement in GameInfo.Improvements() do
 		local tilesPerGoody = improvement.TilesPerGoody;
 		
@@ -748,7 +748,7 @@ function AddGoodies()
 			for index, plot in Plots(Shuffle) do
 				if ( not plot:IsWater() ) then
 					
-					-- Prevents too many goodies from clustering on any one landmass.
+
 					local area = plot:Area();
 					local improvementCount = area:GetNumImprovements(improvementID);
 					local scaler = (area:GetNumTiles() + (tilesPerGoody/2))/tilesPerGoody;	
@@ -767,48 +767,48 @@ end
 
 function DetermineContinents()
 	print("Determining continents for art purposes (MapGenerator.Lua)");
-	-- Each plot has a continent art type. Mixing and matching these could look
-	-- extremely bad, but there is nothing technical to prevent it. The worst 
-	-- that will happen is that it can't find a blend and draws red checkerboards.
+
+
+
 	
-	-- Command for setting the art type for a plot is: <plot object>:SetContinentArtType(<art_set_number>)
+
 	
-	-- CONTINENTAL ART SETS
-	-- 0) Ocean
-	-- 1) America
-	-- 2) Asia
-	-- 3) Africa
-	-- 4) Europe
+
+
+
+
+
+
 	
-	-- Here is an example that sets all land in the world to use the European art set.
-	--[[
-	for i, plot in Plots() do
-		if plot:IsWater() then
-			plot:SetContinentArtType(0);
-		else
-			plot:SetContinentArtType(4);
-		end
-	end
-	]]--
+
+
+
+
+
+
+
+
+
+
 	
-	-- Default for this function operates in C++, but you can override by
-	-- replacing this method with your own and not calling the default stamper.
+
+
 	Map.DefaultContinentStamper();
 end
 
 function StartPlotSystem()
-	-- Divide the map in to Regions, choose starting locations, place civs, 
-	-- place city states, Normalize locations, and place Resources.
-	--
-	-- The code for these operations resides in AssignStartingPlots.lua and MapmakerUtilities.lua
-	-- They are all interwoven and interdependent. Do not change this order of operations.
-	--
-	-- GenerateRegions() and ChooseLocations() allow for some parameters. Refer to
-	-- these functions, or to examples used in map scripts, for more details. Also,
-	-- there is a detailed Reference section at the end of AssignStartingPlots.lua
-	--
-	-- Map scripts can execute enormous power over this operation via replacing
-	-- specific pieces of it with modified or custom methods.
+
+
+
+
+
+
+
+
+
+
+
+
 
 	print("Creating start plot database.");
 	local start_plot_database = AssignStartingPlots.Create()
@@ -831,45 +831,45 @@ end
 
 function GenerateMap()
 	print("Generating Map");
-	-- This is the core map generation function.
-	-- Every step in this process carries dependencies upon earlier steps.
-	-- There isn't any way to change the order of operations without breaking dependencies,
-	-- although it would be possible to repair and reorganize certain dependencies with enough work.
+
+
+
+
 	
-	-- Plot types are the core layer of the map, determining land or sea, determining flatland, hills or mountains.
+
 	GeneratePlotTypes();
 	
-	-- Terrain covers climate: grassland, plains, desert, tundra, snow.
+
 	GenerateTerrain();
 	
-	-- Each body of water, area of mountains, or area of hills+flatlands is independently grouped and tagged.
+
 	Map.RecalculateAreas();
 	
-	-- River generation is affected by plot types, originating from highlands and preferring to traverse lowlands.
+
 	AddRivers();
 	
-	-- Lakes would interfere with rivers, causing them to stop and not reach the ocean, if placed any sooner.
+
 	AddLakes();
 	
-	-- Features depend on plot types, terrain types, rivers and lakes to help determine their placement.
+
 	AddFeatures();
 
-	-- Feature Ice is impassable and therefore requires another area recalculation.
+
 	Map.RecalculateAreas();
 
-	-- Assign Starting Plots, Place Natural Wonders, and Distribute Resources.
-	-- This system was designed and programmed for Civ5 by Bob Thomas.
-	-- Starting plots are wholly dependent on all the previous elements being in place.
-	-- Natural Wonders are dependent on civ starts being in place, to keep them far enough away.
-	-- Resources are dependent on start locations, Natural Wonders, as well as plots, terrain, rivers, lakes and features.
-	--
-	-- This system relies on Area-based data and cannot tolerate an AreaID recalculation during its operations.
-	-- Due to plot changes from Natural Wonders and possibly other source, another recalculation is done as the final action of the system.
+
+
+
+
+
+
+
+
 	StartPlotSystem();
 
-	-- Goodies depend on not colliding with resources or Natural Wonders, or being placed too near to start plots.
+
 	AddGoodies();
 
-	-- Continental artwork selection must wait until Areas are finalized, so it gets handled last.
+
 	DetermineContinents();
 end

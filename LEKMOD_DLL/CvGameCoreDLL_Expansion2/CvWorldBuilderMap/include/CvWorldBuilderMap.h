@@ -1,16 +1,16 @@
-//---------------------------------------------------------------------------------------
-//
-//  *****************   CIV 5 World Builder Map   ********************
-//
-//  FILE:    CvWorldBuilderMap.h
-//
-//  AUTHOR:  Eric Jordan  --  7/20/2009
-//
-//  PURPOSE:
-//
-//---------------------------------------------------------------------------------------
-//  Copyright (c) 2009 Firaxis Games, Inc. All rights reserved.
-//---------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #pragma once
 #ifndef CvWorldBuilderMap_h
@@ -41,10 +41,10 @@ public:
 	void Resize(uint uiWidth, uint uiHeight);
 
 #ifndef CV_WORLD_BUILDER_MAP_IN_GAME
-	MEMBER_EVENT2(MapResized, uint, uint); // uiWidth, uiHeight
+	MEMBER_EVENT2(MapResized, uint, uint);
 #endif
 
-	// Load / Save
+
 	bool Save( _In_z_ const wchar_t* wszFilename, const CvWorldBuilderMapTypeDesc &kTypeDesc, bool bScenario = true) const;
 	bool Load( _In_z_ const wchar_t* wszFilename, const CvWorldBuilderMapTypeDesc &kTypeDesc, bool bScenario = true);
 
@@ -90,7 +90,7 @@ public:
 
 		enum PlotFlags
 		{
-			// Rivers
+
 			W_OF_RIVER    = 0x01,
 			NW_OF_RIVER   = 0x02,
 			NE_OF_RIVER   = 0x04,
@@ -98,7 +98,7 @@ public:
 			RIVER_FLOW_NE = 0x10,
 			RIVER_FLOW_NW = 0x20,
 
-			// Starting Positions
+
 			START_POS_MAJOR = 0x40,
 			START_POS_MINOR = 0x80,
 		};
@@ -116,7 +116,7 @@ public:
 		__forceinline void SetFlags(byte byFlags) { m_byFlags = byFlags; }
 
 	private:
-		// Note: member data forms qword
+
 		byte m_byTerrainType;
 		byte m_byResourceType;
 		byte m_byFeatureType;
@@ -127,7 +127,7 @@ public:
 		byte m_byResourceAmount;
 	};
 
-	// Backwards Compatibility Only.  Not used for anything but loading old maps.
+
 	struct OldUnit
 	{
 		static const byte InvalidUnitType = byte(-1);
@@ -157,8 +157,8 @@ public:
 		bool m_bEmbarked : 1;
 	};
 
-	// Just a fixed buffer for a unit name.  I want to package these together in a serializable
-	// block allocator which is why they aren't variable-length heap allocations.
+
+
 	struct UnitName
 	{
 		typedef CvWorldBuilderMapElementAllocator<UnitName, 4> Map;
@@ -225,8 +225,8 @@ public:
 		static const uint MaxHealth = 100000;
 
 		Unit();
-		explicit Unit(const OldUnit &kOldUnit); // For conversion
-		explicit Unit(const UnitV2 &kOldUnit); // For conversion
+		explicit Unit(const OldUnit &kOldUnit);
+		explicit Unit(const UnitV2 &kOldUnit);
 
 		enum DirectionTypes
 		{
@@ -258,7 +258,7 @@ public:
 
 		PromotionBitset m_kPromotions;
 
-		// Remember floating point error if you choose to use these
+
 		void SetHealthAsFloat(const float fHealth) { m_uiHealth = (uint)(fHealth * MaxHealth); }
 		const float GetHealthAsFloat() const { return (float)m_uiHealth / (float)MaxHealth; }
 
@@ -272,7 +272,7 @@ public:
 		}
 	};
 
-	// Backwards Compatibility Only.  Not used for anything but loading old maps.
+
 	struct OldCity
 	{
 		typedef CvWorldBuilderMapElementAllocator<OldCity, 8> Map;
@@ -340,8 +340,8 @@ public:
 		};
 
 		City();
-		explicit City(const OldCity &kOldCity); // For conversion
-		explicit City(const CityV2 &kOldCity); // For conversion
+		explicit City(const OldCity &kOldCity);
+		explicit City(const CityV2 &kOldCity);
 
 		char m_szName[MaxNameLength];
 		byte m_byOwner;
@@ -350,7 +350,7 @@ public:
 		uint m_uiHealth;
 		BuildingBitset m_kBuildings;
 
-		// Remember floating point error if you choose to use these
+
 		void SetHealthAsFloat(const float fHealth) { m_uiHealth = (uint)(fHealth * MaxHealth); }
 		const float GetHealthAsFloat() const { return (float)m_uiHealth / (float)MaxHealth; }
 
@@ -372,7 +372,7 @@ public:
 
 		PlotScenarioData();
 
-		// Note: member data forms qword
+
 		City::Handle m_hCity;
 		Unit::Handle m_hUnitStack;
 		byte m_byCulture;
@@ -393,7 +393,7 @@ public:
 		TechBitset m_kTechs;
 	};
 
-	// Backwards Compatibility Only.  Not used for anything but loading old maps.
+
 	struct OldPlayer
 	{
 		static const uint MaxPolicies = 256;
@@ -424,7 +424,7 @@ public:
 		typedef std::bitset<MaxPolicies> PolicyBitset;
 
 		Player();
-		explicit Player(const OldPlayer &kOldPlayer); // Conversion
+		explicit Player(const OldPlayer &kOldPlayer);
 
 		PolicyBitset m_kPolicies;
 
@@ -719,8 +719,8 @@ public:
 		FLAG_WORLD_WRAP       = 0x01,
 		FLAG_RANDOM_RECOURCES = 0x02,
 		FLAG_RANDOM_GOODIES   = 0x04,
-		FLAG_OLD_GOODIE_RULES = 0x08, // Backwards compatibility thing.  Don't set normally.
-		FLAG_TRANSFERABLE     = 0x10, // Determines if a map can be transfered over the internets
+		FLAG_OLD_GOODIE_RULES = 0x08,
+		FLAG_TRANSFERABLE     = 0x10,
 	};
 
 	__forceinline bool GetFlag(MapFlags eFlag) const { return (m_uiFlags & eFlag) != 0; }
@@ -735,7 +735,7 @@ public:
 	uint m_uiFlags;
 
 private:
-	// Map loading for all versions of world builder maps
+
 	bool Load0(FIFile &kFile, const CvWorldBuilderMapTypeDesc &kTypeDesc, bool bScenario);
 	bool Load1(FIFile &kFile, const CvWorldBuilderMapTypeDesc &kTypeDesc, bool bScenario);
 	bool Load2(FIFile &kFile, const CvWorldBuilderMapTypeDesc &kTypeDesc, bool bScenario);
@@ -782,10 +782,10 @@ private:
 	Player m_akCityStates[MaxCityStates];
 	Team m_akTeams[MaxTeams];
 
-	//This should really go in either the MapDescription or GameDescription
-	//but cannot for the following reasons:
-	//GameDescription: Only used during scenarios
-	//MapDescription: Read prior to any version handling
+
+
+
+
 	char m_szWorldType[64];
 
 	template<uint TBits>
@@ -853,11 +853,11 @@ private:
 
 	SerializableBitset<MaxMapSize * MaxTeams> m_kVisibility;
 
-	// Return references to these when an out-of-range error occurs
+
 	static PlotMapData sm_kErrorPlotMapData;
 	static PlotScenarioData sm_kErrorPlotScenarioData;
 	static Player sm_kErrorPlayer;
 	static Team sm_kErrorTeam;
 };
 
-#endif // CvWorldBuilderMap_h
+#endif

@@ -1,13 +1,13 @@
-------------------------------------------------------------------------------
---	FILE:	 MapGenerator.lua
---	AUTHORS: Shaun Seckman
---	         Bob Thomas
---	PURPOSE: Base logic for map generation.
-------------------------------------------------------------------------------
---	Copyright (c) 2010 Firaxis Games, Inc. All rights reserved.
-------------------------------------------------------------------------------
 
--- Shared generation steps; rectangular maps retain their coast and lake rules.
+
+
+
+
+
+
+
+
+
 include("HBMapGenerator");
 local generateCoasts = GenerateCoasts;
 function GenerateCoasts(args)
@@ -45,7 +45,7 @@ function AddLakes()
 				if (plot:IsCoastalLand() == false) then
 					if (plot:IsRiver() == false) then
 						coolDown = coolDown - 1;
-						--if (AdjacentToNaturalWonder(plot) == false) then
+
 							local r = Map.Rand(lakePlotRand, "MapGenerator AddLakes");
 							if r == 0 then
 								numLakesAdded = numLakesAdded + 1;
@@ -61,7 +61,7 @@ function AddLakes()
 
 								plot:SetPlotType(PlotTypes.PLOT_OCEAN);
 							end
-						--end
+
 					end
 				end
 			end
@@ -69,14 +69,14 @@ function AddLakes()
 	end
 	print("******************************************************************************************************");
 
-	-- this is a minimalist update because lakes have been added
+
 	if numLakesAdded > 0 then
 		print(tostring(numLakesAdded).." lakes added")
 		Map.CalculateAreas();
 	end
 end
 
-----------------------------------------------------------------------------------------------------------------------
+
 function AddMoreLake(plot)
 	local largeLake = 0;
 	lakePlots = {};
@@ -87,13 +87,13 @@ function AddMoreLake(plot)
 			if (adjacentPlot:IsWater() == false)  then
 				if (adjacentPlot:IsCoastalLand() == false) then
 					if (adjacentPlot:IsRiver() == false) then
-						--if (AdjacentToNaturalWonder(adjacentPlot) == false) then
+
 							local r = Map.Rand(7 + largeLake, "MapGenerator AddLakes");
 							if r < 3 then
 								table.insert(lakePlots, adjacentPlot);
 								largeLake = largeLake + 1;
 							end
-						--end
+
 					end
 				end
 			end
@@ -110,5 +110,3 @@ function AddMoreLake(plot)
 		return false;
 	end
 end
-
-----------------------------------------------------------------------------------------------------------------------

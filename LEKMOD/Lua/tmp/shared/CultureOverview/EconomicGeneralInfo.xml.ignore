@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Context Font="TwCenMT20" FontStyle="Shadow" ColorSet="Beige_Black_Alpha">
-	<!-- Main Container -->
+
 	<Box Offset="-32,49" Anchor="C,C" Size="900,533" Color="255.255.200.0">
-		<!-- Column Headers -->
+
 		<Stack Anchor="L,T" StackGrowth="Right" Offset="0,0" Padding="0">
 			<Box Anchor="L,C" Color="White,0" Size="240,24">
 				<Label Anchor="C,C" String="TXT_KEY_EO_GPT"/>
@@ -89,7 +89,7 @@
 				<Label Anchor="C,C" Offset="0,-1" String="[ICON_PRODUCTION]"/>
 			</Button>
 		</Stack>
-		<!-- Gold Per Turn Information -->
+
 		<ScrollPanel Offset="0,28" Size="210,442" ID="GoldScroll" Vertical="1">
 			<ScrollBar Offset="8,0" Style="VertSlider" Anchor="R,C" AnchorSide="o,i" Length="434"/>
 			<UpButton Offset="8,2" Style="ScrollBarUp" Anchor="R,T" AnchorSide="o,i"/>
@@ -115,12 +115,12 @@
 					<Label Offset="10,0" Font="TwCenMT18" Anchor="L,C" String="TXT_KEY_EO_TOTAL_EXPENSE"/>
 					<Label Offset="10,0" Font="TwCenMT18" Anchor="R,C" ID="TotalExpenseValue"/>
 				</Box>
-				<!--  Income  -->
+
 				<Box Size="175,45" Color="Beige,0" Anchor="C,C">
 					<Grid Size="200,27" Style="Grid9FrameTurns" Anchor="C,B"/>
 					<Label Offset="0,8" Font="TwCenMT20" Anchor="C,B" String="TXT_KEY_EO_INCOME"/>
 				</Box>
-				<!-- Cities -->
+
 				<Button Size="215,24" Anchor="C,C" TextAnchor="L,C" Font="TwCenMT18" TextOffset="5,0" ID="CityToggle" String="TXT_KEY_EO_INCOME_CITIES">
 					<Label Offset="10,0" Font="TwCenMT18" Anchor="R,C" ID="CityIncomeValue"/>
 					<ShowOnMouseOver>
@@ -130,10 +130,10 @@
 					</ShowOnMouseOver>
 				</Button>
 				<Stack Anchor="L,C" ID="CityStack"/>
-				<!--<Box Size="215,24" Anchor="c,c" Color="0.0.0.0" ID="CityIncome" ToolTip="TXT_KEY_EO_INCOME_CITIES" >
-            <Label Offset="10,0" Font="TwCenMT18" Anchor="L,C" String="TXT_KEY_EO_CITIES"  />
-            <Label Offset="10,0" Font="TwCenMT18" Anchor="R,C" ID="CityIncomeValue" />
-          </Box>-->
+
+
+
+
 				<Box Size="215,24" Anchor="c,c" Color="0.0.0.0" ID="DiploIncome" ToolTip="TXT_KEY_EO_INCOME_DIPLOMACY">
 					<Label Offset="10,0" Font="TwCenMT18" Anchor="L,C" String="TXT_KEY_EO_DIPLOMACY"/>
 					<Label Offset="10,0" Font="TwCenMT18" Anchor="R,C" ID="DiploIncomeValue"/>
@@ -142,7 +142,7 @@
 					<Label Offset="10,0" Font="TwCenMT18" Anchor="L,C" String="TXT_KEY_EO_RELIGION"/>
 					<Label Offset="10,0" Font="TwCenMT18" Anchor="R,C" ID="ReligionIncomeValue"/>
 				</Box>
-				<!-- Trade Routes -->
+
 				<Button Size="215,24" Anchor="C,C" TextAnchor="L,C" Font="TwCenMT18" TextOffset="5,0" ID="TradeToggle" String="TXT_KEY_EO_INCOME_TRADE_DETAILS">
 					<Label Offset="10,0" Font="TwCenMT18" Anchor="R,C" ID="TradeIncomeValue"/>
 					<ShowOnMouseOver>
@@ -152,7 +152,7 @@
 					</ShowOnMouseOver>
 				</Button>
 				<Stack Anchor="L,C" ID="TradeStack"/>
-				<!--  Expense  -->
+
 				<Box Size="175,45" Color="Beige,0" Anchor="C,C">
 					<Grid Size="200,27" Style="Grid9FrameTurns" Anchor="C,B"/>
 					<Label Offset="0,8" Font="TwCenMT20" Anchor="C,B" String="TXT_KEY_EO_EXPENSES"/>
@@ -161,7 +161,7 @@
 					<Label Offset="10,0" Font="TwCenMT18" Anchor="L,C" String="TXT_KEY_EO_UNITS"/>
 					<Label Offset="10,0" Font="TwCenMT18" Anchor="R,C" ID="UnitExpenseValue"/>
 				</Box>
-				<!-- Buildings -->
+
 				<Button Size="215,24" Anchor="C,C" TextAnchor="L,C" Font="TwCenMT18" TextOffset="5,0" ID="BuildingsToggle" String="TXT_KEY_EO_BUILDINGS" ToolTip="TXT_KEY_EO_EX_BUILDINGS">
 					<Label Offset="10,0" Font="TwCenMT18" Anchor="R,C" ID="BuildingExpenseValue"/>
 					<ShowOnMouseOver>
@@ -171,10 +171,10 @@
 					</ShowOnMouseOver>
 				</Button>
 				<Stack Anchor="L,C" ID="BuildingsStack"/>
-				<!--<Box Size="215,24" Anchor="c,c" Color="0.0.0.0" ID="BuildingExpense" ToolTip="TXT_KEY_EO_EX_BUILDINGS" >
-            <Label Offset="10,0" Font="TwCenMT18" Anchor="L,C" String="TXT_KEY_EO_BUILDINGS"  />
-            <Label Offset="10,0" Font="TwCenMT18" Anchor="R,C" ID="BuildingExpenseValue" />
-          </Box>-->
+
+
+
+
 				<Box Size="215,24" Anchor="c,c" Color="0.0.0.0" ID="TileExpense">
 					<Label Offset="10,0" Font="TwCenMT18" Anchor="L,C" String="TXT_KEY_EO_IMPROVEMENTS"/>
 					<Label Offset="10,0" Font="TwCenMT18" Anchor="R,C" ID="TileExpenseValue"/>
@@ -193,24 +193,24 @@
 			</Stack>
 		</ScrollPanel>
 	</Box>
-	<!--=======================================================================================================================-->
-	<!--=======================================================================================================================-->
+
+
 	<Instance Name="TradeEntry">
 		<Box Size="210,24" Color="0.0.0.0" ID="TradeIncome">
 			<Label Offset="20,0" Font="TwCenMT16" Anchor="L,C" ID="CityName"/>
 			<Label Offset="6,0" Font="TwCenMT16" Anchor="R,C" ID="TradeIncomeValue"/>
 		</Box>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!--=======================================================================================================================-->
+
+
 	<Instance Name="CityInstance">
 		<Box ID="Root" Offset="0,0" Anchor="L,T" Size="690,34" Color="255,255,255,0">
 			<Stack Anchor="L,C" StackGrowth="Right" Offset="0,0" Padding="0">
 				<Box Anchor="C,C" Color="255.255.255.0" Offset="0,0" Size="48,34">
-					<!-- GrowthMeter  -->
+
 					<Grid Anchor="L,C" Size="54,28" Offset="0,0" Padding="0,0" Style="Grid9Frame27" Hidden="1"/>
 					<Label Anchor="C,C" Offset="-6,0" String="14" Color0="Beige.255" Color1="Black.255" Font="TwCenMT20" FontStyle="Stroke" ID="Population"/>
-					<!-- GrowthMeter CityBannerGrowthBackground -->
+
 					<Box Anchor="R,C" Offset="4,0" Size="6,30" Color="0,0,0,255" Hidden="0" ID="GrowthBox">
 						<Bar Anchor="C,B" Offset="0,0" Size="4,30" FGColor="Food,128" Hidden="0" ID="GrowthBarShadow" Direction="Up"/>
 						<Bar Anchor="C,B" Offset="0,0" Size="4,30" FGColor="Food,255" Hidden="0" ID="GrowthBar" Direction="Up"/>
@@ -220,7 +220,7 @@
 					</Box>
 				</Box>
 				<Box Anchor="L,C" Offset="0,0" Color="Black.0" Size="242,34">
-					<!-- HealthBar -->
+
 					<Box Anchor="C,B" Offset="0,2" Size="140,5" Color="Black,256" Hidden="0" ID="HealthBarBox">
 						<Bar Anchor="C,C" Offset="0,0" Size="138,3" Direction="Right" FGColor="Green,255" Hidden="0" ID="HealthBar"/>
 					</Box>
@@ -262,7 +262,7 @@
 				</Box>
 				<Button Anchor="L,C" Color="255.255.255.0" Offset="20,0" Size="48,34" ID="ProdButton">
 					<Image Anchor="C,C" Offset="2,0" Texture="WonderAtlas360.dds" Size="45.45" Hidden="0" ID="ProdImage">
-						<!-- ProductionMeter  -->
+
 						<Box Anchor="L,C" Offset="-22,0" Size="6,30" Color="0,0,0,255" Hidden="0">
 							<Bar Anchor="C,B" Offset="0,0" Size="4,30" FGColor="Production,128" Hidden="0" ID="ProductionBarShadow" Direction="Up"/>
 							<Bar Anchor="C,B" Offset="0,0" Size="4,30" FGColor="Production,255" Hidden="0" ID="ProductionBar" Direction="Up"/>

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-25 05:44:53 -->
+
 <GameData>
 
-	<!-- +1 Food from Shrines and +2 Food from Temples -->
+
 	<Belief_BuildingClassYieldChanges>
-		<!-- already provides +1 Food from Shrines by default -->
+
 		<Update>
 			<Set YieldChange="2" />
 			<Where BeliefType="BELIEF_FEED_WORLD" BuildingClassType="BUILDINGCLASS_TEMPLE" YieldType="YIELD_FOOD" />
 		</Update>
 	</Belief_BuildingClassYieldChanges>
 	
-	<!-- localization -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_BELIEF_FEED_WORLD" />
 		<Row Tag="TXT_KEY_BELIEF_FEED_WORLD">

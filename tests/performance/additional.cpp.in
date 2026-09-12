@@ -1,4 +1,4 @@
-// Source-extracted production methods with controlled game/database doubles.
+
 #include <cassert>
 #include <cstdio>
 #include <iostream>
@@ -97,7 +97,7 @@ int main(){
     CvPlayerTrade trade;CvBuilderTaskingAI builder;
     for(int i=0;i<3;++i)players[i].id=i;
     for(int fixture=0;fixture<200;++fixture){
-        // Rebuild definitions, including holes, duplicates and NO_IMPROVEMENT.
+
         CvBuildInfo entries[64];CvCity cities[4];GC.builds.clear();
         for(int i=0;i<fixture%65;++i){entries[i].improvement=int(rng()%25)-1;GC.builds.push_back(i%5?&entries[i]:NULL);}
         for(int i=0;i<4;++i)GC.cities[i]=&cities[i];

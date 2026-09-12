@@ -1,11 +1,11 @@
 
--------------------------------
--- TopPanel.lua
--- coded by bc1 from Civ V 1.0.3.276 code
--- code is common using gk_mode and bnw_mode switches
--- compatible with Putmalk's Civ IV Diplomacy Features Mod v10
--- compatible with Gazebo's City-State Diplomacy Mod (CSD) for Brave New World v 23
--------------------------------
+
+
+
+
+
+
+
 include( "EUI_utilities" )
 
 Events.SequenceGameInitComplete.Add(function()
@@ -23,9 +23,9 @@ local gk_mode = Game.GetReligionName ~= nil
 local bnw_mode = Game.GetActiveLeague ~= nil
 local civ5bnw_mode = civ5_mode and bnw_mode
 
--------------------------------
--- minor lua optimizations
--------------------------------
+
+
+
 local math_ceil = math.ceil
 local math_cos = math.cos
 local math_floor = math.floor
@@ -39,7 +39,7 @@ local pairs = pairs
 local tonumber = tonumber
 local S = string.format
 
---EUI_utilities
+
 local IconHookup = EUI.IconHookup
 local CityPlots = EUI.CityPlots
 local PopScratchDeal = EUI.PopScratchDeal
@@ -48,7 +48,7 @@ local table = EUI.table
 local YieldIcons = EUI.YieldIcons
 local YieldNames = EUI.YieldNames
 local GreatPeopleIcon = EUI.GreatPeopleIcon
-local GameInfo = EUI.GameInfoCache -- warning! use iterator ONLY with table field conditions, NOT string SQL query
+local GameInfo = EUI.GameInfoCache
 local GetHelpTextForAffinity
 if civBE_mode then
 	include( "EUI_tooltips" )
@@ -78,9 +78,9 @@ local TradeableItems = TradeableItems
 local UI = UI
 local YieldTypes = YieldTypes
 
--------------------------------
--- Globals
--------------------------------
+
+
+
 
 local g_activePlayerID, g_activePlayer, g_activeTeamID, g_activeTeam, g_activeCivilizationID, g_activeCivilization, g_activeTeamTechs
 
@@ -101,7 +101,7 @@ local g_startTurn = Game.GetStartTurn()
 local g_scienceTextColor = civ5_mode and "[COLOR:33:190:247:255]" or "[COLOR_MENU_BLUE]"
 local g_currencyIcon = civ5_mode and "[ICON_GOLD]" or "[ICON_ENERGY]"
 local g_currencyString = civ5_mode and "GOLD" or "ENERGY"
---local g_happinessIcon = civ5_mode and "[ICON_HAPPY]" or "[ICON_HEALTH]"
+
 local g_happinessString = civ5_mode and "HAPPINESS" or "HEALTH"
 
 local textTipControls = {}
@@ -115,9 +115,9 @@ for resource in GameInfo.Resources() do
 	end
 end
 g_luxuries:sort( function(a,b) return Locale.Compare( a.Description, b.Description ) == -1 end )
--------------------------------
--- Utilities
--------------------------------
+
+
+
 local function GamePopup( popupType, data2 )
 	Events.SerialEventGameMessagePopup{ Type = popupType, Data1 = 1, Data2 = data2 }
 end
@@ -163,18 +163,18 @@ local function setTextToolTip( tipText )
 	return textTipControls.TopPanelMouseover:DoAutoSize()
 end
 
--------------------------------------------------
--- Great People
--------------------------------------------------
 
--- TODO: optimize loop, add capability for several simultaneous gp's
+
+
+
+
 local function ScanGP( player )
 	local gp = nil
 	for city in player:Cities() do
 
 		for specialist in GameInfo.Specialists() do
 
-			local gpuClass = specialist.GreatPeopleUnitClass	-- nil / UNITCLASS_ARTIST / UNITCLASS_SCIENTIST / UNITCLASS_MERCHANT / UNITCLASS_ENGINEER ...
+			local gpuClass = specialist.GreatPeopleUnitClass
 			local unitClass = gpuClass and GameInfo.UnitClasses[gpuClass]
 			if unitClass then
 				local gpThreshold = city:GetSpecialistUpgradeThreshold(unitClass.ID)
@@ -194,13 +194,13 @@ local function ScanGP( player )
 				local isGoldenAge = player:GetGoldenAgeTurns() > 0
 
 				if bnw_mode then
-					-- Generic GP mods
+
 
 					gpChangePolicyMod = player:GetPolicyGreatPeopleRateModifier()
 
 					local worldCongress = (Game.GetNumActiveLeagues() > 0) and Game.GetActiveLeague()
 
-					-- GP mods by type
+
 					if specialist.GreatPeopleUnitClass == "UNITCLASS_WRITER" then
 						gpChangePlayerMod = gpChangePlayerMod + player:GetGreatWriterRateModifier()
 						gpChangePolicyMod = gpChangePolicyMod + player:GetPolicyGreatWriterRateModifier()
@@ -248,7 +248,7 @@ local function ScanGP( player )
 						end
 					end
 
-					-- Player mod actually includes policy mod and World Congress mod, so separate them for tooltip
+
 
 					gpChangePlayerMod = gpChangePlayerMod - gpChangePolicyMod - gpChangeWorldCongressMod
 
@@ -274,9 +274,9 @@ local function ScanGP( player )
 					end
 				end
 
-			end -- unitClass
-		end -- specialist
-	end -- city
+			end
+		end
+	end
 	return gp
 end
 
@@ -286,7 +286,7 @@ local function ScanScientist( player )
 
 		for specialist in GameInfo.Specialists() do
 
-			local gpuClass = specialist.GreatPeopleUnitClass	-- nil / UNITCLASS_ARTIST / UNITCLASS_SCIENTIST / UNITCLASS_MERCHANT / UNITCLASS_ENGINEER ...
+			local gpuClass = specialist.GreatPeopleUnitClass
 			local unitClass = gpuClass and GameInfo.UnitClasses[gpuClass]
 			if unitClass and gpuClass == "UNITCLASS_SCIENTIST" then
 				local gpThreshold = city:GetSpecialistUpgradeThreshold(unitClass.ID)
@@ -306,13 +306,13 @@ local function ScanScientist( player )
 				local isGoldenAge = player:GetGoldenAgeTurns() > 0
 
 				if bnw_mode then
-					-- Generic GP mods
+
 
 					gpChangePolicyMod = player:GetPolicyGreatPeopleRateModifier()
 
 					local worldCongress = (Game.GetNumActiveLeagues() > 0) and Game.GetActiveLeague()
 
-					-- GP mods by type
+
 					if specialist.GreatPeopleUnitClass == "UNITCLASS_WRITER" then
 						gpChangePlayerMod = gpChangePlayerMod + player:GetGreatWriterRateModifier()
 						gpChangePolicyMod = gpChangePolicyMod + player:GetPolicyGreatWriterRateModifier()
@@ -360,7 +360,7 @@ local function ScanScientist( player )
 						end
 					end
 
-					-- Player mod actually includes policy mod and World Congress mod, so separate them for tooltip
+
 
 					gpChangePlayerMod = gpChangePlayerMod - gpChangePolicyMod - gpChangeWorldCongressMod
 
@@ -386,9 +386,9 @@ local function ScanScientist( player )
 					end
 				end
 
-			end -- unitClass
-		end -- specialist
-	end -- city
+			end
+		end
+	end
 	return gp
 end
 
@@ -398,7 +398,7 @@ local function ScanEngineer( player )
 
 		for specialist in GameInfo.Specialists() do
 
-			local gpuClass = specialist.GreatPeopleUnitClass	-- nil / UNITCLASS_ARTIST / UNITCLASS_SCIENTIST / UNITCLASS_MERCHANT / UNITCLASS_ENGINEER ...
+			local gpuClass = specialist.GreatPeopleUnitClass
 			local unitClass = gpuClass and GameInfo.UnitClasses[gpuClass]
 			if unitClass and gpuClass == "UNITCLASS_ENGINEER" then
 				local gpThreshold = city:GetSpecialistUpgradeThreshold(unitClass.ID)
@@ -418,13 +418,13 @@ local function ScanEngineer( player )
 				local isGoldenAge = player:GetGoldenAgeTurns() > 0
 
 				if bnw_mode then
-					-- Generic GP mods
+
 
 					gpChangePolicyMod = player:GetPolicyGreatPeopleRateModifier()
 
 					local worldCongress = (Game.GetNumActiveLeagues() > 0) and Game.GetActiveLeague()
 
-					-- GP mods by type
+
 					if specialist.GreatPeopleUnitClass == "UNITCLASS_WRITER" then
 						gpChangePlayerMod = gpChangePlayerMod + player:GetGreatWriterRateModifier()
 						gpChangePolicyMod = gpChangePolicyMod + player:GetPolicyGreatWriterRateModifier()
@@ -472,7 +472,7 @@ local function ScanEngineer( player )
 						end
 					end
 
-					-- Player mod actually includes policy mod and World Congress mod, so separate them for tooltip
+
 
 					gpChangePlayerMod = gpChangePlayerMod - gpChangePolicyMod - gpChangeWorldCongressMod
 
@@ -498,9 +498,9 @@ local function ScanEngineer( player )
 					end
 				end
 
-			end -- unitClass
-		end -- specialist
-	end -- city
+			end
+		end
+	end
 	return gp
 end
 
@@ -510,7 +510,7 @@ local function ScanMerchant( player )
 
 		for specialist in GameInfo.Specialists() do
 
-			local gpuClass = specialist.GreatPeopleUnitClass	-- nil / UNITCLASS_ARTIST / UNITCLASS_SCIENTIST / UNITCLASS_MERCHANT / UNITCLASS_ENGINEER ...
+			local gpuClass = specialist.GreatPeopleUnitClass
 			local unitClass = gpuClass and GameInfo.UnitClasses[gpuClass]
 			if unitClass and gpuClass == "UNITCLASS_MERCHANT" then
 				local gpThreshold = city:GetSpecialistUpgradeThreshold(unitClass.ID)
@@ -530,13 +530,13 @@ local function ScanMerchant( player )
 				local isGoldenAge = player:GetGoldenAgeTurns() > 0
 
 				if bnw_mode then
-					-- Generic GP mods
+
 
 					gpChangePolicyMod = player:GetPolicyGreatPeopleRateModifier()
 
 					local worldCongress = (Game.GetNumActiveLeagues() > 0) and Game.GetActiveLeague()
 
-					-- GP mods by type
+
 					if specialist.GreatPeopleUnitClass == "UNITCLASS_WRITER" then
 						gpChangePlayerMod = gpChangePlayerMod + player:GetGreatWriterRateModifier()
 						gpChangePolicyMod = gpChangePolicyMod + player:GetPolicyGreatWriterRateModifier()
@@ -584,7 +584,7 @@ local function ScanMerchant( player )
 						end
 					end
 
-					-- Player mod actually includes policy mod and World Congress mod, so separate them for tooltip
+
 
 					gpChangePlayerMod = gpChangePlayerMod - gpChangePolicyMod - gpChangeWorldCongressMod
 
@@ -610,9 +610,9 @@ local function ScanMerchant( player )
 					end
 				end
 
-			end -- unitClass
-		end -- specialist
-	end -- city
+			end
+		end
+	end
 	return gp
 end
 
@@ -622,7 +622,7 @@ local function ScanWriter( player )
 
 		for specialist in GameInfo.Specialists() do
 
-			local gpuClass = specialist.GreatPeopleUnitClass	-- nil / UNITCLASS_ARTIST / UNITCLASS_SCIENTIST / UNITCLASS_MERCHANT / UNITCLASS_ENGINEER ...
+			local gpuClass = specialist.GreatPeopleUnitClass
 			local unitClass = gpuClass and GameInfo.UnitClasses[gpuClass]
 			if unitClass and gpuClass == "UNITCLASS_WRITER" then
 				local gpThreshold = city:GetSpecialistUpgradeThreshold(unitClass.ID)
@@ -642,13 +642,13 @@ local function ScanWriter( player )
 				local isGoldenAge = player:GetGoldenAgeTurns() > 0
 
 				if bnw_mode then
-					-- Generic GP mods
+
 
 					gpChangePolicyMod = player:GetPolicyGreatPeopleRateModifier()
 
 					local worldCongress = (Game.GetNumActiveLeagues() > 0) and Game.GetActiveLeague()
 
-					-- GP mods by type
+
 					if specialist.GreatPeopleUnitClass == "UNITCLASS_WRITER" then
 						gpChangePlayerMod = gpChangePlayerMod + player:GetGreatWriterRateModifier()
 						gpChangePolicyMod = gpChangePolicyMod + player:GetPolicyGreatWriterRateModifier()
@@ -696,7 +696,7 @@ local function ScanWriter( player )
 						end
 					end
 
-					-- Player mod actually includes policy mod and World Congress mod, so separate them for tooltip
+
 
 					gpChangePlayerMod = gpChangePlayerMod - gpChangePolicyMod - gpChangeWorldCongressMod
 
@@ -722,9 +722,9 @@ local function ScanWriter( player )
 					end
 				end
 
-			end -- unitClass
-		end -- specialist
-	end -- city
+			end
+		end
+	end
 	return gp
 end
 
@@ -734,7 +734,7 @@ local function ScanArtist( player )
 
 		for specialist in GameInfo.Specialists() do
 
-			local gpuClass = specialist.GreatPeopleUnitClass	-- nil / UNITCLASS_ARTIST / UNITCLASS_SCIENTIST / UNITCLASS_MERCHANT / UNITCLASS_ENGINEER ...
+			local gpuClass = specialist.GreatPeopleUnitClass
 			local unitClass = gpuClass and GameInfo.UnitClasses[gpuClass]
 			if unitClass and gpuClass == "UNITCLASS_ARTIST" then
 				local gpThreshold = city:GetSpecialistUpgradeThreshold(unitClass.ID)
@@ -754,13 +754,13 @@ local function ScanArtist( player )
 				local isGoldenAge = player:GetGoldenAgeTurns() > 0
 
 				if bnw_mode then
-					-- Generic GP mods
+
 
 					gpChangePolicyMod = player:GetPolicyGreatPeopleRateModifier()
 
 					local worldCongress = (Game.GetNumActiveLeagues() > 0) and Game.GetActiveLeague()
 
-					-- GP mods by type
+
 					if specialist.GreatPeopleUnitClass == "UNITCLASS_WRITER" then
 						gpChangePlayerMod = gpChangePlayerMod + player:GetGreatWriterRateModifier()
 						gpChangePolicyMod = gpChangePolicyMod + player:GetPolicyGreatWriterRateModifier()
@@ -808,7 +808,7 @@ local function ScanArtist( player )
 						end
 					end
 
-					-- Player mod actually includes policy mod and World Congress mod, so separate them for tooltip
+
 
 					gpChangePlayerMod = gpChangePlayerMod - gpChangePolicyMod - gpChangeWorldCongressMod
 
@@ -834,9 +834,9 @@ local function ScanArtist( player )
 					end
 				end
 
-			end -- unitClass
-		end -- specialist
-	end -- city
+			end
+		end
+	end
 	return gp
 end
 
@@ -846,7 +846,7 @@ local function ScanMusician( player )
 
 		for specialist in GameInfo.Specialists() do
 
-			local gpuClass = specialist.GreatPeopleUnitClass	-- nil / UNITCLASS_ARTIST / UNITCLASS_SCIENTIST / UNITCLASS_MERCHANT / UNITCLASS_ENGINEER ...
+			local gpuClass = specialist.GreatPeopleUnitClass
 			local unitClass = gpuClass and GameInfo.UnitClasses[gpuClass]
 			if unitClass and gpuClass == "UNITCLASS_MUSICIAN" then
 				local gpThreshold = city:GetSpecialistUpgradeThreshold(unitClass.ID)
@@ -866,13 +866,13 @@ local function ScanMusician( player )
 				local isGoldenAge = player:GetGoldenAgeTurns() > 0
 
 				if bnw_mode then
-					-- Generic GP mods
+
 
 					gpChangePolicyMod = player:GetPolicyGreatPeopleRateModifier()
 
 					local worldCongress = (Game.GetNumActiveLeagues() > 0) and Game.GetActiveLeague()
 
-					-- GP mods by type
+
 					if specialist.GreatPeopleUnitClass == "UNITCLASS_WRITER" then
 						gpChangePlayerMod = gpChangePlayerMod + player:GetGreatWriterRateModifier()
 						gpChangePolicyMod = gpChangePolicyMod + player:GetPolicyGreatWriterRateModifier()
@@ -920,7 +920,7 @@ local function ScanMusician( player )
 						end
 					end
 
-					-- Player mod actually includes policy mod and World Congress mod, so separate them for tooltip
+
 
 					gpChangePlayerMod = gpChangePlayerMod - gpChangePolicyMod - gpChangeWorldCongressMod
 
@@ -946,33 +946,33 @@ local function ScanMusician( player )
 					end
 				end
 
-			end -- unitClass
-		end -- specialist
-	end -- city
+			end
+		end
+	end
 	return gp
 end
--------------------------------------------------
--- Top Panel Update
--------------------------------------------------
+
+
+
 
 local function UpdateTopPanelNow()
 
 	g_requestTopPanelUpdate = false
 
-	-----------------------------
-	-- Update science stats
-	-----------------------------
+
+
+
 	if g_isScienceEnabled then
 
 		local sciencePerTurnTimes100 = g_activePlayer:GetYieldTimes100(YieldTypes.YIELD_SCIENCE)
 
 		local strSciencePerTurn = S( "+%.0f", sciencePerTurnTimes100 / 100 )
 
-		-- Gold being deducted from our Science ?
+
 		if g_activePlayer:GetScienceFromBudgetDeficitTimes100() == 0 then
-			strSciencePerTurn = g_scienceTextColor .. strSciencePerTurn .. "[ENDCOLOR][ICON_RESEARCH]"	-- Normal Science state
+			strSciencePerTurn = g_scienceTextColor .. strSciencePerTurn .. "[ENDCOLOR][ICON_RESEARCH]"
 		else
-			strSciencePerTurn = "[COLOR:255:0:60:255]" .. strSciencePerTurn .. "[ENDCOLOR][ICON_RESEARCH]"	-- Science deductions
+			strSciencePerTurn = "[COLOR:255:0:60:255]" .. strSciencePerTurn .. "[ENDCOLOR][ICON_RESEARCH]"
 		end
 		Controls.SciencePerTurn:SetText( strSciencePerTurn )
 
@@ -981,7 +981,7 @@ local function UpdateTopPanelNow()
 			local techID = g_activePlayer:GetCurrentResearch()
 
 			if techID ~= -1 then
-			-- research in progress
+
 
 				local scienceProgress = g_activePlayer:GetResearchProgress(techID)
 				local scienceNeeded = g_activePlayer:GetResearchCost(techID)
@@ -999,23 +999,23 @@ local function UpdateTopPanelNow()
 				end
 
 			else
-			-- not researching a tech
+
 
 				Controls.ScienceBox:SetHide(true)
 				techID = g_activeTeamTechs:GetLastTechAcquired()
 
 			end
 
-			-- if we have one, update the tech picture
+
 			local techInfo = techID and techID ~= -1 and GameInfo.Technologies[ techID ]
 			Controls.ScienceTurns:SetText( strScienceTurnsRemaining )
 			Controls.TechIcon:SetHide(not (techInfo and IconHookup( techInfo.PortraitIndex, 45, techInfo.IconAtlas, Controls.TechIcon )) )
 		end
 	end
 
-	-----------------------------
-	-- Update Resources
-	-----------------------------
+
+
+
 
 	for resourceID, resourceInstance in pairs( g_resourceString ) do
 		local resource = GameInfo.Resources[ resourceID ]
@@ -1032,9 +1032,9 @@ local function UpdateTopPanelNow()
 		end
 	end
 
-	-----------------------------
-	-- Update turn counter
-	-----------------------------
+
+
+
 	local gameTurn = Game.GetGameTurn()
 	if g_startTurn > 0 then
 		gameTurn = gameTurn .. "("..(gameTurn-g_startTurn)..")"
@@ -1044,19 +1044,19 @@ local function UpdateTopPanelNow()
 	local culturePerTurn, cultureProgress
 
 	if civ5_mode then
-		-- Clever Firaxis...
+
 		culturePerTurn = g_activePlayer:GetYield(YieldTypes.YIELD_CULTURE, false);
 		cultureProgress = g_activePlayer:GetJONSCulture();
 
-		-----------------------------
-		-- Update gold stats
-		-----------------------------
+
+
+
 
 		Controls.GoldPerTurn:LocalizeAndSetText( "TXT_KEY_TOP_PANEL_GOLD", g_activePlayer:GetGold(), g_activePlayer:CalculateGoldRate() )
 
-		-----------------------------
-		-- Update Happy & Golden Age
-		-----------------------------
+
+
+
 
 		local unhappyProductionModifier = 0
 		local unhappyFoodModifier = 0
@@ -1066,8 +1066,8 @@ local function UpdateTopPanelNow()
 
 			local happinessText
 			local excessHappiness = g_activePlayer:GetExcessHappiness()
-			-- v34
-			local totalGAP = g_activePlayer:GetTotalGoldenAgePointsInEmpire() -- Note Excess Happy is counted here
+
+			local totalGAP = g_activePlayer:GetTotalGoldenAgePointsInEmpire()
 			local turnsRemaining = ""
 
 			if not g_activePlayer:IsEmpireUnhappy() then
@@ -1082,7 +1082,7 @@ local function UpdateTopPanelNow()
 					unhappyProductionModifier = GameDefines.VERY_UNHAPPY_PRODUCTION_PENALTY
 				end
 
-			else -- IsEmpireUnhappy
+			else
 
 				happinessText = S("[COLOR:255:60:60:255]%i[ENDCOLOR][ICON_HAPPINESS_3]", -excessHappiness)
 				unhappyFoodModifier = GameDefines.UNHAPPY_GROWTH_PENALTY
@@ -1097,7 +1097,7 @@ local function UpdateTopPanelNow()
 			local goldenAgeTurns = g_activePlayer:GetGoldenAgeTurns()
 			local happyProgress = g_activePlayer:GetGoldenAgeProgressMeter()
 			local happyNeeded = g_activePlayer:GetGoldenAgeProgressThreshold()
-			local happyProgressNext = happyProgress + totalGAP -- v34
+			local happyProgressNext = happyProgress + totalGAP
 
 			if goldenAgeTurns > 0 then
 				Controls.GoldenAgeString:SetHide(true)
@@ -1112,7 +1112,7 @@ local function UpdateTopPanelNow()
 				if happyNeeded > 0 then
 					Controls.HappyBar:SetPercent( happyProgress / happyNeeded )
 					Controls.HappyBarShadow:SetPercent( happyProgressNext / happyNeeded )
-					if totalGAP > 0 then -- v34
+					if totalGAP > 0 then
 						turnsRemaining = math_ceil((happyNeeded - happyProgress) / totalGAP)
 					end
 					Controls.HappyBox:SetHide(false)
@@ -1121,18 +1121,18 @@ local function UpdateTopPanelNow()
 				end
 			end
 
-			-- pick color tag, White for positive, Red for negative
+
 			local colorTag = totalGAP >= 0
-			and "[COLOR:255:255:255:255]" -- White
-			or "[COLOR:255:60:60:255]" -- Red
+			and "[COLOR:255:255:255:255]"
+			or "[COLOR:255:60:60:255]"
 
 			Controls.GoldenAgeString:SetText( S( colorTag .. " %+i[ENDCOLOR][ICON_GOLDEN_AGE]", totalGAP ) )
 			Controls.HappyTurns:SetText(turnsRemaining)
 		end
 
-		-----------------------------
-		-- Update Faith
-		-----------------------------
+
+
+
 		if g_isReligionEnabled then
 			local faithPerTurn = g_activePlayer:GetYield(YieldTypes.YIELD_FAITH)
 			local faithProgress = g_activePlayer:GetFaith()
@@ -1193,9 +1193,9 @@ local function UpdateTopPanelNow()
 			Controls.FaithIcon:SetHide( not (faithTarget and IconHookup(faithTarget.PortraitIndex, iconSize, faithTarget.IconAtlas, Controls.FaithIcon) ) )
 		end
 
-		-----------------------------
-		-- Update Great People
-		-----------------------------
+
+
+
 		local EUI_options    = Modding.OpenUserData("Enhanced User Interface Options", 1)
 		local bDisplayAllGP  = (EUI_options.GetValue("DB_bDisplayAllGreatPeople") == 1)
 		local gp;
@@ -1205,7 +1205,7 @@ local function UpdateTopPanelNow()
 		    Controls.GpIcon:     SetHide(true)
 		    Controls.GpTurns:    SetText("")
 		
-		    -- Scientist
+
 		    gp = ScanScientist(g_activePlayer)
 		    if gp then
 		        Controls.ScientistBar:       SetPercent( gp.Progress   / gp.Threshold )
@@ -1220,7 +1220,7 @@ local function UpdateTopPanelNow()
 		        Controls.ScientistTurns: SetText("")
 		    end
 		
-		    -- Engineer
+
 		    gp = ScanEngineer(g_activePlayer)
 		    if gp then
 		        Controls.EngineerBar:       SetPercent( gp.Progress   / gp.Threshold )
@@ -1235,7 +1235,7 @@ local function UpdateTopPanelNow()
 		        Controls.EngineerTurns:  SetText("")
 		    end
 		
-		    -- Merchant
+
 		    gp = ScanMerchant(g_activePlayer)
 		    if gp then
 		        Controls.MerchantBar:       SetPercent( gp.Progress   / gp.Threshold )
@@ -1250,7 +1250,7 @@ local function UpdateTopPanelNow()
 		        Controls.MerchantTurns:  SetText("")
 		    end
 		
-		    -- Writer
+
 		    gp = ScanWriter(g_activePlayer)
 		    if gp then
 		        Controls.WriterBar:       SetPercent( gp.Progress   / gp.Threshold )
@@ -1265,7 +1265,7 @@ local function UpdateTopPanelNow()
 		        Controls.WriterTurns:   SetText("")
 		    end
 		
-		    -- Artist
+
 		    gp = ScanArtist(g_activePlayer)
 		    if gp then
 		        Controls.ArtistBar:       SetPercent( gp.Progress   / gp.Threshold )
@@ -1280,7 +1280,7 @@ local function UpdateTopPanelNow()
 		        Controls.ArtistTurns:   SetText("")
 		    end
 		
-		    -- Musician
+
 		    gp = ScanMusician(g_activePlayer)
 		    if gp then
 		        Controls.MusicianBar:       SetPercent( gp.Progress   / gp.Threshold )
@@ -1317,9 +1317,9 @@ local function UpdateTopPanelNow()
 		        Controls.GpTurns:  SetText("")
 		    end
 		end
-		-----------------------------
-		-- Update Alerts
-		-----------------------------
+
+
+
 
 		local unitSupplyProductionModifier = g_activePlayer:GetUnitProductionMaintenanceMod()
 		local globalProductionModifier = unhappyProductionModifier + unitSupplyProductionModifier
@@ -1365,9 +1365,9 @@ local function UpdateTopPanelNow()
 			Controls.UnitSupplyString:SetHide(true)
 		end
 
-		-----------------------------
-		-- Update date
-		-----------------------------
+
+
+
 		local date = Game.GetTurnString()
 
 		if gk_mode and g_activePlayer:IsUsingMayaCalendar() then
@@ -1377,18 +1377,18 @@ local function UpdateTopPanelNow()
 
 		Controls.CurrentDate:SetText( date )
 
-		-----------------------------
-		-- Update Tourism and
-		-- International Trade Routes
-		-----------------------------
+
+
+
+
 		if bnw_mode then
 			Controls.InternationalTradeRoutes:SetText( S( "%i/%i[ICON_INTERNATIONAL_TRADE]", g_activePlayer:GetNumInternationalTradeRoutesUsed(), g_activePlayer:GetNumInternationalTradeRoutesAvailable() ) )
 			Controls.TourismString:SetText( S( "%+i[ICON_TOURISM]", g_activePlayer:GetTourism() ) )
 		end
 	else
-		-----------------------------
-		-- Update affinity status
-		-----------------------------
+
+
+
 		Controls.Purity:LocalizeAndSetText( "TXT_KEY_AFFINITY_STATUS", GameInfo.Affinity_Types.AFFINITY_TYPE_PURITY.IconString, g_activePlayer:GetAffinityLevel( GameInfoTypes.AFFINITY_TYPE_PURITY ) )
 		local percentToNextPurityLevel = g_activePlayer:GetAffinityPercentTowardsNextLevel( GameInfoTypes.AFFINITY_TYPE_PURITY )
 		if g_activePlayer:GetAffinityPercentTowardsMaxLevel( GameInfoTypes.AFFINITY_TYPE_PURITY ) >= 100 then
@@ -1410,15 +1410,15 @@ local function UpdateTopPanelNow()
 		end
 		Controls.SupremacyProgressBar:Resize(5, math_floor((percentToNextSupremacyLevel/100)*30))
 
-		-----------------------------
-		-- Update energy stats
-		-----------------------------
+
+
+
 
 		Controls.GoldPerTurn:LocalizeAndSetText( "TXT_KEY_TOP_PANEL_ENERGY", g_activePlayer:GetEnergy(), g_activePlayer:CalculateGoldRate() )
 
-		-----------------------------
-		-- Update Health
-		-----------------------------
+
+
+
 		if g_isHealthEnabled then
 			local excessHealth = g_activePlayer:GetExcessHealth()
 			if excessHealth < 0 then
@@ -1426,17 +1426,17 @@ local function UpdateTopPanelNow()
 			else
 				Controls.HealthString:SetText( S("[COLOR_GREEN]%i[ENDCOLOR][ICON_HEALTH_1]", excessHealth) )
 			end
---				SetAutoWidthGridButton( Controls.HealthString, strHealth, BUTTON_PADDING )
+
 		end
 
-		-- Clever Firaxis...
+
 		culturePerTurn = g_activePlayer:GetTotalCulturePerTurn()
 		cultureProgress = g_activePlayer:GetCulture()
 	end
 
-	-----------------------------
-	-- Update Culture
-	-----------------------------
+
+
+
 
 	if g_isPoliciesEnabled then
 
@@ -1467,28 +1467,28 @@ local function UpdateTopPanelNow()
 	Controls.TopPanelBarR:SetSizeX( Controls.TopPanelDiploStack:GetSizeX() + 15 )
 end
 
----------------
--- Civilopedia
----------------
+
+
+
 Controls.CivilopediaButton:RegisterCallback( Mouse.eLClick, function() GamePedia( "" ) end )
 
----------------
--- Menu
----------------
+
+
+
 Controls.MenuButton:RegisterCallback( Mouse.eLClick,
 function()
 	return UIManager:QueuePopup( LookUpControl( "/InGame/GameMenu" ), PopupPriority.InGameMenu )
 end)
 
--------------------------------------------------
--- Science Tooltip & Click Actions
--------------------------------------------------
+
+
+
 local function OnTechLClick()
 	GamePopup( ButtonPopupTypes.BUTTONPOPUP_TECH_TREE, -1 )
 end
 local function OnTechRClick()
 	local techInfo = GameInfo.Technologies[ g_activePlayer:GetCurrentResearch() ] or GameInfo.Technologies[ g_activePlayer:GetCurrentResearch() ]
-	GamePedia( techInfo and techInfo.Description or "TXT_KEY_TECH_HEADING1_TITLE" )	-- TXT_KEY_PEDIA_CATEGORY_3_LABEL
+	GamePedia( techInfo and techInfo.Description or "TXT_KEY_TECH_HEADING1_TITLE" )
 end
 
 local function SetMark( line, size, percent, label, text )
@@ -1503,7 +1503,7 @@ local function SetMark( line, size, percent, label, text )
 	label:SetText( text )
 end
 
-g_toolTipHandler.SciencePerTurn = function()-- control )
+g_toolTipHandler.SciencePerTurn = function()
 
 	local tips = table()
 	local tech, showLine1, showLine2, showBlankMeter, showLossMeter, showAnimMeter, showProgressMeter, showPortrait
@@ -1524,7 +1524,7 @@ g_toolTipHandler.SciencePerTurn = function()-- control )
 		end
 
 		if techID ~= -1 then
-		-- Are we researching something right now?
+
 			local researchTurnsLeft = g_activePlayer:GetResearchTurnsLeft( techID, true )
 			tech = GameInfo.Technologies[ techID ]
 			local researchCost = g_activePlayer:GetResearchCost( techID )
@@ -1543,7 +1543,7 @@ g_toolTipHandler.SciencePerTurn = function()-- control )
 				end
 				tips:insert( tip )
 			end
--- todo: rationalize
+
 			local cost = g_activePlayer:GetResearchCost(techID) * 100
 			local progress = g_activePlayer:GetResearchProgress(techID) * 100
 			local change = g_activePlayer:GetYieldTimes100(YieldTypes.YIELD_SCIENCE)
@@ -1563,7 +1563,7 @@ g_toolTipHandler.SciencePerTurn = function()-- control )
 				showProgressMeter = true
 			end
 
-			-- Science LOSS from Budget Deficits
+
 			if loss < 0 then
 				showLossMeter = true
 				showBlankMeter = true
@@ -1584,7 +1584,7 @@ g_toolTipHandler.SciencePerTurn = function()-- control )
 			end
 
 		elseif recentTechID ~= -1 then
-		-- maybe we just finished something
+
 			showAnimMeter = true
 			tech = GameInfo.Technologies[ recentTechID ]
 			local tip = L"TXT_KEY_NOTIFICATION_SUMMARY_NEW_RESEARCH"
@@ -1594,13 +1594,13 @@ g_toolTipHandler.SciencePerTurn = function()-- control )
 			tips:insert( tip )
 		end
 
-		-- if we have one, update the tech picture
+
 		showPortrait = tech and IconHookup( tech.PortraitIndex, size, tech.IconAtlas, tipControls.ItemPortrait )
 
 		tips:insert( g_scienceTextColor )
 		tips:insert( S( "%+g", sciencePerTurnTimes100 / 100 ) .. "[ENDCOLOR] " .. L"TXT_KEY_REPLAY_DATA_SCIENCEPERTURN" )
 
-		-- Standardized science breakdown (must sum to sciencePerTurnTimes100 = GetYieldTimes100(YIELD_SCIENCE))
+
 		local scienceID     = YieldTypes.YIELD_SCIENCE
 		local scienceInfo   = GameInfo.Yields[scienceID]
 		local citiesNoTrade = g_activePlayer:GetYieldFromCitiesTimes100(scienceID, true)
@@ -1610,8 +1610,8 @@ g_toolTipHandler.SciencePerTurn = function()-- control )
 		local traits        = g_activePlayer:GetYieldFromTraitsTimes100(scienceID)
 		local misc          = g_activePlayer:GetYieldPerTurnFromMisc(scienceID) * 100
 		local religion      = g_activePlayer:GetYieldFromReligionTimes100(scienceID, g_activePlayer:GetYieldTimes100(scienceID, true))
-		local penalties     = g_activePlayer:GetYieldPenaltiesTimes100(scienceID) -- budget deficit, negative
-		local minors        = g_activePlayer:GetYieldFromMinorCivsTimes100(scienceID) -- Scholasticism
+		local penalties     = g_activePlayer:GetYieldPenaltiesTimes100(scienceID)
+		local minors        = g_activePlayer:GetYieldFromMinorCivsTimes100(scienceID)
 
 		local scienceIcon = YieldIcons[scienceID]
 		tips:insertLocalizedIfNonZero( "TXT_KEY_TP_YIELD_FROM_BUDGET_DEFICIT", penalties / 100, scienceIcon )
@@ -1628,21 +1628,21 @@ g_toolTipHandler.SciencePerTurn = function()-- control )
 		tips:insertLocalizedIfNonZero( "TXT_KEY_TP_YIELD_FROM_MINORS", minors / 100, scienceIcon )
 
 		if civ5_mode then
-			-- Science from Vassals / Compatibility with Putmalk's Civ IV Diplomacy Features Mod
+
 			if g_activePlayer.GetScienceFromVassalTimes100 then
 				tips:insertLocalizedIfNonZero( "TXT_KEY_TP_SCIENCE_VASSALS", g_activePlayer:GetScienceFromVassalTimes100() / 100 )
 			end
 
-			-- Compatibility with Gazebo's City-State Diplomacy Mod (CSD) for Brave New World v23
+
 			if g_activePlayer.GetScienceRateFromMinorAllies and g_activePlayer.GetScienceRateFromLeagueAid then
 				tips:insertLocalizedIfNonZero( "TXT_KEY_MINOR_SCIENCE_FROM_LEAGUE_ALLIES", g_activePlayer:GetScienceRateFromMinorAllies() )
 				tips:insertLocalizedIfNonZero( "TXT_KEY_SCIENCE_FUNDING_FROM_LEAGUE", g_activePlayer:GetScienceRateFromLeagueAid() )
 			end
 
-			-- Science from Research Agreements
+
 			tips:insertLocalizedIfNonZero( "TXT_KEY_TP_YIELD_FROM_RESEARCH_AGREEMENTS", researchAgr / 100, YieldIcons[YieldTypes.YIELD_SCIENCE] )
 
-			-- Show Research Agreements
+
 
 			local itemType, duration, finalTurn, data1, data2, data3, flag1, fromPlayerID
 			local gameTurn = Game.GetGameTurn() - 1
@@ -1658,8 +1658,8 @@ g_toolTipHandler.SciencePerTurn = function()-- control )
 					else
 						itemType, duration, finalTurn, data1, data2, fromPlayerID = g_deal:GetNextItem()
 					end
---local itemKey for k,v in pairs( TradeableItems ) do if itemType == v then itemKey = k break end end
---print( "Deal #", i, "item type", itemType, itemKey, "duration", duration, "finalTurn", finalTurn, "data1", data1, "data2", data2, "fromPlayerID", fromPlayerID)
+
+
 					if itemType == TradeableItems.TRADE_ITEM_RESEARCH_AGREEMENT and fromPlayerID ~= g_activePlayerID then
 						researchAgreementCounters[fromPlayerID] = finalTurn - gameTurn
 						break
@@ -1677,7 +1677,7 @@ g_toolTipHandler.SciencePerTurn = function()-- control )
 
 				if playerID ~= g_activePlayerID and player:IsAlive() and g_activeTeam:IsHasMet(teamID) then
 
-					-- has reseach agreement ?
+
 					if g_activeTeam:IsHasResearchAgreement(teamID) then
 						tips:insert( "[ICON_BULLET][COLOR_POSITIVE_TEXT]" .. player:GetName() .. "[ENDCOLOR]" )
 						if researchAgreementCounters[playerID] then
@@ -1694,19 +1694,19 @@ g_toolTipHandler.SciencePerTurn = function()-- control )
 				tips:insert( tipIndex+2, L"TXT_KEY_DO_RESEARCH_AGREEMENT" )
 			end
 		else
-			-- Science from Health
+
 			tips:insertLocalizedIfNonZero( "TXT_KEY_TP_SCIENCE_FROM_HEALTH", g_activePlayer:GetScienceFromHealthTimes100() / 100 )
 
-			-- Science from Culture Rate
+
 			tips:insertLocalizedIfNonZero( "TXT_KEY_TP_SCIENCE_FROM_CULTURE", g_activePlayer:GetScienceFromCultureTimes100() / 100 )
 
-			-- Science from Diplomacy Rate
+
 			local scienceFromDiplomacy = g_activePlayer:GetScienceFromDiplomacyTimes100() / 100
 			tips:insertLocalizedIf( scienceFromDiplomacy > 0 and "TXT_KEY_TP_SCIENCE_FROM_DIPLOMACY", scienceFromDiplomacy )
 			tips:insertLocalizedIf( scienceFromDiplomacy < 0 and "TXT_KEY_TP_NEGATIVE_SCIENCE_FROM_DIPLOMACY", -scienceFromDiplomacy )
 		end
 
-		-- Let people know that building more cities makes techs harder to get
+
 		if bnw_mode and g_isBasicHelp then
 			tips:insert( "" )
 			tips:insert( L( "TXT_KEY_TP_TECH_CITY_COST", Game.GetNumCitiesTechCostMod() * ( 100 + ( civBE_mode and g_activePlayer:GetNumCitiesResearchCostDiscount() or 0 ) ) / 100 ) )
@@ -1736,10 +1736,10 @@ if civ5_mode then
 	Controls.TechIcon:RegisterCallback( Mouse.eRClick, OnTechRClick )
 end
 
--------------------------------------------------
--- Gold Tooltip & Click Actions
--------------------------------------------------
-g_toolTipHandler.GoldPerTurn = function()-- control )
+
+
+
+g_toolTipHandler.GoldPerTurn = function()
 	local tips = table()
 
 	local goldPerTurnFromDiplomacy = g_activePlayer:GetGoldPerTurnFromDiplomacy()
@@ -1757,7 +1757,7 @@ g_toolTipHandler.GoldPerTurn = function()-- control )
 	local unitSupply = g_activePlayer:CalculateUnitSupply()
 	local buildingMaintenance = g_activePlayer:GetBuildingGoldMaintenance()
 	local improvementMaintenance = g_activePlayer:GetImprovementGoldMaintenance()
-	local vassalMaintenance = g_activePlayer.GetVassalGoldMaintenance and g_activePlayer:GetVassalGoldMaintenance() or 0	-- Compatibility with Putmalk's Civ IV Diplomacy Features Mod
+	local vassalMaintenance = g_activePlayer.GetVassalGoldMaintenance and g_activePlayer:GetVassalGoldMaintenance() or 0
 	local routeMaintenance = 0
 	local beaconEnergyDelta = 0
 
@@ -1771,7 +1771,7 @@ g_toolTipHandler.GoldPerTurn = function()-- control )
 		end
 	end
 
-	-- Total gold
+
 	local totalIncome, totalWealth
 	local explicitIncome = goldPerTurnFromCities + goldPerTurnFromOtherPlayers + cityConnectionGold + goldPerTurnFromReligion + tradeRouteGold + playerTraitGold
 	if civ5_mode then
@@ -1789,15 +1789,15 @@ g_toolTipHandler.GoldPerTurn = function()-- control )
 	local totalExpenses = unitCost + unitSupply + buildingMaintenance + improvementMaintenance + goldPerTurnToOtherPlayers + vassalMaintenance + routeMaintenance + beaconEnergyDelta
 	tips:insert( "" )
 
-	-- Gold per turn
+
 
 	tips:insert( S( "[COLOR_YELLOW]%+g[ENDCOLOR] ", g_activePlayer:GetYieldTimes100(YieldTypes.YIELD_GOLD) / 100 ) .. L(S("TXT_KEY_REPLAY_DATA_%sPERTURN", g_currencyString)) )
 
-	-- Science LOSS from Budget Deficits
+
 
 	tips:insertLocalizedIfNonZero( "TXT_KEY_TP_SCIENCE_FROM_BUDGET_DEFICIT", g_activePlayer:GetScienceFromBudgetDeficitTimes100() / 100 )
 
-	-- Income
+
 
 	tips:insert( "[COLOR_WHITE]" )
 	tips:insert( L("TXT_KEY_TP_TOTAL_INCOME", totalIncome / 100 ) )
@@ -1817,7 +1817,7 @@ g_toolTipHandler.GoldPerTurn = function()-- control )
 	tips:insertLocalizedBulletIfNonZero( "TXT_KEY_TP_YIELD_FROM_UNCATEGORIZED", (totalIncome - explicitIncome) / 100 )
 	tips:insert( "[ENDCOLOR]" )
 
-	-- Spending
+
 
 	tips:insert( "[COLOR:255:150:150:255]" .. L("TXT_KEY_TP_TOTAL_EXPENSES", totalExpenses ) )
 	tips:insertLocalizedBulletIfNonZero( "TXT_KEY_TP_UNIT_MAINT", unitCost )
@@ -1825,19 +1825,19 @@ g_toolTipHandler.GoldPerTurn = function()-- control )
 	tips:insertLocalizedBulletIfNonZero( S("TXT_KEY_TP_%s_BUILDING_MAINT", g_currencyString), buildingMaintenance )
 	tips:insertLocalizedBulletIfNonZero( S("TXT_KEY_TP_%s_TILE_MAINT", g_currencyString), improvementMaintenance )
 	tips:insertLocalizedBulletIfNonZero( "TXT_KEY_TP_ENERGY_ROUTE_MAINT", routeMaintenance )
-	tips:insertLocalizedBulletIfNonZero( "TXT_KEY_TP_GOLD_VASSAL_MAINT", vassalMaintenance )	-- Compatibility with Putmalk's Civ IV Diplomacy Features Mod
+	tips:insertLocalizedBulletIfNonZero( "TXT_KEY_TP_GOLD_VASSAL_MAINT", vassalMaintenance )
 	tips:insertLocalizedBulletIfNonZero( S("TXT_KEY_TP_%s_TO_OTHERS", g_currencyString), goldPerTurnToOtherPlayers )
 	tips:insertLocalizedBulletIfNonZero( "TXT_KEY_TP_ENERGY_TO_BEACON", beaconEnergyDelta )
 	tips:insert( "[ENDCOLOR]" )
 
-	-- show gold available for trade to the active player
+
 	local tipIndex = #tips
 
 	for playerID = 0, GameDefines.MAX_MAJOR_CIVS-1 do
 
 		local player = Players[playerID]
 
-		-- Valid player? - Can't be us, has to be alive, and has to be met
+
 		if playerID ~= g_activePlayerID and player:IsAlive() and g_activeTeam:IsHasMet( player:GetTeam() ) then
 			tips:insert( "[ICON_BULLET]" .. player:GetName() .. S("  %i%s(%+i)",
 					g_deal:GetGoldAvailable(playerID, -1), g_currencyIcon, player:GetYield(YieldTypes.YIELD_GOLD) ) )
@@ -1849,7 +1849,7 @@ g_toolTipHandler.GoldPerTurn = function()-- control )
 		tips:insert( tipIndex+2, L"TXT_KEY_EO_RESOURCES_AVAILBLE" )
 	end
 
-	-- Basic explanation
+
 
 	if g_isBasicHelp then
 		tips:insert( "" )
@@ -1863,9 +1863,9 @@ Controls.GoldPerTurn:RegisterCallback( Mouse.eRClick, function() GamePedia( S("T
 Controls.GoldPerTurn:SetToolTipCallback( requestTextToolTip )
 
 if civ5_mode then
-	-------------------------------------------------
-	-- Great People Tooltip & Click Actions
-	-------------------------------------------------
+
+
+
 	Controls.GpIcon:RegisterCallback( Mouse.eLClick,
 	function()
 		local gp = ScanGP( Players[Game.GetActivePlayer()] )
@@ -1880,7 +1880,7 @@ if civ5_mode then
 			return GamePedia( GameInfo.Units[ gp.Class.DefaultUnit ].Description )
 		end
 	end)
-	g_toolTipHandler.GpIcon = function()-- control )
+	g_toolTipHandler.GpIcon = function()
 		local tipText = ""
 		local gp = ScanGP( Players[Game.GetActivePlayer()] )
 		if gp then
@@ -1910,7 +1910,7 @@ if civ5_mode then
 			return GamePedia( GameInfo.Units[ gp.Class.DefaultUnit ].Description )
 		end
 	end)
-	g_toolTipHandler.ScientistIcon = function()-- control )
+	g_toolTipHandler.ScientistIcon = function()
 		local tipText = ""
 		local gp = ScanScientist( Players[Game.GetActivePlayer()] )
 		if gp then
@@ -1940,7 +1940,7 @@ if civ5_mode then
 			return GamePedia( GameInfo.Units[ gp.Class.DefaultUnit ].Description )
 		end
 	end)
-	g_toolTipHandler.EngineerIcon = function()-- control )
+	g_toolTipHandler.EngineerIcon = function()
 		local tipText = ""
 		local gp = ScanEngineer( Players[Game.GetActivePlayer()] )
 		if gp then
@@ -1970,7 +1970,7 @@ if civ5_mode then
 			return GamePedia( GameInfo.Units[ gp.Class.DefaultUnit ].Description )
 		end
 	end)
-	g_toolTipHandler.MerchantIcon = function()-- control )
+	g_toolTipHandler.MerchantIcon = function()
 		local tipText = ""
 		local gp = ScanMerchant( Players[Game.GetActivePlayer()] )
 		if gp then
@@ -2000,7 +2000,7 @@ if civ5_mode then
 			return GamePedia( GameInfo.Units[ gp.Class.DefaultUnit ].Description )
 		end
 	end)
-	g_toolTipHandler.WriterIcon = function()-- control )
+	g_toolTipHandler.WriterIcon = function()
 		local tipText = ""
 		local gp = ScanWriter( Players[Game.GetActivePlayer()] )
 		if gp then
@@ -2030,7 +2030,7 @@ if civ5_mode then
 			return GamePedia( GameInfo.Units[ gp.Class.DefaultUnit ].Description )
 		end
 	end)
-	g_toolTipHandler.ArtistIcon = function()-- control )
+	g_toolTipHandler.ArtistIcon = function()
 		local tipText = ""
 		local gp = ScanArtist( Players[Game.GetActivePlayer()] )
 		if gp then
@@ -2060,7 +2060,7 @@ if civ5_mode then
 			return GamePedia( GameInfo.Units[ gp.Class.DefaultUnit ].Description )
 		end
 	end)
-	g_toolTipHandler.MusicianIcon = function()-- control )
+	g_toolTipHandler.MusicianIcon = function()
 		local tipText = ""
 		local gp = ScanMusician( Players[Game.GetActivePlayer()] )
 		if gp then
@@ -2076,10 +2076,10 @@ if civ5_mode then
 	end
 	Controls.MusicianIcon:SetToolTipCallback( requestTextToolTip )
 	
-	-------------------------------------------------
-	-- Happiness Tooltip & Click Actions
-	-------------------------------------------------
-	g_toolTipHandler.HappinessString = function()-- control )
+
+
+
+	g_toolTipHandler.HappinessString = function()
 
 		if g_isHappinessEnabled then
 			local tips = table()
@@ -2109,7 +2109,7 @@ if civ5_mode then
 				religionHappiness = g_activePlayer:GetHappinessFromReligion()
 			else
 				garrisonedUnitsHappiness = g_activePlayer:GetHappinessFromGarrisonedUnits()
-				-- Loop through all the Minors the active player knows
+
 				for minorPlayerID = GameDefines.MAX_MAJOR_CIVS, GameDefines.MAX_CIV_PLAYERS-1 do
 					minorCivHappiness = minorCivHappiness + g_activePlayer:GetHappinessFromMinor(minorPlayerID)
 				end
@@ -2119,8 +2119,8 @@ if civ5_mode then
 			local extraHappinessPerCity = g_activePlayer:GetExtraHappinessPerCity() * g_activePlayer:GetNumCities()
 			local leagueHappiness = bnw_mode and g_activePlayer:GetHappinessFromLeagues() or 0
 			local totalHappiness = g_activePlayer:GetHappiness()
-			local happinessFromVassals = g_activePlayer.GetHappinessFromVassals and g_activePlayer:GetHappinessFromVassals() or 0	-- Compatibility with Putmalk's Civ IV Diplomacy Features Mod
-			local handicapHappiness = totalHappiness - policiesHappiness - resourcesHappiness - cityHappiness - buildingHappiness - garrisonedUnitsHappiness - minorCivHappiness - tradeRouteHappiness - religionHappiness - naturalWonderHappiness - extraHappinessPerCity - leagueHappiness - happinessFromVassals	-- Compatibility with Putmalk's Civ IV Diplomacy Features Mod
+			local happinessFromVassals = g_activePlayer.GetHappinessFromVassals and g_activePlayer:GetHappinessFromVassals() or 0
+			local handicapHappiness = totalHappiness - policiesHappiness - resourcesHappiness - cityHappiness - buildingHappiness - garrisonedUnitsHappiness - minorCivHappiness - tradeRouteHappiness - religionHappiness - naturalWonderHappiness - extraHappinessPerCity - leagueHappiness - happinessFromVassals
 
 			if g_activePlayer:IsEmpireVeryUnhappy() then
 
@@ -2133,14 +2133,14 @@ if civ5_mode then
 
 				tips:insert( "[COLOR:255:60:60:255]" .. L"TXT_KEY_TP_EMPIRE_UNHAPPY" .. "[ENDCOLOR]" )
 			end
-			-- Basic explanation of Happiness
+
 
 			if g_isBasicHelp then
 				tips:insert( L"TXT_KEY_TP_HAPPINESS_EXPLANATION" )
 				tips:insert( "" )
 			end
 
-			-- Individual Resource Info
+
 
 			local baseHappinessFromResources = 0
 			local numHappinessResources = 0
@@ -2152,7 +2152,7 @@ if civ5_mode then
 
 				local numResourceAvailable = g_activePlayer:GetNumResourceAvailable(resource.ID, true)
 				if numResourceAvailable > 0 then
-					local resourceHappiness = gk_mode and g_activePlayer:GetHappinessFromLuxury( resourceID ) or resource.Happiness	-- GetHappinessFromLuxury includes extra happiness
+					local resourceHappiness = gk_mode and g_activePlayer:GetHappinessFromLuxury( resourceID ) or resource.Happiness
 					if resourceHappiness > 0 then
 						availableResources = availableResources
 							.. " [COLOR_POSITIVE_TEXT]"
@@ -2173,8 +2173,8 @@ if civ5_mode then
 				end
 			end
 
-			--------------
-			-- Unhappiness
+
+
 			local unhappinessFromPupetCities = g_activePlayer:GetUnhappinessFromPuppetCityPopulation()
 			local unhappinessFromSpecialists = g_activePlayer:GetUnhappinessFromCitySpecialists()
 			local unhappinessFromPop = g_activePlayer:GetUnhappinessFromCityPopulation() - unhappinessFromSpecialists - unhappinessFromPupetCities
@@ -2190,8 +2190,8 @@ if civ5_mode then
 			tips:insertLocalizedBulletIfNonZero( "TXT_KEY_TP_HAPPINESS_POLICIES", math_min(policiesHappiness,0) )
 			tips:insertLocalizedBulletIfNonZero( "TXT_KEY_TP_UNHAPPINESS_PUBLIC_OPINION", bnw_mode and g_activePlayer:GetUnhappinessFromPublicOpinion() or 0 )
 
-			------------
-			-- Happiness
+
+
 			tips:insert( "[ENDCOLOR][COLOR:150:255:150:255]" )
 			tips:insert( L("TXT_KEY_TP_HAPPINESS_SOURCES", totalHappiness ) )
 			tips:insertLocalizedBulletIfNonZero( "TXT_KEY_TP_HAPPINESS_DIFFICULTY_LEVEL", handicapHappiness )
@@ -2205,15 +2205,15 @@ if civ5_mode then
 			tips:insertLocalizedBulletIfNonZero( "TXT_KEY_TP_HAPPINESS_CITY_COUNT", extraHappinessPerCity )
 			tips:insertLocalizedBulletIfNonZero( "TXT_KEY_TP_HAPPINESS_CITY_STATE_FRIENDSHIP", minorCivHappiness )
 			tips:insertLocalizedBulletIfNonZero( "TXT_KEY_TP_HAPPINESS_LEAGUES", leagueHappiness )
-			tips:insertLocalizedBulletIfNonZero( "TXT_KEY_TP_HAPPINESS_VASSALS", happinessFromVassals )	-- Compatibility with Putmalk's Civ IV Diplomacy Features Mod
+			tips:insertLocalizedBulletIfNonZero( "TXT_KEY_TP_HAPPINESS_VASSALS", happinessFromVassals )
 
-			-- Happiness from Luxury Variety
+
 			tips:insertLocalizedBulletIfNonZero( "          ", "TXT_KEY_TP_HAPPINESS_RESOURCE_VARIETY", happinessFromExtraResources )
 
-			-- Extra Happiness from each Luxury
+
 			tips:insertLocalizedBulletIfNonZero( "          ", "TXT_KEY_TP_HAPPINESS_EXTRA_PER_RESOURCE", extraLuxuryHappiness, numHappinessResources )
 
-			-- Misc Happiness from Resources
+
 			local miscHappiness = resourcesHappiness - baseHappinessFromResources - happinessFromExtraResources - (extraLuxuryHappiness * numHappinessResources)
 			tips:insertLocalizedBulletIfNonZero( "          ", "TXT_KEY_TP_HAPPINESS_OTHER_SOURCES", miscHappiness )
 
@@ -2225,9 +2225,9 @@ if civ5_mode then
 			tips:insert( "[ENDCOLOR]" )
 
 
-			----------------------------
-			-- Local Resources in Cities
-			----------------------------
+
+
+
 			local tip = ""
 			for _, resource in pairs( g_luxuries) do
 				local resourceID = resource.ID
@@ -2238,7 +2238,7 @@ if civ5_mode then
 			end
 			tips:insert( L"TXT_KEY_EO_LOCAL_RESOURCES" .. (#tip > 0 and tip or (" : "..L"TXT_KEY_TP_NO_RESOURCES_DISCOVERED")) )
 
-			-- Resources from city terrain
+
 			for city in g_activePlayer:Cities() do
 				local numConnectedResource = {}
 				local numUnconnectedResource = {}
@@ -2270,9 +2270,9 @@ if civ5_mode then
 				end
 			end
 
-			----------------------------
-			-- Import & Export Breakdown
-			----------------------------
+
+
+
 			local itemType, duration, finalTurn, data1, data2, data3, flag1, fromPlayerID
 			local gameTurn = Game.GetGameTurn()-1
 			local Exports = {}
@@ -2292,7 +2292,7 @@ if civ5_mode then
 					else
 						itemType, duration, finalTurn, data1, data2, fromPlayerID = g_deal:GetNextItem()
 					end
-					-- data1 is resourceID, data2 is quantity
+
 
 					if data2 and itemType == TradeableItems.TRADE_ITEM_RESOURCES and Game.GetResourceUsageType( data1 ) == ResourceUsageTypes.RESOURCEUSAGE_LUXURY then
 						local trade
@@ -2312,9 +2312,9 @@ if civ5_mode then
 			end
 			PopScratchDeal()
 
-			----------------------------
-			-- Imports
-			----------------------------
+
+
+
 			local tip = ""
 			for _, resource in pairs( g_luxuries) do
 				local resourceID = resource.ID
@@ -2356,9 +2356,9 @@ if civ5_mode then
 				end
 			end
 
-			----------------------------
-			-- Exports
-			----------------------------
+
+
+
 			local tip = ""
 			for _, resource in pairs( g_luxuries) do
 				local resourceID = resource.ID
@@ -2384,16 +2384,16 @@ if civ5_mode then
 					end
 				end
 			end
-			-- show resources available for trade to the active player
 
---			tips:insert( L"TXT_KEY_DIPLO_ITEMS_LUXURY_RESOURCES" )
---			tips:insert( missingResources )
+
+
+
 			tips:insert( "" )
 			tips:insert( L"TXT_KEY_EO_RESOURCES_AVAILBLE" )
 
-			----------------------------
-			-- Available for Import
-			----------------------------
+
+
+
 			for _, resource in pairs( g_luxuries) do
 				local resourceID = resource.ID
 				local resources = table()
@@ -2402,7 +2402,7 @@ if civ5_mode then
 					local player = Players[playerID]
 					local isMinorCiv = player:IsMinorCiv()
 
-					-- Valid player? - Can't be us, has to be alive and met, can't be allied city state
+
 					if playerID ~= g_activePlayerID
 						and player:IsAlive()
 						and g_activeTeam:IsHasMet( player:GetTeam() )
@@ -2432,10 +2432,10 @@ if civ5_mode then
 	Controls.HappinessString:RegisterCallback( Mouse.eRClick, function() GamePedia( "TXT_KEY_GOLD_HEADING1_TITLE" ) end )
 	Controls.HappinessString:SetToolTipCallback( requestTextToolTip )
 
-	-------------------------------------------------
-	-- Golden Age Tooltip
-	-------------------------------------------------
-	g_toolTipHandler.GoldenAgeString = function()-- control )
+
+
+
+	g_toolTipHandler.GoldenAgeString = function()
 		g_toolTipHandler.GoldenAgeIcon = g_toolTipHandler.GoldenAgeString
 
 		if g_isHappinessEnabled then
@@ -2455,16 +2455,16 @@ if civ5_mode then
 			end
 
 			local excessHappiness = g_activePlayer:GetExcessHappiness()
-			local cityGAP = g_activePlayer:GetGoldenAgePointsFromCities() -- v34
-			local totalGAP = g_activePlayer:GetTotalGoldenAgePointsInEmpire() -- v34
+			local cityGAP = g_activePlayer:GetGoldenAgePointsFromCities()
+			local totalGAP = g_activePlayer:GetTotalGoldenAgePointsInEmpire()
 			tips:insert( L( "TXT_KEY_PROGRESS_TOWARDS", "[COLOR_YELLOW]" .. Locale.ToUpper( "TXT_KEY_SPECIALISTSANDGP_GOLDENAGE_HEADING4_TITLE" ) .. "[ENDCOLOR]" ) .. " " .. happyProgress .. " / " .. happyNeeded )
-			-- Show estimated turns only if totalGAP > 0 -- v34
+
 			if totalGAP > 0 then
 				local turnsRemaining = math_ceil((happyNeeded - happyProgress) / totalGAP)
 				tips:insert( L("TXT_KEY_MISSION_START_GOLDENAGE") .. ": [COLOR_YELLOW]" .. Locale.ToUpper( L("TXT_KEY_STR_TURNS", turnsRemaining) ) .. "[ENDCOLOR]" )
 			end
 
-			-- Always show GAP sources independently
+
 			if excessHappiness >= 0 then
 				tips:insert( L("TXT_KEY_TP_GOLDEN_AGE_ADDITION_HAPPINESS", excessHappiness) )
 			elseif excessHappiness < 0 then
@@ -2498,11 +2498,11 @@ if civ5_mode then
 	Controls.GoldenAgeIcon:SetToolTipCallback( requestTextToolTip )
 	Controls.GoldenAgeString:SetToolTipCallback( requestTextToolTip )
 
-	-------------------------------------------------
-	-- Tourism Tooltip & Click Actions
-	-------------------------------------------------
+
+
+
 	if bnw_mode then
-		g_toolTipHandler.TourismString = function()-- control )
+		g_toolTipHandler.TourismString = function()
 
 			local totalGreatWorks = g_activePlayer:GetNumGreatWorks()
 			local totalSlots = g_activePlayer:GetNumGreatWorkSlots()
@@ -2522,13 +2522,13 @@ if civ5_mode then
 		end
 		Controls.TourismString:SetHide(false)
 		Controls.TourismString:RegisterCallback( Mouse.eLClick, function() GamePopup( ButtonPopupTypes.BUTTONPOPUP_CULTURE_OVERVIEW, 4 ) end )
-		Controls.TourismString:RegisterCallback( Mouse.eRClick, function() GamePedia( "TXT_KEY_CULTURE_TOURISM_HEADING2_TITLE" ) end )	-- TXT_KEY_CULTURE_TOURISM_AND_CULTURE_HEADING2_TITLE
+		Controls.TourismString:RegisterCallback( Mouse.eRClick, function() GamePedia( "TXT_KEY_CULTURE_TOURISM_HEADING2_TITLE" ) end )
 		Controls.TourismString:SetToolTipCallback( requestTextToolTip )
 
-		-------------------------------------------------
-		-- International Trade Routes Tooltip & Click Actions
-		-------------------------------------------------
-		g_toolTipHandler.InternationalTradeRoutes = function()-- control )
+
+
+
+		g_toolTipHandler.InternationalTradeRoutes = function()
 
 			local tipText = ""
 
@@ -2572,14 +2572,14 @@ if civ5_mode then
 		end
 		Controls.InternationalTradeRoutes:SetHide(false)
 		Controls.InternationalTradeRoutes:RegisterCallback( Mouse.eLClick, function() GamePopup( ButtonPopupTypes.BUTTONPOPUP_TRADE_ROUTE_OVERVIEW ) end )
-		Controls.InternationalTradeRoutes:RegisterCallback( Mouse.eRClick, function() GamePedia( "TXT_KEY_TRADE_ROUTES_HEADING2_TITLE" ) end )	-- TXT_KEY_TRADE_ROUTES_HEADING2_TITLE
+		Controls.InternationalTradeRoutes:RegisterCallback( Mouse.eRClick, function() GamePedia( "TXT_KEY_TRADE_ROUTES_HEADING2_TITLE" ) end )
 		Controls.InternationalTradeRoutes:SetToolTipCallback( requestTextToolTip )
 	end
 else
-	-- ===========================================================================
-	-- Health Tooltip
-	-- ===========================================================================
-	g_toolTipHandler.HealthString = function()-- control )
+
+
+
+	g_toolTipHandler.HealthString = function()
 		if g_isHealthEnabled then
 
 			local excessHealth = g_activePlayer:GetExcessHealth()
@@ -2622,9 +2622,9 @@ else
 			for yieldID = 0, YieldTypes.NUM_YIELD_TYPES-1 do
 				tips:insertLocalizedBulletIfNonZero( "TXT_KEY_TP_HEALTH_LEVEL_EFFECT_CITY_YIELD_MODIFIER", cityYieldMods[yieldID] or 0, YieldIcons[yieldID] or "???", YieldNames[yieldID] or "???" )
 			end
---			tips:insert( "[ENDCOLOR]" )
 
-			--*** HEALTH Breakdown ***--
+
+
 			local totalHealth		= g_activePlayer:GetHealth()
 			local handicapInfo		= GameInfo.HandicapInfos[g_activePlayer:GetHandicapType()]
 			local handicapHealth		= handicapInfo.BaseHealthRate
@@ -2632,7 +2632,7 @@ else
 			local extraCityHealth		= g_activePlayer:GetExtraHealthPerCity() * g_activePlayer:GetNumCities()
 			local healthFromPolicies	= g_activePlayer:GetHealthFromPolicies()
 			local healthFromTradeRoutes	= g_activePlayer:GetHealthFromTradeRoutes()
-			--local healthFromNationalSecurityProject	= g_activePlayer:GetHealthFromNationalSecurityProject(); WRM: Add this in when we have a text string for it
+
 
 			tips:insert( "[COLOR_WHITE]" )
 			tips:insertLocalized( "TXT_KEY_TP_HEALTH_SOURCES", totalHealth )
@@ -2644,7 +2644,7 @@ else
 			tips:insertLocalizedBulletIfNonZero( "TXT_KEY_TP_HEALTH_OTHER_SOURCES", totalHealth - handicapHealth - healthFromPolicies - healthFromCities - healthFromTradeRoutes - extraCityHealth )
 			tips:insert( "[ENDCOLOR]" )
 
-			--*** UNHEALTH Breakdown ***--
+
 			local totalUnhealth			= g_activePlayer:GetUnhealth()
 			local unhealthFromCities		= g_activePlayer:GetUnhealthFromCities()
 			local unhealthFromUnits			= g_activePlayer:GetUnhealthFromUnits()
@@ -2668,14 +2668,14 @@ else
 			tips:insertLocalizedBulletIfNonZero( "TXT_KEY_TP_YIELD_FROM_UNCATEGORIZED", totalUnhealth - ( unhealthFromCities + unhealthFromCityCount + unhealthFromConqueredCityCount + unhealthFromPop + unhealthFromPupetCities + unhealthFromSpecialists + unhealthFromConqueredCities + unhealthFromUnits ) / 100 )
 			tips:insert( "[ENDCOLOR]" )
 
-			-- Overall Unhealth Mod
+
 			local unhealthMod = g_activePlayer:GetUnhealthMod()
-			if unhealthMod > 0 then -- Positive mod means more Unhealth - this is a bad thing!
+			if unhealthMod > 0 then
 				tips:append( "[COLOR:255:150:150:255]" )
 			end
 			tips:insertLocalizedBulletIfNonZero( "TXT_KEY_TP_UNHEALTH_MOD", unhealthMod )
 
-			-- Basic explanation of Health
+
 			tips:insert( "[ENDCOLOR]" )
 			tips:insertLocalized( "TXT_KEY_TP_HEALTH_EXPLANATION", totalUnhealth )
 
@@ -2688,9 +2688,9 @@ else
 	Controls.HealthString:RegisterCallback( Mouse.eRClick, function() GamePedia( "TXT_KEY_GOLD_HEADING1_TITLE" ) end )
 	Controls.HealthString:SetToolTipCallback( requestTextToolTip )
 
-	-- ===========================================================================
-	-- Affinity Tooltips
-	-- ===========================================================================
+
+
+
 
 	g_toolTipHandler.Harmony = function() return setTextToolTip( GetHelpTextForAffinity( GameInfoTypes.AFFINITY_TYPE_HARMONY, g_activePlayer ) ) end
 	g_toolTipHandler.Purity = function() return setTextToolTip( GetHelpTextForAffinity( GameInfoTypes.AFFINITY_TYPE_PURITY, g_activePlayer ) ) end
@@ -2706,10 +2706,10 @@ else
 	Controls.Supremacy:RegisterCallback( Mouse.eLClick, function() GamePopup( ButtonPopupTypes.BUTTONPOPUP_ECONOMIC_OVERVIEW, 2 ) end )
 	Controls.Supremacy:RegisterCallback( Mouse.eRClick, function() GamePedia( GameInfo.Affinity_Types.AFFINITY_TYPE_SUPREMACY.Description ) end )
 end
--------------------------------------------------
--- Culture Tooltip & Click Actions
--------------------------------------------------
-g_toolTipHandler.CultureString = function()-- control )
+
+
+
+g_toolTipHandler.CultureString = function()
 
 	local tips = table()
 
@@ -2722,18 +2722,18 @@ g_toolTipHandler.CultureString = function()-- control )
 	else
 		local turnsRemaining = 1
 
-		local progress 		= g_activePlayer:GetJONSCulture(); -- Unspent Culture toward next Policy
-		local threshold 	= g_activePlayer:GetNextPolicyCost(); -- Culture cost of Next Policy
+		local progress 		= g_activePlayer:GetJONSCulture();
+		local threshold 	= g_activePlayer:GetNextPolicyCost();
 
-		local total 		= g_activePlayer:GetYieldTimes100(cultureID, false); -- total culture output, bool is used for religion calc
-		local cities 		= g_activePlayer:GetYieldFromCitiesTimes100(cultureID, false); -- total culture output of cities, bool can exclude trade routes
-		local otherPlayers 	= g_activePlayer:GetYieldFromOtherPlayersTimes100(cultureID); -- total culture from other players, currently not a thing ?v35
-		local happiness 	= g_activePlayer:GetYieldFromHappinessTimes100(cultureID); -- total culture from excess happiness, for culture this is expressed as a % of excess happiness as a yield
-		local traits 		= g_activePlayer:GetYieldFromTraitsTimes100(cultureID); -- total culture from leader traits
-		local misc 			= g_activePlayer:GetYieldPerTurnFromMisc(cultureID) * 100; -- flat player-level yield (free culture per turn, etc.)
-		local religion 		= g_activePlayer:GetYieldFromReligionTimes100(cultureID, g_activePlayer:GetYieldTimes100(cultureID, true)); -- total culture from religion, the 2nd parameter is for the previous total yield as there is a GoldenAge like mod baked into the function.
-		local penalties 	= g_activePlayer:GetYieldPenaltiesTimes100(cultureID); -- total culture lost from penalties, only used for science atm and generally expected to be negative
-		local minors 		= g_activePlayer:GetYieldFromMinorCivsTimes100(cultureID); -- total culture earned from CS friends and allies
+		local total 		= g_activePlayer:GetYieldTimes100(cultureID, false);
+		local cities 		= g_activePlayer:GetYieldFromCitiesTimes100(cultureID, false);
+		local otherPlayers 	= g_activePlayer:GetYieldFromOtherPlayersTimes100(cultureID);
+		local happiness 	= g_activePlayer:GetYieldFromHappinessTimes100(cultureID);
+		local traits 		= g_activePlayer:GetYieldFromTraitsTimes100(cultureID);
+		local misc 			= g_activePlayer:GetYieldPerTurnFromMisc(cultureID) * 100;
+		local religion 		= g_activePlayer:GetYieldFromReligionTimes100(cultureID, g_activePlayer:GetYieldTimes100(cultureID, true));
+		local penalties 	= g_activePlayer:GetYieldPenaltiesTimes100(cultureID);
+		local minors 		= g_activePlayer:GetYieldFromMinorCivsTimes100(cultureID);
 
 		if threshold > progress then
 			if total > 0 then
@@ -2762,7 +2762,7 @@ g_toolTipHandler.CultureString = function()-- control )
 
 		tips:insert( "" )
 		local cultureIcon = YieldIcons[cultureID];
-		-- Total
+
 		tips:insertLocalizedIfNonZero( "TXT_KEY_TP_YIELD", total / 100, cultureIcon );
 		tips:insertLocalizedIfNonZero( "TXT_KEY_TP_YIELD_FROM_CITIES", cities / 100, cultureIcon );
 		tips:insertLocalizedIfNonZero( "TXT_KEY_TP_YIELD_FROM_OTHER_PLAYERS", otherPlayers / 100, cultureIcon );
@@ -2785,24 +2785,24 @@ g_toolTipHandler.CultureString = function()-- control )
 
 		tips:insertLocalizedIfNonZero( "TXT_KEY_TP_YIELD_FROM_PENALTIES", penalties / 100, cultureIcon );
 		tips:insertLocalizedIfNonZero( "TXT_KEY_TP_YIELD_FROM_MINORS", minors / 100, cultureIcon );
-		-- Let people know that building more cities makes policies harder to get
+
 		if g_isBasicHelp then
 			tips:insert( "" )
-			tips:insert( L("TXT_KEY_TP_CULTURE_CITY_COST", Game.GetNumCitiesPolicyCostMod() * ( 100 + g_activePlayer:GetNumCitiesPolicyCostDiscount() ) / 100 ) ) -- NumCitiesPolicyCostDiscount is Lua Exposed in Lekmod only!
+			tips:insert( L("TXT_KEY_TP_CULTURE_CITY_COST", Game.GetNumCitiesPolicyCostMod() * ( 100 + g_activePlayer:GetNumCitiesPolicyCostDiscount() ) / 100 ) )
 		end
 	end
 
 	return setTextToolTip( tips:concat( "[NEWLINE]" ) )
 end
 Controls.CultureString:RegisterCallback( Mouse.eLClick, function() GamePopup( ButtonPopupTypes.BUTTONPOPUP_CHOOSEPOLICY ) end )
-Controls.CultureString:RegisterCallback( Mouse.eRClick, function() GamePedia( "TXT_KEY_CULTURE_HEADING1_TITLE" ) end )	-- TXT_KEY_PEDIA_CATEGORY_8_LABEL
+Controls.CultureString:RegisterCallback( Mouse.eRClick, function() GamePedia( "TXT_KEY_CULTURE_HEADING1_TITLE" ) end )
 Controls.CultureString:SetToolTipCallback( requestTextToolTip )
 
--------------------------------------------------
--- Faith Tooltip & Click Actions
--------------------------------------------------
+
+
+
 if civ5_mode and gk_mode then
-	g_toolTipHandler.FaithString = function()-- control )
+	g_toolTipHandler.FaithString = function()
 
 
 		if g_isReligionEnabled then
@@ -2819,7 +2819,7 @@ if civ5_mode and gk_mode then
 			tips:insert( "[COLOR_WHITE]" .. S("%+g", faithPerTurn ) .. "[ENDCOLOR] "
 				.. L"TXT_KEY_YIELD_FAITH" .. "[ICON_PEACE] " .. L"TXT_KEY_GOLD_PERTURN_HEADING4_TITLE" )
 
-			-- Standardized faith breakdown (must sum to faithPerTurn = GetYield(YIELD_FAITH))
+
 			local faithID   = YieldTypes.YIELD_FAITH
 			local faithInfo = GameInfo.Yields[faithID]
 			local cities    = g_activePlayer:GetYieldFromCitiesTimes100(faithID, false)
@@ -2844,7 +2844,7 @@ if civ5_mode and gk_mode then
 			end
 			tips:insertLocalizedIfNonZero( "TXT_KEY_TP_YIELD_FROM_MINORS", minors / 100, faithIcon )
 
-			-- New World Deluxe Scenario ( you still need to delete TopPanel.lua from ...\Steam\SteamApps\common\sid meier's civilization v\assets\DLC\DLC_07\Scenarios\Conquest of the New World Deluxe\UI )
+
 			if EUI.deluxe_scenario then
 				tips:insertLocalized( "TXT_KEY_NEWWORLD_SCENARIO_TP_RELIGION_TOOLTIP" )
 			else
@@ -2889,7 +2889,7 @@ if civ5_mode and gk_mode then
 			end
 			return setTextToolTip( tips:concat( "[NEWLINE]" ) )
 		else
-			return setTextToolTip( L"TXT_KEY_TOP_PANEL_RELIGION_OFF_TOOLTIP" )	--TXT_KEY_TOP_PANEL_RELIGION_OFF
+			return setTextToolTip( L"TXT_KEY_TOP_PANEL_RELIGION_OFF_TOOLTIP" )
 		end
 	end
 	g_toolTipHandler.FaithIcon = g_toolTipHandler.FaithString
@@ -2898,7 +2898,7 @@ if civ5_mode and gk_mode then
 		return GamePopup( ButtonPopupTypes.BUTTONPOPUP_RELIGION_OVERVIEW )
 	end
 	local function OnFaithRClick()
-		return GamePedia( "TXT_KEY_CONCEPT_RELIGION_FAITH_EARNING_DESCRIPTION" )	-- TXT_KEY_PEDIA_CATEGORY_15_LABEL
+		return GamePedia( "TXT_KEY_CONCEPT_RELIGION_FAITH_EARNING_DESCRIPTION" )
 	end
 	Controls.FaithString:RegisterCallback( Mouse.eLClick, OnFaithLClick )
 	Controls.FaithString:RegisterCallback( Mouse.eRClick, OnFaithRClick )
@@ -2911,14 +2911,14 @@ if civ5_mode and gk_mode then
 	Controls.FaithIcon:SetHide( false )
 end
 
--------------------------------------------------
--- Strategic Resources Tooltips & Click Actions
--------------------------------------------------
+
+
+
 local function ResourcesToolTip( control )
 
 	local tips = table()
 
-	-- show resources available to the active player
+
 
 	local resource = GameInfo.Resources[ control:GetVoid1() ]
 	local resourceID = resource and resource.ID
@@ -2930,8 +2930,8 @@ local function ResourcesToolTip( control )
 			( g_activeTeamTechs:HasTech( GameInfoTypes[ resource.TechReveal ] ) and
 			g_activeTeamTechs:HasTech( GameInfoTypes[ resource.TechCityTrade ] ) )
 		then
---			local numResourceTotal = g_activePlayer:GetNumResourceTotal( resourceID, true )	-- true means includes both imports & minors - but exports are deducted regardless
-			local numResourceAvailable = g_activePlayer:GetNumResourceAvailable( resourceID, true )	-- same as (total - used)
+
+			local numResourceAvailable = g_activePlayer:GetNumResourceAvailable( resourceID, true )
 			local numResourceExport = g_activePlayer:GetResourceExport( resourceID )
 			local numResourceImport = g_activePlayer:GetResourceImport( resourceID ) + g_activePlayer:GetResourceFromMinors( resourceID )
 			local numResourceLocal = g_activePlayer:GetNumResourceTotal( resourceID, false ) + numResourceExport
@@ -2939,13 +2939,13 @@ local function ResourcesToolTip( control )
 			tips:insert( ColorizeAbs(numResourceAvailable) .. resource.IconString .. " " .. Locale.ToUpper(resource.Description) )
 			tips:insert( "----------------" )
 
-			----------------------------
-			-- Local Resources in Cities
-			----------------------------
+
+
+
 			tips:insert( "" )
 			tips:insert( Colorize(numResourceLocal) .. " " .. L"TXT_KEY_EO_LOCAL_RESOURCES" )
 
-			-- Resources from city terrain
+
 			for city in g_activePlayer:Cities() do
 				local numConnectedResource = 0
 				local numUnconnectedResource = 0
@@ -2971,25 +2971,25 @@ local function ResourcesToolTip( control )
 				end
 			end
 			if gk_mode then
-				-- Resources from buildings
+
 				local tipIndex = #tips
 				for row in GameInfo.Building_ResourceQuantity{ ResourceType = resource.Type } do
 					local building = GameInfo.Buildings[ row.BuildingType ]
 					local numResource = row.Quantity
 					if building and numResource and numResource > 0 then
 						local buildingID = building.ID
-						-- count how many such buildings player has
+
 						local numExisting = g_activePlayer:CountNumBuildings( buildingID )
-						-- count how many such units player is building
+
 						local numBuilds = 0
 						for city in g_activePlayer:Cities() do
 							if city:GetProductionBuilding() == buildingID then
 								numBuilds = numBuilds + 1
 							end
 						end
-						-- can player build this building someday ?
+
 						local canBuildSomeday
-						-- check whether this Unit has been blocked out by the civ XML
+
 						local buildingOverride = GameInfo.Civilization_BuildingClassOverrides{ CivilizationType = g_activeCivilization.Type, BuildingClassType = building.BuildingClass }()
 						if buildingOverride then
 							canBuildSomeday = buildingOverride.BuildingType == building.Type
@@ -2997,9 +2997,9 @@ local function ResourcesToolTip( control )
 							canBuildSomeday = GameInfo.BuildingClasses[ building.BuildingClass ].DefaultBuilding == building.Type
 						end
 						canBuildSomeday = canBuildSomeday and not (
-							-- no espionage buildings for a non-espionage game
+
 							( Game.IsOption(GameOptionTypes.GAMEOPTION_NO_ESPIONAGE) and building.IsEspionage )
-							-- Has obsolete tech?
+
 							or ( building.ObsoleteTech and g_activeTeamTechs:HasTech( GameInfoTypes[building.ObsoleteTech] ) )
 						)
 						if canBuildSomeday or numExisting > 0 or numBuilds > 0 then
@@ -3025,11 +3025,11 @@ local function ResourcesToolTip( control )
 					end
 				end
 			end
-			----------------------------
-			-- Import & Export Breakdown
-			----------------------------
 
-			-- Get specified resource traded with the active player
+
+
+
+
 
 			local itemType, duration, finalTurn, data1, data2, data3, flag1, fromPlayerID
 			local gameTurn = Game.GetGameTurn()-1
@@ -3050,7 +3050,7 @@ local function ResourcesToolTip( control )
 					else
 						itemType, duration, finalTurn, data1, data2, fromPlayerID = g_deal:GetNextItem()
 					end
-					-- data1 is resourceID, data2 is quantity
+
 
 					if itemType == TradeableItems.TRADE_ITEM_RESOURCES and data1 == resourceID and data2 then
 						if fromPlayerID == g_activePlayerID then
@@ -3063,9 +3063,9 @@ local function ResourcesToolTip( control )
 			end
 			PopScratchDeal()
 
-			----------------------------
-			-- Resource Imports
-			----------------------------
+
+
+
 			if numResourceImport > 0 then
 				tips:insert( "" )
 				tips:insert( Colorize(numResourceImport) .. " " .. L"TXT_KEY_RESOURCES_IMPORTED" )
@@ -3090,9 +3090,9 @@ local function ResourcesToolTip( control )
 					end
 				end
 			end
-			----------------------------
-			-- Resource Exports
-			----------------------------
+
+
+
 			if numResourceExport > 0 then
 				tips:insert( "" )
 				tips:insert( Colorize(-numResourceExport) .. " " .. L"TXT_KEY_RESOURCES_EXPORTED" )
@@ -3109,9 +3109,9 @@ local function ResourcesToolTip( control )
 				end
 			end
 
-			----------------------------
-			-- Resource Useage Breakdown
-			----------------------------
+
+
+
 			tips:insert( "" )
 			tips:insert( Colorize(-numResourceUsed) .. " " .. L"TXT_KEY_PEDIA_REQ_RESRC_LABEL" )
 			local tipIndex = #tips
@@ -3120,14 +3120,14 @@ local function ResourcesToolTip( control )
 				local unitID = unit.ID
 				local numResource = Game.GetNumResourceRequiredForUnit( unitID, resourceID )
 				if numResource > 0 then
-					-- count how many such units player has
+
 					local numExisting = 0
 					for unit in g_activePlayer:Units() do
 						if unit:GetUnitType() == unitID then
 							numExisting = numExisting + 1
 						end
 					end
-					-- count how many such units player is building
+
 					local numBuilds = 0
 					for city in g_activePlayer:Cities() do
 						for i=0, city:GetOrderQueueLength()-1 do
@@ -3137,10 +3137,10 @@ local function ResourcesToolTip( control )
 							end
 						end
 					end
-					-- can player build this unit someday ?
+
 					local canBuildSomeday = true
 					if bnw_mode then
-						-- does player trait prohibits training this unit ?
+
 						local leader = GameInfo.Leaders[ g_activePlayer:GetLeaderType() ]
 						for leaderTrait in GameInfo.Leader_Traits{ LeaderType = leader.Type } do
 							if GameInfo.Trait_NoTrain{ UnitClassType = unit.Class, TraitType = leaderTrait.TraitType }() then
@@ -3150,7 +3150,7 @@ local function ResourcesToolTip( control )
 						end
 					end
 					if canBuildSomeday then
-						-- check whether this Unit has been blocked out by the civ XML unit override
+
 						local unitOverride = GameInfo.Civilization_UnitClassOverrides{ CivilizationType = g_activeCivilization.Type, UnitClassType = unit.Class }()
 						if unitOverride then
 							canBuildSomeday = unitOverride.UnitType == unit.Type
@@ -3159,29 +3159,29 @@ local function ResourcesToolTip( control )
 						end
 					end
 					canBuildSomeday = canBuildSomeday and not (
-						-- one City Challenge?
+
 						( Game.IsOption(GameOptionTypes.GAMEOPTION_ONE_CITY_CHALLENGE) and (unit.Found or unit.FoundAbroad) )
-						-- Faith Requirements?
+
 						or ( g_isReligionEnabled and (unit.FoundReligion or unit.SpreadReligion or unit.RemoveHeresy) )
-						-- obsolete by tech?
+
 						or ( unit.ObsoleteTech and g_activeTeamTechs:HasTech( GameInfoTypes[unit.ObsoleteTech] ) )
 					)
 					if canBuildSomeday or numExisting > 0 or numBuilds > 0 then
 						local totalResource = (numExisting + numBuilds) * numResource
 						local tip = "[COLOR_YELLOW]" .. L( unit.Description ) .. "[ENDCOLOR]"
 						if canBuildSomeday then
-							-- Tech requirements
+
 							local tech = unit.PrereqTech and GameInfo.Technologies[ unit.PrereqTech ]
 							if tech and not g_activeTeamTechs:HasTech( tech.ID ) then
 								tip = S( "%s [COLOR_CYAN]%s[ENDCOLOR]", tip, L(tech.Description) )
 							end
-							-- Policy Requirement
+
 							local policy = civ5bnw_mode and unit.PolicyType and GameInfo.Policies[ unit.PolicyType ]
 							if policy and not g_activePlayer:HasPolicy( policy.ID ) then
 								tip = S( "%s [COLOR_MAGENTA]%s[ENDCOLOR]", tip, L(policy.Description) )
 							end
 							if civBE_mode then
-								-- Affinity Level Requirements
+
 								for affinityPrereq in GameInfo.Unit_AffinityPrereqs{ UnitType = unit.Type } do
 									local affinityInfo = (tonumber( affinityPrereq.Level) or 0 ) > 0 and GameInfo.Affinity_Types[ affinityPrereq.AffinityType ]
 									if affinityInfo and g_activePlayer:GetAffinityLevel( affinityInfo.ID ) < affinityPrereq.Level then
@@ -3203,9 +3203,9 @@ local function ResourcesToolTip( control )
 				local buildingID = building.ID
 				local numResource = Game.GetNumResourceRequiredForBuilding( buildingID, resourceID )
 				if numResource > 0 then
-					-- count how many such buildings player has
+
 					local numExisting = g_activePlayer:CountNumBuildings( buildingID )
-					-- count how many such units player is building
+
 					local numBuilds = 0
 					for city in g_activePlayer:Cities() do
 						for i=0, city:GetOrderQueueLength()-1 do
@@ -3215,9 +3215,9 @@ local function ResourcesToolTip( control )
 							end
 						end
 					end
-					-- can player build this building someday ?
+
 					local canBuildSomeday
-					-- check whether this Unit has been blocked out by the civ XML
+
 					local buildingOverride = GameInfo.Civilization_BuildingClassOverrides{ CivilizationType = g_activeCivilization.Type, BuildingClassType = building.BuildingClass }()
 					if buildingOverride then
 						canBuildSomeday = buildingOverride.BuildingType == building.Type
@@ -3225,9 +3225,9 @@ local function ResourcesToolTip( control )
 						canBuildSomeday = GameInfo.BuildingClasses[ building.BuildingClass ].DefaultBuilding == building.Type
 					end
 					canBuildSomeday = canBuildSomeday and not (
-						-- no espionage buildings for a non-espionage game
+
 						( Game.IsOption(GameOptionTypes.GAMEOPTION_NO_ESPIONAGE) and building.IsEspionage )
-						-- Has obsolete tech?
+
 						or ( civ5_mode and building.ObsoleteTech and g_activeTeamTechs:HasTech( GameInfoTypes[building.ObsoleteTech] ) )
 					)
 					if canBuildSomeday or numExisting > 0 or numBuilds > 0 then
@@ -3243,7 +3243,7 @@ local function ResourcesToolTip( control )
 								tip = S( "%s [COLOR_MAGENTA]%s[ENDCOLOR]", tip, L(policyBranch.Description) )
 							end
 							if civBE_mode then
-								-- Affinity Level Requirements
+
 								for affinityPrereq in GameInfo.Building_AffinityPrereqs{ BuildingType = building.Type } do
 									local affinityInfo = (tonumber( affinityPrereq.Level) or 0 ) > 0 and GameInfo.Affinity_Types[ affinityPrereq.AffinityType ]
 									if affinityInfo and g_activePlayer:GetAffinityLevel( affinityInfo.ID ) < affinityPrereq.Level then
@@ -3264,19 +3264,19 @@ local function ResourcesToolTip( control )
 		end
 	end
 
-	-- show foreign strategic resources available for trade to the active player
+
 
 	local tipIndex = #tips
 	local totalResource = 0
-	----------------------------
-	-- Available for Import
-	----------------------------
+
+
+
 	for playerID = 0, GameDefines.MAX_CIV_PLAYERS - 1 do
 
 		local player = Players[playerID]
 		local isMinorCiv = player:IsMinorCiv()
 
-		-- Valid player? - Can't be us, has to be alive, and has to be met
+
 		if playerID ~= g_activePlayerID
 			and player:IsAlive()
 			and g_activeTeam:IsHasMet( player:GetTeam() )
@@ -3304,7 +3304,7 @@ local function ResourcesTipHandler( control )
 	g_requestToolTipControl = control
 end
 
-local function OnResourceLClick()-- resourceID )
+local function OnResourceLClick()
 	return GamePopup( ButtonPopupTypes.BUTTONPOPUP_ECONOMIC_OVERVIEW )
 end
 local function OnResourceRClick( resourceID )
@@ -3325,9 +3325,9 @@ for resource in GameInfo.Resources() do
 	end
 end
 
--------------------------------------------------
--- Initialization
--------------------------------------------------
+
+
+
 
 local function UpdateTopPanel()
 	g_requestTopPanelUpdate = true
@@ -3367,15 +3367,15 @@ Controls.TopPanelMask:SetHide( true )
 
 ContextPtr:SetUpdate(
 function()
---	if IsGameCoreBusy() then
---		return
---	end
+
+
+
 
 	if g_alarmTime and os_time() >= g_alarmTime then
 		g_alarmTime = nil
 		UI.AddPopup{ Type = ButtonPopupTypes.BUTTONPOPUP_TEXT,
-			Data1 = 800,	-- WrapWidth
-			Option1 = true, -- show TopImage
+			Data1 = 800,
+			Option1 = true,
 			Text = os_date( g_clockFormat ) }
 	end
 
@@ -3405,13 +3405,13 @@ end)
 Events.SerialEventGameDataDirty.Add( UpdateTopPanel )
 Events.SerialEventTurnTimerDirty.Add( UpdateTopPanel )
 Events.SerialEventCityInfoDirty.Add( UpdateTopPanel )
-Events.SerialEventImprovementCreated.Add( UpdateTopPanel )	-- required to update happiness & resources if a resource got hooked up
+Events.SerialEventImprovementCreated.Add( UpdateTopPanel )
 Events.GameplaySetActivePlayer.Add( SetActivePlayer )
 Events.GameOptionsChanged.Add( UpdateOptions )
 
--------------------------------------------------
--- Alarm Clock
--------------------------------------------------
+
+
+
 
 for clockFormatIndex, clockFormat in ipairs( g_clockFormats ) do
 	local instance = {}
@@ -3462,7 +3462,7 @@ local function SetAlarmOptions()
 	local time = os_time(t)
 
 	if time < os_time()+2 then
-		time = time + 86400	-- 1 day in seconds
+		time = time + 86400
 	end
 	g_options.SetValue( "AlarmTime", time )
 	g_options.SetValue( "AlarmIsOn", Controls.AlarmCheckBox:IsChecked() )

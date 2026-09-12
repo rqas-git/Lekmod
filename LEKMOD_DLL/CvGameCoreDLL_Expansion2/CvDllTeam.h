@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 #include "CvDllInterfaces.h"
 
@@ -42,9 +42,9 @@ public:
 	void DLLCALL Read(FDataStream& kStream);
 	void DLLCALL Write(FDataStream& kStream) const;
 
-	//! Get the number of Techs the player has fully researched
+
 	virtual int DLLCALL GetTechCount() const;
-	//! Get all the techs the player has researched
+
 	virtual int DLLCALL GetTechs(TechTypes* pkTechArray, uint uiArraySize) const;
 
 private:

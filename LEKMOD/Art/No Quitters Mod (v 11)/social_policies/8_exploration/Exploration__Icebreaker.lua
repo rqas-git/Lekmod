@@ -9,12 +9,11 @@ function NQMP_Exploration_PlayerDoTurn(iPlayer)
 					local plot = unit:GetPlot()
 					if (plot:GetFeatureType() == featureIceID) then
 						plot:SetFeatureType(FeatureTypes["NO_FEATURE"], -1)
-						-- this doesn't work because the game has to be saved and reloaded for the graphics to update
-						-- that is impossible to fix through modding
+
+
 					end
 				end
 			end
 		end
 	end
 end
---GameEvents.PlayerDoTurn.Add(NQMP_Exploration_PlayerDoTurn);

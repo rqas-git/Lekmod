@@ -1,6 +1,6 @@
---==========================================================================================================================	
--- Diplomacy_Responses
---==========================================================================================================================
+
+
+
 CREATE TRIGGER WalesDiploReponse
 AFTER INSERT Diplomacy_Responses
 BEGIN	
@@ -204,5 +204,3 @@ INSERT INTO Diplomacy_Responses (LeaderType, ResponseType, Response, Bias) VALUE
 INSERT INTO Diplomacy_Responses (LeaderType, ResponseType, Response, Bias) VALUES ('LEADER_OWAIN_GLYNDWR','RESPONSE_WORK_WITH_US_NO',										'TXT_KEY_LEADER_US_OWAIN_DECLINE%','1');
 INSERT INTO Diplomacy_Responses (LeaderType, ResponseType, Response, Bias) VALUES ('LEADER_OWAIN_GLYNDWR','RESPONSE_WORK_WITH_US_YES',										'TXT_KEY_LEADER_US_OWAIN_WORK_WITH_US_YES%','1');	
 END;
---==========================================================================================================================			
---==========================================================================================================================						

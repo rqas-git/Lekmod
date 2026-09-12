@@ -1,18 +1,18 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
-//
-//  AUTHOR:	Eric MacDonald  --  8/2003
-//					Mustafa Thamer 11/2004
-//					Jon Shafer - 03/2005
-//
-//  PURPOSE: The base class for all info classes to inherit from.  This gives us the base description
-//				and type strings
-//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #include "CvGameCoreDLLPCH.h"
 #include "CvInfos.h"
@@ -24,26 +24,26 @@
 #include "FireWorks/FRemark.h"
 #include "CvInfosSerializationHelper.h"
 
-// must be included after all other headers
+
 #include "LintFree.h"
 #ifdef _MSC_VER
-#pragma warning ( disable : 4505 ) // unreferenced local function has been removed.. needed by REMARK below
-#endif//_MSC_VER
+#pragma warning ( disable : 4505 )
+#endif
 REMARK_GROUP("CvInfos");
 
-//////////////////////////////////////////////////////////////////////////
-// CvBaseInfo Members
-//////////////////////////////////////////////////////////////////////////
+
+
+
 CvBaseInfo::CvBaseInfo()
 	: m_iID(-1)
 {}
-//------------------------------------------------------------------------------
+
 bool CvBaseInfo::CacheResult(Database::Results& kResults)
 {
 	CvDatabaseUtility kUtility;
 	return CacheResults(kResults, kUtility);
 }
-//------------------------------------------------------------------------------
+
 bool CvBaseInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility&)
 {
 	m_iID				= kResults.GetInt("ID");
@@ -64,7 +64,7 @@ bool CvBaseInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility&)
 		m_strDescriptionKey = szDescription;
 		m_strDescription = GetLocalizedText(szDescription);
 
-		//CvInfoBase did this, gotta support it for now...
+
 		if(m_strTextKey.empty())
 		{
 			m_strTextKey = szDescription;
@@ -74,12 +74,12 @@ bool CvBaseInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility&)
 
 	return true;
 }
-//------------------------------------------------------------------------------
+
 const char* CvBaseInfo::GetText() const
 {
 	return (m_strText.empty())? NULL : m_strText.c_str();
 }
-//------------------------------------------------------------------------------
+
 const char* CvBaseInfo::GetTextKey() const
 {
 	return (m_strTextKey.empty())? NULL : m_strTextKey.c_str();
@@ -138,9 +138,9 @@ FDataStream& operator>>(FDataStream& loadFrom, CvBaseInfo& writeTo)
 	return loadFrom;
 }
 
-//======================================================================================================
-//			CvHotKeyInfo
-//======================================================================================================
+
+
+
 CvHotKeyInfo::CvHotKeyInfo() :
 	m_iActionInfoIndex(-1),
 	m_iHotKeyVal(-1),
@@ -157,17 +157,17 @@ CvHotKeyInfo::CvHotKeyInfo() :
 {
 }
 
-//------------------------------------------------------------------------------------------------------
-//
-//  FUNCTION:   GetHotKeyInt(char* pszHotKeyVal)
-//
-//  PURPOSE :   returns either the integer value of the keyboard mapping for the hot key or -1 if it
-//				doesn't exist.
-//
-//------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 int CvHotKeyInfo::GetHotKeyInt(const char* pszHotKeyVal)
 {
-	// SPEEDUP
+
 	struct CvKeyBoardMapping
 	{
 		char szDefineString[25];
@@ -189,7 +189,7 @@ int CvHotKeyInfo::GetHotKeyInt(const char* pszHotKeyVal)
 		{"KB_7",FKBInputDevice::KB_7},
 		{"KB_8",FKBInputDevice::KB_8},
 		{"KB_9",FKBInputDevice::KB_9},
-		{"KB_MINUS",FKBInputDevice::KB_MINUS},	    /* - on main keyboard */
+		{"KB_MINUS",FKBInputDevice::KB_MINUS},
 		{"KB_A",FKBInputDevice::KB_A},
 		{"KB_B",FKBInputDevice::KB_B},
 		{"KB_C",FKBInputDevice::KB_C},
@@ -221,11 +221,11 @@ int CvHotKeyInfo::GetHotKeyInt(const char* pszHotKeyVal)
 		{"KB_TAB",FKBInputDevice::KB_TAB},
 		{"KB_LBRACKET",FKBInputDevice::KB_LBRACKET},
 		{"KB_RBRACKET",FKBInputDevice::KB_RBRACKET},
-		{"KB_RETURN",FKBInputDevice::KB_RETURN},		/* Enter on main keyboard */
+		{"KB_RETURN",FKBInputDevice::KB_RETURN},
 		{"KB_LCONTROL",FKBInputDevice::KB_LCONTROL},
 		{"KB_SEMICOLON",FKBInputDevice::KB_SEMICOLON},
 		{"KB_APOSTROPHE",FKBInputDevice::KB_APOSTROPHE},
-		{"KB_GRAVE",FKBInputDevice::KB_GRAVE},		/* accent grave */
+		{"KB_GRAVE",FKBInputDevice::KB_GRAVE},
 		{"KB_LSHIFT",FKBInputDevice::KB_LSHIFT},
 		{"KB_BACKSLASH",FKBInputDevice::KB_BACKSLASH},
 		{"KB_COMMA",FKBInputDevice::KB_COMMA},
@@ -304,13 +304,13 @@ int CvHotKeyInfo::GetHotKeyInt(const char* pszHotKeyVal)
 }
 
 
-//------------------------------------------------------------------------------------------------------
-//
-//  FUNCTION:   CreateHotKeyFromDescription(bool bShift, bool bAlt, bool bCtrl)
-//
-//  PURPOSE :   create a hot key from a description and return it
-//
-//------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
 CvString CvHotKeyInfo::CreateHotKeyFromDescription(const char* pszHotKey, bool bShift, bool bAlt, bool bCtrl)
 {
 	CvString strHotKey;
@@ -338,13 +338,13 @@ CvString CvHotKeyInfo::CreateHotKeyFromDescription(const char* pszHotKey, bool b
 	return strHotKey;
 }
 
-//------------------------------------------------------------------------------------------------------
-//
-//  FUNCTION:   CreateKeyStringFromKBCode(const char* pszHotKey)
-//
-//  PURPOSE :   Create a keyboard string from a KB code, Delete would be returned for KB_DELETE
-//
-//------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
 CvString CvHotKeyInfo::CreateKeyStringFromKBCode(const char* pszHotKey)
 {
 	struct CvKeyBoardMapping
@@ -354,7 +354,7 @@ CvString CvHotKeyInfo::CreateKeyStringFromKBCode(const char* pszHotKey)
 		bool bIsLocalizedText;
 	};
 
-	// TODO - this should be a stl map instead of looping strcmp
+
 	const CvKeyBoardMapping asCvKeyBoardMapping[] =
 	{
 		{"KB_ESCAPE", "TXT_KEY_KEYBOARD_ESCAPE", true},
@@ -368,7 +368,7 @@ CvString CvHotKeyInfo::CreateKeyStringFromKBCode(const char* pszHotKey)
 		{"KB_7","7", false},
 		{"KB_8","8", false},
 		{"KB_9","9", false},
-		{"KB_MINUS","-", false},	    // - on main keyboard
+		{"KB_MINUS","-", false},
 		{"KB_A","A", false},
 		{"KB_B","B", false},
 		{"KB_C","C", false},
@@ -400,11 +400,11 @@ CvString CvHotKeyInfo::CreateKeyStringFromKBCode(const char* pszHotKey)
 		{"KB_TAB","TAB", false},
 		{"KB_LBRACKET","[", false},
 		{"KB_RBRACKET","]", false},
-		{"KB_RETURN", "TXT_KEY_KEYBOARD_ENTER", true},		// Enter on main keyboard
+		{"KB_RETURN", "TXT_KEY_KEYBOARD_ENTER", true},
 		{"KB_LCONTROL", "TXT_KEY_KEYBOARD_LEFT_CONTROL_KEY", true},
 		{"KB_SEMICOLON",";", false},
 		{"KB_APOSTROPHE","'", false},
-		{"KB_GRAVE","`", false},		// accent grave
+		{"KB_GRAVE","`", false},
 		{"KB_LSHIFT", "TXT_KEY_KEYBOARD_LEFT_SHIFT_KEY", true},
 		{"KB_BACKSLASH","\\"},
 		{"KB_COMMA",",", false},
@@ -527,7 +527,7 @@ bool CvHotKeyInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& 
 	return true;
 }
 #ifdef INGAME_HOTKEY_MANAGER
-//------------------------------------------------------------------------------
+
 void CvHotKeyInfo::UpdateHotkey(const char* szHK, bool bAlt, bool bShift, bool bCtrl)
 {
 	setHotKey(szHK);
@@ -538,147 +538,147 @@ void CvHotKeyInfo::UpdateHotkey(const char* szHK, bool bAlt, bool bShift, bool b
 	setHotKeyDescription(GetTextKey(), NULL, CreateHotKeyFromDescription(getHotKey(), m_bShiftDown, m_bAltDown, m_bCtrlDown));
 }
 #endif
-//------------------------------------------------------------------------------
+
 int CvHotKeyInfo::getActionInfoIndex() const
 {
 	return m_iActionInfoIndex;
 }
-//------------------------------------------------------------------------------
+
 void CvHotKeyInfo::setActionInfoIndex(int i)
 {
 	m_iActionInfoIndex = i;
 }
-//------------------------------------------------------------------------------
+
 int CvHotKeyInfo::getHotKeyVal() const
 {
 	return m_iHotKeyVal;
 }
-//------------------------------------------------------------------------------
+
 void CvHotKeyInfo::setHotKeyVal(int i)
 {
 	m_iHotKeyVal = i;
 }
-//------------------------------------------------------------------------------
+
 int CvHotKeyInfo::getHotKeyPriority() const
 {
 	return m_iHotKeyPriority;
 }
-//------------------------------------------------------------------------------
+
 void CvHotKeyInfo::setHotKeyPriority(int i)
 {
 	m_iHotKeyPriority = i;
 }
-//------------------------------------------------------------------------------
+
 int CvHotKeyInfo::getHotKeyValAlt() const
 {
 	return m_iHotKeyValAlt;
 }
-//------------------------------------------------------------------------------
+
 void CvHotKeyInfo::setHotKeyValAlt(int i)
 {
 	m_iHotKeyValAlt = i;
 }
-//------------------------------------------------------------------------------
+
 int CvHotKeyInfo::getHotKeyPriorityAlt() const
 {
 	return m_iHotKeyPriorityAlt;
 }
-//------------------------------------------------------------------------------
+
 void CvHotKeyInfo::setHotKeyPriorityAlt(int i)
 {
 	m_iHotKeyPriorityAlt = i;
 }
-//------------------------------------------------------------------------------
+
 int CvHotKeyInfo::getOrderPriority() const
 {
 	return m_iOrderPriority;
 }
-//------------------------------------------------------------------------------
+
 void CvHotKeyInfo::setOrderPriority(int i)
 {
 	m_iOrderPriority = i;
 }
-//------------------------------------------------------------------------------
+
 bool CvHotKeyInfo::isAltDown() const
 {
 	return m_bAltDown;
 }
-//------------------------------------------------------------------------------
+
 void CvHotKeyInfo::setAltDown(bool b)
 {
 	m_bAltDown = b;
 }
-//------------------------------------------------------------------------------
+
 bool CvHotKeyInfo::isShiftDown() const
 {
 	return m_bShiftDown;
 }
-//------------------------------------------------------------------------------
+
 void CvHotKeyInfo::setShiftDown(bool b)
 {
 	m_bShiftDown = b;
 }
-//------------------------------------------------------------------------------
+
 bool CvHotKeyInfo::isCtrlDown() const
 {
 	return m_bCtrlDown;
 }
-//------------------------------------------------------------------------------
+
 void CvHotKeyInfo::setCtrlDown(bool b)
 {
 	m_bCtrlDown = b;
 }
-//------------------------------------------------------------------------------
+
 bool CvHotKeyInfo::isAltDownAlt() const
 {
 	return m_bAltDownAlt;
 }
-//------------------------------------------------------------------------------
+
 void CvHotKeyInfo::setAltDownAlt(bool b)
 {
 	m_bAltDownAlt = b;
 }
-//------------------------------------------------------------------------------
+
 bool CvHotKeyInfo::isShiftDownAlt() const
 {
 	return m_bShiftDownAlt;
 }
-//------------------------------------------------------------------------------
+
 void CvHotKeyInfo::setShiftDownAlt(bool b)
 {
 	m_bShiftDownAlt = b;
 }
-//------------------------------------------------------------------------------
+
 bool CvHotKeyInfo::isCtrlDownAlt() const
 {
 	return m_bCtrlDownAlt;
 }
-//------------------------------------------------------------------------------
+
 void CvHotKeyInfo::setCtrlDownAlt(bool b)
 {
 	m_bCtrlDownAlt = b;
 }
-//------------------------------------------------------------------------------
+
 const char* CvHotKeyInfo::getHotKey() const
 {
 	return m_strHotKey;
 }
-//------------------------------------------------------------------------------
+
 void CvHotKeyInfo::setHotKey(const char* szVal)
 {
 	m_strHotKey = szVal;
 }
-//------------------------------------------------------------------------------
+
 const char* CvHotKeyInfo::getHelp() const
 {
 	return m_strHelp.c_str();
 }
-//------------------------------------------------------------------------------
+
 const char* CvHotKeyInfo::getDisabledHelp() const
 {
 	return m_strDisabledHelp.c_str();
 }
-//------------------------------------------------------------------------------
+
 std::string CvHotKeyInfo::getHotKeyDescription() const
 {
 	Localization::String strTempText;
@@ -703,13 +703,13 @@ std::string CvHotKeyInfo::getHotKeyDescription() const
 
 	return strHotKeyDescription;
 }
-//------------------------------------------------------------------------------
+
 const char* CvHotKeyInfo::getHotKeyString() const
 {
 	return m_strHotKeyString.c_str();
 }
 
-//------------------------------------------------------------------------------
+
 void CvHotKeyInfo::setHotKeyDescription(const char* szHotKeyDescKey, const char* szHotKeyAltDescKey, const char* szHotKeyString)
 {
 	m_strHotKeyDescriptionKey = szHotKeyDescKey;
@@ -717,9 +717,9 @@ void CvHotKeyInfo::setHotKeyDescription(const char* szHotKeyDescKey, const char*
 	m_strHotKeyString = szHotKeyString;
 }
 
-//======================================================================================================
-//					CvSpecialistInfo
-//======================================================================================================
+
+
+
 CvSpecialistInfo::CvSpecialistInfo() :
 	m_iCost(0),
 	m_iGreatPeopleUnitClass(NO_UNITCLASS),
@@ -732,28 +732,28 @@ CvSpecialistInfo::CvSpecialistInfo() :
 	m_iExperience(0)
 {
 }
-//------------------------------------------------------------------------------
+
 CvSpecialistInfo::~CvSpecialistInfo()
 {
 	SAFE_DELETE_ARRAY(m_piYieldChange);
 	SAFE_DELETE_ARRAY(m_piFlavorValue);
 }
-//------------------------------------------------------------------------------
+
 int CvSpecialistInfo::getCost() const
 {
 	return m_iCost;
 }
-//------------------------------------------------------------------------------
+
 int CvSpecialistInfo::getGreatPeopleUnitClass() const
 {
 	return m_iGreatPeopleUnitClass;
 }
-//------------------------------------------------------------------------------
+
 int CvSpecialistInfo::getGreatPeopleRateChange() const
 {
 	return m_iGreatPeopleRateChange;
 }
-//------------------------------------------------------------------------------
+
 int CvSpecialistInfo::getCulturePerTurn() const
 {
 	return m_iCulturePerTurn;
@@ -763,46 +763,46 @@ int CvSpecialistInfo::getMissionType() const
 {
 	return m_iMissionType;
 }
-//------------------------------------------------------------------------------
+
 void CvSpecialistInfo::setMissionType(int iNewType)
 {
 	m_iMissionType = iNewType;
 }
-//------------------------------------------------------------------------------
+
 bool CvSpecialistInfo::isVisible() const
 {
 	return m_bVisible;
 }
-//------------------------------------------------------------------------------
+
 int CvSpecialistInfo::getExperience() const
 {
 	return m_iExperience;
 }
-//------------------------------------------------------------------------------
+
 int CvSpecialistInfo::getYieldChange(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piYieldChange ? m_piYieldChange[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 const int* CvSpecialistInfo::getYieldChangeArray() const
 {
 	return m_piYieldChange;
 }
-//------------------------------------------------------------------------------
+
 int CvSpecialistInfo::getFlavorValue(int i) const
 {
 	CvAssertMsg(i < GC.getNumFlavorTypes(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piFlavorValue ? m_piFlavorValue[i] : 0;
 }
-//------------------------------------------------------------------------------
+
 const char* CvSpecialistInfo::getTexture() const
 {
 	return m_strTexture;
 }
-//------------------------------------------------------------------------------
+
 void CvSpecialistInfo::setTexture(const char* szVal)
 {
 	m_strTexture = szVal;
@@ -825,7 +825,7 @@ void CvSpecialistInfo::setGreatPersonIconString(const char* szVal)
 	m_szGreatPersonIconString = szVal;
 }
 #endif
-//------------------------------------------------------------------------------
+
 bool CvSpecialistInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvHotKeyInfo::CacheResults(kResults, kUtility))
@@ -845,7 +845,7 @@ bool CvSpecialistInfo::CacheResults(Database::Results& kResults, CvDatabaseUtili
 	const char* szGreatPeople = kResults.GetText("GreatPeopleUnitClass");
 	m_iGreatPeopleUnitClass = GC.getInfoTypeForString(szGreatPeople, true);
 
-	//Arrays
+
 	const char* szType = GetType();
 	kUtility.SetFlavors(m_piFlavorValue, "SpecialistFlavors", "SpecialistType", szType);
 	kUtility.SetYields(m_piYieldChange, "SpecialistYields", "SpecialistType", szType);
@@ -853,9 +853,9 @@ bool CvSpecialistInfo::CacheResults(Database::Results& kResults, CvDatabaseUtili
 	return true;
 }
 
-//======================================================================================================
-//					CvMissionInfo
-//======================================================================================================
+
+
+
 CvMissionInfo::CvMissionInfo() :
 	m_iTime(0),
 	m_bSound(false),
@@ -926,9 +926,9 @@ bool CvMissionInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 	return true;
 }
 
-//======================================================================================================
-//					CvCommandInfo
-//======================================================================================================
+
+
+
 CvCommandInfo::CvCommandInfo() :
 	m_iAutomate(NO_AUTOMATE),
 	m_bConfirmCommand(false),
@@ -936,32 +936,32 @@ CvCommandInfo::CvCommandInfo() :
 	m_bAll(false)
 {
 }
-//------------------------------------------------------------------------------
+
 int CvCommandInfo::getAutomate() const
 {
 	return m_iAutomate;
 }
-//------------------------------------------------------------------------------
+
 void CvCommandInfo::setAutomate(int i)
 {
 	m_iAutomate = i;
 }
-//------------------------------------------------------------------------------
+
 bool CvCommandInfo::getConfirmCommand() const
 {
 	return m_bConfirmCommand;
 }
-//------------------------------------------------------------------------------
+
 bool CvCommandInfo::getVisible() const
 {
 	return m_bVisible;
 }
-//------------------------------------------------------------------------------
+
 bool CvCommandInfo::getAll() const
 {
 	return m_bAll;
 }
-//------------------------------------------------------------------------------
+
 bool CvCommandInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvHotKeyInfo::CacheResults(kResults, kUtility))
@@ -978,9 +978,9 @@ bool CvCommandInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 	return true;
 }
 
-//======================================================================================================
-//					CvAutomateInfo
-//======================================================================================================
+
+
+
 CvAutomateInfo::CvAutomateInfo() :
 	m_iCommand(NO_COMMAND),
 	m_iAutomate(NO_AUTOMATE),
@@ -988,37 +988,37 @@ CvAutomateInfo::CvAutomateInfo() :
 	m_bVisible(false)
 {
 }
-//------------------------------------------------------------------------------
+
 int CvAutomateInfo::getCommand() const
 {
 	return m_iCommand;
 }
-//------------------------------------------------------------------------------
+
 void CvAutomateInfo::setCommand(int i)
 {
 	m_iCommand = i;
 }
-//------------------------------------------------------------------------------
+
 int CvAutomateInfo::getAutomate() const
 {
 	return m_iAutomate;
 }
-//------------------------------------------------------------------------------
+
 void CvAutomateInfo::setAutomate(int i)
 {
 	m_iAutomate = i;
 }
-//------------------------------------------------------------------------------
+
 bool CvAutomateInfo::getConfirmCommand() const
 {
 	return m_bConfirmCommand;
 }
-//------------------------------------------------------------------------------
+
 bool CvAutomateInfo::getVisible() const
 {
 	return m_bVisible;
 }
-//------------------------------------------------------------------------------
+
 bool CvAutomateInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvHotKeyInfo::CacheResults(kResults, kUtility))
@@ -1036,16 +1036,16 @@ bool CvAutomateInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility
 	return true;
 }
 
-//======================================================================================================
-//					CvActionInfo
-//======================================================================================================
+
+
+
 CvActionInfo::CvActionInfo() :
 	m_iOriginalIndex(-1),
 	m_eSubType(NO_ACTIONSUBTYPE)
 {
 }
 #ifdef INGAME_HOTKEY_MANAGER
-//------------------------------------------------------------------------------
+
 void CvActionInfo::UpdateHotkey(const char* szHK, bool bAlt, bool bShift, bool bCtrl) const
 {
 	if (getHotkeyInfo())
@@ -1054,7 +1054,7 @@ void CvActionInfo::UpdateHotkey(const char* szHK, bool bAlt, bool bShift, bool b
 	}
 }
 #endif
-//------------------------------------------------------------------------------
+
 int CvActionInfo::getMissionData() const
 {
 
@@ -1068,7 +1068,7 @@ int CvActionInfo::getMissionData() const
 
 	return -1;
 }
-//------------------------------------------------------------------------------
+
 int CvActionInfo::getCommandData() const
 {
 
@@ -1092,7 +1092,7 @@ int CvActionInfo::getCommandData() const
 	return -1;
 #endif
 }
-//------------------------------------------------------------------------------
+
 int CvActionInfo::getAutomateType() const
 {
 
@@ -1115,7 +1115,7 @@ int CvActionInfo::getAutomateType() const
 
 	return NO_AUTOMATE;
 }
-//------------------------------------------------------------------------------
+
 int CvActionInfo::getInterfaceModeType() const
 {
 	if(ACTIONSUBTYPE_INTERFACEMODE == m_eSubType)
@@ -1124,7 +1124,7 @@ int CvActionInfo::getInterfaceModeType() const
 	}
 	return NO_INTERFACEMODE;
 }
-//------------------------------------------------------------------------------
+
 int CvActionInfo::getMissionType() const
 {
 	if(ACTIONSUBTYPE_BUILD == m_eSubType)
@@ -1146,7 +1146,7 @@ int CvActionInfo::getMissionType() const
 
 	return NO_MISSION;
 }
-//------------------------------------------------------------------------------
+
 int CvActionInfo::getCommandType() const
 {
 	if(ACTIONSUBTYPE_COMMAND == m_eSubType)
@@ -1172,7 +1172,7 @@ int CvActionInfo::getCommandType() const
 
 	return NO_COMMAND;
 }
-//------------------------------------------------------------------------------
+
 int CvActionInfo::getControlType() const
 {
 	if(ACTIONSUBTYPE_CONTROL == m_eSubType)
@@ -1181,17 +1181,17 @@ int CvActionInfo::getControlType() const
 	}
 	return -1;
 }
-//------------------------------------------------------------------------------
+
 int CvActionInfo::getOriginalIndex() const
 {
 	return m_iOriginalIndex;
 }
-//------------------------------------------------------------------------------
+
 void CvActionInfo::setOriginalIndex(int i)
 {
 	m_iOriginalIndex = i;
 }
-//------------------------------------------------------------------------------
+
 bool CvActionInfo::isConfirmCommand() const
 {
 	if(ACTIONSUBTYPE_COMMAND == m_eSubType)
@@ -1213,7 +1213,7 @@ bool CvActionInfo::isConfirmCommand() const
 
 	return false;
 }
-//------------------------------------------------------------------------------
+
 bool CvActionInfo::isVisible() const
 {
 	if(ACTIONSUBTYPE_CONTROL == m_eSubType)
@@ -1255,17 +1255,17 @@ bool CvActionInfo::isVisible() const
 
 	return true;
 }
-//------------------------------------------------------------------------------
+
 ActionSubTypes CvActionInfo::getSubType() const
 {
 	return m_eSubType;
 }
-//------------------------------------------------------------------------------
+
 void CvActionInfo::setSubType(ActionSubTypes eSubType)
 {
 	m_eSubType = eSubType;
 }
-//------------------------------------------------------------------------------
+
 CvHotKeyInfo* CvActionInfo::getHotkeyInfo() const
 {
 	switch(getSubType())
@@ -1347,7 +1347,7 @@ CvHotKeyInfo* CvActionInfo::getHotkeyInfo() const
 	CvAssertMsg((0) ,"Unknown Action Subtype in CvActionInfo::getHotkeyInfo");
 	return NULL;
 }
-//------------------------------------------------------------------------------
+
 const char* CvActionInfo::GetType() const
 {
 	if(getHotkeyInfo())
@@ -1357,7 +1357,7 @@ const char* CvActionInfo::GetType() const
 
 	return NULL;
 }
-//------------------------------------------------------------------------------
+
 const char* CvActionInfo::GetDescription() const
 {
 	if(getHotkeyInfo())
@@ -1367,7 +1367,7 @@ const char* CvActionInfo::GetDescription() const
 
 	return "";
 }
-//------------------------------------------------------------------------------
+
 const char* CvActionInfo::GetCivilopedia() const
 {
 	if(getHotkeyInfo())
@@ -1377,7 +1377,7 @@ const char* CvActionInfo::GetCivilopedia() const
 
 	return "";
 }
-//------------------------------------------------------------------------------
+
 const char* CvActionInfo::GetHelp() const
 {
 	if(getHotkeyInfo())
@@ -1387,7 +1387,7 @@ const char* CvActionInfo::GetHelp() const
 
 	return "";
 }
-//------------------------------------------------------------------------------
+
 const char* CvActionInfo::GetDisabledHelp() const
 {
 	if(getHotkeyInfo())
@@ -1397,7 +1397,7 @@ const char* CvActionInfo::GetDisabledHelp() const
 
 	return "";
 }
-//------------------------------------------------------------------------------
+
 const char* CvActionInfo::GetStrategy() const
 {
 	if(getHotkeyInfo())
@@ -1407,7 +1407,7 @@ const char* CvActionInfo::GetStrategy() const
 
 	return "";
 }
-//------------------------------------------------------------------------------
+
 const char* CvActionInfo::GetTextKey() const
 {
 	if(getHotkeyInfo())
@@ -1417,7 +1417,7 @@ const char* CvActionInfo::GetTextKey() const
 
 	return NULL;
 }
-//------------------------------------------------------------------------------
+
 int CvActionInfo::getActionInfoIndex() const
 {
 	if(getHotkeyInfo())
@@ -1427,7 +1427,7 @@ int CvActionInfo::getActionInfoIndex() const
 
 	return -1;
 }
-//------------------------------------------------------------------------------
+
 int CvActionInfo::getHotKeyVal() const
 {
 	if(getHotkeyInfo())
@@ -1437,7 +1437,7 @@ int CvActionInfo::getHotKeyVal() const
 
 	return -1;
 }
-//------------------------------------------------------------------------------
+
 int CvActionInfo::getHotKeyPriority() const
 {
 	if(getHotkeyInfo())
@@ -1447,7 +1447,7 @@ int CvActionInfo::getHotKeyPriority() const
 
 	return -1;
 }
-//------------------------------------------------------------------------------
+
 int CvActionInfo::getHotKeyValAlt() const
 {
 	if(getHotkeyInfo())
@@ -1457,7 +1457,7 @@ int CvActionInfo::getHotKeyValAlt() const
 
 	return -1;
 }
-//------------------------------------------------------------------------------
+
 int CvActionInfo::getHotKeyPriorityAlt() const
 {
 	if(getHotkeyInfo())
@@ -1467,7 +1467,7 @@ int CvActionInfo::getHotKeyPriorityAlt() const
 
 	return -1;
 }
-//------------------------------------------------------------------------------
+
 int CvActionInfo::getOrderPriority() const
 {
 	if(getHotkeyInfo())
@@ -1477,7 +1477,7 @@ int CvActionInfo::getOrderPriority() const
 
 	return -1;
 }
-//------------------------------------------------------------------------------
+
 bool CvActionInfo::isAltDown() const
 {
 	if(getHotkeyInfo())
@@ -1487,7 +1487,7 @@ bool CvActionInfo::isAltDown() const
 
 	return false;
 }
-//------------------------------------------------------------------------------
+
 bool CvActionInfo::isShiftDown() const
 {
 	if(getHotkeyInfo())
@@ -1497,7 +1497,7 @@ bool CvActionInfo::isShiftDown() const
 
 	return false;
 }
-//------------------------------------------------------------------------------
+
 bool CvActionInfo::isCtrlDown() const
 {
 	if(getHotkeyInfo())
@@ -1507,7 +1507,7 @@ bool CvActionInfo::isCtrlDown() const
 
 	return false;
 }
-//------------------------------------------------------------------------------
+
 bool CvActionInfo::isAltDownAlt() const
 {
 	if(getHotkeyInfo())
@@ -1517,7 +1517,7 @@ bool CvActionInfo::isAltDownAlt() const
 
 	return false;
 }
-//------------------------------------------------------------------------------
+
 bool CvActionInfo::isShiftDownAlt() const
 {
 	if(getHotkeyInfo())
@@ -1527,7 +1527,7 @@ bool CvActionInfo::isShiftDownAlt() const
 
 	return false;
 }
-//------------------------------------------------------------------------------
+
 bool CvActionInfo::isCtrlDownAlt() const
 {
 	if(getHotkeyInfo())
@@ -1537,7 +1537,7 @@ bool CvActionInfo::isCtrlDownAlt() const
 
 	return false;
 }
-//------------------------------------------------------------------------------
+
 const char* CvActionInfo::getHotKey() const
 {
 	if(getHotkeyInfo())
@@ -1547,7 +1547,7 @@ const char* CvActionInfo::getHotKey() const
 
 	return NULL;
 }
-//------------------------------------------------------------------------------
+
 std::string CvActionInfo::getHotKeyDescription() const
 {
 	if(getHotkeyInfo())
@@ -1557,7 +1557,7 @@ std::string CvActionInfo::getHotKeyDescription() const
 
 	return "";
 }
-//------------------------------------------------------------------------------
+
 const char* CvActionInfo::getHotKeyString() const
 {
 	if(getHotkeyInfo())
@@ -1568,9 +1568,9 @@ const char* CvActionInfo::getHotKeyString() const
 	return "";
 }
 
-//======================================================================================================
-//					CvMultiUnitFormationInfo
-//======================================================================================================
+
+
+
 const char* CvMultiUnitFormationInfo::getFormationName() const
 {
 	return m_strFormationName;
@@ -1591,12 +1591,12 @@ const CvFormationSlotEntry& CvMultiUnitFormationInfo::getFormationSlotEntry(int 
 	return m_vctSlotEntries[index];
 }
 
-//------------------------------------------------------------------------------
+
 void CvMultiUnitFormationInfo::addFormationSlotEntry(const CvFormationSlotEntry& slotEntry)
 {
 	m_vctSlotEntries.push_back(slotEntry);
 }
-//------------------------------------------------------------------------------
+
 bool CvMultiUnitFormationInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -1605,7 +1605,7 @@ bool CvMultiUnitFormationInfo::CacheResults(Database::Results& kResults, CvDatab
 	m_strFormationName = kResults.GetText("Name");
 	m_bRequiresNavalUnitConsistency = kResults.GetBool("RequiresNavalUnitConsistency");
 
-	//Slot entries
+
 	{
 		Database::Results kSlotEntries;
 		if(DB.SelectAt(kSlotEntries, "MultiUnitFormation_SlotEntries", "MultiUnitFormationType", GetType()))
@@ -1614,10 +1614,10 @@ bool CvMultiUnitFormationInfo::CacheResults(Database::Results& kResults, CvDatab
 			{
 				CvFormationSlotEntry slotEntry;
 
-				//Basic Properties
+
 				slotEntry.m_requiredSlot = kSlotEntries.GetBool("RequiredSlot");
 
-				//References
+
 				const char* szTextVal = NULL;
 				szTextVal = kSlotEntries.GetText("MultiUnitPositionType");
 				slotEntry.m_ePositionType = (MultiunitPositionTypes)GC.getInfoTypeForString(szTextVal, true);
@@ -1636,9 +1636,9 @@ bool CvMultiUnitFormationInfo::CacheResults(Database::Results& kResults, CvDatab
 	return true;
 }
 
-//======================================================================================================
-//					CvSpecialUnitInfo
-//======================================================================================================
+
+
+
 CvSpecialUnitInfo::CvSpecialUnitInfo() :
 	m_bValid(false),
 	m_bCityLoad(false),
@@ -1646,37 +1646,37 @@ CvSpecialUnitInfo::CvSpecialUnitInfo() :
 	m_piProductionTraits(NULL)
 {
 }
-//------------------------------------------------------------------------------
+
 CvSpecialUnitInfo::~CvSpecialUnitInfo()
 {
 	SAFE_DELETE_ARRAY(m_pbCarrierUnitAITypes);
 	SAFE_DELETE_ARRAY(m_piProductionTraits);
 }
-//------------------------------------------------------------------------------
+
 bool CvSpecialUnitInfo::isValid() const
 {
 	return m_bValid;
 }
-//------------------------------------------------------------------------------
+
 bool CvSpecialUnitInfo::isCityLoad() const
 {
 	return m_bCityLoad;
 }
-//------------------------------------------------------------------------------
+
 bool CvSpecialUnitInfo::isCarrierUnitAIType(int i) const
 {
 	CvAssertMsg(i < NUM_UNITAI_TYPES, "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_pbCarrierUnitAITypes ? m_pbCarrierUnitAITypes[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 int CvSpecialUnitInfo::getProductionTraits(int i) const
 {
 	CvAssertMsg(i < GC.getNumTraitInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piProductionTraits ? m_piProductionTraits[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 bool CvSpecialUnitInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -1692,9 +1692,9 @@ bool CvSpecialUnitInfo::CacheResults(Database::Results& kResults, CvDatabaseUtil
 	return true;
 }
 
-//======================================================================================================
-//					CvUnitClassInfo
-//======================================================================================================
+
+
+
 CvUnitClassInfo::CvUnitClassInfo() :
 	m_iMaxGlobalInstances(0),
 	m_iMaxTeamInstances(0),
@@ -1703,37 +1703,37 @@ CvUnitClassInfo::CvUnitClassInfo() :
 	m_iDefaultUnitIndex(NO_UNIT)
 {
 }
-//------------------------------------------------------------------------------
+
 int CvUnitClassInfo::getMaxGlobalInstances() const
 {
 	return m_iMaxGlobalInstances;
 }
-//------------------------------------------------------------------------------
+
 int CvUnitClassInfo::getMaxTeamInstances() const
 {
 	return m_iMaxTeamInstances;
 }
-//------------------------------------------------------------------------------
+
 int CvUnitClassInfo::getMaxPlayerInstances() const
 {
 	return m_iMaxPlayerInstances;
 }
-//------------------------------------------------------------------------------
+
 int CvUnitClassInfo::getInstanceCostModifier() const
 {
 	return m_iInstanceCostModifier;
 }
-//------------------------------------------------------------------------------
+
 int CvUnitClassInfo::getDefaultUnitIndex() const
 {
 	return m_iDefaultUnitIndex;
 }
-//------------------------------------------------------------------------------
+
 void CvUnitClassInfo::setDefaultUnitIndex(int i)
 {
 	m_iDefaultUnitIndex = i;
 }
-//------------------------------------------------------------------------------
+
 bool CvUnitClassInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -1749,9 +1749,9 @@ bool CvUnitClassInfo::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 	return true;
 }
 
-//======================================================================================================
-//					CvBuildingClassInfo
-//======================================================================================================
+
+
+
 CvBuildingClassInfo::CvBuildingClassInfo() :
 	m_iMaxGlobalInstances(0),
 	m_iMaxTeamInstances(0),
@@ -1763,65 +1763,65 @@ CvBuildingClassInfo::CvBuildingClassInfo() :
 	m_piVictoryThreshold(NULL)
 {
 }
-//------------------------------------------------------------------------------
+
 CvBuildingClassInfo::~CvBuildingClassInfo()
 {
 	SAFE_DELETE_ARRAY(m_piVictoryThreshold);
 }
-//------------------------------------------------------------------------------
+
 int CvBuildingClassInfo::getMaxGlobalInstances() const
 {
 	return m_iMaxGlobalInstances;
 }
-//------------------------------------------------------------------------------
+
 int CvBuildingClassInfo::getMaxTeamInstances() const
 {
 	return m_iMaxTeamInstances;
 }
-//------------------------------------------------------------------------------
+
 int CvBuildingClassInfo::getMaxPlayerInstances() const
 {
 	return m_iMaxPlayerInstances;
 }
-//------------------------------------------------------------------------------
+
 int CvBuildingClassInfo::getExtraPlayerInstances() const
 {
 	return m_iExtraPlayerInstances;
 }
-//------------------------------------------------------------------------------
+
 int CvBuildingClassInfo::getDefaultBuildingIndex() const
 {
 	return m_iDefaultBuildingIndex;
 }
-//------------------------------------------------------------------------------
+
 void CvBuildingClassInfo::setDefaultBuildingIndex(int i)
 {
 	m_iDefaultBuildingIndex = i;
 }
-//------------------------------------------------------------------------------
+
 bool CvBuildingClassInfo::isNoLimit() const
 {
 	return m_bNoLimit;
 }
-//------------------------------------------------------------------------------
+
 bool CvBuildingClassInfo::isMonument() const
 {
 	return m_bMonument;
 }
-//------------------------------------------------------------------------------
+
 int CvBuildingClassInfo::getVictoryThreshold(int i) const
 {
 	CvAssertMsg(i < GC.getNumVictoryInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piVictoryThreshold ? m_piVictoryThreshold[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 bool CvBuildingClassInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
 		return false;
 
-	//Basic Properties
+
 	m_iMaxGlobalInstances = kResults.GetInt("MaxGlobalInstances");
 	m_iMaxTeamInstances = kResults.GetInt("MaxTeamInstances");
 	m_iMaxPlayerInstances = kResults.GetInt("MaxPlayerInstances");
@@ -1830,17 +1830,17 @@ bool CvBuildingClassInfo::CacheResults(Database::Results& kResults, CvDatabaseUt
 	m_bNoLimit = kResults.GetBool("NoLimit");
 	m_bMonument = kResults.GetBool("Monument");
 
-	//References
+
 	const char* szDefaultBuilding = kResults.GetText("DefaultBuilding");
 	m_iDefaultBuildingIndex = GC.getInfoTypeForString(szDefaultBuilding, true);
 
-	//Arrays
+
 	kUtility.PopulateArrayByValue(m_piVictoryThreshold, "Victories", "BuildingClass_VictoryThresholds", "VictoryType", "BuildingClassType", GetType(), "Threshold");
 
 	return true;
 }
 
-/// Helper function to read in an integer array of data sized according to number of building class types
+
 void BuildingClassArrayHelpers::Read(FDataStream& kStream, int* paiArray)
 {
 	int iNumEntries;
@@ -1865,13 +1865,13 @@ void BuildingClassArrayHelpers::Read(FDataStream& kStream, int* paiArray)
 				GC.LogMessage(szError.GetCString());
 				CvAssertMsg(false, szError);
 				int iDummy;
-				kStream >> iDummy;	// Skip it.
+				kStream >> iDummy;
 			}
 		}
 	}
 }
 
-/// Helper function to write out an integer array of data sized according to number of building class types
+
 void BuildingClassArrayHelpers::Write(FDataStream& kStream, int* paiArray, int iArraySize)
 {
 	kStream << iArraySize;
@@ -1892,7 +1892,7 @@ void BuildingClassArrayHelpers::Write(FDataStream& kStream, int* paiArray, int i
 	}
 }
 
-/// Helper function to read in an integer array of data sized according to number of unit class types
+
 void UnitClassArrayHelpers::Read(FDataStream& kStream, int* paiArray)
 {
 	int iNumEntries;
@@ -1924,7 +1924,7 @@ void UnitClassArrayHelpers::Read(FDataStream& kStream, int* paiArray)
 	}
 }
 
-/// Helper function to write out an integer array of data sized according to number of unit class types
+
 void UnitClassArrayHelpers::Write(FDataStream& kStream, int* paiArray, int iArraySize)
 {
 	kStream << iArraySize;
@@ -1945,9 +1945,9 @@ void UnitClassArrayHelpers::Write(FDataStream& kStream, int* paiArray, int iArra
 	}
 }
 
-//======================================================================================================
-//					CvCivilizationBaseInfo
-//======================================================================================================
+
+
+
 CvCivilizationBaseInfo::CvCivilizationBaseInfo():
 	m_bPlayable(false),
 	m_bAIPlayable(false)
@@ -1955,52 +1955,52 @@ CvCivilizationBaseInfo::CvCivilizationBaseInfo():
 	memset((void*)&m_kPackageID, 0, sizeof(m_kPackageID));
 }
 
-//------------------------------------------------------------------------------
+
 CvCivilizationBaseInfo::~CvCivilizationBaseInfo()
 {
 }
 
-//------------------------------------------------------------------------------
+
 bool CvCivilizationBaseInfo::isAIPlayable() const
 {
 	return m_bAIPlayable;
 }
-//------------------------------------------------------------------------------
+
 bool CvCivilizationBaseInfo::isPlayable() const
 {
 	return m_bPlayable;
 }
-//------------------------------------------------------------------------------
+
 const char* CvCivilizationBaseInfo::getShortDescription() const
 {
 	return m_strShortDescription.c_str();
 }
-//------------------------------------------------------------------------------
+
 void CvCivilizationBaseInfo::setShortDescriptionKey(const char* szVal)
 {
 	m_strShortDescriptionKey = szVal;
 	m_strShortDescription = GetLocalizedText(m_strShortDescriptionKey.c_str());
 }
-//------------------------------------------------------------------------------
+
 const char* CvCivilizationBaseInfo::getShortDescriptionKey() const
 {
 	return m_strShortDescriptionKey.c_str();
 }
-//------------------------------------------------------------------------------
+
 const GUID& CvCivilizationBaseInfo::getPackageID() const
 {
 	return m_kPackageID;
 }
 
-//------------------------------------------------------------------------------
+
 bool CvCivilizationBaseInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
 		return false;
 
-	const char* szTextVal = NULL;	//! temporary val
+	const char* szTextVal = NULL;
 
-	//Basic Properties
+
 	m_bPlayable = kResults.GetBool("Playable");
 	m_bAIPlayable = kResults.GetBool("AIPlayable");
 
@@ -2014,9 +2014,9 @@ bool CvCivilizationBaseInfo::CacheResults(Database::Results& kResults, CvDatabas
 	}
 	return true;
 }
-//======================================================================================================
-//					CvCivilizationInfo
-//======================================================================================================
+
+
+
 CvCivilizationInfo::CvCivilizationInfo():
 	CvCivilizationBaseInfo(),
 	m_iDefaultPlayerColor(NO_PLAYERCOLOR),
@@ -2036,7 +2036,7 @@ CvCivilizationInfo::CvCivilizationInfo():
 {
 
 }
-//------------------------------------------------------------------------------
+
 CvCivilizationInfo::~CvCivilizationInfo()
 {
 	SAFE_DELETE_ARRAY(m_piCivilizationBuildings);
@@ -2050,13 +2050,13 @@ CvCivilizationInfo::~CvCivilizationInfo()
 	SAFE_DELETE_ARRAY(m_pbReligions);
 }
 
-//------------------------------------------------------------------------------------------------------
-//
-//  FUNCTION:   InitBuildingDefaults(int*& piDefaults)
-//
-//  PURPOSE :   allocate and initialize the civilization's default buildings
-//
-//------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
 void CvCivilizationInfo::InitBuildingDefaults(int*& piDefaults, CvDatabaseUtility& kUtility)
 {
 	kUtility.InitializeArray(piDefaults, "BuildingClasses", -1);
@@ -2075,12 +2075,12 @@ void CvCivilizationInfo::InitBuildingDefaults(int*& piDefaults, CvDatabaseUtilit
 }
 
 
-//------------------------------------------------------------------------------------------------------
-//  FUNCTION:   InitUnitDefaults(int*& piDefaults)
-//
-//  PURPOSE :   allocate and initialize the civilization's default Units
-//
-//------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
 void CvCivilizationInfo::InitUnitDefaults(int*& piDefaults, CvDatabaseUtility& kUtility)
 {
 	kUtility.InitializeArray(piDefaults, "UnitClasses", -1);
@@ -2097,99 +2097,99 @@ void CvCivilizationInfo::InitUnitDefaults(int*& piDefaults, CvDatabaseUtility& k
 		piDefaults[idx] = unitID;
 	}
 }
-//------------------------------------------------------------------------------
+
 int CvCivilizationInfo::getDefaultPlayerColor() const
 {
 	return m_iDefaultPlayerColor;
 }
-//------------------------------------------------------------------------------
+
 int CvCivilizationInfo::getArtStyleType() const
 {
 	return m_iArtStyleType;
 }
-//------------------------------------------------------------------------------
+
 const char* CvCivilizationInfo::getArtStyleSuffix() const
 {
 	return m_strArtStyleSuffix.c_str();
 }
-//------------------------------------------------------------------------------
+
 const char* CvCivilizationInfo::getArtStylePrefix() const
 {
 	return m_strArtStylePrefix.c_str();
 }
-//------------------------------------------------------------------------------
+
 int CvCivilizationInfo::getNumCityNames() const
 {
 	return m_vCityNames.size();
 }
-//------------------------------------------------------------------------------
+
 int CvCivilizationInfo::getNumSpyNames() const
 {
 	return m_vSpyNames.size();
 }
 
-//------------------------------------------------------------------------------
+
 int CvCivilizationInfo::getNumLeaders() const
 {
-	// the number of leaders the Civ has, this is needed so that random leaders can be generated easily
+
 	return m_iNumLeaders;
 }
-//------------------------------------------------------------------------------
+
 const char* CvCivilizationInfo::GetDawnOfManAudio() const
 {
 	return m_strDawnOfManAudio.c_str();
 }
-//------------------------------------------------------------------------------
+
 const char* CvCivilizationInfo::getSoundtrackKey() const
 {
 	return m_strSoundtrackKey.c_str();
 }
 
-//------------------------------------------------------------------------------
+
 const char* CvCivilizationInfo::getAdjective() const
 {
 	return m_strAdjective.c_str();
 }
-//------------------------------------------------------------------------------
+
 void CvCivilizationInfo::setAdjectiveKey(const char* szVal)
 {
 	m_strAdjectiveKey = szVal;
 	m_strAdjective = GetLocalizedText(m_strAdjectiveKey.c_str());
 }
-//------------------------------------------------------------------------------
+
 const char* CvCivilizationInfo::getAdjectiveKey() const
 {
 	return m_strAdjectiveKey.c_str();
 }
-//------------------------------------------------------------------------------
+
 const char* CvCivilizationInfo::getFlagTexture() const
 {
 	return NULL;
 }
-//------------------------------------------------------------------------------
+
 const char* CvCivilizationInfo::getArtDefineTag() const
 {
 	return m_strArtDefineTag.c_str();
 }
-//------------------------------------------------------------------------------
+
 void CvCivilizationInfo::setArtDefineTag(const char* szVal)
 {
 	m_strArtDefineTag = szVal;
 }
-//------------------------------------------------------------------------------
+
 void CvCivilizationInfo::setArtStyleSuffix(const char* szVal)
 {
 	m_strArtStyleSuffix = szVal;
 }
-//------------------------------------------------------------------------------
+
 void CvCivilizationInfo::setArtStylePrefix(const char* szVal)
 {
 	m_strArtStylePrefix = szVal;
 }
-//------------------------------------------------------------------------------
+
 ReligionTypes CvCivilizationInfo::GetReligion() const
 {
-	// Only one per civ supported now
+
 #ifdef AUI_WARNING_FIXES
 	for (uint iI = 0; iI < GC.getNumReligionInfos(); iI++)
 #else
@@ -2203,97 +2203,97 @@ ReligionTypes CvCivilizationInfo::GetReligion() const
 	}
 	return NO_RELIGION;
 }
-//------------------------------------------------------------------------------
+
 int CvCivilizationInfo::getCivilizationBuildings(int i) const
 {
 	CvAssertMsg(i < GC.getNumBuildingClassInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piCivilizationBuildings ? m_piCivilizationBuildings[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 int CvCivilizationInfo::getCivilizationUnits(int i) const
 {
 	CvAssertMsg(i < GC.getNumUnitClassInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piCivilizationUnits ? m_piCivilizationUnits[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 bool CvCivilizationInfo::isCivilizationBuildingOverridden(int i) const
 {
 	CvAssertMsg(i < GC.getNumBuildingClassInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_CivilizationBuildingOverridden[i];
 }
-//------------------------------------------------------------------------------
+
 bool CvCivilizationInfo::isCivilizationUnitOverridden(int i) const
 {
 	CvAssertMsg(i < GC.getNumUnitClassInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_CivilizationUnitOverridden[i];
 }
-//------------------------------------------------------------------------------
+
 int CvCivilizationInfo::getCivilizationFreeUnitsClass(int i) const
 {
 	CvAssertMsg(i < GC.getNumUnitClassInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piCivilizationFreeUnitsClass ? m_piCivilizationFreeUnitsClass[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 int CvCivilizationInfo::getCivilizationFreeUnitsDefaultUnitAI(int i) const
 {
 	CvAssertMsg(i < GC.getNumUnitClassInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piCivilizationFreeUnitsDefaultUnitAI ? m_piCivilizationFreeUnitsDefaultUnitAI[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 bool CvCivilizationInfo::isLeaders(int i) const
 {
 	CvAssertMsg(i < GC.getNumLeaderHeadInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_pbLeaders ? m_pbLeaders[i] : false;
 }
-//------------------------------------------------------------------------------
+
 bool CvCivilizationInfo::isCivilizationFreeBuildingClass(int i) const
 {
 	CvAssertMsg(i < GC.getNumBuildingClassInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_pbCivilizationFreeBuildingClass ? m_pbCivilizationFreeBuildingClass[i] : false;
 }
-//------------------------------------------------------------------------------
+
 bool CvCivilizationInfo::isCivilizationFreeTechs(int i) const
 {
 	CvAssertMsg(i < GC.getNumTechInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_pbCivilizationFreeTechs ? m_pbCivilizationFreeTechs[i] : false;
 }
-//------------------------------------------------------------------------------
+
 bool CvCivilizationInfo::isCivilizationDisableTechs(int i) const
 {
 	CvAssertMsg(i < GC.getNumTechInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_pbCivilizationDisableTechs ? m_pbCivilizationDisableTechs[i] : false;
 }
-//------------------------------------------------------------------------------
+
 const char* CvCivilizationInfo::getCityNames(int i) const
 {
 	return m_vCityNames[i].c_str();
 }
-//------------------------------------------------------------------------------
+
 const char* CvCivilizationInfo::getSpyNames(int i) const
 {
 	return m_vSpyNames[i].c_str();
 }
-//------------------------------------------------------------------------------
+
 bool CvCivilizationInfo::isCoastalCiv() const
 {
 	return m_bCoastalCiv;
 }
-//------------------------------------------------------------------------------
+
 bool CvCivilizationInfo::isFirstCoastalStart() const
 {
 	return m_bPlaceFirst;
 }
-//------------------------------------------------------------------------------
+
 bool CvCivilizationInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvCivilizationBaseInfo::CacheResults(kResults, kUtility))
@@ -2302,13 +2302,13 @@ bool CvCivilizationInfo::CacheResults(Database::Results& kResults, CvDatabaseUti
 	const size_t maxUnitClasses = kUtility.MaxRows("UnitClasses");
 	const size_t maxBuildingClasses = kUtility.MaxRows("BuildingClasses");
 
-	const char* szTextVal = NULL;	//! temporary val
+	const char* szTextVal = NULL;
 
-	//Basic Properties
+
 	szTextVal = kResults.GetText("Adjective");
 	setAdjectiveKey(szTextVal);
 
-	//References
+
 	szTextVal = kResults.GetText("DefaultPlayerColor");
 	m_iDefaultPlayerColor = GC.getInfoTypeForString(szTextVal, true);
 
@@ -2332,7 +2332,7 @@ bool CvCivilizationInfo::CacheResults(Database::Results& kResults, CvDatabaseUti
 
 	const char* szType = GetType();
 
-	//coastal start
+
 	{
 		m_bCoastalCiv = false;
 
@@ -2350,7 +2350,7 @@ bool CvCivilizationInfo::CacheResults(Database::Results& kResults, CvDatabaseUti
 		pResults->Reset();
 	}
 
-	//place first
+
 	{
 		m_bPlaceFirst = false;
 
@@ -2368,9 +2368,9 @@ bool CvCivilizationInfo::CacheResults(Database::Results& kResults, CvDatabaseUti
 		pResults->Reset();
 	}
 
-	//Arrays
 
-	//City Names
+
+
 	{
 		m_vCityNames.clear();
 
@@ -2388,9 +2388,9 @@ bool CvCivilizationInfo::CacheResults(Database::Results& kResults, CvDatabaseUti
 		pResults->Reset();
 	}
 
-	//Building Types
+
 	{
-		// call the function that sets the default civilization buildings
+
 		InitBuildingDefaults(m_piCivilizationBuildings, kUtility);
 
 		m_CivilizationBuildingOverridden.reserve(maxBuildingClasses);
@@ -2415,9 +2415,9 @@ bool CvCivilizationInfo::CacheResults(Database::Results& kResults, CvDatabaseUti
 		pResults->Reset();
 	}
 
-	//Unit Types
+
 	{
-		// call the function that sets the default civilization units
+
 		InitUnitDefaults(m_piCivilizationUnits, kUtility);
 
 		m_CivilizationUnitOverridden.reserve(maxUnitClasses);
@@ -2443,7 +2443,7 @@ bool CvCivilizationInfo::CacheResults(Database::Results& kResults, CvDatabaseUti
 
 	}
 
-	//FreeUnits
+
 	{
 		kUtility.InitializeArray(m_piCivilizationFreeUnitsClass, maxUnitClasses, -1);
 		kUtility.InitializeArray(m_piCivilizationFreeUnitsDefaultUnitAI, maxUnitClasses, -1);
@@ -2488,7 +2488,7 @@ bool CvCivilizationInfo::CacheResults(Database::Results& kResults, CvDatabaseUti
 	kUtility.PopulateArrayByExistence(m_pbReligions, "Religions", "Civilization_Religions",
 	                                  "ReligionType", "CivilizationType", szType);
 
-	//Spy Names
+
 	{
 		m_vSpyNames.clear();
 
@@ -2508,11 +2508,11 @@ bool CvCivilizationInfo::CacheResults(Database::Results& kResults, CvDatabaseUti
 
 	return true;
 }
-//------------------------------------------------------------------------------
 
-//======================================================================================================
-//					CvVictoryInfo
-//======================================================================================================
+
+
+
+
 CvVictoryInfo::CvVictoryInfo() :
 	m_iPopulationPercentLead(0),
 	m_iLandPercent(0),
@@ -2533,102 +2533,102 @@ CvVictoryInfo::CvVictoryInfo() :
 	m_bTargetScore(false)
 {
 }
-//------------------------------------------------------------------------------
+
 CvVictoryInfo::~CvVictoryInfo()
 {
 	SAFE_DELETE_ARRAY(m_piVictoryPointAwards);
 }
-//------------------------------------------------------------------------------
+
 int CvVictoryInfo::getPopulationPercentLead() const
 {
 	return m_iPopulationPercentLead;
 }
-//------------------------------------------------------------------------------
+
 int CvVictoryInfo::getLandPercent() const
 {
 	return m_iLandPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvVictoryInfo::getMinLandPercent() const
 {
 	return m_iMinLandPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvVictoryInfo::getCityCulture() const
 {
 	return m_iCityCulture;
 }
-//------------------------------------------------------------------------------
+
 int CvVictoryInfo::getNumCultureCities() const
 {
 	return m_iNumCultureCities;
 }
-//------------------------------------------------------------------------------
+
 int CvVictoryInfo::getTotalCultureRatio() const
 {
 	return m_iTotalCultureRatio;
 }
-//------------------------------------------------------------------------------
+
 int CvVictoryInfo::getVictoryDelayTurns() const
 {
 	return m_iVictoryDelayTurns;
 }
-//------------------------------------------------------------------------------
+
 bool CvVictoryInfo::IsWinsGame() const
 {
 	return m_bWinsGame;
 }
-//------------------------------------------------------------------------------
+
 bool CvVictoryInfo::isTargetScore() const
 {
 	return m_bTargetScore;
 }
-//------------------------------------------------------------------------------
+
 bool CvVictoryInfo::isEndScore() const
 {
 	return m_bEndScore;
 }
-//------------------------------------------------------------------------------
+
 bool CvVictoryInfo::isConquest() const
 {
 	return m_bConquest;
 }
-//------------------------------------------------------------------------------
+
 bool CvVictoryInfo::isInfluential() const
 {
 	return m_bInfluential;
 }
-//------------------------------------------------------------------------------
+
 bool CvVictoryInfo::isDiploVote() const
 {
 	return m_bDiploVote;
 }
-//------------------------------------------------------------------------------
+
 bool CvVictoryInfo::isPermanent() const
 {
 	return m_bPermanent;
 }
-//------------------------------------------------------------------------------
+
 bool CvVictoryInfo::IsReligionInAllCities() const
 {
 	return m_bReligionInAllCities;
 }
-//------------------------------------------------------------------------------
+
 bool CvVictoryInfo::IsFindAllNaturalWonders() const
 {
 	return m_bFindAllNaturalWonders;
 }
-//------------------------------------------------------------------------------
+
 const char* CvVictoryInfo::getMovie() const
 {
 	return m_strMovie.c_str();
 }
-//------------------------------------------------------------------------------
+
 int CvVictoryInfo::GetVictoryPointAward(int i) const
 {
 	return m_piVictoryPointAwards[i];
 }
-//------------------------------------------------------------------------------
+
 bool CvVictoryInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -2656,7 +2656,7 @@ bool CvVictoryInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 	const char* szCityCulture = kResults.GetText("CityCulture");
 	m_iCityCulture = GC.getInfoTypeForString(szCityCulture, true);
 
-	//VictoryPointAwards
+
 	{
 		const char* szVictoryType = GetType();
 
@@ -2682,11 +2682,11 @@ bool CvVictoryInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 	return true;
 }
 
-//------------------------------------------------------------------------------
 
-//======================================================================================================
-//					CvSmallAwardInfo
-//======================================================================================================
+
+
+
+
 CvSmallAwardInfo::CvSmallAwardInfo() :
 	m_szNotification(""),
 	m_szTeamNotification(""),
@@ -2695,36 +2695,36 @@ CvSmallAwardInfo::CvSmallAwardInfo() :
 	m_iCityPopulation(0)
 {
 }
-//------------------------------------------------------------------------------
+
 CvSmallAwardInfo::~CvSmallAwardInfo()
 {
 }
-//------------------------------------------------------------------------------
+
 int CvSmallAwardInfo::GetNumVictoryPoints() const
 {
 	return m_iNumVictoryPoints;
 }
-//------------------------------------------------------------------------------
+
 CvString CvSmallAwardInfo::GetNotificationString() const
 {
 	return m_szNotification;
 }
-//------------------------------------------------------------------------------
+
 CvString CvSmallAwardInfo::GetTeamNotificationString() const
 {
 	return m_szTeamNotification;
 }
-//------------------------------------------------------------------------------
+
 int CvSmallAwardInfo::GetNumCities() const
 {
 	return m_iNumCities;
 }
-//------------------------------------------------------------------------------
+
 int CvSmallAwardInfo::GetCityPopulation() const
 {
 	return m_iCityPopulation;
 }
-//------------------------------------------------------------------------------
+
 bool CvSmallAwardInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -2741,9 +2741,9 @@ bool CvSmallAwardInfo::CacheResults(Database::Results& kResults, CvDatabaseUtili
 	return true;
 }
 
-//======================================================================================================
-//					CvHurryInfo
-//======================================================================================================
+
+
+
 CvHurryInfo::CvHurryInfo() :
 	m_iPolicyPrereq(NO_POLICY),
 	m_iGoldPerProduction(0),
@@ -2752,32 +2752,32 @@ CvHurryInfo::CvHurryInfo() :
 	m_iGoldPerCulture(0)
 {
 }
-//------------------------------------------------------------------------------
+
 int CvHurryInfo::getPolicyPrereq() const
 {
 	return m_iPolicyPrereq;
 }
-//------------------------------------------------------------------------------
+
 int CvHurryInfo::getGoldPerProduction() const
 {
 	return m_iGoldPerProduction;
 }
-//------------------------------------------------------------------------------
+
 int CvHurryInfo::getProductionPerPopulation() const
 {
 	return m_iProductionPerPopulation;
 }
-//------------------------------------------------------------------------------
+
 int CvHurryInfo::getGoldPerBeaker() const
 {
 	return m_iGoldPerBeaker;
 }
-//------------------------------------------------------------------------------
+
 int CvHurryInfo::getGoldPerCulture() const
 {
 	return m_iGoldPerCulture;
 }
-//------------------------------------------------------------------------------
+
 bool CvHurryInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -2795,9 +2795,9 @@ bool CvHurryInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& k
 }
 
 
-//======================================================================================================
-//					CvHandicapInfo
-//======================================================================================================
+
+
+
 CvHandicapInfo::CvHandicapInfo() :
 	m_iStartingLocationPercent(0),
 	m_iAdvancedStartPointsMod(0),
@@ -2864,335 +2864,335 @@ CvHandicapInfo::CvHandicapInfo() :
 	m_pbAIFreeTechs(NULL)
 {
 }
-//------------------------------------------------------------------------------
+
 CvHandicapInfo::~CvHandicapInfo()
 {
 	SAFE_DELETE_ARRAY(m_piGoodies);
 	SAFE_DELETE_ARRAY(m_pbFreeTechs);
 	SAFE_DELETE_ARRAY(m_pbAIFreeTechs);
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getStartingLocationPercent() const
 {
 	return m_iStartingLocationPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAdvancedStartPointsMod() const
 {
 	return m_iAdvancedStartPointsMod;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getStartingPolicyPoints() const
 {
 	return m_iStartingPolicyPoints;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getHappinessDefault() const
 {
 	return m_iHappinessDefault;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getExtraHappinessPerLuxury() const
 {
 	return m_iExtraHappinessPerLuxury;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getNumCitiesUnhappinessMod() const
 {
 	return m_iNumCitiesUnhappinessMod;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getPopulationUnhappinessMod() const
 {
 	return m_iPopulationUnhappinessMod;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getStartingGold() const
 {
 	return m_iStartingGold;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getGoldFreeUnits() const
 {
 	return m_iGoldFreeUnits;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getProductionFreeUnits() const
 {
 	return m_iProductionFreeUnits;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getProductionFreeUnitsPerCity() const
 {
 	return m_iProductionFreeUnitsPerCity;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getProductionFreeUnitsPopulationPercent() const
 {
 	return m_iProductionFreeUnitsPopulationPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getUnitCostPercent() const
 {
 	return m_iUnitCostPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getRouteCostPercent() const
 {
 	return m_iRouteCostPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getBuildingCostPercent() const
 {
 	return m_iBuildingCostPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getResearchPercent() const
 {
 	return m_iResearchPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getPolicyPercent() const
 {
 	return m_iPolicyPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getImprovementCostPercent() const
 {
 	return m_iImprovementCostPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::GetCityProductionNumOptions() const
 {
 	return m_iCityProductionNumOptions;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::GetTechNumOptions() const
 {
 	return m_iTechNumOptions;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::GetPolicyNumOptions() const
 {
 	return m_iPolicyNumOptions;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getInflationPercent() const
 {
 	return m_iInflationPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getFreeCulturePerTurn() const
 {
 	return m_iFreeCulturePerTurn;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAttitudeChange() const
 {
 	return m_iAttitudeChange;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getNoTechTradeModifier() const
 {
 	return m_iNoTechTradeModifier;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getTechTradeKnownModifier() const
 {
 	return m_iTechTradeKnownModifier;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getBarbCampGold() const
 {
 	return m_iBarbCampGold;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getBarbSpawnMod() const
 {
 	return m_iBarbSpawnMod;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getBarbarianCombatModifier() const
 {
 	return m_iBarbarianCombatModifier;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIBarbarianCombatModifier() const
 {
 	return m_iAIBarbarianCombatModifier;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getEarliestBarbarianReleaseTurn() const
 {
 	return m_iEarliestBarbarianReleaseTurn;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getBarbarianLandTargetRange() const
 {
 	return m_iBarbarianLandTargetRange;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getBarbarianSeaTargetRange() const
 {
 	return m_iBarbarianSeaTargetRange;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getStartingDefenseUnits() const
 {
 	return m_iStartingDefenseUnits;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getStartingWorkerUnits() const
 {
 	return m_iStartingWorkerUnits;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getStartingExploreUnits() const
 {
 	return m_iStartingExploreUnits;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIStartingUnitMultiplier() const
 {
 	return m_iAIStartingUnitMultiplier;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIStartingDefenseUnits() const
 {
 	return m_iAIStartingDefenseUnits;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIStartingWorkerUnits() const
 {
 	return m_iAIStartingWorkerUnits;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIStartingExploreUnits() const
 {
 	return m_iAIStartingExploreUnits;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIDeclareWarProb() const
 {
 	return m_iAIDeclareWarProb;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIWorkRateModifier() const
 {
 	return m_iAIWorkRateModifier;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIUnhappinessPercent() const
 {
 	return m_iAIUnhappinessPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIGrowthPercent() const
 {
 	return m_iAIGrowthPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAITrainPercent() const
 {
 	return m_iAITrainPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIWorldTrainPercent() const
 {
 	return m_iAIWorldTrainPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIConstructPercent() const
 {
 	return m_iAIConstructPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIWorldConstructPercent() const
 {
 	return m_iAIWorldConstructPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAICreatePercent() const
 {
 	return m_iAICreatePercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIWorldCreatePercent() const
 {
 	return m_iAIWorldCreatePercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIBuildingCostPercent() const
 {
 	return m_iAIBuildingCostPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIUnitCostPercent() const
 {
 	return m_iAIUnitCostPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIUnitSupplyPercent() const
 {
 	return m_iAIUnitSupplyPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIUnitUpgradePercent() const
 {
 	return m_iAIUnitUpgradePercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIInflationPercent() const
 {
 	return m_iAIInflationPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIPerEraModifier() const
 {
 	return m_iAIPerEraModifier;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIAdvancedStartPercent() const
 {
 	return m_iAIAdvancedStartPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIFreeXP() const
 {
 	return m_iAIFreeXP;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getAIFreeXPPercent() const
 {
 	return m_iAIFreeXPPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getNumGoodies() const
 {
 	return m_iNumGoodies;
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::getGoodies(int i) const
 {
 	CvAssertMsg(i < getNumGoodies(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piGoodies[i];
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::isFreeTechs(int i) const
 {
 	CvAssertMsg(i < GC.getNumTechInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_pbFreeTechs[i];
 }
-//------------------------------------------------------------------------------
+
 int CvHandicapInfo::isAIFreeTechs(int i) const
 {
 	CvAssertMsg(i < GC.getNumTechInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_pbAIFreeTechs[i];
 }
-//------------------------------------------------------------------------------
+
 bool CvHandicapInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -3258,12 +3258,12 @@ bool CvHandicapInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility
 	m_iAIFreeXP = kResults.GetInt("AIFreeXP");
 	m_iAIFreeXPPercent = kResults.GetInt("AIFreeXPPercent");
 
-	//Arrays
+
 	const char* szHandicapType = GetType();
 
-	//Goodies
+
 	{
-		//First find out how many goodies there are.
+
 		Database::SingleResult kCount("count(*)");
 		if(DB.SelectAt(kCount, "HandicapInfo_Goodies", "HandicapType", szHandicapType))
 		{
@@ -3296,9 +3296,9 @@ bool CvHandicapInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility
 	return true;
 }
 
-//======================================================================================================
-//					CvGameSpeedInfo
-//======================================================================================================
+
+
+
 CvGameSpeedInfo::CvGameSpeedInfo() :
 	m_iDealDuration(0),
 	m_iGrowthPercent(0),
@@ -3336,177 +3336,177 @@ CvGameSpeedInfo::CvGameSpeedInfo() :
 	m_pGameTurnInfo(NULL)
 {
 }
-//------------------------------------------------------------------------------
+
 CvGameSpeedInfo::~CvGameSpeedInfo()
 {
 	SAFE_DELETE_ARRAY(m_pGameTurnInfo);
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::GetDealDuration() const
 {
 	return m_iDealDuration;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getGrowthPercent() const
 {
 	return m_iGrowthPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getTrainPercent() const
 {
 	return m_iTrainPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getConstructPercent() const
 {
 	return m_iConstructPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getCreatePercent() const
 {
 	return m_iCreatePercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getResearchPercent() const
 {
 	return m_iResearchPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getGoldPercent() const
 {
 	return m_iGoldPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getGoldGiftMod() const
 {
 	return m_iGoldGiftMod;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getBuildPercent() const
 {
 	return m_iBuildPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getImprovementPercent() const
 {
 	return m_iImprovementPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getGreatPeoplePercent() const
 {
 	return m_iGreatPeoplePercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getCulturePercent() const
 {
 	return m_iCulturePercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getFaithPercent() const
 {
 	return m_iFaithPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getBarbPercent() const
 {
 	return m_iBarbPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getFeatureProductionPercent() const
 {
 	return m_iFeatureProductionPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getUnitDiscoverPercent() const
 {
 	return m_iUnitDiscoverPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getUnitHurryPercent() const
 {
 	return m_iUnitHurryPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getUnitTradePercent() const
 {
 	return m_iUnitTradePercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getGoldenAgePercent() const
 {
 	return m_iGoldenAgePercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getHurryPercent() const
 {
 	return m_iHurryPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getInflationOffset() const
 {
 	return m_iInflationOffset;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getReligiousPressureAdjacentCity() const
 {
 	return m_iReligiousPressureAdjacentCity;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getInflationPercent() const
 {
 	return m_iInflationPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getVictoryDelayPercent() const
 {
 	return m_iVictoryDelayPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getMinorCivElectionFreqMod() const
 {
 	return m_iMinorCivElectionFreqMod;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getOpinionDurationPercent() const
 {
 	return m_iOpinionDurationPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getSpyRatePercent() const
 {
 	return m_iSpyRatePercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getPeaceDealDuration() const
 {
 	return m_iPeaceDealDuration;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getRelationshipDuration() const
 {
 	return m_iRelationshipDuration;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getLeaguePercent() const
 {
 	return m_iLeaguePercent;
 }
-//------------------------------------------------------------------------------
+
 int CvGameSpeedInfo::getNumTurnIncrements() const
 {
 	return m_iNumTurnIncrements;
 }
-//------------------------------------------------------------------------------
+
 GameTurnInfo& CvGameSpeedInfo::getGameTurnInfo(int iIndex) const
 {
 	return m_pGameTurnInfo[iIndex];
 }
-//------------------------------------------------------------------------------
+
 void CvGameSpeedInfo::allocateGameTurnInfos(const int iSize)
 {
 	m_pGameTurnInfo = FNEW(GameTurnInfo[iSize], c_eCiv5GameplayDLL, 0);
 }
-//------------------------------------------------------------------------------
+
 bool CvGameSpeedInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -3543,11 +3543,11 @@ bool CvGameSpeedInfo::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 	m_iRelationshipDuration			= kResults.GetInt("RelationshipDuration");
 	m_iLeaguePercent				= kResults.GetInt("LeaguePercent");
 
-	//GameTurnInfos
+
 	{
 		const char* szGameSpeedInfoType = GetType();
 
-		//Calculate number of turn increments
+
 		char szCountSQL[256];
 		sprintf_s(szCountSQL, "select count(*) from GameSpeed_Turns where GameSpeedType = '%s'", szGameSpeedInfoType);
 		Database::SingleResult kCount;
@@ -3556,7 +3556,7 @@ bool CvGameSpeedInfo::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 			m_iNumTurnIncrements = kCount.GetInt(0);
 		}
 
-		//Update turn increments
+
 		allocateGameTurnInfos(getNumTurnIncrements());
 		char szSQL[256];
 		sprintf_s(szSQL, "select * from GameSpeed_Turns where GameSpeedType = '%s'", szGameSpeedInfoType);
@@ -3577,36 +3577,36 @@ bool CvGameSpeedInfo::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 }
 
 
-//======================================================================================================
-//					CvTurnTimerInfo
-//======================================================================================================
+
+
+
 CvTurnTimerInfo::CvTurnTimerInfo() :
 	m_iBaseTime(0),
 	m_iCityResource(0),
 	m_iUnitResource(0),
 	m_iFirstTurnMultiplier(0)
 {}
-//------------------------------------------------------------------------------
+
 int CvTurnTimerInfo::getBaseTime() const
 {
 	return m_iBaseTime;
 }
-//------------------------------------------------------------------------------
+
 int CvTurnTimerInfo::getCityResource() const
 {
 	return m_iCityResource;
 }
-//------------------------------------------------------------------------------
+
 int CvTurnTimerInfo::getUnitResource() const
 {
 	return m_iUnitResource;
 }
-//------------------------------------------------------------------------------
+
 int CvTurnTimerInfo::getFirstTurnMultiplier() const
 {
 	return m_iFirstTurnMultiplier;
 }
-//------------------------------------------------------------------------------
+
 bool CvTurnTimerInfo::CacheResults(Database::Results& results, CvDatabaseUtility& kUtility)
 {
 	if(CvBaseInfo::CacheResults(results, kUtility))
@@ -3663,9 +3663,9 @@ FDataStream& operator>>(FDataStream& loadFrom, CvTurnTimerInfo& writeTo)
 	return loadFrom;
 }
 
-//======================================================================================================
-//					CvBuildInfo
-//======================================================================================================
+
+
+
 CvBuildInfo::CvBuildInfo() :
 	m_iTime(0),
 	m_iCost(0),
@@ -3681,10 +3681,10 @@ CvBuildInfo::CvBuildInfo() :
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
 	m_bRemoveWaterCrossing(false),
 #endif
-	//EAP Civ req to builds
+
 	m_bSpecificCivRequired(false),
 	m_eRequiredCivilization(NO_CIVILIZATION),
-//
+
 	m_bWater(false),
 	m_bCanBeEmbarked(false),
 	m_paiFeatureTech(NULL),
@@ -3698,7 +3698,7 @@ CvBuildInfo::CvBuildInfo() :
 	m_pabFeatureRemove(NULL)
 {
 }
-//------------------------------------------------------------------------------
+
 CvBuildInfo::~CvBuildInfo()
 {
 	SAFE_DELETE_ARRAY(m_paiFeatureTech);
@@ -3711,62 +3711,62 @@ CvBuildInfo::~CvBuildInfo()
 	SAFE_DELETE_ARRAY(m_paiTechTimeChange);
 	SAFE_DELETE_ARRAY(m_pabFeatureRemove);
 }
-//------------------------------------------------------------------------------
+
 int CvBuildInfo::getTime() const
 {
 	return m_iTime;
 }
-//------------------------------------------------------------------------------
+
 int CvBuildInfo::getCost() const
 {
 	return m_iCost;
 }
-//------------------------------------------------------------------------------
+
 int CvBuildInfo::getCostIncreasePerImprovement() const
 {
 	return m_iCostIncreasePerImprovement;
 }
-//------------------------------------------------------------------------------
+
 int CvBuildInfo::getTechPrereq() const
 {
 	return m_iTechPrereq;
 }
-//------------------------------------------------------------------------------
+
 int CvBuildInfo::getImprovement() const
 {
 	return m_iImprovement;
 }
-//------------------------------------------------------------------------------
+
 int CvBuildInfo::getRoute() const
 {
 	return m_iRoute;
 }
-//------------------------------------------------------------------------------
+
 int CvBuildInfo::getEntityEvent() const
 {
 	return m_iEntityEvent;
 }
-//------------------------------------------------------------------------------
+
 int CvBuildInfo::getMissionType() const
 {
 	return m_iMissionType;
 }
-//------------------------------------------------------------------------------
+
 void CvBuildInfo::setMissionType(int iNewType)
 {
 	m_iMissionType = iNewType;
 }
-//------------------------------------------------------------------------------
+
 bool CvBuildInfo::isKill() const
 {
 	return m_bKill;
 }
-//------------------------------------------------------------------------------
+
 bool CvBuildInfo::isRepair() const
 {
 	return m_bRepair;
 }
-//------------------------------------------------------------------------------
+
 bool CvBuildInfo::IsRemoveRoute() const
 {
 	return m_bRemoveRoute;
@@ -3778,8 +3778,8 @@ bool CvBuildInfo::IsRemoveWaterCrossing() const
 }
 #endif
 
-//EAP: Civ req builds
-//------------------------------------------------------------------------------
+
+
 bool CvBuildInfo::IsSpecificCivRequired() const
 {
 	return m_bSpecificCivRequired;
@@ -3790,32 +3790,32 @@ CivilizationTypes CvBuildInfo::GetRequiredCivilization() const
 	return m_eRequiredCivilization;
 }
 
-//------------------------------------------------------------------------------
+
 bool CvBuildInfo::IsWater() const
 {
 	return m_bWater;
 }
-//------------------------------------------------------------------------------
+
 bool CvBuildInfo::IsCanBeEmbarked() const
 {
 	return m_bCanBeEmbarked;
 }
 
-//------------------------------------------------------------------------------
+
 int CvBuildInfo::getFeatureTech(int i) const
 {
 	CvAssertMsg(i < GC.getNumFeatureInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_paiFeatureTech ? m_paiFeatureTech[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 int CvBuildInfo::getFeatureTime(int i) const
 {
 	CvAssertMsg(i < GC.getNumFeatureInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_paiFeatureTime ? m_paiFeatureTime[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 int CvBuildInfo::getFeatureProduction(int i) const
 {
 	CvAssertMsg(i < GC.getNumFeatureInfos(), "Index out of bounds");
@@ -3823,7 +3823,7 @@ int CvBuildInfo::getFeatureProduction(int i) const
 	return m_paiFeatureProduction ? m_paiFeatureProduction[i] : -1;
 }
 #ifdef NQ_FOOD_FROM_CHOPS
-//------------------------------------------------------------------------------
+
 int CvBuildInfo::getFeatureFood(int i) const
 {
 	CvAssertMsg(i < GC.getNumFeatureInfos(), "Index out of bounds");
@@ -3831,28 +3831,28 @@ int CvBuildInfo::getFeatureFood(int i) const
 	return m_paiFeatureFood ? m_paiFeatureFood[i] : -1;
 }
 #endif
-//------------------------------------------------------------------------------
+
 int CvBuildInfo::getFeatureCost(int i) const
 {
 	CvAssertMsg(i < GC.getNumFeatureInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_paiFeatureCost ? m_paiFeatureCost[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 int CvBuildInfo::getTechTimeChange(int i) const
 {
 	CvAssertMsg(i < GC.getNumTechInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_paiTechTimeChange ? m_paiTechTimeChange[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 bool CvBuildInfo::isFeatureRemove(int i) const
 {
 	CvAssertMsg(i < GC.getNumFeatureInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_pabFeatureRemove ? m_pabFeatureRemove[i] : false;
 }
-//------------------------------------------------------------------------------
+
 bool CvBuildInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvHotKeyInfo::CacheResults(kResults, kUtility))
@@ -3869,14 +3869,14 @@ bool CvBuildInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& k
 #endif
 	m_bWater = kResults.GetBool("Water");
 	m_bCanBeEmbarked = kResults.GetBool("CanBeEmbarked");
-	//EAP: Adding Civ req to builds as well
+
 	m_bSpecificCivRequired = kResults.GetBool("SpecificCivRequired");
 
 	const char* szCivilizationType = kResults.GetText("CivilizationType");
 	m_eRequiredCivilization = (CivilizationTypes)GC.getInfoTypeForString(szCivilizationType, true);
 
 
-	///
+
 
 
 	const char* szPrereqTech = kResults.GetText("PrereqTech");
@@ -3891,9 +3891,9 @@ bool CvBuildInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& k
 	const char* szEntityEvent = kResults.GetText("EntityEvent");
 	m_iEntityEvent = GC.getInfoTypeForString(szEntityEvent, true);
 
-	//NOTE: Why isn't this really a struct? o_O
-	//HACK: Temporary until the stored proc system is finished
-	//FeatureStructs
+
+
+
 	{
 		kUtility.InitializeArray(m_paiFeatureTech, "Features");
 		kUtility.InitializeArray(m_paiFeatureTime, "Features");
@@ -3937,7 +3937,7 @@ bool CvBuildInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& k
 	return true;
 }
 
-/// Helper function to read in an integer array of data sized according to number of build types
+
 #ifdef AUI_WARNING_FIXES
 void BuildArrayHelpers::Read(FDataStream& kStream, int* paiBuildArray)
 #else
@@ -3973,7 +3973,7 @@ void BuildArrayHelpers::Read(FDataStream& kStream, short* paiBuildArray)
 	}
 }
 
-/// Helper function to write out an integer array of data sized according to number of building types
+
 #ifdef AUI_WARNING_FIXES
 void BuildArrayHelpers::Write(FDataStream& kStream, int* paiBuildArray, int iArraySize)
 #else
@@ -3998,17 +3998,17 @@ void BuildArrayHelpers::Write(FDataStream& kStream, short* paiBuildArray, int iA
 	}
 }
 
-//======================================================================================================
-//					CvGoodyInfo
-//======================================================================================================
 
-//------------------------------------------------------------------------------------------------------
-//
-//  FUNCTION:   CvGoodyInfo()
-//
-//  PURPOSE :   Default constructor
-//
-//------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 CvGoodyInfo::CvGoodyInfo() : CvBaseInfo()
 	, m_iGold(0)
 	, m_iNumGoldRandRolls(0)
@@ -4309,7 +4309,7 @@ bool CvGoodyInfo::CacheResults(Database::Results& results, CvDatabaseUtility& kU
 	m_bReligionFaith = results.GetBool("ReligionFaith");
 #endif
 
-	//TEMP TEMP TEMP TEMP
+
 	m_iUnitClassType = GC.getInfoTypeForString(results.GetText("UnitClass"), true);
 	m_iBarbarianUnitClass = GC.getInfoTypeForString(results.GetText("BarbarianUnitClass"), true);
 
@@ -4317,9 +4317,9 @@ bool CvGoodyInfo::CacheResults(Database::Results& results, CvDatabaseUtility& kU
 	return true;
 }
 
-//======================================================================================================
-//					CvRouteInfo
-//======================================================================================================
+
+
+
 CvRouteInfo::CvRouteInfo() :
 	m_iGoldMaintenance(0),
 	m_iAdvancedStartCost(0),
@@ -4332,65 +4332,65 @@ CvRouteInfo::CvRouteInfo() :
 	m_piResourceQuantityRequirements(NULL)
 {
 }
-//------------------------------------------------------------------------------
+
 CvRouteInfo::~CvRouteInfo()
 {
 	SAFE_DELETE_ARRAY(m_piYieldChange);
 	SAFE_DELETE_ARRAY(m_piTechMovementChange);
 	SAFE_DELETE_ARRAY(m_piResourceQuantityRequirements);
 }
-//------------------------------------------------------------------------------
+
 int CvRouteInfo::GetGoldMaintenance() const
 {
 	return m_iGoldMaintenance;
 }
-//------------------------------------------------------------------------------
+
 int CvRouteInfo::getAdvancedStartCost() const
 {
 	return m_iAdvancedStartCost;
 }
-//------------------------------------------------------------------------------
+
 int CvRouteInfo::getValue() const
 {
 	return m_iValue;
 }
-//------------------------------------------------------------------------------
+
 int CvRouteInfo::getMovementCost() const
 {
 	return m_iMovementCost;
 }
-//------------------------------------------------------------------------------
+
 int CvRouteInfo::getFlatMovementCost() const
 {
 	return m_iFlatMovementCost;
 }
-//------------------------------------------------------------------------------
+
 bool CvRouteInfo::IsIndustrial() const
 {
 	return m_bIndustrial;
 }
-//------------------------------------------------------------------------------
+
 int CvRouteInfo::getYieldChange(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piYieldChange ? m_piYieldChange[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 int CvRouteInfo::getTechMovementChange(int i) const
 {
 	CvAssertMsg(i < GC.getNumTechInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piTechMovementChange ? m_piTechMovementChange[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 int CvRouteInfo::getResourceQuantityRequirement(int i) const
 {
 	CvAssertMsg(i < GC.getNumResourceInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piResourceQuantityRequirements ? m_piResourceQuantityRequirements[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 bool CvRouteInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -4404,7 +4404,7 @@ bool CvRouteInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& k
 
 	m_bIndustrial = kResults.GetBool("Industrial");
 
-	//Arrays
+
 	const char* szRouteType = GetType();
 	kUtility.SetYields(m_piYieldChange, "Route_Yields", "RouteType", szRouteType);
 
@@ -4414,9 +4414,9 @@ bool CvRouteInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& k
 	return true;
 }
 #if defined(TRADE_REFACTOR)
-//======================================================================================================
-//					CvTradeConnectionInfo
-//======================================================================================================
+
+
+
 CvTradeConnectionInfo::CvTradeConnectionInfo() :
 	m_piBaseDestinationValue(NULL),
 	m_piBaseOriginValue(NULL),
@@ -4431,7 +4431,7 @@ CvTradeConnectionInfo::~CvTradeConnectionInfo()
 	SAFE_DELETE_ARRAY(m_piBaseOriginValue);
 	CvDatabaseUtility::SafeDelete2DArray(m_ppiiDomainYieldModifier);
 }
-//------------------------------------------------------------------------------
+
 bool CvTradeConnectionInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if (!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -4499,34 +4499,34 @@ bool CvTradeConnectionInfo::CacheResults(Database::Results& kResults, CvDatabase
 }
 #endif
 #if defined(LEKMOD_GREAT_WORK_YIELD_EFFECTS)
-//======================================================================================================
-//					CvGreatWorkClassInfo
-//======================================================================================================
+
+
+
 CvGreatWorkClassInfo::CvGreatWorkClassInfo() :
 	m_iBaseTourism(0),
 	m_piBaseYield(NULL)
 {
 }
-//------------------------------------------------------------------------------
+
 CvGreatWorkClassInfo::~CvGreatWorkClassInfo()
 {
 	SAFE_DELETE_ARRAY(m_piBaseYield);
 }
 #if !defined(LEK_YIELD_TOURISM)
-//------------------------------------------------------------------------------
+
 int CvGreatWorkClassInfo::getBaseTourism() const
 {
 	return m_iBaseTourism;
 }
 #endif
-//------------------------------------------------------------------------------
+
 int CvGreatWorkClassInfo::getGreatWorkClassBaseYield(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piBaseYield ? m_piBaseYield[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 bool CvGreatWorkClassInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if (!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -4534,25 +4534,25 @@ bool CvGreatWorkClassInfo::CacheResults(Database::Results& kResults, CvDatabaseU
 #if !defined(LEK_YIELD_TOURISM)
 	m_iBaseTourism = kResults.GetInt("BaseTourism");
 #endif
-	//Arrays
+
 	const char* szGreatWorkClassType = GetType();
 	kUtility.SetYields(m_piBaseYield, "GreatWorkClasses_Yields", "GreatWorkClassType", szGreatWorkClassType);
 	return true;
 }
 #endif
-//======================================================================================================
-//					CvResourceClassInfo
-//======================================================================================================
+
+
+
 CvResourceClassInfo::CvResourceClassInfo() :
 	m_iUniqueRange(0)
 {
 }
-//------------------------------------------------------------------------------
+
 int CvResourceClassInfo::getUniqueRange() const
 {
 	return m_iUniqueRange;
 }
-//------------------------------------------------------------------------------
+
 bool CvResourceClassInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -4563,9 +4563,9 @@ bool CvResourceClassInfo::CacheResults(Database::Results& kResults, CvDatabaseUt
 	return true;
 }
 
-//======================================================================================================
-//					CvResourceInfo
-//======================================================================================================
+
+
+
 CvResourceInfo::CvResourceInfo() :
 	m_iResourceClassType(NO_RESOURCECLASS),
 	m_iChar(0),
@@ -4621,7 +4621,7 @@ CvResourceInfo::CvResourceInfo() :
 	m_pbFeatureTerrain(NULL)
 {
 }
-//------------------------------------------------------------------------------
+
 CvResourceInfo::~CvResourceInfo()
 {
 	SAFE_DELETE_ARRAY(m_piYieldChange);
@@ -4638,268 +4638,268 @@ CvResourceInfo::~CvResourceInfo()
 #endif
 	SAFE_DELETE_ARRAY(m_pbTerrain);
 	SAFE_DELETE_ARRAY(m_pbFeature);
-	SAFE_DELETE_ARRAY(m_pbFeatureTerrain);	// free memory - MT
+	SAFE_DELETE_ARRAY(m_pbFeatureTerrain);
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getResourceClassType() const
 {
 	return m_iResourceClassType;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getChar() const
 {
 	return m_iChar;
 }
-//------------------------------------------------------------------------------
+
 void CvResourceInfo::setChar(int i)
 {
 	m_iChar = i;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getTechReveal() const
 {
 	return m_iTechReveal;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getPolicyReveal() const
 {
 	return m_iPolicyReveal;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getTechCityTrade() const
 {
 	return m_iTechCityTrade;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getTechObsolete() const
 {
 	return m_iTechObsolete;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getAIStopTradingEra() const
 {
 	return m_iAIStopTradingEra;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getStartingResourceQuantity() const
 {
 	return m_iStartingResourceQuantity;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getAITradeModifier() const
 {
 	return m_iAITradeModifier;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getAIObjective() const
 {
 	return m_iAIObjective;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getHappiness() const
 {
 	return m_iHappiness;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getWonderProductionMod() const
 {
 	return m_iWonderProductionMod;
 }
-//------------------------------------------------------------------------------
+
 EraTypes CvResourceInfo::getWonderProductionModObsoleteEra() const
 {
 	return m_eWonderProductionModObsoleteEra;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getMinAreaSize() const
 {
 	return m_iMinAreaSize;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getMinLatitude() const
 {
 	return m_iMinLatitude;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getMaxLatitude() const
 {
 	return m_iMaxLatitude;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getPlacementOrder() const
 {
 	return m_iPlacementOrder;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getConstAppearance() const
 {
 	return m_iConstAppearance;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getRandAppearance1() const
 {
 	return m_iRandAppearance1;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getRandAppearance2() const
 {
 	return m_iRandAppearance2;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getRandAppearance3() const
 {
 	return m_iRandAppearance3;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getRandAppearance4() const
 {
 	return m_iRandAppearance4;
 }
-//------------------------------------------------------------------------------
+
 ResourceUsageTypes CvResourceInfo::getResourceUsage() const
 {
 	return m_eResourceUsage;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getPercentPerPlayer() const
 {
 	return m_iPercentPerPlayer;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getTilesPer() const
 {
 	return m_iTilesPer;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getMinLandPercent() const
 {
 	return m_iMinLandPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getUniqueRange() const
 {
 	return m_iUniqueRange;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getGroupRange() const
 {
 	return m_iGroupRange;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getGroupRand() const
 {
 	return m_iGroupRand;
 }
-//------------------------------------------------------------------------------
+
 bool CvResourceInfo::isPresentOnAllValidPlots() const
 {
 	return m_bPresentOnAllValidPlots;
 }
-//------------------------------------------------------------------------------
+
 bool CvResourceInfo::isOneArea() const
 {
 	return m_bOneArea;
 }
-//------------------------------------------------------------------------------
+
 bool CvResourceInfo::isHills() const
 {
 	return m_bHills;
 }
-//------------------------------------------------------------------------------
+
 bool CvResourceInfo::isFlatlands() const
 {
 	return m_bFlatlands;
 }
-//------------------------------------------------------------------------------
+
 bool CvResourceInfo::isNoRiverSide() const
 {
 	return m_bNoRiverSide;
 }
-//------------------------------------------------------------------------------
+
 bool CvResourceInfo::isNormalize() const
 {
 	return m_bNormalize;
 }
-//------------------------------------------------------------------------------
+
 bool CvResourceInfo::isOnlyMinorCivs() const
 {
 	return m_bOnlyMinorCivs;
 }
-//------------------------------------------------------------------------------
+
 CivilizationTypes CvResourceInfo::GetRequiredCivilization() const
 {
 	return m_eRequiredCivilization;
 }
-//------------------------------------------------------------------------------
+
 const char* CvResourceInfo::GetIconString() const
 {
 	return m_strIconString;
 }
-//------------------------------------------------------------------------------
+
 void CvResourceInfo::SetIconString(const char* szVal)
 {
 	m_strIconString = szVal;
 }
-//------------------------------------------------------------------------------
+
 const char* CvResourceInfo::getArtDefineTag() const
 {
 	return m_strArtDefineTag;
 }
-//------------------------------------------------------------------------------
+
 void CvResourceInfo::setArtDefineTag(const char* szVal)
 {
 	m_strArtDefineTag = szVal;
 }
-//------------------------------------------------------------------------------
+
 const char* CvResourceInfo::getArtDefineTagHeavy() const
 {
 	return m_strArtDefineTagHeavy;
 }
-//------------------------------------------------------------------------------
+
 void CvResourceInfo::setArtDefineTagHeavy(const char* szVal)
 {
 	m_strArtDefineTagHeavy = szVal;
 }
-//------------------------------------------------------------------------------
+
 const char* CvResourceInfo::getAltArtDefineTag() const
 {
 	return m_strAltArtDefineTag;
 }
-//------------------------------------------------------------------------------
+
 void CvResourceInfo::setAltArtDefineTag(const char* szVal)
 {
 	m_strAltArtDefineTag = szVal;
 }
-//------------------------------------------------------------------------------
+
 const char* CvResourceInfo::getAltArtDefineTagHeavy() const
 {
 	return m_strAltArtDefineTagHeavy;
 }
-//------------------------------------------------------------------------------
+
 void CvResourceInfo::setAltArtDefineTagHeavy(const char* szVal)
 {
 	m_strAltArtDefineTagHeavy = szVal;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getYieldChange(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piYieldChange ? m_piYieldChange[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 int* CvResourceInfo::getYieldChangeArray()
 {
 	return m_piYieldChange;
 }
 
 #if defined(MOD_RESOURCES_PRODUCTION_COST_MODIFIERS)
-//------------------------------------------------------------------------------
+
 bool CvResourceInfo::isHasUnitCombatProductionCostModifiersLocal() const
 {
 	return m_piiiUnitCombatProductionCostModifiersLocal.size() > 0;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getUnitCombatProductionCostModifiersLocal(UnitCombatTypes eUnitCombat, EraTypes eUnitEra) const
 {
 	CvAssertMsg(eUnitCombat < GC.getNumUnitCombatClassInfos(), "Index out of bounds");
@@ -4913,7 +4913,7 @@ int CvResourceInfo::getUnitCombatProductionCostModifiersLocal(UnitCombatTypes eU
 	int iMod = 0;
 
 	std::map<int, std::vector<ProductionCostModifiers>>::const_iterator itMap = m_piiiUnitCombatProductionCostModifiersLocal.find(iUnitCombat);
-	if (itMap != m_piiiUnitCombatProductionCostModifiersLocal.end()) // find returns the iterator to map::end if the key iUnitCombat is not present in the map
+	if (itMap != m_piiiUnitCombatProductionCostModifiersLocal.end())
 	{
 		for (std::vector<ProductionCostModifiers>::const_iterator itVector = itMap->second.begin(); itVector != itMap->second.end(); ++itVector)
 		{
@@ -4922,13 +4922,13 @@ int CvResourceInfo::getUnitCombatProductionCostModifiersLocal(UnitCombatTypes eU
 
 			if (eUnitEra != NO_ERA)
 			{
-				// Our unit's era needs to be greater than or equal to the required era
+
 				if (eRequiredEra != NO_ERA && iUnitEra < itVector->m_iRequiredEra)
 				{
 					continue;
 				}
 
-				// Our unit's era needs to be less than the obsolete era
+
 				if (eObsoleteEra != NO_ERA && iUnitEra >= itVector->m_iObsoleteEra)
 				{
 					continue;
@@ -4941,7 +4941,7 @@ int CvResourceInfo::getUnitCombatProductionCostModifiersLocal(UnitCombatTypes eU
 
 	return iMod;
 }
-//------------------------------------------------------------------------------
+
 std::vector<ProductionCostModifiers> CvResourceInfo::getUnitCombatProductionCostModifiersLocal(UnitCombatTypes eUnitCombat) const
 {
 	CvAssertMsg(eUnitCombat < GC.getNumUnitCombatClassInfos(), "Index out of bounds");
@@ -4950,19 +4950,19 @@ std::vector<ProductionCostModifiers> CvResourceInfo::getUnitCombatProductionCost
 	int iUnitCombat = (int)eUnitCombat;
 
 	std::map<int, std::vector<ProductionCostModifiers>>::const_iterator it = m_piiiUnitCombatProductionCostModifiersLocal.find(iUnitCombat);
-	if (it != m_piiiUnitCombatProductionCostModifiersLocal.end()) // find returns the iterator to map::end if the key iUnitCombat is not present in the map
+	if (it != m_piiiUnitCombatProductionCostModifiersLocal.end())
 	{
 		return it->second;
 	}
 
 	return std::vector<ProductionCostModifiers>();
 }
-//------------------------------------------------------------------------------
+
 bool CvResourceInfo::isHasBuildingProductionCostModifiersLocal() const
 {
 	return m_aiiiBuildingProductionCostModifiersLocal.size() > 0;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getBuildingProductionCostModifiersLocal(EraTypes eBuildingEra) const
 {
 	CvAssertMsg(eBuildingEra < GC.getNumEraInfos(), "Index out of bounds");
@@ -4978,13 +4978,13 @@ int CvResourceInfo::getBuildingProductionCostModifiersLocal(EraTypes eBuildingEr
 
 		if (eBuildingEra != NO_ERA)
 		{
-			// Our building's era needs to be greater than or equal to the required era
+
 			if (eRequiredEra != NO_ERA && iBuildingEra < it->m_iRequiredEra)
 			{
 				continue;
 			}
 
-			// Our building's era needs to be less than the obsolete era
+
 			if (eObsoleteEra != NO_ERA && iBuildingEra >= it->m_iObsoleteEra)
 			{
 				continue;
@@ -4997,13 +4997,13 @@ int CvResourceInfo::getBuildingProductionCostModifiersLocal(EraTypes eBuildingEr
 	return iMod;
 }
 
-//------------------------------------------------------------------------------
+
 std::vector<ProductionCostModifiers> CvResourceInfo::getBuildingProductionCostModifiersLocal() const
 {
 	return m_aiiiBuildingProductionCostModifiersLocal;
 }
 #endif
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getResourceQuantityType(int i) const
 {
 	CvAssertMsg(i < GC.getNUM_RESOURCE_QUANTITY_TYPES(), "Index out of bounds");
@@ -5031,41 +5031,41 @@ int CvResourceInfo::getTradeConnectionResourceSeaYieldBonusTimes100(int i, int j
 	return m_paiTradeConnectionResourceSeaYieldBonus ? m_paiTradeConnectionResourceSeaYieldBonus[i][j] : 0;
 }
 #endif
-//------------------------------------------------------------------------------
+
 bool CvResourceInfo::isTerrain(int i) const
 {
 	CvAssertMsg(i < GC.getNumTerrainInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_pbTerrain ? m_pbTerrain[i] : false;
 }
-//------------------------------------------------------------------------------
+
 bool CvResourceInfo::isFeature(int i) const
 {
 	CvAssertMsg(i < GC.getNumFeatureInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_pbFeature ? m_pbFeature[i] : false;
 }
-//------------------------------------------------------------------------------
+
 bool CvResourceInfo::isFeatureTerrain(int i) const
 {
 	CvAssertMsg(i < GC.getNumTerrainInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_pbFeatureTerrain ?	m_pbFeatureTerrain[i] : false;
 }
-//------------------------------------------------------------------------------
+
 int CvResourceInfo::getFlavorValue(int i) const
 {
 	CvAssertMsg(i < GC.getNumFlavorTypes(), "index out of bounds");
 	CvAssertMsg(i > -1, "index out of bounds");
 	return m_piFlavor[i];
 }
-//------------------------------------------------------------------------------
+
 bool CvResourceInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
 		return false;
 
-	//Basic properties
+
 	m_iStartingResourceQuantity = kResults.GetInt("StartingResourceQuantity");
 	m_iAITradeModifier = kResults.GetInt("AITradeModifier");
 	m_iAIObjective = kResults.GetInt("AIObjective");
@@ -5105,7 +5105,7 @@ bool CvResourceInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility
 
 	m_eResourceUsage   = (ResourceUsageTypes)kResults.GetInt("ResourceUsage");
 
-	//Basic references
+
 	const char* szResourceClassType = kResults.GetText("ResourceClassType");
 	m_iResourceClassType = GC.getInfoTypeForString(szResourceClassType, true);
 
@@ -5139,7 +5139,7 @@ bool CvResourceInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility
 	const char* szAIStopTradingEra = kResults.GetText("AIStopTradingEra");
 	m_iAIStopTradingEra = GC.getInfoTypeForString(szAIStopTradingEra, true);
 
-	//Arrays
+
 	const char* szResourceType = GetType();
 	kUtility.SetYields(m_piYieldChange, "Resource_YieldChanges", "ResourceType", szResourceType);
 	kUtility.SetFlavors(m_piFlavor, "Resource_Flavors", "ResourceType", szResourceType);
@@ -5174,12 +5174,12 @@ bool CvResourceInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility
 		pResults->Reset();
 	}
 #endif
-	//Resource_QuantityTypes
+
 	{
 		const int iNumQuantityTypes = GC.getNUM_RESOURCE_QUANTITY_TYPES();
 		kUtility.InitializeArray(m_piResourceQuantityTypes, iNumQuantityTypes);
 
-		//Default it to 1
+
 		m_piResourceQuantityTypes[0] = 1;
 
 		Database::Results kArrayResults;
@@ -5199,8 +5199,8 @@ bool CvResourceInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility
 
 	}
 
-#if defined(MOD_RESOURCES_PRODUCTION_COST_MODIFIERS) // From Community Patch DLL - Resource additions for v28
-	//Resource_UnitCombatProductionCostModifiersLocal
+#if defined(MOD_RESOURCES_PRODUCTION_COST_MODIFIERS)
+
 	{
 
 		std::string sqlKey = "Resource_UnitCombatProductionCostModifiersLocal";
@@ -5226,11 +5226,11 @@ bool CvResourceInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility
 
 		pResults->Reset();
 
-		//Trim extra memory off container since this is mostly read-only.
+
 		std::map<int, std::vector<ProductionCostModifiers>>(m_piiiUnitCombatProductionCostModifiersLocal).swap(m_piiiUnitCombatProductionCostModifiersLocal);
 	}
 
-	//Resource_BuildingProductionCostModifiersLocal
+
 		{
 
 			std::string sqlKey = "Resource_BuildingProductionCostModifiersLocal";
@@ -5260,9 +5260,9 @@ bool CvResourceInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility
 	return true;
 }
 
-//======================================================================================================
-//					CvFeatureInfo
-//======================================================================================================
+
+
+
 CvFeatureInfo::CvFeatureInfo() :
 	m_iStartingLocationWeight(0),
 	m_iMovementCost(0),
@@ -5310,7 +5310,7 @@ CvFeatureInfo::CvFeatureInfo() :
 	m_bClearable(false)
 {
 }
-//------------------------------------------------------------------------------
+
 CvFeatureInfo::~CvFeatureInfo()
 {
 	SAFE_DELETE_ARRAY(m_piYieldChange);
@@ -5322,203 +5322,203 @@ CvFeatureInfo::~CvFeatureInfo()
 	SAFE_DELETE_ARRAY(m_pi3DAudioScriptFootstepIndex);
 	SAFE_DELETE_ARRAY(m_pbTerrain);
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getStartingLocationWeight() const
 {
 	return m_iStartingLocationWeight;
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getMovementCost() const
 {
 	return m_iMovementCost;
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getSeeThroughChange() const
 {
 	return m_iSeeThroughChange;
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getAppearanceProbability() const
 {
 	return m_iAppearanceProbability;
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getDisappearanceProbability() const
 {
 	return m_iDisappearanceProbability;
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getGrowthProbability() const
 {
 	return m_iGrowthProbability;
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getGrowthTerrainType() const
 {
 	return m_iGrowthTerrainType;
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getDefenseModifier() const
 {
 	return m_iDefenseModifier;
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getInfluenceCost() const
 {
 	return m_iInfluenceCost;
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getAdvancedStartRemoveCost() const
 {
 	return m_iAdvancedStartRemoveCost;
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getTurnDamage() const
 {
 	return m_iTurnDamage;
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getFirstFinderGold() const
 {
 	return m_iFirstFinderGold;
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getInBorderHappiness() const
 {
 	return m_iInBorderHappiness;
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getOccurrenceFrequency() const
 {
 	return m_iOccurrenceFrequency;
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getAdjacentUnitFreePromotion() const
 {
 	return m_iAdjacentUnitFreePromotion;
 }
-//------------------------------------------------------------------------------
+
 bool CvFeatureInfo::isYieldNotAdditive() const
 {
 	return m_bYieldNotAdditive;
 }
-//------------------------------------------------------------------------------
+
 bool CvFeatureInfo::isNoCoast() const
 {
 	return m_bNoCoast;
 }
-//------------------------------------------------------------------------------
+
 bool CvFeatureInfo::isNoRiver() const
 {
 	return m_bNoRiver;
 }
-//------------------------------------------------------------------------------
+
 bool CvFeatureInfo::isNoAdjacent() const
 {
 	return m_bNoAdjacent;
 }
-//------------------------------------------------------------------------------
+
 bool CvFeatureInfo::isRequiresFlatlands() const
 {
 	return m_bRequiresFlatlands;
 }
-//------------------------------------------------------------------------------
+
 bool CvFeatureInfo::isRequiresRiver() const
 {
 	return m_bRequiresRiver;
 }
-//------------------------------------------------------------------------------
+
 bool CvFeatureInfo::isAddsFreshWater() const
 {
 	return m_bAddsFreshWater;
 }
-//------------------------------------------------------------------------------
+
 bool CvFeatureInfo::isImpassable() const
 {
 	return m_bImpassable;
 }
-//------------------------------------------------------------------------------
+
 bool CvFeatureInfo::isNoCity() const
 {
 	return m_bNoCity;
 }
-//------------------------------------------------------------------------------
+
 bool CvFeatureInfo::isNoImprovement() const
 {
 	return m_bNoImprovement;
 }
-//------------------------------------------------------------------------------
+
 bool CvFeatureInfo::isVisibleAlways() const
 {
 	return m_bVisibleAlways;
 }
-//------------------------------------------------------------------------------
+
 bool CvFeatureInfo::isNukeImmune() const
 {
 	return m_bNukeImmune;
 }
-//------------------------------------------------------------------------------
+
 bool CvFeatureInfo::IsRough() const
 {
 	return m_bRough;
 }
-//------------------------------------------------------------------------------
+
 bool CvFeatureInfo::IsNaturalWonder() const
 {
 	return m_bNaturalWonder;
 }
-//------------------------------------------------------------------------------
+
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
 bool CvFeatureInfo::IsAllowsWalkWater() const
 {
 	return m_bAllowsWalkWater;
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::GetStackedDomainDefensePenalty() const
 {
 	return m_iStackedDomainDefensePenalty;
 }
 #endif
-//------------------------------------------------------------------------------
+
 const char* CvFeatureInfo::getArtDefineTag() const
 {
 	return m_strArtDefineTag;
 }
-//------------------------------------------------------------------------------
+
 void CvFeatureInfo::setArtDefineTag(const char* szTag)
 {
 	m_strArtDefineTag = szTag;
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getWorldSoundscapeScriptId() const
 {
 	return m_iWorldSoundscapeScriptId;
 }
-//------------------------------------------------------------------------------
+
 const char* CvFeatureInfo::getEffectType() const
 {
 	return m_strEffectType;
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getEffectProbability() const
 {
 	return m_iEffectProbability;
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getYieldChange(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piYieldChange ? m_piYieldChange[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getRiverYieldChange(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piRiverYieldChange ? m_piRiverYieldChange[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getHillsYieldChange(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
@@ -5526,7 +5526,7 @@ int CvFeatureInfo::getHillsYieldChange(int i) const
 	return m_piHillsYieldChange ? m_piHillsYieldChange[i] : -1;
 }
 #if defined(LEKMOD_MOUNTAINS)
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::getMountainYieldChange(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
@@ -5534,14 +5534,14 @@ int CvFeatureInfo::getMountainYieldChange(int i) const
 	return m_piMountainYieldChange ? m_piMountainYieldChange[i] : -1;
 }
 #endif
-//------------------------------------------------------------------------------
+
 int CvFeatureInfo::get3DAudioScriptFootstepIndex(int i) const
 {
-	//	CvAssertMsg(i < ?, "Index out of bounds");
+
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_pi3DAudioScriptFootstepIndex ? m_pi3DAudioScriptFootstepIndex[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 bool CvFeatureInfo::isTerrain(int i) const
 {
 	CvAssertMsg(i < GC.getNumTerrainInfos(), "Index out of bounds");
@@ -5549,24 +5549,24 @@ bool CvFeatureInfo::isTerrain(int i) const
 	return m_pbTerrain ? m_pbTerrain[i] : false;
 }
 
-// Set each time the game is started
+
 bool CvFeatureInfo::IsClearable() const
 {
 	return m_bClearable;
 }
-// Set each time the game is started
+
 void CvFeatureInfo::SetClearable(bool bValue)
 {
 	m_bClearable = bValue;
 }
 
-//------------------------------------------------------------------------------
+
 const char* CvFeatureInfo::getEffectTypeTag() const
 {
 	return m_strEffectTypeTag;
 }
 
-//------------------------------------------------------------------------------
+
 bool CvFeatureInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -5575,7 +5575,7 @@ bool CvFeatureInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 	const char* szArtDefineTag = kResults.GetText("ArtDefineTag");
 	setArtDefineTag(szArtDefineTag);
 
-	// Basic properties
+
 	m_iStartingLocationWeight = kResults.GetInt("StartingLocationWeight");
 	m_iMovementCost = kResults.GetInt("Movement");
 	m_iSeeThroughChange = kResults.GetInt("SeeThrough");
@@ -5624,7 +5624,7 @@ bool CvFeatureInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 	{
 		m_iStackedDomainDefensePenalty = kResults.GetInt("StackedDomainDefensePenalty");
 	}
-	// FEATURE_SHALLOWS: walk-water feature (works even if schema columns are absent)
+
 	if (GetType() != NULL && strcmp(GetType(), "FEATURE_SHALLOWS") == 0)
 	{
 		m_bAllowsWalkWater = true;
@@ -5649,7 +5649,7 @@ bool CvFeatureInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 		Remark(1, "Warning: Missing soundscape definition in XML for feature: '%s'", GetType());
 	}
 
-	// Array properties
+
 	const char* szFeatureType = GetType();
 	kUtility.SetYields(m_piYieldChange, "Feature_YieldChanges", "FeatureType", szFeatureType);
 	kUtility.SetYields(m_piRiverYieldChange, "Feature_RiverYieldChanges", "FeatureType", szFeatureType);
@@ -5660,15 +5660,15 @@ bool CvFeatureInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 
 	kUtility.PopulateArrayByExistence(m_pbTerrain, "Terrains", "Feature_TerrainBooleans", "TerrainType", "FeatureType", szFeatureType);
 
-	// Determine of this feature is clearable - set each time the game is started
+
 	m_bClearable = false;
 
 	return true;
 }
 
-//======================================================================================================
-//					CvYieldInfo
-//======================================================================================================
+
+
+
 CvYieldInfo::CvYieldInfo() :
 	m_iHillsChange(0),
 	m_iMountainChange(0),
@@ -5692,37 +5692,37 @@ CvYieldInfo::CvYieldInfo() :
 	m_iAIWeightPercent(0)
 {
 }
-//------------------------------------------------------------------------------
+
 int CvYieldInfo::getHillsChange() const
 {
 	return m_iHillsChange;
 }
-//------------------------------------------------------------------------------
+
 int CvYieldInfo::getMountainChange() const
 {
 	return m_iMountainChange;
 }
-//------------------------------------------------------------------------------
+
 int CvYieldInfo::getLakeChange() const
 {
 	return m_iLakeChange;
 }
-//------------------------------------------------------------------------------
+
 int CvYieldInfo::getCityChange() const
 {
 	return m_iCityChange;
 }
-//------------------------------------------------------------------------------
+
 int CvYieldInfo::getPopulationChangeOffset() const
 {
 	return m_iPopulationChangeOffset;
 }
-//------------------------------------------------------------------------------
+
 int CvYieldInfo::getPopulationChangeDivisor() const
 {
 	return m_iPopulationChangeDivisor;
 }
-//------------------------------------------------------------------------------
+
 int CvYieldInfo::getMinCity() const
 {
 	return m_iMinCity;
@@ -5733,51 +5733,51 @@ int CvYieldInfo::getMinCityOnHillsAdjust() const
 	return m_iMinCityOnHillsAdjust;
 }
 #endif
-//------------------------------------------------------------------------------
+
 int CvYieldInfo::getGoldenAgeYield() const
 {
 	return m_iGoldenAgeYield;
 }
-//------------------------------------------------------------------------------
+
 int CvYieldInfo::getGoldenAgeYieldThreshold() const
 {
 	return m_iGoldenAgeYieldThreshold;
 }
-//------------------------------------------------------------------------------
+
 int CvYieldInfo::getGoldenAgeYieldMod() const
 {
 	return m_iGoldenAgeYieldMod;
 }
 #if defined(LEKMOD_PLAYER_GOLDEN_AGE_YIELD_MOD_INFO)
-//------------------------------------------------------------------------------
+
 int CvYieldInfo::getPlayerGoldenAgeYieldMod() const
 {
 	return m_iPlayerGoldenAgeYieldMod;
 }
 #endif
 #if defined(LEKMOD_PUPPET_YIELD_MOD_INFO)
-//------------------------------------------------------------------------------
+
 int CvYieldInfo::getPuppetYieldModifier() const
 {
 	return m_iPuppetYieldMod;
 }
 #endif
-//------------------------------------------------------------------------------
+
 int CvYieldInfo::getAIWeightPercent() const
 {
 	return m_iAIWeightPercent;
 }
-//------------------------------------------------------------------------------
+
 CvString CvYieldInfo::getIconString() const
 {
 	return m_strIconString;
 }
-//------------------------------------------------------------------------------
+
 void CvYieldInfo::setIconString(const char* szVal)
 {
 	m_strIconString = szVal;
 }
-//------------------------------------------------------------------------------
+
 bool CvYieldInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -5810,9 +5810,9 @@ bool CvYieldInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& k
 
 }
 
-//======================================================================================================
-//					CvTerrainInfo
-//======================================================================================================
+
+
+
 CvTerrainInfo::CvTerrainInfo() :
 	m_iMovementCost(0),
 	m_iSeeFromLevel(0),
@@ -5835,7 +5835,7 @@ CvTerrainInfo::CvTerrainInfo() :
 	m_pi3DAudioScriptFootstepIndex(NULL)
 {
 }
-//------------------------------------------------------------------------------
+
 CvTerrainInfo::~CvTerrainInfo()
 {
 	SAFE_DELETE_ARRAY(m_piYields);
@@ -5846,96 +5846,96 @@ CvTerrainInfo::~CvTerrainInfo()
 #endif
 	SAFE_DELETE_ARRAY(m_pi3DAudioScriptFootstepIndex);
 }
-//------------------------------------------------------------------------------
+
 int CvTerrainInfo::getMovementCost() const
 {
 	return m_iMovementCost;
 }
-//------------------------------------------------------------------------------
+
 int CvTerrainInfo::getSeeFromLevel() const
 {
 	return m_iSeeFromLevel;
 }
-//------------------------------------------------------------------------------
+
 int CvTerrainInfo::getSeeThroughLevel() const
 {
 	return m_iSeeThroughLevel;
 }
-//------------------------------------------------------------------------------
+
 int CvTerrainInfo::getBuildModifier() const
 {
 	return m_iBuildModifier;
 }
-//------------------------------------------------------------------------------
+
 int CvTerrainInfo::getDefenseModifier() const
 {
 	return m_iDefenseModifier;
 }
-//------------------------------------------------------------------------------
+
 int CvTerrainInfo::getInfluenceCost() const
 {
 	return m_iInfluenceCost;
 }
-//------------------------------------------------------------------------------
+
 bool CvTerrainInfo::isWater() const
 {
 	return m_bWater;
 }
-//------------------------------------------------------------------------------
+
 bool CvTerrainInfo::isImpassable() const
 {
 	return m_bImpassable;
 }
-//------------------------------------------------------------------------------
+
 bool CvTerrainInfo::isFound() const
 {
 	return m_bFound;
 }
-//------------------------------------------------------------------------------
+
 bool CvTerrainInfo::isFoundCoast() const
 {
 	return m_bFoundCoast;
 }
-//------------------------------------------------------------------------------
+
 bool CvTerrainInfo::isFoundFreshWater() const
 {
 	return m_bFoundFreshWater;
 }
-//------------------------------------------------------------------------------
+
 const char* CvTerrainInfo::getArtDefineTag() const
 {
 	return m_strArtDefineTag;
 }
-//------------------------------------------------------------------------------
+
 void CvTerrainInfo::setArtDefineTag(const char* szTag)
 {
 	m_strArtDefineTag = szTag;
 }
-//------------------------------------------------------------------------------
+
 int CvTerrainInfo::getWorldSoundscapeScriptId() const
 {
 	return m_iWorldSoundscapeScriptId;
 }
-//------------------------------------------------------------------------------
+
 const char* CvTerrainInfo::getEffectTypeTag() const
 {
 	return m_strEffectTypeTag;
 }
-//------------------------------------------------------------------------------
+
 int CvTerrainInfo::getYield(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piYields ? m_piYields[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 int CvTerrainInfo::getRiverYieldChange(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piRiverYieldChange ? m_piRiverYieldChange[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 int CvTerrainInfo::getHillsYieldChange(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
@@ -5943,7 +5943,7 @@ int CvTerrainInfo::getHillsYieldChange(int i) const
 	return m_piHillsYieldChange ? m_piHillsYieldChange[i] : -1;
 }
 #if defined(LEKMOD_MOUNTAINS)
-//------------------------------------------------------------------------------
+
 int CvTerrainInfo::getMountainYieldChange(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
@@ -5951,14 +5951,14 @@ int CvTerrainInfo::getMountainYieldChange(int i) const
 	return m_piMountainYieldChange ? m_piMountainYieldChange[i] : -1;
 }
 #endif
-//------------------------------------------------------------------------------
+
 int CvTerrainInfo::get3DAudioScriptFootstepIndex(int i) const
 {
-//	CvAssertMsg(i < ?, "Index out of bounds");
+
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_pi3DAudioScriptFootstepIndex ? m_pi3DAudioScriptFootstepIndex[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 bool CvTerrainInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -5990,7 +5990,7 @@ bool CvTerrainInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 		Remark(1, "Warning: Missing soundscape definition in XML for feature: '%s'", GetType());
 	}
 
-	//Arrays
+
 	const char* szTerrainType = GetType();
 	kUtility.SetYields(m_piYields, "Terrain_Yields", "TerrainType", szTerrainType);
 	kUtility.SetYields(m_piRiverYieldChange, "Terrain_RiverYieldChanges", "TerrainType", szTerrainType);
@@ -6004,9 +6004,9 @@ bool CvTerrainInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 	return true;
 }
 
-//======================================================================================================
-//					CvInterfaceModeInfo
-//======================================================================================================
+
+
+
 CvInterfaceModeInfo::CvInterfaceModeInfo() :
 	m_iCursorIndex(NO_CURSOR),
 	m_iMissionType(NO_MISSION),
@@ -6016,37 +6016,37 @@ CvInterfaceModeInfo::CvInterfaceModeInfo() :
 	m_bSelectAll(false)
 {
 }
-//------------------------------------------------------------------------------
+
 int CvInterfaceModeInfo::getCursorIndex() const
 {
 	return m_iCursorIndex;
 }
-//------------------------------------------------------------------------------
+
 int CvInterfaceModeInfo::getMissionType() const
 {
 	return m_iMissionType;
 }
-//------------------------------------------------------------------------------
+
 bool CvInterfaceModeInfo::getVisible() const
 {
 	return m_bVisible;
 }
-//------------------------------------------------------------------------------
+
 bool CvInterfaceModeInfo::getHighlightPlot() const
 {
 	return m_bHighlightPlot;
 }
-//------------------------------------------------------------------------------
+
 bool CvInterfaceModeInfo::getSelectType() const
 {
 	return m_bSelectType;
 }
-//------------------------------------------------------------------------------
+
 bool CvInterfaceModeInfo::getSelectAll() const
 {
 	return m_bSelectAll;
 }
-//------------------------------------------------------------------------------
+
 bool CvInterfaceModeInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvHotKeyInfo::CacheResults(kResults, kUtility))
@@ -6066,9 +6066,9 @@ bool CvInterfaceModeInfo::CacheResults(Database::Results& kResults, CvDatabaseUt
 	return true;
 }
 
-//======================================================================================================
-//					CvLeaderHeadInfo
-//======================================================================================================
+
+
+
 CvLeaderHeadInfo::CvLeaderHeadInfo() :
 	m_iVictoryCompetitiveness(0),
 	m_iWonderCompetitiveness(0),
@@ -6089,7 +6089,7 @@ CvLeaderHeadInfo::CvLeaderHeadInfo() :
 	m_piFlavorValue(NULL)
 {
 }
-//------------------------------------------------------------------------------
+
 CvLeaderHeadInfo::~CvLeaderHeadInfo()
 {
 	SAFE_DELETE_ARRAY(m_piMajorCivApproachBiases);
@@ -6097,123 +6097,123 @@ CvLeaderHeadInfo::~CvLeaderHeadInfo()
 	SAFE_DELETE_ARRAY(m_pbTraits);
 	SAFE_DELETE_ARRAY(m_piFlavorValue);
 }
-//------------------------------------------------------------------------------
+
 int CvLeaderHeadInfo::GetVictoryCompetitiveness() const
 {
 	return m_iVictoryCompetitiveness;
 }
-//------------------------------------------------------------------------------
+
 int CvLeaderHeadInfo::GetWonderCompetitiveness() const
 {
 	return m_iWonderCompetitiveness;
 }
-//------------------------------------------------------------------------------
+
 int CvLeaderHeadInfo::GetMinorCivCompetitiveness() const
 {
 	return m_iMinorCivCompetitiveness;
 }
-//------------------------------------------------------------------------------
+
 int CvLeaderHeadInfo::GetBoldness() const
 {
 	return m_iBoldness;
 }
-//------------------------------------------------------------------------------
+
 int CvLeaderHeadInfo::GetDiploBalance() const
 {
 	return m_iDiploBalance;
 }
-//------------------------------------------------------------------------------
+
 int CvLeaderHeadInfo::GetWarmongerHate() const
 {
 	return m_iWarmongerHate;
 }
-//------------------------------------------------------------------------------
+
 int CvLeaderHeadInfo::GetDenounceWillingness() const
 {
 	return m_iDenounceWillingness;
 }
-//------------------------------------------------------------------------------
+
 int CvLeaderHeadInfo::GetDoFWillingness() const
 {
 	return m_iDoFWillingness;
 }
-//------------------------------------------------------------------------------
+
 int CvLeaderHeadInfo::GetLoyalty() const
 {
 	return m_iLoyalty;
 }
-//------------------------------------------------------------------------------
+
 int CvLeaderHeadInfo::GetNeediness() const
 {
 	return m_iNeediness;
 }
-//------------------------------------------------------------------------------
+
 int CvLeaderHeadInfo::GetForgiveness() const
 {
 	return m_iForgiveness;
 }
-//------------------------------------------------------------------------------
+
 int CvLeaderHeadInfo::GetChattiness() const
 {
 	return m_iChattiness;
 }
-//------------------------------------------------------------------------------
+
 int CvLeaderHeadInfo::GetMeanness() const
 {
 	return m_iMeanness;
 }
-//------------------------------------------------------------------------------
+
 int CvLeaderHeadInfo::GetMajorCivApproachBias(int i) const
 {
 	CvAssertMsg(i < NUM_MAJOR_CIV_APPROACHES, "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piMajorCivApproachBiases? m_piMajorCivApproachBiases[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 int CvLeaderHeadInfo::GetMinorCivApproachBias(int i) const
 {
 	CvAssertMsg(i < NUM_MINOR_CIV_APPROACHES, "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piMinorCivApproachBiases? m_piMinorCivApproachBiases[i] : -1;
 }
-//------------------------------------------------------------------------------
+
 const char* CvLeaderHeadInfo::getArtDefineTag() const
 {
 	return m_strArtDefineTag;
 }
-//------------------------------------------------------------------------------
+
 void CvLeaderHeadInfo::setArtDefineTag(const char* szVal)
 {
 	m_strArtDefineTag = szVal;
 }
-//------------------------------------------------------------------------------
+
 bool CvLeaderHeadInfo::hasTrait(int i) const
 {
 	CvAssertMsg(i < GC.getNumTraitInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_pbTraits ? m_pbTraits[i] : false;
 }
-//------------------------------------------------------------------------------
+
 int CvLeaderHeadInfo::getFlavorValue(int i) const
 {
 	CvAssertMsg(i < GC.getNumFlavorTypes(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piFlavorValue ? m_piFlavorValue[i] : 0;
 }
-//------------------------------------------------------------------------------
+
 const char* CvLeaderHeadInfo::getLeaderHead() const
 {
 	return NULL;
 }
-//------------------------------------------------------------------------------
+
 bool CvLeaderHeadInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
 		return false;
 
-	//Basic Properties
 
-	const char* szTextVal = NULL;	//Temp storage
+
+	const char* szTextVal = NULL;
 	szTextVal = kResults.GetText("ArtDefineTag");
 	setArtDefineTag(szTextVal);
 
@@ -6231,7 +6231,7 @@ bool CvLeaderHeadInfo::CacheResults(Database::Results& kResults, CvDatabaseUtili
 	m_iChattiness									= kResults.GetInt("Chattiness");
 	m_iMeanness									= kResults.GetInt("Meanness");
 
-	//Arrays
+
 	const char* szType = GetType();
 
 	kUtility.SetFlavors(m_piFlavorValue, "Leader_Flavors", "LeaderType", szType);
@@ -6245,9 +6245,9 @@ bool CvLeaderHeadInfo::CacheResults(Database::Results& kResults, CvDatabaseUtili
 	return true;
 }
 
-//======================================================================================================
-//					CvWorldInfo
-//======================================================================================================
+
+
+
 CvWorldInfo::CvWorldInfo() :
 	m_iDefaultPlayers(0),
 	m_iDefaultMinorCivs(0),
@@ -6271,62 +6271,62 @@ CvWorldInfo::CvWorldInfo() :
 	m_iEstimatedNumCities(0)
 {
 }
-//------------------------------------------------------------------------------
+
 int CvWorldInfo::getDefaultPlayers() const
 {
 	return m_iDefaultPlayers;
 }
-//------------------------------------------------------------------------------
+
 int CvWorldInfo::getDefaultMinorCivs() const
 {
 	return m_iDefaultMinorCivs;
 }
-//------------------------------------------------------------------------------
+
 int CvWorldInfo::getFogTilesPerBarbarianCamp() const
 {
 	return m_iFogTilesPerBarbarianCamp;
 }
-//------------------------------------------------------------------------------
+
 int CvWorldInfo::getNumNaturalWonders() const
 {
 	return m_iNumNaturalWonders;
 }
-//------------------------------------------------------------------------------
+
 int CvWorldInfo::getUnitNameModifier() const
 {
 	return m_iUnitNameModifier;
 }
-//------------------------------------------------------------------------------
+
 int CvWorldInfo::getTargetNumCities() const
 {
 	return m_iTargetNumCities;
 }
-//------------------------------------------------------------------------------
+
 int CvWorldInfo::getNumFreeBuildingResources() const
 {
 	return m_iNumFreeBuildingResources;
 }
-//------------------------------------------------------------------------------
+
 int CvWorldInfo::getBuildingClassPrereqModifier() const
 {
 	return m_iBuildingClassPrereqModifier;
 }
-//------------------------------------------------------------------------------
+
 int CvWorldInfo::getMaxConscriptModifier() const
 {
 	return m_iMaxConscriptModifier;
 }
-//------------------------------------------------------------------------------
+
 int CvWorldInfo::getGridWidth() const
 {
 	return m_iGridWidth;
 }
-//------------------------------------------------------------------------------
+
 int CvWorldInfo::getGridHeight() const
 {
 	return m_iGridHeight;
 }
-//------------------------------------------------------------------------------
+
 int CvWorldInfo::getMaxActiveReligions() const
 {
 #ifdef NQ_ALLOW_EXTRA_RELIGIONS
@@ -6338,47 +6338,47 @@ int CvWorldInfo::getMaxActiveReligions() const
 
 	return m_iMaxActiveReligions;
 }
-//------------------------------------------------------------------------------
+
 int CvWorldInfo::getTerrainGrainChange() const
 {
 	return m_iTerrainGrainChange;
 }
-//------------------------------------------------------------------------------
+
 int CvWorldInfo::getFeatureGrainChange() const
 {
 	return m_iFeatureGrainChange;
 }
-//------------------------------------------------------------------------------
+
 int CvWorldInfo::getResearchPercent() const
 {
 	return m_iResearchPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvWorldInfo::getAdvancedStartPointsMod() const
 {
 	return m_iAdvancedStartPointsMod;
 }
-//------------------------------------------------------------------------------
+
 int CvWorldInfo::getNumCitiesUnhappinessPercent() const
 {
 	return m_iNumCitiesUnhappinessPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvWorldInfo::GetNumCitiesPolicyCostMod() const
 {
 	return m_iNumCitiesPolicyCostMod;
 }
-//------------------------------------------------------------------------------
+
 int CvWorldInfo::GetNumCitiesTechCostMod() const
 {
 	return m_iNumCitiesTechCostMod;
 }
-//------------------------------------------------------------------------------
+
 int CvWorldInfo::GetEstimatedNumCities() const
 {
 	return m_iEstimatedNumCities;
 }
-//------------------------------------------------------------------------------
+
 CvWorldInfo CvWorldInfo::CreateCustomWorldSize(const CvWorldInfo& kTemplate, int iWidth, int iHeight)
 {
 	CvWorldInfo kWorldInfo(kTemplate);
@@ -6387,7 +6387,7 @@ CvWorldInfo CvWorldInfo::CreateCustomWorldSize(const CvWorldInfo& kTemplate, int
 
 	return kWorldInfo;
 }
-//------------------------------------------------------------------------------
+
 CvWorldInfo CvWorldInfo::CreateCustomWorldSize(const CvWorldInfo& kTemplate, int iWidth, int iHeight, int iPlayers, int iMinorCivs)
 {
 	CvWorldInfo kWorldInfo(kTemplate);
@@ -6398,7 +6398,7 @@ CvWorldInfo CvWorldInfo::CreateCustomWorldSize(const CvWorldInfo& kTemplate, int
 
 	return kWorldInfo;
 }
-//------------------------------------------------------------------------------
+
 bool CvWorldInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -6462,7 +6462,7 @@ bool CvWorldInfo::operator!=(const CvWorldInfo& rhs) const
 void CvWorldInfo::readFrom(FDataStream& loadFrom)
 {
 	int iVersion;
-	loadFrom >> iVersion;				// Make sure to update versioning if the members change!
+	loadFrom >> iVersion;
 
 	CvBaseInfo::readFrom(loadFrom);
 
@@ -6495,7 +6495,7 @@ void CvWorldInfo::readFrom(FDataStream& loadFrom)
 	}
 }
 
-// A special reader for version 0 (pre-versioning)
+
 void CvWorldInfo::readFromVersion0(FDataStream& loadFrom)
 {
 	CvBaseInfo::readFrom(loadFrom);
@@ -6520,7 +6520,7 @@ void CvWorldInfo::readFromVersion0(FDataStream& loadFrom)
 
 void CvWorldInfo::writeTo(FDataStream& saveTo) const
 {
-	int iVersion = 2;		// Make sure to update the versioning if the members change!
+	int iVersion = 2;
 	saveTo << iVersion;
 
 	CvBaseInfo::writeTo(saveTo);
@@ -6558,9 +6558,9 @@ FDataStream& operator>>(FDataStream& loadFrom, CvWorldInfo& writeTo)
 	return loadFrom;
 }
 
-//======================================================================================================
-//					CvClimateInfo
-//======================================================================================================
+
+
+
 CvClimateInfo::CvClimateInfo() :
 	m_iDesertPercentChange(0),
 	m_iJungleLatitude(0),
@@ -6575,7 +6575,7 @@ CvClimateInfo::CvClimateInfo() :
 	m_fRandIceLatitude(0.0f)
 {
 }
-//------------------------------------------------------------------------------
+
 bool CvClimateInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -6643,14 +6643,14 @@ FDataStream& operator>>(FDataStream& loadFrom, CvClimateInfo& writeTo)
 	return loadFrom;
 }
 
-//======================================================================================================
-//					CvSeaLevelInfo
-//======================================================================================================
+
+
+
 CvSeaLevelInfo::CvSeaLevelInfo() : CvBaseInfo()
 	, m_iSeaLevelChange(0)
 {
 }
-//------------------------------------------------------------------------------
+
 bool CvSeaLevelInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -6684,28 +6684,28 @@ FDataStream& operator>>(FDataStream& loadFrom, CvSeaLevelInfo& writeTo)
 	return loadFrom;
 }
 
-//======================================================================================================
-//					CvProcessInfo
-//======================================================================================================
+
+
+
 CvProcessInfo::CvProcessInfo() :
 	m_iTechPrereq(NO_TECH),
 	m_paiProductionToYieldModifier(NULL),
 	m_paiFlavorValue(NULL)
 {
 }
-//------------------------------------------------------------------------------
+
 CvProcessInfo::~CvProcessInfo()
 {
 	SAFE_DELETE_ARRAY(m_paiProductionToYieldModifier);
 	SAFE_DELETE_ARRAY(m_paiFlavorValue);
 }
-//------------------------------------------------------------------------------
+
 int CvProcessInfo::getTechPrereq() const
 {
 	return m_iTechPrereq;
 }
 
-//------------------------------------------------------------------------------
+
 int CvProcessInfo::getProductionToYieldModifier(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
@@ -6713,7 +6713,7 @@ int CvProcessInfo::getProductionToYieldModifier(int i) const
 	return m_paiProductionToYieldModifier ? m_paiProductionToYieldModifier[i] : -1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvProcessInfo::GetFlavorValue(int i) const
 {
 	CvAssertMsg(i < GC.getNumFlavorTypes(), "Index out of bounds");
@@ -6722,7 +6722,7 @@ int CvProcessInfo::GetFlavorValue(int i) const
 }
 
 
-//------------------------------------------------------------------------------
+
 bool CvProcessInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -6738,11 +6738,11 @@ bool CvProcessInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 
 	return true;
 }
-//------------------------------------------------------------------------------
 
-//======================================================================================================
-//					CvVoteInfo
-//======================================================================================================
+
+
+
+
 CvVoteInfo::CvVoteInfo() :
 	m_iPopulationThreshold(0),
 	m_iMinVoters(0),
@@ -6760,84 +6760,84 @@ CvVoteInfo::CvVoteInfo() :
 	m_abVoteSourceTypes(NULL)
 {
 }
-//------------------------------------------------------------------------------
+
 CvVoteInfo::~CvVoteInfo()
 {
 	SAFE_DELETE_ARRAY(m_abVoteSourceTypes);
 }
-//------------------------------------------------------------------------------
+
 int CvVoteInfo::getPopulationThreshold() const
 {
 	return m_iPopulationThreshold;
 }
-//------------------------------------------------------------------------------
+
 int CvVoteInfo::getMinVoters() const
 {
 	return m_iMinVoters;
 }
-//------------------------------------------------------------------------------
+
 bool CvVoteInfo::isSecretaryGeneral() const
 {
 	return m_bSecretaryGeneral;
 }
-//------------------------------------------------------------------------------
+
 bool CvVoteInfo::isVictory() const
 {
 	return m_bVictory;
 }
-//------------------------------------------------------------------------------
+
 bool CvVoteInfo::isNoNukes() const
 {
 	return m_bNoNukes;
 }
-//------------------------------------------------------------------------------
+
 bool CvVoteInfo::isCityVoting() const
 {
 	return m_bCityVoting;
 }
-//------------------------------------------------------------------------------
+
 bool CvVoteInfo::isCivVoting() const
 {
 	return m_bCivVoting;
 }
-//------------------------------------------------------------------------------
+
 bool CvVoteInfo::isDefensivePact() const
 {
 	return m_bDefensivePact;
 }
-//------------------------------------------------------------------------------
+
 bool CvVoteInfo::isOpenBorders() const
 {
 	return m_bOpenBorders;
 }
-//------------------------------------------------------------------------------
+
 bool CvVoteInfo::isForcePeace() const
 {
 	return m_bForcePeace;
 }
-//------------------------------------------------------------------------------
+
 bool CvVoteInfo::isForceNoTrade() const
 {
 	return m_bForceNoTrade;
 }
-//------------------------------------------------------------------------------
+
 bool CvVoteInfo::isForceWar() const
 {
 	return m_bForceWar;
 }
-//------------------------------------------------------------------------------
+
 bool CvVoteInfo::isAssignCity() const
 {
 	return m_bAssignCity;
 }
-//------------------------------------------------------------------------------
+
 bool CvVoteInfo::isVoteSourceType(int i) const
 {
 	CvAssertMsg(i < GC.getNumVoteSourceInfos(), "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_abVoteSourceTypes ? m_abVoteSourceTypes[i] : false;
 }
-//------------------------------------------------------------------------------
+
 bool CvVoteInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -6864,14 +6864,14 @@ bool CvVoteInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kU
 	return true;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-// CvEntityEventInfo
-/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 CvEntityEventInfo::CvEntityEventInfo() :
 	m_bUpdateFormation(true)
 {
 }
-//------------------------------------------------------------------------------
+
 bool CvEntityEventInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -6881,7 +6881,7 @@ bool CvEntityEventInfo::CacheResults(Database::Results& kResults, CvDatabaseUtil
 
 	const char* szEntityEventType = GetType();
 
-	//EntityEvent_AnimationPaths
+
 	{
 		std::string strKey = "EntityEventInfo - AnimationPaths";
 		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
@@ -6900,25 +6900,25 @@ bool CvEntityEventInfo::CacheResults(Database::Results& kResults, CvDatabaseUtil
 
 	return true;
 }
-//------------------------------------------------------------------------------
+
 AnimationPathTypes CvEntityEventInfo::getAnimationPathType(int iIndex) const
 {
 	return iIndex >= (int)m_vctAnimationPathType.size() ? ANIMATIONPATH_NONE : m_vctAnimationPathType[iIndex];
 }
-//------------------------------------------------------------------------------
+
 int CvEntityEventInfo::getAnimationPathCount() const
 {
 	return m_vctAnimationPathType.size();
 }
-//------------------------------------------------------------------------------
+
 bool CvEntityEventInfo::getUpdateFormation() const
 {
 	return m_bUpdateFormation;
 }
 
-//------------------------------------------------------------------------------------------------------
-//  CvEraInfo
-//
+
+
+
 
 CvEraInfo::CvEraInfo() :
 	m_iStartingUnitMultiplier(0),
@@ -6957,233 +6957,233 @@ CvEraInfo::CvEraInfo() :
 	m_uiCityBombardEffectTagHash(0)
 {
 }
-//------------------------------------------------------------------------------
+
 CvEraInfo::~CvEraInfo()
 {
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getStartingUnitMultiplier() const
 {
 	return m_iStartingUnitMultiplier;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getStartingDefenseUnits() const
 {
 	return m_iStartingDefenseUnits;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getStartingWorkerUnits() const
 {
 	return m_iStartingWorkerUnits;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getStartingExploreUnits() const
 {
 	return m_iStartingExploreUnits;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getResearchAgreementCost() const
 {
 	return m_iResearchAgreementCost;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getEmbarkedUnitDefense() const
 {
 	return m_iEmbarkedUnitDefense;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getStartingGold() const
 {
 	return m_iStartingGold;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getStartingCulture() const
 {
 	return m_iStartingCulture;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getFreePopulation() const
 {
 	return m_iFreePopulation;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getLaterEraBuildingConstructMod() const
 {
 	return m_iLaterEraBuildingConstructMod;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getStartPercent() const
 {
 	return m_iStartPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getBuildingMaintenancePercent() const
 {
 	return m_iBuildingMaintenancePercent;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getGrowthPercent() const
 {
 	return m_iGrowthPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getTrainPercent() const
 {
 	return m_iTrainPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getConstructPercent() const
 {
 	return m_iConstructPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getCreatePercent() const
 {
 	return m_iCreatePercent;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getResearchPercent() const
 {
 	return m_iResearchPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getBuildPercent() const
 {
 	return m_iBuildPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getImprovementPercent() const
 {
 	return m_iImprovementPercent;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getGreatPeoplePercent() const
 {
 	return m_iGreatPeoplePercent;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getEventChancePerTurn() const
 {
 	return m_iEventChancePerTurn;
 }
 
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getSpiesGrantedForPlayer() const
 {
 	return m_iSpiesGrantedForPlayer;
 }
 
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getSpiesGrantedForEveryone() const
 {
 	return m_iSpiesGrantedForEveryone;
 }
 
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getFaithCostMultiplier() const
 {
 	return m_iFaithCostMultiplier;
 }
 
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getDiploEmphasisReligion() const
 {
 	return m_iDiploEmphasisReligion;
 }
 
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getDiplpEmphasisLatePolicies() const
 {
 	return m_iDiplpEmphasisLatePolicies;
 }
 
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getTradeRouteFoodBonusTimes100() const
 {
 	return m_iTradeRouteFoodBonusTimes100;
 }
 
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getTradeRouteProductionBonusTimes100() const
 {
 	return m_iTradeRouteProductionBonusTimes100;
 }
 
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getLeaguePercent() const
 {
 	return m_iLeaguePercent;
 }
 
-//------------------------------------------------------------------------------
+
 int CvEraInfo::getWarmongerPercent() const
 {
 	return m_iWarmongerPercent;
 }
 
-//------------------------------------------------------------------------------
+
 const char* CvEraInfo::getArtPrefix() const
 {
 	return m_strArtPrefix.c_str();
 }
-//------------------------------------------------------------------------------
+
 const char* CvEraInfo::GetCityBombardEffectTag() const
 {
 	return m_strCityBombardEffectTag;
 }
-//------------------------------------------------------------------------------
+
 uint CvEraInfo::GetCityBombardEffectTagHash() const
 {
 	return m_uiCityBombardEffectTagHash;
 }
-//------------------------------------------------------------------------------
+
 const char* CvEraInfo::getAudioUnitVictoryScript() const
 {
 	return m_strAudioUnitVictoryScript;
 }
-//------------------------------------------------------------------------------
+
 const char* CvEraInfo::getAudioUnitDefeatScript() const
 {
 	return m_strAudioUnitDefeatScript;
 }
-//------------------------------------------------------------------------------
+
 bool CvEraInfo::isNoGoodies() const
 {
 	return m_bNoGoodies;
 }
-//------------------------------------------------------------------------------
+
 bool CvEraInfo::isNoBarbUnits() const
 {
 	return m_bNoBarbUnits;
-}//------------------------------------------------------------------------------
+}
 bool CvEraInfo::isNoReligion() const
 {
 	return m_bNoReligion;
 }
-//------------------------------------------------------------------------------
+
 int CvEraInfo::GetNumEraVOs() const
 {
 	return m_vEraVOs.size();
 }
-//------------------------------------------------------------------------------
+
 const char* CvEraInfo::GetEraVO(int iIndex)
 {
 	return m_vEraVOs[iIndex].c_str();
 }
 
-//------------------------------------------------------------------------------
+
 const char* CvEraInfo::getShortDesc() const
 {
 	return m_strShortDesc.c_str();
 }
 
-//------------------------------------------------------------------------------
+
 const char* CvEraInfo::getAbbreviation() const
 {
 	return m_strAbbreviation.c_str();
 }
 
-//------------------------------------------------------------------------------
+
 bool CvEraInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -7234,7 +7234,7 @@ bool CvEraInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUt
 	m_strShortDesc = kResults.GetText("ShortDescription");
 	m_strAbbreviation = kResults.GetText("Abbreviation");
 
-	//City Names
+
 	{
 		m_vEraVOs.clear();
 
@@ -7256,14 +7256,14 @@ bool CvEraInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUt
 }
 
 
-//------------------------------------------------------------------------------
-// CvColorInfo
-//------------------------------------------------------------------------------
+
+
+
 const CvColorA& CvColorInfo::GetColor() const
 {
 	return m_Color;
 }
-//------------------------------------------------------------------------------
+
 bool CvColorInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -7278,34 +7278,34 @@ bool CvColorInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& k
 
 	return true;
 }
-//------------------------------------------------------------------------------
+
 CvPlayerColorInfo::CvPlayerColorInfo() : CvBaseInfo()
 	, m_iColorTypePrimary(NO_COLOR)
 	, m_iColorTypeSecondary(NO_COLOR)
 	, m_iColorTypeText(NO_COLOR)
 {}
-//------------------------------------------------------------------------------
+
 int CvPlayerColorInfo::GetColorTypePrimary() const
 {
 	return m_iColorTypePrimary;
 }
-//------------------------------------------------------------------------------
+
 int CvPlayerColorInfo::GetColorTypeSecondary() const
 {
 	return m_iColorTypeSecondary;
 }
-//------------------------------------------------------------------------------
+
 int CvPlayerColorInfo::GetColorTypeText() const
 {
 	return m_iColorTypeText;
 }
-//------------------------------------------------------------------------------
+
 bool CvPlayerColorInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
 		return false;
 
-	//Perform an inner join
+
 	const char* szSQL =	"select PrimaryColor.ID, SecondaryColor.ID, TextColor.ID FROM PlayerColors INNER JOIN "
 	                    "Colors As PrimaryColor ON PlayerColors.PrimaryColor = PrimaryColor.Type, "
 	                    "Colors AS SecondaryColor ON PlayerColors.SecondaryColor = SecondaryColor.Type, "
@@ -7331,26 +7331,26 @@ bool CvPlayerColorInfo::CacheResults(Database::Results& kResults, CvDatabaseUtil
 	return true;
 }
 
-//======================================================================================================
-//	CvGameOptionInfo
-//	Game options and their default values
-//======================================================================================================
+
+
+
+
 CvGameOptionInfo::CvGameOptionInfo() :
 	m_bDefault(false),
 	m_bVisible(true)
 {
 }
-//------------------------------------------------------------------------------
+
 bool CvGameOptionInfo::getDefault() const
 {
 	return m_bDefault;
 }
-//------------------------------------------------------------------------------
+
 bool CvGameOptionInfo::getVisible() const
 {
 	return m_bVisible;
 }
-//------------------------------------------------------------------------------
+
 bool CvGameOptionInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -7362,20 +7362,20 @@ bool CvGameOptionInfo::CacheResults(Database::Results& kResults, CvDatabaseUtili
 	return true;
 }
 
-//======================================================================================================
-//	CvMPOptionInfo
-//	Multiplayer options and their default values
-//======================================================================================================
+
+
+
+
 CvMPOptionInfo::CvMPOptionInfo() :
 	m_bDefault(false)
 {
 }
-//------------------------------------------------------------------------------
+
 bool CvMPOptionInfo::getDefault() const
 {
 	return m_bDefault;
 }
-//------------------------------------------------------------------------------
+
 bool CvMPOptionInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -7386,20 +7386,20 @@ bool CvMPOptionInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility
 	return true;
 }
 
-//======================================================================================================
-//	CvPlayerOptionInfo
-//	Player options and their default values
-//======================================================================================================
+
+
+
+
 CvPlayerOptionInfo::CvPlayerOptionInfo() :
 	m_bDefault(false)
 {
 }
-//------------------------------------------------------------------------------
+
 bool CvPlayerOptionInfo::getDefault() const
 {
 	return m_bDefault;
 }
-//------------------------------------------------------------------------------
+
 bool CvPlayerOptionInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -7410,45 +7410,45 @@ bool CvPlayerOptionInfo::CacheResults(Database::Results& kResults, CvDatabaseUti
 	return true;
 }
 
-//======================================================================================================
-//		CvVoteSourceInfo
-//======================================================================================================
+
+
+
 CvVoteSourceInfo::CvVoteSourceInfo() :
 	m_iVoteInterval(0),
 	m_iFreeSpecialist(NO_SPECIALIST),
 	m_iPolicy(NO_POLICY)
 {
 }
-//------------------------------------------------------------------------------
+
 CvVoteSourceInfo::~CvVoteSourceInfo()
 {
 }
-//------------------------------------------------------------------------------
+
 int CvVoteSourceInfo::getVoteInterval() const
 {
 	return m_iVoteInterval;
 }
-//------------------------------------------------------------------------------
+
 int CvVoteSourceInfo::getFreeSpecialist() const
 {
 	return m_iFreeSpecialist;
 }
-//------------------------------------------------------------------------------
+
 int CvVoteSourceInfo::getPolicy() const
 {
 	return m_iPolicy;
 }
-//------------------------------------------------------------------------------
+
 const CvString& CvVoteSourceInfo::getPopupText() const
 {
 	return m_strPopupText;
 }
-//------------------------------------------------------------------------------
+
 const CvString& CvVoteSourceInfo::getSecretaryGeneralText() const
 {
 	return m_strSecretaryGeneralText;
 }
-//------------------------------------------------------------------------------
+
 bool CvVoteSourceInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))

@@ -1,22 +1,22 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_CITY_CITIZENS_H
 #define CIV5_CITY_CITIZENS_H
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvCityCitizens
-//!  \brief		Keeps track of Citizens and Specialists in a City
-//
-//!  Key Attributes:
-//!  - One instance for each city
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 class CvCityCitizens
 {
 public:
@@ -48,7 +48,7 @@ public:
 
 	int GetPlotValue(CvPlot* pPlot, bool bUseAllowGrowthFlag);
 
-	// Are this City's Citizens automated? (always true for AI civs)
+
 	bool IsAutomated() const;
 	void SetAutomated(bool bValue);
 
@@ -66,7 +66,7 @@ public:
 	CityAIFocusTypes GetFocusType() const;
 	void SetFocusType(CityAIFocusTypes eFocus);
 
-	// Specialist AI
+
 #ifndef NQM_PRUNING
 	bool IsAIWantSpecialistRightNow();
 #endif
@@ -92,7 +92,7 @@ public:
 #endif
 #endif
 
-	// Citizen Assignment
+
 	int GetNumUnassignedCitizens() const;
 	void ChangeNumUnassignedCitizens(int iChange);
 	int GetNumCitizensWorkingPlots() const;
@@ -112,12 +112,12 @@ public:
 
 	CvPlot* GetBestCityPlotWithValue(int& iValue, bool bWantBest, bool bWantWorked);
 
-	// Worked Plots
+
 	bool IsWorkingPlot(const CvPlot* pPlot) const;
 	void SetWorkingPlot(CvPlot* pPlot, bool bNewValue, bool bUseUnassignedPool = true);
 	void DoAlterWorkingPlot(int iIndex);
 
-	// Forced Working Plots (human override)
+
 	bool IsForcedWorkingPlot(const CvPlot* pPlot) const;
 	void SetForcedWorkingPlot(CvPlot* pPlot, bool bNewValue);
 
@@ -144,11 +144,11 @@ public:
 #endif
 	void DoVerifyWorkingPlots();
 
-	// Helpful Stuff
+
 	int GetCityIndexFromPlot(const CvPlot* pPlot) const;
 	CvPlot* GetCityPlotFromIndex(int iIndex) const;
 
-	// Specialists
+
 #ifdef AUI_YIELDS_APPLIED_AFTER_TURN_NOT_BEFORE
 	int getCachedGPChangeT100ForThisTurn(SpecialistTypes eGPSpecialistType) const;
 	void cacheGPChangesT100ForThisTurn();
@@ -245,4 +245,4 @@ private:
 
 };
 
-#endif // CIV5_CITY_CITIZENS_H
+#endif

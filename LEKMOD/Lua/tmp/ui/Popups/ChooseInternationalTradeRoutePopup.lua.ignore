@@ -1,14 +1,14 @@
 
--------------------------------------------------
--- Choose Archaeology Popup
--------------------------------------------------
+
+
+
 
 include( "IconSupport" );
 include( "InstanceManager" );
 include( "CommonBehaviors" );
 include( "TradeRouteHelpers" );
 
--- Used for Piano Keys
+
 local ltBlue = {19/255,32/255,46/255,120/255};
 local dkBlue = {12/255,22/255,30/255,120/255};
 
@@ -26,7 +26,7 @@ local bHidden = true;
 local screenSizeX, screenSizeY = UIManager:GetScreenSizeVal()
 local spWidth, spHeight = Controls.ItemScrollPanel:GetSizeVal();
 
--- Original UI designed at 1050px 
+
 local heightOffset = screenSizeY - 1020;
 
 spHeight = spHeight + heightOffset;
@@ -35,11 +35,11 @@ Controls.ItemScrollPanel:CalculateInternalSize();
 Controls.ItemScrollPanel:ReprocessAnchoring();
 
 local bpWidth, bpHeight = Controls.BottomPanel:GetSizeVal();
---bpHeight = bpHeight * heightRatio;
---print(heightOffset);
---print(bpHeight);
+
+
+
 bpHeight = bpHeight + heightOffset 
---print(bpHeight);
+
 
 local pUnitPlot;
 
@@ -47,8 +47,8 @@ Controls.BottomPanel:SetSizeVal(bpWidth, bpHeight);
 Controls.BottomPanel:ReprocessAnchoring();
 
 local g_PopupInfo = nil;
--------------------------------------------------
--------------------------------------------------
+
+
 function OnPopupMessage(popupInfo)
 	local popupType = popupInfo.Type;
 	if popupType ~= ButtonPopupTypes.BUTTONPOPUP_CHOOSE_INTERNATIONAL_TRADE_ROUTE then
@@ -63,12 +63,12 @@ function OnPopupMessage(popupInfo)
 end
 Events.SerialEventGameMessagePopup.Add( OnPopupMessage );
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function InputHandler( uiMsg, wParam, lParam )
-    ----------------------------------------------------------------        
-    -- Key Down Processing
-    ----------------------------------------------------------------        
+
+
+
     if uiMsg == KeyEvents.KeyDown then
         if (wParam == Keys.VK_ESCAPE) then
 			if(not Controls.ChooseConfirm:IsHidden()) then
@@ -82,8 +82,8 @@ function InputHandler( uiMsg, wParam, lParam )
 end
 ContextPtr:SetInputHandler( InputHandler );
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function TradeOverview()
 	local popupInfo = {
 		Type = ButtonPopupTypes.BUTTONPOPUP_TRADE_ROUTE_OVERVIEW,
@@ -92,16 +92,16 @@ function TradeOverview()
 end
 Controls.TradeOverviewButton:RegisterCallback( Mouse.eLClick, TradeOverview );
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function OnClose()
     UIManager:DequeuePopup(ContextPtr);
 	Events.Event_ToggleTradeRouteDisplay(OptionsManager.GetShowTradeOn());
 end
 Controls.CloseButton:RegisterCallback( Mouse.eLClick, OnClose );
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function RefreshData()
 	
 	local iActivePlayer = Game.GetActivePlayer();
@@ -157,7 +157,7 @@ function RefreshData()
 		elseif(iTargetOwner < GameDefines.MAX_MAJOR_CIVS) then
 			tradeRoute.Category = 2;
 		else
-			tradeRoute.Category = 3;	-- City States
+			tradeRoute.Category = 3;
 		end
 		
 		local myBonuses = {};
@@ -385,8 +385,8 @@ end
 Controls.ConfirmNo:RegisterCallback( Mouse.eLClick, OnConfirmNo );
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function ShowHideHandler( bIsHide, bInitState )
 
 	bHidden = bIsHide;
@@ -432,7 +432,7 @@ end
 ContextPtr:SetShowHideHandler( ShowHideHandler );
 
 function OnDirty()
-	-- If the user performed any action that changes selection states, just close this UI.
+
 	if not bHidden then
 		OnClose();
 	end
@@ -484,4 +484,3 @@ RegisterCollapseBehavior{
 	OnCollapse = OnCollapseExpand,
 	OnExpand = OnCollapseExpand,
 };
-

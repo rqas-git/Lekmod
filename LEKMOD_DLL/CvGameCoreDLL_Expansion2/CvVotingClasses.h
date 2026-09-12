@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 
 #pragma once
 
@@ -14,11 +14,11 @@
 #define DEBUG_LEAGUES false
 
 
-// Forward declarations
+
 class CvLeague;
 
 
-// Helper namespace
+
 namespace LeagueHelpers
 {
 	CvString GetTextForChoice(ResolutionDecisionTypes eDecision, int iChoice);
@@ -76,20 +76,20 @@ namespace LeagueHelpers
 
 	const int AI_CHOOSE_PROPOSAL_FROM_TOP = 6;
 
-	//antonjs: todo: xml
+
 	const int PROPOSERS_PER_SESSION = 2;
 	const int NUM_LEADERS_FOR_EXTRA_VOTES = 2;
 	const int PROJECT_PROGRESS_PERCENT_WARNING = 33;
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  STRUCT:     CvResolutionEffects
-//!  \brief		Data structure for effects from Resolutions
-//
-//!  Key Attributes:
-//!  - May be used for one Resolution's effects or a sum of Resolutions' effects
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 struct CvResolutionEffects
 {
 	CvResolutionEffects(void);
@@ -147,13 +147,13 @@ FDataStream& operator>>(FDataStream&, CvResolutionEffects&);
 FDataStream& operator<<(FDataStream&, const CvResolutionEffects&);
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:		CvResolutionDecision
-//!  \brief		Abstract base class for a decision about a CvResolution that must be resolved
-//
-//!  Key Attributes:
-//!  - Abstract base class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 class CvResolutionDecision
 {
 public:
@@ -167,11 +167,11 @@ public:
 
 		PlayerTypes ePlayer;
 		int iNumVotes;
-		int iChoice; // Interpreted differently based on ResolutionDecisionTypes
+		int iChoice;
 	};
 	typedef FStaticVector<PlayerVote, MAX_MAJOR_CIVS, false, c_eCiv5GameplayDLL> PlayerVoteList;
 
-	// Pure virtual functions
+
 #if defined(AUI_WARNING_FIXES) || defined(AUI_CONSTIFY) || defined(AUI_TECH_FIX_TEAMER_RESEARCH_COSTS)
 	virtual int GetDecision() const = 0;
 #else
@@ -192,13 +192,13 @@ FDataStream& operator>>(FDataStream&, CvResolutionDecision&);
 FDataStream& operator<<(FDataStream&, const CvResolutionDecision&);
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:		CvProposerDecision
-//!  \brief		Decision about a CvResolution to be resolved by the proposer
-//
-//!  Key Attributes:
-//!  - Stores one PlayerVote, from the proposer
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 class CvProposerDecision : public CvResolutionDecision
 {
 public:
@@ -223,13 +223,13 @@ FDataStream& operator>>(FDataStream&, CvProposerDecision&);
 FDataStream& operator<<(FDataStream&, const CvProposerDecision&);
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:		CvVoterDecision
-//!  \brief		Decision about a CvResolution to be resolved by the voters
-//
-//!  Key Attributes:
-//!  - Stores multiple PlayerVotes, one from each voter
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 class CvVoterDecision : public CvResolutionDecision
 {
 public:
@@ -274,14 +274,14 @@ FDataStream& operator>>(FDataStream&, CvVoterDecision&);
 FDataStream& operator<<(FDataStream&, const CvVoterDecision&);
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvResolution
-//!  \brief		Abstract base class for a game-changing effect
-//
-//!  Key Attributes:
-//!  - Abstract base class
-//!  - Contains data about a Resolution's type and effects
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvResolution
 {
 public:
@@ -289,7 +289,7 @@ public:
 	CvResolution(int iID, ResolutionTypes eType, LeagueTypes eLeague);
 	~CvResolution(void);
 
-	// Pure virtual functions
+
 	virtual void Init() = 0;
 
 	int GetID() const;
@@ -321,14 +321,14 @@ FDataStream& operator>>(FDataStream&, CvResolution&);
 FDataStream& operator<<(FDataStream&, const CvResolution&);
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvProposal
-//!  \brief		Abstract base class for a game-changing effect considered by a CvLeague
-//
-//!  Key Attributes:
-//!  - Abstract base class
-//!  - Contains data about how it was proposed
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvProposal : public CvResolution
 {
 public:
@@ -336,7 +336,7 @@ public:
 	CvProposal(int iID, ResolutionTypes eType, LeagueTypes eLeague, PlayerTypes eProposalPlayer);
 	~CvProposal(void);
 
-	// Pure virtual functions
+
 #if defined(AUI_WARNING_FIXES) || defined(AUI_CONSTIFY)
 	virtual bool IsPassed(int iTotalSessionVotes) const = 0;
 	virtual CvString GetProposalName(bool bForLogging) const = 0;
@@ -356,12 +356,12 @@ FDataStream& operator>>(FDataStream&, CvProposal&);
 FDataStream& operator<<(FDataStream&, const CvProposal&);
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvEnactProposal
-//!  \brief		Proposal to a enact a new Resolution
-//
-//!  Key Attributes:
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
 class CvEnactProposal : public CvProposal
 {
 public:
@@ -387,14 +387,14 @@ FDataStream& operator<<(FDataStream&, const CvEnactProposal&);
 typedef FStaticVector<CvEnactProposal, 2, false, c_eCiv5GameplayDLL> EnactProposalList;
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvActiveResolution
-//!  \brief		A Resolution that has been enacted by a League, with active CvResolutionEffects
-//
-//!  Key Attributes:
-//!  - Instantiated using data from an existing CvEnactProposal
-//!  - Assigned a unique ID by the CvLeague that enacts it
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvActiveResolution : public CvResolution
 {
 public:
@@ -420,13 +420,13 @@ FDataStream& operator<<(FDataStream&, const CvActiveResolution&);
 typedef FStaticVector<CvActiveResolution, 12, false, c_eCiv5GameplayDLL> ActiveResolutionList;
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvRepealProposal
-//!  \brief		Proposal to repeal an existing CvActiveResolution
-//
-//!  Key Attributes:
-//!  - Contains the unique ID of the CvActiveResolution to be repealed
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 class CvRepealProposal : public CvProposal
 {
 public:
@@ -463,15 +463,15 @@ FDataStream& operator<<(FDataStream&, const CvRepealProposal&);
 typedef FStaticVector<CvRepealProposal, 2, false, c_eCiv5GameplayDLL> RepealProposalList;
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvLeague
-//!  \brief		A group of players that makes collective decisions on Resolutions
-//
-//!  Key Attributes:
-//!  - Tracks resolutions that are active, up for enactment, and up for repeal
-//!  - Tracks members and their statuses
-//!  - Queried for certain effects of active Resolutions by other game classes
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvLeague
 {
 public:
@@ -529,7 +529,7 @@ public:
 	bool CanChangeCustomName(PlayerTypes ePlayer);
 	void DoChangeCustomName(PlayerTypes ePlayer, const char* szCustomName);
 
-	// Sessions
+
 	int GetSessionTurnInterval();
 	bool IsInSession();
 	bool IsInSpecialSession();
@@ -545,11 +545,11 @@ public:
 	LeagueSpecialSessionTypes GetCurrentSpecialSession() const;
 	bool CanStartSpecialSession(LeagueSpecialSessionTypes eSpecialSession);
 
-	// Diplomatic Victory
+
 	bool IsUnitedNations() const;
 	void SetUnitedNations(bool bValue);
 
-	// Resolutions
+
 	void DoVoteEnact(int iID, PlayerTypes eVoter, int iNumVotes, int iChoice);
 	void DoVoteRepeal(int iResolutionID, PlayerTypes eVoter, int iNumVotes, int iChoice);
 	void DoVoteAbstain(PlayerTypes eVoter, int iNumVotes);
@@ -589,7 +589,7 @@ public:
 	void AssignSecondProposalPrivilege();
 #endif
 
-	// Members
+
 	void AddMember(PlayerTypes ePlayer);
 	void RemoveMember(PlayerTypes ePlayer);
 	bool IsMember(PlayerTypes ePlayer) const;
@@ -609,7 +609,7 @@ public:
 	LeagueHelpers::PlayerList GetMembersThatDislikeProposal(ResolutionTypes eResolution, PlayerTypes eObserver, int iProposerChoice);
 	LeagueHelpers::PlayerList GetMembersThatDislikeProposal(int iTargetResolutionID, PlayerTypes eObserver);
 
-	// Host
+
 	bool HasHostMember() const;
 	bool IsHostMember(PlayerTypes ePlayer) const;
 	PlayerTypes GetHostMember() const;
@@ -620,7 +620,7 @@ public:
 	bool HasMemberEverBeenHost(PlayerTypes ePlayer);
 	bool HasMemberAlwaysBeenHost(PlayerTypes ePlayer);
 
-	// Projects
+
 	bool IsProjectActive(LeagueProjectTypes eLeagueProject) const;
 	bool IsProjectComplete(LeagueProjectTypes eLeagueProject) const;
 	int GetProjectCostPerPlayer(LeagueProjectTypes eLeagueProject) const;
@@ -634,7 +634,7 @@ public:
 	ContributionTier GetMemberContributionTier(PlayerTypes ePlayer, LeagueProjectTypes eLeagueProject);
 	float GetContributionTierThreshold(ContributionTier eTier, LeagueProjectTypes eLeagueProject);
 
-	// Resolution Effect Queries
+
 	bool IsTradeEmbargoed(PlayerTypes eTrader, PlayerTypes eRecipient);
 	bool IsLuxuryHappinessBanned(ResourceTypes eLuxury);
 #if defined(AUI_CONSTIFY) || defined(AUI_TECH_FIX_TEAMER_RESEARCH_COSTS)
@@ -653,7 +653,7 @@ public:
 	int GetArtsyGreatPersonRateModifier();
 	int GetScienceyGreatPersonRateModifier();
 
-	// Text composition for UI
+
 	CvString GetResolutionName(ResolutionTypes eResolution, int iResolutionID, int iProposerChoice, bool bIncludePrefix);
 	CvString GetResolutionDetails(ResolutionTypes eResolution, PlayerTypes eObserver, int iResolutionID, int iProposerChoice);
 	CvString GetResolutionVoteOpinionDetails(ResolutionTypes eResolution, PlayerTypes eObserver, int iResolutionID);
@@ -674,7 +674,7 @@ public:
 	CvString GetLeagueSplashNextEraDetails(LeagueSpecialSessionTypes eGoverningSpecialSession, bool bJustFounded);
 	CvString GetGreatPersonRateModifierDetails(UnitClassTypes eGreatPersonClass);
 
-	// Achievements
+
 	void CheckProjectAchievements();
 
 	LeagueTypes m_eID;
@@ -732,11 +732,11 @@ private:
 
 	void UpdateName();
 
-	// Logging
+
 	void LogProposalResolved(CvEnactProposal* pProposal);
 	void LogProposalResolved(CvRepealProposal* pProposal);
 
-	// Accessors
+
 	Member* GetMember(PlayerTypes ePlayer);
 	Project* GetProject(LeagueProjectTypes eLeagueProject);
 };
@@ -748,14 +748,14 @@ FDataStream& operator<<(FDataStream&, const CvLeague&);
 typedef FStaticVector<CvLeague, 2, false, c_eCiv5GameplayDLL> LeagueList;
 #endif
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvGameLeagues
-//!  \brief		All the information about active Leagues and their Resolutions
-//
-//!  Key Attributes:
-//!  - Contains list of active Leagues in the game
-//!  - Queried for information about player membership (CvLeague) and gameplay effects (CvResolution)
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvGameLeagues
 {
 public:
@@ -764,10 +764,10 @@ public:
 
 	void Init();
 
-	// Called each game turn
+
 	void DoTurn();
 
-	// Called each player turn
+
 	void DoPlayerTurn(CvPlayer& kPlayer);
 
 	void FoundLeague(PlayerTypes eFounder = NO_PLAYER);
@@ -793,11 +793,11 @@ public:
 
 	int GenerateResolutionUniqueID();
 
-	// Projects
+
 	bool CanContributeToLeagueProject(PlayerTypes ePlayer, LeagueProjectTypes eLeagueProject);
 	void DoLeagueProjectContribution(PlayerTypes ePlayer, LeagueProjectTypes eLeagueProject, int iValue);
 
-	// Resolution Effects
+
 	PlayerTypes GetDiplomaticVictor() const;
 	void SetDiplomaticVictor(PlayerTypes ePlayer);
 	bool IsTradeEmbargoed(PlayerTypes eTrader, PlayerTypes eRecipient);
@@ -815,7 +815,7 @@ public:
 	int GetArtsyGreatPersonRateModifier(PlayerTypes ePlayer);
 	int GetScienceyGreatPersonRateModifier(PlayerTypes ePlayer);
 
-	// General Logging
+
 	CvString GetLogFileName() const;
 	void LogLeagueMessage(CvString& kMessage);
 
@@ -830,7 +830,7 @@ public:
 	EraTypes m_eLastEraTrigger;
 
 private:
-	// Logging
+
 	void LogLeagueFounded(PlayerTypes eFounder);
 	void LogSpecialSession(LeagueSpecialSessionTypes eSpecialSession);
 
@@ -840,20 +840,20 @@ FDataStream& operator>>(FDataStream&, CvGameLeagues&);
 FDataStream& operator<<(FDataStream&, const CvGameLeagues&);
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvLeagueAI
-//!  \brief		Player-level AI to direct decisions about Leagues and Resolutions
-//
-//!  Key Attributes:
-//!  - This object is created inside the CvPlayer object and accessed through CvPlayer
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 class CvLeagueAI
 {
 public:
 	CvLeagueAI(void);
 	~CvLeagueAI(void);
 	
-	// Increments of how much knowledge we have of another player's desires
+
 	enum KnowledgeLevels {
 		KNOWLEDGE_NONE,
 		KNOWLEDGE_PARTIAL,
@@ -862,7 +862,7 @@ public:
 		NUM_KNOWLEDGE_LEVELS,
 	};
 
-	// Increments of how much we want a certain outcome
+
 	enum DesireLevels {
 		DESIRE_NEVER,
 		DESIRE_STRONG_DISLIKE,
@@ -877,7 +877,7 @@ public:
 		NUM_DESIRE_LEVELS,
 	};
 
-	// Increments of how much we want a diplomat in a civ's capital (for trades, etc.)
+
 	enum DiplomatUsefulnessLevels {
 		DIPLOMAT_USEFULNESS_NONE,
 		DIPLOMAT_USEFULNESS_LOW,
@@ -887,7 +887,7 @@ public:
 		NUM_DIPLOMAT_USEFULNESS_LEVELS,
 	};
 
-	// Increments of how much we think our interests are aligned with another player's
+
 	enum AlignmentLevels {
 		ALIGNMENT_WAR,
 		
@@ -953,7 +953,7 @@ public:
 	void DoAbstainAllVotes(CvLeague* pLeague);
 	void DoProposals(CvLeague* pLeague);
 
-	// Deals for votes
+
 	VoteCommitmentList GetDesiredVoteCommitments(PlayerTypes eFromPlayer);
 	bool HasVoteCommitment() const;
 	int GetVoteCommitment(PlayerTypes eToPlayer, int iResolutionID, int iVoteChoice, bool bRepeal);
@@ -962,7 +962,7 @@ public:
 	void CancelVoteCommitmentsToPlayer(PlayerTypes eToPlayer);
 	void DoVoteCommitments(CvLeague* pLeague);
 
-	// Naked knowledge for other players
+
 #if defined(AUI_WARNING_FIXES) || defined(AUI_CONSTIFY)
 	DesireLevels EvaluateVoteForTrade(int iResolutionID, int iVoteChoice, int iNumVotes, bool bRepeal) const;
 	DesireLevels EvaluateProposalForProposer(const CvLeague* pLeague, PlayerTypes eProposer, ResolutionTypes eResolution, int iProposerChoice = LeagueHelpers::CHOICE_NONE) const;
@@ -975,17 +975,17 @@ public:
 	AlignmentLevels EvaluateAlignment(PlayerTypes ePlayer);
 #endif
 
-	// Masked knowledge for other players
+
 	KnowledgeLevels GetKnowledgeGivenToOtherPlayer(PlayerTypes eToPlayer, CvString* sTooltipSink = NULL);
 	int EvaluateVoteForOtherPlayerKnowledge(CvLeague* pLeague, PlayerTypes eToPlayer, CvEnactProposal* pProposal, CvString* sTooltipSink = NULL);
 	int EvaluateVoteForOtherPlayerKnowledge(CvLeague* pLeague, PlayerTypes eToPlayer, CvRepealProposal* pProposal, CvString* sTooltipSink = NULL);
 
-	// Diplomat AI
+
 	DiplomatUsefulnessLevels GetDiplomatUsefulnessAtCiv(PlayerTypes ePlayer);
 	int GetExtraVotesPerDiplomat();
 	int GetExtraVotesPerCityStateAlly();
 
-	// String composition for UI
+
 	CvString GetCommitVoteDetails(PlayerTypes eToPlayer);
 
 	CvPlayer* GetPlayer();
@@ -1007,7 +1007,7 @@ private:
 	DesireLevels EvaluateDesire(int iRawEvaluationScore);
 #endif
 
-	// Voting
+
 	void AllocateVotes(CvLeague* pLeague);
 #if defined(AUI_WARNING_FIXES) || defined(AUI_CONSTIFY) || defined(AUI_VOTING_TWEAKED_PROPOSAL_SCORING)
 	void FindBestVoteChoices(const CvEnactProposal* pProposal, VoteConsiderationList& considerations) const;
@@ -1025,7 +1025,7 @@ private:
 	int ScoreVoteChoicePlayer(CvProposal* pProposal, int iChoice, bool bEnact);
 #endif
 
-	// Proposing
+
 	void AllocateProposals(CvLeague* pLeague);
 #ifdef AUI_VOTING_TWEAKED_PROPOSAL_SCORING
 	int ScoreProposal(const CvLeague* pLeague, ResolutionTypes eResolution, int iChoice = LeagueHelpers::CHOICE_NONE, PlayerTypes eProposalPlayer = NO_PLAYER) const;
@@ -1038,7 +1038,7 @@ private:
 	int ScoreProposal(CvLeague* pLeague, CvActiveResolution* pResolution);
 #endif
 
-	// Logging
+
 #if defined(AUI_WARNING_FIXES) || defined(AUI_CONSTIFY)
 	void LogVoteChoiceConsidered(const CvEnactProposal* pProposal, int iChoice, int iScore) const;
 	void LogVoteChoiceConsidered(const CvRepealProposal* pProposal, int iChoice, int iScore) const;
@@ -1053,14 +1053,14 @@ private:
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvLeagueSpecialSessionEntry
-//!  \brief		A single entry in the special session XML file
-//
-//!  Key Attributes:
-//!  - Populated from XML\GameInfo\CIV5Resolutions.xml
-//!  - Array of these contained in CvLeagueSpecialSessionXMLEntries class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvLeagueSpecialSessionEntry: public CvBaseInfo
 {
 public:
@@ -1095,22 +1095,22 @@ private:
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvLeagueSpecialSessionXMLEntries
-//!  \brief		Game-wide information about league special sessions
-//
-//!  Key Attributes:
-//!  - Populated from XML\GameInfo\CIV5Resolutions.xml
-//!  - Contains an array of CvLeagueSpecialSessionEntry from the above XML file
-//!  - One instance for the entire game
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvLeagueSpecialSessionXMLEntries
 {
 public:
 	CvLeagueSpecialSessionXMLEntries(void);
 	~CvLeagueSpecialSessionXMLEntries(void);
 
-	// Accessor functions
+
 	std::vector<CvLeagueSpecialSessionEntry*>& GetLeagueSpecialSessionEntries();
 	int GetNumLeagueSpecialSessions();
 	CvLeagueSpecialSessionEntry* GetEntry(int index);
@@ -1122,14 +1122,14 @@ private:
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvLeagueNameEntry
-//!  \brief		A single entry in the league name variation XML file
-//
-//!  Key Attributes:
-//!  - Populated from XML\GameInfo\CIV5Resolutions.xml
-//!  - Array of these contained in CvLeagueNameXMLEntries class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvLeagueNameEntry
 {
 public:
@@ -1165,22 +1165,22 @@ private:
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvLeagueNameXMLEntries
-//!  \brief		Game-wide information about league name variations
-//
-//!  Key Attributes:
-//!  - Populated from XML\GameInfo\CIV5Resolutions.xml
-//!  - Contains an array of CvLeagueNameEntry from the above XML file
-//!  - One instance for the entire game
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvLeagueNameXMLEntries
 {
 public:
 	CvLeagueNameXMLEntries(void);
 	~CvLeagueNameXMLEntries(void);
 
-	// Accessor functions
+
 	std::vector<CvLeagueNameEntry*>& GetLeagueNameEntries();
 	int GetNumLeagueNames();
 	CvLeagueNameEntry* GetEntry(int index);
@@ -1192,14 +1192,14 @@ private:
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvLeagueProjectRewardEntry
-//!  \brief		A single entry in the league project reward XML file
-//
-//!  Key Attributes:
-//!  - Populated from XML\GameInfo\CIV5Resolutions.xml
-//!  - Array of these contained in CvLeagueProjectRewardXMLEntries class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvLeagueProjectRewardEntry: public CvBaseInfo
 {
 public:
@@ -1236,22 +1236,22 @@ private:
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvLeagueProjectRewardXMLEntries
-//!  \brief		Game-wide information about league projects
-//
-//!  Key Attributes:
-//!  - Populated from XML\GameInfo\CIV5Resolutions.xml
-//!  - Contains an array of CvLeagueProjectRewardEntry from the above XML file
-//!  - One instance for the entire game
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvLeagueProjectRewardXMLEntries
 {
 public:
 	CvLeagueProjectRewardXMLEntries(void);
 	~CvLeagueProjectRewardXMLEntries(void);
 
-	// Accessor functions
+
 	std::vector<CvLeagueProjectRewardEntry*>& GetLeagueProjectRewardEntries();
 	int GetNumLeagueProjectRewards();
 	CvLeagueProjectRewardEntry* GetEntry(int index);
@@ -1263,14 +1263,14 @@ private:
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvLeagueProjectEntry
-//!  \brief		A single entry in the league project XML file
-//
-//!  Key Attributes:
-//!  - Populated from XML\GameInfo\CIV5Resolutions.xml
-//!  - Array of these contained in CvLeagueProjectXMLEntries class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvLeagueProjectEntry: public CvBaseInfo
 {
 public:
@@ -1298,22 +1298,22 @@ private:
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvLeagueProjectXMLEntries
-//!  \brief		Game-wide information about league projects
-//
-//!  Key Attributes:
-//!  - Populated from XML\GameInfo\CIV5Resolutions.xml
-//!  - Contains an array of CvLeagueProjectEntry from the above XML file
-//!  - One instance for the entire game
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvLeagueProjectXMLEntries
 {
 public:
 	CvLeagueProjectXMLEntries(void);
 	~CvLeagueProjectXMLEntries(void);
 
-	// Accessor functions
+
 	std::vector<CvLeagueProjectEntry*>& GetLeagueProjectEntries();
 	int GetNumLeagueProjects();
 	CvLeagueProjectEntry* GetEntry(int index);
@@ -1325,14 +1325,14 @@ private:
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvResolutionEntry
-//!  \brief		A single entry in the resolution XML file
-//
-//!  Key Attributes:
-//!  - Populated from XML\GameInfo\CIV5Resolutions.xml
-//!  - Array of these contained in CvResolutionXMLEntries class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvResolutionEntry: public CvBaseInfo
 {
 public:
@@ -1415,15 +1415,15 @@ private:
 	CvResolutionEntry& operator=(const CvResolutionEntry&);
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvResolutionXMLEntries
-//!  \brief		Game-wide information about resolutions
-//
-//!  Key Attributes:
-//!  - Populated from XML\GameInfo\CIV5Resolutions.xml
-//!  - Contains an array of CvResolutionEntry from the above XML file
-//!  - One instance for the entire game
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvResolutionXMLEntries
 {
 public:
@@ -1440,7 +1440,7 @@ private:
 	std::vector<CvResolutionEntry*> m_paResolutionEntries;
 };
 
-#endif //CIV5_VOTING_CLASSES_H
+#endif
 
 #ifdef MP_PLAYERS_VOTING_SYSTEM
 enum MPVotingSystemProposalTypes
@@ -1496,7 +1496,7 @@ public:
 		HasVotedList vHasVoted;
 		VotesList vVotes;
 	};
-	typedef FStaticVector<Proposal, 100, false, c_eCiv5GameplayDLL> ProposalList;  // hope 100 is enough
+	typedef FStaticVector<Proposal, 100, false, c_eCiv5GameplayDLL> ProposalList;
 	ProposalList m_vProposals;
 	int m_iLastProposalID;
 
@@ -1534,8 +1534,8 @@ public:
 	void SetVoterHasVoted(int iProposalID, PlayerTypes ePlayerID, bool bValue);
 	void SetVoterVote(int iProposalID, PlayerTypes ePlayerID, bool bValue);
 private:
-	const static int IRR_THRESHOLD_TIMES_100 = 100;  // EAP: Put to a 100% for now - // ImmoS: 80% of total support is enough for irr. 100% during tournament competition. 
-	const static int MAX_ACTIVE_RESOLUTIONS = MAX_MAJOR_CIVS + 2;  // 1 irr x players, 1 cc and 1 scrap
+	const static int IRR_THRESHOLD_TIMES_100 = 100;
+	const static int MAX_ACTIVE_RESOLUTIONS = MAX_MAJOR_CIVS + 2;
 	const static int PROPOSAL_COOLDOWN = 10;
 	const static int REMAP_PROPOSAL_REVEAL_TURN = 10;
 

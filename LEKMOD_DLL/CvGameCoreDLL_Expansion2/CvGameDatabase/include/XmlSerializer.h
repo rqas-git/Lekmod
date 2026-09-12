@@ -1,5 +1,5 @@
-// $Header
-//------------------------------------------------------------------------------
+
+
 #pragma once 
 
 
@@ -14,22 +14,22 @@ namespace Database
 		CvGameDatabaseAPI XMLSerializer(Connection& database);
 		CvGameDatabaseAPI ~XMLSerializer();
 
-		//The following methods load XML data from disk.
-		//! \param szName - The location on disk to the file.
-		//! \param kResultsCache - A cache object used to minimize the amount of queries created.
+
+
+
 		CvGameDatabaseAPI bool Load(const wchar_t* wszFilename);
 		CvGameDatabaseAPI bool Load(const wchar_t* wszFilename, ResultsCache& kResultsCache);
 
-		//The following methods load XML data from memory.
-		//! \param szName -  An identifier used for error reporting.
-		//! \param szBuffer - The pointer to an allocated buffer.
-		//! \param lenBuffer - The length of the buffer.
-		//! \param kResultsCache - A cache object used to minimize the amount of queries created.
+
+
+
+
+
 		CvGameDatabaseAPI bool LoadFromMemory(const wchar_t* wszFilename, char* szBuffer, size_t lenBuffer);
 		CvGameDatabaseAPI bool LoadFromMemory(const wchar_t* wszFilename, char* szBuffer, size_t lenBuffer, ResultsCache& kResultsCache);
 
-		//! Tells the serializer whether or not each Load should use a transaction.
-		//! Default is true.
+
+
 		CvGameDatabaseAPI bool UseTransactions() const;
 		CvGameDatabaseAPI void UseTransactions(bool bUse);
 		
@@ -72,15 +72,15 @@ namespace Database
 		bool DeleteRow(FXmlTraverser& kRow, ResultsCache& kResultsCache, const char* szTableName, size_t lenTableName);
 		bool UpdateRow(FXmlTraverser& kRows, ResultsCache& kResultsCache, const char* szTableName, size_t lenTableName);
 
-		//! Loads the entire contents of the file szFilename into the buffer pkFilebuffer.
-		//! Will allocate or reallocate if necessary depending the preexisting size of the buffer.
+
+
 		bool LoadFileIntoBuffer(const wchar_t* wszFilename, char*& pkFilebuffer, size_t& pkNewBufferSize, size_t& kOutFileSize);
 
 		void PostColumnInsert(std::stringstream& columns, std::list<std::string> &values, const char* szTableName, size_t lenTableName);
 
 	private:
-		XMLSerializer(const XMLSerializer&);			//Stub to prevent compiler generated function.
-		XMLSerializer& operator=(const XMLSerializer&);	//Stub to prevent compiler generated function.
+		XMLSerializer(const XMLSerializer&);
+		XMLSerializer& operator=(const XMLSerializer&);
 
 		char m_szCurrentFileName[256];
 
@@ -97,11 +97,11 @@ namespace Database
 		std::string				m_szPackageTag;
 	};
 
-}	//namespace Database
+}
 
-//------------------------------------------------------------------------------
-// inline routines
-//------------------------------------------------------------------------------
+
+
+
 inline const char* Database::XMLSerializer::ErrorMessage() const
 {
 	return m_szErrorMessage;

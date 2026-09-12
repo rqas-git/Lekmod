@@ -1,13 +1,13 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
 
-// Author -	Mustafa Thamer
-//			Jon Shafer - 03/2005
+
+
+
+
+
+
+
+
+
 
 #include "CvGameCoreDLLPCH.h"
 #include "CvGlobals.h"
@@ -42,7 +42,7 @@
 #include "CvDllRandom.h"
 #include "CvDllUnit.h"
 
-// must be included after all other headers
+
 #include "LintFree.h"
 
 template <class T>
@@ -60,14 +60,14 @@ void deleteInfoArray(std::vector<T*>& array)
 	array.clear();
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 CvGlobals gGlobals;
 
-//
-// CONSTRUCTOR
-//
+
+
+
 CvGlobals::CvGlobals() :
 	m_bGraphicsInitialized(false),
 	m_bTutorialDisabled(false),
@@ -178,7 +178,7 @@ CvGlobals::CvGlobals() :
 	GD_INT_INIT(NEW_SCORE_BELIEF_MULTIPLIER, 0),
 #endif
 
-// -- ints --
+
 	m_iAI_ATTEMPT_RUSH_OVER_X_TURNS_TO_BUILD(15),
 	m_iINITIAL_AI_CITY_PRODUCTION(0),
 	m_iAI_CAN_DISBAND_UNITS(1),
@@ -236,7 +236,7 @@ CvGlobals::CvGlobals() :
 	m_iAI_STRATEGY_AREA_IS_FULL_PERCENT(75),
 	m_iAI_STRATEGY_MINIMUM_SETTLE_FERTILITY(20000),
 	m_iAI_BUY_PLOT_TEST_PROBES(5),
-	m_iAI_PLOT_VALUE_STRATEGIC_RESOURCE(40), // Swapped Strategic Value with Luxury Value. Luxuries are more important god dammit! ~EAP
+	m_iAI_PLOT_VALUE_STRATEGIC_RESOURCE(40),
 	m_iAI_PLOT_VALUE_LUXURY_RESOURCE(50),
 	m_iAI_PLOT_VALUE_SPECIALIZATION_MULTIPLIER(20),
 	m_iAI_PLOT_VALUE_YIELD_MULTIPLIER(10),
@@ -414,13 +414,13 @@ CvGlobals::CvGlobals() :
 	m_iPROMOTION_YIELD_CAP(-1),
 	m_iUNIT_YIELD_CAP(-1),
 #endif	
-#if defined(MISC_CHANGES) // New Global Values in CvGlobals.cpp
+#if defined(MISC_CHANGES)
 	m_iBULLY_GOLD_GROWTH_FACTOR(350),
 	m_iINTERNAL_TRADE_FOOD_BASE_TIMES100(300),
 	m_iINTERNAL_TRADE_PRODUCTION_BASE_TIMES100(300),
 	m_iFAITH_PURCHASE_VISIBLE_DIVISOR(5),
 #endif
-#if defined(LEKMOD_v34) // Support for the New Golden Age Points yield
+#if defined(LEKMOD_v34)
 	m_iAI_CITIZEN_VALUE_GOLDEN_AGE_POINTS(6),
 #endif
 	m_iMINOR_FRIENDSHIP_RATE_MOD_MAXIMUM(150),
@@ -1087,7 +1087,7 @@ CvGlobals::CvGlobals() :
 	m_iINTERNATIONAL_TRADE_EXCLUSIVE_CONNECTION(200),
 	m_iINTERNATIONAL_TRADE_CITY_GPT_DIVISOR(20),
 
-// -- floats --
+
 
 	m_fDIPLO_VICTORY_CIV_DELEGATES_COEFFICIENT(1.443f),
 	m_fDIPLO_VICTORY_CIV_DELEGATES_CONSTANT(7.000f),
@@ -1198,7 +1198,7 @@ CvGlobals::CvGlobals() :
 	m_fLEAGUE_PROJECT_REWARD_TIER_1_THRESHOLD(0.5f),
 	m_fLEAGUE_PROJECT_REWARD_TIER_2_THRESHOLD(1.0f),
 
-// -- post defines --
+
 
 	m_iLAND_TERRAIN(0),
 	m_iDEEP_WATER_TERRAIN(6),
@@ -1310,22 +1310,22 @@ CvGlobals::~CvGlobals()
 
 #if defined(LEKMOD_MACOS)
 #else
-#ifdef AUI_MINIDUMPS // Altered to work, and be more helpful like VP's
-/************************************************************************************************/
-/* MINIDUMP_MOD                           04/10/11                                terkhen       */
-/*                                                                                              */
-/* See http://www.debuginfo.com/articles/effminidumps.html                                      */
-/************************************************************************************************/
-// Originally for Civ 4, ported by ls612 to Civ 5
+#ifdef AUI_MINIDUMPS
+
+
+
+
+
+
 #include <dbghelp.h>
 #pragma comment (lib, "dbghelp.lib")
 
 void CreateMiniDump(EXCEPTION_POINTERS *pep)
 {
-	// Initialize debug symbols
+
 	HANDLE hProcess = GetCurrentProcess();
 	SymInitialize(hProcess, NULL, TRUE);
-	// Time Stamp, since it make sense SMH
+
 
 	SYSTEMTIME st;
 	GetLocalTime(&st);
@@ -1335,7 +1335,7 @@ void CreateMiniDump(EXCEPTION_POINTERS *pep)
 		st.wYear, st.wMonth, st.wDay,
 		st.wHour, st.wMinute, st.wSecond);
 
-	// Open the file
+
 	HANDLE hFile = CreateFile(
 		szDumpPath,
 		GENERIC_READ | GENERIC_WRITE,
@@ -1346,7 +1346,7 @@ void CreateMiniDump(EXCEPTION_POINTERS *pep)
 
 	if ((hFile != NULL) && (hFile != INVALID_HANDLE_VALUE))
 	{
-		/* Create the minidump. */
+
 		MINIDUMP_EXCEPTION_INFORMATION mdei;
 
 		mdei.ThreadId			= GetCurrentThreadId();
@@ -1354,29 +1354,29 @@ void CreateMiniDump(EXCEPTION_POINTERS *pep)
 		mdei.ClientPointers		= FALSE;
 
 		MINIDUMP_TYPE mdt;
-#if defined(MINIDUMP_ADDITIONAL_INFOS) // Taken from VP, since I don't have any idea what is useful.
+#if defined(MINIDUMP_ADDITIONAL_INFOS)
 		mdt = (MINIDUMP_TYPE)(
-			MiniDumpWithFullMemory |             // Complete memory snapshot
-			MiniDumpWithFullMemoryInfo |         // Memory state information
-			MiniDumpWithHandleData |             // Handle usage
-			MiniDumpWithUnloadedModules |        // Track unloaded DLLs
-			MiniDumpWithThreadInfo |             // Extended thread information
-			MiniDumpWithProcessThreadData |      // Process thread data
-			MiniDumpWithCodeSegs |               // Code segments
-			MiniDumpWithDataSegs |               // Data segments
-			MiniDumpWithPrivateReadWriteMemory | // Private memory
-			MiniDumpWithFullAuxiliaryState |     // Auxiliary state (handles, GDI objects)
-			MINIDUMP_TYPE(0x00000040) |          // MiniDumpWithTokenInformation
-			MINIDUMP_TYPE(0x00000400) |          // MiniDumpWithPrivateWriteCopyMemory
-			MINIDUMP_TYPE(0x00020000) |          // MiniDumpIgnoreInaccessibleMemory
-			MiniDumpWithIndirectlyReferencedMemory | // Memory referenced by locals
-			MINIDUMP_TYPE(0x00000800)            // MiniDumpWithModuleHeaders
+			MiniDumpWithFullMemory |
+			MiniDumpWithFullMemoryInfo |
+			MiniDumpWithHandleData |
+			MiniDumpWithUnloadedModules |
+			MiniDumpWithThreadInfo |
+			MiniDumpWithProcessThreadData |
+			MiniDumpWithCodeSegs |
+			MiniDumpWithDataSegs |
+			MiniDumpWithPrivateReadWriteMemory |
+			MiniDumpWithFullAuxiliaryState |
+			MINIDUMP_TYPE(0x00000040) |
+			MINIDUMP_TYPE(0x00000400) |
+			MINIDUMP_TYPE(0x00020000) |
+			MiniDumpWithIndirectlyReferencedMemory |
+			MINIDUMP_TYPE(0x00000800)
 			);
 #else
 		mdt = (MINIDUMP_TYPE)(
-			MiniDumpNormal |                    // Basic info
-			MiniDumpWithThreadInfo |            // Thread information
-			MINIDUMP_TYPE(0x00020000)           // MiniDumpIgnoreInaccessibleMemory
+			MiniDumpNormal |
+			MiniDumpWithThreadInfo |
+			MINIDUMP_TYPE(0x00020000)
 			);
 #endif
 
@@ -1393,7 +1393,7 @@ void CreateMiniDump(EXCEPTION_POINTERS *pep)
 		else
 			_tprintf(_T("MiniDumpWriteDump failed. Error: %u \n"), GetLastError());
 
-		/* Close the file. */
+
 		CloseHandle(hFile);
 	}
 	else
@@ -1410,13 +1410,13 @@ LONG WINAPI CustomFilter(EXCEPTION_POINTERS *ExceptionInfo)
 #endif
 #endif
 
-/************************************************************************************************/
-/* MINIDUMP_MOD                                END                                              */
-/************************************************************************************************/
 
-//
-// allocate
-//
+
+
+
+
+
+
 void CvGlobals::init()
 {
 #if defined(LEKMOD_MACOS)
@@ -1425,56 +1425,56 @@ void CvGlobals::init()
 	SetUnhandledExceptionFilter(CustomFilter);
 #endif
 #endif
-	//
-	// These vars are used to initialize the globals.
-	//
+
+
+
 	int aiPlotDirectionX[NUM_DIRECTION_TYPES] =
 	{
-		0,	// DIRECTION_NORTHEAST
-		1,	// DIRECTION_EAST
-		1,	// DIRECTION_SOUTHEAST
-		0,	// DIRECTION_SOUTHWEST
-		-1,	// DIRECTION_WEST
-		-1,	// DIRECTION_NORTHWEST
+		0,
+		1,
+		1,
+		0,
+		-1,
+		-1,
 	};
 
 	int aiPlotDirectionY[NUM_DIRECTION_TYPES] =
 	{
-		1,	// DIRECTION_NORTHEAST
-		0,	// DIRECTION_EAST
-		-1,	// DIRECTION_SOUTHEAST
-		-1,	// DIRECTION_SOUTHWEST
-		0,	// DIRECTION_WEST
-		1,	// DIRECTION_NORTHWEST
+		1,
+		0,
+		-1,
+		-1,
+		0,
+		1,
 	};
 
-	// these are now in hex-space coords
+
 	int aiCityPlotX[NUM_CITY_PLOTS] =
 	{
-		//	0
+
 		0,
-		//	1	2	3	4	5	6
+
 		0,  1,  1,  0, -1, -1,
-		//	7	8	9	10	11	12	13	14	15	16	17	18
+
 		0,  1,  2,  2,  2,  1,  0,  -1, -2, -2, -2, -1,
-		//	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34	35	36
+
 		0,  1,  2,  3,  3,  3,  3,  2,  1,  0,  -1, -2, -3, -3, -3, -3, -2, -1,
-		//	37	38	39	40	41	42	43	44	45	46	47	48	49	50	51	52	53	54	55	56	57	58	59	60
-		//	0,  1,  2,  3,  4,  4,  4,  4,  4,  3,  2,  1,  0,  -1,  -2, -3, -4, -4, -4, -4, -4, -3, -2, -1,
+
+
 	};
 
 	int aiCityPlotY[NUM_CITY_PLOTS] =
 	{
-		//	0
+
 		0,
-		//	1	2	3	4	5	6
+
 		1,  0, -1, -1,  0,  1,
-		//	7	8	9	10	11	12	13	14	15	16	17	18
+
 		2,  1,  0, -1,	-2, -2, -2, -1,  0,  1,  2,  2,
-		//	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34	35	36
+
 		3,  2,  1,  0,  -1, -2, -3, -3, -3, -3, -2, -1,  0,  1,  2,  3,  3,  3,
-		//	37	38	39	40	41	42	43	44	45	46	47	48	49	50	51	52	53	54	55	56	57	58	59	60
-		//	4,  3,  2,  1,  0, -1, -2, -3, -4, -4, -4, -4, -4, -3, -2, -1,  0,  1,  2,  3,  4,  4,  4,  4,
+
+
 	};
 
 	int aiCityPlotPriority[NUM_CITY_PLOTS] =
@@ -1483,62 +1483,62 @@ void CvGlobals::init()
 		1,  1,  1,  1,  1,  1,
 		2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
 		3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,
-		//4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,
+
 	};
 
 	int aaiXYCityPlot[CITY_PLOTS_DIAMETER][CITY_PLOTS_DIAMETER] =
 	{
-		// this is the 4 ring layout
-		/*
-		//	 -4  -3  -2  -1   0   1   2   3  4  -- in the Y direction
-		{-1, -1, -1, -1, 53, 54, 55, 56, 57,}, // -4 hex-space x
-		{-1, -1, -1, 52, 31, 32, 33, 34, 58,}, // -3 hex-space x
-		{-1, -1, 51, 30, 15, 16, 17, 35, 59,}, // -2 hex-space x
-		{-1, 50, 29, 14,  5,  6, 18, 36, 60,}, // -1 hex-space x
-		{49, 28, 13,  4,  0,  1,  7, 19, 37,}, //  0 hex-space x
-		{48, 27, 12,  3,  2,  8, 20, 38, -1,}, //  1 hex-space x
-		{47, 26, 11, 10,  9, 21, 39, -1, -1,}, //  2 hex-space x
-		{46, 25, 24, 23, 22, 40, -1, -1, -1,}, //  3 hex-space x
-		{45, 44, 43, 42, 41, -1, -1, -1, -1,}, //  4 hex-space x
-		*/
-		// this is the 3 ring layout
-		//	 -3  -2  -1   0   1   2   3    -- in the Y direction
-		{-1, -1, -1, 31, 32, 33, 34,}, // -3 hex-space x
-		{-1, -1, 30, 15, 16, 17, 35,}, // -2 hex-space x
-		{-1, 29, 14,  5,  6, 18, 36,}, // -1 hex-space x
-		{28, 13,  4,  0,  1,  7, 19,}, //  0 hex-space x
-		{27, 12,  3,  2,  8, 20, -1,}, //  1 hex-space x
-		{26, 11, 10,  9, 21, -1, -1,}, //  2 hex-space x
-		{25, 24, 23, 22, -1, -1, -1,}, //  3 hex-space x
-		/*
-		// this is the 2 ring layout
-		//	-2   -1   0   1   2      -- in the Y direction
-		{-1, -1, 16, 17, 18,}, // -2 hex-space x
-		{-1, 15,  5,  6,  7,}, // -1 hex-space x
-		{14,  4,  0,  1,  8,}, //  0 hex-space x
-		{13,  3,  2,  9, -1,}, //  1 hex-space x
-		{12, 11, 10, -1, -1,}, //  2 hex-space x
-		*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		{-1, -1, -1, 31, 32, 33, 34,},
+		{-1, -1, 30, 15, 16, 17, 35,},
+		{-1, 29, 14,  5,  6, 18, 36,},
+		{28, 13,  4,  0,  1,  7, 19,},
+		{27, 12,  3,  2,  8, 20, -1,},
+		{26, 11, 10,  9, 21, -1, -1,},
+		{25, 24, 23, 22, -1, -1, -1,},
+
+
+
+
+
+
+
+
+
 	};
 
 	DirectionTypes aeTurnRightDirection[NUM_DIRECTION_TYPES] =
 	{
-		DIRECTION_EAST,			// DIRECTION_NORTHEAST or DIRECTION_NORTH (deprecated)
-		DIRECTION_SOUTHEAST,	// DIRECTION_EAST
-		DIRECTION_SOUTHWEST,	// DIRECTION_SOUTHEAST
-		DIRECTION_WEST,			// DIRECTION_SOUTHWEST or DIRECTION_SOUTH (deprecated)
-		DIRECTION_NORTHWEST,	// DIRECTION_WEST
-		DIRECTION_NORTHEAST,	// DIRECTION_NORTHWEST
+		DIRECTION_EAST,
+		DIRECTION_SOUTHEAST,
+		DIRECTION_SOUTHWEST,
+		DIRECTION_WEST,
+		DIRECTION_NORTHWEST,
+		DIRECTION_NORTHEAST,
 	};
 
 	DirectionTypes aeTurnLeftDirection[NUM_DIRECTION_TYPES] =
 	{
-		DIRECTION_NORTHWEST,	// DIRECTION_NORTHEAST or DIRECTION_NORTH (deprecated)
-		DIRECTION_NORTHEAST,	// DIRECTION_EAST
-		DIRECTION_EAST,			// DIRECTION_SOUTHEAST
-		DIRECTION_SOUTHEAST,	// DIRECTION_SOUTHWEST or DIRECTION_SOUTH (deprecated)
-		DIRECTION_SOUTHWEST,	// DIRECTION_WEST
-		DIRECTION_WEST,			// DIRECTION_NORTHWEST
+		DIRECTION_NORTHWEST,
+		DIRECTION_NORTHEAST,
+		DIRECTION_EAST,
+		DIRECTION_SOUTHEAST,
+		DIRECTION_SOUTHWEST,
+		DIRECTION_WEST,
 	};
 
 	CvAssertMsg(gDLL != NULL, "Civ app needs to set gDLL");
@@ -1548,7 +1548,7 @@ void CvGlobals::init()
 	m_asyncRand = FNEW(CvRandom, c_eCiv5GameplayDLL, 0);
 #endif
 
-	gDLL->InitGlobals();	// some globals need to be allocated outside the dll
+	gDLL->InitGlobals();
 
 #ifdef AUI_WARNING_FIXES
 	m_game = new(_aligned_malloc(sizeof(CvGame), 16)) CvGame();
@@ -1618,9 +1618,9 @@ void CvGlobals::init()
 #endif
 }
 
-//
-// free
-//
+
+
+
 void CvGlobals::uninit()
 {
 	CvPlayerAI::freeStatics();
@@ -1647,8 +1647,8 @@ void CvGlobals::uninit()
 	SAFE_DELETE(m_pResolutions);
 	SAFE_DELETE(m_pNotifications);
 
-	SAFE_DELETE(m_pImprovements); // player uses the improvement count in deallocating.
-	SAFE_DELETE(m_pTechs);        // improvements uses tech to deallocate. arrghh!
+	SAFE_DELETE(m_pImprovements);
+	SAFE_DELETE(m_pTechs);
 
 	SAFE_DELETE(m_map);
 #ifdef AUI_WARNING_FIXES
@@ -1668,7 +1668,7 @@ void CvGlobals::uninit()
 	m_kGlobalDefinesLookup.Release();
 
 	if(gDLL)
-		gDLL->UninitGlobals();	// free globals allocated outside the dll
+		gDLL->UninitGlobals();
 
 	SAFE_DELETE(m_pathFinder);
 	SAFE_DELETE(m_interfacePathFinder);
@@ -1683,7 +1683,7 @@ void CvGlobals::uninit()
 	SAFE_DELETE(m_internationalTradeRouteWaterFinder);
 	SAFE_DELETE(m_tacticalAnalysisMapFinder);
 
-	// already deleted outside of the dll, set to null for safety
+
 	m_pathFinder=NULL;
 	m_interfacePathFinder=NULL;
 	m_ignoreUnitsPathFinder=NULL;
@@ -1704,57 +1704,57 @@ void CvGlobals::uninit()
 
 }
 
-//------------------------------------------------------------------------------
+
 CvCity* CvGlobals::UnwrapCityPointer(ICvCity1* pCity)
 {
 	return (NULL != pCity)? static_cast<CvDllCity*>(pCity)->GetInstance() : NULL;
 }
-//------------------------------------------------------------------------------
+
 auto_ptr<ICvCity1> CvGlobals::WrapCityPointer(CvCity* pCity)
 {
 	return auto_ptr<ICvCity1>((NULL != pCity)? new CvDllCity(pCity) : NULL);
 }
-//------------------------------------------------------------------------------
+
 CvDeal* CvGlobals::UnwrapDealPointer(ICvDeal1* pDeal)
 {
 	return (NULL != pDeal)? static_cast<CvDllDeal*>(pDeal)->GetInstance() : NULL;
 }
-//------------------------------------------------------------------------------
+
 auto_ptr<ICvDeal1> CvGlobals::WrapDealPointer(CvDeal* pDeal)
 {
 	return auto_ptr<ICvDeal1>((NULL != pDeal)? new CvDllDeal(pDeal) : NULL);
 }
-//------------------------------------------------------------------------------
+
 CvPlot* CvGlobals::UnwrapPlotPointer(ICvPlot1* pPlot)
 {
 	return (NULL != pPlot)? static_cast<CvDllPlot*>(pPlot)->GetInstance() : NULL;
 }
-//------------------------------------------------------------------------------
+
 auto_ptr<ICvPlot1> CvGlobals::WrapPlotPointer(CvPlot* pPlot)
 {
 	return auto_ptr<ICvPlot1>((NULL != pPlot)? new CvDllPlot(pPlot) : NULL);
 }
-//------------------------------------------------------------------------------
+
 CvRandom* CvGlobals::UnwrapRandomPointer(ICvRandom1* pRandom)
 {
 	return (NULL != pRandom)? static_cast<CvDllRandom*>(pRandom)->GetInstance() : NULL;
 }
-//------------------------------------------------------------------------------
+
 auto_ptr<ICvRandom1> CvGlobals::WrapRandomPointer(CvRandom* pRandom)
 {
 	return auto_ptr<ICvRandom1>((NULL != pRandom)? new CvDllRandom(pRandom) : NULL);
 }
-//------------------------------------------------------------------------------
+
 auto_ptr<ICvUnit1> CvGlobals::WrapUnitPointer(CvUnit* pUnit)
 {
 	return auto_ptr<ICvUnit1>((NULL != pUnit)? new CvDllUnit(pUnit) : NULL);
 }
-//------------------------------------------------------------------------------
+
 CvUnit* CvGlobals::UnwrapUnitPointer(ICvUnit1* pUnit)
 {
 	return (NULL != pUnit)? static_cast<CvDllUnit*>(pUnit)->GetInstance() : NULL;
 }
-//------------------------------------------------------------------------------
+
 CvGlobals& CvGlobals::getInstance()
 {
 	return gGlobals;
@@ -1837,8 +1837,8 @@ ICvDLLDatabaseUtility1* CvGlobals::getDatabaseLoadUtility()
 	if(m_pkDatabaseLoadUtility == NULL)
 		m_pkDatabaseLoadUtility = new CvDllDatabaseUtility(DB);
 
-	//By using query interface, we implicitly increment the reference count and avoid
-	//a new allocation.
+
+
 	return m_pkDatabaseLoadUtility->QueryInterface<ICvDLLDatabaseUtility1>();
 }
 
@@ -4154,7 +4154,7 @@ int CvGlobals::getNumSmallAwardInfos()
 #endif
 }
 
-std::vector<CvSmallAwardInfo*>& CvGlobals::getSmallAwardInfo()	// For Moose - XML Load Util, CvInfos
+std::vector<CvSmallAwardInfo*>& CvGlobals::getSmallAwardInfo()
 {
 	return m_paSmallAwardInfo;
 }
@@ -4177,7 +4177,7 @@ CvSmallAwardInfo* CvGlobals::getSmallAwardInfo(SmallAwardTypes eSmallAwardNum)
 #endif
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 #ifdef AUI_WARNING_FIXES
 uint CvGlobals::getNumUnitDomainInfos() const
 {
@@ -4212,7 +4212,7 @@ CvDomainInfo* CvGlobals::getUnitDomainInfo(DomainTypes eDomainNum)
 #endif
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 void CvGlobals::LogMessage(const char* szMessage)
 {
 	if(getLogging())
@@ -4235,7 +4235,7 @@ CvString*& CvGlobals::getFootstepAudioTags()
 
 CvString& CvGlobals::getFootstepAudioTags(int i)
 {
-//	CvAssertMsg(i < getNumFootstepAudioTags(), "Index out of bounds")
+
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_paszFootstepAudioTags[i];
 }
@@ -4336,7 +4336,7 @@ bool CvGlobals::GetHexDebugLayerString(CvPlot* pkPlot, const char* szLayerName, 
 	}
 	else if(strLayerName == "ArtifactLayer")
 	{
-		const int iValue = pkPlot->GetArchaeologicalRecord().m_eArtifactType; // this is a copy
+		const int iValue = pkPlot->GetArchaeologicalRecord().m_eArtifactType;
 		sprintf_s(szBuffer, uiBufferLength, "%d", iValue);
 	}
 	else if(strLayerName == "TacticalAnalysisLayer")
@@ -4459,7 +4459,7 @@ void CvGlobals::cacheGlobals()
 	GD_INT_CACHE(NEW_SCORE_GREAT_WORK_MULTIPLIER);
 	GD_INT_CACHE(NEW_SCORE_BELIEF_MULTIPLIER);
 #endif
-	// -- ints --
+
 
 	m_iAI_ATTEMPT_RUSH_OVER_X_TURNS_TO_BUILD = getDefineINT("AI_ATTEMPT_RUSH_OVER_X_TURNS_TO_BUILD");
 	m_iINITIAL_AI_CITY_PRODUCTION = getDefineINT("INITIAL_AI_CITY_PRODUCTION");
@@ -4697,13 +4697,13 @@ void CvGlobals::cacheGlobals()
 	m_iPROMOTION_YIELD_CAP = getDefineINT("PROMOTION_YIELD_CAP");
 	m_iUNIT_YIELD_CAP = getDefineINT("UNIT_YIELD_CAP");
 #endif
-#if defined(MISC_CHANGES) // New global values
+#if defined(MISC_CHANGES)
 	m_iBULLY_GOLD_GROWTH_FACTOR = getDefineINT("BULLY_GOLD_GROWTH_FACTOR");
 	m_iINTERNAL_TRADE_FOOD_BASE_TIMES100 = getDefineINT("INTERNAL_TRADE_FOOD_BASE_TIMES100");
 	m_iINTERNAL_TRADE_PRODUCTION_BASE_TIMES100 = getDefineINT("INTERNAL_TRADE_PRODUCTION_BASE_TIMES100");
 	m_iFAITH_PURCHASE_VISIBLE_DIVISOR = getDefineINT("FAITH_PURCHASE_VISIBLE_DIVISOR");
 #endif
-#if defined(LEKMOD_v34) // Support for New Golden Age Points Yield
+#if defined(LEKMOD_v34)
 	m_iAI_CITIZEN_VALUE_GOLDEN_AGE_POINTS = getDefineINT("AI_CITIZEN_VALUE_GOLDEN_AGE_POINTS");
 #endif
 	m_iMINOR_FRIENDSHIP_RATE_MOD_MAXIMUM = getDefineINT("MINOR_FRIENDSHIP_RATE_MOD_MAXIMUM");
@@ -5381,7 +5381,7 @@ void CvGlobals::cacheGlobals()
 	m_iAI_OPERATIONAL_MAX_RECRUIT_TURNS_DEFAULT = getDefineINT("AI_OPERATIONAL_MAX_RECRUIT_TURNS_DEFAULT");
 	m_iAI_OPERATIONAL_MAX_RECRUIT_TURNS_ENEMY_TERRITORY = getDefineINT("AI_OPERATIONAL_MAX_RECRUIT_TURNS_ENEMY_TERRITORY");
 
-	// -- floats --
+
 
 	m_fDIPLO_VICTORY_CIV_DELEGATES_COEFFICIENT = getDefineFLOAT("DIPLO_VICTORY_CIV_DELEGATES_COEFFICIENT");
 	m_fDIPLO_VICTORY_CIV_DELEGATES_CONSTANT = getDefineFLOAT("DIPLO_VICTORY_CIV_DELEGATES_CONSTANT");
@@ -5474,7 +5474,7 @@ void CvGlobals::cacheGlobals()
 	m_fLEAGUE_PROJECT_REWARD_TIER_1_THRESHOLD = getDefineFLOAT("LEAGUE_PROJECT_REWARD_TIER_1_THRESHOLD");
 	m_fLEAGUE_PROJECT_REWARD_TIER_2_THRESHOLD = getDefineFLOAT("LEAGUE_PROJECT_REWARD_TIER_2_THRESHOLD");
 
-	// -- post defines --
+
 
 	m_iLAND_TERRAIN = getDefineINT("LAND_TERRAIN");
 	m_iDEEP_WATER_TERRAIN = getDefineINT("DEEP_WATER_TERRAIN");
@@ -5585,7 +5585,7 @@ void CvGlobals::cacheGlobals()
 #endif
 
 #ifdef LEKMOD_TOURISM_COMBAT_MOD
-	// Defaults match Tourism_InfluenceCombatMod.xml; overwritten if table row loads
+
 	m_iLekmodTourismCombatMinInfluencePercent = 10;
 	m_iLekmodTourismCombatMaxInfluencePercent = 100;
 	m_iLekmodTourismCombatMinBonus = 0;
@@ -5808,14 +5808,14 @@ void CvGlobals::deleteInfoArrays()
 	deleteInfoArray(m_paEntityEventInfo);
 }
 
-//
-// Global Infos Hash Map
-//
+
+
+
 const CvGlobals::InfosMap& CvGlobals::GetInfoTypes() const
 {
 	return m_infosMap;
 }
-//------------------------------------------------------------------------------
+
 int CvGlobals::getInfoTypeForString(const char* szType, bool hideAssert) const
 {
 	if(!hideAssert)
@@ -5835,13 +5835,13 @@ int CvGlobals::getInfoTypeForString(const char* szType, bool hideAssert) const
 
 	if(!hideAssert)
 	{
-		//
-		// *** EFB: Need to restore this logging??? ***
-		//
+
+
+
 		CvString strError;
 		strError.Format("Info type %s not found.", szType);
 		CvAssertMsg(strcmp(szType, "NONE")==0 || strcmp(szType, "")==0, strError.c_str());
-//		gDLL->logMsg("xml.log", szError);
+
 	}
 
 	return -1;
@@ -5870,7 +5870,7 @@ void CvGlobals::infoTypeFromStringReset()
 	m_infosHashMap.clear();
 }
 
-//------------------------------------------------------------------------------
+
 int CvGlobals::getInfoTypeForHash(uint uiHash, bool hideAssert) const
 {
 
@@ -5918,7 +5918,7 @@ int CvGlobals::getNumPlayerOptionInfos() const
 }
 
 
-//------------------------------------------------------------------------------
+
 void CvGlobals::SetGameDatabase(Database::Connection* pGameDatabase)
 {
 	if(m_pGameDatabase != pGameDatabase)
@@ -5929,7 +5929,7 @@ void CvGlobals::SetGameDatabase(Database::Connection* pGameDatabase)
 		m_pGameDatabase = pGameDatabase;
 	}
 }
-//------------------------------------------------------------------------------
+
 
 bool CvGlobals::IsGraphicsInitialized() const
 {

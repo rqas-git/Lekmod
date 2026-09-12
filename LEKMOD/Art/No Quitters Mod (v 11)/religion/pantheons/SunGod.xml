@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-24 14:15:24 -->
+
 <GameData>
 
-	<!-- +1 Food from Wheat, Bananas, Citrus, and Cocoa. -->
+
 	<Belief_ResourceYieldChanges>
 		<Row>
 			<BeliefType>BELIEF_SUN_GOD</BeliefType>
@@ -18,7 +18,7 @@
 		</Row>
 	</Belief_ResourceYieldChanges>
 
-	<!-- localization -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_BELIEF_SUN_GOD" />
 		<Row Tag="TXT_KEY_BELIEF_SUN_GOD">

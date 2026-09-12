@@ -1,8 +1,8 @@
--- Author: EnormousApplePie
 
-------------------------------------------------------------------------------------------------------------------------
--- Blocked units
-------------------------------------------------------------------------------------------------------------------------
+
+
+
+
 
 local workboat_unit = GameInfoTypes["UNIT_WORKBOAT"]
 
@@ -16,9 +16,9 @@ function lekmod_block_unit_construction(player_id, _, unit_type)
 
 end
 GameEvents.CityCanTrain.Add(lekmod_block_unit_construction)
-------------------------------------------------------------------------------------------------------------------------
--- Unit Embark bug fix
-------------------------------------------------------------------------------------------------------------------------
+
+
+
 local hover_promotion = GameInfoTypes["PROMOTION_MOVE_ALL_TERRAIN"]
 local embark_promotion = GameInfoTypes["PROMOTION_EMBARKATION"]
 
@@ -35,6 +35,6 @@ function lekmod_embark_fix(player_id)
 	end
 
 end
--- Note: UnitCreated is a Lekmod Event! Not available in the base game
+
 GameEvents.UnitCreated.Add(lekmod_embark_fix)
 GameEvents.PlayerDoTurn.Add(lekmod_embark_fix)

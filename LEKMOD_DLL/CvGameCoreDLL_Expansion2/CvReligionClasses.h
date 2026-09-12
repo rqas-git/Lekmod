@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #include "CvWeightedVector.h"
@@ -12,14 +12,14 @@
 #ifndef CIV5_RELIGION_CLASSES_H
 #define CIV5_RELIGION_CLASSES_H
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvReligionEntry
-//!  \brief		A single entry in the religion XML file
-//
-//!  Key Attributes:
-//!  - Populated from XML\Religions\CIV5Religions.xml
-//!  - Array of these contained in CvReligionXMLEntries class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvReligionEntry: public CvBaseInfo
 {
 public:
@@ -38,22 +38,22 @@ private:
 	CvReligionEntry& operator=(const CvReligionEntry&);
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvReligionXMLEntries
-//!  \brief		Game-wide information about religions
-//
-//! Key Attributes:
-//! - Populated from XML\Religions\CIV5Religions.xml
-//! - Contains an array of CvReligionEntry from the above XML file
-//! - One instance for the entire game
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvReligionXMLEntries
 {
 public:
 	CvReligionXMLEntries(void);
 	~CvReligionXMLEntries(void);
 
-	// Accessor functions
+
 	std::vector<CvReligionEntry*>& GetReligionEntries();
 	int GetNumReligions();
 	CvReligionEntry* GetEntry(int index);
@@ -64,13 +64,13 @@ private:
 	std::vector<CvReligionEntry*> m_paReligionEntries;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS: CvReligion
-//!  \brief All the information about a single religion
-//
-//!  Key Attributes:
-//!  - Stores the founder and holy city
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 class CvReligion
 {
 public:
@@ -79,7 +79,7 @@ public:
 
 	CvString GetName() const;
 
-	// Public data
+
 	ReligionTypes m_eReligion;
 	PlayerTypes m_eFounder;
 	int m_iHolyCityX;
@@ -94,20 +94,20 @@ public:
 FDataStream& operator>>(FDataStream&, CvReligion&);
 FDataStream& operator<<(FDataStream&, const CvReligion&);
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS: CvReligionInCity
-//!  \brief All the information about a single religion inside a city
-//
-//!  Key Attributes:
-//!  - Stores the number of followers, pressure level, is it Holy City
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 class CvReligionInCity
 {
 public:
 	CvReligionInCity();
 	CvReligionInCity(ReligionTypes eReligion, bool bFoundedHere, int iFollowers, int iPressure);
 
-	// Public data
+
 	ReligionTypes m_eReligion;
 	bool m_bFoundedHere;
 	int m_iFollowers;
@@ -119,16 +119,16 @@ public:
 typedef FStaticVector<CvReligion, 16, false, c_eCiv5GameplayDLL > ReligionList;
 typedef FStaticVector<CvReligionInCity, 8, false, c_eCiv5GameplayDLL > ReligionInCityList;
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:		CvGameReligions
-//!  \brief		All the information about religions founded and active in the game
-//
-//!  Key Attributes:
-//!  - Core data in this class is a list of CvReligions
-//!  - This object is created inside the CvGame object and accessed through CvGame
-//!  - Provides convenience functions to the other game subsystems to quickly summarize
-//!    information on the religions in place
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
 class CvGameReligions
 {
 public:
@@ -152,12 +152,12 @@ public:
 
 	void Init();
 
-	// Functions invoked each game turn
+
 	void DoTurn();
 	void SpreadReligion();
 	void SpreadReligionToOneCity(CvCity* pCity);
 
-	// Functions invoked each player turn
+
 	void DoPlayerTurn(CvPlayer& kPlayer);
 	FOUNDING_RESULT CanCreatePantheon(PlayerTypes ePlayer, bool bCheckFaithTotal);
 	FOUNDING_RESULT CanFoundReligion(PlayerTypes ePlayer, ReligionTypes eReligion, const char* szCustomName, BeliefTypes eBelief1, BeliefTypes eBelief2, BeliefTypes eBelief3, BeliefTypes eBelief4, CvCity* pkHolyCity);
@@ -166,7 +166,7 @@ public:
 	FOUNDING_RESULT CanAddReformationBelief(PlayerTypes ePlayer, BeliefTypes eBelief = NO_BELIEF) const;
 #endif
 
-	// Functions for religious actions
+
 	ReligionTypes GetReligionToFound(PlayerTypes ePlayer);
 	void FoundPantheon(PlayerTypes ePlayer, BeliefTypes eBelief);
 	void FoundReligion(PlayerTypes ePlayer, ReligionTypes eReligion, const char* szCustomName, BeliefTypes eBelief1, BeliefTypes eBelief2, BeliefTypes eBelief3, BeliefTypes eBelief4, CvCity* pkHolyCity);
@@ -176,11 +176,11 @@ public:
 	void SetFounder(ReligionTypes eReligion, PlayerTypes eFounder);
 	void UpdateAllCitiesThisReligion(ReligionTypes eReligion);
 
-	// General religion information functions
+
 	const CvReligion* GetReligion(ReligionTypes eReligion, PlayerTypes ePlayer) const;
 	bool IsInSomeReligion(BeliefTypes eBelief) const;
 
-	// Pantheon information functions
+
 	void SetMinimumFaithNextPantheon(int iMinFaith)
 	{
 		m_iMinimumFaithForNextPantheon = iMinFaith;
@@ -199,7 +199,7 @@ public:
 	bool IsPantheonBeliefAvailable(BeliefTypes eBelief);
 #endif
 
-	// Main religion information functions
+
 	int GetNumFollowers(ReligionTypes eReligion) const;
 	int GetNumCitiesFollowing(ReligionTypes eReligion) const;
 	bool HasCreatedReligion(PlayerTypes ePlayer) const;
@@ -235,11 +235,11 @@ public:
 	int GetAdjacentCityReligiousPressure (ReligionTypes eReligion, CvCity *pFromCity, CvCity *pToCity, int& iNumTradeRoutesInfluencing, bool bPretendTradeConnection);
 #endif
 
-	// Great Prophet/Person information functions
+
 	int GetFaithGreatProphetNumber(int iNum) const;
 	int GetFaithGreatPersonNumber(int iNum) const;
 
-	// Complex belief convenience functions
+
 #ifdef AUI_CONSTIFY
 	int GetBeliefYieldForKill(YieldTypes eYield, int iX, int iY, PlayerTypes eWinningPlayer) const;
 #else
@@ -248,7 +248,7 @@ public:
 
 	static void NotifyPlayer(PlayerTypes ePlayer, CvGameReligions::FOUNDING_RESULT eResult);
 
-	// Public logging functions
+
 	CvString GetLogFileName() const;
 	void LogReligionMessage(CvString& strMsg);
 
@@ -264,7 +264,7 @@ private:
 	bool IsPreferredByCivInGame(ReligionTypes eReligion);
 #endif
 
-	// Functions invoked each player turn
+
 	bool CheckSpawnGreatProphet(CvPlayer& kPlayer);
 
 	int m_iMinimumFaithForNextPantheon;
@@ -288,14 +288,14 @@ enum CvReligiousFollowChangeReason
 	FOLLOWER_CHANGE_SPY_PRESSURE,
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:		CvPlayerReligions
-//!  \brief		All the information about religious activity for a player
-//
-//!  Key Attributes:
-//!  - Core data in this class is a list of how many great prophets this player has spawned
-//!  - This object is created inside the CvPlayer object and accessed through CvPlayer
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvPlayerReligions
 {
 public:
@@ -307,7 +307,7 @@ public:
 	void Read(FDataStream& kStream);
 	void Write(FDataStream& kStream);
 
-	// Data accessors
+
 	int GetNumProphetsSpawned() const;
 	void ChangeNumProphetsSpawned(int iValue);
 	int GetCostNextProphet(bool bIncludeBeliefDiscounts, bool bAdjustForSpeedDifficulty) const;
@@ -320,7 +320,7 @@ public:
 		m_bFoundingReligion = bNewValue;
 	};
 
-	// State information
+
 	bool HasCreatedPantheon() const;
 	bool HasCreatedReligion() const;
 	bool HasAddedReformationBelief() const;
@@ -347,14 +347,14 @@ private:
 #endif
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:		CvCityReligions
-//!  \brief		All the information about religious activity in a city
-//
-//!  Key Attributes:
-//!  - Core data in this class is a list of how citizens break down between religions
-//!  - This object is created inside the CvCity object and accessed through CvCity
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvCityReligions
 {
 public:
@@ -368,7 +368,7 @@ public:
 	void Uninit();
 	void Copy(CvCityReligions* pOldCity);
 
-	// Data accessors
+
 #ifdef AUI_CONSTIFY
 	int GetNumFollowers(ReligionTypes eReligion) const;
 	int GetNumSimulatedFollowers(ReligionTypes eReligion) const;
@@ -432,7 +432,7 @@ public:
 	bool WouldExertTradeRoutePressureToward (CvCity* pTargetCity, ReligionTypes& eReligion, int& iAmount);
 #endif
 
-	// Routines to update religious status of citizens
+
 	void DoPopulationChange(int iChange);
 	void DoReligionFounded(ReligionTypes eReligion);
 	void AddProphetSpread(ReligionTypes eReligion, int iPressure, PlayerTypes eResponsiblePlayer);
@@ -449,7 +449,7 @@ public:
 
 	void UpdateNumTradeRouteConnections(CvCity* pOtherCity);
 
-	// Routines to precompute results of possible religion spreads
+
 	int GetNumFollowersAfterSpread(ReligionTypes eReligion, int iConversionStrength);
 	int GetNumFollowersAfterProphetSpread(ReligionTypes eReligion, int iConversionStrength);
 	ReligionTypes GetMajorityReligionAfterSpread(ReligionTypes eReligion, int iConversionStrength);
@@ -475,21 +475,21 @@ private:
 FDataStream& operator>>(FDataStream&, CvCityReligions&);
 FDataStream& operator<<(FDataStream&, const CvCityReligions&);
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvUnitReligion
-//!  \brief		Information about the religious affiliation of a single unit
-//
-//!  Key Attributes:
-//!  - One instance for each unit
-//!  - Accessed by any class that needs to check religious information for this unit
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvUnitReligion
 {
 public:
 	CvUnitReligion(void);
 	void Init();
 
-	// Accessors
+
 	ReligionTypes GetReligion() const
 	{
 		return m_eReligion;
@@ -524,13 +524,13 @@ private:
 FDataStream& operator>>(FDataStream&, CvUnitReligion&);
 FDataStream& operator<<(FDataStream&, const CvUnitReligion&);
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:		CvReligionAI
-//!  \brief		Player level AI to manage a civ's efforts with religion
-//
-//!  Key Attributes:
-//!  - This object is created inside the CvPlayer object and accessed through CvPlayer
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 class CvReligionAI
 {
 public:
@@ -631,4 +631,4 @@ namespace CvReligionAIHelpers
 	bool DoesUnitPassFaithPurchaseCheck(CvPlayer &kPlayer, UnitTypes eUnit);
 }
 
-#endif //CIV5_RELIGION_CLASSES_H
+#endif

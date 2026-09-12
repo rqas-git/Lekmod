@@ -4,7 +4,7 @@
 #include "DatabaseResults.h"
 #include "Database.h"
 #include "CvLocalization.h"
-// Sizes reconstructed from the installed Aspyr 180925 x86_64 executable.
+
 static_assert(sizeof(void*) == 8, "Mac engine requires x86_64 pointers");
 static_assert(sizeof(wchar_t) == 4, "Mac engine uses native UTF-32 wchar_t");
 static_assert(sizeof(dword) == 4, "CRC and engine DWORDs must remain 32-bit");

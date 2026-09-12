@@ -1,4 +1,4 @@
-"""Filesystem regression tests; compiler, ABI checks and signing are mocked."""
+
 from contextlib import ExitStack
 import json
 from pathlib import Path

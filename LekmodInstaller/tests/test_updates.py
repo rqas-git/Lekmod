@@ -1,4 +1,4 @@
-"""Update regression tests using local fixtures; no GUI, network or batch execution."""
+
 from pathlib import Path
 import ast
 import os
@@ -44,7 +44,7 @@ class InstallTests(unittest.TestCase):
         self.assertEqual((self.old / 'old.txt').read_text(), 'working')
 
     def test_catalog_failure_preserves_working_installation(self):
-        # Execute the real worker without importing Tk or opening a window.
+
         tree = ast.parse((Path(__file__).resolve().parents[1] / 'installer.py').read_text())
         cls = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == 'LekmodInstaller')
         method = next(n for n in cls.body if isinstance(n, ast.FunctionDef) and n.name == '_install_thread')

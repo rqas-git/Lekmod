@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 4/22/2015 7:24:06 PM -->
+
 <GameData>
 	
-	<!-- OXFORD UNIVERSITY -->
+
 	<Building_ThemingBonuses>
 		<Update>
 			<Set RequiresAnyButOwner="false" />
@@ -35,7 +35,7 @@
 	</Language_RU_RU>
 
 
-	<!-- HERMITAGE -->
+
 	<Building_ThemingBonuses>
 		<Update>
 			<Set RequiresUniquePlayers="false" />
@@ -68,7 +68,7 @@
 	</Language_RU_RU>
 
 
-	<!-- GREAT LIBRARY -->
+
 	<Building_ThemingBonuses>
 		<Update>
 			<Set RequiresUniquePlayers="false" />
@@ -101,7 +101,7 @@
 	</Language_RU_RU>
 
 
-	<!-- LOUVRE -->
+
 	<Building_ThemingBonuses>
 		<Update>
 			<Set RequiresUniquePlayers="false" />

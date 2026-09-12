@@ -1,32 +1,32 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvUnitCycler.h"
 #include "CvPlayer.h"
 #include "CvUnit.h"
 #include "CvGameCoreUtils.h"
 
-//	---------------------------------------------------------------------------
+
 CvUnitCycler::CvUnitCycler(CvPlayer* pkPlayer)
 {
 	m_pkPlayer = pkPlayer;
 }
 
-//	---------------------------------------------------------------------------
+
 void CvUnitCycler::Clear()
 {
 	m_kNodeList.clear();
 }
 
-//	---------------------------------------------------------------------------
-void CvUnitCycler::Rebuild(CvUnit *pkStartUnit /* = NULL */)
+
+void CvUnitCycler::Rebuild(CvUnit *pkStartUnit             )
 {
-	// Delete contents of old list
+
 	Node* pUnitNode = HeadNode();
 	while(pUnitNode != NULL)
 	{
@@ -36,13 +36,13 @@ void CvUnitCycler::Rebuild(CvUnit *pkStartUnit /* = NULL */)
 
 	if (pkStartUnit == NULL)
 	{
-		// If no unit supplied, use the selected unit.
+
 		auto_ptr<ICvUnit1> pSelectedUnit(DLLUI->GetHeadSelectedUnit());
 		pkStartUnit = GC.UnwrapUnitPointer(pSelectedUnit.get());
 
 		if (pkStartUnit && pkStartUnit->getOwner() != m_pkPlayer->GetID())
 		{
-			// Not ours, fall back to just selecting a worker
+
 			pkStartUnit = NULL;
 		}
 	}
@@ -52,12 +52,12 @@ void CvUnitCycler::Rebuild(CvUnit *pkStartUnit /* = NULL */)
 	CvUnit* pkFirstUnit = m_pkPlayer->firstUnit(&iLoop);
 	for(pLoopUnit = pkFirstUnit; pLoopUnit != NULL; pLoopUnit = m_pkPlayer->nextUnit(&iLoop))
 	{
-		// Reset cycle order (will be used later in this function)
+
 		pLoopUnit->SetCycleOrder(0);
 
 		if (!pkStartUnit)
 		{
-			// Workers first
+
 			if(pLoopUnit->workRate(true) > 0)
 				pkStartUnit = pLoopUnit;
 		}
@@ -66,16 +66,16 @@ void CvUnitCycler::Rebuild(CvUnit *pkStartUnit /* = NULL */)
 	if (!pkStartUnit)
 		pkStartUnit = pkFirstUnit;
 
-	// Add first unit to list
+
 	if(pkStartUnit)
 	{
 		m_kNodeList.insertAtEnd(pkStartUnit->GetID());
 
-		// Current unit is the first one
+
 		UnitHandle pCurrentUnit = pkStartUnit;
 		pCurrentUnit->SetCycleOrder(1);
 
-		// Loop through units until everyone is accounted for
+
 		int iNumUnits = m_pkPlayer->getNumUnits();
 		while(m_kNodeList.getLength() < iNumUnits)
 		{
@@ -86,13 +86,13 @@ void CvUnitCycler::Rebuild(CvUnit *pkStartUnit /* = NULL */)
 			int iY = pCurrentUnit->getY();
 			for(pLoopUnit = m_pkPlayer->firstUnit(&iLoop); pLoopUnit != NULL; pLoopUnit = m_pkPlayer->nextUnit(&iLoop))
 			{
-				// If we've already added this unit to the cycle list, skip it
+
 				if(pLoopUnit->GetCycleOrder() == 1)
 					continue;
 
 				int iScore = plotDistance(iX, iY, pLoopUnit->getX(), pLoopUnit->getY());
 
-				// Closest unit yet
+
 				if(iScore < iBestUnitScore)
 				{
 					iBestUnitScore = iScore;
@@ -106,7 +106,7 @@ void CvUnitCycler::Rebuild(CvUnit *pkStartUnit /* = NULL */)
 			{
 				m_kNodeList.insertAtEnd(pBestUnit->GetID());
 
-				// Now have a new current unit
+
 				pCurrentUnit = pBestUnit;
 				pCurrentUnit->SetCycleOrder(1);
 			}
@@ -116,7 +116,7 @@ void CvUnitCycler::Rebuild(CvUnit *pkStartUnit /* = NULL */)
 	}
 }
 
-//	---------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 void CvUnitCycler::AddUnit(int)
 #else
@@ -125,7 +125,7 @@ void CvUnitCycler::AddUnit(int iID)
 {
 	Rebuild();
 }
-//	---------------------------------------------------------------------------
+
 void CvUnitCycler::RemoveUnit(int iID)
 {
 	CLLNode<int>* pUnitNode;
@@ -146,8 +146,8 @@ void CvUnitCycler::RemoveUnit(int iID)
 	}
 }
 
-//	-----------------------------------------------------------------------------------------------
-// Returns the next unit in the cycle...
+
+
 CvUnit *CvUnitCycler::Cycle(CvUnit* pUnit, bool bForward, bool bWorkers, bool* pbWrap)
 {
 	const CLLNode<int>* pUnitNode;
@@ -273,49 +273,49 @@ CvUnit *CvUnitCycler::Cycle(CvUnit* pUnit, bool bForward, bool bWorkers, bool* p
 }
 
 
-//	---------------------------------------------------------------------------
+
 CvUnitCycler::Node* CvUnitCycler::DeleteNode(CvUnitCycler::Node* pNode)
 {
 	return m_kNodeList.deleteNode(pNode);
 }
 
-//	---------------------------------------------------------------------------
+
 const CvUnitCycler::Node* CvUnitCycler::NextNode(const CvUnitCycler::Node* pNode) const
 {
 	return m_kNodeList.next(pNode);
 }
 
-//	---------------------------------------------------------------------------
+
 CvUnitCycler::Node* CvUnitCycler::NextNode(CvUnitCycler::Node* pNode)
 {
 	return m_kNodeList.next(pNode);
 }
 
-//	---------------------------------------------------------------------------
+
 const CvUnitCycler::Node* CvUnitCycler::PreviousNode(const CvUnitCycler::Node* pNode) const
 {
 	return m_kNodeList.prev(pNode);
 }
 
-//	---------------------------------------------------------------------------
+
 const CvUnitCycler::Node* CvUnitCycler::HeadNode() const
 {
 	return m_kNodeList.head();
 }
 
-//	---------------------------------------------------------------------------
+
 CvUnitCycler::Node* CvUnitCycler::HeadNode()
 {
 	return m_kNodeList.head();
 }
 
-//	---------------------------------------------------------------------------
+
 const CvUnitCycler::Node* CvUnitCycler::TailNode() const
 {
 	return m_kNodeList.tail();
 }
 
-//	---------------------------------------------------------------------------
+
 FDataStream & operator>>(FDataStream & loadFrom, CvUnitCycler & writeTo)
 {
 	writeTo.Clear();
@@ -323,7 +323,7 @@ FDataStream & operator>>(FDataStream & loadFrom, CvUnitCycler & writeTo)
 	return loadFrom;
 }
 
-//	---------------------------------------------------------------------------
+
 FDataStream & operator<<(FDataStream & saveTo, const CvUnitCycler & readFrom)
 {
 	saveTo << readFrom.m_kNodeList;

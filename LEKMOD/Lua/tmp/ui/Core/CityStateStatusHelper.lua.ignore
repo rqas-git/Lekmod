@@ -1,16 +1,16 @@
-------------------------------------------------------
--- CityStateStatusHelper.lua
--- Author: Anton Strenger
---
--- Consolidation of code associated with displaying
--- the friendship status of a player with a city-state
-------------------------------------------------------
+
+
+
+
+
+
+
 print("City State Peace Block loaded");
 include( "IconSupport" );
 
-------------------------------------------------------
--- Global Constants
-------------------------------------------------------
+
+
+
 local kPosInfRange = math.abs( GameDefines["FRIENDSHIP_THRESHOLD_ALLIES"] - GameDefines["FRIENDSHIP_THRESHOLD_NEUTRAL"] );
 local kNegInfRange = math.abs( GameDefines["MINOR_FRIENDSHIP_AT_WAR"] - GameDefines["FRIENDSHIP_THRESHOLD_NEUTRAL"] );
 local kPosBarRange = 81;
@@ -18,19 +18,19 @@ local kNegBarRange = 81;
 local kBarIconAtlas = "CITY_STATE_INFLUENCE_METER_ICON_ATLAS";
 local kBarIconNeutralIndex = 4;
 
--- The order of precedence in which the quest icons and tooltip points are displayed
+
 ktQuestsDisplayOrder = {
-	-- Global quests are first
+
 	MinorCivQuestTypes.MINOR_CIV_QUEST_CONTEST_CULTURE,
 	MinorCivQuestTypes.MINOR_CIV_QUEST_CONTEST_FAITH,
 	MinorCivQuestTypes.MINOR_CIV_QUEST_CONTEST_TECHS,
 	MinorCivQuestTypes.MINOR_CIV_QUEST_INVEST,
 	MinorCivQuestTypes.MINOR_CIV_QUEST_KILL_CAMP,
-	-- Then personal support quests
+
 	MinorCivQuestTypes.MINOR_CIV_QUEST_GIVE_GOLD,
 	MinorCivQuestTypes.MINOR_CIV_QUEST_PLEDGE_TO_PROTECT,
 	MinorCivQuestTypes.MINOR_CIV_QUEST_DENOUNCE_MAJOR,
-	-- Then other pesonal quests
+
 	MinorCivQuestTypes.MINOR_CIV_QUEST_TRADE_ROUTE,
 	MinorCivQuestTypes.MINOR_CIV_QUEST_SPREAD_RELIGION,
 	MinorCivQuestTypes.MINOR_CIV_QUEST_BULLY_CITY_STATE,
@@ -43,7 +43,7 @@ ktQuestsDisplayOrder = {
 	MinorCivQuestTypes.MINOR_CIV_QUEST_ROUTE,
 }
 
-------------------------------------------------------
+
 
 function GetCityStateStatusRow(iMajor, iMinor)
 	local pMajor = Players[iMajor];
@@ -63,33 +63,33 @@ function GetCityStateStatusRow(iMajor, iMinor)
 	local bCanBully = pMinor:CanMajorBullyGold(iMajor);
 	local bAllies = pMinor:IsAllies(iMajor);
 	
-	-- War
+
 	if (bWar) then
 		return GameInfo.MinorCivTraits_Status["MINOR_FRIENDSHIP_STATUS_WAR"];
 	end
 	
-	-- Negative INF
+
 	if (iInf < GameDefines["FRIENDSHIP_THRESHOLD_NEUTRAL"]) then
-		-- Able to bully?
+
 		if (bCanBully) then
 			return GameInfo.MinorCivTraits_Status["MINOR_FRIENDSHIP_STATUS_AFRAID"];
 		else
 			return GameInfo.MinorCivTraits_Status["MINOR_FRIENDSHIP_STATUS_ANGRY"];
 		end
-	-- Neutral
+
 	elseif (iInf < GameDefines["FRIENDSHIP_THRESHOLD_FRIENDS"]) then
 		if (bCanBully) then
 			return GameInfo.MinorCivTraits_Status["MINOR_FRIENDSHIP_STATUS_AFRAID"];
 		else
 			return GameInfo.MinorCivTraits_Status["MINOR_FRIENDSHIP_STATUS_NEUTRAL"];
 		end
-	-- Friends
+
 	elseif (iInf < GameDefines["FRIENDSHIP_THRESHOLD_ALLIES"]) then
 		return GameInfo.MinorCivTraits_Status["MINOR_FRIENDSHIP_STATUS_FRIENDS"];
-	-- Friends, but high enough INF to be a potential ally
+
 	elseif (not bAllies) then
 		return GameInfo.MinorCivTraits_Status["MINOR_FRIENDSHIP_STATUS_FRIENDS"];
-	-- Allies
+
 	else
 		return GameInfo.MinorCivTraits_Status["MINOR_FRIENDSHIP_STATUS_ALLIES"];
 	end
@@ -133,9 +133,9 @@ function UpdateCityStateStatusBar(iMajor, iMinor, posBarCtrl, negBarCtrl, barMar
 		negBarCtrl:SetHide(true);
 	end
 	
-	-- Bubble icon for meter
+
 	local size = barMarkerCtrl:GetSize().x;
-	-- Special case when INF = 0
+
 	if (iInf == 0) then
 		IconHookup(kBarIconNeutralIndex, size, kBarIconAtlas, barMarkerCtrl);
 	elseif (info.StatusMeterIconAtlasIndex ~= nil) then
@@ -172,46 +172,46 @@ function GetCityStateStatusText(iMajor, iMinor)
 	local bWar = pMajorTeam:IsAtWar(iMinorTeam);
 	local bCanBully = pMinor:CanMajorBullyGold(iMajor);
 	
-	-- Status
+
 	local strStatusText = "";
 	
-	if (pMinor:IsAllies(iMajor)) then		-- Allies
+	if (pMinor:IsAllies(iMajor)) then
 		strStatusText = Locale.ConvertTextKey("TXT_KEY_ALLIES");
 		strStatusText = "[COLOR_POSITIVE_TEXT]" .. strStatusText .. "[ENDCOLOR]";
 		
-	elseif (pMinor:IsFriends(iMajor)) then		-- Friends
+	elseif (pMinor:IsFriends(iMajor)) then
 		strStatusText = Locale.ConvertTextKey("TXT_KEY_FRIENDS");
 		strStatusText = "[COLOR_POSITIVE_TEXT]" .. strStatusText .. "[ENDCOLOR]";
 		
-	elseif (pMinor:IsMinorPermanentWar(iActiveTeam)) then		-- Permanent War
+	elseif (pMinor:IsMinorPermanentWar(iActiveTeam)) then
 		strStatusText = Locale.ConvertTextKey("TXT_KEY_PERMANENT_WAR");
 		strStatusText = "[COLOR_NEGATIVE_TEXT]" .. strStatusText .. "[ENDCOLOR]";
 		
-	elseif (pMinor:IsPeaceBlocked(iActiveTeam)) then		-- Peace blocked by being at war with ally
+	elseif (pMinor:IsPeaceBlocked(iActiveTeam)) then
 		strStatusText = Locale.ConvertTextKey("TXT_KEY_PEACE_BLOCKED");
 		strStatusText = "[COLOR_NEGATIVE_TEXT]" .. strStatusText .. "[ENDCOLOR]";
 		
-	-- NQ_PEACE_BLOCKED_IF_INFLUENCE_TOO_LOW begin
-	elseif (pMinor:IsInfluenceTooLowForPeace(iMajor)) then		-- Peace blocked by being less than -50 influence
+
+	elseif (pMinor:IsInfluenceTooLowForPeace(iMajor)) then
 		strStatusText = Locale.ConvertTextKey("TXT_KEY_PEACE_BLOCKED");
 		strStatusText = "[COLOR_NEGATIVE_TEXT]" .. strStatusText .. "[ENDCOLOR]";
-	-- NQ_PEACE_BLOCKED_IF_INFLUENCE_TOO_LOW end
 
-	elseif (bWar) then		-- War
+
+	elseif (bWar) then
 		strStatusText = Locale.ConvertTextKey("TXT_KEY_WAR");
 		strStatusText = "[COLOR_NEGATIVE_TEXT]" .. strStatusText .. "[ENDCOLOR]";
 		
 	elseif (pMinor:GetMinorCivFriendshipWithMajor(iMajor) < GameDefines["FRIENDSHIP_THRESHOLD_NEUTRAL"]) then
-		-- Afraid
+
 		if (bCanBully) then
 			strStatusText = Locale.ConvertTextKey("TXT_KEY_AFRAID");
-		-- Angry
+
 		else
 			strStatusText = Locale.ConvertTextKey("TXT_KEY_ANGRY");
 		end
 		strStatusText = "[COLOR_NEGATIVE_TEXT]" .. strStatusText .. "[ENDCOLOR]";
 		
-	else		-- Neutral
+	else
 		strStatusText = Locale.ConvertTextKey("TXT_KEY_CITY_STATE_PERSONALITY_NEUTRAL");
 		strStatusText = "[COLOR_POSITIVE_TEXT]" .. strStatusText .. "[ENDCOLOR]";
 	end
@@ -242,8 +242,8 @@ function GetCityStateStatusToolTip(iMajor, iMinor, bFullInfo)
 	
 	local strStatusTT = "";
 	
-	-- Status and Influence
-	if (pMinor:IsAllies(iMajor)) then		-- Allies
+
+	if (pMinor:IsAllies(iMajor)) then
 		strStatusTT = Locale.ConvertTextKey("TXT_KEY_DIPLO_STATUS_TT", Locale.ConvertTextKey(strShortDescKey), Locale.ConvertTextKey("TXT_KEY_ALLIES"),
 										  iInfluence, 
 										  GameDefines["FRIENDSHIP_THRESHOLD_MAX"] - GameDefines["FRIENDSHIP_THRESHOLD_ALLIES"]); 
@@ -252,7 +252,7 @@ function GetCityStateStatusToolTip(iMajor, iMinor, bFullInfo)
 		
 		strStatusTT = strStatusTT .. "[NEWLINE][NEWLINE]" .. strTempTT;
 		
-	elseif (pMinor:IsFriends(iMajor)) then		-- Friends
+	elseif (pMinor:IsFriends(iMajor)) then
 		strStatusTT = Locale.ConvertTextKey("TXT_KEY_DIPLO_STATUS_TT", Locale.ConvertTextKey(strShortDescKey), Locale.ConvertTextKey("TXT_KEY_FRIENDS"),
 										    iInfluence,
 										    GameDefines["FRIENDSHIP_THRESHOLD_ALLIES"] - GameDefines["FRIENDSHIP_THRESHOLD_FRIENDS"]);
@@ -261,38 +261,38 @@ function GetCityStateStatusToolTip(iMajor, iMinor, bFullInfo)
 		
 		strStatusTT = strStatusTT .. "[NEWLINE][NEWLINE]" .. strTempTT;
 		
-	elseif (pMinor:IsMinorPermanentWar(iActiveTeam)) then		-- Permanent War
+	elseif (pMinor:IsMinorPermanentWar(iActiveTeam)) then
 		strStatusTT = Locale.ConvertTextKey("TXT_KEY_DIPLO_STATUS_TT", Locale.ConvertTextKey(strShortDescKey), Locale.ConvertTextKey("TXT_KEY_ANGRY"),
 										    iInfluence, GameDefines["MINOR_FRIENDSHIP_AT_WAR"]);
 										    
 		strStatusTT = strStatusTT .. "[NEWLINE][NEWLINE]" .. Locale.ConvertTextKey("TXT_KEY_PERMANENT_WAR_CSTATE_TT", strShortDescKey);
 		
-	elseif (pMinor:IsPeaceBlocked(iActiveTeam)) then		-- Peace blocked by being at war with ally
+	elseif (pMinor:IsPeaceBlocked(iActiveTeam)) then
 		strStatusTT = Locale.ConvertTextKey("TXT_KEY_DIPLO_STATUS_TT", Locale.ConvertTextKey(strShortDescKey), Locale.ConvertTextKey("TXT_KEY_ANGRY"),
 										    iInfluence, GameDefines["MINOR_FRIENDSHIP_AT_WAR"]);
 										    
 		strStatusTT = strStatusTT .. "[NEWLINE][NEWLINE]" .. Locale.ConvertTextKey("TXT_KEY_PEACE_BLOCKED_CSTATE_TT", strShortDescKey);
 	
-	-- NQ_PEACE_BLOCKED_IF_INFLUENCE_TOO_LOW begin
-	elseif (pMinor:IsInfluenceTooLowForPeace(iMajor)) then		-- Peace blocked by being less than -50 influence
+
+	elseif (pMinor:IsInfluenceTooLowForPeace(iMajor)) then
 		strStatusTT = Locale.ConvertTextKey("TXT_KEY_DIPLO_STATUS_TT", Locale.ConvertTextKey(strShortDescKey), Locale.ConvertTextKey("TXT_KEY_ANGRY"),
 										    iInfluence, GameDefines["MINOR_FRIENDSHIP_AT_WAR"]);
 										    
 		strStatusTT = strStatusTT .. "[NEWLINE][NEWLINE]" .. Locale.ConvertTextKey("TXT_KEY_INFLUENCE_TOO_LOW_FOR_PEACE_CSTATE_TT", strShortDescKey);
-	-- NQ_PEACE_BLOCKED_IF_INFLUENCE_TOO_LOW end
 
-	elseif (bWar) then		-- War
+
+	elseif (bWar) then
 		strStatusTT = Locale.ConvertTextKey("TXT_KEY_DIPLO_STATUS_TT", Locale.ConvertTextKey(strShortDescKey), Locale.ConvertTextKey("TXT_KEY_ANGRY"),
 										    iInfluence, GameDefines["MINOR_FRIENDSHIP_AT_WAR"]);
 										    
 		strStatusTT = strStatusTT .. "[NEWLINE][NEWLINE]" ..Locale.ConvertTextKey("TXT_KEY_WAR_CSTATE_TT", strShortDescKey);
 		
 	elseif (iInfluence < GameDefines["FRIENDSHIP_THRESHOLD_NEUTRAL"]) then
-		-- Afraid
+
 		if (bCanBully) then
 			strStatusTT = Locale.ConvertTextKey("TXT_KEY_DIPLO_STATUS_TT", Locale.ConvertTextKey(strShortDescKey), Locale.ConvertTextKey("TXT_KEY_AFRAID"),
 										    iInfluence, GameDefines["MINOR_FRIENDSHIP_AT_WAR"]);
-		-- Angry
+
 		else
 			strStatusTT = Locale.ConvertTextKey("TXT_KEY_DIPLO_STATUS_TT", Locale.ConvertTextKey(strShortDescKey), Locale.ConvertTextKey("TXT_KEY_ANGRY"),
 										    iInfluence, GameDefines["MINOR_FRIENDSHIP_AT_WAR"]);
@@ -300,7 +300,7 @@ function GetCityStateStatusToolTip(iMajor, iMinor, bFullInfo)
 										    
 		strStatusTT = strStatusTT .. "[NEWLINE][NEWLINE]" .. Locale.ConvertTextKey("TXT_KEY_ANGRY_CSTATE_TT", strShortDescKey);
 		
-	else		-- Neutral
+	else
 		strStatusTT = Locale.ConvertTextKey("TXT_KEY_DIPLO_STATUS_TT", Locale.ConvertTextKey(strShortDescKey), Locale.ConvertTextKey("TXT_KEY_CITY_STATE_PERSONALITY_NEUTRAL"),
 										    iInfluence - GameDefines["FRIENDSHIP_THRESHOLD_NEUTRAL"], 
 											GameDefines["FRIENDSHIP_THRESHOLD_FRIENDS"] - GameDefines["FRIENDSHIP_THRESHOLD_NEUTRAL"]);
@@ -308,22 +308,22 @@ function GetCityStateStatusToolTip(iMajor, iMinor, bFullInfo)
 		strStatusTT = strStatusTT .. "[NEWLINE][NEWLINE]" .. Locale.ConvertTextKey("TXT_KEY_NEUTRAL_CSTATE_TT", strShortDescKey);
 	end
 	
-	-- start NQ_SHOW_BASE_INFLUENCE_WHILE_AT_WAR_IN_CS_TOOLTIP
+
 	if (bWar) then
 		local iBaseInfluence = pMinor:GetMinorCivBaseFriendshipWithMajor(iMajor);
 		strStatusTT = strStatusTT .. "[NEWLINE][NEWLINE]";
 		strStatusTT = strStatusTT .. Locale.ConvertTextKey("TXT_KEY_BASE_INFLUENCE_DESPITE_WAR", iBaseInfluence);
 	end
 
-	-- end NQ_SHOW_BASE_INFLUENCE_WHILE_AT_WAR_IN_CS_TOOLTIP
 
-	-- Influence change
+
+
 	if (iInfluence ~= iInfluenceAnchor) then
 		strStatusTT = strStatusTT .. "[NEWLINE][NEWLINE]";
 		strStatusTT = strStatusTT .. Locale.ConvertTextKey("TXT_KEY_CSTATE_INFLUENCE_RATE", iInfluenceChangeThisTurn, iInfluenceAnchor);
 	end
 	
-	-- Bullying
+
 	if (bCanBully) then
 		strStatusTT = strStatusTT .. "[NEWLINE][NEWLINE]";
 		strStatusTT = strStatusTT .. Locale.ConvertTextKey("TXT_KEY_CSTATE_CAN_BULLY");
@@ -333,7 +333,7 @@ function GetCityStateStatusToolTip(iMajor, iMinor, bFullInfo)
 	end
 	
 	if (bFullInfo) then
-		-- Open Borders
+
 		if (pMinor:IsPlayerHasOpenBorders(iMajor)) then
 		
 			strStatusTT = strStatusTT .. "[NEWLINE][NEWLINE]";
@@ -345,7 +345,7 @@ function GetCityStateStatusToolTip(iMajor, iMinor, bFullInfo)
 			end
 		end
 		
-		-- Friendship bonuses
+
 		local iCultureBonus = pMinor:GetMinorCivCurrentCultureBonus(iMajor);
 		if (iCultureBonus ~= 0) then
 			strStatusTT = strStatusTT .. "[NEWLINE][NEWLINE]";
@@ -383,7 +383,7 @@ function GetCityStateStatusToolTip(iMajor, iMinor, bFullInfo)
 			strStatusTT = strStatusTT .. Locale.ConvertTextKey("TXT_KEY_CSTATE_FAITH_BONUS", iFaithBonus);
 		end
 		
-		-- Resources
+
 		local strExportedResourceText = "";
 		
 		local iAmount;
@@ -421,22 +421,22 @@ function GetAllyText(iActivePlayer, iMinor)
 	local pMinor = Players[iMinor];
 	if (pActivePlayer ~= nil and pMinor ~= nil) then
 		local iAlly = pMinor:GetAlly();
-		-- Has an ally
+
 		if (iAlly ~= nil and iAlly ~= -1) then
-			-- Not us
+
 			if (iAlly ~= iActivePlayer) then
-				-- Someone we know
+
 				if (Teams[pActivePlayer:GetTeam()]:IsHasMet(Players[iAlly]:GetTeam())) then
 					sText = "[COLOR_POSITIVE_TEXT]" .. Locale.ConvertTextKey(Players[iAlly]:GetCivilizationShortDescriptionKey()) .. "[ENDCOLOR]";
-				-- Someone we haven't met
+
 				else
 					sText = "?";
 				end
-			-- Us
+
 			else
 				sText = "[COLOR_POSITIVE_TEXT]" .. Locale.ConvertTextKey("TXT_KEY_YOU") .. "[ENDCOLOR]";
 			end
-		-- No ally
+
 		else
 			sText = Locale.ConvertTextKey("TXT_KEY_CITY_STATE_NOBODY");
 		end
@@ -453,25 +453,25 @@ function GetAllyToolTip(iActivePlayer, iMinor)
 	if (pActivePlayer ~= nil and pMinor ~= nil) then
 		local iActivePlayerInf = pMinor:GetMinorCivFriendshipWithMajor(iActivePlayer);
 		local iAlly = pMinor:GetAlly();
-		-- Has an ally
+
 		if (iAlly ~= nil and iAlly ~= -1) then
 			local iAllyInf = pMinor:GetMinorCivFriendshipWithMajor(iAlly);
-			-- Not us
+
 			if (iAlly ~= iActivePlayer) then
-				-- Someone we know
+
 				if (Teams[pActivePlayer:GetTeam()]:IsHasMet(Players[iAlly]:GetTeam())) then
-					local iInfUntilAllied = iAllyInf - iActivePlayerInf + 1; -- needs to pass up the current ally, not just match
+					local iInfUntilAllied = iAllyInf - iActivePlayerInf + 1;
 					sToolTip = Locale.ConvertTextKey("TXT_KEY_CITY_STATE_ALLY_TT", Players[iAlly]:GetCivilizationShortDescriptionKey(), iInfUntilAllied);
-				-- Someone we haven't met
+
 				else
-					local iInfUntilAllied = iAllyInf - iActivePlayerInf + 1; -- needs to pass up the current ally, not just match
+					local iInfUntilAllied = iAllyInf - iActivePlayerInf + 1;
 					sToolTip = Locale.ConvertTextKey("TXT_KEY_CITY_STATE_ALLY_UNKNOWN_TT", iInfUntilAllied);
 				end
-			-- Us
+
 			else
 				sToolTip = Locale.ConvertTextKey("TXT_KEY_CITY_STATE_ALLY_ACTIVE_PLAYER_TT");
 			end
-		-- No ally
+
 		else
 			local iInfUntilAllied = GameDefines["FRIENDSHIP_THRESHOLD_ALLIES"] - iActivePlayerInf;
 			sToolTip = Locale.ConvertTextKey("TXT_KEY_CITY_STATE_ALLY_NOBODY_TT", iInfUntilAllied);
@@ -497,7 +497,7 @@ function GetActiveQuestText(iMajor, iMinor)
 			
 			iNumQuests = iNumQuests + 1;
 			
-			-- This data is not pertinent for all quest types, but grab it here for readability
+
 			local iQuestData1 = pMinor:GetQuestData1(iMajor, eType);
 			local iQuestData2 = pMinor:GetQuestData2(iMajor, eType);
 	
@@ -545,13 +545,13 @@ function GetActiveQuestText(iMajor, iMinor)
 		end
 	end
 	
-	-- Threatening Barbarians event
+
 	if (pMinor:IsThreateningBarbariansEventActiveForPlayer(iMajor)) then
 		iNumQuests = iNumQuests + 1;
 		sIconText = sIconText .. "[ICON_RAZING]";
 	end
 	
-	-- Proxy War event
+
 	if (pMinor:IsProxyWarActiveForMajor(iMajor)) then
 		iNumQuests = iNumQuests + 1;
 		sIconText = sIconText .. "[ICON_RESISTANCE]";
@@ -610,10 +610,10 @@ function GetActiveQuestToolTip(iMajor, iMinor)
 			end
 			sToolTipText = sToolTipText .. "[ICON_BULLET]";
 			
-			-- This data is not pertinent for all quest types, but grab it here for readability
+
 			local iQuestData1 = pMinor:GetQuestData1(iMajor, eType);
 			local iQuestData2 = pMinor:GetQuestData2(iMajor, eType);
-			local iTurnsRemaining = pMinor:GetQuestTurnsRemaining(iMajor, eType, Game.GetGameTurn()); -- add 1 since began on CS's turn (1 before), and avoids "0 turns remaining"
+			local iTurnsRemaining = pMinor:GetQuestTurnsRemaining(iMajor, eType, Game.GetGameTurn());
 			
 			if (eType == MinorCivQuestTypes.MINOR_CIV_QUEST_ROUTE) then
 				sToolTipText = sToolTipText .. Locale.Lookup( "TXT_KEY_CITY_STATE_QUEST_ROUTE_FORMAL" );
@@ -677,7 +677,7 @@ function GetActiveQuestToolTip(iMajor, iMinor)
 		end
 	end
 	
-	-- Threatening Barbarians event
+
 	if (pMinor:IsThreateningBarbariansEventActiveForPlayer(iMajor)) then
 		iNumQuests = iNumQuests + 1;
 		if (sToolTipText ~= "") then
@@ -687,7 +687,7 @@ function GetActiveQuestToolTip(iMajor, iMinor)
 		sToolTipText = sToolTipText .. Locale.Lookup("TXT_KEY_CITY_STATE_QUEST_INVADING_BARBS_FORMAL");
 	end
 	
-	-- Proxy War event
+
 	if (pMinor:IsProxyWarActiveForMajor(iMajor)) then
 		iNumQuests = iNumQuests + 1;
 		if (sToolTipText ~= "") then
@@ -739,7 +739,7 @@ function GetCityStateTraitToolTip(iMinor)
 				if (GameInfo.Units[eUniqueUnit] ~= nil) then
 					local ePrereqTech = GameInfo.Units[eUniqueUnit].PrereqTech;
 					if (ePrereqTech == nil) then
-						-- If no prereq then just make it Agriculture, but make sure that Agriculture is in our database. Otherwise, show the fallback tooltip.
+
 						if (GameInfo.Technologies["TECH_AGRICULTURE"] ~= nil) then
 							ePrereqTech = GameInfo.Technologies["TECH_AGRICULTURE"].ID;
 						end

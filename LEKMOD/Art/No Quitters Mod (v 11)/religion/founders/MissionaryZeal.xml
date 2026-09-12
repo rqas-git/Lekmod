@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-25 05:44:53 -->
+
 <GameData>
 
-	<!-- Missionaries cost 50% less Faith and have 1 extra Spread Religion charge. -->
+
 	<Beliefs>
 		<Update>
 			<Set MissionaryStrengthModifier="0" MissionaryCostModifier="-50" Enhancer="false" Founder="true" MissionaryExtraSpreads="1" />
@@ -10,7 +10,7 @@
 		</Update>
 	</Beliefs>
 
-	<!-- localization -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_BELIEF_MISSIONARY_ZEAL" />
 		<Row Tag="TXT_KEY_BELIEF_MISSIONARY_ZEAL">

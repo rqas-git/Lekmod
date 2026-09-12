@@ -3,14 +3,14 @@
 <GameData>
 
 	<Language_en_US>
-		<!--
-		<Replace Tag="TXT_KEY_RESOURCE_COCOA">
-			<Text>Cocoa</Text>
-		</Replace>
-		<Replace Tag="TXT_KEY_CIV5_RESOURCE_COCOA_TEXT">
-			<Text>Cocoa is produced from the seeds of the tropical cacao tree, which are fermented, roasted, peeled, and then ground into cocoa mass or liquified into chocolate liquor. This pure chocolate was used originally in Mesoamerica, both as a beverage and as an ingredient in foods, and played a special role in both Maya and Aztec royal and religious events. Eventually, once Europeans obtained this luxury, they sweetened and fattened it to create the types of chocolate we know today.</Text>
-		</Replace>
-		-->
+
+
+
+
+
+
+
+
 		<Replace Tag="TXT_KEY_RESOURCE_COFFEE">
 			<Text>Coffee</Text>
 		</Replace>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2/14/2016 9:54:57 PM -->
+
 <GameData>
 	
-	<!-- T1 Covert Action building: Covert Ops HQ -->
+
 	<BuildingClasses>
 		<Row>
 			<Type>BUILDINGCLASS_T1_COVERT_ACTION</Type>
@@ -74,7 +74,7 @@
 		</Row>
 	</Language_RU_RU>
 
-	<!-- Covert Action tooltip -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_POLICY_COVERT_ACTION_HELP" />
 		<Row Tag="TXT_KEY_POLICY_COVERT_ACTION_HELP">

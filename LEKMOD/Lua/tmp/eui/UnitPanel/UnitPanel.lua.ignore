@@ -1,10 +1,10 @@
-------------------------------------------------------
--- Unit Panel Screen
--- modified by bc1 from Civ V 1.0.3.276 code
--- code is common using gk_mode and bnw_mode switches
-------------------------------------------------------
--- edit: NEW: Ingame Hotkey Manager for EUI
-------------------------------------------------------
+
+
+
+
+
+
+
 g_needsUpdate = true;
 
 include( "EUI_tooltips" )
@@ -21,9 +21,9 @@ local gk_mode = Game.GetReligionName ~= nil
 local bnw_mode = Game.GetActiveLeague ~= nil
 
 
--------------------------------------------------
--- Minor lua optimizations
--------------------------------------------------
+
+
+
 local ipairs = ipairs
 local math_ceil = math.ceil
 local math_floor = math.floor
@@ -35,17 +35,17 @@ local table_insert = table.insert
 local table_remove = table.remove
 local tostring = tostring
 
---EUI_utilities
+
 local StackInstanceManager = StackInstanceManager
 local IconLookup = EUI.IconLookup
 local IconHookup = EUI.IconHookup
 local Color = EUI.Color
 local PrimaryColors = EUI.PrimaryColors
 local BackgroundColors = EUI.BackgroundColors
-local GameInfo = EUI.GameInfoCache -- warning! use iterator ONLY with table field conditions, NOT string SQL query
+local GameInfo = EUI.GameInfoCache
 local table = EUI.table
 
---EUI_tooltips
+
 local GetHelpTextForUnit = EUI.GetHelpTextForUnit
 local GetHelpTextForBuilding = EUI.GetHelpTextForBuilding
 local GetHelpTextForProject = EUI.GetHelpTextForProject
@@ -62,8 +62,8 @@ local DomainTypes = DomainTypes
 local Events = Events
 local Game = Game
 local GameDefines = GameDefines
--- NEW: actually we need direct access to this global now
---local GameInfoActions = GameInfoActions
+
+
 local GameInfoTypes = GameInfoTypes
 local GameInfo_Automates = GameInfo.Automates
 local GameInfo_Builds = GameInfo.Builds
@@ -86,9 +86,9 @@ local UI_GetHeadSelectedUnit = UI.GetHeadSelectedUnit
 local UI_GetUnitPortraitIcon = UI.GetUnitPortraitIcon
 local YieldTypes = YieldTypes
 
--------------------------------------------------
--- Globals
--------------------------------------------------
+
+
+
 
 local g_tipControls = {}
 TTManager:GetTypeControlTable( "EUI_UnitPanelItemTooltip", g_tipControls )
@@ -100,15 +100,15 @@ local g_ActivePlayerUnitTypes
 local g_ActivePlayerUnitsInRibbon = {}
 local g_isHideCityList, g_isHideUnitList, g_isHideUnitTypes
 local ActionToolTipHandler
---[[ 
- _   _       _ _          ___      ____ _ _   _             ____  _ _     _                 
-| | | |_ __ (_) |_ ___   ( _ )    / ___(_) |_(_) ___  ___  |  _ \(_) |__ | |__   ___  _ __  
-| | | | '_ \| | __/ __|  / _ \/\ | |   | | __| |/ _ \/ __| | |_) | | '_ \| '_ \ / _ \| '_ \ 
-| |_| | | | | | |_\__ \ | (_>  < | |___| | |_| |  __/\__ \ |  _ <| | |_) | |_) | (_) | | | |
- \___/|_| |_|_|\__|___/  \___/\/  \____|_|\__|_|\___||___/ |_| \_\_|_.__/|_.__/ \___/|_| |_|
-]]
 
--- NO_ACTIVITY, ACTIVITY_AWAKE, ACTIVITY_HOLD, ACTIVITY_SLEEP, ACTIVITY_HEAL, ACTIVITY_SENTRY, ACTIVITY_INTERCEPT, ACTIVITY_MISSION
+
+
+
+
+
+
+
+
 local g_activityMissions = {
 [ActivityTypes.ACTIVITY_AWAKE] = nil,
 [ActivityTypes.ACTIVITY_HOLD] = GameInfo_Missions.MISSION_SKIP,
@@ -128,7 +128,7 @@ local g_units, g_cities, g_unitTypes
 local EUI_options = Modding.OpenUserData( "Enhanced User Interface Options", 1 )
 
 local g_cityFocusIcons = {
---[CityAIFocusTypes.NO_CITY_AI_FOCUS_TYPE or -1] = "",
+
 [CityAIFocusTypes.CITY_AI_FOCUS_TYPE_FOOD or -1] = "[ICON_FOOD]",
 [CityAIFocusTypes.CITY_AI_FOCUS_TYPE_PRODUCTION or -1] = "[ICON_PRODUCTION]",
 [CityAIFocusTypes.CITY_AI_FOCUS_TYPE_GOLD or -1] = "[ICON_GOLD]",
@@ -149,9 +149,9 @@ local g_cityFocusTooltips = {
 [CityAIFocusTypes.CITY_AI_FOCUS_TYPE_FAITH or -1] = L"TXT_KEY_CITYVIEW_FOCUS_FAITH_TEXT",
 } g_cityFocusTooltips[-1] = nil
 
--------------------------------------------------
--- Tooltip Utilities
--------------------------------------------------
+
+
+
 
 local function ShowSimpleTip( ... )
 	local toolTip = ... and table_concat( {...}, "[NEWLINE]----------------[NEWLINE]" )
@@ -193,9 +193,9 @@ local function ReligionColor( s )
 	return TextColor("[COLOR_WHITE]", s)
 end
 
--------------------------------------------------
--- Ribbon Manager
--------------------------------------------------
+
+
+
 
 local function g_RibbonManager( name, stack, scrap, createAllItems, initItem, updateItem, callbacks, tooltips )
 	local self
@@ -210,15 +210,15 @@ local function g_RibbonManager( name, stack, scrap, createAllItems, initItem, up
 			if n <= #self then
 				instance = self[ n ]
 				if n > m then
---print("Recycle from scrap", name, m, n, #self, instance, "item", itemID, item and item:GetName() )
+
 					instance.Button:ChangeParent( stack )
---else print("Recycle from stack", name, m, n, #self, instance, "item", itemID, item and item:GetName() )
+
 				end
 			else
 				instance = {}
---print("Create new ", name, m, n, #self, instance, "item", itemID, item and item:GetName() )
+
 				ContextPtr:BuildInstanceForControl( name, instance, stack )
-				-- Setup Tootip Callbacks
+
 				local control
 				for name, callback in pairs( tooltips ) do
 					control = instance[name]
@@ -227,7 +227,7 @@ local function g_RibbonManager( name, stack, scrap, createAllItems, initItem, up
 						control:SetToolTipType( "EUI_UnitPanelItemTooltip" )
 					end
 				end
-				-- Setup Callbacks
+
 				for name, eventCallbacks in pairs( callbacks ) do
 					control = instance[name]
 					if control then
@@ -243,18 +243,18 @@ local function g_RibbonManager( name, stack, scrap, createAllItems, initItem, up
 			instance[1] = itemID
 			instance[2] = n
 			return initItem( instance, item )
---else print( "Failed attempt to add an item to the list", itemID )
+
 		end
 	end
 
 self = {
 	Initialize = function( isHidden )
---print("Initializing ", name, " stack", m, n, #self, "hidden ?", isHidden )
+
 		m = n
 		n = 0
 		index = {}
 		if not isHidden then
---print("Initializing ", name, " stack contents" )
+
 			createAllItems( Create )
 		end
 		for i = n+1, m do
@@ -270,13 +270,13 @@ self = {
 
 	Destroy = function( itemID )
 		local instance = index[ itemID ]
---print( "Remove item from list", name, m, n, #self, "item", itemID, instance )
+
 		if instance then
 			index[ itemID ] = nil
 			for i = instance[2] or 0, 1, -1 do
---print("looking for instance", instance, "ID", itemID, instance[1], instance[2], "self", self[i], self[i][1], self[i][2])
+
 				if self[i] == instance then
---print( "Found item to remove at index", i )
+
 					table_remove( self, i )
 					instance.Button:ChangeParent( scrap )
 					n = n-1
@@ -285,8 +285,8 @@ self = {
 				end
 			end
 		end
---print( "Failed attempt to remove item", name, itemID, instance )
---for k,v in pairs(index) do print("index[", k,"] = ", v) end
+
+
 	end;
 
 	Update = function( itemID )
@@ -316,9 +316,9 @@ self = {
 	return self
 end
 
--------------------------------------------------
--- Item Functions
--------------------------------------------------
+
+
+
 
 local function UpdateCity( instance )
 	local city = instance and g_activePlayer:GetCityByID( instance[1] )
@@ -398,7 +398,7 @@ end
 local function getUnitBuildProgressData( plot, buildID, unit )
 	local buildProgress = plot:GetBuildProgress( buildID )
 	local nominalWorkRate = unit:WorkRate( true )
-	-- take into account unit.cpp "wipe out all build progress also" game bug
+
 	local buildTime = plot:GetBuildTime( buildID, g_activePlayerID ) - nominalWorkRate
 	local buildTurnsLeft
 	if buildProgress == 0 then
@@ -417,15 +417,15 @@ end
 local function updateSmallUnitIcons( unit, instance )
 	local movesLeft = unit:MovesLeft()
 	if movesLeft >= unit:MaxMoves() then
-		instance.MovementPip:SetTextureOffsetVal( 0, 0 )-- cyan (green)
+		instance.MovementPip:SetTextureOffsetVal( 0, 0 )
 	elseif movesLeft > 0 then
 		if unit:IsCombatUnit() and unit:IsOutOfAttacks() then
-			instance.MovementPip:SetTextureOffsetVal( 0, 96 )-- orange (gray)
+			instance.MovementPip:SetTextureOffsetVal( 0, 96 )
 		else
-			instance.MovementPip:SetTextureOffsetVal( 0, 32 )-- green (yellow)
+			instance.MovementPip:SetTextureOffsetVal( 0, 32 )
 		end
 	else
-		instance.MovementPip:SetTextureOffsetVal( 0, 64 )-- red
+		instance.MovementPip:SetTextureOffsetVal( 0, 64 )
 	end
 	local damage = unit:GetDamage()
 	local percent = 1
@@ -435,17 +435,17 @@ local function updateSmallUnitIcons( unit, instance )
 		else
 			percent = 1 - damage / g_MaxDamage
 		end
---			instance.HealthMeter:SetHide(false)
---			instance.HealthMeter:SetPercent( percent )
---		else
---			instance.HealthMeter:SetHide(true)
+
+
+
+
 	end
 	instance.Button:SetColor( Color( 1, percent, percent, 1 ) )
 
 	local info
 	local text = ""
 	local buildID = unit:GetBuildType()
-	if buildID ~= -1 then -- unit is actively building something
+	if buildID ~= -1 then
 		info = GameInfo_Builds[buildID]
 		text = getUnitBuildProgressData( unit:GetPlot(), buildID, unit )
 		if text > 99 then text = "" end
@@ -483,7 +483,7 @@ local function UpdateUnit( instance )
 		updateSmallUnitIcons( unit, instance )
 	end
 end
--- todo: flash text info
+
 
 local function FilterUnit( unit )
 	return unit and g_ActivePlayerUnitsInRibbon[ unit:GetUnitType() ]
@@ -499,8 +499,8 @@ local function UnitToolTip( unit, ... )
 		local unitTypeID = unit:GetUnitType()
 		local unitInfo = unitTypeID and GameInfo_Units[unitTypeID]
 
-		-- Unit XML stats
---		local productionCost = g_activePlayer:GetUnitProductionNeeded( unitTypeID )
+
+
 		local rangedStrength = unit:GetBaseRangedCombatStrength()
 		local unitRange = unit:Range()
 		local combatStrength = unitInfo.Combat or 0
@@ -509,7 +509,7 @@ local function UnitToolTip( unit, ... )
 
 		local thisUnitType = { UnitType = unitInfo.Type }
 
-		-- Player data
+
 		local city, activeCivilization, activeCivilizationType
 
 		activeCivilization = GameInfo.Civilizations[ g_activePlayer:GetCivilizationType() ]
@@ -517,50 +517,50 @@ local function UnitToolTip( unit, ... )
 		city = UI.GetHeadSelectedCity()
 		city = (city and city:GetOwner() ~= g_activePlayerID and city) or g_activePlayer:GetCapitalCity() or g_activePlayer:Cities()(g_activePlayer)
 
-		-- Name
+
 		local combatClass = unitInfo.CombatClass and GameInfo.UnitCombatInfos[unitInfo.CombatClass]
 		local tips = table( UnitColor( Locale_ToUpper( unit:GetNameKey() ) ) .. (combatClass and " ("..L(combatClass.Description)..")" or ""), "----------------", ... )
 
-		-- Required Resources:
+
 		local resources = table()
 		for resource in GameInfo.Resources() do
 			local numResourceRequired = Game.GetNumResourceRequiredForUnit( unitTypeID, resource.ID )
--- TODO				local numResourceAvailable = g_activePlayer:GetNumResourceAvailable(resource.ID, true)
-			resources:insertIf( numResourceRequired > 0 and numResourceRequired .. resource.IconString ) -- .. L(resource.Description) )
+
+			resources:insertIf( numResourceRequired > 0 and numResourceRequired .. resource.IconString )
 		end
 		tips:insertIf( #resources > 0 and L"TXT_KEY_PEDIA_REQ_RESRC_LABEL" .. " " .. resources:concat(", ") )
 
-		-- Movement:
+
 		tips:insertIf( unitInfo.Domain ~= "DOMAIN_AIR" and L("TXT_KEY_UPANEL_MOVEMENT") .. (" %.3g / %g[ICON_MOVES]"):format( movesLeft, maxMoves ) )
 
-		-- Combat:
+
 		tips:insertIf( combatStrength > 0 and L"TXT_KEY_UPANEL_STRENGTH" .. (" %g[ICON_STRENGTH]"):format( combatStrength ))
 
-		-- Ranged Combat:
-		tips:insertIf( rangedStrength > 0 and L"TXT_KEY_UPANEL_RANGED_ATTACK" .. " " .. rangedStrength .. "[ICON_RANGE_STRENGTH]" .. unitRange ) --TXT_KEY_PEDIA_RANGEDCOMBAT_LABEL
 
-		-- Health
+		tips:insertIf( rangedStrength > 0 and L"TXT_KEY_UPANEL_RANGED_ATTACK" .. " " .. rangedStrength .. "[ICON_RANGE_STRENGTH]" .. unitRange )
+
+
 		local damage = unit:GetDamage()
 		tips:insertIf( damage > 0 and L( "TXT_KEY_UPANEL_SET_HITPOINTS_TT", g_MaxDamage-damage, g_MaxDamage ) )
 
-		-- XP
-		tips:insertIf( (unit:IsCombatUnit() or unit:GetDomainType() == DomainTypes.DOMAIN_AIR) and L("TXT_KEY_UNIT_EXPERIENCE_INFO", unit:GetLevel(), unit:GetExperience(), unit:ExperienceNeeded() ) )
-		--L( "TXT_KEY_EXPERIENCE_POPUP", unit:GetExperience().."/"..unit:ExperienceNeeded() ) )
 
-		-- Abilities:	--TXT_KEY_PEDIA_FREEPROMOTIONS_LABEL
+		tips:insertIf( (unit:IsCombatUnit() or unit:GetDomainType() == DomainTypes.DOMAIN_AIR) and L("TXT_KEY_UNIT_EXPERIENCE_INFO", unit:GetLevel(), unit:GetExperience(), unit:ExperienceNeeded() ) )
+
+
+
 		for unitPromotion in GameInfo.UnitPromotions() do
 			if unit:IsHasPromotion(unitPromotion.ID) and not (bnw_mode and unit:IsTrade()) then
-				tips:insert( "[ICON_BULLET]"..L(unitPromotion.Description) )-- L(unitPromotion.Help) )
+				tips:insert( "[ICON_BULLET]"..L(unitPromotion.Description) )
 			end
 		end
 
-		-- Ability to create building in city (e.g. vanilla great general)
+
 		for row in GameInfo.Unit_Buildings( thisUnitType ) do
 			local building = row.BuildingType and GameInfo.Buildings[row.BuildingType]
 			tips:insertIf( building and "[ICON_BULLET]"..L"TXT_KEY_MISSION_CONSTRUCT".." " .. BuildingColor( L(building.Description) ) )
 		end
 
-		-- Actions	--TXT_KEY_PEDIA_WORKER_ACTION_LABEL
+
 		for row in GameInfo.Unit_Builds( thisUnitType ) do
 			local build = row.BuildType and GameInfo.Builds[row.BuildType]
 			if build then
@@ -573,17 +573,17 @@ local function UnitToolTip( unit, ... )
 			end
 		end
 
-		-- Great Engineer
+
 		tips:insertIf( unitInfo.BaseHurry > 0 and "[ICON_BULLET]" .. L"TXT_KEY_MISSION_HURRY_PRODUCTION" .. (" %g[ICON_PRODUCTION]%+g[ICON_PRODUCTION]/[ICON_CITIZEN]"):format( unitInfo.BaseHurry, unitInfo.HurryMultiplier or 0 ) )
 
-		-- Great Merchant
+
 		tips:insertIf( unitInfo.BaseGold > 0 and "[ICON_BULLET]" .. L"TXT_KEY_MISSION_CONDUCT_TRADE_MISSION" .. (" %g[ICON_GOLD]%+g[ICON_INFLUENCE]" ):format( unitInfo.BaseGold + ( unitInfo.NumGoldPerEra or 0 ) * ( Game and Teams[Game.GetActiveTeam()]:GetCurrentEra() or PreGame.GetEra() ), GameDefines.MINOR_FRIENDSHIP_FROM_TRADE_MISSION or 0 ) )
 
-		-- Becomes Obsolete with:
+
 		local obsoleteTech = unitInfo.ObsoleteTech and GameInfo.Technologies[unitInfo.ObsoleteTech]
 		tips:insertIf( obsoleteTech and L"TXT_KEY_PEDIA_OBSOLETE_TECH_LABEL" .. " " .. TechColor( L(obsoleteTech.Description) ) )
 
-		-- Upgrade unit
+
 		local upgradeUnitTypeID = unit:GetUpgradeUnitType()
 		local unitUpgradeInfo = upgradeUnitTypeID and GameInfo.Units[upgradeUnitTypeID]
 		tips:insertIf( unitUpgradeInfo and L"TXT_KEY_COMMAND_UPGRADE" .. ": " .. UnitColor( L(unitUpgradeInfo.Description) ) .. " ("..unit:UpgradePrice(upgradeUnitTypeID).."[ICON_GOLD])" )
@@ -597,25 +597,25 @@ local function UnitToolTip( unit, ... )
 	g_tipControls.Box:SetHide( not unit )
 end
 
--------------------------------------------------
--- Unit Ribbon "Object"
--------------------------------------------------
+
+
+
 g_units = g_RibbonManager( "UnitInstance", Controls.UnitStack, Controls.Scrap,
-	function( Create ) -- CREATE ALL
+	function( Create )
 		for unit in g_activePlayer:Units() do
 			if FilterUnit( unit ) then
 				Create( unit:GetID(), unit )
 			end
 		end
 	end,
-	function( instance, unit ) -- INIT
+	function( instance, unit )
 		local portrait, portraitOffset, portraitAtlas = instance.Portrait, UI_GetUnitPortraitIcon( unit )
 		portrait:SetHide(not ( portraitOffset and portraitAtlas and IconHookup( portraitOffset, portrait:GetSizeX(), portraitAtlas, portrait ) ) )
 		return UpdateUnit( instance )
 	end,
-	UpdateUnit, -- UPDATE
--------------------------------------------------------------------------------------------------
-{-- the callback function table names need to match associated instance control ID defined in xml
+	UpdateUnit,
+
+{
 	Button = {
 		[Mouse.eLClick] = function( unitID )
 			local unit = g_activePlayer:GetUnitByID( unitID )
@@ -630,24 +630,24 @@ g_units = g_RibbonManager( "UnitInstance", Controls.UnitStack, Controls.Scrap,
 				lookAt( unit:GetPlot() )
 			end
 		end,
-	},--/Button
-},--/unit callbacks
-------------------------------------------------------------------------------------------
-{-- the tooltip function names need to match associated instance control ID defined in xml
+	},
+},
+
+{
 	Button = function( control )
 		UnitToolTip( FindUnit( control ) )
 	end;
 	MovementPip = function( control )
 		local unit = FindUnit( control )
 		ShowSimpleTip( unit and L"TXT_KEY_UPANEL_MOVEMENT"..(" %.3g / %g [ICON_MOVES]"):format( unit:MovesLeft() / g_moveDenominator, unit:MaxMoves() / g_moveDenominator )
---[[
-.." GetActivityType="..tostring(unit:GetActivityType())
-.." GetFortifyTurns="..tostring(unit:GetFortifyTurns())
-.." HasMoved="..tostring(unit:HasMoved())
-.." IsReadyToMove="..tostring(unit:IsReadyToMove())
-.." IsWaiting="..tostring(unit:IsWaiting())
-.." IsAutomated="..tostring(unit:IsAutomated())
---]]
+
+
+
+
+
+
+
+
 		)
 	end;
 	Mission = function( control )
@@ -656,11 +656,11 @@ g_units = g_RibbonManager( "UnitInstance", Controls.UnitStack, Controls.Scrap,
 		if unit then
 			local buildID = unit:GetBuildType()
 			local activityType = unit:GetActivityType()
-			if buildID ~= -1 then -- this is a worker who is actively building something
+			if buildID ~= -1 then
 				status = L(GameInfo_Builds[buildID].Description).. " (".. getUnitBuildProgressData( unit:GetPlot(), buildID, unit ) ..")"
 
 			elseif unit:IsEmbarked() then
-				status = "TXT_KEY_MISSION_EMBARK_HELP" --"TXT_KEY_UNIT_STATUS_EMBARKED"
+				status = "TXT_KEY_MISSION_EMBARK_HELP"
 
 			elseif unit:IsAutomated() then
 				if unit:IsWork() then
@@ -677,7 +677,7 @@ g_units = g_RibbonManager( "UnitInstance", Controls.UnitStack, Controls.Scrap,
 			elseif activityType == ActivityTypes.ACTIVITY_SENTRY then
 				status = "TXT_KEY_MISSION_ALERT_HELP"
 
-			elseif activityType == ActivityTypes.ACTIVITY_SLEEP then -- sleep is either sleep or fortify
+			elseif activityType == ActivityTypes.ACTIVITY_SLEEP then
 				if unit:IsGarrisoned() then
 					status = "TXT_KEY_MISSION_GARRISON_HELP"
 				elseif unit:IsEverFortifyable() then
@@ -699,26 +699,26 @@ g_units = g_RibbonManager( "UnitInstance", Controls.UnitStack, Controls.Scrap,
 		end
 		ShowSimpleTip( unit and L(status) )
 	end;
-}--/units tooltips
-)--/unit ribbon object
+}
+)
 
--------------------------------------------------
--- City Ribbon "Object"
--------------------------------------------------
+
+
+
 local function ShowSimpleCityTip( control, city, tip, ... )
 	return ShowSimpleTip( city:GetName() .. "[NEWLINE]" .. tip, ... )
 end
 
 g_cities = g_RibbonManager( "CityInstance", Controls.CityStack, Controls.Scrap,
-	function( Create ) -- CREATE ALL
+	function( Create )
 		for city in g_activePlayer:Cities() do
 			Create( city:GetID(), city )
 		end
 	end,
-	UpdateCity, -- INIT
-	UpdateCity, -- UPDATE
--------------------------------------------------------------------------------------------------
-{-- the callback function table names need to match associated instance control ID defined in xml
+	UpdateCity,
+	UpdateCity,
+
+{
 	Button = {
 		[Mouse.eLClick] = function( cityID )
 			local city = g_activePlayer:GetCityByID( cityID )
@@ -732,10 +732,10 @@ g_cities = g_RibbonManager( "CityInstance", Controls.CityStack, Controls.Scrap,
 				lookAt( city:Plot() )
 			end
 		end,
-	},--/Button
-},--/city callbacks
-------------------------------------------------------------------------------------------
-{-- the tooltip function names need to match associated instance control ID defined in xml
+	},
+},
+
+{
 	Button = function( control )
 		local city = FindCity( control )
 		local itemInfo, strToolTip, portraitOffset, portraitAtlas
@@ -817,7 +817,7 @@ g_cities = g_RibbonManager( "CityInstance", Controls.CityStack, Controls.Scrap,
 		local resource = GameInfo.Resources[city:GetResourceDemanded()]
 		local weLoveTheKingDayCounter = city:GetWeLoveTheKingDayCounter()
 		local tip
-		-- We love the king
+
 		if weLoveTheKingDayCounter > 0 then
 			tip = L( "TXT_KEY_CITYVIEW_WLTKD_COUNTER", weLoveTheKingDayCounter )
 
@@ -836,7 +836,7 @@ g_cities = g_RibbonManager( "CityInstance", Controls.CityStack, Controls.Scrap,
 	end,
 	CityIsConnected = function( control )
 		local city = FindCity( control )
-		ShowSimpleCityTip( control, city, L("TXT_KEY_CITY_CONNECTED") .. (" (%+g[ICON_GOLD])"):format( ( bnw_mode and g_activePlayer:GetCityConnectionRouteGoldTimes100( city ) or g_activePlayer:GetRouteGoldTimes100( city ) ) / 100 ) ) -- stupid function renaming
+		ShowSimpleCityTip( control, city, L("TXT_KEY_CITY_CONNECTED") .. (" (%+g[ICON_GOLD])"):format( ( bnw_mode and g_activePlayer:GetCityConnectionRouteGoldTimes100( city ) or g_activePlayer:GetRouteGoldTimes100( city ) ) / 100 ) )
 	end,
 	CityIsBlockaded = function( control )
 		local city = FindCity( control )
@@ -847,16 +847,16 @@ g_cities = g_RibbonManager( "CityInstance", Controls.CityStack, Controls.Scrap,
 		ShowSimpleCityTip( control, city, L"TXT_KEY_CITY_OCCUPIED" )
 	end,
 
-}--/city tooltips
-)--/city ribbon object
+}
+)
 
---[[ 
- _   _       _ _     ____                  _ 
-| | | |_ __ (_) |_  |  _ \ __ _ _ __   ___| |
-| | | | '_ \| | __| | |_) / _` | '_ \ / _ \ |
-| |_| | | | | | |_  |  __/ (_| | | | |  __/ |
- \___/|_| |_|_|\__| |_|   \__,_|_| |_|\___|_|
-]]
+
+
+
+
+
+
+
 
 local g_screenWidth , g_screenHeight = UIManager:GetScreenSizeVal()
 local g_topOffset0 = Controls.CityPanel:GetOffsetY()
@@ -868,14 +868,14 @@ local g_ActionIM = StackInstanceManager( "UnitAction",  "UnitActionButton", Cont
 local g_BuildIM = StackInstanceManager( "UnitAction",  "UnitActionButton", Controls.WorkerActionStack )
 local g_EarnedPromotionIM = StackInstanceManager( "EarnedPromotionInstance", "EarnedPromotion", Controls.EarnedPromotionStack )
 
-local g_lastUnitID = -1		-- Used to determine if a different unit has been selected.
+local g_lastUnitID = -1
 local g_isWorkerActionPanelOpen = false
 
 local g_unitPortraitSize = Controls.UnitPortrait:GetSizeX()
 
 local g_recommendedActionButton = {}
 ContextPtr:BuildInstanceForControlAtIndex( "UnitAction", g_recommendedActionButton, Controls.WorkerActionStack, 1 )
---Controls.RecommendedActionLabel:ChangeParent( g_recommendedActionButton.UnitActionButton )
+
 local g_actionIconSize = g_recommendedActionButton.UnitActionIcon:GetSizeX()
 local g_actionButtonSpacing = OptionsManager.GetSmallUIAssets() and 42 or 58
 
@@ -939,8 +939,8 @@ local g_yieldString = {
 [YieldTypes.YIELD_CULTURE or false] = "TXT_KEY_BUILD_CULTURE_STRING",
 [YieldTypes.YIELD_FAITH or false] = "TXT_KEY_BUILD_FAITH_STRING",
 } g_yieldString[false] = nil
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
+
+
 local function OnUnitActionClicked( actionID )
 	local action = GameInfoActions[actionID]
 	if action and g_activePlayer:IsTurnActive() then
@@ -951,9 +951,9 @@ local function OnUnitActionClicked( actionID )
 	end
 end
 
---------------------------------------------------------------------------------
--- Refresh unit actions
---------------------------------------------------------------------------------
+
+
+
 local function UpdateUnitActions( unit )
 
 	g_ActionIM:ResetInstances()
@@ -968,19 +968,19 @@ local function UpdateUnitActions( unit )
 	Controls.BackgroundCivFrame:SetHide( false )
 
 	local hideCityButton = true
---	local currentBuildID = unit:GetBuildType()
 
-	-- loop over all the game actions
+
+
 	local actions = {}
 	for actionID = 0, #GameInfoActions do
 		local action = GameInfoActions[ actionID ]
-		-- test CanHandleAction w/ visible flag (ie COULD train if ... )
+
 		if action.Visible and Game.CanHandleAction( actionID, plot, true ) then
 			local isPromotion = action.SubType == ActionSubTypes.ACTIONSUBTYPE_PROMOTION
 			if isPromotion then
 				hasPromotion = true
 			end
-			-- We hide the Action buttons when Units are out of moves so new players aren't confused
+
 			if hasMovesLeft or isPromotion
 				or action.Type == "COMMAND_CANCEL"
 				or action.Type == "COMMAND_STOP_AUTOMATION"
@@ -998,7 +998,7 @@ local function UpdateUnitActions( unit )
 	end
 
 	local numBuildActions = 0
-	-- loop over all the unit actions
+
 	for i = 1, #actions do
 		local action = actions[i]
 
@@ -1042,7 +1042,7 @@ local function UpdateUnitActions( unit )
 			button = instance.UnitActionButton
 		end
 
-		-- test w/o visible flag (ie can train right now)
+
 		if not Game.CanHandleAction( action.ID, plot, false ) then
 			button:SetAlpha( 0.6 )
 			button:SetDisabled( true )
@@ -1060,8 +1060,8 @@ local function UpdateUnitActions( unit )
 	g_ActionIM:Commit()
 	g_BuildIM:Commit()
 
-	--Controls.BuildStack:CalculateSize()
-	--Controls.BuildStack:ReprocessAnchoring()
+
+
 	if numBuildActions > 0 or hasPromotion then
 		Controls.WorkerActionPanel:SetHide( false )
 		g_isWorkerActionPanelOpen = true
@@ -1098,9 +1098,9 @@ end
 local defaultErrorTextureSheet = "TechAtlasSmall.dds"
 local nullOffset = { x=0, y=0 }
 
---------------------------------------------------------------------------------
--- Refresh unit portrait and name
---------------------------------------------------------------------------------
+
+
+
 local function UpdateUnitPortrait( unit )
 
 	local name
@@ -1115,7 +1115,7 @@ local function UpdateUnitPortrait( unit )
 
 	name = Locale_ToUpper(name)
 
-	--local name = unit:GetNameKey()
+
 	local convertedKey = L(name)
 	convertedKey = Locale_ToUpper(convertedKey)
 
@@ -1135,7 +1135,7 @@ local function UpdateUnitPortrait( unit )
 		Controls.UnitName:SetFontByName("TwCenMT14")
 	end
 
-	-- XP
+
 	if unit:IsCombatUnit() or unit:GetDomainType() == DomainTypes.DOMAIN_AIR then
 		local iExperience = unit:GetExperience()
 
@@ -1149,7 +1149,7 @@ local function UpdateUnitPortrait( unit )
 		Controls.XPFrame:SetHide( true )
 	end
 
---	local thisUnitInfo = GameInfo_Units[unit:GetUnitType()]
+
 
 	local flagOffset, flagAtlas = UI.GetUnitFlagIcon(unit)
 	local textureOffset, textureAtlas = IconLookup( flagOffset, 32, flagAtlas )
@@ -1167,7 +1167,7 @@ local function UpdateUnitPortrait( unit )
 	Controls.UnitPortrait:SetTexture(textureAtlas or nullOffset)
 	Controls.UnitPortrait:SetTextureOffset(textureOffset or defaultErrorTextureSheet)
 
-	--These controls are potentially hidden if the previous selection was a city.
+
 	Controls.UnitTypeFrame:SetHide(false)
 	Controls.CycleLeft:SetHide(false)
 	Controls.CycleRight:SetHide(false)
@@ -1177,7 +1177,7 @@ end
 local function UpdateCityPortrait(city)
 	local name = city:GetName()
 	name = Locale_ToUpper(name)
-	--local name = unit:GetNameKey()
+
 	local convertedKey = L(name)
 	convertedKey = Locale_ToUpper(convertedKey)
 
@@ -1201,8 +1201,8 @@ local function UpdateCityPortrait(city)
 	Controls.UnitPortrait:SetTextureOffset(textureOffset or defaultErrorTextureSheet)
 
 
-	--Hide various aspects of Unit Panel since they don't apply to the city.
-	--Clear promotions
+
+
 	g_EarnedPromotionIM:ResetInstances()
 	g_EarnedPromotionIM:Commit()
 
@@ -1217,15 +1217,15 @@ local function UpdateCityPortrait(city)
 end
 
 
---------------------------------------------------------------------------------
--- Refresh unit promotions
---------------------------------------------------------------------------------
+
+
+
 local UpdateUnitPromotions = EUI.UpdateUnitPromotions or function(unit)
 
 	g_EarnedPromotionIM:ResetInstances()
 	local controlTable
 
-	--For each avail promotion, display the icon
+
 	for unitPromotion in GameInfo.UnitPromotions() do
 		local unitPromotionID = unitPromotion.ID
 
@@ -1234,28 +1234,28 @@ local UpdateUnitPromotions = EUI.UpdateUnitPromotions or function(unit)
 			controlTable = g_EarnedPromotionIM:GetInstance()
 			IconHookup( unitPromotion.PortraitIndex, 32, unitPromotion.IconAtlas, controlTable.UnitPromotionImage )
 
-			-- Tooltip
+
 			controlTable.EarnedPromotion:SetToolTipString( L(unitPromotion.Description) .. "[NEWLINE][NEWLINE]" .. L(unitPromotion.Help) )
 		end
 	end
 	g_EarnedPromotionIM:Commit()
 end
 
----------------------------------------------------
----- Promotion Help
----------------------------------------------------
---local function PromotionHelpOpen(iPromotionID)
-	--local pPromotionInfo = GameInfo.UnitPromotions[iPromotionID]
-	--local promotionHelp = L(pPromotionInfo.Description)
-	--Controls.HelpText:SetText(promotionHelp)
---end
 
---------------------------------------------------------------------------------
--- Refresh unit stats
---------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 local function UpdateUnitStats(unit)
 
-	-- update the background image (update this if we get icons for the minors)
+
 	local civType = unit:GetCivilizationType()
 	local civInfo = GameInfo.Civilizations[civType]
 	local civPortraitIndex = civInfo.PortraitIndex
@@ -1268,9 +1268,9 @@ local function UpdateUnitStats(unit)
 	updateSmallUnitIcons( unit, Controls )
 
 	Controls.UnitStatBox:SetHide( bnw_mode and unit:IsTrade() )
---	Controls.UnitStatBox:SetHide( false )
 
-	-- Movement
+
+
 	if unit:GetDomainType() == DomainTypes.DOMAIN_AIR then
 		local unitRange = unit:Range()
 		Controls.UnitStatMovement:SetText( unitRange .. "[ICON_MOVES]" )
@@ -1282,7 +1282,7 @@ local function UpdateUnitStats(unit)
 		Controls.UnitStatMovement:LocalizeAndSetToolTip( "TXT_KEY_UPANEL_UNIT_MAY_MOVE", movesLeft )
 	end
 
-	-- Strength
+
 	local strength = 0
 	if unit:GetDomainType() == DomainTypes.DOMAIN_AIR then
 		strength = unit:GetBaseRangedCombatStrength()
@@ -1292,7 +1292,7 @@ local function UpdateUnitStats(unit)
 	if strength > 0 then
 		Controls.UnitStatStrength:SetText( strength .. "[ICON_STRENGTH]" )
 		Controls.UnitStatStrength:LocalizeAndSetToolTip( "TXT_KEY_UPANEL_STRENGTH_TT" )
-	-- Religious units
+
 	elseif gk_mode and unit:GetSpreadsLeft() > 0 then
 		Controls.UnitStatStrength:SetText( math_floor(unit:GetConversionStrength()/g_pressureMultiplier) .. "[ICON_PEACE]" )
 		Controls.UnitStatStrength:LocalizeAndSetToolTip( "TXT_KEY_UPANEL_RELIGIOUS_STRENGTH_TT" )
@@ -1303,20 +1303,20 @@ local function UpdateUnitStats(unit)
 		Controls.UnitStatStrength:SetText()
 	end
 
-	-- Ranged Strength
+
 	local rangedStrength = unit:GetDomainType() ~= DomainTypes.DOMAIN_AIR and unit:GetBaseRangedCombatStrength() or 0
 	if rangedStrength > 0 then
 		Controls.UnitStatRangedAttack:SetText( rangedStrength .. "[ICON_RANGE_STRENGTH]" .. unit:Range() )
 		Controls.UnitStatRangedAttack:LocalizeAndSetToolTip( "TXT_KEY_UPANEL_RANGED_ATTACK_TT" )
-	-- Religious unit
+
 	elseif gk_mode and unit:GetSpreadsLeft() > 0 then
 		local unitReligion = unit:GetReligion()
 		local icon = (GameInfo.Religions[unitReligion] or {}).IconString
 		Controls.UnitStatRangedAttack:SetText( icon and (unit:GetSpreadsLeft()..icon) )
 		Controls.UnitStatRangedAttack:SetToolTipString( L(Game.GetReligionName(unitReligion))..": "..L"TXT_KEY_UPANEL_SPREAD_RELIGION_USES_TT" )
---	elseif gk_mode and GameInfo_Units[unit:GetUnitType()].RemoveHeresy then
---		Controls.UnitStatRangedAttack:LocalizeAndSetText( "TXT_KEY_UPANEL_REMOVE_HERESY_USES" )
---		Controls.UnitStatRangedAttack:LocalizeAndSetToolTip( "TXT_KEY_UPANEL_REMOVE_HERESY_USES_TT" )
+
+
+
 	elseif bnw_mode and unit:CargoSpace() > 0 then
 		Controls.UnitStatRangedAttack:SetText( L"TXT_KEY_UPANEL_CARGO_CAPACITY" .. " " .. unit:CargoSpace() )
 		Controls.UnitStatRangedAttack:LocalizeAndSetToolTip( "TXT_KEY_UPANEL_CARGO_CAPACITY_TT", unit:GetName() )
@@ -1327,11 +1327,11 @@ local function UpdateUnitStats(unit)
 	Controls.UnitStats:ReprocessAnchoring()
 end
 
---------------------------------------------------------------------------------
--- Refresh unit health bar
---------------------------------------------------------------------------------
+
+
+
 local function UpdateUnitHealthBar(unit)
-	-- note that this doesn't use the bar type
+
 	local damage = unit:GetDamage()
 	if damage == 0 then
 		Controls.HealthBar:SetHide(true)
@@ -1363,24 +1363,24 @@ local function UpdateUnitHealthBar(unit)
 	end
 end
 
---------------------------------------------------------------------------------
--- Event Handlers
---------------------------------------------------------------------------------
+
+
+
 
 Controls.CycleLeft:RegisterCallback( Mouse.eLClick,
 function()
-	-- Cycle to next selection.
+
 	Game.CycleUnits(true, true, false)
 end)
 
 Controls.CycleRight:RegisterCallback( Mouse.eLClick,
 function()
-	-- Cycle to previous selection.
+
 	Game.CycleUnits(true, false, false)
 end)
 
 local function OnUnitNameClicked()
-	-- go to this unit
+
 	UI.LookAtSelectionPlot()
 end
 Controls.UnitNameButton:RegisterCallback( Mouse.eLClick, OnUnitNameClicked )
@@ -1409,9 +1409,9 @@ local function sortUnitsByDistanceToSelectedUnit( instance1, instance2 )
 	end
 end
 
--------------------------------------------------
--- Unit rename
--------------------------------------------------
+
+
+
 local function OnEditNameClick()
 
 	if UI_GetHeadSelectedUnit() then
@@ -1428,9 +1428,9 @@ end
 Controls.EditButton:RegisterCallback( Mouse.eLClick, OnEditNameClick )
 Controls.UnitNameButton:RegisterCallback( Mouse.eRClick, OnEditNameClick )
 
-------------------------------------------------------
--- Action Tooltip Handler
-------------------------------------------------------
+
+
+
 local tipControlTable = {}
 TTManager:GetTypeControlTable( "TypeUnitAction", tipControlTable )
 function ActionToolTipHandler( control )
@@ -1441,7 +1441,7 @@ function ActionToolTipHandler( control )
 		return
 	end
 
-	-- NEW: update GameInfoActions now?
+
 	if g_needsUpdate == true then
 		Game.UpdateActions();
 		g_needsUpdate = false;
@@ -1466,30 +1466,30 @@ function ActionToolTipHandler( control )
 		end
 	end
 
-	-- Able to perform action
+
 	local gameCanHandleAction = Game.CanHandleAction( actionID, plot, false )
 
-	-- Build data
+
 	local isBuild = action.SubType == ActionSubTypes.ACTIONSUBTYPE_BUILD
 	local buildID = action.MissionData
 	local build = GameInfo_Builds[buildID]
 
-	-- Improvement data
+
 	local improvement = build and GameInfo.Improvements[build.ImprovementType]
 	local improvementID = improvement and improvement.ID or -1
 
-	-- Feature data
+
 	local featureID = plot:GetFeatureType()
 	local feature = GameInfo.Features[featureID]
 
-	-- Route data
+
 	local route = build and build.RouteType and build.RouteType ~= "NONE" and GameInfo.Routes[build.RouteType]
 
 	local strBuildTurnsString = ""
 	local toolTip = table()
 	local disabledTip = table()
 
-	-- Upgrade has special help text
+
 	if action.Type == "COMMAND_UPGRADE" then
 
 		local upgradeUnitTypeID = unit:GetUpgradeUnitType()
@@ -1502,28 +1502,28 @@ function ActionToolTipHandler( control )
 		if not gameCanHandleAction then
 			toolTip:insert( "----------------" )
 
-			-- Can't upgrade because we're outside our territory
+
 			if plot:GetOwner() ~= unit:GetOwner() then
 
 				disabledTip:insertLocalized( "TXT_KEY_UPGRADE_HELP_DISABLED_TERRITORY" )
 			end
 
-			-- Can't upgrade because we're outside of a city
+
 			if unit:GetDomainType() == DomainTypes.DOMAIN_AIR and not plot:IsCity() then
 
 				disabledTip:insertLocalized( "TXT_KEY_UPGRADE_HELP_DISABLED_CITY" )
 			end
 
-			-- Can't upgrade because we lack the Gold
+
 			if unitUpgradePrice > g_activePlayer:GetGold() then
 
 				disabledTip:insertLocalized( "TXT_KEY_UPGRADE_HELP_DISABLED_GOLD" )
 			end
 
-			-- Can't upgrade because we lack the Resources
+
 			local resourcesNeeded = table()
 
-			-- Loop through all resources to see how many we need. If it's > 0 then add to the string
+
 			for resource in GameInfo.Resources() do
 				local iResourceLoop = resource.ID
 
@@ -1534,13 +1534,13 @@ function ActionToolTipHandler( control )
 				end
 			end
 
-			-- Build resources required string
+
 			if #resourcesNeeded > 0 then
 
 				disabledTip:insertLocalized( "TXT_KEY_UPGRADE_HELP_DISABLED_RESOURCES", resourcesNeeded:concat(", ") )
 			end
 
-				-- if we can't upgrade due to stacking
+
 			if plot:GetNumFriendlyUnitsOfType(unit) > 1 then
 
 				disabledTip:insertLocalized( "TXT_KEY_UPGRADE_HELP_DISABLED_STACKING" )
@@ -1568,9 +1568,9 @@ function ActionToolTipHandler( control )
         	        minor = owner
         	    end
         	end
-			if not minor then -- not in cs territory
+			if not minor then
 				disabledTip:insertLocalized( "TXT_KEY_BUY_CITY_STATE_HELP_DISABLED_TERRITORY" )
-			else -- in cs territory, other reasons
+			else
 				local ally = minor:GetAlly()
 				local minorName = minor:GetCivilizationShortDescriptionKey()
 
@@ -1582,7 +1582,7 @@ function ActionToolTipHandler( control )
 					local thisTurn = Game.GetGameTurn()
 					for majorLoop = 0, GameDefines.MAX_MAJOR_CIVS - 1 do
 						 if majorLoop ~= thisUnitOwner then
-        	                local lastTurn = minor:GetLastAllyTurnWithMajor(majorLoop) or -1 -- -1 if never
+                            local lastTurn = minor:GetLastAllyTurnWithMajor(majorLoop) or -1
 							if lastTurn >= 0 then
 								local turnDelta = thisTurn - lastTurn
         	                    if turnDelta < window then
@@ -1616,29 +1616,29 @@ function ActionToolTipHandler( control )
 
 		if not gameCanHandleAction then
 			toolTip:insert( "----------------" )
-			-- Can't Retrain because we lack the Gold
+
 			if (iRetrainCost > g_activePlayer:GetGold()) then
 				disabledTip:insertLocalized("TXT_KEY_RETRAIN_HELP_DISABLED_GOLD");
 			end
-			-- Can't upgrade because we're outside our territory
+
 			if (plot:GetOwner() ~= unit:GetOwner()) then
 				disabledTip:insertLocalized("TXT_KEY_RETRAIN_HELP_DISABLED_TERRITORY")
 			end
-			-- Can't Retrain because we do not have enough chosen Promotions
+
 			if (iNumRefundedPromotions < 2) then
 				disabledTip:insertLocalized("TXT_KEY_RETRAIN_HELP_DISABLED_PROMOTIONS")
 			end
-			-- Can't Retrain because we Lack experience
+
 			if (unit:GetExperience() < 30) then
 				disabledTip:insertLocalized("TXT_KEY_RETRAIN_HELP_DISABLED_EXPERIENCE")
 			end
 		end
-	-- Golden Age has special help text
+
 	elseif action.Type == "MISSION_GOLDEN_AGE" then
 
 		toolTip:insertLocalized(  "TXT_KEY_MISSION_START_GOLDENAGE_HELP", unit:GetGoldenAgeTurns() )
 
-	-- Spread Religion has special help text
+
 	elseif gk_mode and action.Type == "MISSION_SPREAD_RELIGION" then
 
 		local eMajorityReligion = unit:GetMajorityReligionAfterSpread()
@@ -1652,7 +1652,7 @@ function ActionToolTipHandler( control )
 			toolTip:append( L("TXT_KEY_MISSION_MAJORITY_RELIGION", Game.GetReligionName(eMajorityReligion) ) )
 		end
 
-	-- Create Great Work has special help text
+
 	elseif bnw_mode and action.Type == "MISSION_CREATE_GREAT_WORK" then
 
 		toolTip:insertLocalized( "TXT_KEY_MISSION_CREATE_GREAT_WORK_HELP" )
@@ -1665,11 +1665,11 @@ function ActionToolTipHandler( control )
 			toolTip:insertLocalized( "TXT_KEY_MISSION_CREATE_GREAT_WORK_RESULT", GameInfo.Buildings[iBuilding].Description, pCity:GetNameKey() )
 		end
 
-	-- Paradrop
+
 	elseif action.Type == "INTERFACEMODE_PARADROP" then
 		toolTip:insertLocalized( "TXT_KEY_INTERFACEMODE_PARADROP_HELP_WITH_RANGE", unit:GetDropRange() )
 
-	-- Sell Exotic Goods
+
 	elseif bnw_mode and action.Type == "MISSION_SELL_EXOTIC_GOODS" then
 
 		toolTip:insertLocalized( "TXT_KEY_MISSION_SELL_EXOTIC_GOODS_HELP" )
@@ -1680,7 +1680,7 @@ function ActionToolTipHandler( control )
 			toolTip:insertLocalized( "TXT_KEY_EXPERIENCE_POPUP", unit:GetExoticGoodsXPAmount() )
 		end
 
-	-- Great Scientist
+
 	elseif bnw_mode and action.Type == "MISSION_DISCOVER" then
 
 		toolTip:insertLocalized( "TXT_KEY_MISSION_DISCOVER_TECH_HELP" )
@@ -1690,7 +1690,7 @@ function ActionToolTipHandler( control )
 			toolTip:insert( "+" .. unit:GetDiscoverAmount() .. "[ICON_RESEARCH]" )
 		end
 
-	-- Great Engineer
+
 	elseif bnw_mode and action.Type == "MISSION_HURRY" then
 
 		toolTip:insertLocalized( "TXT_KEY_MISSION_HURRY_PRODUCTION_HELP" )
@@ -1700,7 +1700,7 @@ function ActionToolTipHandler( control )
 			toolTip:insert( "+" .. unit:GetHurryProduction(plot) .. "[ICON_PRODUCTION]" )
 		end
 
-	-- Great Merchant
+
 	elseif bnw_mode and action.Type == "MISSION_TRADE" then
 
 		toolTip:insertLocalized( "TXT_KEY_MISSION_CONDUCT_TRADE_MISSION_HELP" )
@@ -1711,7 +1711,7 @@ function ActionToolTipHandler( control )
 			toolTip:insert( "+" .. unit:GetTradeGold(plot) .. "[ICON_GOLD]" )
 		end
 
-	-- Great Writer
+
 	elseif bnw_mode and action.Type == "MISSION_GIVE_POLICIES" then
 
 		toolTip:insertLocalized( "TXT_KEY_MISSION_GIVE_POLICIES_HELP" )
@@ -1721,7 +1721,7 @@ function ActionToolTipHandler( control )
 			toolTip:insert( "+" .. unit:GetGivePoliciesCulture() .. "[ICON_CULTURE]" )
 		end
 
-	-- Great Musician
+
 	elseif bnw_mode and action.Type == "MISSION_ONE_SHOT_TOURISM" then
 
 		toolTip:insertLocalized( "TXT_KEY_MISSION_ONE_SHOT_TOURISM_HELP" )
@@ -1731,28 +1731,28 @@ function ActionToolTipHandler( control )
 			toolTip:insert( "+" .. unit:GetBlastTourism() .. "[ICON_TOURISM]" )
 		end
 
-	-- Help text
+
 	elseif action.Help and action.Help ~= "" then
 
 		toolTip:insertLocalized( action.Help )
 	end
 
-	-- Delete has special help text
+
 	if action.Type == "COMMAND_DELETE" then
 
 		toolTip:insertLocalized( "TXT_KEY_SCRAP_HELP", unit:GetScrapGold() )
 	end
 
-	-- Not able to perform action
+
 	if not gameCanHandleAction then
 
-		-- Worker build
+
 		if isBuild then
 
-			-- Figure out what the name of the thing is that we're looking at
+
 			local strImpRouteKey = (improvement and improvement.Description) or (route and route.Description) or ""
 
-			-- Don't have Tech for Build?
+
 			if improvement or route then
 				local prereqTech = GameInfo.Technologies[build.PrereqTech]
 				if prereqTech and prereqTech.ID ~= -1 and not g_activeTechs:HasTech(prereqTech.ID) then
@@ -1761,27 +1761,27 @@ function ActionToolTipHandler( control )
 				end
 			end
 
-			-- Trying to build something and are not adjacent to our territory?
+
 			if gk_mode and improvement and improvement.InAdjacentFriendly then
 				if plot:GetTeam() ~= unit:GetTeam() and not plot:IsAdjacentTeam(unit:GetTeam(), true) then
 
 						disabledTip:insertLocalized( "TXT_KEY_BUILD_BLOCKED_NOT_IN_ADJACENT_TERRITORY", strImpRouteKey )
 				end
 
-			-- Trying to build something in a City-State's territory?
+
 			elseif bnw_mode and improvement and improvement.OnlyCityStateTerritory then
 				if not plot:IsOwned() or not Players[plot:GetOwner()]:IsMinorCiv() then
 					disabledTip:insertLocalized( "TXT_KEY_BUILD_BLOCKED_NOT_IN_CITY_STATE_TERRITORY", strImpRouteKey )
 				end
 
-			-- Trying to build something outside of our territory?
+
 			elseif improvement and not improvement.OutsideBorders then
 				if plot:GetTeam() ~= unit:GetTeam() then
 					disabledTip:insertLocalized( "TXT_KEY_BUILD_BLOCKED_OUTSIDE_TERRITORY", strImpRouteKey )
 				end
 			end
 
-			-- Trying to build something that requires an adjacent luxury?
+
 			if bnw_mode and improvement and improvement.AdjacentLuxury then
 				local bAdjacentLuxury = false
 
@@ -1804,7 +1804,7 @@ function ActionToolTipHandler( control )
 				end
 			end
 
-			-- Trying to build something where we can't have two adjacent?
+
 			if bnw_mode and improvement and improvement.NoTwoAdjacent then
 				local bTwoAdjacent = false
 
@@ -1823,7 +1823,7 @@ function ActionToolTipHandler( control )
 				end
 			end
 
-			-- Build blocked by a feature here?
+
 			if g_activePlayer:IsBuildBlockedByFeature(buildID, featureID) then
 
 				for row in GameInfo.BuildFeatures{ BuildType = build.Type, FeatureType = feature.Type } do
@@ -1833,7 +1833,7 @@ function ActionToolTipHandler( control )
 
 			end
 
-		-- Not a Worker build, use normal disabled help from XML
+
 		else
 
 			if action.Type == "MISSION_FOUND" and g_activePlayer:IsEmpireVeryUnhappy() then
@@ -1855,7 +1855,7 @@ function ActionToolTipHandler( control )
 		end
 	end
 
-	-- Is this a Worker build?
+
 	if isBuild then
 
 		local turnsRemaining = getUnitBuildProgressData( plot, buildID, unit )
@@ -1863,7 +1863,7 @@ function ActionToolTipHandler( control )
 			strBuildTurnsString = " ... " .. L("TXT_KEY_STR_TURNS", turnsRemaining )
 		end
 
-		-- Extra Yield from this build
+
 
 		for yieldID = 0, YieldTypes.NUM_YIELD_TYPES-1 do
 			local yieldChange = plot:GetYieldWithBuild( buildID, yieldID, false, g_activePlayerID ) - plot:CalculateYield(yieldID)
@@ -1875,7 +1875,7 @@ function ActionToolTipHandler( control )
 			end
 		end
 
-		-- Resource connection
+
 		if improvement then
 			local resourceID = plot:GetResourceType(g_activeTeamID)
 			if resourceID ~= -1
@@ -1887,12 +1887,12 @@ function ActionToolTipHandler( control )
 			end
 		end
 
-		-- Production for clearing a feature
+
 		if feature and plot:IsBuildRemovesFeature(buildID) then
 			toolTip:insertLocalized( "TXT_KEY_BUILD_FEATURE_CLEARED", feature.Description )
 
 			local featureProduction = plot:GetFeatureProduction(buildID, g_activeTeamID)
-			local featureFood = 0 --plot:GetFeatureFood(buildID, g_activeTeamID)
+			local featureFood = 0
 			if featureProduction > 0 then
 				toolTip:append( L("TXT_KEY_BUILD_FEATURE_PRODUCTION", featureProduction) )
 				local city = plot:GetWorkingCity()
@@ -1909,23 +1909,23 @@ function ActionToolTipHandler( control )
 		end
 	end
 
-	-- Tooltip
+
 	tipControlTable.UnitActionHelp:SetText( toolTip:concat("[NEWLINE]") )
 
-	-- Title
+
 	tipControlTable.UnitActionText:SetText( "[COLOR_POSITIVE_TEXT]" .. L( tostring( action.TextKey or action.Type ) ) .. "[ENDCOLOR]".. strBuildTurnsString )
 
-	-- HotKey
-	-- NEW: show promotion hotkeys now
-	--if action.SubType == ActionSubTypes.ACTIONSUBTYPE_PROMOTION then
-	-- 	tipControlTable.UnitActionHotKey:SetText()
+
+
+
+
 	if action.HotKey and action.HotKey ~= "" then
 		tipControlTable.UnitActionHotKey:SetText( "("..tostring(action.HotKey)..")" )
 	else
 		tipControlTable.UnitActionHotKey:SetText()
 	end
 
-	-- Autosize tooltip
+
 	tipControlTable.UnitActionMouseover:DoAutoSize()
 	local mouseoverSizeX = tipControlTable.UnitActionMouseover:GetSizeX()
 	if mouseoverSizeX < 350 then
@@ -1934,7 +1934,7 @@ function ActionToolTipHandler( control )
 
 end
 g_existingBuild.UnitActionButton:SetToolTipCallback(
-function()-- control )
+function()
 	local unit = UI_GetHeadSelectedUnit()
 	if unit then
 		local plot = unit:GetPlot()
@@ -1942,17 +1942,17 @@ function()-- control )
 		local improvement = GameInfo.Improvements[ improvementID ]
 		local build = improvement and GameInfo_Builds{ ImprovementType = improvement.Type }()
 		if build then
-			-- Icon
+
 			IconHookup( build.IconIndex, 64, build.IconAtlas, tipControlTable.UnitActionIcon )
-			-- Title
+
 			tipControlTable.UnitActionText:SetText( "[COLOR_POSITIVE_TEXT]" .. L( improvement.Description ) .. "[ENDCOLOR]" )
-			-- no HotKey
+
 			tipControlTable.UnitActionHotKey:SetText()
-			-- Yield from this improvement
+
 			local toolTip = table()
 			for yieldID = 0, YieldTypes.NUM_YIELD_TYPES-1 do
 				local yieldChange = plot:CalculateImprovementYieldChange( improvementID, yieldID, plot:GetOwner() )
-				--plot:CalculateYield( yieldID ) - plot:CalculateNatureYield( yieldID, g_activeTeamID )
+
 
 				if yieldChange > 0 then
 					toolTip:insert( "[COLOR_POSITIVE_TEXT]+" .. L( g_yieldString[yieldID], yieldChange) )
@@ -1961,7 +1961,7 @@ function()-- control )
 				end
 			end
 			tipControlTable.UnitActionHelp:SetText( toolTip:concat("[NEWLINE]") )
-			-- Autosize tooltip
+
 			tipControlTable.UnitActionMouseover:DoAutoSize()
 			return
 		end
@@ -1969,33 +1969,33 @@ function()-- control )
 	tipControlTable.UnitActionMouseover:SetHide( true )
 end)
 
---[[----------------------------------------------------
- ___       _ _   _       _ _          _   _             
-|_ _|_ __ (_) |_(_) __ _| (_)______ _| |_(_) ___  _ __  
- | || '_ \| | __| |/ _` | | |_  / _` | __| |/ _ \| '_ \ 
- | || | | | | |_| | (_| | | |/ / (_| | |_| | (_) | | | |
-|___|_| |_|_|\__|_|\__,_|_|_/___\__,_|\__|_|\___/|_| |_|
-]]------------------------------------------------------
+
+
+
+
+
+
+
 
 local g_unitUpdateRequired, g_cityUpdateRequired, g_isUpdateRequired
 
 local function UpdateDisplayNow()
---	if IsGameCoreBusy() then
---		return
---	end
+
+
+
 
 	g_isUpdateRequired = false
 	ContextPtr:ClearUpdate()
 
-	-- update all ribbon units
+
 	if g_unitUpdateRequired then
 		g_unitUpdateRequired = false
 		g_units.Update()
-		-- Retrieve the currently selected unit.
+
 		local unit = UI_GetHeadSelectedUnit()
 		local unitID = unit and unit:GetID() or -1
 
-		-- Unit is different than last unit ?
+
 		if unitID ~= g_lastUnitID then
 			local hexPosition = ToHexFromGrid{ x = unit and unit:GetX() or 0, y = unit and unit:GetY() or 0 }
 
@@ -2023,7 +2023,7 @@ local function UpdateDisplayNow()
 			Controls.Panel:SetHide( false )
 			Controls.Actions:SetHide( false )
 		else
-			-- Attempt to show currently selected city.
+
 			local city = UI.GetHeadSelectedCity()
 			if city then
 				UpdateCityPortrait(city)
@@ -2051,7 +2051,7 @@ local function UpdateDisplayNow()
 			Controls.UnitTypesScrollPanel:ReprocessAnchoring()
 		end
 	end
-	-- update cities
+
 	if g_cityUpdateRequired then
 		g_cities.Update( g_cityUpdateRequired ~= true and g_cityUpdateRequired )
 		g_cityUpdateRequired = false
@@ -2088,7 +2088,7 @@ local function UpdateDisplayNow()
 		Controls.CityStack:ChangeParent( Controls.CityPanel )
 	end
 	Controls.CityPanel:ReprocessAnchoring()
---	Controls.CityPanel:SetSizeY( cityStackHeight )
+
 
 	Controls.UnitScrollPanel:SetHide( not unitStackHeight )
 	if unitStackHeight then
@@ -2129,11 +2129,11 @@ local function UpdateSpecificCity( playerID, cityID )
 	end
 end
 
-local function SelectUnitType( isChecked, unitTypeID ) -- Void2, control )
+local function SelectUnitType( isChecked, unitTypeID )
 	g_ActivePlayerUnitsInRibbon[ unitTypeID ] = isChecked
 	g_units.Initialize( g_isHideUnitList )
 	UpdateUnits()
-	-- only save player 0 preferences, not other hotseat player's
+
 	if g_activePlayerID == 0 then
 		EUI_options.SetValue( "RIBBON_"..GameInfo_Units[ unitTypeID ].Type, isChecked and 1 or 0 )
 	end
@@ -2146,24 +2146,24 @@ local function addUnitType( unit )
 	if instance then
 		local n = instance[3] + 1
 		instance[3] = n
---print( "Add unit:", unit:GetID(), unit:GetName(), "type:", instance, unitTypeID, "count:", n )
+
 		return instance.Count:SetText( n )
 	else
---print( "Add unit:", unit:GetID(), unit:GetName(), "new type:", unitTypeID )
+
 		return g_unitTypes.Create( unitTypeID, unit )
 	end
 end
--------------------------------------------------
--- Unit Options "Object"
--------------------------------------------------
+
+
+
 g_unitTypes = g_RibbonManager( "UnitTypeInstance", Controls.UnitTypesStack, Controls.Scrap,
-	function() -- CREATE ALL
+	function()
 		g_ActivePlayerUnitTypes = {}
 		for unit in g_activePlayer:Units() do
 			addUnitType( unit )
 		end
 	end,
-	function( instance, unit ) -- INIT
+	function( instance, unit )
 		local portrait, portraitOffset, portraitAtlas = instance.Portrait, UI_GetUnitPortraitIcon( unit )
 		portrait:SetHide(not ( portraitOffset and portraitAtlas and IconHookup( portraitOffset, portrait:GetSizeX(), portraitAtlas, portrait ) ) )
 		instance.CheckBox:RegisterCheckHandler( SelectUnitType )
@@ -2173,11 +2173,11 @@ g_unitTypes = g_RibbonManager( "UnitTypeInstance", Controls.UnitTypesStack, Cont
 		instance.Count:SetText("1")
 		instance[3] = 1
 	end,
-	function( instance ) -- UPDATE
+	function( instance )
 		instance.Count:SetText( instance[3] )
 	end,
--------------------------------------------------------------------------------------------------
-{-- the callback function table names need to match associated instance control ID defined in xml
+
+{
 	Button = {
 		[Mouse.eRClick] = function( unitTypeID )
 			local unit = GameInfo.Units[ unitTypeID ]
@@ -2185,10 +2185,10 @@ g_unitTypes = g_RibbonManager( "UnitTypeInstance", Controls.UnitTypesStack, Cont
 				Events.SearchForPediaEntry( unit.Description )
 			end
 		end,
-	},--/Button
-},--/unit options callbacks
--------------------------------------------------------------------------------------------------
-{-- the tooltip function names need to match associated instance control ID defined in xml
+	},
+},
+
+{
 	Button = function( control )
 		local itemID = control:GetVoid1()
 		local portraitOffset, portraitAtlas = UI_GetUnitPortraitIcon( itemID, g_activePlayerID )
@@ -2199,13 +2199,13 @@ g_unitTypes = g_RibbonManager( "UnitTypeInstance", Controls.UnitTypesStack, Cont
 		g_tipControls.PortraitFrame:SetHide( not item )
 		g_tipControls.Box:DoAutoSize()
 	end,
-}--/units options tooltips
-)--/unit options object
+}
+)
 
-local function CreateUnit( playerID, unitID ) --hexVec, unitType, cultureType, civID, primaryColor, secondaryColor, unitFlagIndex, fogState, selected, military, notInvisible )
+local function CreateUnit( playerID, unitID )
 	if playerID == g_activePlayerID then
 		local unit = g_activePlayer:GetUnitByID( unitID )
---print("Create unit", unitID, unit and unit:GetName() )
+
 		if unit then
 			addUnitType( unit )
 			if FilterUnit( unit ) then
@@ -2216,7 +2216,7 @@ local function CreateUnit( playerID, unitID ) --hexVec, unitType, cultureType, c
 	end
 end
 
-local function CreateCity( hexPos, playerID, cityID ) --, cultureType, eraType, continent, populationSize, size, fowState )
+local function CreateCity( hexPos, playerID, cityID )
 	if playerID == g_activePlayerID then
 		g_cities.Create( cityID, g_activePlayer:GetCityByID( cityID ) )
 		return UpdateDisplay()
@@ -2228,7 +2228,7 @@ local function DestroyUnit( playerID, unitID )
 		g_units.Destroy( unitID )
 		local unitTypeID = g_ActivePlayerUnitTypes[ unitID ]
 		local instance = g_unitTypes.Get( g_ActivePlayerUnitTypes[ unitID ] )
---print( "Destroy unit", unitID, "type:", g_ActivePlayerUnitTypes[ unitID ], instance, "previous count:", instance and instance[3] )
+
 		g_ActivePlayerUnitTypes[ unitID ] = nil
 		if instance then
 			local n = instance[3] - 1
@@ -2303,8 +2303,8 @@ function()
 	end
 end)
 
-local function SetActivePlayer()-- activePlayerID, prevActivePlayerID )
-	-- initialize globals
+local function SetActivePlayer()
+
 	if g_activePlayerID then
 		g_AllPlayerOptions.UnitTypes[ g_activePlayerID ] = g_ActivePlayerUnitTypes
 		g_AllPlayerOptions.UnitsInRibbon[ g_activePlayerID ] = g_ActivePlayerUnitsInRibbon
@@ -2339,73 +2339,73 @@ Events.OpenInfoCorner.Add( function( infoCornerID )
 	return UpdateOptions()
 end)
 
---[[
-Events.EndCombatSim.Add( function(
-			attackerPlayerID,
-			attackerUnitID,
-			attackerUnitDamage,
-			attackerFinalUnitDamage,
-			attackerMaxHitPoints,
-			defenderPlayerID,
-			defenderUnitID,
-			defenderUnitDamage,
-			defenderFinalUnitDamage,
-			defenderMaxHitPoints )
-	if attackerPlayerID == g_activePlayerID then
-		local instance = g_units.Get( attackerUnitID )
-		if instance then
-			local toolTip = instance.Button:GetToolTipString()
-			if toolTip then
-				toolTip = toolTip .. "[NEWLINE]"
-			else
-				toolTip = ""
-			end
-			toolTip = toolTip
-				.."Attack: "
-				.. " / " .. tostring( attackerPlayerID )
-				.. " / " .. tostring( attackerUnitID )
-				.. " / " .. tostring( attackerUnitDamage )
-				.. " / " .. tostring( attackerFinalUnitDamage )
-				.. " / " .. tostring( attackerMaxHitPoints )
-				.. " / " .. tostring( defenderPlayerID )
-				.. " / " .. tostring( defenderUnitID )
-				.. " / " .. tostring( defenderUnitDamage )
-				.. " / " .. tostring( defenderFinalUnitDamage )
-				.. " / " .. tostring( defenderMaxHitPoints )
-			instance.Button:SetToolTipString( toolTip )
-		end
-	elseif defenderPlayerID == g_activePlayerID then
-		local instance = g_units.Get( defenderUnitID )
-		if instance then
-			local toolTip = instance.Button:GetToolTipString()
-			if toolTip then
-				toolTip = toolTip .. "[NEWLINE]"
-			else
-				toolTip = ""
-			end
-			toolTip = toolTip
-				.."Defense: "
-				.. " / " .. tostring( attackerPlayerID )
-				.. " / " .. tostring( attackerUnitID )
-				.. " / " .. tostring( attackerUnitDamage )
-				.. " / " .. tostring( attackerFinalUnitDamage )
-				.. " / " .. tostring( attackerMaxHitPoints )
-				.. " / " .. tostring( defenderPlayerID )
-				.. " / " .. tostring( defenderUnitID )
-				.. " / " .. tostring( defenderUnitDamage )
-				.. " / " .. tostring( defenderFinalUnitDamage )
-				.. " / " .. tostring( defenderMaxHitPoints )
-			instance.Button:SetToolTipString( toolTip )
-		end
-	end
-end)
---]]
 
--- NEW update GameInfoActions for this context explicitly
--- check g_needsUpdate before any call to GameInfoActions[].HotKey property
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 LuaEvents.UpdateHotkey.Add(function() g_needsUpdate = true; end)
 
--- Process request to hide enemy panel
+
 LuaEvents.EnemyPanelHide.Add(
 	function( isEnemyPanelHide )
 		if g_isWorkerActionPanelOpen then

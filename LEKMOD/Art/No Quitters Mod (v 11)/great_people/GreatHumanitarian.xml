@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-14 15:03:45 -->
+
 <GameData>
 
-	<!-- [New UU] Great Humanitarian (replaces Great Merchant): Trade Missions with City States provide 90 Influence (up from 30) and twice as much gold as usual. -->
+
 	<Units>
 		<Row>
 			<Class>UNITCLASS_MERCHANT</Class>
@@ -193,7 +193,7 @@
 		</Row>
 	</Unit_UniqueNames>
 
-	<!-- localization -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_PROMOTION_TRADE_MISSION_BONUS_HELP" />
 		<Row Tag="TXT_KEY_PROMOTION_TRADE_MISSION_BONUS_HELP">

@@ -1,23 +1,23 @@
-/*	-------------------------------------------------------------------------------------------------------
-	? 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
-// CvGlobals.h
+
 
 #ifndef CIV5_GLOBALS_H
 #define CIV5_GLOBALS_H
 
-//
-// 'global' vars for Civ V.  singleton class.
-// All globals and global types should be contained in this class
-// Author -	Mustafa Thamer
-//			Jon Shafer - 03/2005
-//
+
+
+
+
+
+
 class CvRandom;
 class CvGame;
 class CvPlayerAI;
@@ -151,16 +151,16 @@ class CvGlobals
 {
 public:
 
-	typedef stdext::hash_map<std::string /* type string */, int /* info index */> InfosMap;
-	typedef std::map<uint /* FString::HashType */, int /* info index */> InfosHashMap;
+	typedef stdext::hash_map<std::string                  , int                 > InfosMap;
+	typedef std::map<uint                        , int                 > InfosHashMap;
 
-	// singleton accessor
+
 	static CvGlobals& getInstance();
 
 	CvGlobals();
 	virtual ~CvGlobals();
 
-	//DLL Utility Methods
+
 	CvCity* UnwrapCityPointer(ICvCity1* pCity);
 	auto_ptr<ICvCity1> WrapCityPointer(CvCity* pCity);
 
@@ -181,7 +181,7 @@ public:
 
 	CvMap& getMap()
 	{
-		return *m_map;    // inlined for perf reasons, do not use outside of dll
+		return *m_map;
 	}
 	CvMap* getMapPointer()
 	{
@@ -189,7 +189,7 @@ public:
 	}
 	CvGame& getGame()
 	{
-		return *m_game;    // inlined for perf reasons, do not use outside of dll
+		return *m_game;
 	}
 	CvGame* getGamePointer()
 	{
@@ -275,17 +275,17 @@ public:
 
 	DirectionTypes getXYDirection(int i, int j, int stagger);
 
-	//
-	// Global Infos
-	// All info type strings are upper case and are kept in this hash map for fast lookup
-	//
+
+
+
+
 	void SetGameDatabase(Database::Connection* pGameDatabase);
 	Database::Connection* GetGameDatabase();
 	const Database::Connection* GetGameDatabase() const;
 
 	const InfosMap& GetInfoTypes() const;
-	int getInfoTypeForString(const char* szType, bool hideAssert = false) const;			// returns the infos index, use this when searching for an info type string
-	int getInfoTypeForHash(uint uiHash, bool hideAssert = false) const;			// returns the infos index, use this when searching for an info type string
+	int getInfoTypeForString(const char* szType, bool hideAssert = false) const;
+	int getInfoTypeForHash(uint uiHash, bool hideAssert = false) const;
 	void setInfoTypeFromString(const char* szType, int idx);
 	void infoTypeFromStringReset();
 	void infosReset();
@@ -813,17 +813,17 @@ public:
 
 	CvNotificationXMLEntries* GetNotificationEntries();
 
-	//
-	// Global Types
-	// All type strings are upper case and are kept in this hash map for fast lookup
-	// The other functions are kept for convenience when enumerating, but most are not used
-	//
+
+
+
+
+
 	int getNUM_YIELD_TYPES() const;
 	int getNUM_CONTROL_TYPES() const;
 
-	// int& getNumFlavorTypes();
-	// CvString*& getFlavorTypes();
-	// CvString& getFlavorTypes(FlavorTypes e);
+
+
+
 	void       setNumFlavorTypes(const int iTypes)
 	{
 		m_iNumFlavorTypes = iTypes;
@@ -838,7 +838,7 @@ public:
 	}
 	CvString&  getFlavorTypes(FlavorTypes e)
 	{
-		CvAssert(e > -1); /*CvAssert(e < GC.getNumFlavorTypes())*/;
+		CvAssert(e > -1);                                         ;
 		return m_paszFlavorTypes[e];
 	}
 
@@ -857,12 +857,12 @@ public:
 	float GetHexDebugLayerScale(const char* szLayerName);
 	bool GetHexDebugLayerString(CvPlot* pkPlot, const char* szLayerName, PlayerTypes ePlayer, char* szBuffer, unsigned int uiBufferLength);
 
-	///////////////// BEGIN global defines
-	// THESE ARE READ-ONLY
-	//
+
+
+
 	void cacheGlobals();
 
-	// use very sparingly - this is costly
+
 	CvString getDefineSTRING(const char* szName, bool bReportErrors = true);
 
 #ifdef AUI_DIPLOMACY_AI_LEADERHEAD_DEALS_IN_MULTIPLAYER
@@ -891,7 +891,7 @@ public:
 	GD_INT_DEF(NEW_SCORE_BELIEF_MULTIPLIER);
 #endif
 
-	// -- ints --
+
 
 	inline int getAI_ATTEMPT_RUSH_OVER_X_TURNS_TO_BUILD()
 	{
@@ -1835,7 +1835,7 @@ public:
 		return m_iUNIT_YIELD_CAP;
 	}
 #endif
-#if defined(MISC_CHANGES) // New Global Values
+#if defined(MISC_CHANGES)
 	inline int getBULLY_GOLD_GROWTH_FACTOR()
 	{
 		return m_iBULLY_GOLD_GROWTH_FACTOR;
@@ -4380,7 +4380,7 @@ public:
 		return m_iWALLS_BUILDINGCLASS;
 	}
 
-	// -- floats --
+
 
 	inline float getDIPLO_VICTORY_CIV_DELEGATES_COEFFICIENT()
 	{
@@ -4555,7 +4555,7 @@ public:
 		return m_fCITY_STRENGTH_TECH_EXPONENT;
 	}
 
-	// post defines
+
 
 	inline int getLAND_TERRAIN()
 	{
@@ -5139,7 +5139,7 @@ public:
 	}
 #endif
 
-	////////////// END DEFINES //////////////////
+
 
 	void setDLLIFace(ICvEngineUtility4* pDll)
 	{
@@ -5164,16 +5164,16 @@ public:
 	bool IsGraphicsInitialized() const;
 	void SetGraphicsInitialized(bool bVal);
 
-	// for caching
+
 	bool readEventInfoArray(FDataStream& kStream);
 	void writeEventInfoArray(FDataStream& kStream);
 
 	bool readEventTriggerInfoArray(FDataStream& kStream);
 	void writeEventTriggerInfoArray(FDataStream& kStream);
 
-	//
-	// additional accessors for initting globals
-	//
+
+
+
 	void setPathFinder(CvTwoLayerPathFinder* pVal);
 	void setInterfacePathFinder(CvTwoLayerPathFinder* pVal);
 	void setIgnoreUnitsPathFinder(CvIgnoreUnitsPathFinder* pVal);
@@ -5190,7 +5190,7 @@ public:
 	void setDangerPathFinder(CvTwoLayerPathFinder* pVal);
 #endif
 
-	// So that CvEnums are moddable in the DLL
+
 	int getNumDirections() const;
 	int getNumGameOptions() const;
 	int getNumMPOptions() const;
@@ -5270,18 +5270,18 @@ protected:
 	FlowDirectionTypes* m_aeTurnLeftFlowDirection[NUM_FLOWDIRECTION_TYPES];
 	FlowDirectionTypes* m_aeTurnRightFlowDirection[NUM_FLOWDIRECTION_TYPES];
 
-	//InterfaceModeInfo m_aInterfaceModeInfo[NUM_INTERFACEMODE_TYPES] =
+
 	std::vector<CvInterfaceModeInfo*> m_paInterfaceModeInfo;
 
-	/***********************************************************************************************************************
-	Globals loaded from Database
-	************************************************************************************************************************/
+
+
+
 	Database::Connection* m_pGameDatabase;
 	Database::Results m_kGlobalDefinesLookup;
 
-	// all type strings are upper case and are kept in this hash map for fast lookup, Moose
+
 	InfosMap		m_infosMap;
-	InfosHashMap	m_infosHashMap;		// Hash of the type string, mapped to the index of the info in its array.
+	InfosHashMap	m_infosHashMap;
 
 	std::vector<CvColorInfo*> m_paColorInfo;
 	std::vector<CvPlayerColorInfo*> m_paPlayerColorInfo;
@@ -5327,7 +5327,7 @@ protected:
 	std::vector<CvControlInfo*> m_paControlInfo;
 	std::vector<CvCommandInfo*> m_paCommandInfo;
 	std::vector<CvAutomateInfo*> m_paAutomateInfo;
-	std::vector<CvEraInfo*> m_aEraInfo;	// [NUM_ERA_TYPES];
+	std::vector<CvEraInfo*> m_aEraInfo;
 	std::vector<CvHurryInfo*> m_paHurryInfo;
 	std::vector<CvVictoryInfo*> m_paVictoryInfo;
 	std::vector<CvSmallAwardInfo*> m_paSmallAwardInfo;
@@ -5360,20 +5360,20 @@ protected:
 	CvResolutionXMLEntries* m_pResolutions;
 	CvNotificationXMLEntries* m_pNotifications;
 
-	//////////////////////////////////////////////////////////////////////////
-	// GLOBAL TYPES
-	//////////////////////////////////////////////////////////////////////////
 
-	// XXX These are duplicates and are kept for enumeration convenience - most could be removed, Moose
+
+
+
+
 	CvString* m_paszFlavorTypes;
 	int m_iNumFlavorTypes;
 
 	CvString* m_paszFootstepAudioTags;
 	int m_iNumFootstepAudioTags;
 
-	//////////////////////////////////////////////////////////////////////////
-	// Formerly Global Defines
-	//////////////////////////////////////////////////////////////////////////
+
+
+
 
 	int getDefineINT(const char* szName, bool bReportErrors = true);
 	float getDefineFLOAT(const char* szName, bool bReportErrors = true);
@@ -5388,7 +5388,7 @@ protected:
 #endif
 	bool getDefineValue(const char* szName, CvString& szValue, bool bReportErrors = true);
 
-	// -- Togglable AuI options
+
 #ifdef AUI_DIPLOMACY_AI_LEADERHEAD_DEALS_IN_MULTIPLAYER
 	GD_INT_DECL(MULTIPLAYER_AI_DIPLOMACY_NOTIFICATIONS_ONLY_SIMULTANEOUS);
 #endif
@@ -5415,7 +5415,7 @@ protected:
 	GD_INT_DECL(NEW_SCORE_BELIEF_MULTIPLIER);
 #endif
 
-	// -- ints --
+
 
 	int m_iAI_ATTEMPT_RUSH_OVER_X_TURNS_TO_BUILD;
 	int m_iINITIAL_AI_CITY_PRODUCTION;
@@ -5653,13 +5653,13 @@ protected:
 	int m_iPROMOTION_YIELD_CAP;
 	int m_iUNIT_YIELD_CAP;
 #endif
-#if defined(MISC_CHANGES) // New Global Values
+#if defined(MISC_CHANGES)
 	int m_iBULLY_GOLD_GROWTH_FACTOR;
 	int m_iINTERNAL_TRADE_FOOD_BASE_TIMES100;
 	int m_iINTERNAL_TRADE_PRODUCTION_BASE_TIMES100;
 	int m_iFAITH_PURCHASE_VISIBLE_DIVISOR;
 #endif
-#if defined(LEKMOD_v34) // Support for the New Golden Age Points Yield
+#if defined(LEKMOD_v34)
 	int m_iAI_CITIZEN_VALUE_GOLDEN_AGE_POINTS;
 #endif
 	int m_iMINOR_FRIENDSHIP_RATE_MOD_MAXIMUM;
@@ -6366,7 +6366,7 @@ protected:
 	int m_iCOMBAT_CAPTURE_MAX_CHANCE;
 	int m_iCOMBAT_CAPTURE_RATIO_MULTIPLIER;
 
-	// -- floats --
+
 
 	float m_fDIPLO_VICTORY_CIV_DELEGATES_COEFFICIENT;
 	float m_fDIPLO_VICTORY_CIV_DELEGATES_CONSTANT;
@@ -6477,7 +6477,7 @@ protected:
 	int   m_iPOLICY_BRANCH_AUTOCRACY;
 	int   m_iPOLICY_BRANCH_ORDER;
 
-	// -- post defines --
+
 
 	int m_iLAND_TERRAIN;
 	int m_iDEEP_WATER_TERRAIN;
@@ -6536,21 +6536,21 @@ protected:
 	int m_iSPOILS_OF_WAR_PERCENT_FUTURE;
 #endif
 
-	// DLL interface
+
 	ICvEngineUtility4* m_pDLL;
 
-	// Engine UI interface
+
 	ICvUserInterface2* m_pEngineUI;
 };
 
-//extern CvGlobals gGlobals;	// for debugging
 
-//
-// inlines
-//
-//
-// helpers
-//
+
+
+
+
+
+
+
 extern CvGlobals gGlobals;
 #define GC gGlobals
 #define gDLL GC.getDLLIFace()

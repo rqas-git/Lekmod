@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/4/2015 2:38:57 PM -->
+
 <GameData>
 	
-	<!-- Change National Intelligence Agency to require Constabularies instead of Police Stations -->
+
 	<Building_ClassesNeededInCity>
 		<Update>
 			<Set BuildingClassType="BUILDINGCLASS_CONSTABLE" />

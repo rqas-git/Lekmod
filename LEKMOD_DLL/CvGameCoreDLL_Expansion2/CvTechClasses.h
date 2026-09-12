@@ -1,30 +1,30 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_TECH_CLASSES_H
 #define CIV5_TECH_CLASSES_H
 
-// Forward definitions
+
 class CvTeam;
 class CvTechAI;
 
 #include "CvInfos.h"
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvTechEntry
-//!  \brief		A single entry in the tech tree
-//
-//!  Key Attributes:
-//!  - Used to be called CvTechInfo
-//!  - Populated from XML\Technologies\CIV5TechInfos.xml
-//!  - Array of these contained in CvTechXMLEntries class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvTechEntry: public CvBaseInfo
 {
 public:
@@ -33,7 +33,7 @@ public:
 
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
 
-	// Accessor Functions (Non-Arrays)
+
 	int GetAIWeight() const;
 	int GetAITradeModifier() const;
 	int GetResearchCost() const;
@@ -47,10 +47,10 @@ public:
 	int GetFirstFreeTechs() const;
 	int GetEmbarkedMoveChange() const;
 
-	//EAP: Extra Embarked visibility on tech
+
 	int GetEmbarkedSightChange() const;
 
-#if defined(MISC_CHANGES) // Extra League Votes
+#if defined(MISC_CHANGES)
 	int GetExtraLeagueVotes() const;
 #endif
 
@@ -63,7 +63,7 @@ public:
 
 	bool IsEndsGame() const;
 	bool IsAllowsEmbarking() const;
-	//EAP: Civilian Embark
+
 	bool IsAllowsEmbarkingCivilian() const;
 
 	bool IsAllowsDefensiveEmbarking() const;
@@ -103,7 +103,7 @@ public:
 	const char* GetSoundMP() const;
 	void SetSoundMP(const char* szVal);
 
-	// Accessor Functions (Arrays)
+
 	int GetDomainExtraMoves(int i) const;
 	int GetTradeRouteDomainExtraRange(int i) const;
 	int GetFlavorValue(int i) const;
@@ -123,7 +123,7 @@ private:
 	int m_iFirstFreeUnitClass;
 	int m_iFirstFreeTechs;
 	int m_iEmbarkedMoveChange;
-	//EAP: Embarked Sight change on tech
+
 	int m_iEmbarkedSightChange;
 	int m_iInternationalTradeRoutesChange;
 	int m_iInfluenceSpreadModifier;
@@ -134,10 +134,10 @@ private:
 
 	bool m_bEndsGame;
 	bool m_bAllowsEmbarking;
-	//EAP: Civilian Embark
+
 	bool m_bAllowsEmbarkingCivilian;
 
-#if defined(MISC_CHANGES) // Extra League Votes
+#if defined(MISC_CHANGES)
 	int m_iExtraLeagueVotes;
 #endif
 
@@ -171,7 +171,7 @@ private:
 	CvString m_strSound;
 	CvString m_strSoundMP;
 
-	// Arrays
+
 	int* m_piDomainExtraMoves;
 	int* m_piTradeRouteDomainExtraRange;
 	int* m_piFlavorValue;
@@ -180,24 +180,24 @@ private:
 	bool* m_pabFreePromotion;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvTechXMLEntries
-//!  \brief		Game-wide information about the tech tree
-//
-//! Key Attributes:
-//! - Plan is it will be contained in CvGameRules object within CvGame class
-//! - Populated from XML\Technologies\CIV5TechInfos.xml
-//! - Contains an array of CvTechEntry from the above XML file
-//! - One instance for the entire game
-//! - Accessed heavily by CvPlayerTechs class (which stores the tech state for 1 player)
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
 class CvTechXMLEntries
 {
 public:
 	CvTechXMLEntries(void);
 	~CvTechXMLEntries(void);
 
-	// Accessor functions
+
 	std::vector<CvTechEntry*>& GetTechEntries();
 #ifdef AUI_WARNING_FIXES
 	uint GetNumTechs() const;
@@ -213,15 +213,15 @@ private:
 	std::vector<CvTechEntry*> m_paTechEntries;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvPlayerTechs
-//!  \brief		Information about the technologies being researched by a single player
-//
-//!  Key Attributes:
-//!  - Plan is it will be contained in CvPlayerState object within CvPlayer class
-//!  - One instance for each civ (player or AI)
-//!  - Accessed by any class that needs to check technology research state
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvPlayerTechs: public CvFlavorRecipient
 {
 public:
@@ -233,13 +233,13 @@ public:
 	void Read(FDataStream& kStream);
 	void Write(FDataStream& kStream);
 
-	// Flavor recipient required function
+
 	void FlavorUpdate();
 
 	CvPlayer* GetPlayer();
 	CvTechAI* GetTechAI();
 
-	// Accessor functions
+
 	void SetResearchingTech(TechTypes eIndex, bool bNewValue);
 	bool IsResearchingTech(TechTypes eIndex) const;
 	void SetCivTechPriority(TechTypes eIndex, int iNewValue);
@@ -273,7 +273,7 @@ public:
 private:
 	void AddFlavorAsStrategies(int iPropagatePercent);
 
-	// Logging functions
+
 	void LogFlavors(FlavorTypes eFlavor = NO_FLAVOR);
 
 	bool* m_pabResearchingTech;
@@ -288,15 +288,15 @@ private:
 	CvTechAI* m_pTechAI;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvTeamTechs
-//!  \brief		Information about the technologies owned by a team of players
-//
-//!  Key Attributes:
-//!  - Plan is it will be contained in CvTeamState object within CvTeam class
-//!  - One instance for each team of civs
-//!  - Accessed by any class that needs to check technology ownership
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvTeamTechs
 {
 public:
@@ -313,7 +313,7 @@ public:
 	bool HasTechByHuman(TechTypes eIndex) const;
 #endif
 
-	// Accessor functions
+
 	void SetHasTech(TechTypes eIndex, bool bNewValue);
 	bool HasTech(TechTypes eIndex) const;
 #ifdef CAN_PROPOSE_ENACT_UPDATES_ONCE_PER_SESSION
@@ -355,10 +355,10 @@ private:
 	bool* m_pabHasTechForLeague;
 #endif
 	bool* m_pabNoTradeTech;
-	int* m_paiResearchProgress;  // Stored in hundredths
+	int* m_paiResearchProgress;
 	int* m_paiTechCount;
 	CvTechXMLEntries* m_pTechs;
 	CvTeam* m_pTeam;
 };
 
-#endif //CIV5_TECH_CLASSES_H
+#endif

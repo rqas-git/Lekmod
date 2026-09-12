@@ -1,29 +1,29 @@
-//---------------------------------------------------------------------------------------
-//
-//  *****************   CIV 5 World Builder Map   ********************
-//
-//  FILE:    FRelationshipBitset.h
-//
-//  AUTHOR:  Eric Jordan  --  4/14/2010
-//
-//  PURPOSE:
-//		This little monstrosity was created to support the Civ 5 World Builder map format.
-//		It creates a bitset which stores boolean relationships between elements.  In the
-//		case of the World Builder maps it is used to store relationships between teams.
-//		It stores a unique bit for the relationship between each element with every other
-//		element.  For example: a bit for each pair of teams in a civ game representing if
-//      they are at war with each other.
-//
-//---------------------------------------------------------------------------------------
-//  Copyright (c) 2010 Firaxis Games, Inc. All rights reserved.
-//---------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #pragma once
 #ifndef FRelationshipBitset_h
 #define FRelationshipBitset_h
 
-// TElementCount - The number of elements that have relationships between them.  (more than 0 please)
-// TSelfRelation - The relationship an element has with itself.
+
+
 template<uint TElementCount, bool TSelfRelation>
 class FRelationshipBitset
 {
@@ -82,14 +82,14 @@ public:
 	}
 
 private:
-	// BitCount = ((n - 1) / 2) * n where n is the team count
+
 	static const uint BitCount  = ((TElementCount - 1) * TElementCount) / 2;
 	static const uint ByteCount = BitCount / 8 + ((BitCount % 8)? 1 : 0);
 
-	// returns the total number of bits for a relationship map
+
 	static const uint GetTotalBitCount(uint uiElementCount)
 	{
-		// BitCount = ((n - 1) / 2) * n where n is the team count
+
 		return ((uiElementCount - 1) * uiElementCount) / 2;
 	}
 
@@ -111,12 +111,12 @@ private:
 
 		FAssertMsg(uiLarge < TElementCount, "Out of range!");
 
-		// uiStart represents the start of the bitfield for the large index
-		const uint uiStart = GetTotalBitCount(uiLarge); // Get the bitcount leading up to this
+
+		const uint uiStart = GetTotalBitCount(uiLarge);
 		return uiStart + uiSmall;
 	}
 
 	byte m_Mem[ByteCount];
 };
 
-#endif // FRelationshipBitset_h
+#endif

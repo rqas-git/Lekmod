@@ -1,4 +1,4 @@
-"""Keep experimental flags and artifacts out of the default gameplay build."""
+
 from pathlib import Path
 import os
 import subprocess

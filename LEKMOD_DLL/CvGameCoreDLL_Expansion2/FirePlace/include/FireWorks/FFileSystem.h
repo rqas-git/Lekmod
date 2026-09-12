@@ -4,7 +4,7 @@
 
 #include "FIFile.h"
 
-// Implementation class for the file system.  This should only be accessed directly on the application side, DLLs should use FIFileSystem::GetInstance()
+
 class FFileSystem : public FIFileSystem
 {
 public:
@@ -35,4 +35,4 @@ public:
 	virtual bool		IsFileCatalogEnabled();
 };
 
-#endif // _FFILESYSTEM_H_
+#endif

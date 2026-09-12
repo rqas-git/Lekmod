@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 5/6/2015 4:32:58 AM -->
+
 <GameData>
 
-	<!-- Anti Tank Guns and Helicopter Gunships have +200% vs Armored (up from +100%) to compensate for the buff to Armored units vs Land units -->
+
 	<UnitPromotions_UnitCombatMods>
 		<Update>
 			<Set Modifier="200" />

@@ -1,4 +1,4 @@
-// Exercise the production adapter and method wrappers against a real Lua 5.1 state.
+
 #include <cassert>
 extern "C" {
 #include <lua.h>

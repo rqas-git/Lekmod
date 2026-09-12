@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 
 #include "CvGameCoreDLLPCH.h"
 #include "CvDllNetInitInfo.h"
@@ -54,11 +54,11 @@ CvDllNetInitInfo::CvDllNetInitInfo()
 
 	ZeroMemory(m_szDebugString, sizeof m_szDebugString);
 }
-//------------------------------------------------------------------------------
+
 CvDllNetInitInfo::~CvDllNetInitInfo()
 {
 }
-//------------------------------------------------------------------------------
+
 void* CvDllNetInitInfo::QueryInterface(GUID guidInterface)
 {
 	if(guidInterface == ICvUnknown::GetInterfaceId() ||
@@ -70,13 +70,13 @@ void* CvDllNetInitInfo::QueryInterface(GUID guidInterface)
 
 	return NULL;
 }
-//------------------------------------------------------------------------------
+
 unsigned int CvDllNetInitInfo::IncrementReference()
 {
 	++m_uiRefCount;
 	return m_uiRefCount;
 }
-//------------------------------------------------------------------------------
+
 unsigned int CvDllNetInitInfo::DecrementReference()
 {
 	if(m_uiRefCount == 1)
@@ -90,27 +90,27 @@ unsigned int CvDllNetInitInfo::DecrementReference()
 		return m_uiRefCount;
 	}
 }
-//------------------------------------------------------------------------------
+
 unsigned int CvDllNetInitInfo::GetReferenceCount()
 {
 	return m_uiRefCount;
 }
-//------------------------------------------------------------------------------
+
 void CvDllNetInitInfo::Destroy()
 {
 	DecrementReference();
 }
-//------------------------------------------------------------------------------
+
 void CvDllNetInitInfo::operator delete(void* p)
 {
 	CvDllGameContext::Free(p);
 }
-//------------------------------------------------------------------------------
+
 void* CvDllNetInitInfo::operator new(size_t bytes)
 {
 	return CvDllGameContext::Allocate(bytes);
 }
-//------------------------------------------------------------------------------
+
 const char* CvDllNetInitInfo::GetDebugString()
 {
 	sprintf(m_szDebugString, "NetInitInfo : m_szLoadFileName=\"%s\", "\
@@ -156,7 +156,7 @@ const char* CvDllNetInitInfo::GetDebugString()
 
 	return m_szDebugString;
 }
-//------------------------------------------------------------------------------
+
 bool CvDllNetInitInfo::Read(FDataStream& kStream)
 {
 	kStream >> m_szLoadFileName;
@@ -196,7 +196,7 @@ bool CvDllNetInitInfo::Read(FDataStream& kStream)
 
 	return true;
 }
-//------------------------------------------------------------------------------
+
 bool CvDllNetInitInfo::Write(FDataStream& kStream)
 {
 	kStream << m_szLoadFileName;
@@ -234,13 +234,13 @@ bool CvDllNetInitInfo::Write(FDataStream& kStream)
 
 	return true;
 }
-//------------------------------------------------------------------------------
+
 bool CvDllNetInitInfo::Commit()
 {
-	// Copy the settings into our initialization data structure
 
-	//The map script path cannot be trusted since this structure is sent over the network.
-	//Have the app search for the best candidate.
+
+
+
 	FILogFile* logFile = LOGFILEMGR.GetLog("net_message_debug.log", 0);
 
 	char szMapScriptPath[1040] = {0};
@@ -252,7 +252,7 @@ bool CvDllNetInitInfo::Commit()
 
 	CvPreGame::setMapScriptName(strMapScriptPath);
 	CvPreGame::setRandomMapScript(m_bIsRandomMapScript);
-	CvPreGame::setTransferredMap(false);		// We'll always set this manually
+	CvPreGame::setTransferredMap(false);
 	CvPreGame::setLoadFileName(m_szLoadFileName, m_eLoadFileStorage);
 	CvPreGame::setMapNoPlayers(m_bWBMapNoPlayers);
 	CvPreGame::setWorldSize(m_eWorldSize,false);

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-25 05:44:53 -->
+
 <GameData>
 
-	<!-- May use Faith to purchase Pagodas (+1 Faith / +1 Culture / 10% of Food is retained on citizen growth) -->
+
 	<Buildings>
 		<Update>
 			<Set FoodKept="10" Happiness="1" Help="TXT_KEY_BUILDING_PAGODA_HELP" />
@@ -16,7 +16,7 @@
 		</Update>
 	</Building_YieldChanges>
 
-	<!-- localization -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_BELIEF_PAGODAS" />
 		<Row Tag="TXT_KEY_BELIEF_PAGODAS">

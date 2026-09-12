@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_CITY_CONNECTIONS_H
@@ -12,12 +12,12 @@
 
 class CvPlayer;
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvCityConnections
-//!  \brief		Maintains route connections for a city
-//
-//!  Key Attributes:
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
 class CvCityConnections
 {
 public:
@@ -27,7 +27,7 @@ public:
 	void Init(CvPlayer* pPlayer);
 	void Uninit(void);
 
-	//// Serialization routines
+
 	void Read(FDataStream& kStream);
 	void Write(FDataStream& kStream) const;
 
@@ -38,7 +38,7 @@ public:
 	void ResetRouteInfo(void);
 	void ResetCityPlotIDs(void);
 
-	bool IsEmpty(void);  // if there are no cities in the route list
+	bool IsEmpty(void);
 
 	uint GetIndexFromCity(CvCity* pCity);
 	CvCity* GetCityFromIndex(int iIndex);
@@ -69,7 +69,7 @@ public:
 		}
 
 		char m_cRouteState;
-		char m_cPassEval; // used to create the data, but should not be referenced as a value
+		char m_cPassEval;
 	};
 
 	uint m_uiRouteInfosDimension;
@@ -77,8 +77,8 @@ public:
 
 	RouteInfo* GetRouteInfo(uint uiFirstCityIndex, uint uiSecondCityIndex);
 
-	//typedef FStaticVector< RouteInfo, SAFE_ESTIMATE_NUM_CITIES, true, c_eCiv5GameplayDLL, 0 > RouteInfosRow;
-	//FFastVector< RouteInfosRow, false, c_eCiv5GameplayDLL, 0 > m_aaRouteInfos;
+
+
 #ifdef AUI_WARNING_FIXES
 	FStaticVector<uint, SAFE_ESTIMATE_NUM_CITIES, true, c_eCiv5GameplayDLL, 0> m_aiCityPlotIDs;
 #else
@@ -86,7 +86,7 @@ public:
 #endif
 	FStaticVector<BuildingTypes, 10, true, c_eCiv5GameplayDLL, 0> m_aBuildingsAllowWaterRoutes;
 
-	//---------------------------------------PROTECTED MEMBER VARIABLES---------------------------------
+
 protected:
 
 	void UpdatePlotRouteStates(void);
@@ -95,7 +95,7 @@ protected:
 
 	void ResizeRouteInfo(uint uiNewSize);
 
-	// these are used to update the engine
+
 	typedef enum PlotRouteState
 	{
 	    NO_CONNECTION = 0x0,
@@ -122,4 +122,4 @@ protected:
 	FStaticVector<PlotRouteInfo, 100, true, c_eCiv5GameplayDLL, 0> m_aPlotRouteInfos;
 };
 
-#endif //CIV5_BUILDER_TASKING_AI_H
+#endif

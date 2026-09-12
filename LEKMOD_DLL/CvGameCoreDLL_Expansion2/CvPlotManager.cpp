@@ -1,19 +1,19 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 
 #include "CvGameCoreDLLPCH.h"
 #include "CvPlotManager.h"
 
-//////////////////////////////////////////////////////////////////////////
-// CvSparseIDInfoGrid
-//////////////////////////////////////////////////////////////////////////
 
-//	---------------------------------------------------------------------------
+
+
+
+
 CvSparseIDInfoGrid::CvSparseIDInfoGrid(uint uiWidth, uint uiHeight, CvIDInfoFixedVectorAllocator* pkAllocator)
 {
 	m_uiWidth = uiWidth;
@@ -27,7 +27,7 @@ CvSparseIDInfoGrid::CvSparseIDInfoGrid(uint uiWidth, uint uiHeight, CvIDInfoFixe
 	m_pkAllocator = pkAllocator;
 }
 
-//	---------------------------------------------------------------------------
+
 CvSparseIDInfoGrid::~CvSparseIDInfoGrid()
 {
 	if (m_paEntries)
@@ -43,7 +43,7 @@ CvSparseIDInfoGrid::~CvSparseIDInfoGrid()
 		delete []m_paEntries;
 	}
 }
-//	---------------------------------------------------------------------------
+
 const CvIDInfoFixedVector *CvSparseIDInfoGrid::Get(int iX, int iY) const
 {
 	uint uiIndex = ((uint) iY * m_uiWidth) + (uint) iX;
@@ -57,7 +57,7 @@ const CvIDInfoFixedVector *CvSparseIDInfoGrid::Get(int iX, int iY) const
 	return NULL;
 }
 
-//	---------------------------------------------------------------------------
+
 bool CvSparseIDInfoGrid::Add(const IDInfo& kInfo, int iX, int iY)
 {
 	uint uiIndex = ((uint) iY * m_uiWidth) + (uint) iX;
@@ -80,7 +80,7 @@ bool CvSparseIDInfoGrid::Add(const IDInfo& kInfo, int iX, int iY)
 	return false;
 }
 
-//	---------------------------------------------------------------------------
+
 void CvSparseIDInfoGrid::Remove(const IDInfo& kInfo, int iX, int iY)
 {
 	uint uiIndex = ((uint) iY * m_uiWidth) + (uint) iX;
@@ -93,7 +93,7 @@ void CvSparseIDInfoGrid::Remove(const IDInfo& kInfo, int iX, int iY)
 			{
 				if (pkEntry->size() == 0)
 				{
-					// Nothing there, release the array
+
 					m_pkAllocator->Release(pkEntry);
 					m_paEntries[uiIndex] = NULL;
 				}
@@ -102,43 +102,43 @@ void CvSparseIDInfoGrid::Remove(const IDInfo& kInfo, int iX, int iY)
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////
-// CvPlotManager
-//////////////////////////////////////////////////////////////////////////
 
-//	---------------------------------------------------------------------------
+
+
+
+
 CvPlotManager::CvPlotManager()
 {
 	m_uiWidth = 0;
 	m_uiHeight = 0;
 }
 
-//	---------------------------------------------------------------------------
+
 CvPlotManager::~CvPlotManager()
 {
 	
 }
 
-//	---------------------------------------------------------------------------
+
 void CvPlotManager::Init(uint uiWidth, uint uiHeight)
 {
 	m_uiWidth = uiWidth;
 	m_uiHeight = uiHeight;
 }
 
-//	---------------------------------------------------------------------------
+
 void CvPlotManager::Uninit()
 {
 	m_aLayers.clear();
 }
 
-//	---------------------------------------------------------------------------
+
 int CvPlotManager::GetNumLayers() const
 {
 	return (int)m_aLayers.size();
 }
 
-//	---------------------------------------------------------------------------
+
 int CvPlotManager::GetLayerIDIndex(uint uiLayerID) const
 {
 	int iIndex = 0;
@@ -154,7 +154,7 @@ int CvPlotManager::GetLayerIDIndex(uint uiLayerID) const
 	return -1;
 }
 
-//	---------------------------------------------------------------------------
+
 uint CvPlotManager::GetLayerIndexID(int iLayerIndex) const
 {
 	if (iLayerIndex >= 0 && iLayerIndex < (int)m_aLayers.size())
@@ -163,7 +163,7 @@ uint CvPlotManager::GetLayerIndexID(int iLayerIndex) const
 	return (uint)-1;
 }
 
-//	---------------------------------------------------------------------------
+
 CvSparseIDInfoGrid* CvPlotManager::AddLayer(uint uiLayerID)
 {
 	for (CvSparseIDInfoGridVector::const_iterator itr = m_aLayers.begin(); itr != m_aLayers.end(); ++itr)
@@ -180,7 +180,7 @@ CvSparseIDInfoGrid* CvPlotManager::AddLayer(uint uiLayerID)
 	return pkLayer;
 }
 
-//	---------------------------------------------------------------------------
+
 CvSparseIDInfoGrid* CvPlotManager::FindLayer(uint uiLayerID)
 {
 	for (CvSparseIDInfoGridVector::const_iterator itr = m_aLayers.begin(); itr != m_aLayers.end(); ++itr)
@@ -194,7 +194,7 @@ CvSparseIDInfoGrid* CvPlotManager::FindLayer(uint uiLayerID)
 	return NULL;
 }
 
-//	---------------------------------------------------------------------------
+
 const CvSparseIDInfoGrid* CvPlotManager::FindLayer(uint uiLayerID) const
 {
 	for (CvSparseIDInfoGridVector::const_iterator itr = m_aLayers.begin(); itr != m_aLayers.end(); ++itr)
@@ -208,7 +208,7 @@ const CvSparseIDInfoGrid* CvPlotManager::FindLayer(uint uiLayerID) const
 	return NULL;
 }
 
-//	---------------------------------------------------------------------------
+
 const CvIDInfoFixedVector &CvPlotManager::GetUnits(int iX, int iY, uint uiLayerID) const
 {
 	if (uiLayerID != (uint)-1)
@@ -227,7 +227,7 @@ const CvIDInfoFixedVector &CvPlotManager::GetUnits(int iX, int iY, uint uiLayerI
 	return m_kEmpty;
 }
 
-//	---------------------------------------------------------------------------
+
 const CvIDInfoFixedVector &CvPlotManager::GetUnitsByIndex(int iX, int iY, int iLayerIndex) const
 {
 	if (iLayerIndex >= 0 && iLayerIndex < (int)m_aLayers.size())
@@ -240,7 +240,7 @@ const CvIDInfoFixedVector &CvPlotManager::GetUnitsByIndex(int iX, int iY, int iL
 	return m_kEmpty;
 }
 
-//	---------------------------------------------------------------------------
+
 void CvPlotManager::AddUnit(const IDInfo& kInfo, int iX, int iY, uint uiLayerID)
 {
 	CvSparseIDInfoGrid* pkLayer = AddLayer(uiLayerID);
@@ -250,7 +250,7 @@ void CvPlotManager::AddUnit(const IDInfo& kInfo, int iX, int iY, uint uiLayerID)
 	}
 }
 
-//	---------------------------------------------------------------------------
+
 void CvPlotManager::RemoveUnit(const IDInfo& kInfo, int iX, int iY, uint uiLayerID)
 {
 #ifdef AUI_WARNING_FIXES
@@ -277,7 +277,7 @@ void CvPlotManager::RemoveUnit(const IDInfo& kInfo, int iX, int iY, uint uiLayer
 	}
 }
 
-//	---------------------------------------------------------------------------
+
 int CvPlotManager::GetNumUnits(int iX, int iY, uint uiLayerID) const
 {
 	const CvSparseIDInfoGrid* pkLayer = FindLayer(uiLayerID);
@@ -291,7 +291,7 @@ int CvPlotManager::GetNumUnits(int iX, int iY, uint uiLayerID) const
 	return 0;
 }
 
-//	---------------------------------------------------------------------------
+
 int CvPlotManager::GetNumUnitsByIndex(int iX, int iY, int iLayerIndex) const
 {
 	if (iLayerIndex >= 0 && iLayerIndex < (int)m_aLayers.size())

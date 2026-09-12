@@ -5,12 +5,12 @@
 
 namespace CvLuaArgs
 {
-	//To
+
 	template<typename T>
 	static T toValue(lua_State* L, int idx)
 	{
-		//This is pretty unsafe, but common.
-		//Assume T is a poorly designed enum =(
+
+
 		return (T)lua_tointeger(L, idx);
 	}
 
@@ -24,12 +24,12 @@ namespace CvLuaArgs
 		return lua_toboolean(L, idx) != 0;
 	}
 
-	//Push
+
 	template<typename T>
 	static void pushValue(lua_State* L, T t)
 	{
-		//This is pretty unsafe, but common.
-		//Assume T is a poorly designed enum =(
+
+
 		lua_pushinteger(L, t);
 	}
 
@@ -47,4 +47,4 @@ namespace CvLuaArgs
 
 }
 
-#endif //CVLUAARGTEMPLATES
+#endif

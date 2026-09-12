@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/9/2015 12:35:25 AM -->
+
 <GameData>
 
-	<!-- New promotion which is good against both Mounted (previously Formation) AND Armored (previously Ambush) ... "Ambush Formation" lol ... -->
+
 	<UnitPromotions>
 		<Row>
 			<Type>PROMOTION_AMBUSH_FORMATION_1</Type>
@@ -144,7 +144,7 @@
 	</Language_RU_RU>
 
 
-	<!-- Remove old Ambush & Formation promotions -->
+
 	<UnitPromotions>
 		<Delete Type="PROMOTION_FORMATION_1" />
 		<Delete Type="PROMOTION_FORMATION_2" />
@@ -168,7 +168,7 @@
 		<Delete PromotionType="PROMOTION_AMBUSH_2" />
 	</Unit_FreePromotions>
 
-	<!-- Foreign Legions now start with Ambush Formation I for free. -->
+
 	<Unit_FreePromotions>
 		<Row>
 			<UnitType>UNIT_FRENCH_FOREIGNLEGION</UnitType>

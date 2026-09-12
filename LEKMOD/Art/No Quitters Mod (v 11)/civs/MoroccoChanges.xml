@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 5/5/2016 9:23:29 PM -->
+
 <GameData>
 	
-	<!-- Morocco bonus yield per trade partner now also increases by +1 Gold / +1 Culture per era. -->
+
 	
-	<!-- This will eventually be implemented correctly. For now it's hard coded to be +1 in CvTraitClasses.h - GetTradePartnerYieldFlatBonusPerEra() -->
-	<!--
-	<Traits>
-		<Update>
-			<Set TradePartnerYieldFlatBonusPerEra="1" />
-			<Where Type="TRAIT_GATEWAY_AFRICA" />
-		</Update>
-	</Traits>
-	-->
+
+
+
+
+
+
+
+
+
 	
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_TRAIT_GATEWAY_AFRICA" />

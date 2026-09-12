@@ -16,7 +16,7 @@
 	<style name="TradeRoute" type="HexContour" width=".2" texture="hex_contour2.dds"/>
 	<style name="GUHB" type="HexContour" width=".2" texture="hex_contour2.dds"/>
 
-	<!-- HB Air Unit styles -->
+
 
 	<style name="AirRangeFill" type="FilledHex" width ="1" color="255,0,0,30" />
 	<style name="AirRangeBorder" type="SplineBorder" width ="6" texture="hex_contour1.dds" color="255,255,255,200" />
@@ -24,7 +24,7 @@
 	<style name="AirSweepFill" type="FilledHex" width ="1" color="158,158,158,90" />
 	<style name="AirSweepBorder" type="SplineBorder" width ="6" texture="hex_contour1.dds" color="255,255,255,200" />
 
-	<!-- EUI styles -->
+
 
 	<style name="Culture" type="HexContour" width=".2" texture="hex_contour2.dds" />
 

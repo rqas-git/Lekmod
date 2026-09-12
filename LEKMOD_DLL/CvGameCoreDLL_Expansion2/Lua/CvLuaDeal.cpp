@@ -1,16 +1,16 @@
-/*	-------------------------------------------------------------------------------------------------------
-	ù 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 
 #include "CvGameCoreDLLPCH.h"
 #include "CvLuaSupport.h"
 #include "CvLuaDeal.h"
 
-//Utility macro for registering methods
+
 #define Method(Name)			\
 	lua_pushcclosure(L, l##Name, 0);	\
 	lua_setfield(L, t, #Name);
@@ -19,7 +19,7 @@
 using namespace CvLuaArgs;
 TradedItemList::iterator CvLuaDeal::m_iterator;
 
-//------------------------------------------------------------------------------
+
 void CvLuaDeal::PushMethods(lua_State* L, int t)
 {
 	Method(ClearItems);
@@ -91,7 +91,7 @@ void CvLuaDeal::PushMethods(lua_State* L, int t)
 	Method(ChangeThirdPartyEmbargoDuration);
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaDeal::lRemoveByType(lua_State* L)
 {
 	CvDeal* pkDeal = GetInstance(L);
@@ -106,23 +106,23 @@ int CvLuaDeal::lRemoveByType(lua_State* L)
 }
 
 
-//------------------------------------------------------------------------------
+
 void CvLuaDeal::HandleMissingInstance(lua_State* L)
 {
 	DefaultHandleMissingInstance(L);
 }
-//------------------------------------------------------------------------------
+
 const char* CvLuaDeal::GetTypeName()
 {
 	return "Deal";
 }
-//------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
-// Lua Methods
-//------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
+
+
+
+
+
 int CvLuaDeal::lIsPossibleToTradeItem(lua_State* L)
 {
 	CvDeal* pkDeal = GetInstance(L);
@@ -139,7 +139,7 @@ int CvLuaDeal::lIsPossibleToTradeItem(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaDeal::lGetNumResource(lua_State* L)
 {
 	CvDeal* pkDeal = GetInstance(L);
@@ -151,7 +151,7 @@ int CvLuaDeal::lGetNumResource(lua_State* L)
 }
 
 #ifdef LEKMOD_LUXURY_DUPLICATE_TRADE_TOOLTIP
-//------------------------------------------------------------------------------
+
 int CvLuaDeal::lIsLuxuryTradeTargetAlreadyHasResource(lua_State* L)
 {
 	CvDeal* pkDeal = GetInstance(L);
@@ -164,7 +164,7 @@ int CvLuaDeal::lIsLuxuryTradeTargetAlreadyHasResource(lua_State* L)
 }
 #endif
 
-//------------------------------------------------------------------------------
+
 int CvLuaDeal::lResetIterator(lua_State* L)
 {
 	CvDeal* pkDeal = GetInstance(L);
@@ -172,7 +172,7 @@ int CvLuaDeal::lResetIterator(lua_State* L)
 	return 0;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaDeal::lGetNextItem(lua_State* L)
 {
 	CvDeal* pkDeal = GetInstance(L);
@@ -203,7 +203,7 @@ int CvLuaDeal::lGetNextItem(lua_State* L)
 	return 8;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaDeal::lAddVoteCommitment(lua_State* L)
 {
 	CvDeal* pkDeal = GetInstance(L);
@@ -217,7 +217,7 @@ int CvLuaDeal::lAddVoteCommitment(lua_State* L)
 	return 0;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaDeal::lRemoveVoteCommitment(lua_State* L)
 {
 	CvDeal* pkDeal = GetInstance(L);

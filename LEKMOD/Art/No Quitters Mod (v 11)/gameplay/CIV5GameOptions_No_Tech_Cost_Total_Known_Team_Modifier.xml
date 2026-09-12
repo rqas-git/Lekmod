@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GameData>
-	<!-- Table data -->
+
 	<GameOptions>
 		<Row>
 			<Type>GAMEOPTION_NO_TECH_COST_TOTAL_KNOWN_TEAM_MODIFIER</Type>

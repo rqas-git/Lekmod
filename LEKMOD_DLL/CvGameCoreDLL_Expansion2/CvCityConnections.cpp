@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvCityConnections.h"
 #include "CvPlayer.h"
@@ -13,7 +13,7 @@
 #include "CvDiplomacyAI.h"
 #include "FStlContainerSerialization.h"
 
-// must be included after all other headers
+
 #include "LintFree.h"
 
 
@@ -29,20 +29,20 @@ FDataStream& operator>>(FDataStream& loadFrom, CvCityConnections::RouteInfo& wri
 	return loadFrom;
 }
 
-/// Constructor
+
 CvCityConnections::CvCityConnections(void)
 {
 	m_aRouteInfos = NULL;
 	Uninit();
 }
 
-/// Destructor
+
 CvCityConnections::~CvCityConnections(void)
 {
 	Uninit();
 }
 
-/// Init
+
 void CvCityConnections::Init(CvPlayer* pPlayer)
 {
 	CvBuildingXMLEntries* pkBuildingEntries = GC.GetGameBuildings();
@@ -73,7 +73,7 @@ void CvCityConnections::Init(CvPlayer* pPlayer)
 	m_aPlotRouteInfos.clear();
 }
 
-/// Uninit
+
 void CvCityConnections::Uninit(void)
 {
 	m_pPlayer = NULL;
@@ -87,10 +87,10 @@ void CvCityConnections::Uninit(void)
 #endif
 }
 
-/// Serialization read
+
 void CvCityConnections::Read(FDataStream& kStream)
 {
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion;
 	kStream >> uiVersion;
 
@@ -102,7 +102,7 @@ void CvCityConnections::Read(FDataStream& kStream)
 		kStream >> m_aRouteInfos[ui].m_cRouteState;
 	}
 
-	// read in city ids
+
 	int iNumCityIDs;
 	kStream >> iNumCityIDs;
 	m_aiCityPlotIDs.clear();
@@ -114,10 +114,10 @@ void CvCityConnections::Read(FDataStream& kStream)
 	}
 }
 
-/// Serialization write
+
 void CvCityConnections::Write(FDataStream& kStream) const
 {
-	// Current version number
+
 	uint uiVersion = 1;
 	kStream << uiVersion;
 
@@ -135,7 +135,7 @@ void CvCityConnections::Write(FDataStream& kStream) const
 	}
 }
 
-/// Update - called from within CvPlayer
+
 void CvCityConnections::Update(void)
 {
 	if(m_pPlayer->isBarbarian())
@@ -149,7 +149,7 @@ void CvCityConnections::Update(void)
 	BroadcastPlotRouteStateChanges();
 }
 
-/// Update the city ids to the correct ones
+
 void CvCityConnections::UpdateCityPlotIDs(void)
 {
 	ResetCityPlotIDs();
@@ -170,7 +170,7 @@ void CvCityConnections::UpdateCityPlotIDs(void)
 
 		if(ePlayerTeam == eMyPlayerTeam)
 		{
-			// player's city
+
 			for(pLoopCity = GET_PLAYER(ePlayer).firstCity(&iLoop); pLoopCity != NULL; pLoopCity = GET_PLAYER(ePlayer).nextCity(&iLoop))
 			{
 				CvAssertMsg(pLoopCity->plot(), "pLoopCity does not have a plot. What??");
@@ -202,7 +202,7 @@ CvCityConnections::RouteInfo* CvCityConnections::GetRouteInfo(uint uiFirstCityIn
 	return &(m_aRouteInfos[uiFirstCityIndex * m_uiRouteInfosDimension + uiSecondCityIndex]);
 }
 
-/// Reset the route info array to have empty data
+
 void CvCityConnections::ResetRouteInfo(void)
 {
 	RouteInfo* pRouteInfo = NULL;
@@ -226,14 +226,14 @@ void CvCityConnections::UpdateRouteInfo(void)
 {
 	RouteTypes eBestRouteType = m_pPlayer->getBestRoute();
 
-	// build city list
+
 	FStaticVector<CvCity*, SAFE_ESTIMATE_NUM_CITIES, true, c_eCiv5GameplayDLL, 0> vpCities;
 	CvCity* pLoopCity = NULL;
 	int iLoop;
 
 	bool bAllowWaterRoutes = false;
 
-	// add all the cities we control and those that we want to connect to
+
 	for(uint ui = 0; ui < MAX_CIV_PLAYERS; ui++)
 	{
 		PlayerTypes ePlayer = (PlayerTypes)ui;
@@ -244,7 +244,7 @@ void CvCityConnections::UpdateRouteInfo(void)
 
 		if(ePlayer == m_pPlayer->GetID())
 		{
-			// player's city
+
 			for(pLoopCity = m_pPlayer->firstCity(&iLoop); pLoopCity != NULL; pLoopCity = m_pPlayer->nextCity(&iLoop))
 			{
 				vpCities.push_back(pLoopCity);
@@ -279,14 +279,14 @@ void CvCityConnections::UpdateRouteInfo(void)
 	}
 	ResetRouteInfo();
 
-	// if the player can't build any routes, then we don't need to check this
+
 	if(eBestRouteType == NO_ROUTE && !bAllowWaterRoutes)
 	{
 		return;
 	}
 
-	// These inputs stay fixed during this update; resolve them once per city.
-	// vpCities also has a different membership/order from m_aiCityPlotIDs.
+
+
 	std::vector<uint> aiCityRouteIndices(vpCities.size());
 	std::vector<unsigned char> abCityCanUseWaterRoutes(vpCities.size(), 0);
 	for(uint uiCityIndex = 0; uiCityIndex < vpCities.size(); uiCityIndex++)
@@ -307,19 +307,19 @@ void CvCityConnections::UpdateRouteInfo(void)
 		}
 	}
 
-	// pass 0 = can cities connect via water routes
-	// pass 1 = can cities connect via land and water routes
+
+
 #ifdef AUI_WARNING_FIXES
 	for (char iPass = 0; iPass < 2; iPass++)
 #else
 	for(int iPass = 0; iPass < 2; iPass++)
 #endif
 	{
-		if(iPass == 0 && !bAllowWaterRoutes)  // if in the first pass, we can't embark, skip
+		if(iPass == 0 && !bAllowWaterRoutes)
 		{
 			continue;
 		}
-		else if(iPass == 1 && eBestRouteType == NO_ROUTE)  // if in the second pass, we can't build a road, skip
+		else if(iPass == 1 && eBestRouteType == NO_ROUTE)
 		{
 			continue;
 		}
@@ -337,7 +337,7 @@ void CvCityConnections::UpdateRouteInfo(void)
 
 			for(uint uiSecondCityIndex = 0; uiSecondCityIndex < vpCities.size(); uiSecondCityIndex++)
 			{
-				// same city! ignore
+
 				if(uiSecondCityIndex == uiFirstCityIndex)
 				{
 					continue;
@@ -348,13 +348,13 @@ void CvCityConnections::UpdateRouteInfo(void)
 				RouteInfo* pRouteInfo = GetRouteInfo(iFirstCityArrayIndex, iSecondCityArrayIndex);
 				RouteInfo* pInverseRouteInfo = GetRouteInfo(iSecondCityArrayIndex, iFirstCityArrayIndex);
 
-				// bail if either are null
+
 				if(!pRouteInfo || !pInverseRouteInfo)
 				{
 					continue;
 				}
 
-				// if the route has already been evaluated, copy the data
+
 				if(pInverseRouteInfo->m_cPassEval > iPass)
 				{
 					pRouteInfo->m_cPassEval = pInverseRouteInfo->m_cPassEval;
@@ -362,17 +362,17 @@ void CvCityConnections::UpdateRouteInfo(void)
 					continue;
 				}
 
-				// this path already has an existing route (usually water)
-				//if(pRouteInfo->m_cRouteState & (HAS_ANY_ROUTE | HAS_BEST_ROUTE | HAS_WATER_ROUTE))
-				//{
-				//	continue;
-				//}
+
+
+
+
+
 
 				pRouteInfo->m_cPassEval = iPass + 1;
 
-				if(iPass == 0)  // check water route
+				if(iPass == 0)
 				{
-					// Both cities need an active harbor and must be free of a blockade.
+
 					if(!abCityCanUseWaterRoutes[uiFirstCityIndex] || !abCityCanUseWaterRoutes[uiSecondCityIndex])
 					{
 						continue;
@@ -383,12 +383,12 @@ void CvCityConnections::UpdateRouteInfo(void)
 						pRouteInfo->m_cRouteState |= HAS_ANY_ROUTE | HAS_WATER_ROUTE;
 					}
 				}
-				else if(iPass == 1)  // check land route
+				else if(iPass == 1)
 				{
 					bool bAnyRouteFound = false;
 					bool bBestRouteFound = false;
 
-					// assuming that there are fewer than 256 players
+
 					int iRouteValue = eBestRouteType + 1;
 					int iPathfinderFlags = (iRouteValue << 8);
 
@@ -415,7 +415,7 @@ void CvCityConnections::UpdateRouteInfo(void)
 						pRouteInfo->m_cRouteState |= HAS_ANY_ROUTE;
 					}
 
-					// walk through the nodes for plot route info
+
 					if(pFirstCity->isCapital() || pSecondCity->isCapital())
 					{
 						if(bAnyRouteFound)
@@ -439,13 +439,13 @@ void CvCityConnections::UpdateRouteInfo(void)
 	}
 }
 
-/// Reset the city id array to have invalid data
+
 void CvCityConnections::ResetCityPlotIDs(void)
 {
 	m_aiCityPlotIDs.clear();
 }
 
-/// if there are no cities in the route list
+
 bool CvCityConnections::IsEmpty(void)
 {
 	if(m_aiCityPlotIDs.size() > 0)
@@ -458,7 +458,7 @@ bool CvCityConnections::IsEmpty(void)
 	}
 }
 
-/// Get the index value from the city passed in
+
 uint CvCityConnections::GetIndexFromCity(CvCity* pCity)
 {
 	CvCity* pOtherCity = NULL;
@@ -507,7 +507,7 @@ bool CvCityConnections::ShouldConnectToOtherPlayer(PlayerTypes eOtherPlayer)
 {
 	bool result = false;
 
-	// shouldn't be able to connect to yourself
+
 	if(m_pPlayer->GetID() == eOtherPlayer)
 	{
 		return false;
@@ -525,7 +525,7 @@ bool CvCityConnections::ShouldConnectToOtherPlayer(PlayerTypes eOtherPlayer)
 
 	CvPlayer* pOtherPlayer = &(GET_PLAYER(eOtherPlayer));
 
-	// only majors and minors should connect to each other at this point.
+
 	bool bMajorMinor = m_pPlayer->isMinorCiv() != pOtherPlayer->isMinorCiv();
 	if(!bMajorMinor)
 	{
@@ -536,7 +536,7 @@ bool CvCityConnections::ShouldConnectToOtherPlayer(PlayerTypes eOtherPlayer)
 	{
 		CvPlayer* pMajorCiv = pOtherPlayer;
 
-		// If the major is a human, don't decide a connection to a minor is desirable on their behalf
+
 		if(pMajorCiv->isHuman())
 		{
 			return false;
@@ -549,7 +549,7 @@ bool CvCityConnections::ShouldConnectToOtherPlayer(PlayerTypes eOtherPlayer)
 
 		result = true;
 	}
-	else // player is a major
+	else
 	{
 		CvPlayer* pMinorPlayer = pOtherPlayer;
 		if(!pMinorPlayer->isAlive())
@@ -557,7 +557,7 @@ bool CvCityConnections::ShouldConnectToOtherPlayer(PlayerTypes eOtherPlayer)
 			return false;
 		}
 
-		// If the major is a human, don't decide a connection to a minor is desirable on their behalf
+
 		if(m_pPlayer->isHuman())
 		{
 			return false;
@@ -602,7 +602,7 @@ void CvCityConnections::BroadcastPlotRouteStateChanges(void)
 		{
 			if(!(m_aPlotRouteInfos[ui].m_bPlotRouteState & CONNECTION))
 			{
-				// indicate removed route
+
 				CvPlot* pPlot = GC.getMap().plotByIndex(m_aPlotRouteInfos[ui].m_iPlotIndex);
 				pPlot->SetTradeRoute(m_pPlayer->GetID(), false);
 			}
@@ -611,7 +611,7 @@ void CvCityConnections::BroadcastPlotRouteStateChanges(void)
 		{
 			if(m_aPlotRouteInfos[ui].m_bPlotRouteState & CONNECTION)
 			{
-				// broadcast new connected trade route
+
 				CvPlot* pPlot = GC.getMap().plotByIndex(m_aPlotRouteInfos[ui].m_iPlotIndex);
 				pPlot->SetTradeRoute(m_pPlayer->GetID(), true);
 			}

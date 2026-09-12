@@ -1,18 +1,18 @@
 #pragma once
 
 
-// {02891D70-8B76-412a-A8A5-5363DBF0B22B}
+
 static const GUID guidICvUserInterface1 = 
 { 0x2891d70, 0x8b76, 0x412a, { 0xa8, 0xa5, 0x53, 0x63, 0xdb, 0xf0, 0xb2, 0x2b } };
 
-// {9EB813D2-A2EE-4fbf-9433-4A8A811922EC}
+
 static const GUID guidICvUserInterface2 = 
 { 0x9eb813d2, 0xa2ee, 0x4fbf, { 0x94, 0x33, 0x4a, 0x8a, 0x81, 0x19, 0x22, 0xec } };
 
 
-//
-// abstract class containing InterfaceBuddy functions that the DLL needs
-//
+
+
+
 #include "LinkedList.h"
 
 class ICvEnumerator;
@@ -21,9 +21,9 @@ class ICvDeal1;
 
 typedef std::list<CvPopupInfo*> CvPopupQueue;
 
-//This interface has been deprecated and should no longer be used. 
-//Please use the versioned interfaces instead.
-//PROGRAMMERS: This interface is locked, do not modify this interface in ANY way.
+
+
+
 class CvDLLInterfaceIFaceBase
 {
 public:
@@ -35,7 +35,7 @@ public:
 
 	virtual void lookAtSelectionPlot(bool bRelease = false) = 0;
 
-	//virtual bool canHandleAction(int iAction, ICvPlot1* pPlot = NULL, bool bTestVisible = false) = 0;
+
 	virtual bool CanDoInterfaceMode(InterfaceModeTypes eInterfaceMode, bool bTestVisible = false) = 0;
 
 	_Ret_maybenull_ virtual ICvPlot1* getSelectionPlot() = 0;
@@ -102,8 +102,8 @@ public:
 	virtual void clearEventMessages() = 0;
 	virtual void AddPopup(const CvPopupInfo& kPopup) = 0;
 	virtual void AddPopupText( int x, int y, const char *szText, float fDelay = 0 ) = 0;
-	virtual void PublishActivePlayerTurnStart() = 0;	// Only the 'active' (local human) player
-    virtual void PublishActivePlayerTurnEnd() = 0;		// Only the 'active' (local human) player
+	virtual void PublishActivePlayerTurnStart() = 0;
+    virtual void PublishActivePlayerTurnEnd() = 0;
 	virtual void PublishRemotePlayerTurnEnd() = 0;
 	virtual void PublishPlayerTurnStatus(TURN_STATUS_TYPE eStatus, PlayerTypes ePlayer, const char* pszTag = NULL) = 0;
 	virtual void AddNotification( int iID, NotificationTypes type, const char *cTooltip, const char* cSummary, int iGameData, int iExtraGameData, PlayerTypes ePlayer, int iX = -1, int iY = -1) = 0;
@@ -248,8 +248,8 @@ public:
 };
 
 
-//THIS INTERFACE IS LOCKED.  DO NOT MODIFY IN ANY WAY.
-//This interface was used for base game/expansion 1 support.
+
+
 class ICvUserInterface1 : public ICvUnknown
 {
 public:
@@ -323,8 +323,8 @@ public:
 	virtual void clearEventMessages() = 0;
 	virtual void AddPopup(const CvPopupInfo& kPopup) = 0;
 	virtual void AddPopupText( int x, int y, const char *szText, float fDelay = 0 ) = 0;
-	virtual void PublishActivePlayerTurnStart() = 0;	// Only the 'active' (local human) player
-	virtual void PublishActivePlayerTurnEnd() = 0;		// Only the 'active' (local human) player
+	virtual void PublishActivePlayerTurnStart() = 0;
+	virtual void PublishActivePlayerTurnEnd() = 0;
 	virtual void PublishRemotePlayerTurnEnd() = 0;
 	virtual void PublishPlayerTurnStatus(CvDLLInterfaceIFaceBase::TURN_STATUS_TYPE eStatus, PlayerTypes ePlayer, const char* pszTag = NULL) = 0;
 	virtual void AddNotification( int iID, NotificationTypes type, const char *cTooltip, const char* cSummary, int iGameData, int iExtraGameData, PlayerTypes ePlayer, int iX = -1, int iY = -1) = 0;
@@ -468,13 +468,13 @@ public:
 	virtual void SetMPQuickCombatEnabled(bool bEnable) = 0;
 };
 
-//This interface contains methods necessary to support the second expansion and updates to the XP1 and base DLL
+
 class ICvUserInterface2 : public ICvUserInterface1
 {
 public:
 	static GUID DLLCALL GetInterfaceId() { return guidICvUserInterface2; }
 
 	using ICvUserInterface1::AddPopup;
-	virtual void PublishRemotePlayerTurnStart() = 0;	// Only remote human players
+	virtual void PublishRemotePlayerTurnStart() = 0;
 	virtual void AddPopup(int iPopupType, int iIntArraySize, const int *pIntArray, int iBoolArraySize, const bool *pBoolArray) = 0;
 };

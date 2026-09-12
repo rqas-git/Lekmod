@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?> 
 
-<!-- Copy-paste this table into your mod if you want to have the map make use of this -->
+
 <GameData>
 
-	<!-- new tables for map script -->
+
 	<Table name ="Resource_Preferences">
 		<Column name="ResourceType" type="text" notnull="true" />
 		<Column name="TreeRequired" type="boolean"  default="0"/>
@@ -16,32 +16,32 @@
 	</Table>
 	
 	<Resource_Preferences>
-	<!-- New table for Resources -->
-	<!--  This table handles preferences and hard setting required terrain/features. Perefences are normally done in various places in the map script. Simplified and made editable here in the database.
-		Default Frequencies are in the <Resources> table under "TilesPer" column. Editing the default frequency means you should also edit the bonus values here.
+
+
+
 		
-		##### IMPORTANT ##### Currently this table only supports global placements and only for strategics. ######## 
+
 		
-		Any terrain/features entered is treated as "spawning more/less often on x terrain/features". 
+
 		
-		The value (y) means: x resource will spawn once per y amount of tiles it is viable on.
-		Example: Iron is placed once every 10 tiles it is viable on by default. If we enter TERRAIN_TUNDRA for RESOURCE_IRON with a value of -5, 
-		then for every (10 - 5 ) = 5 tundra tiles an iron can spawn on it will be placed once every 5 rather than every 10 tiles, so twice as often. 
-		However, it will still only be placed once every 10 tiles on any other terrain it is valid (such as plains).
+
+
+
+
 		
 		
-	-->
+
 	
-	<!-- TreeRequired will force any resource to spawn with a forest/jungle depending on valid features. Unused and has no effect yet.
-		The booleans main purpose is for certain resources to still be flexable with regards to spawn rules, but still need to have a plot/feature type present.
-		Setting them anywhere here will not affect initial spawning, only cleaning them up after everything else.
-		-->
+
+
+
+
 		
-	<!-- Multiple entries for one resource is allowed, but will resort in more of the resource being placed. Duplicate entries are allowed.
-		###Important: Setting both a terrain and feature type in one row will combine them. Useful for if you want a resource to spawn more often on a feature but only in a certain biome.
-	-->
+
+
+
 	
-	<!-- Default frequency of strategics is 0, so it will only spawn on the terrain/features set here regardless of Terrain/Feature/FeatureTerrain Booleans  -->
+
 		
 		<Row>
 			<ResourceType>RESOURCE_URANIUM</ResourceType>

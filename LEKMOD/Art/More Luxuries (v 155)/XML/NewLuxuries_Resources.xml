@@ -3,7 +3,7 @@
 <GameData>
 
 	<Resources>
-		<!-- Delete any luxuries with the same name so there's no conflict. -->
+
 		<Delete Type="RESOURCE_COFFEE"/>
 		<Delete Type="RESOURCE_TEA"/>
 		<Delete Type="RESOURCE_TOBACCO"/>
@@ -14,7 +14,7 @@
 		<Delete Type="RESOURCE_GLASS"/>
 		<Delete Type="RESOURCE_CORAL"/>
 		<Delete Type="RESOURCE_LAPIS"/>
-		<!-- Delete any luxuries that may exist that are too similar as well. -->
+
 		<Delete Type="RESOURCE_CIGARS"/>
 		<Delete Type="RESOURCE_OLIVEOIL"/>
 		<Delete Type="RESOURCE_OLIVE_OIL"/>
@@ -220,7 +220,7 @@
 			<PortraitIndex>9</PortraitIndex>
 			<IconAtlas>NEWLUXURIES_RESOURCE_ATLAS</IconAtlas>
 		</Row>
-		<!-- City-State -->
+
 		<Row>
 			<Type>RESOURCE_GLASS</Type>
 			<Happiness>4</Happiness>
@@ -242,7 +242,7 @@
 			<PortraitIndex>10</PortraitIndex>
 			<IconAtlas>NEWLUXURIES_RESOURCE_ATLAS</IconAtlas>
 		</Row>
-		<!-- Existing -->
+
 		<Update>
 			<Where Type="RESOURCE_SUGAR"/>
 			<Set ArtDefineTag="ART_DEF_RESOURCE_SUGAR_ALT"/>
@@ -250,7 +250,7 @@
 	</Resources>
 
 	<Resource_YieldChanges>
-		<!-- Delete any luxuries with the same name so there's no conflict. -->
+
 		<Delete ResourceType="RESOURCE_COFFEE"/>
 		<Delete ResourceType="RESOURCE_TEA"/>
 		<Delete ResourceType="RESOURCE_TOBACCO"/>
@@ -261,7 +261,7 @@
 		<Delete ResourceType="RESOURCE_GLASS"/>
 		<Delete ResourceType="RESOURCE_CORAL"/>
 		<Delete ResourceType="RESOURCE_LAPIS"/>
-		<!-- Delete any luxuries that may exist that are too similar as well. -->
+
 		<Delete ResourceType="RESOURCE_CIGARS"/>
 		<Delete ResourceType="RESOURCE_OLIVEOIL"/>
 		<Delete ResourceType="RESOURCE_OLIVE_OIL"/>
@@ -329,7 +329,7 @@
 	</Resource_YieldChanges>
 	
 	<Resource_Flavors>
-		<!-- Delete any luxuries with the same name so there's no conflict. -->
+
 		<Delete ResourceType="RESOURCE_COFFEE"/>
 		<Delete ResourceType="RESOURCE_TEA"/>
 		<Delete ResourceType="RESOURCE_TOBACCO"/>
@@ -340,7 +340,7 @@
 		<Delete ResourceType="RESOURCE_GLASS"/>
 		<Delete ResourceType="RESOURCE_CORAL"/>
 		<Delete ResourceType="RESOURCE_LAPIS"/>
-		<!-- Delete any luxuries that may exist that are too similar as well. -->
+
 		<Delete ResourceType="RESOURCE_CIGARS"/>
 		<Delete ResourceType="RESOURCE_OLIVEOIL"/>
 		<Delete ResourceType="RESOURCE_OLIVE_OIL"/>

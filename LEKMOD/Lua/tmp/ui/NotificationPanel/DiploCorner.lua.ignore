@@ -1,30 +1,30 @@
--------------------------------------------------
--- Diplomacy and Advisors Buttons that float out in the screen
--------------------------------------------------
--- edit:
---     Ingame Hotkey Manager – extended controls
---     Restore messages on game load
---     Emote Picker Menu
--- for vanilla UI
--------------------------------------------------
+
+
+
+
+
+
+
+
+
 g_needsUpdate = true;
 g_bWaitForKeyUp = false;
--- NEW: simple map from legacy KB to VK keycodes
+
 g_KeyMap = { 27, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 189, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80,
     81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 187, 8, 9, 219, 220, 13, 162, 186, 222, 192, 160, 220, 188, 190, 191, 161, 106,
     164, 32, 20, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 144, 145, 103, 104, 105, 109, 100, 101, 102, 107, 97, 98,
     99, 96, 110, 122, 123, -1, -1, -1, -1, -1, 163, 174, 175, -1, 111, -1, 165, 19, 36, 38, 33, 37, 39, 35, 40, 34, 45, 46 };
--- NEW update GameInfoActions for this context explicitly
--- check g_needsUpdate before any call to GameInfoActions[].HotKey property
+
+
 LuaEvents.UpdateHotkey.Add(function() g_needsUpdate = true; end);
--- NEW: search for chat control index
+
 local ToggleChat = -1;
 for actionID, action in next, GameInfoActions do
     if action.Type == 'CONTROL_TOGGLE_CHAT' then
         ToggleChat = actionID;
     end
 end
--------------------------------------------------
+
 include( "IconSupport" );
 include( "SupportFunctions"  );
 include( "InstanceManager" );
@@ -42,11 +42,11 @@ local g_pLocalTeam = Teams[ g_iLocalTeam ];
 local m_bChatOpen = not Controls.ChatPanel:IsHidden();
 
 
--------------------------------------------------
--------------------------------------------------
--- This method refreshes the entries that are in the additional information dropdown.
--- Modders can use the Lua event "AdditionalInformationDropdownGatherEntries" to 
--- add entries to the list.
+
+
+
+
+
 function RefreshAdditionalInformationEntries()
 
 	local function Popup(popupType, data1, data2)
@@ -69,10 +69,10 @@ function RefreshAdditionalInformationEntries()
 		{ text = Locale.Lookup("TXT_KEY_TRADE_ROUTE_OVERVIEW"),				call=function() Popup(ButtonPopupTypes.BUTTONPOPUP_TRADE_ROUTE_OVERVIEW); end };
 	};
 
-	-- Obtain any modder/dlc entries.
+
 	LuaEvents.AdditionalInformationDropdownGatherEntries(additionalEntries);
 	
-	-- Now that we have all entries, call methods to sort them
+
 	LuaEvents.AdditionalInformationDropdownSortEntries(additionalEntries);
 
 	 Controls.MultiPull:ClearEntries();
@@ -94,8 +94,8 @@ function RefreshAdditionalInformationEntries()
 		
 	end
 
-	-- STYLE HACK
-	-- The grid has a nice little footer that will overlap entries if it is not resized to be larger than everything else.
+
+
 	Controls.MultiPull:CalculateInternals();
 	local dropDown = Controls.MultiPull;
 	local width, height = dropDown:GetGrid():GetSizeVal();
@@ -111,8 +111,8 @@ function SortAdditionalInformationDropdownEntries(entries)
 end
 LuaEvents.AdditionalInformationDropdownSortEntries.Add(SortAdditionalInformationDropdownEntries);
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnCultureOverview()
     local popupInfo = {
         Type = ButtonPopupTypes.BUTTONPOPUP_CULTURE_OVERVIEW,
@@ -129,9 +129,9 @@ function OnEspionageButton()
 end
 Controls.EspionageButton:RegisterCallback(Mouse.eLClick, OnEspionageButton);
 
--------------------------------------------------
--- On ChatToggle
--------------------------------------------------
+
+
+
 function OnChatToggle()
 
     m_bChatOpen = not m_bChatOpen;
@@ -153,9 +153,9 @@ end
 Controls.ChatToggle:RegisterCallback( Mouse.eLClick, OnChatToggle );
 
 
--------------------------------------------------
--- NEW: bSkipSound, show message timestamp on hover
--------------------------------------------------
+
+
+
 local bFlipper = false;
 function OnChat( fromPlayer, toPlayer, text, eTargetType, bSkipSound, iTurn, iTimestamp )
 
@@ -217,7 +217,7 @@ function OnChat( fromPlayer, toPlayer, text, eTargetType, bSkipSound, iTurn, iTi
 	    Events.AudioPlay2DSound( "AS2D_IF_MP_CHAT_DING" );
     end 
 
-    -- set tooltip with message timestamp info, either historical or generated ATM
+
     if ( iTurn == nil or iTimestamp == nil ) then
         iTurn = Game.GetElapsedGameTurns();
         iTimestamp = Game.GetTurnTimeElapsed();
@@ -232,9 +232,9 @@ end
 Events.GameMessageChat.Add( OnChat );
 
 
--------------------------------------------------
--- NEW: store chat messages
--------------------------------------------------
+
+
+
 function SendChat( text )
     if( string.len( text ) > 0 ) then
         if LekmodVersion.IsGameChat( text ) or LekmodVersion.IsHiddenChatProtocol( text ) then
@@ -281,23 +281,23 @@ function ChatFocus()
     Controls.ChatEntry:TakeFocus();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function ShowHideInviteButton()
 	local bShow = PreGame.IsInternetGame();
 	Controls.MPInvite:SetHide( not bShow );
 end
 
--------------------------------------------------
--- On MPInvite
--------------------------------------------------
+
+
+
 function OnMPInvite()
     Steam.ActivateInviteOverlay();	
 end
 Controls.MPInvite:RegisterCallback( Mouse.eLClick, OnMPInvite );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnPlayerDisconnect( playerID )
     if( ContextPtr:IsHidden() == false ) then
     	ShowHideInviteButton();
@@ -305,8 +305,8 @@ function OnPlayerDisconnect( playerID )
 end
 Events.MultiplayerGamePlayerDisconnected.Add( OnPlayerDisconnect );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function ShowHideHandler( bIsHide )
     Controls.CornerAnchor:SetHide( false );
     
@@ -317,11 +317,11 @@ function ShowHideHandler( bIsHide )
 end
 ContextPtr:SetShowHideHandler( ShowHideHandler );
 
--------------------------------------------------
--------------------------------------------------
--- NEW: replace input handles with configurable variables
+
+
+
 function InputHandler( uiMsg, wParam, lParam )
-    -- NEW: update GameInfoActions now?
+
     if g_needsUpdate == true then
         Game.UpdateActions();
         g_needsUpdate = false;
@@ -330,7 +330,7 @@ function InputHandler( uiMsg, wParam, lParam )
         if( m_bChatOpen and not g_bWaitForKeyUp ) then
             g_bWaitForKeyUp = true;
             ContextPtr:SetUpdate(ChatFocus);
-        -- show chat if hidden
+
         elseif not g_bWaitForKeyUp then
             g_bWaitForKeyUp = true;
             OnChatToggle();
@@ -344,38 +344,38 @@ end
 ContextPtr:SetInputHandler( InputHandler );
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function OnSocialPoliciesClicked()
     Events.SerialEventGameMessagePopup( { Type = ButtonPopupTypes.BUTTONPOPUP_CHOOSEPOLICY } );
 end
 Controls.SocialPoliciesButton:RegisterCallback( Mouse.eLClick, OnSocialPoliciesClicked );
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function OnDiploClicked()
     Controls.DiploList:SetHide( not Controls.DiploList:IsHidden() );
-    -- Events.SerialEventGameMessagePopup( { Type = ButtonPopupTypes.BUTTONPOPUP_DIPLOMACY } );
+
 end
 Controls.DiploButton:RegisterCallback( Mouse.eLClick, OnDiploClicked );
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function OnOpenPlayerDealScreen( iOtherPlayer )
     local iUs = Game.GetActivePlayer();
     local iUsTeam = Players[ iUs ]:GetTeam();
     local pUsTeam = Teams[ iUsTeam ];
 
-    -- any time we're legitimately opening the pvp deal screen, make sure we hide the diplolist.
+
     local iOtherTeam = Players[iOtherPlayer]:GetTeam();
     local iProposalTo = UI.HasMadeProposal( iUs );
    
-	  -- this logic should match OnOpenPlayerDealScreen in TradeLogic.lua, DiploCorner.lua, and DiploList.lua  
-    if( (pUsTeam:IsAtWar( iOtherTeam ) and (g_bAlwaysWar or g_bNoChangeWar) ) or																					 -- Always at War
-	    (iProposalTo ~= -1 and iProposalTo ~= iOtherPlayer and not UI.ProposedDealExists(iOtherPlayer, iUs)) ) then -- Only allow one proposal from us at a time.
-	    -- do nothing
+
+    if( (pUsTeam:IsAtWar( iOtherTeam ) and (g_bAlwaysWar or g_bNoChangeWar) ) or
+	    (iProposalTo ~= -1 and iProposalTo ~= iOtherPlayer and not UI.ProposedDealExists(iOtherPlayer, iUs)) ) then
+
 	    return;
     else
         Controls.CornerAnchor:SetHide( true );
@@ -385,8 +385,8 @@ end
 Events.OpenPlayerDealScreenEvent.Add( OnOpenPlayerDealScreen );
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function OnChatTarget( iTeam, iPlayer )
     g_iChatTeam = iTeam;
     g_iChatPlayer = iPlayer;
@@ -406,14 +406,14 @@ end
 Controls.ChatPull:RegisterSelectionCallback( OnChatTarget );
 
 
--------------------------------------------------------
--------------------------------------------------------
+
+
 function PopulateChatPull()
 
     Controls.ChatPull:ClearEntries();
 
-    -------------------------------------------------------
-    -- Add All Entry
+
+
     local controlTable = {};
     Controls.ChatPull:BuildEntry( "InstanceOne", controlTable );
     controlTable.Button:SetVoids( -1, -1 );
@@ -421,8 +421,8 @@ function PopulateChatPull()
     textControl:LocalizeAndSetText( "TXT_KEY_DIPLO_TO_ALL" );
 
 
-    -------------------------------------------------------
-    -- See if Team has more than 1 other human member
+
+
     local iTeamCount = 0;
     for iPlayer = 0, GameDefines.MAX_PLAYERS do
         local pPlayer = Players[iPlayer];
@@ -441,8 +441,8 @@ function PopulateChatPull()
     end
 
 
-    -------------------------------------------------------
-    -- Humans
+
+
     for iPlayer = 0, GameDefines.MAX_PLAYERS do
         local pPlayer = Players[iPlayer];
 
@@ -462,8 +462,8 @@ end
 Events.MultiplayerGamePlayerUpdated.Add(PopulateChatPull);
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function DoUpdateLeagueCountdown()
 	local bHide = true;
 	local sTooltip = Locale.ConvertTextKey("TXT_KEY_EO_DIPLOMACY");
@@ -495,11 +495,11 @@ function DoUpdateLeagueCountdown()
 end
 Events.SerialEventGameDataDirty.Add(DoUpdateLeagueCountdown);
 
--- Also call it once so it starts correct - surprisingly enough, GameData isn't dirtied as we're loading a game
+
 DoUpdateLeagueCountdown();
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function DoUpdateEspionageButton()
 	local iLocalPlayer = Game.GetActivePlayer();
 	local pLocalPlayer = Players[iLocalPlayer];
@@ -520,10 +520,10 @@ function DoUpdateEspionageButton()
 end
 Events.SerialEventEspionageScreenDirty.Add(DoUpdateEspionageButton);
 
---------------------------------------------------------------------
+
 function HandleNotificationAdded(notificationId, notificationType, toolTip, summary, gameValue, extraGameData)
 	
-	-- In the event we receive a new spy, make sure the large button is displayed.
+
 	if(ContextPtr:IsHidden() == false) then
 		if(notificationType == NotificationTypes.NOTIFICATION_SPY_CREATED_ACTIVE_PLAYER) then
 			CheckEspionageStarted();
@@ -534,8 +534,8 @@ Events.NotificationAdded.Add(HandleNotificationAdded);
 
 DoUpdateEspionageButton();
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 if( Game.IsGameMultiPlayer() ) then
     PopulateChatPull();
 
@@ -546,8 +546,8 @@ if( Game.IsGameMultiPlayer() ) then
 end
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function OnEndGameButton()
 
     local which = math.random( 1, 6 );
@@ -563,13 +563,13 @@ end
 Controls.EndGameButton:RegisterCallback( Mouse.eLClick, OnEndGameButton );
 
 local g_PerPlayerState = {};
-----------------------------------------------------------------
--- 'Active' (local human) player has changed
-----------------------------------------------------------------
+
+
+
 function OnDiploCornerActivePlayerChanged( iActivePlayer, iPrevActivePlayer )
-	-- Restore the state per player
+
 	local bIsHidden = Controls.DiploList:IsHidden() == true;
-	-- Save the state per player
+
 	if (iPrevActivePlayer ~= -1) then
 		g_PerPlayerState[ iPrevActivePlayer + 1 ] = bIsHidden;
 	end
@@ -618,23 +618,23 @@ Events.ActivePlayerTurnStart.Add(OnActivePlayerTurnStart);
 
 OnActivePlayerTurnStart();
 
---Hide CultureOverview, if disabled.
+
 if(Game.IsOption("GAMEOPTION_NO_CULTURE_OVERVIEW_UI")) then
 	Controls.CultureOverviewButton:SetHide(true);
 end
 
--- NEW: disable chatpull in tournament mode
+
 if PreGame.GetGameOption("GAMEOPTION_DISABLE_CHAT") > 0 then
     Controls.ChatPull:SetDisabled(true);
 end
 
--- NEW: add saved chat messages on load
+
 function LoadChatMessages()
     local messages = Game.GetReplayMessages();
     local iLocalPlayer = Game.GetActivePlayer();
     local iLocalTeam = Players[iLocalPlayer]:GetTeam();
     for i,message in ipairs(messages) do
-        if (message.Type == 7) then -- chat message
+        if (message.Type == 7) then
             print(message.Player, message.Data1, message.Data2, message.Text);
             local eTarget = message.Data1;
             local toPlayer = message.Data2;
@@ -645,7 +645,7 @@ function LoadChatMessages()
     end
 end
 
--- Import lobby chat history persisted by StagingRoom on launch, then write into replay so it survives save/reload.
+
 function ImportLobbyChatHistory()
     local userData = Modding.OpenUserData("LekmodLobbyChat", 1);
     local count = tonumber(userData.GetValue("count") or 0);
@@ -668,7 +668,7 @@ function ImportLobbyChatHistory()
                 end
             end
             table.insert(messages, { fromPlayer = fromPlayer, text = text });
-            -- Persist into replay for save/reload (display is done via OnChat below).
+
             if hasReplayApi then
                 pcall(function()
                     local replayText = bGameChat and LekmodVersion.EncodeGameChat( text ) or text;
@@ -683,7 +683,7 @@ function ImportLobbyChatHistory()
     return messages;
 end
 
--- NEW: populate Emote Picker
+
 Controls.EmotePickerButton:RegisterCallback( Mouse.eLClick, function() Controls.EmotePicker:SetHide(not Controls.EmotePicker:IsHidden()) end );
 for i in GameInfo.IconFontMapping('1 ORDER BY LENGTH(IconFontTexture), rowid') do
     local ins = {};
@@ -695,7 +695,7 @@ end
 Controls.EmotesScrollPanel:ReprocessAnchoring()
 Controls.EmotesScrollPanel:CalculateInternalSize()
 
--- Load any existing replay chat first, then inject lobby history into the visible chat.
+
 LoadChatMessages();
 local lobbyChatMessages = ImportLobbyChatHistory();
 for _, msg in ipairs(lobbyChatMessages) do

@@ -1,18 +1,18 @@
-//---------------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------
-//
-//
-//                  FTempHeap
-//
-//  Designed to create a safe global scratch pool for systems to use temporarily
-//
-//---------------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #ifndef FTEMP_HEAP_H
 #define FTEMP_HEAP_H
@@ -49,18 +49,18 @@ public:
     
         enum { eWriteShift = 16 };
     
-        //-----------------------------------------------------------
+
         class WriteLock_Infinite
         {
         public:
     
             WriteLock_Infinite(volatile LONG& uiLockRef);
-            ~WriteLock_Infinite() {m_uiLock=0;} // one writer allowed at a time so this does not need to be atomic
+            ~WriteLock_Infinite() {m_uiLock=0;}
     
             volatile LONG& m_uiLock;
         };
     
-        //-----------------------------------------------------------
+
         class WriteLock_Single
         {
         public:
@@ -74,7 +74,7 @@ public:
             volatile LONG& m_uiLock;
         };
     
-        //-----------------------------------------------------------
+
         class ReadLock_Infinite
         {
         public:
@@ -86,20 +86,20 @@ public:
         };
     
     
-        //-----------------------------------------------------------
-        //-----------------------------------------------------------
+
+
         typedef WriteLock_Infinite WRITE_LOCK_INFINITE;
         typedef WriteLock_Single   WRITE_LOCK_SINGLE;
         typedef ReadLock_Infinite  READ_LOCK_INFINITE;
     
-        //-----------------------------------------------------------
+
         volatile LONG& Acquire() { return m_uiLock; }
     
         __declspec( align(16)) volatile LONG m_uiLock;
     };
 
     uint GetCapacity() const { return m_uiCapacity; };
-	// Be careful, this is not thread-safe, so you can get an erroneous number back if allocations are happening when you query.
+
 	uint GetAvailable() const { return m_uiCapacity - m_uiCurrentOffset; };
 
     void AssertIfNotCompletelyReleased() const
@@ -127,25 +127,25 @@ TempHeap* GetTempHeap();
 #else
 extern TempHeap* GetTempHeap();
 #endif
-//extern void BindTempHeapProc();
+
 #else
 extern "C" {
 	__declspec(dllexport) TempHeap* GetTempHeap();
     extern TempHeap g_TempHeap;
 
 
-//extern void SetDLLTempHeap(TempHeap* pTempHeap);
+
 };
 #endif
 
 
-//====================================================================================================
-// Temp heap allocator for FFastVector
-//====================================================================================================
+
+
+
 struct FTempHeapFastVectorAllocator
 {
 #ifdef AUI_WARNING_FIXES
-	static void* AllocAligned(unsigned int nBytes, unsigned int nAlign, unsigned int /*nAllocPool*/, unsigned int /*nAllocSubID*/)
+	static void* AllocAligned(unsigned int nBytes, unsigned int nAlign, unsigned int               , unsigned int                )
 #else
 	static void* AllocAligned( unsigned int nBytes, unsigned int nAlign, unsigned int nAllocPool, unsigned int nAllocSubID )
 #endif
@@ -171,9 +171,9 @@ struct FTempHeapFastVectorAllocator
 };
 
 
-//====================================================================================================
-/// A scoped wrapper for allocations from the temp heap
-//====================================================================================================
+
+
+
 template< class T, int POOL, int TAG >
 class FTempArray : public FUncopyable
 {
@@ -214,5 +214,3 @@ private:
 
 
 #endif
-
-

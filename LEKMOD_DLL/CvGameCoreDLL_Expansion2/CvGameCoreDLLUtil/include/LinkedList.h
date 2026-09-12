@@ -1,6 +1,6 @@
 #pragma once
-// LinkedList.h
-// A doubly-linked list
+
+
 
 #ifndef		LINKEDLIST_H
 #define		LINKEDLIST_H
@@ -25,7 +25,7 @@ public:
           }
 	virtual ~CLLNode() {}
 
-	tVARTYPE	m_data;		//list of vartype
+	tVARTYPE	m_data;
 
 protected:
 
@@ -101,8 +101,8 @@ protected:
 
 
 
-//constructor
-//resets local vars
+
+
 template <class tVARTYPE>
 inline CLinkList<tVARTYPE>::CLinkList()
 {
@@ -113,8 +113,8 @@ inline CLinkList<tVARTYPE>::CLinkList()
 }
 
 
-//Destructor
-//resets local vars
+
+
 template <class tVARTYPE>
 inline CLinkList<tVARTYPE>::~CLinkList()
 {
@@ -143,7 +143,7 @@ inline void CLinkList<tVARTYPE>::clear()
 }
 
 
-//inserts at the tail of the list
+
 template <class tVARTYPE>
 inline void CLinkList<tVARTYPE>::insertAtBeginning(const tVARTYPE& val)
 {	
@@ -169,7 +169,7 @@ inline void CLinkList<tVARTYPE>::insertAtBeginning(const tVARTYPE& val)
 }
 
 
-//inserts at the tail of the list
+
 template <class tVARTYPE>
 inline void CLinkList<tVARTYPE>::insertAtEnd(const tVARTYPE& val)
 {	
@@ -195,7 +195,7 @@ inline void CLinkList<tVARTYPE>::insertAtEnd(const tVARTYPE& val)
 }
 
 
-//inserts before the specified node
+
 template <class tVARTYPE>
 inline void CLinkList<tVARTYPE>::insertBefore(const tVARTYPE& val, CLLNode<tVARTYPE>* pThisNode)
 {
@@ -220,7 +220,7 @@ inline void CLinkList<tVARTYPE>::insertBefore(const tVARTYPE& val, CLLNode<tVART
 }
 
 
-//inserts after the specified node
+
 template <class tVARTYPE>
 inline void CLinkList<tVARTYPE>::insertAfter(const tVARTYPE& val, CLLNode<tVARTYPE>* pThisNode)
 {
@@ -442,7 +442,7 @@ inline void CLinkList<tVARTYPE>::swapUp(int iNum)
 		pNode->m_pPrev = pNextNode;
 		pNode->m_pNext = NULL;
 	}
-	else // ((pPrevNode == NULL) && (pNextNextNode == NULL))
+	else
 	{
 		pNextNode->m_pPrev = NULL;
 		pNextNode->m_pNext = pNode;
@@ -461,9 +461,9 @@ inline void CLinkList<tVARTYPE>::swapUp(int iNum)
 
 
 
-//
-// use when linked list contains non-streamable types
-//
+
+
+
 template < class T >
 inline void CLinkList< T >::Read( FDataStream& kStream )
 {
@@ -533,4 +533,4 @@ FDataStream & operator>>(FDataStream & loadFrom, CLinkList<ValueType> & writeTo)
 	writeTo.Read(loadFrom);
 	return loadFrom;
 }
-#endif	//LINKEDLIST_H
+#endif

@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvGameCoreDLLUtil.h"
 #include "CvWonderProductionAI.h"
@@ -14,29 +14,29 @@
 #include "CvMinorCivAI.h"
 #include "CvDiplomacyAI.h"
 #include "CvInfosSerializationHelper.h"
-// include this after all other headers
+
 #include "LintFree.h"
 
 
-/// Constructor
+
 CvWonderProductionAI::CvWonderProductionAI(CvPlayer* pPlayer, CvBuildingXMLEntries* pBuildings):
 	m_pPlayer(pPlayer),
 	m_pBuildings(pBuildings)
 {
 }
 
-/// Destructor
+
 CvWonderProductionAI::~CvWonderProductionAI(void)
 {
 }
 
-/// Initialize
+
 void CvWonderProductionAI::Init(CvBuildingXMLEntries* pBuildings, CvPlayer* pPlayer, bool bIsCity)
 {
-	// Init base class
+
 	CvFlavorRecipient::Init();
 
-	// Store off the pointer to the buildings for this game
+
 	m_pBuildings = pBuildings;
 	m_pPlayer = pPlayer;
 	m_bIsCity = bIsCity;
@@ -44,15 +44,15 @@ void CvWonderProductionAI::Init(CvBuildingXMLEntries* pBuildings, CvPlayer* pPla
 	Reset();
 }
 
-/// Clear out AI local variables
+
 void CvWonderProductionAI::Reset()
 {
 	CvAssertMsg(m_pBuildings != NULL, "Wonder Production AI init failure: building entries are NULL");
 
-	// Reset vector
+
 	m_WonderAIWeights.clear();
 
-	// Loop through reading each one and adding it to our vector
+
 	if(m_pBuildings)
 	{
 #ifdef AUI_WARNING_FIXES
@@ -66,10 +66,10 @@ void CvWonderProductionAI::Reset()
 	}
 }
 
-/// Serialization read
+
 void CvWonderProductionAI::Read(FDataStream& kStream)
 {
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion;
 	kStream >> uiVersion;
 
@@ -85,10 +85,10 @@ void CvWonderProductionAI::Read(FDataStream& kStream)
 
 	CvAssertMsg(m_pBuildings != NULL, "Wonder Production AI init failure: building entries are NULL");
 
-	// Reset vector
+
 	m_WonderAIWeights.clear();
 
-	// Loop through reading each one and adding it to our vector
+
 	if(m_pBuildings)
 	{
 #ifdef AUI_WARNING_FIXES
@@ -128,10 +128,10 @@ void CvWonderProductionAI::Read(FDataStream& kStream)
 	}
 }
 
-/// Serialization write
+
 void CvWonderProductionAI::Write(FDataStream& kStream) const
 {
-	// Current version number
+
 	uint uiVersion = 1;
 	kStream << uiVersion;
 
@@ -144,7 +144,7 @@ void CvWonderProductionAI::Write(FDataStream& kStream) const
 		int iNumBuildings = m_pBuildings->GetNumBuildings();
 		kStream << iNumBuildings;
 
-		// Loop through writing each entry
+
 		for(int iI = 0; iI < iNumBuildings; iI++)
 		{
 			const BuildingTypes eBuilding = static_cast<BuildingTypes>(iI);
@@ -166,10 +166,10 @@ void CvWonderProductionAI::Write(FDataStream& kStream) const
 	}
 }
 
-/// Respond to a new set of flavor values
+
 void CvWonderProductionAI::FlavorUpdate()
 {
-	// Broadcast to our sub AI objects
+
 	for(int iFlavor = 0; iFlavor < GC.getNumFlavorTypes(); iFlavor++)
 	{
 		int iFlavorValue = GetLatestFlavorValue((FlavorTypes)iFlavor);
@@ -177,7 +177,7 @@ void CvWonderProductionAI::FlavorUpdate()
 	}
 }
 
-/// Establish weights for one flavor; can be called multiple times to layer strategies
+
 void CvWonderProductionAI::AddFlavorWeights(FlavorTypes eFlavor, int iWeight)
 {
 #ifdef AUI_PER_CITY_WONDER_PRODUCTION_AI
@@ -204,7 +204,7 @@ void CvWonderProductionAI::AddFlavorWeights(FlavorTypes eFlavor, int iWeight)
 		pReligion = GC.getGame().GetGameReligions()->GetReligion(pCapitol->GetCityReligions()->GetReligiousMajority(), m_pPlayer->GetID());
 #endif
 #endif
-	// Loop through all buildings (even though we're only go to do anything on wonders)
+
 #ifdef AUI_WARNING_FIXES
 	for (uint iBldg = 0; iBldg < m_pBuildings->GetNumBuildings(); iBldg++)
 #else
@@ -217,7 +217,7 @@ void CvWonderProductionAI::AddFlavorWeights(FlavorTypes eFlavor, int iWeight)
 			CvBuildingEntry& kBuilding = *entry;
 			if(IsWonder(kBuilding))
 			{
-				// Set its weight by looking at wonder's weight for this flavor and using iWeight multiplier passed in
+
 #if defined(AUI_POLICY_BUILDING_CLASS_FLAVOR_MODIFIERS) || defined(AUI_BELIEF_BUILDING_CLASS_FLAVOR_MODIFIERS) || defined(AUI_BUILDING_PRODUCTION_AI_LUA_FLAVOR_WEIGHTS) || (defined(AUI_BUILDING_PRODUCTION_AI_CONSIDER_FREE_STUFF) && defined(AUI_PER_CITY_WONDER_PRODUCTION_AI))
 				int iFlavorValue = entry->GetFlavorValue(eFlavor);
 #endif
@@ -265,7 +265,7 @@ void CvWonderProductionAI::AddFlavorWeights(FlavorTypes eFlavor, int iWeight)
 	}
 }
 
-/// Retrieve sum of weights on one item
+
 int CvWonderProductionAI::GetWeight(BuildingTypes eBldg)
 {
 #if defined(AUI_BUILDING_PRODUCTION_AI_CONSIDER_FREE_STUFF) && defined(AUI_PER_CITY_WONDER_PRODUCTION_AI)
@@ -303,7 +303,7 @@ int CvWonderProductionAI::GetWeight(BuildingTypes eBldg)
 				{
 					UnitTypes eCurrentUnitType = pLoopUnit->getUnitType();
 
-					// check for duplicate unit
+
 					bool bAddUnit = true;
 					for (uint ui = 0; ui < aExtraUnits.size(); ui++)
 					{
@@ -331,7 +331,7 @@ int CvWonderProductionAI::GetWeight(BuildingTypes eBldg)
 #endif
 }
 
-/// Recommend highest-weighted wonder, also return total weight of all buildable wonders
+
 BuildingTypes CvWonderProductionAI::ChooseWonder(bool bUseAsyncRandom, bool bAdjustForOtherPlayers, int& iWonderWeight)
 {
 #ifdef AUI_WARNING_FIXES
@@ -346,7 +346,7 @@ BuildingTypes CvWonderProductionAI::ChooseWonder(bool bUseAsyncRandom, bool bAdj
 	RandomNumberDelegate fcn;
 	BuildingTypes eSelection;
 
-	// Use the asynchronous random number generate if "no random" is set
+
 	if(bUseAsyncRandom)
 	{
 		fcn = MakeDelegate(&GC.getGame(), &CvGame::getAsyncRandNum);
@@ -356,10 +356,10 @@ BuildingTypes CvWonderProductionAI::ChooseWonder(bool bUseAsyncRandom, bool bAdj
 		fcn = MakeDelegate(&GC.getGame(), &CvGame::getJonRandNum);
 	}
 
-	// Reset list of all the possible wonders
+
 	m_Buildables.clear();
 
-	// Guess which city will be producing this (doesn't matter that much since weights are all relative)
+
 	CvCity* pWonderCity = m_pPlayer->GetCitySpecializationAI()->GetWonderBuildCity();
 	if(pWonderCity == NULL)
 	{
@@ -376,7 +376,7 @@ BuildingTypes CvWonderProductionAI::ChooseWonder(bool bUseAsyncRandom, bool bAdj
 		iEstimatedProductionPerTurn = 1;
 	}
 
-	// Loop through adding the available wonders
+
 	for(iBldgLoop = 0; iBldgLoop < GC.GetGameBuildings()->GetNumBuildings(); iBldgLoop++)
 	{
 		const BuildingTypes eBuilding = static_cast<BuildingTypes>(iBldgLoop);
@@ -392,16 +392,16 @@ BuildingTypes CvWonderProductionAI::ChooseWonder(bool bUseAsyncRandom, bool bAdj
 			}
 #endif
 
-			// Make sure this wonder can be built now
+
 			if(IsWonder(kBuilding) && HaveCityToBuild((BuildingTypes)iBldgLoop))
 			{
 				iTurnsRequired = std::max(1, kBuilding.GetProductionCost() / iEstimatedProductionPerTurn);
 
-				// if we are forced to restart a wonder, give one that has been started already a huge bump
+
 				bool bAlreadyStarted = pWonderCity->GetCityBuildings()->GetBuildingProduction(eBuilding) > 0;
 				int iTempWeight = bAlreadyStarted ? m_WonderAIWeights.GetWeight(iBldgLoop) * 25 : m_WonderAIWeights.GetWeight(iBldgLoop);
 
-				// Don't build the UN if you aren't going for the diplo victory
+
 				if(pkBuildingInfo->IsDiplomaticVoting())
 				{
 					int iVotesNeededToWin = GC.getGame().GetVotesNeededForDiploVictory();
@@ -409,7 +409,7 @@ BuildingTypes CvWonderProductionAI::ChooseWonder(bool bUseAsyncRandom, bool bAdj
 					TeamTypes myTeamID = m_pPlayer->getTeam();
 					PlayerTypes myPlayerID = m_pPlayer->GetID();
 
-					// Loop through Players to see if they'll vote for this player
+
 					PlayerTypes eLoopPlayer;
 					TeamTypes eLoopTeam;
 					for(int iPlayerLoop = 0; iPlayerLoop < MAX_CIV_PLAYERS; iPlayerLoop++)
@@ -420,16 +420,16 @@ BuildingTypes CvWonderProductionAI::ChooseWonder(bool bUseAsyncRandom, bool bAdj
 						{
 							eLoopTeam = GET_PLAYER(eLoopPlayer).getTeam();
 
-							// Liberated?
+
 							if(GET_TEAM(eLoopTeam).GetLiberatedByTeam() == myTeamID)
 							{
 								iSecuredVotes++;
 							}
 
-							// Minor civ?
+
 							else if(GET_PLAYER(eLoopPlayer).isMinorCiv())
 							{
-								// Best Relations?
+
 								if(GET_PLAYER(eLoopPlayer).GetMinorCivAI()->GetAlly() == myPlayerID)
 								{
 									iSecuredVotes++;
@@ -450,7 +450,7 @@ BuildingTypes CvWonderProductionAI::ChooseWonder(bool bUseAsyncRandom, bool bAdj
 
 				if(bAdjustForOtherPlayers && ::isWorldWonderClass(kBuildingClassInfo))
 				{
-					// Adjust weight for this wonder down based on number of other players currently working on it
+
 					int iNumOthersConstructing = 0;
 					for(int iPlayerLoop = 0; iPlayerLoop < MAX_MAJOR_CIVS; iPlayerLoop++)
 					{
@@ -468,7 +468,7 @@ BuildingTypes CvWonderProductionAI::ChooseWonder(bool bUseAsyncRandom, bool bAdj
 		}
 	}
 
-	// Sort items and grab the first one
+
 	if(m_Buildables.size() > 0)
 	{
 		m_Buildables.SortItems();
@@ -482,14 +482,14 @@ BuildingTypes CvWonderProductionAI::ChooseWonder(bool bUseAsyncRandom, bool bAdj
 			return eSelection;
 		}
 
-		// Nothing with any weight
+
 		else
 		{
 			return NO_BUILDING;
 		}
 	}
 
-	// Unless we didn't find any
+
 	else
 	{
 		return NO_BUILDING;
@@ -497,7 +497,7 @@ BuildingTypes CvWonderProductionAI::ChooseWonder(bool bUseAsyncRandom, bool bAdj
 }
 
 
-/// Recommend highest-weighted wonder and what city to build it at
+
 BuildingTypes CvWonderProductionAI::ChooseWonderForGreatEngineer(bool bUseAsyncRandom, int& iWonderWeight, CvCity*& pCityToBuildAt)
 {
 #ifdef AUI_WARNING_FIXES
@@ -513,7 +513,7 @@ BuildingTypes CvWonderProductionAI::ChooseWonderForGreatEngineer(bool bUseAsyncR
 	pCityToBuildAt = 0;
 	iWonderWeight = 0;
 
-	// Use the asynchronous random number generate if "no random" is set
+
 	if (bUseAsyncRandom)
 	{
 		fcn = MakeDelegate(&GC.getGame(), &CvGame::getAsyncRandNum);
@@ -523,10 +523,10 @@ BuildingTypes CvWonderProductionAI::ChooseWonderForGreatEngineer(bool bUseAsyncR
 		fcn = MakeDelegate(&GC.getGame(), &CvGame::getJonRandNum);
 	}
 
-	// Reset list of all the possible wonders
+
 	m_Buildables.clear();
 
-	// Guess which city will be producing this
+
 	CvCity* pWonderCity = m_pPlayer->GetCitySpecializationAI()->GetWonderBuildCity();
 	if (pWonderCity == NULL)
 	{
@@ -537,7 +537,7 @@ BuildingTypes CvWonderProductionAI::ChooseWonderForGreatEngineer(bool bUseAsyncR
 	if (pWonderCity == NULL)
 		return NO_BUILDING;
 
-	// Loop through adding the available wonders
+
 	for (iBldgLoop = 0; iBldgLoop < GC.GetGameBuildings()->GetNumBuildings(); iBldgLoop++)
 	{
 		const BuildingTypes eBuilding = static_cast<BuildingTypes>(iBldgLoop);
@@ -551,11 +551,11 @@ BuildingTypes CvWonderProductionAI::ChooseWonderForGreatEngineer(bool bUseAsyncR
 				continue;
 			}
 #endif
-			// Make sure this wonder can be built now
+
 			if (IsWonder(kBuilding) && HaveCityToBuild((BuildingTypes)iBldgLoop))
 			{
-				iWeight = m_WonderAIWeights.GetWeight((UnitTypes)iBldgLoop); // use raw weight since this wonder is essentially free
-				// Don't build the UN if you aren't going for the diplo victory and have a chance of winning it
+				iWeight = m_WonderAIWeights.GetWeight((UnitTypes)iBldgLoop);
+
 				if(pkBuildingInfo->IsDiplomaticVoting())
 				{
 					int iVotesNeededToWin = GC.getGame().GetVotesNeededForDiploVictory();
@@ -563,7 +563,7 @@ BuildingTypes CvWonderProductionAI::ChooseWonderForGreatEngineer(bool bUseAsyncR
 					TeamTypes myTeamID = m_pPlayer->getTeam();
 					PlayerTypes myPlayerID = m_pPlayer->GetID();
 
-					// Loop through Players to see if they'll vote for this player
+
 					PlayerTypes eLoopPlayer;
 					TeamTypes eLoopTeam;
 					for(int iPlayerLoop = 0; iPlayerLoop < MAX_CIV_PLAYERS; iPlayerLoop++)
@@ -574,16 +574,16 @@ BuildingTypes CvWonderProductionAI::ChooseWonderForGreatEngineer(bool bUseAsyncR
 						{
 							eLoopTeam = GET_PLAYER(eLoopPlayer).getTeam();
 
-							// Liberated?
+
 							if(GET_TEAM(eLoopTeam).GetLiberatedByTeam() == myTeamID)
 							{
 								iSecuredVotes++;
 							}
 
-							// Minor civ?
+
 							else if(GET_PLAYER(eLoopPlayer).isMinorCiv())
 							{
-								// Best Relations?
+
 								if(GET_PLAYER(eLoopPlayer).GetMinorCivAI()->GetAlly() == myPlayerID)
 								{
 									iSecuredVotes++;
@@ -599,13 +599,13 @@ BuildingTypes CvWonderProductionAI::ChooseWonderForGreatEngineer(bool bUseAsyncR
 						iWeight = 0;
 					}
 				}
-				// ??? do we want to weight it more for more expensive wonders?
+
 				m_Buildables.push_back(iBldgLoop, iWeight);
 			}
 		}
 	}
 
-	// Sort items and grab the first one
+
 	if(m_Buildables.size() > 0)
 	{
 		m_Buildables.SortItems();
@@ -617,12 +617,12 @@ BuildingTypes CvWonderProductionAI::ChooseWonderForGreatEngineer(bool bUseAsyncR
 			eSelection = (BuildingTypes)m_Buildables.ChooseFromTopChoices(iNumChoices, &fcn, "Choosing wonder from Top Choices");
 			iWonderWeight = m_Buildables.GetTotalWeight();
 
-			// first check if the wonder city can build it
+
 			if (pWonderCity->canConstruct(eSelection))
 			{
 				pCityToBuildAt = pWonderCity;
 			}
-			// if it can't then check for other cities
+
 			else
 			{
 				CvCity* pLoopCity;
@@ -632,7 +632,7 @@ BuildingTypes CvWonderProductionAI::ChooseWonderForGreatEngineer(bool bUseAsyncR
 					if(pLoopCity->canConstruct(eSelection))
 					{
 						pCityToBuildAt = pLoopCity;
-						break; // todo: find the best city 
+						break;
 					}
 				}
 			}
@@ -640,14 +640,14 @@ BuildingTypes CvWonderProductionAI::ChooseWonderForGreatEngineer(bool bUseAsyncR
 			return eSelection;
 		}
 
-		// Nothing with any weight
+
 		else
 		{
 			return NO_BUILDING;
 		}
 	}
 
-	// Unless we didn't find any
+
 	else
 	{
 		return NO_BUILDING;
@@ -655,25 +655,25 @@ BuildingTypes CvWonderProductionAI::ChooseWonderForGreatEngineer(bool bUseAsyncR
 }
 
 
-/// Log all potential builds
+
 void CvWonderProductionAI::LogPossibleWonders()
 {
 	if(GC.getLogging() && GC.getAILogging())
 	{
-		// Find the name of this civ
+
 		CvString playerName = m_pPlayer->getCivilizationShortDescription();
 
-		// Open the log file
+
 		FILogFile* pLog = LOGFILEMGR.GetLog(m_pPlayer->GetCitySpecializationAI()->GetLogFileName(playerName), FILogFile::kDontTimeStamp);
 
-		// Get the leading info for this line
+
 		CvString strBaseString;
 		strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 		strBaseString += playerName + ", ";
 
 
 
-		// Dump out the weight of each buildable item
+
 		for(int iI = 0; iI < m_Buildables.size(); iI++)
 		{
 			CvString strOutBuf = strBaseString;
@@ -693,12 +693,12 @@ void CvWonderProductionAI::LogPossibleWonders()
 	}
 }
 
-/// Stub - Probably don't need to log flavors to city specialization log -- is in enough places already
+
 void CvWonderProductionAI::LogFlavors(FlavorTypes)
 {
 }
 
-/// Check to make sure this is one of the buildings we consider to be a wonder
+
 bool CvWonderProductionAI::IsWonder(const CvBuildingEntry& kBuilding) const
 {
 	const CvBuildingClassInfo& kBuildingClass = kBuilding.GetBuildingClassInfo();
@@ -712,9 +712,9 @@ bool CvWonderProductionAI::IsWonder(const CvBuildingEntry& kBuilding) const
 	return false;
 }
 
-// PRIVATE METHODS
 
-/// Check to make sure some city can build this wonder
+
+
 bool CvWonderProductionAI::HaveCityToBuild(BuildingTypes eBuilding) const
 {
 	CvCity* pLoopCity;

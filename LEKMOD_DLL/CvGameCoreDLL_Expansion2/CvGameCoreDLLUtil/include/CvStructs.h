@@ -7,10 +7,10 @@ struct CvColorA
 	float r, g, b, a;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvCombatMemberEntry
-//!  \brief		A single member in combat.
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 struct CvCombatMemberEntry {
 	PlayerTypes		m_ePlayer;
 	int				m_iID;
@@ -28,16 +28,16 @@ public:
 		MEMBER_CITY
 	};
 
-	int16			m_iDamage;		// Amount of damage for this combat
-	int16			m_iFinalDamage;	// Amount of unit damage in total (damage this combat + previous damage)
+	int16			m_iDamage;
+	int16			m_iFinalDamage;
 	int16			m_iMaxHitPoints;
-	int16			m_iX;			// Plot X
-	int16			m_iY;			// Plot X
+	int16			m_iX;
+	int16			m_iY;
 	UnitCombatTypes	m_eCombatType;
-	EraTypes		m_eEra;			// Era type for the unit/city
+	EraTypes		m_eEra;
 
-	uint32			m_uiWeaponType;		// Used for cities
-	float			m_fWeaponOption;	// Used for cities
+	uint32			m_uiWeaponType;
+	float			m_fWeaponOption;
 
 	PlayerTypes GetPlayer() const { return m_ePlayer; }
 	void		SetPlayer(PlayerTypes ePlayer) { m_ePlayer = ePlayer; }
@@ -104,7 +104,7 @@ public:
 #define POPUP_PARAM_INT_ARRAY(x)	sizeof(x)/sizeof(int), &x[0]
 #define POPUP_PARAM_BOOL_ARRAY(x)	sizeof(x)/sizeof(bool), &x[0]
 
-//------------------------------------------------------------------------------
+
 struct CvPopupInfo
 {
 public:
@@ -117,7 +117,7 @@ public:
 		, bOption2(option2)
 		, eButtonPopupType(buttonPopupType)
 	{
-		//Nothing
+
 		szText[0] = 0;
 	}
 	
@@ -146,7 +146,7 @@ struct CvMapInitData
 	{ }
 };
 
-//------------------------------------------------------------------------------
+
 struct CvWorldBuilderMapLoaderMapInfo
 {
 	unsigned int uiWidth;
@@ -171,7 +171,7 @@ struct CvWorldBuilderMapLoaderMapInfo
 
 	}
 };
-//------------------------------------------------------------------------------
+
 struct IDInfo
 {
 	IDInfo(PlayerTypes eOwner=NO_PLAYER, int iID=FFreeList::INVALID_INDEX) : eOwner(eOwner), iID(iID) {}
@@ -199,7 +199,7 @@ struct IDInfo
 		return eOwner == NO_PLAYER && iID == FFreeList::INVALID_INDEX;
 	}
 };
-//------------------------------------------------------------------------------
+
 struct UnitMoveRate 
 {
 	UnitMoveRate():m_fTotalMoveRate(1.0f),m_fEaseIn(0.0f),m_fEaseOut(0.0f),m_fIndividualOffset(0.0f), m_fRowOffset(0.0f), m_fCurveRoll(0.0f), m_iPathSubdivision(1)
@@ -214,4 +214,3 @@ struct UnitMoveRate
 	float m_fCurveRoll;
 	int   m_iPathSubdivision;
 };
-

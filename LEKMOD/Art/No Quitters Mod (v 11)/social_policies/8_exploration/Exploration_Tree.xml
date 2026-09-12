@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/6/2015 4:51:27 PM -->
+
 <GameData>
 	
-	<!-- New Policy Tree
+
 	
-				Maritime Infrastructure	 	Naval Tradition			 Colonialism
-	  			  	|_____________________________|
-	  						 |					  
-						 Navigation School
-				 		         |
-						  Treasure Fleets
+
+
+
+
+
+
 					
-		RENAMES:
-		Merchant Navy -> Colonialism
-	-->
+
+
+
 
 	<Policies>
 		<Update>

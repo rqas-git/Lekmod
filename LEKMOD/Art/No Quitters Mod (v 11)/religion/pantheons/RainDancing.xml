@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-24 14:15:24 -->
+
 <GameData>
 
-	<!-- +1 Culture and +1 Faith from Lakes and Oases. -->
+
 	<Beliefs>
 		<Row>
 			<Type>BELIEF_RAIN_DANCING</Type>
@@ -14,13 +14,13 @@
 	<Belief_FeatureYieldChanges>
 		<Row>
 			<BeliefType>BELIEF_RAIN_DANCING</BeliefType>
-			<FeatureType>FEATURE_ICE</FeatureType> <!-- Cheating!! DLL is hard-coded to use lakes instead of ice for this. Ugly but works. -->
+			<FeatureType>FEATURE_ICE</FeatureType>
 			<YieldType>YIELD_CULTURE</YieldType>
 			<Yield>1</Yield>
 		</Row>
 		<Row>
 			<BeliefType>BELIEF_RAIN_DANCING</BeliefType>
-			<FeatureType>FEATURE_ICE</FeatureType> <!-- Cheating!! DLL is hard-coded to use lakes instead of ice for this. Ugly but works. -->
+			<FeatureType>FEATURE_ICE</FeatureType>
 			<YieldType>YIELD_FAITH</YieldType>
 			<Yield>2</Yield>
 		</Row>
@@ -38,7 +38,7 @@
 		</Row>
 	</Belief_FeatureYieldChanges>
 	
-	<!-- localization -->
+
 	<Language_en_US>
 		<Row Tag="TXT_KEY_BELIEF_RAIN_DANCING">
 			<Text>+1 [ICON_CULTURE] Culture and +2 [ICON_PEACE] Faith from Lakes and Oases</Text>

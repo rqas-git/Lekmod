@@ -1,13 +1,13 @@
--------------------------------------------------
--- Bombardment
--------------------------------------------------
+
+
+
 
 local redColor = Vector4( 0.7, 0, 0, 1 );
-local highlightColor = Vector4( 0.7, 0.7, 0, 1 ); -- depending on the theme these may not actually be used (for example SplineBorder do not)
+local highlightColor = Vector4( 0.7, 0.7, 0, 1 );
 local ms_CityBombardPlayer = -1;
 local ms_CityBombardID = -1;
 
--------------------------------------------------
+
 function RangedStrikeHighlight()
 	local pHeadSelectedCity = UI.GetHeadSelectedCity();
 	local pHeadSelectedUnit = UI.GetHeadSelectedUnit();
@@ -39,10 +39,10 @@ function RangedStrikeHighlight()
 		thisTeam = pHeadSelectedUnit:GetTeam();
 		thingThatCanActuallyFire = pHeadSelectedUnit;
 		bDomainOnly = pHeadSelectedUnit:IsRangeAttackOnlyInDomain();
-		--print("bDomainOnly:"..tostring(bDomainOnly))
+
 	end
 	if thingThatCanActuallyFire ~= nil and thisPlot then
-		-- highlight the bombardable plots
+
 		local NO_DIRECTION = -1;
 		for iDX = -iRange, iRange do
 			for iDY = -iRange, iRange do
@@ -86,7 +86,7 @@ function RangedStrikeHighlight()
 	end
 end
 
--------------------------------------------------
+
 function AirStrikeHighlight()
 	local pHeadSelectedUnit = UI.GetHeadSelectedUnit();
 	local thingThatCanActuallyFire = nil;
@@ -107,7 +107,7 @@ function AirStrikeHighlight()
 		thingThatCanActuallyFire = pHeadSelectedUnit;
 	end
 	if thingThatCanActuallyFire ~= nil then
-		-- highlight the bombardable plots
+
 		local NO_DIRECTION = -1;
 		for iDX = -iRange, iRange, 1 do
 			for iDY = -iRange, iRange, 1 do
@@ -135,7 +135,7 @@ end
 
 
 
--------------------------------------------------
+
 function NukeStrikeHighlight()
 	local pHeadSelectedUnit = UI.GetHeadSelectedUnit();
 	local thingThatCanActuallyFire = nil;
@@ -155,7 +155,7 @@ function NukeStrikeHighlight()
 		thingThatCanActuallyFire = pHeadSelectedUnit;
 	end
 	if thingThatCanActuallyFire ~= nil then
-		-- highlight the nukable plots
+
 		local NO_DIRECTION = -1;
 		for iDX = -iRange, iRange, 1 do
 			for iDY = -iRange, iRange, 1 do
@@ -178,9 +178,9 @@ function NukeStrikeHighlight()
 end
 
 
--------------------------------------------------
+
 function DisplayBombardArrow( hexX, hexY )
-	--find the selected attacker
+
 	local unit = UI.GetHeadSelectedUnit();
 	local city = UI.GetHeadSelectedCity();
 	local attacker;
@@ -194,7 +194,7 @@ function DisplayBombardArrow( hexX, hexY )
 		return
 	end
 	
-	--get bombard end hex
+
 	if attacker:CanRangeStrikeAt( hexX, hexY ) then
 		Events.SpawnArrowEvent( attacker:GetX(), attacker:GetY(), hexX, hexY );
 	else
@@ -204,9 +204,9 @@ function DisplayBombardArrow( hexX, hexY )
 end
 
 
--------------------------------------------------
+
 function DisplayNukeArrow( hexX, hexY )
-	--find the selected attacker
+
 	local unit = UI.GetHeadSelectedUnit();
 	if unit and unit:CanNuke() then
 		attacker = unit
@@ -216,7 +216,7 @@ function DisplayNukeArrow( hexX, hexY )
 		return
 	end
 	
-	--get bombard end hex
+
 	if attacker:CanNukeAt( hexX, hexY ) then
 		Events.SpawnArrowEvent( attacker:GetX(), attacker:GetY(), hexX, hexY );
 	else
@@ -226,19 +226,19 @@ function DisplayNukeArrow( hexX, hexY )
 end
 
 
--------------------------------------------------
+
 function BeginRangedAttack()
 	local pHeadSelectedCity = UI.GetHeadSelectedCity();
 	local pHeadSelectedUnit = UI.GetHeadSelectedUnit();
 	
-	-- Validate the Interface Mode
+
 	local interfaceMode = UI.GetInterfaceMode();
 	if (interfaceMode == InterfaceModeTypes.INTERFACEMODE_CITY_RANGE_ATTACK) then
 		if (pHeadSelectedCity == nil) then
 			UI.SetInterfaceMode(InterfaceModeTypes.INTERFACEMODE_SELECTION);
 			return;
 		else
-			-- Keep track of the city, in case the selection changes
+
 			ms_CityBombardPlayer = pHeadSelectedCity:GetOwner();
 			ms_CityBombardID = pHeadSelectedCity:GetID();
 		end
@@ -258,17 +258,17 @@ function BeginRangedAttack()
 
 end
 
--------------------------------------------------
+
 function OnCityInfoDirty()
 	local interfaceMode = UI.GetInterfaceMode();
 	if (interfaceMode == InterfaceModeTypes.INTERFACEMODE_CITY_RANGE_ATTACK) then
 		local pHeadSelectedCity = UI.GetHeadSelectedCity();
-		-- Still selected?
+
 		if (pHeadSelectedCity == nil) then
 			UI.SetInterfaceMode(InterfaceModeTypes.INTERFACEMODE_SELECTION);
 			return;
 		end
-		-- Same city?
+
 		if (pHeadSelectedCity:GetOwner() ~= ms_CityBombardPlayer or pHeadSelectedCity:GetID() ~= ms_CityBombardID) then
 			UI.SetInterfaceMode(InterfaceModeTypes.INTERFACEMODE_SELECTION);
 		end
@@ -276,14 +276,14 @@ function OnCityInfoDirty()
 end
 Events.SerialEventCityInfoDirty.Add(OnCityInfoDirty);
 
--------------------------------------------------
+
 function EndRangedAttack()
 	Events.RemoveAllArrowsEvent();
 	Events.SerialEventMouseOverHex.Remove( DisplayBombardArrow );
 	ClearUnitHexHighlights();
 end
 
--------------------------------------------------
+
 function BeginAirAttack()
 	local pHeadSelectedUnit = UI.GetHeadSelectedUnit();
 	
@@ -294,7 +294,7 @@ function BeginAirAttack()
 
 end
 
--------------------------------------------------
+
 function EndAirAttack()
 	Events.RemoveAllArrowsEvent();
 	Events.SerialEventMouseOverHex.Remove( DisplayBombardArrow );
@@ -303,7 +303,7 @@ function EndAirAttack()
 	Events.ClearHexHighlightStyle("AirRangeBorder");
 end
 
--------------------------------------------------
+
 function BeginNukeAttack()
 	local pHeadSelectedUnit = UI.GetHeadSelectedUnit();
 	print("pHeadSelectedUnit:"..tostring(pHeadSelectedUnit))
@@ -314,7 +314,7 @@ function BeginNukeAttack()
 
 end
 
--------------------------------------------------
+
 function EndNukeAttack()
 	Events.RemoveAllArrowsEvent();
 	Events.SerialEventMouseOverHex.Remove( DisplayNukeArrow );
@@ -323,7 +323,7 @@ function EndNukeAttack()
 	Events.ClearHexHighlightStyle("AirRangeBorder");
 end
 
--------------------------------------------------
+
 function AirSweepHighlightHB()
 	local interfaceMode = UI.GetInterfaceMode()
 	if interfaceMode == InterfaceModeTypes.INTERFACEMODE_AIR_SWEEP then
@@ -350,7 +350,7 @@ function AirSweepHighlightHB()
 	end
 end
 
--------------------------------------------------
+
 function ClearHBCustomHex()
 	local interfaceMode = UI.GetInterfaceMode()
 
@@ -360,6 +360,6 @@ function ClearHBCustomHex()
 	end
 end
 
--------------------------------------------------
+
 Events.InterfaceModeChanged.Add(AirSweepHighlightHB)
 Events.InterfaceModeChanged.Add(ClearHBCustomHex)

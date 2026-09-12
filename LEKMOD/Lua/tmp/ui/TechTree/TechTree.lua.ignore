@@ -1,6 +1,6 @@
--------------------------------------------------
--- Tech Tree Popup
--------------------------------------------------
+
+
+
 include( "InstanceManager" );
 
 g_UseSmallIcons = true;
@@ -26,7 +26,7 @@ local techButtons = {};
 local eraBlocks = {};
 local eraColumns = {};
 
--- I'll need these before I'm done
+
 local playerID = Game.GetActivePlayer();	
 local player = Players[playerID];
 local civType = GameInfo.Civilizations[player:GetCivilizationType()].Type;
@@ -146,7 +146,7 @@ local function ApplyUnlockIcons( thisTechButton, tech )
 	LayoutUnlockIcons( thisTechButton, CountUnlockIcons( thisTechButton ) );
 end
 
--- textures I'll be using
+
 local right1Texture = "TechBranchH.dds"
 local right2Texture = "TechBranches.dds"
 local right2BTexture = "TechBranches.dds"
@@ -178,22 +178,22 @@ local extraYOffset = 32;
 
 local maxTechNameLength = 22 - Locale.Length(Locale.Lookup("TXT_KEY_TURNS"));
 
--------------------------------------------------
--- Do initial setup stuff here
--------------------------------------------------
+
+
+
 
 function InitialSetup()
 
-	-- make the scroll bar the correct size for the display size
+
 	Controls.TechTreeScrollBar:SetSizeX( Controls.TechTreeScrollPanel:GetSize().x - 150 );
 	
-	-- gather info about this player's unique units and buldings
+
 	GatherInfoAboutUniqueStuff( civType );
 
-	-- add the Era panels to the background
+
 	AddEraPanels();
 
-	-- add the pipes
+
 	local techPipes = {};
 	for row in GameInfo.Technologies() do
 		techPipes[row.Type] = 
@@ -215,7 +215,7 @@ function InitialSetup()
 	local cnxUp = 2
 	local cnxDown = 4
 	
-	-- Figure out which left and right adapters we need
+
 	for row in GameInfo.Technology_PrereqTechs() do
 		local prereq = GameInfo.Technologies[row.PrereqTech];
 		local tech = GameInfo.Technologies[row.TechType];
@@ -226,7 +226,7 @@ function InitialSetup()
 			elseif tech.GridY > prereq.GridY then
 				techPipes[tech.Type].leftConnectionUp = true;
 				techPipes[prereq.Type].rightConnectionDown = true;
-			else -- tech.GridY == prereq.GridY
+			else
 				techPipes[tech.Type].leftConnectionCenter = true;
 				techPipes[prereq.Type].rightConnectionCenter = true;
 			end
@@ -329,9 +329,9 @@ function InitialSetup()
 				pipe.TechPipeIcon:SetTexture(bottomRightTexture);
 				pipe.TechPipeIcon:SetTextureOffset(Vector2(72,72));
 			elseif thisPipe.rightConnectionType == 3 then
-				--pipe.TechPipeIcon:SetOffsetVal( (tech.GridX+thisPipe.xOffset)*blockSpacingX + blockSizeX + 96 - 6, yOffset - 15 );
-				--pipe.TechPipeIcon:SetTexture(right2BTexture);
-				--pipe.TechPipeIcon:SetTextureOffset(Vector2(36,72));
+
+
+
 				pipe.TechPipeIcon:SetOffsetVal( (tech.GridX)*blockSpacingX + blockSizeX + 96, yOffset );
 				pipe.TechPipeIcon:SetTexture(right1Texture);
 				pipe = g_PipeManager:GetInstance();			
@@ -343,9 +343,9 @@ function InitialSetup()
 				pipe.TechPipeIcon:SetTexture(topRightTexture);
 				pipe.TechPipeIcon:SetTextureOffset(Vector2(72,0));
 			elseif thisPipe.rightConnectionType == 5 then
-				--pipe.TechPipeIcon:SetOffsetVal( (tech.GridX)*blockSpacingX + blockSizeX + 96 - 6, yOffset );
-				--pipe.TechPipeIcon:SetTexture(right2TTexture);
-				--pipe.TechPipeIcon:SetTextureOffset(Vector2(36,0));
+
+
+
 				pipe.TechPipeIcon:SetOffsetVal( (tech.GridX)*blockSpacingX + blockSizeX + 96, yOffset );
 				pipe.TechPipeIcon:SetTexture(right1Texture);
 				pipe = g_PipeManager:GetInstance();			
@@ -353,9 +353,9 @@ function InitialSetup()
 				pipe.TechPipeIcon:SetTexture(topRightTexture);
 				pipe.TechPipeIcon:SetTextureOffset(Vector2(72,0));
 			elseif thisPipe.rightConnectionType == 6 then
-				--pipe.TechPipeIcon:SetOffsetVal( (tech.GridX+thisPipe.xOffset)*blockSpacingX + blockSizeX + 96 - 12, yOffset - 6 );
-				--pipe.TechPipeIcon:SetTexture(right2Texture);
-				--pipe.TechPipeIcon:SetTextureOffset(Vector2(72,36));
+
+
+
 				pipe.TechPipeIcon:SetOffsetVal( (tech.GridX)*blockSpacingX + blockSizeX + 96 - 12, yOffset );
 				pipe.TechPipeIcon:SetTexture(topRightTexture);
 				pipe.TechPipeIcon:SetTextureOffset(Vector2(72,0));
@@ -363,10 +363,10 @@ function InitialSetup()
 				pipe.TechPipeIcon:SetOffsetVal( (tech.GridX+thisPipe.xOffset)*blockSpacingX + blockSizeX + 96 - 12, yOffset - 15 );
 				pipe.TechPipeIcon:SetTexture(bottomRightTexture);
 				pipe.TechPipeIcon:SetTextureOffset(Vector2(72,72));
-			else-- thisPipe.rightConnectionType == 7 then
-				--pipe.TechPipeIcon:SetOffsetVal( (tech.GridX)*blockSpacingX + blockSizeX + 96 - 6, yOffset - 6 );
-				--pipe.TechPipeIcon:SetTexture(right3Texture);
-				--pipe.TechPipeIcon:SetTextureOffset(Vector2(36,36));
+			else
+
+
+
 				pipe.TechPipeIcon:SetOffsetVal( (tech.GridX)*blockSpacingX + blockSizeX + 96, yOffset );
 				pipe.TechPipeIcon:SetTexture(right1Texture);
 				pipe = g_PipeManager:GetInstance();			
@@ -396,9 +396,9 @@ function InitialSetup()
 				pipe.TechPipeIcon:SetTexture(bottomLeftTexture);
 				pipe.TechPipeIcon:SetTextureOffset(Vector2(0,72));
 			elseif thisPipe.leftConnectionType == 3 then
-				--pipe.TechPipeIcon:SetOffsetVal( (tech.GridX)*blockSpacingX - 6, yOffset - 15 );
-				--pipe.TechPipeIcon:SetTexture(left2BTexture);
-				--pipe.TechPipeIcon:SetTextureOffset(Vector2(36,72));
+
+
+
 				pipe.TechPipeIcon:SetOffsetVal( (tech.GridX)*blockSpacingX, yOffset );
 				pipe.TechPipeIcon:SetTexture(left1Texture);
 				pipe = g_PipeManager:GetInstance();	
@@ -410,9 +410,9 @@ function InitialSetup()
 				pipe.TechPipeIcon:SetTexture(topLeftTexture);
 				pipe.TechPipeIcon:SetTextureOffset(Vector2(0,0));
 			elseif thisPipe.leftConnectionType == 5 then
-				--pipe.TechPipeIcon:SetOffsetVal( (tech.GridX)*blockSpacingX - 6, yOffset );
-				--pipe.TechPipeIcon:SetTexture(left2TTexture);
-				--pipe.TechPipeIcon:SetTextureOffset(Vector2(36,0));
+
+
+
 				pipe.TechPipeIcon:SetOffsetVal( (tech.GridX)*blockSpacingX, yOffset );
 				pipe.TechPipeIcon:SetTexture(left1Texture);
 				pipe = g_PipeManager:GetInstance();	
@@ -420,9 +420,9 @@ function InitialSetup()
 				pipe.TechPipeIcon:SetTexture(topLeftTexture);
 				pipe.TechPipeIcon:SetTextureOffset(Vector2(0,0));
 			elseif thisPipe.leftConnectionType == 6 then
-				--pipe.TechPipeIcon:SetOffsetVal( (tech.GridX)*blockSpacingX, yOffset - 6 );
-				--pipe.TechPipeIcon:SetTexture(left2Texture);
-				--pipe.TechPipeIcon:SetTextureOffset(Vector2(0,36));
+
+
+
 				pipe.TechPipeIcon:SetOffsetVal( (tech.GridX)*blockSpacingX, yOffset );
 				pipe.TechPipeIcon:SetTexture(topLeftTexture);
 				pipe.TechPipeIcon:SetTextureOffset(Vector2(0,0));
@@ -430,10 +430,10 @@ function InitialSetup()
 				pipe.TechPipeIcon:SetOffsetVal( (tech.GridX)*blockSpacingX, yOffset - 15);
 				pipe.TechPipeIcon:SetTexture(bottomLeftTexture);
 				pipe.TechPipeIcon:SetTextureOffset(Vector2(0,72));
-			else-- thisPipe.rightConnectionType == 7 then
-				--pipe.TechPipeIcon:SetOffsetVal( (tech.GridX)*blockSpacingX - 6, yOffset - 6 );
-				--pipe.TechPipeIcon:SetTexture(left2Texture);
-				--pipe.TechPipeIcon:SetTextureOffset(Vector2(36,36));
+			else
+
+
+
 				pipe.TechPipeIcon:SetOffsetVal( (tech.GridX)*blockSpacingX, yOffset );
 				pipe.TechPipeIcon:SetTexture(left1Texture);
 				pipe = g_PipeManager:GetInstance();	
@@ -451,21 +451,21 @@ function InitialSetup()
 
 	techPediaSearchStrings = {};
 
-	-- add the instances of the tech panels
+
 	for tech in GameInfo.Technologies() do
 		AddTechButton( tech );
 	end
 
-	-- resize the panel to fit the contents
+
 	Controls.EraStack:CalculateSize();
 	Controls.EraStack:ReprocessAnchoring();
     Controls.TechTreeScrollPanel:CalculateInternalSize();
     
-    --initialized = true;		
+
 end
 
 function AddEraPanels()
-	-- find the range of columns that each era takes
+
 	for tech in GameInfo.Technologies() do
 		local eraID = GameInfo.Eras[tech.Era].ID;
 		if not eraColumns[eraID] then
@@ -480,21 +480,21 @@ function AddEraPanels()
 		end
 	end
 
-	-- add the era panels
+
 	for era in GameInfo.Eras() do
 	
 		local thisEraBlockInstance = g_EraManager:GetInstance();
-		-- store this panel off for later
+
 		eraBlocks[era.ID] = thisEraBlockInstance;
 		
-		-- add the correct text for this era panel
+
 		local textString = era.Description;
 		local localizedLabel = Locale.ConvertTextKey( textString );
 		thisEraBlockInstance.OldLabel:SetText( localizedLabel );
 		thisEraBlockInstance.CurrentLabel:SetText( localizedLabel );
 		thisEraBlockInstance.FutureLabel:SetText( localizedLabel );
 		
-		-- adjust the sizes of the era panels
+
 		local blockWidth;
 		if (eraColumns[era.ID] ~= nil) then
 			blockWidth = (eraColumns[era.ID].maxGridX - eraColumns[era.ID].minGridX + 1);
@@ -547,7 +547,7 @@ function AddEraPanels()
 end
 
 function TechSelected( eTech, iDiscover)
-	--print("eTech:"..tostring(eTech));
+
 	print("stealingTechTargetPlayerID: " .. stealingTechTargetPlayerID);
 	print("player:GetNumFreeTechs(): " ..  player:GetNumFreeTechs());
 	if eTech > -1 then
@@ -563,12 +563,12 @@ function AddTechButton( tech )
 	local thisTechButtonInstance = g_TechInstanceManager:GetInstance();
 	if thisTechButtonInstance then
 		
-		-- store this instance off for later
+
 		techButtons[tech.ID] = thisTechButtonInstance;
 		
-		-- add the input handler to this button
-		thisTechButtonInstance.TechButton:SetVoid1( tech.ID ); -- indicates tech to add to queue
-		thisTechButtonInstance.TechButton:SetVoid2( 0 ); -- how many free techs
+
+		thisTechButtonInstance.TechButton:SetVoid1( tech.ID );
+		thisTechButtonInstance.TechButton:SetVoid2( 0 );
 		techPediaSearchStrings[tostring(thisTechButtonInstance.TechButton)] = tech.Description;
 		thisTechButtonInstance.TechButton:RegisterCallback( Mouse.eRClick, GetTechPedia );
 
@@ -577,10 +577,10 @@ function AddTechButton( tech )
 			thisTechButtonInstance.TechButton:RegisterCallback( Mouse.eLClick, TechSelected );
 		end
 		
-		-- position this instance
+
 		thisTechButtonInstance.TechButton:SetOffsetVal( tech.GridX*blockSpacingX + 64, (tech.GridY-5)*blockSpacingY + extraYOffset);
 		
-		-- update the name of this instance
+
 		local techName = Locale.ConvertTextKey( tech.Description );
 		
 		techName = Locale.TruncateString(techName, maxTechNameLength, true);
@@ -593,23 +593,23 @@ function AddTechButton( tech )
 		
 		thisTechButtonInstance.TechButton:SetToolTipString( GetHelpTextForTech(tech.ID) );
 		
-		-- update the picture
+
 		if IconHookup( tech.PortraitIndex, 64, tech.IconAtlas, thisTechButtonInstance.TechPortrait ) then
 			thisTechButtonInstance.TechPortrait:SetHide( false );
 		else
 			thisTechButtonInstance.TechPortrait:SetHide( true );
 		end
 		
-		-- add the small pictures and their tooltips
+
 		ApplyUnlockIcons( thisTechButtonInstance, tech ); WireUnlockScrollButtons( thisTechButtonInstance, tech.ID ); thisTechButtonInstance._unlockScroll = 0;
 		
 	end
 end
 
 
--------------------------------------------------
--- On Display
--------------------------------------------------
+
+
+
 local g_isOpen = false;
 
 function OnDisplay( popupInfo )
@@ -656,7 +656,7 @@ function RefreshDisplay()
 		RefreshDisplayOfSpecificTech( tech );
 	end
 	
-	-- update the era panels
+
 	local highestEra = 0;
 	for thisEra = 0, #eraBlocks, 1  do
 		if eraColumns[thisEra] then
@@ -697,7 +697,7 @@ function RefreshDisplayOfSpecificTech( tech )
 	local isAllowedToStealTech = false;
 	local isAllowedToGetTechFree = false;
 	
-	-- Espionage - stealing a tech!
+
  	if stealingTechTargetPlayerID ~= -1 then
  		if player:CanResearch( techID ) then
 			opponentPlayer = Players[stealingTechTargetPlayerID];
@@ -708,7 +708,7 @@ function RefreshDisplayOfSpecificTech( tech )
 		end
 	end
 	
-	-- Choosing a free tech - extra conditions may apply
+
 	if (numFreeTechs > 0) then
 		if (player:CanResearchForFree(techID)) then
 			isAllowedToGetTechFree = true;
@@ -717,7 +717,7 @@ function RefreshDisplayOfSpecificTech( tech )
  	
  	local potentiallyBlockedFromStealing = (stealingTechTargetPlayerID ~= -1) and ((not isAllowedToStealTech) or player:GetNumTechsToSteal(stealingTechTargetPlayerID) <= 0);
  	
- 	-- Rebuild the small buttons if needed
+
  	if (g_NeedsFullRefresh) then
 		ApplyUnlockIcons( thisTechButton, tech );
  	end
@@ -731,12 +731,12 @@ function RefreshDisplayOfSpecificTech( tech )
  	
  	
 	if(not scienceDisabled) then
-		thisTechButton.TechButton:SetVoid1( techID ); -- indicates tech to add to queue
-		thisTechButton.TechButton:SetVoid2( numFreeTechs ); -- how many free techs
+		thisTechButton.TechButton:SetVoid1( techID );
+		thisTechButton.TechButton:SetVoid2( numFreeTechs );
 		AddCallbackToSmallButtons( thisTechButton, maxSmallButtons, techID, numFreeTechs, Mouse.eLClick, TechSelected );
 	end
 	
- 	if activeTeam:GetTeamTechs():HasTech(techID) then -- the player (or more accurately his team) has already researched this one
+    if activeTeam:GetTeamTechs():HasTech(techID) then
  		thisTechButton.AlreadyResearched:SetHide( false );
  		thisTechButton.FreeTech:SetHide( true );
  		thisTechButton.CurrentlyResearching:SetHide( true );
@@ -744,34 +744,34 @@ function RefreshDisplayOfSpecificTech( tech )
  		thisTechButton.Unavailable:SetHide( true );
 		thisTechButton.Locked:SetHide( true );
  
- 		-- figure out if we need the first place dingus
+
  
- 		-- update the era marker for this tech
+
  		local eraID = GameInfo.Eras[tech.Era].ID;
 		if eraColumns[eraID] then
 			eraColumns[eraID].researched = true;
 		end
 		
-  		-- hide advisor icon
- 		--thisTechButton.AdvisorIcon:SetHide( true );
+
+
  				
 		if(not scienceDisabled) then
 			thisTechButton.TechQueue:SetHide( true );
-			thisTechButton.TechButton:SetVoid2( 0 ); -- num free techs
-			thisTechButton.TechButton:SetVoid1( -1 ); -- indicates tech is invalid
+			thisTechButton.TechButton:SetVoid2( 0 );
+			thisTechButton.TechButton:SetVoid1( -1 );
 			AddCallbackToSmallButtons( thisTechButton, maxSmallButtons, -1, 0, Mouse.eLClick, TechSelected );
  		end
  		
- 	elseif player:GetCurrentResearch() == techID and (not potentiallyBlockedFromStealing) then -- the player is currently researching this one
+    elseif player:GetCurrentResearch() == techID and (not potentiallyBlockedFromStealing) then
  		thisTechButton.AlreadyResearched:SetHide( true );
  		thisTechButton.Available:SetHide( true );
  		thisTechButton.Unavailable:SetHide( true );
 		thisTechButton.Locked:SetHide( true );
-		-- deal with free tech
+
 		if (isAllowedToGetTechFree) or (stealingTechTargetPlayerID ~= -1 and isAllowedToStealTech) then
   			thisTechButton.FreeTech:SetHide( false );
  			thisTechButton.CurrentlyResearching:SetHide( true );
-			-- update number of turns to research
+
  			if 	player:GetScience() > 0 and stealingTechTargetPlayerID == -1 then
   				thisTechButton.FreeTurns:SetText( turnText );
   				thisTechButton.FreeTurns:SetHide( false );
@@ -783,7 +783,7 @@ function RefreshDisplayOfSpecificTech( tech )
 		else
   			thisTechButton.FreeTech:SetHide( true );
  			thisTechButton.CurrentlyResearching:SetHide( false );
-			-- update number of turns to research
+
  			if 	player:GetScience() > 0 then
   				thisTechButton.CurrentlyResearchingTurns:SetText( turnText );
   				thisTechButton.CurrentlyResearchingTurns:SetHide( false );
@@ -792,7 +792,7 @@ function RefreshDisplayOfSpecificTech( tech )
   			end
 			thisTechButton.TechQueue:SetHide( true );
 		end
- 		-- turn on the meter
+
 		local teamTechs = activeTeam:GetTeamTechs();
 		local researchProgressPercent = 0;
 		local researchProgressPlusThisTurnPercent = 0;
@@ -806,38 +806,38 @@ function RefreshDisplayOfSpecificTech( tech )
 		if (researchProgressPlusThisTurnPercent > 1) then
 			researchProgressPlusThisTurnPercent = 1
 		end
- 		-- update advisor icon if needed
- 		--thisTechButton.AdvisorIcon:SetHide( true );
- 	elseif (player:CanResearch( techID ) and not scienceDisabled and (not potentiallyBlockedFromStealing)) then -- the player research this one right now if he wants
+
+
+    elseif (player:CanResearch( techID ) and not scienceDisabled and (not potentiallyBlockedFromStealing)) then
  		thisTechButton.AlreadyResearched:SetHide( true );
  		thisTechButton.CurrentlyResearching:SetHide( true );
  		thisTechButton.Unavailable:SetHide( true );
 		thisTechButton.Locked:SetHide( true );
- 		-- deal with free 		
+
 		if (isAllowedToGetTechFree)  or (stealingTechTargetPlayerID ~= -1 and isAllowedToStealTech) then
  			thisTechButton.FreeTech:SetHide( false );
  			thisTechButton.Available:SetHide( true );
-			-- update number of turns to research
+
  			if 	player:GetScience() > 0 and stealingTechTargetPlayerID == -1 then
   				thisTechButton.FreeTurns:SetText( turnText );
   				thisTechButton.FreeTurns:SetHide( false );
   			else
   				thisTechButton.FreeTurns:SetHide( true );
   			end
-			-- update queue number to say "FREE"
+
 			thisTechButton.TechQueueLabel:SetText( freeString );
 			thisTechButton.TechQueue:SetHide( false );
 		else
  			thisTechButton.FreeTech:SetHide( true );
  			thisTechButton.Available:SetHide( false );
-			-- update number of turns to research
+
  			if 	player:GetScience() > 0 then
   				thisTechButton.AvailableTurns:SetText( turnText );
   				thisTechButton.AvailableTurns:SetHide( false );
   			else
   				thisTechButton.AvailableTurns:SetHide( true );
   			end
-			-- update queue number if needed
+
 			local queuePosition = player:GetQueuePosition( techID );
 			if queuePosition == -1 then
 				thisTechButton.TechQueue:SetHide( true );
@@ -846,8 +846,8 @@ function RefreshDisplayOfSpecificTech( tech )
 				thisTechButton.TechQueue:SetHide( false );
 			end
 		end
-  		-- update advisor icon if needed
- 		--thisTechButton.AdvisorIcon:SetHide( true );
+
+
  	elseif (not player:CanEverResearch( techID ) or isAllowedToGetTechFree or stealingTechTargetPlayerID ~= -1) then
  		thisTechButton.AlreadyResearched:SetHide( true );
  		thisTechButton.CurrentlyResearching:SetHide( true );
@@ -855,24 +855,24 @@ function RefreshDisplayOfSpecificTech( tech )
  		thisTechButton.Unavailable:SetHide( true );
 		thisTechButton.Locked:SetHide( false );
   		thisTechButton.FreeTech:SetHide( true );
-		-- have queue number say "LOCKED"
+
 		thisTechButton.TechQueueLabel:SetText( lockedString );
 		thisTechButton.TechQueue:SetHide( false );
-		-- hide the advisor icon
- 		--thisTechButton.AdvisorIcon:SetHide( true );
+
+
 		if(not scienceDisabled) then
 			thisTechButton.TechButton:SetVoid1( -1 ); 
-			thisTechButton.TechButton:SetVoid2( 0 ); -- num free techs
+			thisTechButton.TechButton:SetVoid2( 0 );
 			AddCallbackToSmallButtons( thisTechButton, maxSmallButtons, -1, 0, Mouse.eLClick, TechSelected );
  		end
- 	else -- currently unavailable
+    else
  		thisTechButton.AlreadyResearched:SetHide( true );
  		thisTechButton.CurrentlyResearching:SetHide( true );
  		thisTechButton.Available:SetHide( true );
  		thisTechButton.Unavailable:SetHide( false );
 		thisTechButton.Locked:SetHide( true );
   		thisTechButton.FreeTech:SetHide( true );
- 		-- update number of turns to research
+
  		if 	player:GetScience() > 0 then
   			thisTechButton.UnavailableTurns:SetText( turnText );
   			thisTechButton.UnavailableTurns:SetHide( false );
@@ -880,7 +880,7 @@ function RefreshDisplayOfSpecificTech( tech )
   			thisTechButton.UnavailableTurns:SetHide( true );
   		end
   		
-		-- update queue number if needed
+
 		local queuePosition = player:GetQueuePosition( techID );
 		if queuePosition == -1 then
 			thisTechButton.TechQueue:SetHide( true );
@@ -889,8 +889,8 @@ function RefreshDisplayOfSpecificTech( tech )
 			thisTechButton.TechQueue:SetHide( false );
 		end
 		
- 		-- update advisor icon if needed
- 		--thisTechButton.AdvisorIcon:SetHide( true );
+
+
 
 		if (isAllowedToGetTechFree) then
 			thisTechButton.TechButton:SetVoid1( -1 ); 
@@ -904,12 +904,12 @@ function RefreshDisplayOfSpecificTech( tech )
 	end
 end
 
-----------------------------------------------------------------        
--- Input processing
-----------------------------------------------------------------        
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
+
+
+
 function OnCloseButtonClicked ()
 	UIManager:DequeuePopup( ContextPtr );
     Events.SerialEventGameMessagePopupProcessed.CallImmediate(ButtonPopupTypes.BUTTONPOPUP_TECH_TREE, 0);
@@ -917,8 +917,8 @@ function OnCloseButtonClicked ()
 end
 Controls.CloseButton:RegisterCallback( Mouse.eLClick, OnCloseButtonClicked );
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 
 function InputHandler( uiMsg, wParam, lParam )
     if g_isOpen and uiMsg == KeyEvents.KeyDown then
@@ -942,32 +942,32 @@ function ShowHideHandler( bIsHide, bIsInit )
 end
 ContextPtr:SetShowHideHandler( ShowHideHandler );
 
-----------------------------------------------------------------
--- 'Active' (local human) player has changed
-----------------------------------------------------------------
+
+
+
 function OnTechTreeActivePlayerChanged( iActivePlayer, iPrevActivePlayer )
 	playerID = Game.GetActivePlayer();	
 	player = Players[playerID];
 	civType = GameInfo.Civilizations[player:GetCivilizationType()].Type;
 	activeTeamID = Game.GetActiveTeam();
 	activeTeam = Teams[activeTeamID];	
-	-- Rebuild some tables	
+
 	GatherInfoAboutUniqueStuff( civType );	
 	
-	-- So some extra stuff gets re-built on the refresh call
+
 	if not g_isOpen then
 		g_NeedsFullRefreshOnOpen = true;	
 	else
 		g_NeedsFullRefresh = true;
 	end
 	
-	-- Close it, so the next player does not have to.
+
 	OnCloseButtonClicked();
 end
 Events.GameplaySetActivePlayer.Add(OnTechTreeActivePlayerChanged);
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function OnEventResearchDirty()
 	if (g_isOpen) then
 		RefreshDisplay();
@@ -975,8 +975,8 @@ function OnEventResearchDirty()
 end
 Events.SerialEventResearchDirty.Add(OnEventResearchDirty);
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
 
--- One time initialization
+
+
+
 InitialSetup()

@@ -1,16 +1,16 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
-//
-//  AUTHOR:	Ken Grey
-//
-//  PURPOSE: Helper functions to serialize and unserialize CvInfo types and data associated with the types
-//			 so that the type IDs are saved as unique values so the CvInfo*s tables can be changed by modding and DLC
-//
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #include "CvGameCoreDLLPCH.h"
 #include "CvInfos.h"
@@ -18,13 +18,13 @@
 #include "CvGameCoreUtils.h"
 #include "CvInfosSerializationHelper.h"
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Helper Functions to serialize arrays of variable length
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 namespace CvInfosSerializationHelper
 {
-/// Read a fixed array of resource entry values and place them in the resource slots from the
-/// initial release.
+
+
 const char* ms_V0ResourceTags[27] =
 {
 	"RESOURCE_IRON",
@@ -134,8 +134,8 @@ const char* ms_V0PolicyBranchTags[10] =
 	"POLICY_BRANCH_AUTOCRACY"
 };
 
-/// Helper function to read a single type ID as a string and convert it to an ID
-int Read(FDataStream& kStream, bool* bValid /*= NULL*/)
+
+int Read(FDataStream& kStream, bool* bValid           )
 {
 	FStringFixedBuffer(sTemp, 256);
 	kStream >> sTemp;
@@ -168,8 +168,8 @@ int Read(FDataStream& kStream, bool* bValid /*= NULL*/)
 	return -1;
 }
 
-/// Helper function to read a single resource type ID as a hash and convert it to an ID
-int ReadHashed(FDataStream& kStream, bool* bValid /*= NULL*/)
+
+int ReadHashed(FDataStream& kStream, bool* bValid           )
 {
 	uint uiHash;
 	if(bValid) *bValid = true;
@@ -194,9 +194,9 @@ int ReadHashed(FDataStream& kStream, bool* bValid /*= NULL*/)
 	return -1;
 }
 
-/// Helper function to read a single type (as a string) and find its ID in a database table.
-/// Assumes the type is in the table's field "Type"
-int ReadDBLookup(FDataStream& kStream, const char* szTable, bool* bValid /*= NULL*/)
+
+
+int ReadDBLookup(FDataStream& kStream, const char* szTable, bool* bValid           )
 {
 	FStringFixedBuffer(sTemp, 256);
 	kStream >> sTemp;
@@ -228,10 +228,10 @@ int ReadDBLookup(FDataStream& kStream, const char* szTable, bool* bValid /*= NUL
 }
 
 
-// Start Type specific functions.
 
-// These functions convert a runtime type ID (index) to a unique type
-// string or hash
+
+
+
 
 IMPLEMENT_SERIALIZATION_INFO_TYPE_HELPER(ResourceTypes, getResourceInfo, NO_RESOURCE);
 IMPLEMENT_SERIALIZATION_INFO_TYPE_HELPER(PolicyTypes, getPolicyInfo, NO_POLICY);
@@ -262,14 +262,14 @@ IMPLEMENT_SERIALIZATION_INFO_TYPE_HELPER(ImprovementTypes, getImprovementInfo, N
 #if defined(TRAITIFY)
 IMPLEMENT_SERIALIZATION_INFO_TYPE_HELPER(BuildingClassTypes, getBuildingClassInfo, NO_BUILDINGCLASS);
 #endif
-// Can't use this because nothing ever respects the values.  They are all hard-coded in the enum
-//IMPLEMENT_SERIALIZATION_INFO_TYPE_HELPER(UnitAITypes, getUnitAIInfo, NO_UNITAI);
 
-/// Helper fun
 
-/// End Type specific functions
 
-/// Helper function to write out an info type ID as string
+
+
+
+
+
 bool Write(FDataStream& kStream, const CvBaseInfo* pkInfo)
 {
 	if(pkInfo)
@@ -281,7 +281,7 @@ bool Write(FDataStream& kStream, const CvBaseInfo* pkInfo)
 	}
 	else
 	{
-		// To save space, just write an empty string to denote a missing type
+
 		int iLen = 0;
 		kStream << iLen;
 	}
@@ -289,7 +289,7 @@ bool Write(FDataStream& kStream, const CvBaseInfo* pkInfo)
 	return false;
 }
 
-/// Helper function to write out an info type ID as a hash
+
 bool WriteHashed(FDataStream& kStream, const CvBaseInfo* pkInfo)
 {
 	if(pkInfo && pkInfo->GetType() && pkInfo->GetType()[0] != 0)
@@ -299,7 +299,7 @@ bool WriteHashed(FDataStream& kStream, const CvBaseInfo* pkInfo)
 		return true;
 	}
 
-	uint uiHash = 0;		// 0 hash == missing type
+	uint uiHash = 0;
 	kStream << uiHash;
 	return false;
 }

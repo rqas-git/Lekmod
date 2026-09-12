@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 4/22/2015 4:42:24 PM -->
+
 <GameData>
 
-	<!-- Update Angkor Wat to provide a free University and 3 Culture (up from 1) -->
+
 	<Buildings>
 		<Update>
 			<Set FreeBuildingThisCity="BUILDINGCLASS_UNIVERSITY" GlobalPlotCultureCostModifier="0" GlobalPlotBuyCostModifier="0" SpecialistType="SPECIALIST_SCIENTIST"/>

@@ -1,4 +1,4 @@
-"""Read pre-refactor fixtures from Git without duplicating the shipped assets."""
+
 import io
 from pathlib import Path
 import subprocess

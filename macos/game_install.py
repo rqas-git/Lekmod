@@ -1,4 +1,4 @@
-"""Steam discovery and transactional replacement of a macOS Civ V app."""
+
 from contextlib import contextmanager
 from datetime import datetime, timezone
 import fcntl
@@ -17,7 +17,7 @@ STOCK_CORE_SHA256 = '0da6a5ffc283c3f147b20a7ec426e4ed85a6838ab891faf61b50af4e25c
 
 
 def read_vdf(path):
-    """Read Steam's quoted KeyValues files, including escaped library paths."""
+
     tokens = re.finditer(r'"((?:\\.|[^"\\])*)"|([{}])|//[^\n]*',
                         path.read_text(encoding='utf-8-sig'))
     root, stack, key = {}, [], None
@@ -62,7 +62,7 @@ def validate_app(app):
     for relative in (ASSETS / 'DLC', ASSETS / 'Maps'):
         if not (app / relative).is_dir():
             raise RuntimeError(f'Missing game directory: {app / relative}')
-    # Never write through bundle links to files outside the staged copy.
+
     for relative in (CORE, ASSETS, ASSETS / 'DLC', ASSETS / 'Maps', MANIFEST):
         target = app / relative
         if not target.resolve().is_relative_to(app.resolve()):
@@ -85,7 +85,7 @@ def detect_apps(steam_root=None):
                     if folder:
                         libraries.append(Path(folder).expanduser())
         except (OSError, ValueError, AttributeError):
-            continue  # A stale library file must not hide the default installation.
+            continue
     found = []
     for library in libraries:
         steamapps = library / 'steamapps'
@@ -133,7 +133,7 @@ def installed_state(app):
 
 
 def validate_core(app):
-    """Validate the installed library and return its content digest."""
+
     digest = sha256(app / CORE)
     if digest == STOCK_CORE_SHA256:
         return digest
@@ -149,8 +149,8 @@ def validate_core(app):
 def game_running():
     result = subprocess.run(['pgrep', '-x', 'Civilization V'], capture_output=True, text=True)
     if result.returncode == 1:
-        # Steam first opens Aspyr's separate PLAY window. It holds this bundle
-        # open too, so wait for it to close before replacing the installation.
+
+
         result = subprocess.run(['pgrep', '-f', r'/Civilization V[^/]*\.app/Contents/MacOS/AppBundleExe( |$)'],
                                 capture_output=True, text=True)
     if result.returncode not in (0, 1):
@@ -167,7 +167,7 @@ def clone_app(source, destination):
     result = subprocess.run(['cp', '-cR', str(source), str(destination)],
                             capture_output=True, text=True)
     if result.returncode:
-        # Cross-volume and non-APFS installs cannot use copy-on-write cloning.
+
         if destination.exists():
             shutil.rmtree(destination)
         shutil.copytree(source, destination, symlinks=True)
@@ -178,8 +178,8 @@ def sign_core(app):
 
 
 def sign_nested(app):
-    # Some Steam-shipped binaries have stale signatures. Repair them before
-    # sealing the outer bundle; never follow a link outside the staged app.
+
+
     for binary in (app / 'Contents/MacOS').iterdir():
         if binary.suffix != '.dylib' and binary.name not in ('AppBundleExe', 'Civilization V'):
             continue
@@ -198,7 +198,7 @@ def sign_app(app):
 
 @contextmanager
 def installation_lock(app):
-    # Lock the parent directory itself, leaving no lock files in Steam's library.
+
     with open_directory(app.parent) as descriptor:
         try:
             fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -221,7 +221,7 @@ def open_directory(path):
 
 
 def replace_app(app, populate, log=print):
-    """Prepare and sign off to the side; retain the entire previous app as backup."""
+
     with tempfile.TemporaryDirectory(prefix='.lekmod-stage-', dir=app.parent) as temporary:
         staged = Path(temporary) / app.name
         log('Preparing installation…')

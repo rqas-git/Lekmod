@@ -1,18 +1,18 @@
--- Shared Oval/Donut start placement with their existing custom-option indices.
--- Copyright (c) 2010 Firaxis Games, Inc. All rights reserved.
+
+
 function StartPlotSystem()
 
 	local RegionalMethod = 1;
 
-	-- Get Resources setting input by user.
+
 	local AllowInlandSea = Map.GetCustomOption(17)
 	local res = Map.GetCustomOption(13)
 	local starts = Map.GetCustomOption(5)
-	--if starts == 7 then
-		--starts = 1 + Map.Rand(8, "Random Resources Option - Lua");
-	--end
 
-	-- Handle coastal spawns and start bias
+
+
+
+
 	MixedBias = false;
 	if Map.GetCustomOption(15) == 1 then
 		OnlyCoastal = true;
@@ -40,7 +40,7 @@ function StartPlotSystem()
 	local start_plot_database = AssignStartingPlots.Create()
 
 	print("Dividing the map in to Regions.");
-	-- Regional Division Method 1: Biggest Landmass
+
 	local args = {
 		method = RegionalMethod,
 		start_locations = starts,

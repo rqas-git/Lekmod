@@ -1,7 +1,8 @@
-"""Source-extracted checks for the second performance implementation batch."""
+
 import itertools
 from pathlib import Path
 import random
+from source_text import canonical
 import statistics
 import subprocess
 
@@ -15,9 +16,8 @@ def baseline(path):
 
 
 def normalize_trade_section(text):
-    """Undo only the enumerator cache plumbing and read-only parameter change."""
-    text = text.replace('''		// Range inputs stay fixed during this read-only origin enumeration.
-		int aiCachedRanges[NUM_DOMAIN_TYPES];
+
+    text = text.replace('''		int aiCachedRanges[NUM_DOMAIN_TYPES];
 		std::fill(aiCachedRanges, aiCachedRanges + NUM_DOMAIN_TYPES, -1);
 ''', '')
     text = text.replace('IsValidTradeRoutePathWithCachedRange(pOriginCity, pDestCity, eDomain, aiCachedRanges[eDomain])',
@@ -30,11 +30,11 @@ def normalize_trade_section(text):
 
 def cpp_checks(directory, source, extract, compile_run):
     worker, old_worker = source(PREFIX+'CvBuilderTaskingAI.cpp'), baseline(PREFIX+'CvBuilderTaskingAI.cpp')
-    start = worker.index('\t// A stable heap produces')
+    start = worker.index('\tconst bool bUseHeap =')
     current = worker[start:worker.index('\n\tif(m_bLogging)', start)]
     start = old_worker.index('\tm_aDirectives.StableSortItems();', old_worker.index('bool CvBuilderTaskingAI::EvaluateBuilder('))
     old = old_worker[start:old_worker.index('\n\tif(m_bLogging)', start)]
-    start = worker.index('\t\t// Keep a snapshot,')
+    start = worker.index('\t\tconst CvPlotsVector& aiOwnedPlots =')
     snapshot = worker[start:worker.index('\n\t}\n', start)]
     entry = extract(worker, 'struct BuilderDirectiveHeapEntry').replace('const\n\t\t{', 'const\n\t\t{\n\t\t\t++heapComparisons;')
     assert '++heapComparisons;' in entry
@@ -50,7 +50,7 @@ def cpp_checks(directory, source, extract, compile_run):
     assert 'PrefetchCollection(GC.getPromotionInfo(), "UnitPromotions");\n\tCvPromotionEntry::InvalidateVisibilityChangeCache();' in prefetch
     def sight_method(text):
         start = text.index('void CvPlot::updateSeeFromSight(')
-        return text[start:text.index('\n\n//', start)]
+        return text[start:text.index('bool CvPlot::canHaveResource(', start)]
     sight_sub = {
         'BASELINE': sight_method(old_plot).replace('::updateSeeFromSight(', '::baseline('),
         'CURRENT': sight_method(plot),
@@ -62,15 +62,15 @@ def cpp_checks(directory, source, extract, compile_run):
     trade, old_trade = source(PREFIX+'CvTradeClasses.cpp'), baseline(PREFIX+'CvTradeClasses.cpp')
     def path_methods(text, current):
         start = text.index('#ifdef AUI_CONSTIFY\nbool CvGameTrade::IsValidTradeRoutePath(')
-        return text[start:text.index('\n//\t---', start)]
+        return text[start:text.index('#ifdef AUI_CONSTIFY\nCvPlot* CvGameTrade::GetPlotAdjacentToWater', start)]
     range_sub = {
         'BASELINE_PATH': path_methods(old_trade, False).replace('::IsValidTradeRoutePath', '::IsValidTradeRoutePathBaseline'),
         'CURRENT_PATH': path_methods(trade, True),
         'BASELINE_CANDIDATES': extract(old_trade, 'void CvTradeAI::GetAvailableTR(').replace('::GetAvailableTR(', '::GetAvailableTRBaseline(').replace('->IsValidTradeRoutePath(', '->IsValidTradeRoutePathBaseline('),
         'CURRENT_CANDIDATES': extract(trade, 'void CvTradeAI::GetAvailableTR('),
     }
-    # The range formula itself is still byte-for-byte identical.
-    assert extract(old_trade, 'int CvPlayerTrade::GetTradeRouteRange (') == extract(trade, 'int CvPlayerTrade::GetTradeRouteRange (')
+
+    assert canonical(extract(old_trade, 'int CvPlayerTrade::GetTradeRouteRange (')) == canonical(extract(trade, 'int CvPlayerTrade::GetTradeRouteRange ('))
     results = {}
     modes = [('default', ()), ('ubsan_checked', ('-fsanitize=undefined', '-fno-sanitize-recover=all',
               '-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG'))]
@@ -81,7 +81,7 @@ def cpp_checks(directory, source, extract, compile_run):
             variants += [('benchmark', ('-DPERF_BENCHMARK',))]
         for mode, flags in variants:
             results[name][mode] = compile_run(name+'.cpp.in', subs, directory, flags)
-        # Checked libc++ also invokes comparators for its own heap assertions.
+
         comparable = lambda value: {k:v for k,v in value.items() if k not in ('selection_comparisons', 'timings')}
         assert all(comparable(value) == comparable(results[name]['default']) for value in results[name].values()), results[name]
     return results
@@ -95,7 +95,7 @@ def shuffle_checks(lua):
         return text[start:text.index('\nend', start)+4]
     lua.execute(function(old).replace('GetShuffledCopyOfTable', 'shuffleOld', 1))
     lua.execute(function(current).replace('GetShuffledCopyOfTable', 'shuffleNew', 1))
-    # Exercise the actual tree code exhaustively on short arrays too.
+
     lua.execute(function(current).replace('GetShuffledCopyOfTable', 'shuffleForced', 1).replace('len >= 1024', 'len >= 0'))
     lua.execute('''
     function compareShuffle(ranks, sparse)

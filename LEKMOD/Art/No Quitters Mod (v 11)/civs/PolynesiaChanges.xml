@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-09 15:50:01 -->
+
 <GameData>
 	
-	<!-- UA now also gives +1 movement to embarked units and stronger defense (like War Canoes from Songhai) -->
+
 	<Traits>
 		<Update>
 			<Set ExtraEmbarkMoves="1" />
@@ -53,7 +53,7 @@
 		</Update>
 	</UnitPromotions>
 
-	<!-- Polynesian Maori Warrior now has 9 Combat Strength (up from 8) -->
+
 	<Units>
 		<Update>
 			<Set Combat="9" />
@@ -62,7 +62,7 @@
 	</Units>
 
 
-	<!-- localization -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_TRAIT_WAYFINDING" />
 		<Row Tag="TXT_KEY_TRAIT_WAYFINDING">

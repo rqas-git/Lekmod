@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- edited with XMLSPY v2004 rel. 2 U (http://www.xmlspy.com) by Anton Strenger (Firaxis Games) -->
-<!-- edit: MP voting system for EUI & vanilla UI -->
+
+
 <Context Font="TwCenMT14" FontStyle="Base" Color0="Beige">
 	<Instance Name="DiploVoteButton">
 		<GridButton Anchor="L,C" Style="BaseButton" ID="Button" Size="400,42" Offset="0,15">

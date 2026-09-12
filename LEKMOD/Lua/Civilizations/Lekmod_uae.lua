@@ -1,12 +1,12 @@
--- Author: EnormousApplePie
+
 include("Lekmod_utilities.lua")
 
 local this_civ = GameInfoTypes["CIVILIZATION_UAE"]
 local is_active = LekmodUtilities:is_civilization_active(this_civ)
 
-------------------------------------------------------------------------------------------------------------------------
--- UAE UA. Award 100 gold and start a We Love the King Day (15 turns) in a city that builds a World Wonder.
-------------------------------------------------------------------------------------------------------------------------
+
+
+
 function lekmod_uae_wonder_ua(player_id, city_id, building_id)
 
    local player = Players[player_id]
@@ -29,9 +29,9 @@ function lekmod_uae_wonder_ua(player_id, city_id, building_id)
    end
 
 end
-------------------------------------------------------------------------------------------------------------------------
--- UAE UA. Award +3 Gold per turn and 1 experience to units stationed on a trade route.
-------------------------------------------------------------------------------------------------------------------------
+
+
+
 function lekmod_uae_trade_route_gold(player_id)
 
 	local player = Players[player_id]
@@ -44,7 +44,7 @@ function lekmod_uae_trade_route_gold(player_id)
          local has_trade_route
          if player.HasInternationalTradeRoutePlotToolTip then
             has_trade_route = player:HasInternationalTradeRoutePlotToolTip(unit_plot)
-         else -- Retain compatibility with gameplay libraries predating the predicate.
+         else
             has_trade_route = #player:GetInternationalTradeRoutePlotToolTip(unit_plot) > 0
          end
 
@@ -52,7 +52,7 @@ function lekmod_uae_trade_route_gold(player_id)
             player:ChangeGold(3)
             loop_unit:ChangeExperience(1)
 
-            -- show popup text on the unit plot
+
             if player_id == Game.GetActivePlayer() then
                print("popup text")
                local hex_position = ToHexFromGrid{x = unit_plot:GetX(), y = unit_plot:GetY()}
@@ -65,9 +65,9 @@ function lekmod_uae_trade_route_gold(player_id)
    end
 
 end
-------------------------------------------------------------------------------------------------------------------------
--- UAE UU. Award +15 XP and restore 2 movement when Qasimi Raider pillages.
-------------------------------------------------------------------------------------------------------------------------
+
+
+
 function lekmod_uae_qasimi_raider_pillage(player_id, unit_id, plot_x, plot_y)
    local player = Players[player_id]
    if player:GetCivilizationType() ~= this_civ then return end
@@ -75,11 +75,11 @@ function lekmod_uae_qasimi_raider_pillage(player_id, unit_id, plot_x, plot_y)
    local unit = player:GetUnitByID(unit_id)
    if not unit or unit:GetUnitType() ~= GameInfoTypes.UNIT_QASIMI_RAIDER then return end
 
-   -- Award XP and movement
-   unit:ChangeExperience(15)
-   unit:ChangeMoves(200) -- Movement points are in hundredths, so 200 = 2 movement points
 
-   -- Show popup text if this is the active player
+   unit:ChangeExperience(15)
+   unit:ChangeMoves(200)
+
+
    if player_id == Game.GetActivePlayer() then
       local hex_position = ToHexFromGrid{x = plot_x, y = plot_y}
       local world_position = HexToWorld(hex_position)
@@ -88,7 +88,7 @@ function lekmod_uae_qasimi_raider_pillage(player_id, unit_id, plot_x, plot_y)
    end
 end
 
-------------------------------------------------------------------------------------------------------------------------
+
 if is_active then
    GameEvents.CityConstructed.Add(lekmod_uae_wonder_ua)
    GameEvents.PlayerDoTurn.Add(lekmod_uae_trade_route_gold)

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-24 14:15:24 -->
+
 <GameData>
 
-	<!-- +1 Faith from Wine, Sugar, Spice, and Truffles. -->
+
 	<Belief_ResourceYieldChanges>
 		<Delete BeliefType="BELIEF_GOD_FESTIVALS" ResourceType="RESOURCE_INCENSE" YieldType="YIELD_CULTURE" Yield="1" />
 		<Delete BeliefType="BELIEF_GOD_FESTIVALS" ResourceType="RESOURCE_INCENSE" YieldType="YIELD_FAITH" Yield="1" />
@@ -32,7 +32,7 @@
 		</Row>
 	</Belief_ResourceYieldChanges>
 
-	<!-- localization -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_BELIEF_GOD_FESTIVALS" />
 		<Row Tag="TXT_KEY_BELIEF_GOD_FESTIVALS">

@@ -1,28 +1,28 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 
 #include "CvGameCoreDLLPCH.h"
 #include "CvDatabaseUtility.h"
 
-// must be included after all other headers
+
 #include "LintFree.h"
 
 CvDatabaseUtility::CvDatabaseUtility()
 {
 
 }
-//------------------------------------------------------------------------------
+
 CvDatabaseUtility::~CvDatabaseUtility()
 {
-	//Remove any cached statements
+
 	ClearResults();
 }
-//------------------------------------------------------------------------------
+
 void CvDatabaseUtility::ClearResults()
 {
 	for(ResultsMap::const_iterator it = m_storedResults.begin(); it != m_storedResults.end(); ++it)
@@ -33,7 +33,7 @@ void CvDatabaseUtility::ClearResults()
 
 	m_storedResults.clear();
 }
-//------------------------------------------------------------------------------
+
 void CvDatabaseUtility::ClearResults(const std::string& strKey)
 {
 	Database::Results* pResults = GetResults(strKey);
@@ -43,7 +43,7 @@ void CvDatabaseUtility::ClearResults(const std::string& strKey)
 		m_storedResults.erase(strKey);
 	}
 }
-//------------------------------------------------------------------------------
+
 Database::Results* CvDatabaseUtility::GetResults(const std::string& strKey)
 {
 	ResultsMap::const_iterator it = m_storedResults.find(strKey);
@@ -55,13 +55,13 @@ Database::Results* CvDatabaseUtility::GetResults(const std::string& strKey)
 
 	return NULL;
 }
-//------------------------------------------------------------------------------
+
 Database::Results* CvDatabaseUtility::GetOrPrepareResults(const std::string& strKey, const char* szStmt)
 {
 	Database::Results* pResults = GetResults(strKey);
 	return pResults ? pResults : PrepareResults(strKey, szStmt);
 }
-//------------------------------------------------------------------------------
+
 Database::Results* CvDatabaseUtility::PrepareResults(const std::string& strKey, const char* szStmt)
 {
 	Database::Results* pResults = new Database::Results();
@@ -84,8 +84,8 @@ Database::Results* CvDatabaseUtility::PrepareResults(const std::string& strKey, 
 
 	return NULL;
 }
-//------------------------------------------------------------------------------
-bool CvDatabaseUtility::Initialize2DArray(int**& ppArray, const char* szTable1Name, const char* szTable2Name, int iDefault /* = 0 */)
+
+bool CvDatabaseUtility::Initialize2DArray(int**& ppArray, const char* szTable1Name, const char* szTable2Name, int iDefault          )
 {
 #ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
 	const size_t iCount1 = MaxRows(szTable1Name);
@@ -123,11 +123,11 @@ bool CvDatabaseUtility::Initialize2DArray(int**& ppArray, const char* szTable1Na
 	return true;
 #endif
 }
-//------------------------------------------------------------------------------
+
 #ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
-bool CvDatabaseUtility::Initialize2DArray(int**& ppArray, const size_t iCount1, const size_t iCount2, int iDefault /*= 0*/)
+bool CvDatabaseUtility::Initialize2DArray(int**& ppArray, const size_t iCount1, const size_t iCount2, int iDefault        )
 #else
-void CvDatabaseUtility::Initialize2DArray(int**& ppArray, const size_t iCount1, const size_t iCount2, int iDefault /*= 0*/)
+void CvDatabaseUtility::Initialize2DArray(int**& ppArray, const size_t iCount1, const size_t iCount2, int iDefault        )
 #endif
 {
 	if(iCount1 <= 0 || iCount2 <= 0)
@@ -173,7 +173,7 @@ void CvDatabaseUtility::Initialize2DArray(int**& ppArray, const size_t iCount1, 
 	}
 #endif
 }
-//------------------------------------------------------------------------------
+
 #ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
 void CvDatabaseUtility::SafeDelete2DArray(int**& ppArray, const char* szTable1Name)
 {
@@ -197,7 +197,7 @@ void CvDatabaseUtility::SafeDelete2DArray(int**& ppArray)
 	ppArray = NULL;
 }
 
-//------------------------------------------------------------------------------
+
 bool CvDatabaseUtility::PopulateArrayByExistence(bool*& pArray, const char* szTypeTableName, const char* szDataTableName, const char* szTypeColumn, const char* szFilterColumn, const char* szFilterValue)
 {
 	InitializeArray(pArray, MaxRows(szTypeTableName), false);
@@ -234,7 +234,7 @@ bool CvDatabaseUtility::PopulateArrayByExistence(bool*& pArray, const char* szTy
 
 	return true;
 }
-//------------------------------------------------------------------------------
+
 bool CvDatabaseUtility::PopulateArrayByExistence(int*& pArray, const char* szTypeTableName, const char* szDataTableName, const char* szTypeColumn, const char* szFilterColumn, const char* szFilterValue)
 {
 	InitializeArray(pArray, MaxRows(szTypeTableName), -1);
@@ -270,8 +270,8 @@ bool CvDatabaseUtility::PopulateArrayByExistence(int*& pArray, const char* szTyp
 
 	return true;
 }
-//------------------------------------------------------------------------------
-bool CvDatabaseUtility::PopulateArrayByValue(int*& pArray, const char* szTypeTableName, const char* szDataTableName, const char* szTypeColumn, const char* szFilterColumn, const char* szFilterValue, const char* szValueColumn, int iDefaultValue /* = 0 */, int iMinArraySize /* = 0 */)
+
+bool CvDatabaseUtility::PopulateArrayByValue(int*& pArray, const char* szTypeTableName, const char* szDataTableName, const char* szTypeColumn, const char* szFilterColumn, const char* szFilterValue, const char* szValueColumn, int iDefaultValue          , int iMinArraySize          )
 {
 	int iSize = MaxRows(szTypeTableName);
 	InitializeArray(pArray, (iSize<iMinArraySize)?iMinArraySize:iSize, iDefaultValue);
@@ -308,7 +308,7 @@ bool CvDatabaseUtility::PopulateArrayByValue(int*& pArray, const char* szTypeTab
 
 	return true;
 }
-//------------------------------------------------------------------------------
+
 bool CvDatabaseUtility::SetFlavors(int*& pFlavorsArray,
                                    const char* szTableName,
                                    const char* szFilterColumn,
@@ -318,7 +318,7 @@ bool CvDatabaseUtility::SetFlavors(int*& pFlavorsArray,
 	return PopulateArrayByValue(pFlavorsArray, "Flavors", szTableName,
 	                            "FlavorType", szFilterColumn, szFilterValue, "Flavor", iDefaultValue);
 }
-//------------------------------------------------------------------------------
+
 bool CvDatabaseUtility::SetYields(int*& pYieldsArray,
                                   const char* szTableName,
                                   const char* szFilterColumn,
@@ -327,7 +327,7 @@ bool CvDatabaseUtility::SetYields(int*& pYieldsArray,
 	return PopulateArrayByValue(pYieldsArray, "Yields", szTableName,
 	                            "YieldType", szFilterColumn, szFilterValue, "Yield");
 }
-//------------------------------------------------------------------------------
+
 void CvDatabaseUtility::SetYieldMatrix(int**& pYieldsArray, const char* szDimensionTable,
                                       const char* szKey, const char* szQuery, const char* szFilterValue)
 {
@@ -342,12 +342,12 @@ void CvDatabaseUtility::SetYieldMatrix(int**& pYieldsArray, const char* szDimens
 	}
 	pResults->Reset();
 }
-//------------------------------------------------------------------------------
+
 int CvDatabaseUtility::MaxRows(const char* szTableName)
 {
 	char szSQL[256] = {0};
 	sprintf_s(szSQL, "SELECT max(rowid) from %s", szTableName);
-	// Cache the statement, not its value: tables may change between calls.
+
 	Database::Results* pResults = GetResults(szSQL);
 	if(!pResults)
 	{
@@ -358,7 +358,7 @@ int CvDatabaseUtility::MaxRows(const char* szTableName)
 	{
 		if(pResults->Step())
 		{
-			//Since some rowid's start at 0 in Civ, let's increase this # by 1.
+
 			maxValue = pResults->GetInt(0) + 1;
 		}
 		pResults->Reset();
@@ -366,21 +366,21 @@ int CvDatabaseUtility::MaxRows(const char* szTableName)
 
 	return maxValue;
 }
-//------------------------------------------------------------------------------
+
 const char* CvDatabaseUtility::GetErrorMessage() const
 {
 	return DB.ErrorMessage();
 }
-//------------------------------------------------------------------------------
+
 #ifdef LEKMOD_POST_DLC_DATA_LOADING
-//! Fallback method to refresh language text tables
+
 void CvDatabaseUtility::RefreshLanguageTextFallback()
 {
-    // A more direct approach - use SQL to refresh all language tables
+
     Database::Connection* db = GC.GetGameDatabase();
     if(!db) return;
     
-    // Force text reload by reading all language tables
+
     Database::Results tables;
     if(db->Execute(tables, "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'Language_%'"))
     {
@@ -389,12 +389,12 @@ void CvDatabaseUtility::RefreshLanguageTextFallback()
             const char* tableName = tables.GetText(0);
             if(tableName)
             {
-                // Force a full scan of each table to ensure it's loaded in memory
+
                 std::string query = "SELECT COUNT(*) FROM ";
                 query += tableName;
                 db->Execute(query.c_str());
                 
-                // Force a cache refresh of a few entries
+
                 query = "SELECT * FROM ";
                 query += tableName;
                 query += " LIMIT 100";
@@ -404,13 +404,3 @@ void CvDatabaseUtility::RefreshLanguageTextFallback()
     }
 }
 #endif
-
-//------------------------------------------------------------------------------
-// Tables in Civ5 commonly have a Yields array.
-// This method fetches that yield data into an integer array.
-// CONDITIONS:
-//	*'Yields' table must exist.
-//	*YieldTable must have a 'YieldType' column.
-// RETURNS:
-//	True on success.
-//------------------------------------------------------------------------------

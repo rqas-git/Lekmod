@@ -9,11 +9,11 @@ namespace Database{
 
 	enum ColumnTypes
 	{
-		COLTYPE_NULL	= 5,	//SQLITE_NULL
-		COLTYPE_INT		= 1,	//SQLITE_INTEGER
-		COLTYPE_FLOAT	= 2,	//SQLITE_FLOAT
-		COLTYPE_TEXT	= 3,	//SQLITE_TEXT
-		COLTYPE_BOOL	= 6,	//NON SQLITE ENUM
+		COLTYPE_NULL	= 5,
+		COLTYPE_INT		= 1,
+		COLTYPE_FLOAT	= 2,
+		COLTYPE_TEXT	= 3,
+		COLTYPE_BOOL	= 6,
 	};
 
 	class Results 
@@ -23,33 +23,33 @@ namespace Database{
 		CvGameDatabaseAPI Results(const Results& copy);
 		CvGameDatabaseAPI virtual ~Results();
 
-		//! Retrieves the columns used by results (default: *).
+
 		CvGameDatabaseAPI virtual const char* GetColumns() const;
 
-		//! Sets the columns used by results.
+
 		CvGameDatabaseAPI void SetColumns(const char* szColumns); 
 
-		//! Step and Execute function exactly the same but are meant for different
-		//! use cases.  Use Execute when you do not expect any rows to be returned.
-		//! Use Step when you expect one or more rows to be returned.
+
+
+
 		CvGameDatabaseAPI bool Execute();
-		//! Similar to execute, but will not return an error for constraint failures.
-		//! This is useful when using "insert or abort" commands.
+
+
 		CvGameDatabaseAPI bool TryExecute();
 		CvGameDatabaseAPI bool Step();
 
-		//! Resets the statement and also clears all bound arguments.
+
 		CvGameDatabaseAPI bool Reset();
-		//! Resets the statement and also clears all bound arguments.
+
 		CvGameDatabaseAPI bool TryReset();
 
-		//! Releases the command used by the results.
+
 		CvGameDatabaseAPI void Release();
 
-		// Bind methods used to bind literal values
 
-		//! Bind a UTF-8 string to the indexed parameter.
-		//! If bMakeCopy is true, an internal copy of the string will be made.
+
+
+
 		CvGameDatabaseAPI bool Bind(int idx, const char* szValue, int lenValue, bool bMakeCopy = true);
 		CvGameDatabaseAPI bool Bind(int idx, const char* szValue, bool bMakeCopy = true);
 
@@ -110,8 +110,8 @@ namespace Database{
 		CvGameDatabaseAPI void* operator new(size_t tSize);
 		CvGameDatabaseAPI void operator delete(void* pMem);
 
-		//(INTERNAL USE ONLY)
-		//! Attaches a SQLite3 statement to results.
+
+
 		bool SetCommand(Command& command);
 
 	protected:
@@ -123,8 +123,8 @@ namespace Database{
 		bool m_bSingleQuery;
 
 #ifdef LEKMOD_MACOS
-        // Aspyr build 180925 uses a 72-byte legacy hash container here.
-        // Its constructor, destructor and all accessors belong to the host.
+
+
         alignas(8) unsigned char m_hshColumnPositions[72];
 #else
 		stdext::hash_map<std::string, int> m_hshColumnPositions;
@@ -137,4 +137,4 @@ namespace Database{
 		CvGameDatabaseAPI SingleResult(const char* szColumns = NULL);
 	};
 
-} //namespace Database
+}

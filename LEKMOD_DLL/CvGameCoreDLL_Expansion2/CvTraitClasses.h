@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_TRAIT_CLASSES_H
@@ -34,12 +34,12 @@ struct FreeResourceCities
 	int m_iResourceQuantity;
 	int m_iNumCities;
 
-	// Group behavior
+
 	int m_iGroup;
 	int m_iPriority;
 	bool m_bCycleGroup;
 
-	// Trigger / placement rules
+
 	bool m_bCity;
 	bool m_bFound;
 	bool m_bTech;
@@ -64,15 +64,15 @@ struct MayaBonusChoice
 	int m_iBaktunJustFinished;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvTraitEntry
-//!  \brief		A single entry in the trait XML file
-//
-//!  Key Attributes:
-//!  - Used to be called CvTraitInfo
-//!  - Populated from XML\Civilizations\CIV5Traits.xml
-//!  - Array of these contained in CvTraitXMLEntries class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvTraitEntry: public CvBaseInfo
 {
 public:
@@ -129,7 +129,7 @@ public:
 	int GetNaturalWonderFirstFinderGold() const;
 	int GetNaturalWonderSubsequentFinderGold() const;
 	
-#if defined(TRAITIFY) // Int and Bool getters
+#if defined(TRAITIFY)
 	bool IsHalfMoreSpecialistUnhappiness() const;
 
 	int GetNumExtraLeagueVotes() const;
@@ -159,7 +159,7 @@ public:
 	int GetSelfReligiousPressureModifier() const;
 #endif
 
-	//EAP: Natural Wonder finder faith
+
 	int GetNaturalWonderFirstFinderFaith() const;
 	int GetNaturalWonderSubsequentFinderFaith() const;
 
@@ -175,9 +175,9 @@ public:
 	int GetRazeSpeedModifier() const;
 	int GetDOFGreatPersonModifier() const;
 	int GetLuxuryHappinessRetention() const;
-	int GetExtraHappinessPerLuxury() const; // NQMP GJS - New Netherlands UA
+	int GetExtraHappinessPerLuxury() const;
 	int GetExtraSpies() const;
-	int GetHappinessPerReligion() const; // NQMP GJS - New Ottoman UA
+	int GetHappinessPerReligion() const;
 	int GetUnresearchedTechBonusFromKills() const;
 	int GetExtraFoundedCityTerritoryClaimRange() const;
 	int GetFreeSocialPoliciesPerEra() const;
@@ -191,7 +191,7 @@ public:
 	int GetTradeReligionModifier() const;
 	int GetTradeBuildingModifier() const;
 	
-	// Here we insert usefull new table entries to smooth out existing code (From the Community-Patch DLL) ~EAP
+
 	TechTypes GetFreeBuildingPrereqTech() const; 
 	TechTypes GetCapitalFreeBuildingPrereqTech() const;
 
@@ -220,7 +220,7 @@ public:
 #ifdef NQ_UNIT_IMMUNE_TO_PLUNDER_FROM_TRAIT
 	bool IsSeaTradeRoutesArePlunderImmune() const;
 #endif
-	// NQMP GJS - New France UA begin
+
 	bool IsEarnsGreatPersonOnSlotOrGuild() const;
 	bool IsHasBuiltWritersGuild() const;
 	void SetHasBuiltWritersGuild(bool hasBuilt);
@@ -228,7 +228,7 @@ public:
 	void SetHasBuiltArtistsGuild(bool hasBuilt);
 	bool IsHasBuiltMusiciansGuild() const;
 	void SetHasBuiltMusiciansGuild(bool hasBuilt);
-	// NQMP GJS - New France UA end
+
 
 	bool IsBonusReligiousBelief() const;
 	bool IsAbleToAnnexCityStates() const;
@@ -243,11 +243,11 @@ public:
 	const char* getShortDescription() const;
 	void setShortDescription(const char* szVal);
 
-	// Arrays
+
 #if defined(LEKMOD_EXPERIMENTAL_CHANGES)
 	int GetWorldWonderYieldChanges(int i) const;
 #endif
-#if defined(TRAITIFY) //Arrays
+#if defined(TRAITIFY)
 	bool IsBuildingClassRemoveRequiredTerrain(BuildingClassTypes eBuildingClass) const;
 	bool IsUnitClassForceSpawnCapital(UnitClassTypes eUnitClass) const;
 
@@ -295,7 +295,7 @@ public:
 	int GetGreatWorkClassYieldChange(int i, int j) const;
 #endif
 	int GetYieldChangeStrategicResources(int i) const;
-	int GetYieldChangeLuxuryResources(int i) const; // NQMP GJS - New Netherlands UA
+	int GetYieldChangeLuxuryResources(int i) const;
 	int GetYieldChangeNaturalWonder(int i) const;
 #if !defined(TRADE_REFACTOR)
 	int GetYieldChangePerTradePartner(int i) const;
@@ -352,11 +352,11 @@ public:
 #ifdef LEKMOD_BUILD_TIME_OVERRIDE
 	int GetBuildTimeOverride(BuildTypes eBuild, ResourceClassTypes eResourceClass = NO_RESOURCECLASS);
 	
-	// Add accessor methods for direct access to the vectors
+
 	int GetBuildTimeOverrideVector(int iBuild) const { return m_aiBuildTimeOverride[iBuild]; }
 	ResourceClassTypes GetBuildTimeOverrideResourceClassRequiredVector(int iBuild) const { return m_aiBuildTimeOverrideResourceClassRequired[iBuild]; }
 	
-	// Add accessor method for the multimap
+
 	const std::multimap<BuildTypes, std::pair<int, ResourceClassTypes>>& GetBuildTimeOverridesMultimap() const { return m_BuildTimeOverrides; }
 #endif
 
@@ -416,7 +416,7 @@ protected:
 	int m_iNaturalWonderFirstFinderGold;
 	int m_iNaturalWonderSubsequentFinderGold;
 
-#if defined(TRAITIFY) // int and bool members
+#if defined(TRAITIFY)
 	bool m_bHalfMoreSpecialistUnhappiness;
 
 	int m_iNumExtraLeagueVotes;
@@ -446,7 +446,7 @@ protected:
 	int m_iSelfReligiousPressureModifier;
 #endif
 
-	//EAP: Natural wonder faith for the finder
+
 	int m_iNaturalWonderFirstFinderFaith;
 	int m_iNaturalWonderSubsequentFinderFaith;
 
@@ -462,9 +462,9 @@ protected:
 	int m_iRazeSpeedModifier;
 	int m_iDOFGreatPersonModifier;
 	int m_iLuxuryHappinessRetention;
-	int m_iExtraHappinessPerLuxury; // NQMP GJS - New Netherlands UA
+	int m_iExtraHappinessPerLuxury;
 	int m_iExtraSpies;
-	int m_iHappinessPerReligion; // NQMP GJS - New Ottoman UA
+	int m_iHappinessPerReligion;
 	int m_iUnresearchedTechBonusFromKills;
 	int m_iExtraFoundedCityTerritoryClaimRange;
 	int m_iFreeSocialPoliciesPerEra;
@@ -506,12 +506,12 @@ protected:
 	bool m_bSeaTradeRoutesArePlunderImmune;
 #endif
 
-	// NQMP GJS - New France UA begin
+
 	bool m_bEarnsGreatPersonOnSlotOrGuild;
 	bool m_bHasBuiltWritersGuild;
 	bool m_bHasBuiltArtistsGuild;
 	bool m_bHasBuiltMusiciansGuild;
-	// NQMP GJS - New France UA end
+
 
 	bool m_bBonusReligiousBelief;
 	bool m_bAbleToAnnexCityStates;
@@ -525,11 +525,11 @@ protected:
 
 	CvString m_strShortDescription;
 
-	// Arrays
+
 #if defined(LEKMOD_EXPERIMENTAL_CHANGES)
 	int* m_piWorldWonderYieldChanges;
 #endif
-#if defined(TRAITIFY) //Array members
+#if defined(TRAITIFY)
 	std::vector<bool> m_abBuildingClassRemoveRequiredTerrain;
 	std::vector<bool> m_abUnitClassForceSpawnCapital;
 	int** m_ppiBuildingCostOverride;
@@ -569,7 +569,7 @@ protected:
 	int* m_paiExtraYieldThreshold;
 	int* m_paiYieldChange;
 	int* m_paiYieldChangeStrategicResources;
-	int* m_paiYieldChangeLuxuryResources; // NQMP GJS - New Netherlands UA
+	int* m_paiYieldChangeLuxuryResources;
 	int* m_paiYieldChangeNaturalWonder;
 #if !defined(TRADE_REFACTOR)
 	int* m_paiYieldChangePerTradePartner;
@@ -641,23 +641,23 @@ private:
 	CvTraitEntry& operator=(const CvTraitEntry&);
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvTraitXMLEntries
-//!  \brief		Game-wide information about civilization traits
-//
-//! Key Attributes:
-//! - Plan is it will be contained in CvGameRules object within CvGame class
-//! - Populated from XML\GameInfo\CIV5Traits.xml
-//! - Contains an array of CvTraitEntry from the above XML file
-//! - One instance for the entire game
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
 class CvTraitXMLEntries
 {
 public:
 	CvTraitXMLEntries(void);
 	~CvTraitXMLEntries(void);
 
-	// Accessor functions
+
 	std::vector<CvTraitEntry*>& GetTraitEntries();
 	int GetNumTraits();
 	CvTraitEntry* GetEntry(int index);
@@ -680,14 +680,14 @@ struct FreeTraitUnit
 	TechTypes m_ePrereqTech;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvPlayerTraits
-//!  \brief		Information about the traits of a player
-//
-//!  Key Attributes:
-//!  - One instance for each player
-//!  - Accessed by any class that needs to check trait info
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvPlayerTraits
 {
 public:
@@ -698,7 +698,7 @@ public:
 	void Reset();
 	void InitPlayerTraits();
 
-	// Accessor functions
+
 	bool HasTrait(TraitTypes eTrait) const;
 	int GetGreatPeopleRateModifier() const
 	{
@@ -869,7 +869,7 @@ public:
 	int GetFirstFreeUnit(TechTypes eTech);
 	int GetNextFreeUnit();
 
-#if defined(TRAITIFY) // int and bool getters
+#if defined(TRAITIFY)
 	bool IsHalfMoreSpecialistUnhappiness() const
 	{
 		return m_bHalfMoreSpecialistUnhappiness;
@@ -959,7 +959,7 @@ public:
 		return m_iNaturalWonderSubsequentFinderGold;
 	};
 
-	//EAP Faith for the natural wonder finder
+
 
 	int GetNaturalWonderFirstFinderFaith() const
 	{
@@ -1019,22 +1019,22 @@ public:
 	{
 		return m_iLuxuryHappinessRetention;
 	};
-	// NQMP GJS - New Netherlands UA gives +1 Happiness per unique Luxury for the empire BEGIN
+
 	int GetExtraHappinessPerLuxury() const
 	{
 		return m_iExtraHappinessPerLuxury;
 	};
-	// NQMP GJS - New Netherlands UA gives +1 Happiness per unique Luxury for the empire END
+
 	int GetExtraSpies() const
 	{
 		return m_iExtraSpies;
 	};
-	// NQMP GJS - New Ottoman UA begin
+
 	int GetHappinessPerReligion() const
 	{
 		return m_iHappinessPerReligion;
 	};
-	// NQMP GJS - New Ottoman UA end
+
 	int GetUnresearchedTechBonusFromKills() const
 	{
 		return m_iUnresearchedTechBonusFromKills;
@@ -1126,7 +1126,7 @@ public:
 	{
 		return m_bStaysAliveZeroCities;
 	};
-	// NQMP GJS - New France UA begin
+
 	bool IsEarnsGreatPersonOnSlotOrGuild() const
 	{
 		return m_bEarnsGreatPersonOnSlotOrGuild;
@@ -1155,7 +1155,7 @@ public:
 	{
 		m_bHasBuiltMusiciansGuild = hasBuilt;
 	};
-	// NQMP GJS - New France UA end
+
 	bool IsFaithFromUnimprovedForest() const
 	{
 		return m_bFaithFromUnimprovedForest;
@@ -1215,12 +1215,12 @@ public:
 	{
 		return m_iYieldChangeStrategicResources[(int)eYield];
 	};
-	// NQMP GJS - New Netherlands UA BEGIN
+
 	int GetYieldChangeLuxuryResources(YieldTypes eYield) const
 	{
 		return m_iYieldChangeLuxuryResources[(int)eYield];
 	};
-	// NQMP GJS - New Netherlands UA END
+
 	int GetYieldChangeNaturalWonder(YieldTypes eYield) const
 	{
 		return m_iYieldChangeNaturalWonder[(int)eYield];
@@ -1266,12 +1266,12 @@ public:
 	{
 		return m_iYieldChangePerTradePartner[(int)eYield];
 	};
-	// NQMP GJS - Morocco UA Gateway To Africa now scales with era BEGIN
+
 	int GetTradePartnerYieldFlatBonusPerEra() const
 	{
-		return 1; //m_iYieldChangePerTradePartner[(int)eYield]; // TODO: finish this to get the trait "TradePartnerYieldFlatBonusPerEra" from SQL
+		return 1;
 	};
-	// NQMP GJS - Morocco UA Gateway To Africa now scales with era END
+
 	int GetYieldChangeIncomingTradeRoute(YieldTypes eYield) const
 	{
 		return m_iYieldChangeIncomingTradeRoute[(int)eYield];
@@ -1310,9 +1310,9 @@ public:
 #endif
 	int GetUnimprovedFeatureYieldChange(FeatureTypes eFeature, YieldTypes eYield) const;
 	const std::vector<FreeResourceCities>& GetFreeResourceCities() const { return m_vFreeResourceCities; }
-	// Second element of each pair is a plot index (CvPlot::GetPlotIndex), not an Area ID -- Area IDs are
-	// reassigned by CvMap::recalculateAreas() (e.g. IGE/WorldBuilder edits), so callers must resolve the
-	// stored plot to its current Area ID via GC.getMap().plotByIndex(...)->getArea() before comparing.
+
+
+
 	std::vector<std::pair<int, int> >& GetUsedGroupAreas() { return m_vUsedGroupAreas; }
 	std::vector<std::pair<int, int> >& GetGroupPriority() { return m_vGroupPriority; }
 #if defined(LEKMOD_FREE_RESOURCE_CITY_GRANT)
@@ -1324,13 +1324,13 @@ public:
 
 	bool HasFreePromotionUnitCombat(const int promotionID, const int unitCombatID) const;
 
-	// Public functions to make trait-based game state changes
+
 	void AddUniqueLuxuries(CvCity *pCity);
 
 	bool CheckForBarbarianConversion(CvPlot* pPlot);
 	int GetCapitalBuildingDiscount(BuildingTypes eBuilding);
 	
-	// Inserted Table Entries from CMP DLL ~EAP
+
 	TechTypes GetFreeBuildingPrereqTech() const;
 	TechTypes GetCapitalFreeBuildingPrereqTech() const;
 #if defined(LEKMOD_CITY_YIELDS_TRAITS)
@@ -1369,7 +1369,7 @@ public:
 #ifdef LEKMOD_BUILD_TIME_OVERRIDE
 	int GetBuildTimeOverride(BuildTypes eBuild, ResourceClassTypes eResourceClass = NO_RESOURCECLASS);
 #endif
-#if defined(TRAITIFY) //Array members
+#if defined(TRAITIFY)
 	bool IsBuildingClassRemoveRequiredTerrain(BuildingClassTypes eBuildingClass);
 	bool IsUnitClassForceSpawnCapital(UnitClassTypes eUnitClass);
 
@@ -1410,7 +1410,7 @@ public:
 	int GetGreatWorkClassYieldChange(GreatWorkClass eClass, YieldTypes eYield);
 #endif
 
-	// Maya calendar routines
+
 	bool IsUsingMayaCalendar() const;
 	bool IsEndOfMayaLongCount();
 	CvString GetMayaCalendarString();
@@ -1421,7 +1421,7 @@ public:
 	void SetUnitBaktun(UnitTypes eUnit);
 	bool IsFreeMayaGreatPersonChoice() const;
 
-	// Serialization
+
 	void Read(FDataStream& kStream);
 	void Write(FDataStream& kStream);
 
@@ -1436,7 +1436,7 @@ private:
 	std::vector<bool> m_vLeaderHasTrait;
 	std::vector<TraitTypes> m_vPotentiallyActiveLeaderTraits;
 
-	// Cached data about this player's traits
+
 	int m_iGreatPeopleRateModifier;
 	int m_iGreatScientistRateModifier;
 	int m_iGreatGeneralRateModifier;
@@ -1487,7 +1487,7 @@ private:
 	int m_iNaturalWonderSubsequentFinderGold;
 	int m_iNaturalWonderYieldModifier;
 
-#if defined(TRAITIFY) // int and bool members
+#if defined(TRAITIFY)
 	bool m_bHalfMoreSpecialistUnhappiness;
 
 	int m_iNumExtraLeagueVotes;
@@ -1517,7 +1517,7 @@ private:
 	int m_iSelfReligiousPressureModifier;
 #endif
 
-	//EAP: Natural wonder faith for the finder
+
 	int m_iNaturalWonderFirstFinderFaith;
 	int m_iNaturalWonderSubsequentFinderFaith;
 	
@@ -1534,9 +1534,9 @@ private:
 	int m_iRazeSpeedModifier;
 	int m_iDOFGreatPersonModifier;
 	int m_iLuxuryHappinessRetention;
-	int m_iExtraHappinessPerLuxury; // NQMP GJS - New Netherlands UA
+	int m_iExtraHappinessPerLuxury;
 	int m_iExtraSpies;
-	int m_iHappinessPerReligion; //NQMP GJS - New Ottoman UA
+	int m_iHappinessPerReligion;
 	int m_iUnresearchedTechBonusFromKills;
 	int m_iExtraFoundedCityTerritoryClaimRange;
 	int m_iFreeSocialPoliciesPerEra;
@@ -1550,7 +1550,7 @@ private:
 	int m_iLandTradeRouteRangeBonus;
 	int m_iTradeReligionModifier;
 	int m_iTradeBuildingModifier;
-	// Saved
+
 
 	bool m_bFightWellDamaged;
 	bool m_bMoveFriendlyWoodsAsRoad;
@@ -1569,12 +1569,12 @@ private:
 	bool m_bSeaTradeRoutesArePlunderImmune;
 #endif
 
-	// NQMP GJS - New France UA begin
+
 	bool m_bEarnsGreatPersonOnSlotOrGuild;
 	bool m_bHasBuiltWritersGuild;
 	bool m_bHasBuiltArtistsGuild;
 	bool m_bHasBuiltMusiciansGuild;
-	// NQMP GJS - New France UA end
+
 
 	bool m_bBonusReligiousBelief;
 	bool m_bAbleToAnnexCityStates;
@@ -1605,7 +1605,7 @@ private:
 	int m_iExtraYieldThreshold[NUM_YIELD_TYPES];
 	int m_iFreeCityYield[NUM_YIELD_TYPES];
 	int m_iYieldChangeStrategicResources[NUM_YIELD_TYPES];
-	int m_iYieldChangeLuxuryResources[NUM_YIELD_TYPES]; // NQMP GJS - New Netherlands UA
+	int m_iYieldChangeLuxuryResources[NUM_YIELD_TYPES];
 	int m_iYieldChangeNaturalWonder[NUM_YIELD_TYPES];
 #if !defined(TRADE_REFACTOR)
 	int m_iYieldChangePerTradePartner[NUM_YIELD_TYPES];
@@ -1641,14 +1641,14 @@ private:
 	FStaticVector<FreeTraitUnit, SAFE_ESTIMATE_NUM_FREE_UNITS, true, c_eCiv5GameplayDLL, 0> m_aFreeTraitUnits;
 	std::vector<int> m_aUniqueLuxuryAreas;
 
-	// Maya calendar bonus data
-	int m_iBaktunPreviousTurn;  // Saved
-	int m_iBaktun;	 // Not saved
-	int m_iKatun;    // Not saved
-	int m_iTun;      // Not saved
-	int m_iWinal;    // Not saved
-	int m_iKin;      // Not saved
-	std::vector<MayaBonusChoice> m_aMayaBonusChoices;  // Saved
+
+	int m_iBaktunPreviousTurn;
+	int m_iBaktun;
+	int m_iKatun;
+	int m_iTun;
+	int m_iWinal;
+	int m_iKin;
+	std::vector<MayaBonusChoice> m_aMayaBonusChoices;
 
 	std::vector<int> m_paiMovesChangeUnitCombat;
 	std::vector<int> m_paiMaintenanceModifierUnitCombat;
@@ -1709,4 +1709,4 @@ private:
 #endif
 };
 
-#endif //CIV5_TRAIT_CLASSES_H
+#endif

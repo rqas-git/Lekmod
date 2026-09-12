@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2/14/2016 8:40:53 PM -->
+
 <GameData>
 	<Policies>
 		<Update>
@@ -8,7 +8,7 @@
 		</Update>
 	</Policies>
 
-	<!-- Tooltip texts -->
+
 	<Language_en_US>
 		<Row Tag="TXT_KEY_GOLDMOD_YIELD_T1_ECONOMIC_UNION">
 			<Text>[NEWLINE][ICON_BULLET]Modifier for Economic Union: {1_Num}%</Text>
@@ -46,7 +46,7 @@
 		</Row>
 	</Language_RU_RU>
 
-	<!-- T1 Economic Union building: Trade Depot -->
+
 	<BuildingClasses>
 		<Row>
 			<Type>BUILDINGCLASS_T1_ECONOMIC_UNION</Type>

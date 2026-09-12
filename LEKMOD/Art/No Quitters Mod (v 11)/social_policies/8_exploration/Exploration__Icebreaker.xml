@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/7/2015 12:54:16 AM -->
+
 <GameData>
 
-	<!-- NOTE: This new unit is not used due to problems explained in Exploration__Icebreaker.lua -->
-	<!-- Icebreaker Ship -->
+
+
 	<UnitClasses>
 		<Row>
 			<Type>UNITCLASS_ICEBREAKER</Type>

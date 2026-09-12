@@ -1,27 +1,27 @@
-//---------------------------------------------------------------------------------------
-//
-//  *****************   FIRAXIS GAME ENGINE   ********************
-//
-//  FILE:		FAutoVariableBase.cpp
-//
-//  AUTHOR:		Justin Randall	--  07/20/2009
-//
-//  PURPOSE:	Base class declaration for FAutoVariables. See FAutoVariable.h
-//              for a concrete description.
-//
-//---------------------------------------------------------------------------------------
-//  Copyright (c) 2009 Firaxis Games, Inc. All rights reserved.
-//---------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #ifndef _INCLUDED_FAutoVariableBase_H
 #define _INCLUDED_FAutoVariableBase_H
 
 #ifndef FINAL_RELEASE
 #	include "FCallStack.h"
-#endif//FINAL_RELEASE
+#endif
 
 #ifdef _WINPC
-#	pragma warning ( disable : 4355 )  // Clients of this class will need to pass 'this' along to construct AutoVariables
-#endif//_WINPC
+#	pragma warning ( disable : 4355 )
+#endif
 #include <vector>
 
 class FAutoArchive;
@@ -30,7 +30,7 @@ class FAutoVariableBase;
 
 namespace FSerialization
 {
-	// converting types to printable strings, for debugging
+
 	std::string toString(const bool & source);
 	std::string toString(const unsigned char & source);
 	std::string toString(const char & source);
@@ -40,7 +40,7 @@ namespace FSerialization
 	std::string toString(const int & source);
 	std::string toString(const float & source);
 	std::string toString(const double & source);
-	std::string toString(const std::string & source); // for completeness, no a-priori knowlege of what the var type is
+	std::string toString(const std::string & source);
 	std::string toString(const FAutoVariableBase &);
 	template<typename ValueType>
 	std::string toString(const std::vector<ValueType> & source)
@@ -60,11 +60,11 @@ namespace FSerialization
 		return result;
 	}
 
-	// temporary fall-through do-nothing case
-	// comment this to let the compiler tell you which
-	// types need implementations or which implementations
-	// are not in scope for code that fails after removing
-	// this function
+
+
+
+
+
 	template<typename ValueType>
 	std::string toString(const ValueType &)
 	{
@@ -78,7 +78,7 @@ class FAutoVariableBase
 public:
 	FAutoVariableBase(const std::string & name, FAutoArchive & owner);
 
-	// used for extended debugging out of sync errors. Does nothing in release builds
+
 	FAutoVariableBase(const std::string & name, FAutoArchive & owner, bool callStackTracking);
 
 	virtual ~FAutoVariableBase() = 0;
@@ -92,7 +92,7 @@ public:
 
 	virtual const std::string & name() const = 0;
 
-	// used for extended debugging out of sync errors. Does nothing in release builds
+
 	std::string  getStackTrace() const;
 	std::string  getStackTraceRemark() const;
 	virtual void setStackTraceRemark() = 0;
@@ -107,12 +107,12 @@ protected:
 	bool         m_callStackTracking;
 #endif
 private:
-	// keep these out of containers by value, they won't do what is expected
+
 	FAutoVariableBase(const FAutoVariableBase &);
 	FAutoVariableBase & operator=(const FAutoVariableBase &);
 
 private:
-	//std::string  m_name; // JAR : todo  - this is redundant for each class instance, this could be a FlyWeight
+
 };
 
-#endif//_INCLUDED_FAutoVariableBase_H
+#endif

@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 #include "CvDllInterfaces.h"
 #include "CvDllVersion.h"
@@ -24,12 +24,12 @@ public:
 	void* DLLCALL QueryInterface(GUID guidInterface);
 
 
-	// This is a singleton class.
+
 	static void InitializeSingleton();
 	static void DestroySingleton();
 	static CvDllGameContext* GetSingleton();
 
-	//Memory management functions used by adapters.
+
 	_Check_return_ static void* Allocate(size_t bytes);
 	static void Free(_In_ void* p);
 
@@ -48,7 +48,7 @@ public:
 	ICvMap1* DLLCALL GetMap();
 	ICvTeam1* DLLCALL GetTeam(TeamTypes eTeam);
 
-	//Infos Accessors
+
 	int DLLCALL GetInfoTypeForString(const char* szType, bool hideAssert = false) const;
 	int DLLCALL GetInfoTypeForHash(uint uiHash, bool hideAssert = false) const;
 
@@ -108,8 +108,8 @@ public:
 	ICvUnitInfo1* DLLCALL GetUnitInfo(UnitTypes eUnit);
 	ICvVictoryInfo1* DLLCALL GetVictoryInfo(VictoryTypes eVictoryType);
 
-	// ***** EXPOSED *****
-	// use very sparingly - this is costly
+
+
 	bool DLLCALL GetDefineSTRING(char* szBuffer, size_t lenBuffer, const char* szName, bool bReportErrors = true);
 
 	int DLLCALL GetMOVE_DENOMINATOR() const;
@@ -215,10 +215,10 @@ private:
 	CvDllScriptSystemUtility* m_pScriptSystemUtility;
 	CvDllWorldBuilderMapLoader* m_pWorldBuilderMapLoader;
 
-	//Programmer Note:
-	//Rather than use the common idiom of using the index of the object in an array as the public
-	//identifier to the object, I chose to use a system where the index will always be unique even
-	//after objects are destroyed.  This technique is prone to fewer bugs w/ heavily threaded apps.
+
+
+
+
 	std::vector<std::pair<uint, CvRandom*> > m_RandomNumberGenerators;
 	unsigned int m_uiRngCounter;
 

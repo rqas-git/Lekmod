@@ -1,4 +1,4 @@
-"""Checks for host pinning, reversible metadata changes, and real event handlers."""
+
 from pathlib import Path
 import json
 import plistlib

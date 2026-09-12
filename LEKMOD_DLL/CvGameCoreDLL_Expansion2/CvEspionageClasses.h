@@ -1,21 +1,21 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_ESPIONAGE_CLASSES_H
 #define CIV5_ESPIONAGE_CLASSES_H
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS: CvEspionageSpy
-//!  \brief All the information about a spy
-//
-//!  Key Attributes:
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
 enum CvSpyRank
 {
     SPY_RANK_RECRUIT,
@@ -38,26 +38,26 @@ enum CvSpyState
     NUM_SPY_STATES
 };
 
-enum CvSpyResult // what was the result of the last spy action
+enum CvSpyResult
 {
-    SPY_RESULT_UNDETECTED, // spy was not detected
-    SPY_RESULT_DETECTED,   // a spy was detected in the city, but the defensive player can't tell which player
-    SPY_RESULT_IDENTIFIED, // a spy was detected and identified in the city
+    SPY_RESULT_UNDETECTED,
+    SPY_RESULT_DETECTED,
+    SPY_RESULT_IDENTIFIED,
 #ifdef ESPIONAGE_SYSTEM_REWORK
 	SPY_RESULT_SPOTTED,
 #endif
-    SPY_RESULT_KILLED,     // a spy was detected, identified, and killed in the city
+    SPY_RESULT_KILLED,
     NUM_SPY_RESULTS
 };
 
-enum CvIntrigueType // What intrigue was uncovered?
+enum CvIntrigueType
 {
-    INTRIGUE_TYPE_DECEPTION,			    // A civ is lying to another civ
-    INTRIGUE_TYPE_BUILDING_ARMY,		    // A civ is amassing an army
-    INTRIGUE_TYPE_BUILDING_AMPHIBIOUS_ARMY, // A civ is amassing an army to attack over the water
-    INTRIGUE_TYPE_ARMY_SNEAK_ATTACK,	    // A civ is sending an army toward another civ
-    INTRIGUE_TYPE_AMPHIBIOUS_SNEAK_ATTACK,  // a civ is sending a land invasion across the water toward another civ
-	INTRIGUE_TYPE_CONSTRUCTING_WONDER,		// A civ is constructing a wonder
+    INTRIGUE_TYPE_DECEPTION,
+    INTRIGUE_TYPE_BUILDING_ARMY,
+    INTRIGUE_TYPE_BUILDING_AMPHIBIOUS_ARMY,
+    INTRIGUE_TYPE_ARMY_SNEAK_ATTACK,
+    INTRIGUE_TYPE_AMPHIBIOUS_SNEAK_ATTACK,
+	INTRIGUE_TYPE_CONSTRUCTING_WONDER,
     NUM_INTRIGUE_TYPES
 };
 
@@ -66,15 +66,15 @@ class CvEspionageSpy
 public:
 	CvEspionageSpy();
 
-	// Public data
+
 	int m_iName;
 	int m_iCityX;
 	int m_iCityY;
 	CvSpyRank m_eRank;
 	CvSpyState m_eSpyState;
-	int m_iReviveCounter; // after killed, counter to reincarnate a spy
+	int m_iReviveCounter;
 	bool m_bIsDiplomat;
-	bool m_bEvaluateReassignment; // used by the AI. Flag to indicate if the spy should be evaluated to be reassigned
+	bool m_bEvaluateReassignment;
 #ifdef AUI_YIELDS_APPLIED_AFTER_TURN_NOT_BEFORE
 	int m_iMyPoliciesEspionageModifierCached;
 	int m_iInfluenceMajorCivSpyRankBonusCached;
@@ -87,14 +87,14 @@ public:
 FDataStream& operator>>(FDataStream&, CvEspionageSpy&);
 FDataStream& operator<<(FDataStream&, const CvEspionageSpy&);
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:		CvPlayerEspionage
-//!  \brief		All the information about espionage relating to this player
-//
-//!  Key Attributes:
-//!  - Core data in this class is a list of CvEspionageSpies
-//!  - This object is created inside the CvPlayer object and accessed through CvPlayer
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 struct HeistLocation
 {
 	int m_iX;
@@ -142,7 +142,7 @@ public:
 	void Uninit(void);
 	void Reset(void);
 
-	// Functions invoked each player turn
+
 	void DoTurn(void);
 
 	void CreateSpy(void);
@@ -225,8 +225,8 @@ public:
 	NumTechsToStealList m_aiNumTechsToStealList;
 	MaxTechCost m_aiMaxTechCost;
 	HeistLocationList m_aHeistLocations;
-	std::vector<SpyNotificationMessage> m_aSpyNotificationMessages; // cleared every turn after displayed for the player
-	std::vector<IntrigueNotificationMessage> m_aIntrigueNotificationMessages; // cleared only between games
+	std::vector<SpyNotificationMessage> m_aSpyNotificationMessages;
+	std::vector<IntrigueNotificationMessage> m_aIntrigueNotificationMessages;
 
 private:
 	CvPlayer* m_pPlayer;
@@ -236,16 +236,16 @@ FDataStream& operator>>(FDataStream&, CvPlayerEspionage&);
 FDataStream& operator<<(FDataStream&, const CvPlayerEspionage&);
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:		CvCityEspionage
-//!  \brief		All the information about espionage relating to this player
-//
-//!  Key Attributes:
-//!  - Core data in this class is the progress various civs have made on doing
-//!     espionage in the city
-//!  - This object is created inside the CvCity object and accessed through CvCity
-//!  - This may be deprecated!
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
 typedef Firaxis::Array<int, MAX_MAJOR_CIVS> SpyAssignmentList;
 typedef Firaxis::Array<int, MAX_MAJOR_CIVS> SpyAmountProgressList;
 typedef Firaxis::Array<int, MAX_MAJOR_CIVS> SpyRateProgressList;
@@ -281,26 +281,26 @@ public:
 
 	CvCity* m_pCity;
 	SpyAssignmentList m_aiSpyAssignment;
-	SpyAmountProgressList m_aiAmount; // how much has been collected so far
-	SpyRateProgressList m_aiRate; // how much per turn
-	SpyGoalProgressList m_aiGoal; // how many we need
-	LastProgressList m_aiLastProgress; // the last progress we got from this city. This is recalculated when transitioning between surveillance and stealing a tech and while stealing techs
-	LastPotentialList m_aiLastPotential; // the last potential we calculated from this city taking into account the spy stealing
-	LastPotentialList m_aiLastBasePotential; // the last potential we calculated from this city without taking into account the spy
-	SpyResultList m_aiResult; // what was the spy result this turn
-	NumTimesCityRobbedList m_aiNumTimesCityRobbed; // how many times has this city had a tech stolen from it?
+	SpyAmountProgressList m_aiAmount;
+	SpyRateProgressList m_aiRate;
+	SpyGoalProgressList m_aiGoal;
+	LastProgressList m_aiLastProgress;
+	LastPotentialList m_aiLastPotential;
+	LastPotentialList m_aiLastBasePotential;
+	SpyResultList m_aiResult;
+	NumTimesCityRobbedList m_aiNumTimesCityRobbed;
 };
 
 FDataStream& operator>>(FDataStream&, CvCityEspionage&);
 FDataStream& operator<<(FDataStream&, const CvCityEspionage&);
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:		CvEspionageAI
-//!  \brief		The player-level AI for espionage
-//
-//!  Key Attributes:
-//!  - Object is in the player class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 typedef FStaticVector<int, MAX_MAJOR_CIVS, false, c_eCiv5GameplayDLL> EspionageAIOutOfTechTurnList;
 typedef FStaticVector<int, MAX_MAJOR_CIVS, false, c_eCiv5GameplayDLL> EspionageAILastTurns;
 typedef FStaticVector<int, MAX_MAJOR_CIVS, false, c_eCiv5GameplayDLL> EspionageAICount;
@@ -309,7 +309,7 @@ typedef std::vector<CvCity*> EspionageCityList;
 class CvEspionageAI
 {
 public:
-	// check to see if the countdown clock is started
+
 	enum {
 		PLAN_DEFEND_CS_FOR_WIN,
 		PLAN_ATTACK_CS_TO_PREVENT_DEFEAT,
@@ -341,21 +341,21 @@ public:
 	void EvaluateDiplomatSpies(void);
 
 	CvPlayer* m_pPlayer;
-	EspionageAIOutOfTechTurnList m_aiCivOutOfTechTurn; // when a civ has run out of techs to steal relative to us
+	EspionageAIOutOfTechTurnList m_aiCivOutOfTechTurn;
 
-	EspionageAICount m_aiNumSpiesCaught; // how many spies we caught
-	EspionageAICount m_aiNumSpiesKilled;   // how many spies we killed
-	EspionageAICount m_aiNumSpiesDied;     // how many spies we controlled that were killed
+	EspionageAICount m_aiNumSpiesCaught;
+	EspionageAICount m_aiNumSpiesKilled;
+	EspionageAICount m_aiNumSpiesDied;
 
-	EspionageAILastTurns m_aiTurnLastSpyCaught; // last turn we caught a spy
-	EspionageAILastTurns m_aiTurnLastSpyKilled; // last turn we killed a spy
-	EspionageAILastTurns m_aiTurnLastSpyDied;   // last turn one of our spies was killed
+	EspionageAILastTurns m_aiTurnLastSpyCaught;
+	EspionageAILastTurns m_aiTurnLastSpyKilled;
+	EspionageAILastTurns m_aiTurnLastSpyDied;
 
-	bool m_bUNCountdownStarted; // has the UN countdown started
-	int m_iTurnEspionageStarted; // what turn espionage started
+	bool m_bUNCountdownStarted;
+	int m_iTurnEspionageStarted;
 };
 
 FDataStream& operator>>(FDataStream&, CvEspionageAI&);
 FDataStream& operator<<(FDataStream&, const CvEspionageAI&);
 
-#endif //CIV5_ESPIONAGE_CLASSES_H
+#endif

@@ -1,4 +1,4 @@
-"""Research models, not game integration tests. Run with --lua-python-path PATH."""
+
 import argparse
 import hashlib
 import heapq
@@ -22,7 +22,7 @@ sources = ['Lekmap/HBMapmakerUtilities.lua',
            'LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvTradeClasses.cpp']
 result = {'source_sha256': {p: hashlib.sha256((root / p).read_bytes()).hexdigest() for p in sources}}
 
-# Original DX-major order, including axis/sign boundaries.
+
 for radius in range(65):
     original = [(x, y) for x in range(-radius, radius + 1)
                 for y in range(-radius, radius + 1)
@@ -33,8 +33,8 @@ for radius in range(65):
     assert original == bounded
 result['hex_order'] = {'radii_checked': 65, 'radius_8_square': 289, 'radius_8_bounded': 217}
 
-# Stable descending score order represented by heap keys; model all reachability
-# patterns in randomized lists. Compare attempted candidates.
+
+
 rng = random.Random(274)
 cases = 0
 for n in list(range(9)) + [32, 100, 1000]:
@@ -58,8 +58,8 @@ for n in list(range(9)) + [32, 100, 1000]:
 result['worker_order_model_cases'] = cases
 
 lua = LuaRuntime(unpack_returned_tuples=True)
-# Keep the research comparison reproducible after the production implementation
-# has changed; integration tests compare the new shipping code separately.
+
+
 shuffle_baseline = 'a90d5bbe07a9cbf521190cdcc33304739f5375f2'
 source_bytes = subprocess.check_output(['git', 'show', f'{shuffle_baseline}:{sources[0]}'], cwd=root)
 source = source_bytes.decode()

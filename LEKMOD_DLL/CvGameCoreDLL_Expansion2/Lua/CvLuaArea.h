@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 
 #pragma once
 #ifndef CVLUAAREA_H
@@ -16,13 +16,13 @@ class CvLuaArea :  public CvLuaScopedInstance<CvLuaArea, CvArea>
 {
 public:
 
-	//! Push CvArea methods into table t
+
 	static void PushMethods(lua_State* L, int t);
 
-	//! Required by CvLuaScopedInstance.
+
 	static void HandleMissingInstance(lua_State* L);
 
-	//! Required by CvLuaScopedInstance.
+
 	static const char* GetTypeName();
 
 protected:
@@ -33,7 +33,7 @@ protected:
 	static int lCountNumUniqueResourceTypes(lua_State* L);
 	static int lGetID(lua_State* L);
 	static int lGetNumTiles(lua_State* L);
-	//static int lIsLake(lua_State* L);
+
 	static int lGetNumOwnedTiles(lua_State* L);
 	static int lGetNumUnownedTiles(lua_State* L);
 	static int lGetNumRiverEdges(lua_State* L);
@@ -59,4 +59,4 @@ protected:
 	static int lGetNumImprovements(lua_State* L);
 };
 
-#endif //CVLUAAREA_H
+#endif

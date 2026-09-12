@@ -1,4 +1,4 @@
-// Standalone source-extracted research fixtures, not game integration tests.
+
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
@@ -46,7 +46,7 @@ int main(){
     long long techCases=0,oldAlloc=0,newAlloc=0;
     for(int world=0;world<2000;++world){
         for(int p=0;p<64;++p){players[p]={p,int(rng()%64),rng()%3!=0};teams[p].techs.known=int(rng()%15);}
-        // Include no living players and a single survivor.
+
         if(world<2)for(int p=0;p<64;++p)players[p].alive=(world==1&&p==0);
         for(int p=0;p<64;++p){
             current.player=p;allocations=techReads=0;
@@ -75,8 +75,8 @@ int main(){
         allocations=0;std::sort(b,b+n,ReverseSort());unstableAlloc+=allocations;
         assert(std::memcmp(a,b,n)==0);++sortCases;
     }
-    // The optional wide-storage branch is NOT equivalent: its comparator narrows
-    // distinct values to the same byte, making stable tie order observable.
+
+
     int wideMismatches=0;
     for(int trial=0;trial<200;++trial){
         std::vector<unsigned int> wide(37);for(auto& v:wide)v=rng()%1024;

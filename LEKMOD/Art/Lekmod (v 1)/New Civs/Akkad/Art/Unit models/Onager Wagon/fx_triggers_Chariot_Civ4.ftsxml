@@ -1,4 +1,4 @@
-<!-- edited with XMLSPY v2004 rel. 2 U (http://www.xmlspy.com) by Michael Curran (Firaxis Games) -->
+
 <trigger_system type="FGrannyTimedTriggerSystem">
   <event_tracks>
     <event_track ec="1160">

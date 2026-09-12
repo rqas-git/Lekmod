@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-25 05:44:53 -->
+
 <GameData>
 
-	<!-- Religion spreads twice as fast to your cities but only 25% as fast to other cities -->
+
 	<Beliefs>
 		<Row>
 			<Type>BELIEF_PROMISED_LAND</Type>
@@ -14,7 +14,7 @@
 		</Row>
 	</Beliefs>
 
-	<!-- localization -->
+
 	<Language_en_US>
 		<Row Tag="TXT_KEY_BELIEF_PROMISED_LAND">
 			<Text>Religion spreads twice as fast to your cities but only 25% as fast to other cities</Text>

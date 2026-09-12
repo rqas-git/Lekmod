@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvWorldBuilderMapLoader.h"
 #include "CvGameCoreUtils.h"
@@ -18,9 +18,9 @@
 
 #include "LintFree.h"
 
-// I know it looks weird to have these as static non-members.
-// The reason it's set up this was is to avoid an h file dependency
-// on CvWorldBuilderMap.
+
+
+
 static CvWorldBuilderMap sg_kSave;
 static CvWorldBuilderMapLoaderMapInfo sg_kMapInfo;
 static CvWorldBuilderMapTypeDesc sg_kMapTypeDesc;
@@ -28,8 +28,8 @@ static uint sg_auiPlayerSlots[MAX_CIV_PLAYERS];
 
 void InitTypeDesc()
 {
-	//static bool bFirst = true;
-	//if( bFirst ) // Do this every time as mod data may have changed.
+
+
 	{
 		sg_kMapTypeDesc.m_kTerrainTypes.Clear();
 		const int iTerrainTypeCount = GC.getNumTerrainInfos();
@@ -168,7 +168,7 @@ void InitTypeDesc()
 			}
 		}
 
-		//bFirst = false;
+
 	}
 }
 
@@ -185,7 +185,7 @@ bool CvWorldBuilderMapLoader::Preload(const wchar_t* wszFilename, bool bScenario
 {
 	InitTypeDesc();
 
-	// Re-initialize map info
+
 	new(&sg_kMapInfo)CvWorldBuilderMapLoaderMapInfo();
 
 	if(sg_kSave.Load(wszFilename, sg_kMapTypeDesc))
@@ -194,10 +194,10 @@ bool CvWorldBuilderMapLoader::Preload(const wchar_t* wszFilename, bool bScenario
 
 		if(!bScenario)
 		{
-			// Clear out all of the scenario data (except improvements)
+
 			sg_kSave.ClearScenarioData(true);
 
-			// Remove all improvements that aren't goodies
+
 			for(uint i = 0; i < uiPlotCount; ++i)
 			{
 				CvWorldBuilderMap::PlotScenarioData& kPlot = sg_kSave.GetPlotScenarioData(i);
@@ -261,7 +261,7 @@ bool CvWorldBuilderMapLoader::Preload(const wchar_t* wszFilename, bool bScenario
 			}
 		}
 
-		//ResetPlayerSlots();
+
 
 		return true;
 	}
@@ -397,8 +397,8 @@ void CvWorldBuilderMapLoader::SetupPlayers()
 		}
 	}
 
-	// If this is a map with defined player slots then close any slots out of this defined range
-	// that are being filled by computer players.  Hopefully there aren't any human players there.
+
+
 	const uint uiPlayerSlotCount = sg_kMapInfo.uiMajorCivStartingPositions + sg_kMapInfo.uiPlayers;
 	if(uiPlayerSlotCount > 0)
 	{
@@ -407,7 +407,7 @@ void CvWorldBuilderMapLoader::SetupPlayers()
 			const PlayerTypes ePlayer = (PlayerTypes)i;
 			const SlotStatus eStatus = CvPreGame::slotStatus(ePlayer);
 			if(eStatus == SS_COMPUTER)
-				CvPreGame::resetPlayer(ePlayer);	// Do a full reset, which will also close the slot.  A reset is better so that the player data does not get initialized later.
+				CvPreGame::resetPlayer(ePlayer);
 		}
 	}
 
@@ -509,15 +509,15 @@ void SetPlayerInitialItems(CvPlayer& kGameplayPlayer, const CvWorldBuilderMap::P
 		const PolicyTypes ePolicy = (PolicyTypes)iPolicy;
 		if(kSavedPlayer.m_kPolicies[iPolicy])
 		{
-			// Check the policy branch
+
 			CvPlayerPolicies* pkPlayerPolicies = kGameplayPlayer.GetPlayerPolicies();
 			const CvPolicyEntry* pkPolicy = GC.getPolicyInfo(ePolicy);
 			if(pkPolicy != NULL && pkPlayerPolicies != NULL)
 			{
 				PolicyBranchTypes ePolicyBranch = (PolicyBranchTypes)pkPolicy->GetPolicyBranchType();
 
-				// NO_POLICY_BRANCH_TYPE means that this is probably a free policy.
-				// We'll have to look through the policy branches to find a matching one.
+
+
 				if(ePolicyBranch == NO_POLICY_BRANCH_TYPE)
 				{
 					const int iPolicyBranchCount = GC.getNumPolicyBranchInfos();
@@ -533,13 +533,13 @@ void SetPlayerInitialItems(CvPlayer& kGameplayPlayer, const CvWorldBuilderMap::P
 					}
 				}
 
-				// Unlock the policy branch if it hasn't been unlocked yet
+
 				if(ePolicyBranch != NO_POLICY_BRANCH_TYPE &&
 				        !pkPlayerPolicies->IsPolicyBranchUnlocked(ePolicyBranch))
 				{
 					pkPlayerPolicies->SetPolicyBranchUnlocked(ePolicyBranch, true, false);
 
-					// Also, unlock the free policy for the branch
+
 					const CvPolicyBranchEntry* pkBranch = GC.getPolicyBranchInfo(ePolicyBranch);
 					if(pkBranch != NULL)
 					{
@@ -550,7 +550,7 @@ void SetPlayerInitialItems(CvPlayer& kGameplayPlayer, const CvWorldBuilderMap::P
 				}
 			}
 
-			// Finally, unlock the policy
+
 			kGameplayPlayer.setHasPolicy(ePolicy, true);
 		}
 	}
@@ -638,7 +638,7 @@ void CvWorldBuilderMapLoader::SetInitialItems(bool bFirstCall)
 
 		if(!bFirstCall)
 		{
-			// Assign all citizens
+
 			CvCity* pLoopCity;
 			int iLoop;
 			for(pLoopCity = kPlayer.firstCity(&iLoop); pLoopCity != NULL; pLoopCity = kPlayer.nextCity(&iLoop))
@@ -646,7 +646,7 @@ void CvWorldBuilderMapLoader::SetInitialItems(bool bFirstCall)
 				pLoopCity->GetCityCitizens()->DoTurn();
 			}
 
-			// Update player data
+
 			kPlayer.GetCityConnections()->Update();
 			kPlayer.GetTreasury()->DoUpdateCityConnectionGold();
 			kPlayer.GetTreasury()->DoGold();
@@ -677,7 +677,7 @@ PlayerTypes GetPlayerType(byte byCulture)
 		if(byCulture < MAX_MAJOR_CIVS)
 			return (PlayerTypes)byCulture;
 		else
-			return NO_PLAYER; // Player out of range
+			return NO_PLAYER;
 	}
 	else if(byCulture < CvWorldBuilderMap::MaxPlayers + CvWorldBuilderMap::MaxCityStates)
 	{
@@ -685,7 +685,7 @@ PlayerTypes GetPlayerType(byte byCulture)
 		if(uiCityState < MAX_MINOR_CIVS)
 			return (PlayerTypes)(uiCityState + MAX_MAJOR_CIVS);
 		else
-			return NO_PLAYER; // City State out of range
+			return NO_PLAYER;
 	}
 	else if(byCulture == CvWorldBuilderMap::MaxPlayers + CvWorldBuilderMap::MaxCityStates)
 	{
@@ -693,7 +693,7 @@ PlayerTypes GetPlayerType(byte byCulture)
 	}
 	else
 	{
-		return NO_PLAYER; // Completely invalid culture type
+		return NO_PLAYER;
 	}
 }
 
@@ -723,10 +723,10 @@ void SetupCity(const CvWorldBuilderMap::City& kSavedCity, int iPlotX, int iPlotY
 			{
 				const int iMaxHitPoints = pkGameplayCity->GetMaxHitPoints();
 
-				// TODO: Oh no!  It's floating point math!  This may be an issue for multi-player.
+
 				const float fHitPoints = kSavedCity.GetHealthAsFloat() * (float)iMaxHitPoints;
 
-				// Don't allow the city to be killed by a precision error
+
 				int iHitPoints = (int)fHitPoints;
 				if(iHitPoints == 0 && kSavedCity.m_uiHealth != 0)
 					iHitPoints = 1;
@@ -754,9 +754,9 @@ void SetupUnit(const CvWorldBuilderMap::Unit& kSavedUnit, int iPlotX, int iPlotY
 {
 	const PlayerTypes ePlayer = GetPlayerType(kSavedUnit.m_byOwner);
 	UnitTypes eUnitType = (UnitTypes)kSavedUnit.m_byUnitType;
-	// Test to see if m_byUnitType is still a byte, if so, if it is 255, then it is really -1 and we must reflect this in the eUnitType
-	// The World Builder map format should be changed so the serialization of the unit type is an int.  We are already close to
-	// maxing out the byte range as it stands now.
+
+
+
 	if (sizeof(kSavedUnit.m_byUnitType) == 1 && kSavedUnit.m_byUnitType == 255)
 	{
 		eUnitType = NO_UNIT;
@@ -764,11 +764,11 @@ void SetupUnit(const CvWorldBuilderMap::Unit& kSavedUnit, int iPlotX, int iPlotY
 
 	UnitAITypes eAIType = NO_UNITAI;
 	const CvUnitEntry* pkUnitType = GC.getUnitInfo(eUnitType);
-	FAssert(pkUnitType); // We should probably be concerned if this unit type isn't valid
+	FAssert(pkUnitType);
 	if(pkUnitType != NULL)
 		eAIType = (UnitAITypes)pkUnitType->GetDefaultUnitAIType();
 	else
-		return;	// The unit type is invalid, we really can't go any further.
+		return;
 
 	DirectionTypes eFacing = NO_DIRECTION;
 	switch(kSavedUnit.m_byDirection)
@@ -827,10 +827,10 @@ void SetupUnit(const CvWorldBuilderMap::Unit& kSavedUnit, int iPlotX, int iPlotY
 			{
 				const int iMaxHitPoints = pkGameplayUnit->GetMaxHitPoints();
 
-				// TODO: Oh no!  It's floating point math!  This may be an issue for multi-player.
+
 				const float fHitPoints = kSavedUnit.GetHealthAsFloat() * (float)iMaxHitPoints;
 
-				// Don't allow the unit to be killed by a precision error
+
 				int iHitPoints = (int)fHitPoints;
 				if(iHitPoints == 0 && kSavedUnit.m_uiHealth != 0)
 					iHitPoints = 1;
@@ -890,10 +890,10 @@ const CvCity* FindClosestCity(const PlayerTypes ePlayer, const CvPlot& kPlot)
 
 	const bool bWorldWrap = kMap.isWrapX();
 
-	// Do a search radiating from the search plot
+
 	for(int iDist = 1; iDist < iMapHeight || iDist < iMapWidth; ++iDist)
 	{
-		// Center Row
+
 		if(iPlotX - iDist >= 0)
 		{
 			const CvPlot* pkTestPlot = kMap.plot(iPlotX - iDist, iPlotY);
@@ -926,14 +926,14 @@ const CvCity* FindClosestCity(const PlayerTypes ePlayer, const CvPlot& kPlot)
 			if(pkCity) return pkCity;
 		}
 
-		// Top and Bottom Rows
+
 		const int iRowOffset = (iPlotY % 2 == 0)? 0 : 1;
 		for(int iRow = 1; iRow < iDist; ++iRow)
 		{
 			const int iRowWidth = (iDist * 2) - (iRow - 1);
 
 			{
-				// Left-most plot in the current row
+
 				int iX = iPlotX - (iRowWidth / 2);
 				if(iRow % 2 == 1) iX += iRowOffset;
 
@@ -966,7 +966,7 @@ const CvCity* FindClosestCity(const PlayerTypes ePlayer, const CvPlot& kPlot)
 			}
 
 			{
-				// Right-most plot in the current row
+
 				int iX = iPlotX + (iRowWidth / 2) - 1;
 				if(iRow % 2 == 1) iX += iRowOffset;
 
@@ -999,7 +999,7 @@ const CvCity* FindClosestCity(const PlayerTypes ePlayer, const CvPlot& kPlot)
 			}
 		}
 
-		// Top-most and Bottom-most rows
+
 		{
 			const int iRowWidth = iDist + 1;
 			for(int iPlot = 0; iPlot < iRowWidth; ++iPlot)
@@ -1107,16 +1107,16 @@ bool CvWorldBuilderMapLoader::InitMap()
 	const uint uiTeamCount = std::min(sg_kSave.GetTeamCount(), (byte)MAX_TEAMS);
 #endif
 
-	// HACK: Call SetInitialItems early.  It has to be called later too :_(
-	// This is because of what is essentially a circular dependency.  Techs
-	// need to be initialized before units are created (for the embarkation
-	// promotion among other things).  However, units must be created before
-	// CvGame sets up the initial player state otherwise a scenario player may
-	// be given starting units they don't need and shouldn't have.  Unfortunately
-	// this also does stuff like reset starting techs.  Therefore SetInitialItems
-	// must be called AGAIN to put the player state back to where it should be.
-	// This second call is done from CvInitMgr::GameCoreNew.  You may be tempted to
-	// remove this hack but be very careful if you do and test thoroughly with scenario saves.
+
+
+
+
+
+
+
+
+
+
 	SetInitialItems(true);
 
 	FFastVector<CvPlayer*> kMajorCivs;
@@ -1221,7 +1221,7 @@ bool CvWorldBuilderMapLoader::InitMap()
 
 	GC.getGame().GetTacticalAnalysisMap()->Init(GC.getMap().numPlots());
 
-	// Init Diplomacy
+
 	for(uint uiTeam1 = 0; uiTeam1 < uiTeamCount; ++uiTeam1)
 	{
 		for(uint uiTeam2 = uiTeam1 + 1; uiTeam2 < uiTeamCount; ++uiTeam2)
@@ -1260,7 +1260,7 @@ bool CvWorldBuilderMapLoader::InitMap()
 		}
 	}
 
-	// Init City State Relationships
+
 	for(uint uiCityState = 0; uiCityState < uiCityStateCount; ++uiCityState)
 	{
 		const PlayerTypes eCityStatePlayer = GetPlayerType((byte)(uiCityState + CvWorldBuilderMap::MaxPlayers));
@@ -1283,7 +1283,7 @@ bool CvWorldBuilderMapLoader::InitMap()
 		}
 	}
 
-	// Scenario elements must come after areas have been calculated
+
 	for(uint i = 0; i < uiPlotCount; ++i)
 	{
 		const CvWorldBuilderMap::PlotScenarioData& kPlotData = sg_kSave.GetPlotScenarioData(i);
@@ -1314,7 +1314,7 @@ bool CvWorldBuilderMapLoader::InitMap()
 			const PlayerTypes eOwner = GetPlayerType(kPlotData.m_byRouteOwner);
 			if(eOwner != NO_PLAYER && !pkPlot->isOwned())
 			{
-				// Mark the player as responsible for this route and update the treasury
+
 				CvTreasury* pkTreasury = GET_PLAYER(eOwner).GetTreasury();
 				const CvRouteInfo* pkRouteInfo = GC.getRouteInfo(eRoute);
 				if(pkTreasury != NULL && pkRouteInfo != NULL)
@@ -1334,8 +1334,8 @@ bool CvWorldBuilderMapLoader::InitMap()
 			SetupCity(*pkCity, iPlotX, iPlotY);
 		}
 
-		// Note - All calls to SetupUnit for this plot must come after SetupCity for this plot.
-		// This is because of garrisoned units that need the city to be there first.
+
+
 		for(const CvWorldBuilderMap::Unit* pkUnit = sg_kSave.m_kUnits[kPlotData.m_hUnitStack];
 		        pkUnit != NULL;
 		        pkUnit = sg_kSave.m_kUnits[pkUnit->m_hStackedUnit])
@@ -1350,7 +1350,7 @@ bool CvWorldBuilderMapLoader::InitMap()
 		}
 	}
 
-	// Set culture.  This must come after all cities have been added.
+
 	for(uint i = 0; i < uiPlotCount; ++i)
 	{
 		const CvWorldBuilderMap::PlotScenarioData& kPlotData = sg_kSave.GetPlotScenarioData(i);
@@ -1396,7 +1396,7 @@ bool CvWorldBuilderMapLoader::Save(const wchar_t* wszFilename, const char* szMap
 	sg_kSave.Resize(kMap.getGridWidth(), kMap.getGridHeight());
 	sg_kSave.ClearScenarioData();
 
-	// Set map name
+
 	if(szMapName == NULL)
 	{
 		FStringFixedBufferW(sFilename, MAX_PATH);
@@ -1783,7 +1783,7 @@ int CvWorldBuilderMapLoader::RunPostProcessScript(lua_State* L)
 					ICvEngineScriptSystem1* pkScriptSystem = gDLL->GetScriptSystem();
 					if(pkScriptSystem != NULL)
 					{
-						//1040 == _MAX_PATH * 4
+
 						char szMapScriptPath[1040] = {0};
 						const bool bResult = gDLL->GetEvaluatedMapScriptPath(szLua, szMapScriptPath, 1040);
 						if(!bResult)
@@ -1855,8 +1855,8 @@ void CvWorldBuilderMapLoader::ValidateTerrain()
 
 void CvWorldBuilderMapLoader::ValidateCoast()
 {
-	//FTimer kTimer;
-	//kTimer.Start();
+
+
 
 	CvMap& kMap = GC.getMap();
 	const int iMapWidth = kMap.getGridWidth();
@@ -1882,10 +1882,10 @@ void CvWorldBuilderMapLoader::ValidateCoast()
 			}
 		}
 
-	//kTimer.Stop();
-	//FStringFixedBuffer(sMsg, 64);
-	//sMsg.Format("CvWorldBuilderMapLoader::ValidateCoast() took %fs\n", kTimer.m_fTimer);
-	//OutputDebugStr(sMsg);
+
+
+
+
 }
 
 void CvWorldBuilderMapLoader::ClearResources()
@@ -1938,7 +1938,7 @@ WorldSizeTypes CvWorldBuilderMapLoader::GetWorldSizeType(const CvWorldBuilderMap
 	if(eWorldSize == NO_WORLDSIZE)
 	{
 		const int iArea = (int)(kMap.GetWidth() * kMap.GetHeight());
-		int iSmallestAreaDifference = 64000; // Arbitrarily large at start
+		int iSmallestAreaDifference = 64000;
 
 		Database::Results kWorldSizes;
 		DB.SelectAll(kWorldSizes, "Worlds");

@@ -107,8 +107,8 @@ int main(){
             assert(old==now && beforeTrace==trace);++cases;candidates+=now.size();
         }
     }
-    // Cost boundary including the +99 allowance, and standalone calls that must
-    // read changed ranges rather than keeping an enumeration cache.
+
+
     CvCity origin={0,0,true},destination={1,1,true};
     GC.land.outcome[0][1]=2;
     for(int range=-3;range<50;++range)for(int extra:{-1,0,1,98,99,100}){

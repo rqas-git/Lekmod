@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvGameCoreEnumSerialization.h"
 
@@ -13,7 +13,7 @@ FDataStream& operator<<(FDataStream& saveTo, const YieldTypes& readFrom)
 	saveTo << static_cast<int>(readFrom);
 	return saveTo;
 }
-//------------------------------------------------------------------------------
+
 FDataStream& operator>>(FDataStream& loadFrom, YieldTypes& writeTo)
 {
 	int v;
@@ -21,7 +21,7 @@ FDataStream& operator>>(FDataStream& loadFrom, YieldTypes& writeTo)
 	writeTo = static_cast<YieldTypes>(v);
 	return loadFrom;
 }
-//------------------------------------------------------------------------------
+
 namespace FSerialization
 {
 std::string toString(const YieldTypes& v)

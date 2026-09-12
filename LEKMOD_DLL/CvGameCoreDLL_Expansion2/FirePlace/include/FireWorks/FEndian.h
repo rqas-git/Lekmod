@@ -1,23 +1,23 @@
-//------------------------------------------------------------------------------------------------
-//
-//  *****************   FIRAXIS GAME ENGINE   ********************
-//
-//! \file		FEndian.h
-//! \author		Bart Muzzin -- 2-7-2006
-//! \brief		Functions related to endianness of the target machine
-//
-//------------------------------------------------------------------------------------------------
-//  Copyright (c) 2007 Firaxis Games, Inc. All rights reserved.
-//------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 
 #pragma once
 #ifndef FENDIAN_H
 #define FENDIAN_H
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      FEndian
-//!  \brief		Class containing (static) functions and defines for endianness
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class FEndian
 {
 	public:
@@ -38,18 +38,18 @@ class FEndian
 		static void* EndianSwitchWorker( void* pData, const char* format,
 			int blockRepeatCount = 1, const char** updatedFormat = NULL );
 
-		static EEndianness	ms_eTargetEndianness;	// The endianness of the currently executing machine
+		static EEndianness	ms_eTargetEndianness;
 };
 
-//------------------------------------------------------------------------------------------------
-// FUNCTION:    FEndian::SwapEndian
-//! \brief      Converts the endianness of a variable, depending on the input endianness
-//! \param		kData The data to convert endianness
-//! \param		kInputEndian The endianness of the incoming data
-//! \retval     See FEndian::EEndianness
-//------------------------------------------------------------------------------------------------
 
-// Specific instantiations for sizes 2, 4 and 8, must exist, this handles any unexpected sizes
+
+
+
+
+
+
+
+
 template<class T> inline void FEndian::SwapEndian( T * kData, EEndianness kInputEndian )
 {
 	if ( GetEndianness() == kInputEndian ) return;
@@ -129,4 +129,4 @@ template<> inline void FEndian::SwapEndian( double * kData, EEndianness kInputEn
 	std::swap( szBuffer[3], szBuffer[4] );
 }
 
-#endif // FENDIAN_H
+#endif

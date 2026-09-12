@@ -1,18 +1,18 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
-//
-//  FILE:    CvDllDatabaseUtility.cpp
-//
-//  AUTHOR:		Eric MacDonald  --  8/2003
-//				Mustafa Thamer
-//				Shaun Seckman	--	3/2009
-//  PURPOSE: Group of functions to load in the xml files for Civilization 5
-//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include <algorithm>
 #include "CvDLLDatabaseUtility.h"
@@ -32,7 +32,7 @@
 
 #include <CvLocalization.h>
 #include <CvGameDatabase.h>
-// include this after all other headers
+
 #include "LintFree.h"
 
 #include <windows.h>
@@ -40,11 +40,11 @@
 #define GAMEPLAYXML_PATH "Gameplay\\XML\\"
 
 #ifdef LEKMOD_POST_DLC_DATA_LOADING
-// Helper function to replace min() which might not be available in VS2008
+
 size_t MinValue(size_t a, size_t b);
 #endif
 
-//Just a quick utility function to save from writing lots of verbose code.
+
 void InsertGameDefine(Database::Results& kInsertDefine, const char* szValue, int iValue)
 {
 	kInsertDefine.Bind(1, szValue);
@@ -53,18 +53,18 @@ void InsertGameDefine(Database::Results& kInsertDefine, const char* szValue, int
 	kInsertDefine.Reset();
 }
 
-//////////////////////////////////////////////////////////////////////////
+
 CvDllDatabaseUtility::CvDllDatabaseUtility(Database::Connection& db)
 	: m_kGameplayDatabase(db)
 	, m_bGameDatabaseNeedsCaching(true)
 	, m_uiRefCount(1)
 {
 }
-//------------------------------------------------------------------------------
+
 CvDllDatabaseUtility::~CvDllDatabaseUtility()
 {
 }
-//------------------------------------------------------------------------------
+
 void* CvDllDatabaseUtility::QueryInterface(GUID guidInterface)
 {
 	if(guidInterface == ICvUnknown::GetInterfaceId() ||
@@ -76,13 +76,13 @@ void* CvDllDatabaseUtility::QueryInterface(GUID guidInterface)
 
 	return NULL;
 }
-//------------------------------------------------------------------------------
+
 unsigned int CvDllDatabaseUtility::IncrementReference()
 {
 	++m_uiRefCount;
 	return m_uiRefCount;
 }
-//------------------------------------------------------------------------------
+
 unsigned int CvDllDatabaseUtility::DecrementReference()
 {
 	if(m_uiRefCount == 1)
@@ -96,49 +96,49 @@ unsigned int CvDllDatabaseUtility::DecrementReference()
 		return m_uiRefCount;
 	}
 }
-//------------------------------------------------------------------------------
+
 unsigned int CvDllDatabaseUtility::GetReferenceCount()
 {
 	return m_uiRefCount;
 }
-//------------------------------------------------------------------------------
+
 void CvDllDatabaseUtility::Destroy()
 {
 	DecrementReference();
 }
-//------------------------------------------------------------------------------
+
 void CvDllDatabaseUtility::operator delete(void* p)
 {
 	CvDllGameContext::Free(p);
 }
-//------------------------------------------------------------------------------
+
 void* CvDllDatabaseUtility::operator new(size_t bytes)
 {
 	return CvDllGameContext::Allocate(bytes);
 }
-//------------------------------------------------------------------------------
+
 bool CvDllDatabaseUtility::CacheGameDatabaseData()
 {
-	//Do not cache everything if we don't need to.
+
 	if(m_bGameDatabaseNeedsCaching == false)
 		return true;
 
-	//The following code depends on a valid initialized database.
+
 	bool bSuccess = true;
 
-	//TODO: Figure out how to handle cases where Validation has failed.
-	/*bSuccess &= */
+
+
 	ValidateGameDatabase();
 	
 #ifdef LEKMOD_POST_DLC_DATA_LOADING
-	// Add our post-DLC loading here, after validation but before prefetching
+
 	bSuccess &= PerformPostDLCLoading();
 #endif
 
-	//HACK Legacy 'FindInfoByType' support.
-	//In order to support the legacy code still using the old infos system,
-	//all of the id/type pairs must be added to gc.m_infosMap
-	//I apologize for this horrendous code, please remove it in the near future.
+
+
+
+
 	GC.infoTypeFromStringReset();
 	Database::Results kTables("name");
 	if(DB.SelectAt(kTables, "sqlite_master", "type", "table"))
@@ -178,10 +178,10 @@ bool CvDllDatabaseUtility::CacheGameDatabaseData()
 
 	bSuccess &= SetGlobalActionInfo();
 
-	//Clear out database cache and tune for runtime use.
+
 	DB.ClearCountCache();
 
-	//Log Database Memory statistics
+
 	LogMsg(DB.CalculateMemoryStats());
 
 	CvAssertMsg(bSuccess, "Failed to load Gameplay Database Data! Not Good!");
@@ -191,7 +191,7 @@ bool CvDllDatabaseUtility::CacheGameDatabaseData()
 
 	return bSuccess;
 }
-//------------------------------------------------------------------------------
+
 bool CvDllDatabaseUtility::FlushGameDatabaseData()
 {
 	m_bGameDatabaseNeedsCaching = true;
@@ -202,21 +202,21 @@ bool CvDllDatabaseUtility::FlushGameDatabaseData()
 
 	return true;
 }
-//------------------------------------------------------------------------------
+
 bool CvDllDatabaseUtility::PerformDatabasePostProcessing()
 {
-	//Insert any database methods that you would like performed after the database
-	//has been fully loaded.  This method will execute every single time the game
-	//is run.
-	//Updates performed here are done AFTER the database has been built or read
-	//from cache.
+
+
+
+
+
 	Database::Connection* db = GC.GetGameDatabase();
 
-	//Update Defines table from references in PostDefines table
+
 	db->BeginTransaction();
 	Database::Results kPostDefines;
 
-	//Build insertion statement
+
 	Database::Results kInsert;
 	db->Execute(kInsert, "INSERT OR REPLACE INTO Defines(Name, Value) VALUES(?, ?)");
 
@@ -232,13 +232,13 @@ bool CvDllDatabaseUtility::PerformDatabasePostProcessing()
 
 		Database::Results kLookup;
 
-		//Compile the command.
+
 		if(db->Execute(kLookup, szSQL))
 		{
-			//Run the command.
+
 			if(kLookup.Step())
 			{
-				//Perform insertion
+
 				kInsert.Bind(1, szName);
 				kInsert.Bind(2, kLookup.GetInt(0));
 				kInsert.Step();
@@ -247,21 +247,21 @@ bool CvDllDatabaseUtility::PerformDatabasePostProcessing()
 		}
 	}
 
-	// ** Modify ResourceUsage of Resources table **
-	// Set ResourceUsage to 1 if it's referenced in Unit_ResourceQuantityRequirements
-	// NOTE: This query could be simplified using the IN operator but when analyzed this
-	//			statement generates faster operations.
+
+
+
+
 	const char* szStrategicResource
 	    = "UPDATE Resources SET ResourceUsage = 1 WHERE EXISTS (SELECT * FROM Unit_ResourceQuantityRequirements WHERE ResourceType = Type)";
 	db->Execute(szStrategicResource);
 
-	// Set ResourceUsage to 2 if the Resource has a happiness value greater than 0
+
 	const char* szLuxoryResource
 	    = "UPDATE Resources SET ResourceUsage = 2 where Happiness > 0";
 	db->Execute(szLuxoryResource);
 
-	//These are hard-coded GameDefines enum values, let's share them with the database so that they
-	//get the same amount of love as the DB.
+
+
 	Database::Results kInsertDefine;
 	if(db->Execute(kInsertDefine, "INSERT OR REPLACE INTO Defines(Name, Value) VALUES(?, ?);"))
 	{
@@ -284,20 +284,20 @@ bool CvDllDatabaseUtility::PerformDatabasePostProcessing()
 
 	return true;
 }
-//------------------------------------------------------------------------------
+
 bool CvDllDatabaseUtility::PrefetchGameData()
 {
 	cvStopWatch kTest("PrefetchGameData", "xml-perf.log");
 	CvBuilderTaskingAI::ClearBuildTypeCache();
 
-	//Because Colors and PlayerColors are used everywhere during load
-	//(by the translator) we load interface infos first.
-	//Interface
+
+
+
 	PrefetchCollection(GC.GetColorInfo(), "Colors");
 	PrefetchCollection(GC.GetPlayerColorInfo(), "PlayerColors");
 	PrefetchCollection(GC.getInterfaceModeInfo(), "InterfaceModes");
 
-	//AI
+
 	PrefetchCollection(GC.getAICityStrategyInfo(), "AICityStrategies");
 	PrefetchCollection(GC.getEconomicAIStrategyInfo(), "AIEconomicStrategies");
 	PrefetchCollection(GC.getAIGrandStrategyInfo(), "AIGrandStrategies");
@@ -305,17 +305,17 @@ bool CvDllDatabaseUtility::PrefetchGameData()
 	PrefetchCollection(GC.getCitySpecializationInfo(), "CitySpecializations");
 	PrefetchCollection(GC.getTacticalMoveInfo(), "TacticalMoves");
 
-	//BasicInfos
-	//AnimationOperators?
-	//Attitudes?
+
+
+
 	PrefetchCollection(GC.getUnitAIInfo(), "UnitAIInfos");
 	PrefetchCollection(GC.getUnitCombatClassInfo(), "UnitCombatInfos");
 
-	//Buildings
+
 	PrefetchCollection(GC.getBuildingClassInfo(), "BuildingClasses");
 	PrefetchCollection(GC.getBuildingInfo(), "Buildings");
 
-	//GameInfo
+
 	PrefetchCollection(GC.getEmphasisInfo(), "EmphasizeInfos");
 	PrefetchCollection(GC.getEraInfo(), "Eras");
 	PrefetchCollection(GC.getGameOptionInfo(), "GameOptions");
@@ -335,10 +335,10 @@ bool CvDllDatabaseUtility::PrefetchGameData()
 	PrefetchCollection(GC.getVoteSourceInfo(), "VoteSources");
 	PrefetchCollection(GC.getUnitDomainInfo(), "Domains");
 
-	//Leaders
+
 	PrefetchCollection(GC.getLeaderHeadInfo(), "Leaders");
 
-	//Misc
+
 	PrefetchCollection(GC.getRouteInfo(), "Routes");
 #if defined(LEKMOD_GREAT_WORK_YIELD_EFFECTS)
 	PrefetchCollection(GC.getGreatWorkClassInfo(), "GreatWorkClasses");
@@ -353,10 +353,10 @@ bool CvDllDatabaseUtility::PrefetchGameData()
 #if defined(TRADE_REFACTOR)
 	PrefetchCollection(GC.getTradeConnectionInfo(), "TradeConnections");
 #endif
-	//Technologies
+
 	PrefetchCollection(GC.getTechInfo(), "Technologies");
 
-	//Terrain
+
 	PrefetchCollection(GC.getFeatureInfo(), "Features");
 	PrefetchCollection(GC.getImprovementInfo(), "Improvements");
 	PrefetchCollection(GC.getResourceClassInfo(), "ResourceClasses");
@@ -364,7 +364,7 @@ bool CvDllDatabaseUtility::PrefetchGameData()
 	PrefetchCollection(GC.getTerrainInfo(), "Terrains");
 	PrefetchCollection(GC.getYieldInfo(), "Yields");
 
-	//Units
+
 	PrefetchCollection(GC.getAutomateInfo(), "Automates");
 	PrefetchCollection(GC.getBuildInfo(), "Builds");
 	PrefetchCollection(GC.getCommandInfo(), "Commands");
@@ -378,7 +378,7 @@ bool CvDllDatabaseUtility::PrefetchGameData()
 	CvPromotionEntry::InvalidateVisibilityChangeCache();
 	PrefetchCollection(GC.getUnitInfo(), "Units");
 
-	//Civilizations - must be after buildings and units
+
 	PrefetchCollection(GC.getCivilizationInfo(), "Civilizations");
 	PrefetchCollection(GC.getMinorCivInfo(), "MinorCivilizations");
 #ifdef LEKMOD_MINOR_CIV_PERSONALITIES
@@ -393,12 +393,12 @@ bool CvDllDatabaseUtility::PrefetchGameData()
 	PrefetchCollection(GC.getLeagueProjectRewardInfo(), "LeagueProjectRewards");
 	PrefetchCollection(GC.getResolutionInfo(), "Resolutions");
 
-	//Copy flavors into string array
+
 	{
 		CvDatabaseUtility kUtility;
 		CvString*& paFlavors = GC.getFlavorTypes();
 		const int iNumFlavors = kUtility.MaxRows("Flavors");
-		//GC.getNumFlavorTypes() = iNumFlavors;
+
 		GC.setNumFlavorTypes(iNumFlavors);
 		paFlavors = FNEW(CvString[iNumFlavors], c_eCiv5GameplayDLL, 0);
 
@@ -423,7 +423,7 @@ bool CvDllDatabaseUtility::PrefetchGameData()
 	}
 
 #ifdef LEKMOD_ADJACENT_IMPROVEMENT_YIELD
-	// CacheResults runs before each entry is appended, so wait for the full list.
+
 	for(int iImprovement = 0; iImprovement < GC.getNumImprovementInfos(); iImprovement++)
 	{
 		CvImprovementEntry* pImprovement = GC.getImprovementInfo(static_cast<ImprovementTypes>(iImprovement));
@@ -439,11 +439,11 @@ bool CvDllDatabaseUtility::PrefetchGameData()
 
 	return true;
 }
-//------------------------------------------------------------------------------
+
 bool CvDllDatabaseUtility::ValidateGameDatabase()
 {
-	//This function contains a suite of useful game database unit tests that will
-	//ensure the database conforms to certain unique rules of Civ5.
+
+
 	if(!gDLL->ShouldValidateGameDatabase())
 	{
 		LogMsg("*** SKIPPING Game Database Validation. ****");
@@ -456,7 +456,7 @@ bool CvDllDatabaseUtility::ValidateGameDatabase()
 
 	LogMsg("**** Validating Game Database *****");
 
-	//Test that all Tables w/ 'ID' column start at 0 and not 1.
+
 	{
 		cvStopWatch watch("Ensure All Tables with 'ID' column start at 0");
 		Database::Results kTables("name");
@@ -467,11 +467,11 @@ bool CvDllDatabaseUtility::ValidateGameDatabase()
 				const char* szTableName = kTables.GetText(0);
 				if(DB.Count(szTableName) > 0)
 				{
-					//Test if table has 'ID' column
+
 					bool bHasIDColumn = false;
 					{
-						//Execute "select ID from <table_name> limit 1;
-						//If there's a SQL error, it's most likely due to a lack of an 'id' column.
+
+
 						char szSQL[512];
 						sprintf_s(szSQL, "pragma table_info(%s)", szTableName);
 						Database::Results kResults;
@@ -493,7 +493,7 @@ bool CvDllDatabaseUtility::ValidateGameDatabase()
 						Database::SingleResult kTest;
 						if(!DB.SelectAt(kTest, szTableName, "ID", 0))
 						{
-							//Table has 'ID' column and contains data but does not use ID 0.
+
 							char szError[512];
 							sprintf_s(szError, "Table '%s' contains 'ID' column that starts at 1 instead of 0.", szTableName);
 							LogMsg(szError);
@@ -506,7 +506,7 @@ bool CvDllDatabaseUtility::ValidateGameDatabase()
 		}
 	}
 
-	//Validate FK constraints
+
 	{
 		cvStopWatch watch("Validate FK Constraints");
 		DB.ValidateFKConstraints();
@@ -679,7 +679,7 @@ bool CvDllDatabaseUtility::ValidatePrefetchProcess()
 	ValidateVectorSize(getNumBuildingClassInfos);
 	ValidateVectorSize(getNumBuildingInfos);
 	ValidateVectorSize(getNumUnitClassInfos);
-	//ValidateVectorSize(getNumActionInfos);	//Action Infos are generated as a post process.
+
 
 	ValidateCount(gc.getMissionInfo().size);
 	ValidateCount(gc.getControlInfo().size);
@@ -702,7 +702,7 @@ bool CvDllDatabaseUtility::ValidatePrefetchProcess()
 	ValidateVectorSize(getNumEmphasisInfos);
 	ValidateVectorSize(getNumVictoryInfos);
 
-	// The domains are a special case in that the contents must match a populated enum exactly.
+
 #define ValidateDomain(domain) { CvDomainInfo* pkDomainInfo; if (GC.getNumUnitDomainInfos() <= (int)domain || (pkDomainInfo = GC.getUnitDomainInfo(domain)) == NULL || strcmp(pkDomainInfo->GetType(), #domain) != 0) bError = true; }
 
 	ValidateDomain(DOMAIN_SEA);
@@ -723,26 +723,26 @@ bool CvDllDatabaseUtility::ValidatePrefetchProcess()
 	return !bError;
 }
 
-//------------------------------------------------------------------------------------------------------
-//
-//  FUNCTION:   LoadPostGlobalsGlobalDefines()
-//
-//  PURPOSE :   This function assumes that the LoadGlobalDefines function has already been called
-//							it then loads the few global defines that needed to reference a global variable that
-//							hadn't been loaded in prior to the SetGlobalDefines call
-//
-//------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
 bool CvDllDatabaseUtility::LoadGlobalDefines()
 {
 	GC.cacheGlobals();
 	return true;
 }
 
-//
-// Globals which must be loaded before the main menus.
-// Don't put anything in here unless it has to be loaded before the main menus,
-// instead try to load things in LoadPostMenuGlobals()
-//
+
+
+
+
+
 bool CvDllDatabaseUtility::UpdatePlayableCivilizationCounts()
 {
 	cvStopWatch kPerfTest("UpdatePlayableCivilizationCounts", "xml-perf.log");
@@ -750,7 +750,7 @@ bool CvDllDatabaseUtility::UpdatePlayableCivilizationCounts()
 	int numPlayableCivilizations = 0;
 	int numAIPlayableCivilizations = 0;
 
-	// Check Playables
+
 #ifdef AUI_WARNING_FIXES
 	for (uint i = 0; i < GC.getNumCivilizationInfos(); ++i)
 #else
@@ -774,15 +774,15 @@ bool CvDllDatabaseUtility::UpdatePlayableCivilizationCounts()
 	return true;
 }
 
-//------------------------------------------------------------------------------------------------------
-//
-//  FUNCTION:   SetGlobalActionInfo(CvActionInfo** ppActionInfo, int* iNumVals)
-//
-//  PURPOSE :   Takes the szTagName parameter and if it exists in the xml it loads the ppActionInfo
-//				with the value under it and sets the value of the iNumVals parameter to the total number
-//				of occurances of the szTagName tag in the xml.
-//
-//------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
 bool CvDllDatabaseUtility::SetGlobalActionInfo()
 {
 	cvStopWatch kPerfTest("SetGlobalActionInfo", "xml-perf.log");
@@ -791,7 +791,7 @@ bool CvDllDatabaseUtility::SetGlobalActionInfo()
 	typedef std::vector<CvActionInfo*> ActionInfoVector;
 	ActionInfoVector& actionInfos = GC.getActionInfo();
 
-	//First, clear out action info data
+
 	for(ActionInfoVector::iterator it = actionInfos.begin(); it != actionInfos.end(); ++it)
 	{
 		CvActionInfo* pActionInfo = (*it);
@@ -805,7 +805,7 @@ bool CvDllDatabaseUtility::SetGlobalActionInfo()
 	const int iNumMissionTypes = CvTypes::getNUM_MISSION_TYPES();
 #endif
 
-	//Verify action counts
+
 	if(!(NUM_INTERFACEMODE_TYPES > 0))
 	{
 		LogMsg("NUM_INTERFACE_TYPES is not greater than zero in CvDllDatabaseUtility::SetGlobalActionInfo.");
@@ -852,13 +852,13 @@ bool CvDllDatabaseUtility::SetGlobalActionInfo()
 	int* piBuffer = FNEW(int[iEstimatedNumActionInfos * 4], c_eCiv5GameplayDLL, 0);
 	memset(piBuffer,0, sizeof(int) * iEstimatedNumActionInfos * 4);
 
-	int* piIndexList = piBuffer + iEstimatedNumActionInfos * 0;				//FNEW(int[iNumActionInfos], c_eCiv5GameplayDLL, 0);
-	int* piPriorityList = piBuffer + iEstimatedNumActionInfos * 1;			//FNEW(int[iNumActionInfos], c_eCiv5GameplayDLL, 0);
-	int* piActionInfoTypeList = piBuffer + iEstimatedNumActionInfos * 2;	//FNEW(int[iNumActionInfos], c_eCiv5GameplayDLL, 0);
-	int* piOrderedIndex = piBuffer + iEstimatedNumActionInfos * 3;			//FNEW(int[iNumActionInfos], c_eCiv5GameplayDLL, 0);
+	int* piIndexList = piBuffer + iEstimatedNumActionInfos * 0;
+	int* piPriorityList = piBuffer + iEstimatedNumActionInfos * 1;
+	int* piActionInfoTypeList = piBuffer + iEstimatedNumActionInfos * 2;
+	int* piOrderedIndex = piBuffer + iEstimatedNumActionInfos * 3;
 
 
-	//Gather all available infos, checking for NULL entries as they may have been removed.
+
 #ifdef AUI_WARNING_FIXES
 	uint iTotalActionInfoCount = 0;
 	uint i = 0;
@@ -962,10 +962,10 @@ bool CvDllDatabaseUtility::SetGlobalActionInfo()
 		}
 	}
 
-	//Preallocate
+
 	actionInfos.reserve(iTotalActionInfoCount);
 
-	//Sort and add action infos.
+
 	orderHotkeyInfo(&piOrderedIndex, piPriorityList, iTotalActionInfoCount);
 	for(i = 0; i < iTotalActionInfoCount; i++)
 	{
@@ -1022,18 +1022,18 @@ bool CvDllDatabaseUtility::SetGlobalActionInfo()
 	}
 
 	SAFE_DELETE_ARRAY(piBuffer);
-// 	SAFE_DELETE_ARRAY(piOrderedIndex);
-// 	SAFE_DELETE_ARRAY(piIndexList);
-// 	SAFE_DELETE_ARRAY(piPriorityList);
-// 	SAFE_DELETE_ARRAY(piActionInfoTypeList);
+
+
+
+
 
 	return true;
 }
 
 
-//
-// helper sort predicate
-//
+
+
+
 struct OrderIndex
 {
 	int m_iPriority;
@@ -1054,17 +1054,17 @@ void CvDllDatabaseUtility::orderHotkeyInfo(int** ppiSortedIndex, T* pHotkeyInfos
 	viOrderPriority.resize(iLength);
 	piSortedIndex = *ppiSortedIndex;
 
-	// set up vector
+
 	for(iI=0; iI<iLength; iI++)
 	{
 		viOrderPriority[iI].m_iPriority = pHotkeyInfos[iI].getOrderPriority();
 		viOrderPriority[iI].m_iIndex = iI;
 	}
 
-	// sort the array
+
 	std::sort(viOrderPriority.begin(), viOrderPriority.end(), sortHotkeyPriority);
 
-	// insert new order into the array to return
+
 	for(iI=0; iI<iLength; iI++)
 	{
 		piSortedIndex[iI] = viOrderPriority[iI].m_iIndex;
@@ -1080,17 +1080,17 @@ void CvDllDatabaseUtility::orderHotkeyInfo(int** ppiSortedIndex, int* pHotkeyInd
 	viOrderPriority.resize(iLength);
 	piSortedIndex = *ppiSortedIndex;
 
-	// set up vector
+
 	for(iI=0; iI<iLength; iI++)
 	{
 		viOrderPriority[iI].m_iPriority = pHotkeyIndex[iI];
 		viOrderPriority[iI].m_iIndex = iI;
 	}
 
-	// sort the array
+
 	std::sort(viOrderPriority.begin(), viOrderPriority.end(), sortHotkeyPriority);
 
-	// insert new order into the array to return
+
 	for(iI=0; iI<iLength; iI++)
 	{
 		piSortedIndex[iI] = viOrderPriority[iI].m_iIndex;
@@ -1104,14 +1104,14 @@ bool CvDllDatabaseUtility::PerformPostDLCLoading()
 	if(!db)
 		return false;
 
-	// Begin transaction for database changes
+
 	db->BeginTransaction();
 	this->LogMsg("[LEKMOD] Starting XML loading process");
 
-	// Base DLC path
+
 	const wchar_t* wszDLCPath = L"Assets\\DLC\\";
 	
-	// Search for any folder containing "LEKMOD" in the name
+
 	WIN32_FIND_DATAW ffd;
 	HANDLE hFind = FindFirstFileW((std::wstring(wszDLCPath) + L"*LEKMOD*").c_str(), &ffd);
 	
@@ -1121,14 +1121,14 @@ bool CvDllDatabaseUtility::PerformPostDLCLoading()
 	if(hFind != INVALID_HANDLE_VALUE) 
 	{
 		do {
-			// Skip if not a directory
+
 			if(!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 				continue;
 
-			// Build the XML path for this LEKMOD folder
+
 			std::wstring wszXMLPath = std::wstring(wszDLCPath) + ffd.cFileName + L"\\XML\\";
 			
-			// Convert to regular string for logging
+
 			char szFolderName[256];
 			WideCharToMultiByte(CP_UTF8, 0, ffd.cFileName, -1, szFolderName, sizeof(szFolderName), NULL, NULL);
 			
@@ -1136,7 +1136,7 @@ bool CvDllDatabaseUtility::PerformPostDLCLoading()
 			WideCharToMultiByte(CP_UTF8, 0, wszXMLPath.c_str(), -1, szXMLPath, sizeof(szXMLPath), NULL, NULL);
 			this->LogMsg("[LEKMOD] Found folder: %s, checking for XML at: %s", szFolderName, szXMLPath);
 			
-			// Check if the XML subfolder exists
+
 			WIN32_FIND_DATAW xmlFolderData;
 			HANDLE hXmlFind = FindFirstFileW((wszXMLPath + L"*").c_str(), &xmlFolderData);
 			
@@ -1144,7 +1144,7 @@ bool CvDllDatabaseUtility::PerformPostDLCLoading()
 			{
 				FindClose(hXmlFind);
 				
-				// Process XML files with standard serializer
+
 				this->LogMsg("[LEKMOD] Processing XML files in: %s", szXMLPath);
 				Database::XMLSerializer serializer(*db);
 				ProcessXMLFiles(wszXMLPath, serializer);
@@ -1168,7 +1168,7 @@ bool CvDllDatabaseUtility::PerformPostDLCLoading()
 		return false;
 	}
 
-	// Commit transaction
+
 	db->EndTransaction();
 	
 	if(foldersProcessed > 0) 
@@ -1183,10 +1183,10 @@ bool CvDllDatabaseUtility::PerformPostDLCLoading()
 	}
 }
 
-// Helper function to process XML files from a folder
+
 void CvDllDatabaseUtility::ProcessXMLFiles(const std::wstring& wszPath, Database::XMLSerializer& serializer)
 {
-    // Find all XML files in this directory
+
     WIN32_FIND_DATAW ffd;
     HANDLE hFind = FindFirstFileW((wszPath + L"*.xml").c_str(), &ffd);
     
@@ -1198,11 +1198,11 @@ void CvDllDatabaseUtility::ProcessXMLFiles(const std::wstring& wszPath, Database
         {
             std::wstring wszFile = wszPath + ffd.cFileName;
             
-            // Log the file we're loading
+
             WideCharToMultiByte(CP_UTF8, 0, wszFile.c_str(), -1, szLogBuffer, sizeof(szLogBuffer), NULL, NULL);
             this->LogMsg("[LEKMOD] Loading XML: %s", szLogBuffer);
             
-            // Try to load this XML file
+
             if(serializer.Load(wszFile.c_str()))
             {
                 this->LogMsg("[LEKMOD] Successfully loaded XML file");
@@ -1217,19 +1217,19 @@ void CvDllDatabaseUtility::ProcessXMLFiles(const std::wstring& wszPath, Database
         FindClose(hFind);
     }
     
-    // Process all subdirectories
+
     hFind = FindFirstFileW((wszPath + L"*").c_str(), &ffd);
     
     if(hFind != INVALID_HANDLE_VALUE)
     {
         do
         {
-            // Skip . and .. directories and non-directories
+
             if(wcscmp(ffd.cFileName, L".") == 0 || wcscmp(ffd.cFileName, L"..") == 0 || 
               !(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
                 continue;
                 
-            // Process this subdirectory
+
             ProcessXMLFiles(wszPath + ffd.cFileName + L"\\", serializer);
             
         } while(FindNextFileW(hFind, &ffd) != 0);
@@ -1238,25 +1238,25 @@ void CvDllDatabaseUtility::ProcessXMLFiles(const std::wstring& wszPath, Database
     }
 }
 
-// Helper function to replace min() which might not be available in VS2008
+
 size_t MinValue(size_t a, size_t b)
 {
     return (a < b) ? a : b;
 }
 #endif
 
-//------------------------------------------------------------------------------
-//
-// PRIVATE FUNCTIONS
-//
-//
-// for logging
-//
+
+
+
+
+
+
+
 void CvDllDatabaseUtility::LogMsg(const char* format, ...) const
 {
 	const size_t kBuffSize = 1024;
 	static char buf[kBuffSize];
-	const uint uiFlags = 0;    // Default (0) is to not write to console and to time stamp
+	const uint uiFlags = 0;
 
 	va_list vl;
 	va_start(vl,format);
@@ -1265,4 +1265,3 @@ void CvDllDatabaseUtility::LogMsg(const char* format, ...) const
 
 	LOGFILEMGR.GetLog("xml.log", uiFlags)->Msg(buf);
 }
-

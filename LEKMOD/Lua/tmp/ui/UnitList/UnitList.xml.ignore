@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- edit: expandable Info Panel size for EUI & vanilla UI -->
+
 <Context  ColorSet="Beige_Black_Alpha" Font="TwCenMT16" FontStyle="Shadow">
 
     <Instance Name="UnitInstance" >
@@ -7,20 +7,20 @@
         <Box Anchor="R,C" Color="255.255.255.0" Offset="0,0" Size="355,24" ID="Root" >
 
 
-            <!-- Unit Button -->
+
             <Button Size="355,24" Anchor="L,C" ID="Button"  >
 
-                <!-- Selected State -->
+
                 <Grid Anchor="C,C" Offset="10,0" Size="335,24"  Style="Grid9FrameTurns" ID="SelectionFrame" />
 
 
                 <Box Anchor="L,C" Color="255.255.255.0" Offset="0,0" Size="150,24">
 
-                    <!-- HealthBar -->
+
                     <Box Anchor="C,B"  Offset="0,1" Size="140,5" Color="0,0,0,255" Hidden="1" ID="HealthBarBox" >
                         <Bar Anchor="C,C" Offset="0,0" Size="138,3" Direction="Right" FGColor="Green,255" Hidden="0" ID="HealthBar" />
-                        <!--Box Anchor="C,T" Offset="0,1" Size="138,1" Color="255,255,255,64" Hidden="0" /-->
-                        <!--Box Anchor="C,B" Offset="0,0" Size="138,2" Color="0,0,0,64" Hidden="0" /-->
+
+
                     </Box>
                     <Label Anchor="C,C" ID="UnitName" Offset="-2,0" String="000000000"  ColorSet="Beige_Black_Alpha" Font="TwCenMT18" FontStyle="Shadow" />
 
@@ -64,8 +64,8 @@
 
 
 
-    <!--=======================================================================================================================-->
-    <!--=======================================================================================================================-->
+
+
 
     <Grid Size="390,400" Anchor="L,T" Offset="-7,4"  Style="Grid9DetailFive140" ConsumeMouse="1" ID="MainGrid" >
 
@@ -147,7 +147,7 @@
             <Image Anchor="L,B" Offset="0,24" Texture="HorizontalTrim.dds" Size="355.5" />
         </Box>
 
-		<!-- NEW: expandable Info Panel size for EUI & vanilla UI -->
+
 		<Slider ID="VerticalSizeDragArea" Anchor="L,B" Vertical="1" Texture="Blank.dds" BranchAlpha="0" Length="32" Size="390,1" Offset="0,10" />
 
         <TextButton Offset="0,22" Anchor="C,B" Style="Font14or20" ColorSet="Beige_Black_Alpha" String="TXT_KEY_CLOSE" FontStyle="Shadow" MouseOverStyle="SoftShadow" ConsumeMouse="1" ID="CloseButton" />

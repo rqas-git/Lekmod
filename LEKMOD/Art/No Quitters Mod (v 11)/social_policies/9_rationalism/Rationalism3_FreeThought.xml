@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/12/2015 4:21:54 AM -->
+
 <GameData>
 
-	<!-- FREE THOUGHT -->
+
 	<Policy_BuildingClassYieldModifiers>
 		<Delete PolicyType="POLICY_FREE_THOUGHT" />
 	</Policy_BuildingClassYieldModifiers>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/6/2015 4:51:27 PM -->
+
 <GameData>
 
-	<!-- Navigation School: +10% Combat strength for Naval units. +3 Science in coastal Cities. -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_POLICY_NAVIGATION_SCHOOL_HELP" />
 		<Row Tag="TXT_KEY_POLICY_NAVIGATION_SCHOOL_HELP">
@@ -52,7 +52,7 @@
 		<Delete PolicyType="POLICY_NAVIGATION_SCHOOL" />
 	</Policy_FreeUnitClasses>
 	
-	<!-- Naval Tradition promotion -->
+
 	<UnitPromotions>
 		<Row>
 			<Type>PROMOTION_NAVIGATION_SCHOOL</Type>

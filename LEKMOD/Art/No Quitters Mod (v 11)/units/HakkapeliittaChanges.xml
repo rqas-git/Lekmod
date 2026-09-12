@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 5/5/2016 6:01:19 AM -->
+
 <GameData>
 
-	<!-- Hakkapeliitta now has 5 movement and also gets Charge promotion. -->
+
 	<Units>
 		<Update>
 			<Set Moves="5" />

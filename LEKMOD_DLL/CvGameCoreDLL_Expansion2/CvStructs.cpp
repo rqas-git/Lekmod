@@ -1,23 +1,23 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
 
-//! \author		Multiple
-//! \brief		Implementation of basic Civ5 structures
+
+
+
+
+
+
+
+
+
 
 #include "CvGameCoreDLLPCH.h"
 #include "CvUnit.h"
-//#include "CvStructs.h"
+
 #include "CvGameCoreEnumSerialization.h"
 #include "CvEnumSerialization.h"
 #include "FStlContainerSerialization.h"
 #include "CvTypes.h"
 
-// include this after all other headers!
+
 #include "LintFree.h"
 
 int VoteSelectionData::GetID() const
@@ -32,7 +32,7 @@ void VoteSelectionData::SetID(int iID)
 
 void VoteSelectionData::read(FDataStream& kStream)
 {
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion;
 	kStream >> uiVersion;
 
@@ -60,7 +60,7 @@ FDataStream& operator>>(FDataStream& loadFrom, VoteSelectionData& writeTo)
 
 void VoteSelectionData::write(FDataStream& kStream) const
 {
-	// Current version number
+
 	uint uiVersion = 1;
 	kStream << uiVersion;
 
@@ -94,7 +94,7 @@ void VoteTriggeredData::SetID(int iID)
 
 void VoteTriggeredData::read(FDataStream& kStream)
 {
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion;
 	kStream >> uiVersion;
 
@@ -114,7 +114,7 @@ FDataStream& operator>>(FDataStream& loadFrom, VoteTriggeredData& writeTo)
 
 void VoteTriggeredData::write(FDataStream& kStream) const
 {
-	// Current version number
+
 	uint uiVersion = 1;
 	kStream << uiVersion;
 
@@ -170,15 +170,15 @@ void checkBattleUnitType(BattleUnitTypes unitType)
 	DEBUG_VARIABLE(unitType);
 	CvAssertMsg((unitType >= 0) && (unitType < BATTLE_UNIT_COUNT), "Invalid battle unit type.");
 #else
-void checkBattleUnitType(BattleUnitTypes /*unitType*/)
+void checkBattleUnitType(BattleUnitTypes             )
 {
 #endif
 }
 
-//------------------------------------------------------------------------------------------------
-// FUNCTION:    CvCombatInfo::CvCombatInfo
-//! \brief      Constructor
-//------------------------------------------------------------------------------------------------
+
+
+
+
 CvCombatInfo::CvCombatInfo() :
 	m_pTargetPlot(NULL),
 	m_pFromPlot(NULL),
@@ -257,13 +257,13 @@ const CvCombatMemberEntry* CvCombatInfo::getCombatMember(BattleUnitTypes unitTyp
 		return &m_kCombatMembers[unitType];
 	return NULL;
 }
-// Perform the Random Roll for this combat
+
 void CvCombatInfo::doRandomness(BattleUnitTypes eUnitType, int iWoundedRatio)
 {
 	if (getCombatSeed(eUnitType) != -1)
-		return; // if we haven't set the combat seed yet, don't do randomness yet.  This is for set seeds.
+		return;
 	const char* szLog = "Combat Damage Roll";
-	// this is bad, but theres like 4 global values that all equal this for combat so fuck it.
+
 	int iExtraDamage = 1200;
 
 	switch (eUnitType)
@@ -302,7 +302,7 @@ void CvCombatInfo::doRandomness(BattleUnitTypes eUnitType, int iWoundedRatio)
 	setCombatSeed(eUnitType, iRoll);
 
 }
-// Perform the Strength Ratio calculation for this combat
+
 double CvCombatInfo::doStrengthRatio(int strength, int opponentStrength)
 {
 	const double max = 10.0f;
@@ -324,7 +324,7 @@ double CvCombatInfo::doStrengthRatio(int strength, int opponentStrength)
 	}
 	return ratio;
 }
-// Perform the Experience calculation for this combat
+
 void CvCombatInfo::doExperience()
 {
 	for (int i = 0; i < BATTLE_UNIT_COUNT; ++i)
@@ -352,7 +352,7 @@ void CvCombatInfo::doExperience()
 	int iDefenderExperience = 0;
 	int iInterceptorExperience = 0;
 
-	// Air sweep: interceptor is stored as the defender.
+
 	if (getAttackIsAirSweep())
 	{
 		if (pAttackerUnit != NULL &&
@@ -360,7 +360,7 @@ void CvCombatInfo::doExperience()
 		{
 			if (pDefenderUnit->getDomainType() != DOMAIN_AIR)
 			{
-				iAttackerExperience = 0; // Air sweeps against ground units do not give XP to the attacker.
+				iAttackerExperience = 0;
 				iDefenderExperience = GC.getEXPERIENCE_DEFENDING_AIR_SWEEP_GROUND();
 			}
 			else
@@ -370,7 +370,7 @@ void CvCombatInfo::doExperience()
 			}
 		}
 	}
-	// Bombing mission.
+
 	else if (getAttackIsBombingMission())
 	{
 		if (pAttackerUnit != NULL)
@@ -391,7 +391,7 @@ void CvCombatInfo::doExperience()
 			iInterceptorExperience = GC.getEXPERIENCE_DEFENDING_AIR_SWEEP_GROUND();
 		}
 	}
-	// Normal ranged strike.
+
 	else if (getAttackIsRanged())
 	{
 		if (pAttackerUnit != NULL)
@@ -411,7 +411,7 @@ void CvCombatInfo::doExperience()
 			iDefenderExperience = GC.getEXPERIENCE_DEFENDING_UNIT_RANGED();
 		}
 	}
-	else if (pAttackerUnit != NULL) // Melee.
+	else if (pAttackerUnit != NULL)
 	{
 		if (pDefenderUnit != NULL)
 		{
@@ -428,7 +428,7 @@ void CvCombatInfo::doExperience()
 	setExperience(BATTLE_UNIT_DEFENDER, iDefenderExperience);
 	setExperience(BATTLE_UNIT_INTERCEPTOR, iInterceptorExperience);
 
-	// Attacker metadata.
+
 	if (pAttackerUnit != NULL)
 	{
 		if (pDefenderUnit != NULL)
@@ -444,14 +444,14 @@ void CvCombatInfo::doExperience()
 			setUpdateGlobal(BATTLE_UNIT_ATTACKER, pDefenderCity->canEarnGlobalXP());
 		}
 
-		// No General Progress for air sweeps against ground units.
+
 		if (getAttackIsAirSweep() && pDefenderUnit != NULL && pDefenderUnit->getDomainType() != DOMAIN_AIR )
 		{
 			setUpdateGlobal(BATTLE_UNIT_ATTACKER, false);
 		}
 	}
 
-	// Defender metadata.
+
 	if (pDefenderUnit != NULL)
 	{
 		if (pAttackerUnit != NULL)
@@ -468,7 +468,7 @@ void CvCombatInfo::doExperience()
 		}
 	}
 
-	// Bombing interceptor metadata.
+
 	if (pInterceptor != NULL && pAttackerUnit != NULL )
 	{
 		setMaxExperienceAllowed(BATTLE_UNIT_INTERCEPTOR, pAttackerUnit->maxXPValue());
@@ -481,7 +481,7 @@ bool CvCombatInfo::IsCombatRandom() const
 {
 	return !GC.getGame().isOption(GAMEOPTION_NO_COMBAT_RANDOMNESS) && !IsCombatPrediction();
 }
-// Did the Attacker bite the dust?
+
 bool CvCombatInfo::IsAttackerDead() const
 {
 	if (getUnit(BATTLE_UNIT_ATTACKER) != NULL)
@@ -494,7 +494,7 @@ bool CvCombatInfo::IsAttackerDead() const
 	}
 	return false;
 }
-// Did the Defender bite the dust?
+
 bool CvCombatInfo::IsDefenderDead() const
 {
 	if (getUnit(BATTLE_UNIT_DEFENDER) != NULL)
@@ -526,7 +526,7 @@ void CvCombatModifierList::AddEntry(const CvString& strText, int iModifier, bool
 		return;
 	}
 
-	// Unlimited, or another named row fits.
+
 	if (iMaxLines <= 0 || static_cast<int>(m_kEntries.size()) < iMaxLines)
 	{
 		m_kEntries.push_back(CvCombatModifierEntry(strText, iModifier, bPercent));
@@ -576,10 +576,10 @@ void CvCombatModifierList::RebuildMiscellaneous(bool bPercent)
 	kMiscEntry.m_bMiscellaneous = true;
 }
 #endif
-//------------------------------------------------------------------------------------------------
-// FUNCTION:    CvMissionDefinition::CvMissionDefinition
-//! \brief      Default constructor.
-//------------------------------------------------------------------------------------------------
+
+
+
+
 CvMissionDefinition::CvMissionDefinition() :
 	m_fMissionTime(0.0f),
 	m_eMissionType(NO_MISSION),
@@ -642,25 +642,25 @@ void CvMissionDefinition::setSecondaryPlot(const CvPlot* plot)
 	m_pSecondaryPlot = plot;
 }
 
-//------------------------------------------------------------------------------------------------
-// FUNCTION:    CvAirMissionDefinition::CvAirMissionDefinition
-//! \brief      Constructor
-//------------------------------------------------------------------------------------------------
+
+
+
+
 CvAirMissionDefinition::CvAirMissionDefinition() :
 	CvMissionDefinition()
 #ifdef AUI_WARNING_FIXES
-	, m_aDamage()		//!< The ending damage of the units
+	, m_aDamage()
 #endif
 {
 	m_fMissionTime = 0.0f;
 	m_eMissionType = CvTypes::getMISSION_AIRPATROL();
 }
 
-//------------------------------------------------------------------------------------------------
-// FUNCTION:    CvAirMissionDefinition::CvAirMissionDefinition
-//! \brief      Copy constructor
-//! \param      kCopy The object to copy
-//------------------------------------------------------------------------------------------------
+
+
+
+
+
 CvAirMissionDefinition::CvAirMissionDefinition(const CvAirMissionDefinition& kCopy)
 {
 	m_fMissionTime = kCopy.m_fMissionTime;
@@ -696,33 +696,33 @@ bool CvAirMissionDefinition::isDead(BattleUnitTypes unitType) const
 		return false;
 }
 
-//PBGameSetupData::PBGameSetupData() :
-//iSize(0)
-//, iClimate(0)
-//, iSeaLevel(0)
-//, iSpeed(0)
-//, iEra(0)
-//, iMaxTurns(0)
-//, iCityElimination(0)
-//, iAdvancedStartPoints(0)
-//, iTurnTime(0)
-//, iNumCustomMapOptions(0)
-//, aiCustomMapOptions(0)
-//, iNumVictories(0)
-//, abVictories(0)
-//, szMapName("")
-//, abOptions()
-//, abMPOptions()
-//{
-//	for (int i = 0; i < NUM_GAMEOPTION_TYPES; i++)
-//	{
-//		abOptions.push_back(false);
-//	}
-//	for (int i = 0; i < NUM_MPOPTION_TYPES; i++)
-//	{
-//		abMPOptions.push_back(false);
-//	}
-//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 FDataStream& operator<<(FDataStream& saveTo, const OrderData& readFrom)
 {

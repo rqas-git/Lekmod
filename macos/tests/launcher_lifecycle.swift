@@ -1,4 +1,4 @@
-// Compiled with the production launcher declarations by check_launcher_lifecycle.py.
+
 func require(_ condition: @autoclosure () -> Bool, _ message: String) {
     if !condition() { fatalError(message) }
 }

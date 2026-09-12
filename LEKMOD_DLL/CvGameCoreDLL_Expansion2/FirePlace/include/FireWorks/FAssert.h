@@ -1,36 +1,36 @@
 #ifndef FASSERT_H
 #define FASSERT_H
 
-// Only compile in FAssert's if FASSERT_ENABLE is defined.  By default, however, let's key off of
-// _DEBUG.  Sometimes, however, it's useful to enable asserts in release builds, and you can do that
-// simply by changing the following lines to define FASSERT_ENABLE or using project settings to override
+
+
+
 #if !defined(FINAL_RELEASE)
 #define		FASSERT_ENABLE
-#endif	//	FINAL_RELEASE
+#endif
 
 #ifdef		_NDS
 #undef		FASSERT_ENABLE
 #endif
 
-#if			defined(NDEBUG) && !defined(_NDS)	// _assert() is in ALL run-time-libs, but not prototyped in RELEASE
+#if			defined(NDEBUG) && !defined(_NDS)
 extern "C" _CRTIMP void __cdecl _assert(const char *, const char *, unsigned);
-#endif	//	NDEBUG
+#endif
 
-// VERIFY() works like assert() but is also called in release.
+
 #undef		VERIFY
 #ifdef		_DEBUG
 #define		VERIFY(f)	FAssert(f)
-#else	//	_DEBUG
+#else
 #define		VERIFY(f)	(f)
-#endif	//	_DEBUG
+#endif
 
-// These macros will cause an FAssert, and if the expression is false, perform the given code.
-// This can be used, for example, to return from a function when something unexpected happens:
-// ReturnValue * MyFunction( Class * pkParameter )
-// {
-//	FAssertExecuteMsg( pkParameter != 0, return NULL, "Unexpected NULL parameter." );
-//	... // real code goes here.
-// }
+
+
+
+
+
+
+
 #define FAssertExecute( expr, statement ) FAssert(expr); if ( !(expr) ) { statement; };
 #define FAssertExecuteMsg( expr, statement, msg ) FAssertMsg(expr, msg); if ( !(expr) ) { statement; };
 #define FAssertExecuteMsg0( expr, statement, _fmt ) FAssertMsg(expr, _fmt); if ( !(expr) ) { statement; };
@@ -40,13 +40,13 @@ extern "C" _CRTIMP void __cdecl _assert(const char *, const char *, unsigned);
 #define FAssertExecuteMsg4( expr, statement, _fmt, _p0, _p1, _p2, _p3 ) FAssertMsg4(expr, msg_fmt, _p0, _p1, _p2, _p3); if ( !(expr) ) { statement; };
 
 #if !defined(FXS_IS_DLL)
-// functions to allow runtime control over assert mechanism
+
 void FAssertEnable(bool bEnable);
 bool FAssertIsEnabled();
 void FAssertEnableDialog(bool bEnable);
 bool FAssertIsDialogEnabled();
 
-// These must be set (and called) to do things, such as device locking on Xenon
+
 typedef void (*FASSERT_CALLBACK)();
 void SetPreAssertCallback( FASSERT_CALLBACK pfnPreAssertCallback );
 void SetPostAssertCallback( FASSERT_CALLBACK pfnPostAssertCallback );
@@ -56,14 +56,14 @@ void SetAssertLogCallback( FASSERT_LOG_CALLBACK pfnAssertLogCallback );
 
 #ifdef FASSERT_ENABLE
 
-	// Set breakpoint creation macros
+
 	#if defined (_WINPC) || defined (_XENON)
 	#define FASSERT_BREAKPOINT __debugbreak()
 	#else
 	#define FASSERT_BREAKPOINT assert(0)
 	#endif
 
-	// Each platform must implement this function, which returns whether to break or not
+
 	bool FAssertDlg( const char*, const char*, const char*, unsigned int, bool& );
 
 	#define FAssert( expr )	\
@@ -86,9 +86,9 @@ void SetAssertLogCallback( FASSERT_LOG_CALLBACK pfnAssertLogCallback );
 		} \
 	}
 
-	// Defined for convenience, these allow you to format arguments in your asserts
-	// Unfortunately, since they are macros, you can't use var_arg, and so you have to
-	// know how many parameters you are using at compile time.
+
+
+
 
 	#define FAssertMsg0( expr, _fmt ) FAssertMsg( expr, _fmt )
 	#define FAssertMsg1( expr, _fmt, _p0 ) \
@@ -149,7 +149,7 @@ void SetAssertLogCallback( FASSERT_LOG_CALLBACK pfnAssertLogCallback );
     }
 
 #else
-	// FASSERT_ENABLE not defined
+
 	#define FAssert( expr )
 	#define FAssertMsg( expr, msg )
 	#define FAssertMsg0( expr, _fmt )
@@ -165,11 +165,11 @@ void SetAssertLogCallback( FASSERT_LOG_CALLBACK pfnAssertLogCallback );
 
 #ifndef		ASSERT
 #define		ASSERT					FAssert
-#endif	//	ASSERT
+#endif
 
-// A class that disables asserts when it is instantiated and
-// re-enables them (if they were enabled to being with) when 
-// it goes out of scope
+
+
+
 class FScopedAssertDisabler 
 {
 	protected:
@@ -180,4 +180,4 @@ class FScopedAssertDisabler
 		~FScopedAssertDisabler();
 };
 
-#endif // FASSERT_H
+#endif

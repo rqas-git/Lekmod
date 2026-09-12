@@ -1,4 +1,4 @@
--- Controlled engine doubles; the runner supplies the real production scripts.
+
 local function event()
     local listeners = {}
     return {
@@ -148,7 +148,7 @@ function run_policies(source, count, reordered, alternate_rules)
         p.units[i]=u
     end
     load(e,source)
-    -- Missing and dead units must not initialize the metadata cache.
+
     e.GameEvents.UnitCreated.Fire(0,999)
     p.alive=false
     for i=1,count do e.GameEvents.UnitCreated.Fire(0,i) end
@@ -157,7 +157,7 @@ function run_policies(source, count, reordered, alternate_rules)
     for i=1,count do e.GameEvents.UnitCreated.Fire(0,i) end
     p.policy=true
     e.GameEvents.PlayerAdoptPolicy.Fire(0,3)
-    -- Recheck after a unit's live combat class changes and a promotion is removed.
+
     for _,u in ipairs(p.units) do u.combat=10; u.promotions[8]=nil end
     for i=1,count do e.GameEvents.UnitCreated.Fire(0,i) end
     e.GameEvents.PlayerAdoptPolicy.Fire(0,3)

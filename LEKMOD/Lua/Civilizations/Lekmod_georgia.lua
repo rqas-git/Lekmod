@@ -1,4 +1,4 @@
--- Author: 404NotFound & EnormousApplePie
+
 
 include("Lekmod_utilities.lua")
 include("PlotIterators.lua")
@@ -6,9 +6,9 @@ include("PlotIterators.lua")
 local this_civ = GameInfoTypes["CIVILIZATION_GEORGIA"]
 local is_active = LekmodUtilities:is_civilization_active(this_civ)
 
-------------------------------------------------------------------------------------------------------------------------
--- Georgia UU. Give Khevsur the Golden Age promotion if the player is in a Golden Age.
-------------------------------------------------------------------------------------------------------------------------
+
+
+
 function lekmod_georgia_uu_golden_age(player_id)
 
 	local player = Players[player_id]
@@ -25,7 +25,7 @@ function lekmod_georgia_uu_golden_age(player_id)
     end
 
 end
-------------------------------------------------------------------------------------------------------------------------
+
 
 GameEvents.PlayerDoTurn.Add(lekmod_georgia_uu_golden_age)
 GameEvents.GreatPersonExpended.Add(lekmod_georgia_uu_golden_age)

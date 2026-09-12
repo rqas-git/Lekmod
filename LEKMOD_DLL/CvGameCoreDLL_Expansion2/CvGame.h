@@ -1,13 +1,13 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
-// game.h
+
 
 #ifndef CIV5_GAME_H
 #define CIV5_GAME_H
@@ -277,14 +277,14 @@ public:
 
 	void DoFromUIDiploEvent(FromUIDiploEventTypes eEvent, PlayerTypes eAIPlayer, int iArg1, int iArg2);
 
-	// Diplomacy Victory
+
 	void DoInitDiploVictory();
 	void DoUpdateDiploVictory();
 	int GetVotesNeededForDiploVictory() const;
 	void SetVotesNeededForDiploVictory(int iValue);
 	bool IsUnitedNationsActive();
 
-	// DEPRECATED
+
 	int GetUnitedNationsCountdown() const;
 	void SetUnitedNationsCountdown(int iValue);
 	void ChangeUnitedNationsCountdown(int iChange);
@@ -300,7 +300,7 @@ public:
 	int GetNumVotesForTeam(TeamTypes eTeam) const;
 	void SetNumVotesForTeam(TeamTypes eTeam, int iValue);
 	void ChangeNumVotesForTeam(TeamTypes eTeam, int iChange);
-	// End DEPRECATED
+
 
 	Localization::String GetDiploResponse(const char* szLeader, const char* szResponse, const Localization::String& strOptionalKey1, const Localization::String& strOptionalKey2);
 
@@ -423,11 +423,11 @@ public:
 	void setOption(const char* pszOption, bool bEnabled);
 
 #if defined(LEKMOD_WC_RESPECT_ACTIVATION_ORDER)
-	// Last human simultaneous-activation order (index 0 = first activated). Used for WC host / 2nd-proposer ties.
+
 	void StoreTurnActivationOrder(const int* aiShuffle);
 	int GetTurnActivationOrderIndex(PlayerTypes ePlayer) const;
 	bool IsRandomizedTurnActivationOrderEnabled() const;
-	// Prefer eA over eB: earlier activation if option on, else lower player ID.
+
 	bool IsPreferredByTurnActivationOrder(PlayerTypes eA, PlayerTypes eB) const;
 #endif
 
@@ -507,7 +507,7 @@ public:
 
 	void writeReplay(FDataStream& kStream);
 
-	// Ported in from old CvGameAI
+
 	int GetCombatValue(UnitTypes eUnit);
 
 	void saveReplay();
@@ -577,7 +577,7 @@ public:
 
 	int GetResearchAgreementCost(PlayerTypes ePlayer1, PlayerTypes ePlayer2);
 
-	// Victory Stuff
+
 	void DoTestConquestVictory();
 
 	PlayerTypes GetBestWondersPlayer();
@@ -589,19 +589,19 @@ public:
 
 	bool IsEndGameTechResearched() const;
 	void SetEndGameTechResearched(bool bValue);
-	// End Victory Stuff
 
-	// Returns true if the tuner has ever been connected at any point during this game.
+
+
 	bool TunerEverConnected() const;
 
-	// slewis - Tutorial stuff
+
 	bool IsEverAttackedTutorial() const;
 	void SetEverAttackedTutorial(bool bValue);
 	bool IsEverRightClickMoved() const;
 	void SetEverRightClickMoved(bool bValue);
 	bool IsCombatWarned() const;
 	void SetCombatWarned(bool bValue);
-	// end Tutorial stuff
+
 
 	CvAdvisorCounsel* GetAdvisorCounsel();
 	CvAdvisorRecommender* GetAdvisorRecommender();
@@ -652,7 +652,7 @@ public:
 	FTimer  m_endTurnTimer;
 	int     m_endTurnTimerSemaphore;
 	FTimer  m_curTurnTimer;
-	FTimer  m_timeSinceGameTurnStart;		//time since game turn started for human players
+	FTimer  m_timeSinceGameTurnStart;
 	float	m_fCurrentTurnTimerPauseDelta;
 #endif
 #ifdef TURN_TIMER_PAUSE_BUTTON
@@ -662,17 +662,17 @@ public:
 
 public:
 
-	//Function to determine city size from city population
+
 	unsigned int GetVariableCitySizeFromPopulation(unsigned int nPopulation);
 
-	//------------------------------------------------------------
-	//------------------------------------------------------------
-	//------------------------------------------------------------
+
+
+
 
 private:
-	//------------------------------------------------------------
-	// Convert from city population to discrete size
-	//------------------------------------------------------------
+
+
+
 	const static unsigned int ms_aiSizes[10];
 
 protected:
@@ -693,9 +693,9 @@ protected:
 	int m_iNoNukesCount;
 	int m_iNukesExploded;
 	int m_iMaxPopulation;
-	int m_iUnused1;  //unused
-	int m_iUnused2;  //unused
-	int m_iUnused3;  //unused
+	int m_iUnused1;
+	int m_iUnused2;
+	int m_iUnused3;
 	int m_iInitPopulation;
 	int m_iInitLand;
 	int m_iInitTech;
@@ -735,18 +735,18 @@ protected:
 	bool m_bNukesValid;
 	bool m_bEndGameTechResearched;
 	bool m_bTunerEverConnected;
-	bool m_bDynamicTurnsSimultMode;		//if playing dynamic turn mode, are we currently running simultaneous turns?
+	bool m_bDynamicTurnsSimultMode;
 	PlayerTypes m_eWaitDiploPlayer;
 
 	bool m_bFOW;
 
-	// slewis - tutorial values
+
 	bool m_bStaticTutorialActive;
 	bool m_bTutorialEverAttacked;
 	bool m_bEverRightClickMoved;
 	bool m_bCombatWarned;
 	std::tr1::unordered_set<std::string> m_AdvisorMessagesViewed;
-	// slewis - tutorial values
+
 
 	HandicapTypes m_eHandicap;
 	PlayerTypes m_ePausePlayer;
@@ -766,12 +766,12 @@ protected:
 	CvString m_strScriptData;
 
 	int* m_aiEndTurnMessagesReceived;
-	int* m_aiRankPlayer;        // Ordered by rank...
-	int* m_aiPlayerRank;        // Ordered by player ID...
-	int* m_aiPlayerScore;       // Ordered by player ID...
-	int* m_aiRankTeam;						// Ordered by rank...
-	int* m_aiTeamRank;						// Ordered by team ID...
-	int* m_aiTeamScore;						// Ordered by team ID...
+	int* m_aiRankPlayer;
+	int* m_aiPlayerRank;
+	int* m_aiPlayerScore;
+	int* m_aiRankTeam;
+	int* m_aiTeamRank;
+	int* m_aiTeamScore;
 
 	int* m_paiUnitCreatedCount;
 	int* m_paiUnitClassCreatedCount;
@@ -834,10 +834,10 @@ protected:
 
 	CvGameDeals                m_kGameDeals;
 
-	//necessary because we only want to hide the mouseover of the most recently moused over unit -KS
+
 	int                        m_iLastMouseoverUnitID;
 
-	// CACHE: cache frequently used values
+
 
 #if !defined (CAN_PARADROP_HALF_TIMER) || !defined (CAN_SET_INTERCEPT_HALF_TIMER)
 	FTimer  m_endTurnTimer;
@@ -848,10 +848,10 @@ protected:
 	FTimer  m_curTurnTimer;
 #endif
 #if !defined (CAN_PARADROP_HALF_TIMER) || !defined (CAN_SET_INTERCEPT_HALF_TIMER)
-	FTimer  m_timeSinceGameTurnStart;		//time since game turn started for human players
+	FTimer  m_timeSinceGameTurnStart;
 #endif
 #if !defined (CAN_PARADROP_HALF_TIMER) || !defined (CAN_SET_INTERCEPT_HALF_TIMER)
-	float	m_fCurrentTurnTimerPauseDelta;	//
+	float	m_fCurrentTurnTimerPauseDelta;
 #endif
 	bool    m_sentAutoMoves;
 	bool	m_bForceEndingTurn;
@@ -910,11 +910,11 @@ protected:
 };
 
 #ifdef REPLAY_EVENTS
-// add new event types to the end of the enum, before NUM_REPLAYEVENTS
-// each event listed here should have its own corresponding xml entry in ReplayEvents table
+
+
 enum ReplayEventTypes
 {
-	// Network actions
+
 	REPLAYEVENT_AdvancedStartAction,
 	REPLAYEVENT_AutoMission,
 	REPLAYEVENT_BarbarianRansom,
@@ -977,7 +977,7 @@ enum ReplayEventTypes
 	REPLAYEVENT_SwapUnits,
 	REPLAYEVENT_UpdateCityCitizens,
 	REPLAYEVENT_UpdatePolicies,
-	/// 
+
 	REPLAYEVENT_CityPurchaseUnit,
 	REPLAYEVENT_CityPurchaseBuilding,
 	REPLAYEVENT_FreeTech,
@@ -994,7 +994,7 @@ enum ReplayEventTypes
 	REPLAYEVENT_UpdatePolicyBranch,
 	REPLAYEVENT_UnpauseTimer,
 
-	// Gameplay events
+
 	REPLAYEVENT_CityUnitComplete,
 	REPLAYEVENT_CityBuildingComplete,
 	REPLAYEVENT_CityGrowth,
@@ -1019,7 +1019,7 @@ enum ReplayEventTypes
 	REPLAYEVENT_CongressHostChange,
 	REPLAYEVENT_CongressEnactedProposalsChange,
 	REPLAYEVENT_MPProposalResult,
-	REPLAYEVENT_PlotNewCityName,  // Special event to track city name changes
+	REPLAYEVENT_PlotNewCityName,
 	REPLAYEVENT_EnterCityScreen,
 
 	NUM_REPLAYEVENTS

@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_BUILDING_CLASSES_H
@@ -32,9 +32,9 @@ struct BuildingFreeTerrainYields
 	int m_iMinTerrainRequired;
 	int m_iYieldChange;
 };
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvThemingBonusInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvThemingBonusInfo
 {
 	friend class CvBuildingEntry;
@@ -84,15 +84,15 @@ protected:
 	int m_iAIPriority;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvBuildingEntry
-//!  \brief		A single building available in the game
-//
-//!  Key Attributes:
-//!  - Used to be called CvBuildingInfo
-//!  - Populated from XML\Buildings\CIV5BuildingInfos.xml
-//!  - Array of these contained in CvBuildingXMLEntries class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvBuildingEntry: public CvBaseInfo
 {
 public:
@@ -101,7 +101,7 @@ public:
 
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
 
-	// Accessor Functions (Non-Arrays)
+
 	int GetBuildingClassType() const;
 	const CvBuildingClassInfo& GetBuildingClassInfo() const;
 
@@ -203,7 +203,7 @@ public:
 	int GetTechShare() const;
 	int GetFreeTechs() const;
 	int GetFreePolicies() const;
-	int GetFreeFlatFaith() const; // NQMP GJS - New Stonehenge
+	int GetFreeFlatFaith() const;
 	int GetFreeGreatPeople() const;
 	int GetMedianTechPercentChange() const;
 	int GetGold() const;
@@ -236,7 +236,7 @@ public:
 	int GetTradeRouteLandDistanceModifier() const;
 	int GetTradeRouteLandGoldBonus() const;
 	int GetCityStateTradeRouteProductionModifier() const;
-	int GetCityStateTradeRouteGoldModifier() const; // NQMP GJS - new Economic Union
+	int GetCityStateTradeRouteGoldModifier() const;
 	int GetGreatScientistBeakerModifier() const;
 	int GetExtraLeagueVotes() const;
 #if defined(LEKMOD_GARRISON_YIELD_EFFECTS)
@@ -265,7 +265,7 @@ public:
 	bool IsCityWall() const;
 	bool IsCapital() const;
 	bool IsGoldenAge() const;
-	bool IsGrantsFreeCulturalGreatPersonWithTrait() const; // NQMP GJS - New France UA
+	bool IsGrantsFreeCulturalGreatPersonWithTrait() const;
 	bool IsMapCentering() const;
 	bool IsNeverCapture() const;
 	bool IsNukeImmune() const;
@@ -297,7 +297,7 @@ public:
 	const char* GetWonderSplashAudio() const;
 	CvString GetThemingBonusHelp() const;
 
-	// Accessor Functions (Arrays)
+
 
 	int GetYieldChange(int i) const;
 	int* GetYieldChangeArray() const;
@@ -361,17 +361,17 @@ public:
 	bool IsBuildingClassNeededInCity(int i) const;
 	int GetNumFreeUnits(int i) const;
 #if defined(TRADE_REFACTOR)
-	// Yield for SENDER if creating a Trade Route from a city with this building
+
 	int GetTradeConnectionOriginLandYieldChange(int i, int j) const;
 	int GetTradeConnectionOriginSeaYieldChange(int i, int j) const;
-	// Yield for RECEIVER for having a Trade Route sent to a city with this building
+
 	int GetTradeConnectionDestinationLandYieldChange(int i, int j) const;
 	int GetTradeConnectionDestinationSeaYieldChange(int i, int j) const;
-	// Yield for the SENDER if they send a Trade Route to a city with this building, if international, else to destination city. its a bit complicated...
+
 	int GetIncomingTradeConnectionLandYieldChange(int i, int j) const;
 	int GetIncomingTradeConnectionSeaYieldChange(int i, int j) const;
 #endif
-#if defined(MISC_CHANGES) // CvBuildingClasses arrays
+#if defined(MISC_CHANGES)
 	int GetResourceClassYieldChange(int i, int j) const;
 #endif
 #if defined(LEKMOD_v34)
@@ -515,7 +515,7 @@ private:
 	int m_iTechShare;
 	int m_iFreeTechs;
 	int m_iFreePolicies;
-	int m_iFreeFlatFaith; // NQMP GJS - New Stonehenge
+	int m_iFreeFlatFaith;
 	int m_iFreeGreatPeople;
 	int m_iMedianTechPercentChange;
 	int m_iGold;
@@ -549,7 +549,7 @@ private:
 	int m_iTradeRouteLandDistanceModifier;
 	int m_iTradeRouteLandGoldBonus;
 	int m_iCityStateTradeRouteProductionModifier;
-	int m_iCityStateTradeRouteGoldModifier; // NQMP GJS - new Economic Union
+	int m_iCityStateTradeRouteGoldModifier;
 	int m_iGreatScientistBeakerModifier;
 	int m_iExtraLeagueVotes;
 #if defined(LEKMOD_GARRISON_YIELD_EFFECTS)
@@ -578,7 +578,7 @@ private:
 	bool m_bPlayerBorderObstacle;
 	bool m_bCapital;
 	bool m_bGoldenAge;
-	bool m_bGrantsFreeCulturalGreatPersonWithTrait; // NQMP GJS - New France UA
+	bool m_bGrantsFreeCulturalGreatPersonWithTrait;
 	bool m_bMapCentering;
 	bool m_bNeverCapture;
 	bool m_bNukeImmune;
@@ -609,7 +609,7 @@ private:
 	CvString m_strWonderSplashAudio;
 	CvString m_strThemingBonusHelp;
 
-	// Arrays
+
 
 	int* m_piLockedBuildingClasses;
 	int* m_piPrereqAndTechs;
@@ -669,7 +669,7 @@ private:
 	int** m_ppaiIncomingTradeConnectionLandYieldChange;
 	int** m_ppaiIncomingTradeConnectionSeaYieldChange;
 #endif
-	#if defined(MISC_CHANGES) // CvBuildingClasses arrays
+	#if defined(MISC_CHANGES)
 	int** m_ppaiResourceClassYieldChange;
 #endif
 #if defined(LEKMOD_v34)
@@ -700,24 +700,24 @@ private:
 	int m_iNumThemingBonuses;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvBuildingXMLEntries
-//!  \brief		Game-wide information about buildings
-//
-//! Key Attributes:
-//! - Plan is it will be contained in CvGameRules object within CvGame class
-//! - Populated from XML\Buildings\CIV5BuildingInfos.xml
-//! - Contains an array of CvBuildingEntry from the above XML file
-//! - One instance for the entire game
-//! - Accessed heavily by CvCityBuildings class (which stores the building state for 1 city)
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
 class CvBuildingXMLEntries
 {
 public:
 	CvBuildingXMLEntries(void);
 	~CvBuildingXMLEntries(void);
 
-	// Accessor functions
+
 	std::vector<CvBuildingEntry*>& GetBuildingEntries();
 #ifdef AUI_WARNING_FIXES
 	uint GetNumBuildings() const;
@@ -733,15 +733,15 @@ private:
 	std::vector<CvBuildingEntry*> m_paBuildingEntries;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvCityBuildings
-//!  \brief		Information about the buildings constructed in a single city
-//
-//!  Key Attributes:
-//!  - Plan is it will be contained in CvCityState object within CvCity class
-//!  - One instance for each city
-//!  - Accessed by any class that needs to check building construction status
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvCityBuildings
 {
 public:
@@ -757,7 +757,7 @@ public:
 	void Read(FDataStream& kStream);
 	void Write(FDataStream& kStream);
 
-	// Accessor functions
+
 	CvBuildingXMLEntries* GetBuildings() const;
 
 	int GetNumBuildings() const;
@@ -765,7 +765,7 @@ public:
 
 	int GetNumBuilding(BuildingTypes eIndex) const;
 
-	/// CMP
+
 	bool HasBuildingClass(BuildingClassTypes eIndex) const;
 	BuildingTypes GetBuildingTypeFromClass(BuildingClassTypes eIndex) const;
 
@@ -835,7 +835,7 @@ public:
 	bool GetNextAvailableGreatWorkSlot(GreatWorkSlotType eGreatWorkSlot, BuildingClassTypes *eBuildingClass, int *iSlot) const;
 #endif
 
-	int GetYieldFromGreatWorks(YieldTypes eIndex) const; // NQMP GJS - Artistic Genius fix to add science to Great Works
+	int GetYieldFromGreatWorks(YieldTypes eIndex) const;
 	int GetCultureFromGreatWorks() const;
 #if !defined(LEKMOD_GREAT_WORK_YIELD_EFFECTS)
 	int GetThemingBonuses() const;
@@ -869,7 +869,7 @@ public:
 	int GetNumBuildingsFromFaith() const;
 
 	int GetCityStateTradeRouteProductionModifier() const;
-	int GetCityStateTradeRouteGoldModifier() const; // NQMP GJS - new Economic Union
+	int GetCityStateTradeRouteGoldModifier() const;
 
 	int GetBuildingProductionModifier() const;
 	void ChangeBuildingProductionModifier(int iChange);
@@ -915,7 +915,7 @@ public:
 	bool CheckForAllWondersBuilt();
 	bool CheckForSevenAncientWondersBuilt();
 
-	/// CMP
+
 	const std::vector<BuildingTypes>& GetAllBuildingsHere() const { return m_buildingsThatExistAtLeastOnce; }
 
 
@@ -960,10 +960,10 @@ private:
 	int m_iHappinessFromGreatWorks;
 	std::vector< Firaxis::Array<int, NUM_YIELD_TYPES > > m_aaiCityGreatWorkClassYieldChange;
 #endif
-/// CMP
+
 
 	std::vector<BuildingTypes> m_buildingsThatExistAtLeastOnce;
-	///
+
 
 	std::vector<BuildingYieldChange> m_aBuildingYieldChange;
 	std::vector<BuildingGreatWork> m_aBuildingGreatWork;
@@ -972,13 +972,13 @@ private:
 	CvCity* m_pCity;
 };
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Helper Functions to serialize arrays of variable length (based on number of buildings defined in game)
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 namespace BuildingArrayHelpers
 {
 void Read(FDataStream& kStream, int* paiBuildingArray);
 void Write(FDataStream& kStream, int* paiBuildingArray, int iArraySize);
 }
 
-#endif //CIV5_BUILDING_CLASSES_H
+#endif

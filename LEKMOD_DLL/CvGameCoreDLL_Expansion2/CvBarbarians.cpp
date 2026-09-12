@@ -1,17 +1,17 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 
 #include "CvGameCoreDLLPCH.h"
 #include "CvBarbarians.h"
 #include "CvGameCoreUtils.h"
 #include "CvTypes.h"
 
-//static 
+
 #ifdef AUI_WARNING_FIXES
 int* CvBarbarians::m_aiPlotBarbCampSpawnCounter = NULL;
 int* CvBarbarians::m_aiPlotBarbCampNumUnitsSpawned = NULL;
@@ -21,7 +21,7 @@ short* CvBarbarians::m_aiPlotBarbCampNumUnitsSpawned = NULL;
 #endif
 FStaticVector<DirectionTypes, 6, true, c_eCiv5GameplayDLL, 0> CvBarbarians::m_aeValidBarbSpawnDirections;
 
-//	---------------------------------------------------------------------------
+
 bool CvBarbarians::IsPlotValidForBarbCamp(CvPlot* pPlot)
 {
 	int iRange = 4;
@@ -33,9 +33,9 @@ bool CvBarbarians::IsPlotValidForBarbCamp(CvPlot* pPlot)
 	for (iDY = -iRange; iDY <= iRange; iDY++)
 	{
 		iMaxDX = iRange - MAX(0, iDY);
-		for (iDX = -iRange - MIN(0, iDY); iDX <= iMaxDX; iDX++) // MIN() and MAX() stuff is to reduce loops (hexspace!)
+		for (iDX = -iRange - MIN(0, iDY); iDX <= iMaxDX; iDX++)
 		{
-			// No need for range check because loops are set up properly
+
 			pLoopPlot = plotXY(pPlot->getX(), pPlot->getY(), iDX, iDY);
 #else
 	int iPlotX = pPlot->getX();
@@ -49,11 +49,11 @@ bool CvBarbarians::IsPlotValidForBarbCamp(CvPlot* pPlot)
 			int iLoopPlotX = iPlotX + iDX;
 			int iLoopPlotY = iPlotY + iDY;
 
-			// Cut off corners
+
 			if (plotDistance(iPlotX, iPlotY, iLoopPlotX, iLoopPlotY) > iRange)
 				continue;
 
-			// If the counter is below -1 that means a camp was cleared recently
+
 			CvPlot* pLoopPlot = kMap.plot(iLoopPlotX, iLoopPlotY);
 #endif
 			if (pLoopPlot)
@@ -67,8 +67,8 @@ bool CvBarbarians::IsPlotValidForBarbCamp(CvPlot* pPlot)
 	return true;
 }
 
-//	--------------------------------------------------------------------------------
-/// Camp cleared, so reset counter
+
+
 void CvBarbarians::DoBarbCampCleared(CvPlot* pPlot, PlayerTypes ePlayer)
 {
 	m_aiPlotBarbCampSpawnCounter[pPlot->GetPlotIndex()] = -16;
@@ -76,8 +76,8 @@ void CvBarbarians::DoBarbCampCleared(CvPlot* pPlot, PlayerTypes ePlayer)
 	pPlot->AddArchaeologicalRecord(CvTypes::getARTIFACT_BARBARIAN_CAMP(), ePlayer, NO_PLAYER);
 }
 
-//	--------------------------------------------------------------------------------
-/// What turn are we now allowed to Spawn Barbarians on?
+
+
 bool CvBarbarians::CanBarbariansSpawn()
 {
 	CvGame& kGame = GC.getGame();
@@ -89,8 +89,8 @@ bool CvBarbarians::CanBarbariansSpawn()
 	return true;
 }
 
-//	--------------------------------------------------------------------------------
-/// Determines when to Spawn a new Barb Unit from a Camp
+
+
 bool CvBarbarians::ShouldSpawnBarbFromCamp(CvPlot* pPlot)
 {
 	if (m_aiPlotBarbCampSpawnCounter[pPlot->GetPlotIndex()] == 0)
@@ -101,40 +101,40 @@ bool CvBarbarians::ShouldSpawnBarbFromCamp(CvPlot* pPlot)
 	return false;
 }
 
-//	--------------------------------------------------------------------------------
-/// Gameplay informing us when a Camp has either been created or spawned a Unit so we can reseed the spawn counter
+
+
 void CvBarbarians::DoCampActivationNotice(CvPlot* pPlot)
 {
 	CvGame& kGame = GC.getGame();
-	// Default to between 8 and 12 turns per spawn
+
 	int iNumTurnsToSpawn = 8 + kGame.getJonRandNum(5, "Barb Spawn Rand call");
 
-	// Raging
+
 	if (kGame.isOption(GAMEOPTION_RAGING_BARBARIANS))
 		iNumTurnsToSpawn /= 2;
 
-	// Num Units Spawned
+
 	int iNumUnitsSpawned = m_aiPlotBarbCampNumUnitsSpawned[pPlot->GetPlotIndex()];
 
-	// Reduce turns between spawn if we've pumped out more guys (meaning we're further into the game)
-	iNumTurnsToSpawn -= min(3, iNumUnitsSpawned);	// -1 turns if we've spawned one Unit, -3 turns if we've spawned three
 
-	// Increment # of barbs spawned from this camp
-	m_aiPlotBarbCampNumUnitsSpawned[pPlot->GetPlotIndex()]++;	// This starts at -1 so when a camp is first created it will bump up to 0, which is correct
+	iNumTurnsToSpawn -= min(3, iNumUnitsSpawned);
 
-	//// If it's too early to spawn then add in a small amount to delay things a bit - between 3 and 6 extra turns
-	//if (CanBarbariansSpawn())
-	//{
-	//	iNumTurnsToSpawn += 3;
-	//	iNumTurnsToSpawn += auto_ptr<ICvGame1> pGame = GameCore::GetGame();\n.getJonRandNum(4, "Early game Barb Spawn Rand call");
-	//}
 
-	// Difficulty level can add time between spawns (e.g. Settler is +8 turns)
+	m_aiPlotBarbCampNumUnitsSpawned[pPlot->GetPlotIndex()]++;
+
+
+
+
+
+
+
+
+
 	CvHandicapInfo* pHandicapInfo = GC.getHandicapInfo(kGame.getHandicapType());
 	if (pHandicapInfo)
 		iNumTurnsToSpawn += pHandicapInfo->getBarbSpawnMod();
 
-	// Game Speed can increase or decrease amount of time between spawns (ranges from 67 on Quick to 400 on Marathon)
+
 	CvGameSpeedInfo* pGameSpeedInfo = GC.getGameSpeedInfo(kGame.getGameSpeedType());
 	if (pGameSpeedInfo)
 	{
@@ -145,20 +145,20 @@ void CvBarbarians::DoCampActivationNotice(CvPlot* pPlot)
 	m_aiPlotBarbCampSpawnCounter[pPlot->GetPlotIndex()] = iNumTurnsToSpawn;
 }
 
-//	--------------------------------------------------------------------------------
-/// Gameplay informing a camp has been attacked - make it more likely to spawn
+
+
 void CvBarbarians::DoCampAttacked(CvPlot* pPlot)
 {
 	int iCounter = m_aiPlotBarbCampSpawnCounter[pPlot->GetPlotIndex()];
 
-	// Halve the amount of time to spawn
+
 	int iNewValue = iCounter / 2;
 
 	m_aiPlotBarbCampSpawnCounter[pPlot->GetPlotIndex()] = iNewValue;
 }
 
-//	---------------------------------------------------------------------------
-/// Called every turn
+
+
 void CvBarbarians::BeginTurn()
 {
 	CvGame &kGame = GC.getGame();
@@ -170,7 +170,7 @@ void CvBarbarians::BeginTurn()
 	{
 		if (m_aiPlotBarbCampSpawnCounter[iPlotLoop] > 0)
 		{
-			// No Camp here any more
+
 			CvPlot* pPlot = kMap.plotByIndex(iPlotLoop);
 
 			if (pPlot->getImprovementType() != eCamp)
@@ -184,7 +184,7 @@ void CvBarbarians::BeginTurn()
 			}
 		}
 
-		// Counter is negative, meaning a camp was cleared here recently and isn't allowed to respawn in the area for a while
+
 		else if (m_aiPlotBarbCampSpawnCounter[iPlotLoop] < -1)
 		{
 			m_aiPlotBarbCampSpawnCounter[iPlotLoop]++;
@@ -192,7 +192,7 @@ void CvBarbarians::BeginTurn()
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvBarbarians::MapInit(int iWorldNumPlots)
 {
 	if (m_aiPlotBarbCampSpawnCounter != NULL)
@@ -225,7 +225,7 @@ void CvBarbarians::MapInit(int iWorldNumPlots)
 #endif
 		}
 
-		// Default values
+
 		for (iI = 0; iI < iWorldNumPlots; ++iI)
 		{
 			m_aiPlotBarbCampSpawnCounter[iI] = -1;
@@ -234,8 +234,8 @@ void CvBarbarians::MapInit(int iWorldNumPlots)
 	}
 }
 
-//	---------------------------------------------------------------------------
-/// Uninit
+
+
 void CvBarbarians::Uninit()
 {
 	if (m_aiPlotBarbCampSpawnCounter != NULL)
@@ -249,21 +249,21 @@ void CvBarbarians::Uninit()
 	}
 }
 
-//	---------------------------------------------------------------------------
-/// Serialization Read
+
+
 #ifdef AUI_WARNING_FIXES
-void CvBarbarians::Read(FDataStream& kStream, uint /*uiParentVersion*/)
+void CvBarbarians::Read(FDataStream& kStream, uint                    )
 #else
 void CvBarbarians::Read(FDataStream& kStream, uint uiParentVersion)
 #endif
 {
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion = 0;
 
 	kStream >> uiVersion;	
 
 	int iWorldNumPlots = GC.getMap().numPlots();
-	MapInit(iWorldNumPlots);	// Map will have been initialized/unserialized by now so this is ok.
+	MapInit(iWorldNumPlots);
 
 #ifdef AUI_WARNING_FIXES
 	ArrayWrapper<int> kWrapper1(iWorldNumPlots, m_aiPlotBarbCampSpawnCounter);
@@ -276,11 +276,11 @@ void CvBarbarians::Read(FDataStream& kStream, uint uiParentVersion)
 #endif
 }
 
-//	---------------------------------------------------------------------------
-/// Serialization Write
+
+
 void CvBarbarians::Write(FDataStream& kStream)
 {
-	// Current version number
+
 	uint uiVersion = 1;
 	kStream << uiVersion;
 
@@ -296,7 +296,7 @@ void CvBarbarians::Write(FDataStream& kStream)
 #endif
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvBarbarians::DoCamps()
 {
 	CvGame& kGame = GC.getGame();
@@ -314,11 +314,11 @@ void CvBarbarians::DoCamps()
 
 	bool bAlwaysRevealedBarbCamp = false;
 
-	// Is there an appropriate Improvement to place as a Barb Camp?
+
 	if(eCamp != NO_IMPROVEMENT)
 	{
 		CvMap& kMap = GC.getMap();
-		// Figure out how many Nonvisible tiles we have to base # of camps to spawn on
+
 #ifdef AUI_WARNING_FIXES
 		for (uint iI = 0; iI < kMap.numPlots(); iI++)
 #else
@@ -327,7 +327,7 @@ void CvBarbarians::DoCamps()
 		{
 			pLoopPlot = kMap.plotByIndexUnchecked(iI);
 
-			// See how many camps we already have
+
 			if(pLoopPlot->getImprovementType() == eCamp)
 			{
 				iNumCampsInExistence++;
@@ -347,23 +347,23 @@ void CvBarbarians::DoCamps()
 		iNumValidCampPlots = iNumNotVisiblePlots;
 
 		int iFogTilesPerBarbarianCamp = kMap.getWorldInfo().getFogTilesPerBarbarianCamp();
-		int iCampTargetNum = (iFogTilesPerBarbarianCamp != 0)? iNumValidCampPlots / iFogTilesPerBarbarianCamp : 0;//getHandicapInfo().getFogTilesPerBarbarianCamp();
+		int iCampTargetNum = (iFogTilesPerBarbarianCamp != 0)? iNumValidCampPlots / iFogTilesPerBarbarianCamp : 0;
 		int iNumCampsToAdd = iCampTargetNum - iNumCampsInExistence;
 
 		int iMaxCampsThisArea;
 
-		if(iNumCampsToAdd > 0 && GC.getBARBARIAN_CAMP_ODDS_OF_NEW_CAMP_SPAWNING() > 0) // slewis - added the barbarian chance for the FoR scenario
+		if(iNumCampsToAdd > 0 && GC.getBARBARIAN_CAMP_ODDS_OF_NEW_CAMP_SPAWNING() > 0)
 		{
-			// First turn of the game add 1/3 of the Target number of Camps
+
 			if(kGame.getElapsedGameTurns() == 0)
 			{
-				iNumCampsToAdd *= /*33*/ GC.getBARBARIAN_CAMP_FIRST_TURN_PERCENT_OF_TARGET_TO_ADD();
+				iNumCampsToAdd *=        GC.getBARBARIAN_CAMP_FIRST_TURN_PERCENT_OF_TARGET_TO_ADD();
 				iNumCampsToAdd /= 100;
 			}
-			// Every other turn of the game there's a 1 in 2 chance of adding a new camp if we're still below the target
+
 			else
 			{
-				if(kGame.getJonRandNum(/*2*/ GC.getBARBARIAN_CAMP_ODDS_OF_NEW_CAMP_SPAWNING(), "Random roll to see if Barb Camp spawns this turn") > 0)
+				if(kGame.getJonRandNum(      GC.getBARBARIAN_CAMP_ODDS_OF_NEW_CAMP_SPAWNING(), "Random roll to see if Barb Camp spawns this turn") > 0)
 				{
 					iNumCampsToAdd = 1;
 				}
@@ -373,7 +373,7 @@ void CvBarbarians::DoCamps()
 				}
 			}
 
-			// Don't want to get stuck in an infinite or almost so loop
+
 			int iCount = 0;
 			int iPlotIndex = -1;
 			int iNumPlots = kMap.numPlots();
@@ -382,11 +382,11 @@ void CvBarbarians::DoCamps()
 
 			int iNumLandPlots = kMap.getLandPlots();
 
-			// Do a random roll to bias in favor of Coastal land Tiles so that the Barbs will spawn Boats :) - required 1/6 of the time
-			bool bWantsCoastal = kGame.getJonRandNum(/*6*/ GC.getBARBARIAN_CAMP_COASTAL_SPAWN_ROLL(), "Barb Camp Plot-Finding Roll - Coastal Bias 1") == 0 ? true : false;
 
-			int iPlayerCapitalMinDistance = /*4*/ GC.getBARBARIAN_CAMP_MINIMUM_DISTANCE_CAPITAL();
-			int iBarbCampMinDistance = /*7*/ GC.getBARBARIAN_CAMP_MINIMUM_DISTANCE_ANOTHER_CAMP();
+			bool bWantsCoastal = kGame.getJonRandNum(      GC.getBARBARIAN_CAMP_COASTAL_SPAWN_ROLL(), "Barb Camp Plot-Finding Roll - Coastal Bias 1") == 0 ? true : false;
+
+			int iPlayerCapitalMinDistance =       GC.getBARBARIAN_CAMP_MINIMUM_DISTANCE_CAPITAL();
+			int iBarbCampMinDistance =       GC.getBARBARIAN_CAMP_MINIMUM_DISTANCE_ANOTHER_CAMP();
 			int iMaxDistanceToLook = iPlayerCapitalMinDistance > iBarbCampMinDistance ? iPlayerCapitalMinDistance : iBarbCampMinDistance;
 			int iPlotDistance;
 
@@ -398,7 +398,7 @@ void CvBarbarians::DoCamps()
 
 			int iPlayerLoop;
 
-			// Find Plots to put the Camps
+
 			do
 			{
 				iCount++;
@@ -407,33 +407,33 @@ void CvBarbarians::DoCamps()
 
 				pLoopPlot = kMap.plotByIndex(iPlotIndex);
 
-				// Plot must be valid (not Water, nonvisible)
+
 				if(!pLoopPlot->isWater())
 				{
 					if(!pLoopPlot->isImpassable() && !pLoopPlot->isMountain())
 					{
 						if(!pLoopPlot->isOwned() && !pLoopPlot->isVisibleToCivTeam())
 						{
-							// JON: NO RESOURCES FOR NOW, MAY REPLACE WITH SOMETHING COOLER
+
 							if(pLoopPlot->getResourceType() == NO_RESOURCE)
 							{
-								// No camps on 1-tile islands
+
 								if(kMap.getArea(pLoopPlot->getArea())->getNumTiles() > 1)
 								{
 									if(pLoopPlot->isCoastalLand() || !bWantsCoastal)
 									{
-										// Max Camps for this area
+
 										iMaxCampsThisArea = iCampTargetNum * pLoopPlot->area()->getNumTiles() / iNumLandPlots;
-										// Add 1 just in case the above algorithm rounded something off
+
 										iMaxCampsThisArea++;
 
-										// Already enough Camps in this Area?
+
 										if(pLoopPlot->area()->getNumImprovements(eCamp) <= iMaxCampsThisArea)
 										{
-											// Don't look at Tiles that already have a Camp
+
 											if(pLoopPlot->getImprovementType() == NO_IMPROVEMENT)
 											{
-												// Don't look at Tiles that can't have an improvement
+
 												if(pLoopPlot->getFeatureType() == NO_FEATURE || !GC.getFeatureInfo(pLoopPlot->getFeatureType())->isNoImprovement())
 												{
 													bSomethingTooClose = false;
@@ -443,9 +443,9 @@ void CvBarbarians::DoCamps()
 													for (iDY = -(iMaxDistanceToLook); iDY <= iMaxDistanceToLook; iDY++)
 													{
 														iMaxDX = iMaxDistanceToLook - MAX(0, iDY);
-														for (iDX = -(iMaxDistanceToLook) - MIN(0, iDY); iDX <= iMaxDX; iDX++) // MIN() and MAX() stuff is to reduce loops (hexspace!)
+														for (iDX = -(iMaxDistanceToLook) - MIN(0, iDY); iDX <= iMaxDX; iDX++)
 #else
-													// Look at nearby Plots to make sure another camp isn't too close
+
 													for(iDX = -(iMaxDistanceToLook); iDX <= iMaxDistanceToLook; iDX++)
 													{
 														for(iDY = -(iMaxDistanceToLook); iDY <= iMaxDistanceToLook; iDY++)
@@ -461,14 +461,14 @@ void CvBarbarians::DoCamps()
 																iPlotDistance = plotDistance(pNearbyCampPlot->getX(), pNearbyCampPlot->getY(), pLoopPlot->getX(), pLoopPlot->getY());
 #endif
 
-																// Can't be too close to a player
+
 																if(iPlotDistance <= iPlayerCapitalMinDistance)
 																{
 																	if(pNearbyCampPlot->isCity())
 																	{
 																		if(pNearbyCampPlot->getPlotCity()->isCapital())
 																		{
-																			// Only care about Majors' capitals
+
 																			if(pNearbyCampPlot->getPlotCity()->getOwner() < MAX_MAJOR_CIVS)
 																			{
 																				bSomethingTooClose = true;
@@ -478,7 +478,7 @@ void CvBarbarians::DoCamps()
 																	}
 																}
 
-																// Can't be too close to another Camp
+
 																if(iPlotDistance <= iBarbCampMinDistance)
 																{
 																	if(pNearbyCampPlot->getImprovementType() == eCamp)
@@ -495,11 +495,11 @@ void CvBarbarians::DoCamps()
 														}
 													}
 
-													// Found a camp too close, check another Plot
+
 													if(bSomethingTooClose)
 														continue;
 
-													// Last check
+
 													if(!CvBarbarians::IsPlotValidForBarbCamp(pLoopPlot))
 														continue;
 
@@ -519,7 +519,7 @@ void CvBarbarians::DoCamps()
 #endif
 													}
 
-													// If we should update Camp visibility (for Policy), do so
+
 													PlayerTypes ePlayer;
 													TeamTypes eTeam;
 													for(iPlayerLoop = 0; iPlayerLoop < MAX_MAJOR_CIVS; iPlayerLoop++)
@@ -538,13 +538,13 @@ void CvBarbarians::DoCamps()
 														}
 													}
 
-													// Add another Unit adjacent to the Camp to stir up some trouble (JON: Disabled for now 09/12/09)
-													//doSpawnBarbarianUnit(pLoopPlot);
+
+
 
 													iNumCampsToAdd--;
 
-													// Seed the next Camp for Coast or not
-													bWantsCoastal = kGame.getJonRandNum(/*5*/ GC.getBARBARIAN_CAMP_COASTAL_SPAWN_ROLL(), "Barb Camp Plot-Finding Roll - Coastal Bias 2") == 0 ? true : false;
+
+													bWantsCoastal = kGame.getJonRandNum(      GC.getBARBARIAN_CAMP_COASTAL_SPAWN_ROLL(), "Barb Camp Plot-Finding Roll - Coastal Bias 2") == 0 ? true : false;
 												}
 											}
 										}
@@ -563,7 +563,7 @@ void CvBarbarians::DoCamps()
 		GC.getMap().updateDeferredFog();
 }
 
-//	--------------------------------------------------------------------------------
+
 UnitTypes CvBarbarians::GetRandomBarbarianUnitType(CvArea* pArea, UnitAITypes eUnitAI)
 {
 	UnitTypes eBestUnit = NO_UNIT;
@@ -599,7 +599,7 @@ UnitTypes CvBarbarians::GetRandomBarbarianUnitType(CvArea* pArea, UnitAITypes eU
 			bValid = (kUnit.GetCombat() > 0);
 			if(bValid)
 			{
-				// Unit has combat strength, make sure it isn't only defensive (and with no ranged combat ability)
+
 				if(kUnit.GetRange() == 0)
 				{
 #ifdef AUI_WARNING_FIXES
@@ -692,7 +692,7 @@ UnitTypes CvBarbarians::GetRandomBarbarianUnitType(CvArea* pArea, UnitAITypes eU
 	return eBestUnit;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvBarbarians::DoUnits()
 {
 	CvGame& kGame = GC.getGame();
@@ -718,7 +718,7 @@ void CvBarbarians::DoUnits()
 	{
 		CvPlot* pLoopPlot = kMap.plotByIndexUnchecked(iPlotLoop);
 
-		// Found a Camp to spawn near
+
 		if(pLoopPlot->getImprovementType() == eCamp)
 		{
 			if(ShouldSpawnBarbFromCamp(pLoopPlot))
@@ -730,8 +730,8 @@ void CvBarbarians::DoUnits()
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// Spawn a Barbarian Unit somewhere adjacent to pPlot
+
+
 void CvBarbarians::DoSpawnBarbarianUnit(CvPlot* pPlot, bool bIgnoreMaxBarbarians, bool bFinishMoves)
 {
 	int iNumNearbyUnits;
@@ -751,7 +751,7 @@ void CvBarbarians::DoSpawnBarbarianUnit(CvPlot* pPlot, bool bIgnoreMaxBarbarians
 	if (pPlot == 0)
 		return;
 
-	// is this camp empty - first priority is to fill it
+
 	if (pPlot && pPlot->GetNumCombatUnits() == 0)
 	{
 		UnitTypes eUnit;
@@ -767,7 +767,7 @@ void CvBarbarians::DoSpawnBarbarianUnit(CvPlot* pPlot, bool bIgnoreMaxBarbarians
 
 	m_aeValidBarbSpawnDirections.clear();
 
-	// Look at nearby Plots to see if there are already too many Barbs nearby
+
 	iNumNearbyUnits = 0;
 
 #ifdef AUI_HEXSPACE_DX_LOOPS
@@ -775,16 +775,16 @@ void CvBarbarians::DoSpawnBarbarianUnit(CvPlot* pPlot, bool bIgnoreMaxBarbarians
 	for (iY = -iRange; iY <= iRange; iY++)
 	{
 		iMaxDX = iRange - MAX(0, iY);
-		for (iX = -iRange - MIN(0, iY); iX <= iMaxDX; iX++) // MIN() and MAX() stuff is to reduce loops (hexspace!)
+		for (iX = -iRange - MIN(0, iY); iX <= iMaxDX; iX++)
 		{
-			// No need for range check because loops are set up properly
+
 			pNearbyPlot = plotXY(pPlot->getX(), pPlot->getY(), iX, iY);
 #else
 	for(iX = -iRange; iX <= iRange; iX++)
 	{
 		for(iY = -iRange; iY <= iRange; iY++)
 		{
-			// Cut off the corners of the area we're looking at that we don't want
+
 			pNearbyPlot = plotXYWithRangeCheck(pPlot->getX(), pPlot->getY(), iX, iY, iRange);
 #endif
 
@@ -809,14 +809,14 @@ void CvBarbarians::DoSpawnBarbarianUnit(CvPlot* pPlot, bool bIgnoreMaxBarbarians
 		}
 	}
 
-	if(iNumNearbyUnits <= /*2*/ GC.getMAX_BARBARIANS_FROM_CAMP_NEARBY() || bIgnoreMaxBarbarians)
+	if(iNumNearbyUnits <=       GC.getMAX_BARBARIANS_FROM_CAMP_NEARBY() || bIgnoreMaxBarbarians)
 	{
 		CvPlot* pLoopPlot;
 
-		// Barbs only get boats after some period of time has passed
-		bool bCanSpawnBoats = kGame.getElapsedGameTurns() > /*30*/ GC.getBARBARIAN_NAVAL_UNIT_START_TURN_SPAWN();
 
-		// Look to see if adjacent Tiles are valid locations to spawn a Unit
+		bool bCanSpawnBoats = kGame.getElapsedGameTurns() >        GC.getBARBARIAN_NAVAL_UNIT_START_TURN_SPAWN();
+
+
 		for(int iDirectionLoop = 0; iDirectionLoop < NUM_DIRECTION_TYPES; iDirectionLoop++)
 		{
 			eDirection = (DirectionTypes) iDirectionLoop;
@@ -832,7 +832,7 @@ void CvBarbarians::DoSpawnBarbarianUnit(CvPlot* pPlot, bool bIgnoreMaxBarbarians
 						{
 							if(!pLoopPlot->isLake())
 							{
-								// Water Tiles are only valid when the Barbs have the proper Tech
+
 								if(!pLoopPlot->isWater() || bCanSpawnBoats)
 								{
 									m_aeValidBarbSpawnDirections.push_back(eDirection);
@@ -844,7 +844,7 @@ void CvBarbarians::DoSpawnBarbarianUnit(CvPlot* pPlot, bool bIgnoreMaxBarbarians
 			}
 		}
 
-		// Any valid locations?
+
 		if(m_aeValidBarbSpawnDirections.size() > 0)
 		{
 			int iIndex = kGame.getJonRandNum(m_aeValidBarbSpawnDirections.size(), "Barb Unit Location Spawn Roll");
@@ -853,12 +853,12 @@ void CvBarbarians::DoSpawnBarbarianUnit(CvPlot* pPlot, bool bIgnoreMaxBarbarians
 			UnitAITypes eUnitAI;
 			UnitTypes eUnit;
 
-			// Naval Barbs
+
 			if(pSpawnPlot->isWater())
 			{
 				eUnitAI = UNITAI_ATTACK_SEA;
 			}
-			// Land Barbs
+
 			else
 			{
 				eUnitAI = UNITAI_FAST_ATTACK;

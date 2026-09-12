@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvGameCoreUtils.h"
 #include "CvSiteEvaluationClasses.h"
@@ -13,34 +13,34 @@
 #include "CvDiplomacyAI.h"
 #include "CvGrandStrategyAI.h"
 
-// include this after all other headers!
+
 #include "LintFree.h"
 
-//=====================================
-// CvCitySiteEvaluator
-//=====================================
-/// Constructor
+
+
+
+
 CvCitySiteEvaluator::CvCitySiteEvaluator(void)
 {
 	m_iExpansionIndex = 12;
 	m_iGrowthIndex = 13;
 }
 
-/// Destructor
+
 CvCitySiteEvaluator::~CvCitySiteEvaluator(void)
 {
 }
 
-/// Initialize
+
 void CvCitySiteEvaluator::Init()
 {
-	// Set up city ring multipliers
-	m_iRingModifier[0] = 1;   // Items under city get handled separately
-	m_iRingModifier[1] = /*6*/ GC.getCITY_RING_1_MULTIPLIER();
-	m_iRingModifier[2] = /*3*/ GC.getCITY_RING_2_MULTIPLIER();
-	m_iRingModifier[3] = /*2*/ GC.getCITY_RING_3_MULTIPLIER();
-	m_iRingModifier[4] = /*1*/ GC.getCITY_RING_4_MULTIPLIER();
-	m_iRingModifier[5] = /*1*/ GC.getCITY_RING_5_MULTIPLIER();
+
+	m_iRingModifier[0] = 1;
+	m_iRingModifier[1] =       GC.getCITY_RING_1_MULTIPLIER();
+	m_iRingModifier[2] =       GC.getCITY_RING_2_MULTIPLIER();
+	m_iRingModifier[3] =       GC.getCITY_RING_3_MULTIPLIER();
+	m_iRingModifier[4] =       GC.getCITY_RING_4_MULTIPLIER();
+	m_iRingModifier[5] =       GC.getCITY_RING_5_MULTIPLIER();
 	m_iRingModifier[6] = 0;
 	m_iRingModifier[7] = 0;
 
@@ -48,14 +48,14 @@ void CvCitySiteEvaluator::Init()
 	m_iExpansionIndex = GC.getInfoTypeForString("FLAVOR_EXPANSION");
 	m_iNavalIndex = GC.getInfoTypeForString("FLAVOR_NAVAL");
 
-	m_iBrazilMultiplier = 1000;	//fertility boost from jungles
-	m_iSpainMultiplier = 55000;	//fertility boost from natural wonders
-	m_iMorrocoMultiplier = 1000; //fertility boost from desert
-	m_iNetherlandsMultiplier = 2000; //fertility boost from marshes and flood plains
-	m_iIncaMultiplier = 500; //fertility boost for hill tiles surrounded my mountains
+	m_iBrazilMultiplier = 1000;
+	m_iSpainMultiplier = 55000;
+	m_iMorrocoMultiplier = 1000;
+	m_iNetherlandsMultiplier = 2000;
+	m_iIncaMultiplier = 500;
 }
 
-/// Is it valid for this player to found a city here?
+
 bool CvCitySiteEvaluator::CanFound(CvPlot* pPlot, const CvPlayer* pPlayer, bool bTestVisible) const
 {
 	CvAssert(pPlot);
@@ -66,7 +66,7 @@ bool CvCitySiteEvaluator::CanFound(CvPlot* pPlot, const CvPlayer* pPlayer, bool 
 	bool bValid(false);
 	int iRange(0), iDX(0), iDY(0);
 
-	// Used to have a Python hook: CANNOT_FOUND_CITY_CALLBACK
+
 
 	if(GC.getGame().isFinalInitialized())
 	{
@@ -136,7 +136,7 @@ bool CvCitySiteEvaluator::CanFound(CvPlot* pPlot, const CvPlayer* pPlayer, bool 
 		}
 	}
 
-	// Used to have a Python hook: CAN_FOUND_CITIES_ON_WATER_CALLBACK
+
 
 	if(pPlot->isWater())
 	{
@@ -150,7 +150,7 @@ bool CvCitySiteEvaluator::CanFound(CvPlot* pPlot, const CvPlayer* pPlayer, bool 
 
 	if(!bTestVisible)
 	{
-		// look at same land mass
+
 		iRange = GC.getMIN_CITY_RANGE();
 
 #ifdef AUI_HEXSPACE_DX_LOOPS
@@ -158,7 +158,7 @@ bool CvCitySiteEvaluator::CanFound(CvPlot* pPlot, const CvPlayer* pPlayer, bool 
 		for (iDY = -iRange; iDY <= iRange; iDY++)
 		{
 			iMaxDX = iRange - MAX(0, iDY);
-			for (iDX = -iRange - MIN(0, iDY); iDX <= iMaxDX; iDX++) // MIN() and MAX() stuff is to reduce loops (hexspace!)
+			for (iDX = -iRange - MIN(0, iDY); iDX <= iMaxDX; iDX++)
 			{
 				pLoopPlot = plotXY(pPlot->getX(), pPlot->getY(), iDX, iDY);
 #else
@@ -177,7 +177,7 @@ bool CvCitySiteEvaluator::CanFound(CvPlot* pPlot, const CvPlayer* pPlayer, bool 
 						{
 							return false;
 						}
-						else if(hexDistance(iDX, iDY) < iRange)  // one less for off shore
+						else if(hexDistance(iDX, iDY) < iRange)
 						{
 							return false;
 						}
@@ -190,10 +190,10 @@ bool CvCitySiteEvaluator::CanFound(CvPlot* pPlot, const CvPlayer* pPlayer, bool 
 	return true;
 }
 
-/// Setup flavor multipliers - call once per player before PlotFoundValue() or PlotFertilityValue()
+
 void CvCitySiteEvaluator::ComputeFlavorMultipliers(CvPlayer* pPlayer)
 {
-	// Set all to 0
+
 	for(int iI = 0; iI < NUM_YIELD_TYPES; iI++)
 	{
 		m_iFlavorMultiplier[iI] = 0;
@@ -201,7 +201,7 @@ void CvCitySiteEvaluator::ComputeFlavorMultipliers(CvPlayer* pPlayer)
 
 	m_iFlavorMultiplier[SITE_EVALUATION_HAPPINESS] = 0;
 
-	// Find out if player has a desired next city specialization
+
 	CitySpecializationTypes eNextSpecialization = pPlayer->GetCitySpecializationAI()->GetNextSpecializationDesired();
 	CvCitySpecializationXMLEntry* pkCitySpecializationEntry = NULL;
 	if(eNextSpecialization != NO_CITY_SPECIALIZATION)
@@ -241,7 +241,7 @@ void CvCitySiteEvaluator::ComputeFlavorMultipliers(CvPlayer* pPlayer)
 		}
 		else if(strFlavor == "FLAVOR_SCIENCE")
 		{
-			// Doubled since only one flavor related to science
+
 			m_iFlavorMultiplier[YIELD_SCIENCE] += pPlayer->GetFlavorManager()->GetPersonalityIndividualFlavor(eFlavor) * 2;
 			if(pkCitySpecializationEntry)
 			{
@@ -250,7 +250,7 @@ void CvCitySiteEvaluator::ComputeFlavorMultipliers(CvPlayer* pPlayer)
 		}
 		else if(strFlavor == "FLAVOR_HAPPINESS")
 		{
-			// Doubled since only one flavor related to Happiness
+
 			m_iFlavorMultiplier[SITE_EVALUATION_HAPPINESS] += pPlayer->GetFlavorManager()->GetPersonalityIndividualFlavor(eFlavor) * 2;
 			if(pkCitySpecializationEntry)
 			{
@@ -259,7 +259,7 @@ void CvCitySiteEvaluator::ComputeFlavorMultipliers(CvPlayer* pPlayer)
 		}
 		else if(strFlavor == "FLAVOR_RELIGION")
 		{
-			// Doubled since only one flavor related to faith
+
 			m_iFlavorMultiplier[YIELD_FAITH] += pPlayer->GetFlavorManager()->GetPersonalityIndividualFlavor(eFlavor) * 2;
 			if (pkCitySpecializationEntry)
 			{
@@ -268,7 +268,7 @@ void CvCitySiteEvaluator::ComputeFlavorMultipliers(CvPlayer* pPlayer)
 		}
 	}
 
-	// Make sure none are negative
+
 	for(int iI = 0; iI < NUM_YIELD_TYPES; iI++)
 	{
 		if(m_iFlavorMultiplier[iI] < 0)
@@ -277,12 +277,12 @@ void CvCitySiteEvaluator::ComputeFlavorMultipliers(CvPlayer* pPlayer)
 		}
 	}
 
-	// Set tradable resources and strategic value to times 10 (so multiplying this by the number of map gives a number from 1 to 100)
+
 	m_iFlavorMultiplier[SITE_EVALUATION_RESOURCES] = 10;
 	m_iFlavorMultiplier[SITE_EVALUATION_STRATEGIC] = 10;
 }
 
-/// Retrieve the relative value of this plot (including plots that would be in city radius)
+
 int CvCitySiteEvaluator::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldTypes eYield, bool)
 {
 	CvAssert(pPlot);
@@ -293,7 +293,7 @@ int CvCitySiteEvaluator::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldT
 		return 0;
 #endif
 
-	// Make sure this player can even build a city here
+
 	if(!CanFound(pPlot, pPlayer, false))
 	{
 		return 0;
@@ -337,7 +337,7 @@ int CvCitySiteEvaluator::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldT
 	if ( pPlayer->getCapitalCity() )
 		iCapitalArea = pPlayer->getCapitalCity()->getArea();
 
-	// Custom code for Inca ideal terrace farm locations
+
 	ImprovementTypes eIncaImprovement = (ImprovementTypes)GC.getInfoTypeForString("IMPROVEMENT_TERRACE_FARM", true);  
 	if(eIncaImprovement != NO_IMPROVEMENT)
 	{
@@ -357,7 +357,7 @@ int CvCitySiteEvaluator::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldT
 	for (int iDY = -7; iDY <= 7; iDY++)
 	{
 		iMaxDX = 7 - MAX(0, iDY);
-		for (iDX = -7 - MIN(0, iDY); iDX <= iMaxDX; iDX++) // MIN() and MAX() stuff is to reduce loops (hexspace!)
+		for (iDX = -7 - MIN(0, iDY); iDX <= iMaxDX; iDX++)
 #else
 	for (int iDX = -7; iDX <= 7; iDX++)
 	{
@@ -379,7 +379,7 @@ int CvCitySiteEvaluator::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldT
 				{
 					if ((pLoopPlot->getOwner() == NO_PLAYER) || (pLoopPlot->getOwner() == pPlayer->GetID()))
 					{
-						// See if there are other cities nearby
+
 						if (iClosestCityOfMine > iDistance)
 						{
 							if (pLoopPlot->isCity())
@@ -388,7 +388,7 @@ int CvCitySiteEvaluator::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldT
 							}
 						}
 
-						// Skip the city plot itself for now
+
 						if (iDistance <= 5)
 						{
 							int iRingModifier = m_iRingModifier[iDistance];
@@ -405,33 +405,33 @@ int CvCitySiteEvaluator::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldT
 							{
 								if (eYield == NO_YIELD || eYield == YIELD_FOOD)
 								{
-									iFoodValue = iRingModifier * ComputeFoodValue(pLoopPlot, pPlayer) * /*15*/ GC.getSETTLER_FOOD_MULTIPLIER();
+									iFoodValue = iRingModifier * ComputeFoodValue(pLoopPlot, pPlayer) *        GC.getSETTLER_FOOD_MULTIPLIER();
 								}
 								if (eYield == NO_YIELD || eYield == YIELD_PRODUCTION)
 								{
-									iProductionValue = iRingModifier * ComputeProductionValue(pLoopPlot, pPlayer) * /*3*/ GC.getSETTLER_PRODUCTION_MULTIPLIER();
+									iProductionValue = iRingModifier * ComputeProductionValue(pLoopPlot, pPlayer) *       GC.getSETTLER_PRODUCTION_MULTIPLIER();
 								}
 								if (eYield == NO_YIELD || eYield == YIELD_GOLD)
 								{
-									iGoldValue = iRingModifier * ComputeGoldValue(pLoopPlot, pPlayer) * /*2*/ GC.getSETTLER_GOLD_MULTIPLIER();
+									iGoldValue = iRingModifier * ComputeGoldValue(pLoopPlot, pPlayer) *       GC.getSETTLER_GOLD_MULTIPLIER();
 								}
 								if (eYield == NO_YIELD || eYield == YIELD_SCIENCE)
 								{
-									iScienceValue = iRingModifier * ComputeScienceValue(pLoopPlot, pPlayer) * /*1*/ GC.getSETTLER_SCIENCE_MULTIPLIER();
+									iScienceValue = iRingModifier * ComputeScienceValue(pLoopPlot, pPlayer) *       GC.getSETTLER_SCIENCE_MULTIPLIER();
 								}
 								if (eYield == NO_YIELD || eYield == YIELD_FAITH)
 								{
-									iFaithValue = iRingModifier * ComputeFaithValue(pLoopPlot, pPlayer) * /*1*/ GC.getSETTLER_FAITH_MULTIPLIER();
+									iFaithValue = iRingModifier * ComputeFaithValue(pLoopPlot, pPlayer) *       GC.getSETTLER_FAITH_MULTIPLIER();
 								}
 							}
 
-							// whether or not we are working these we get the benefit as long as culture can grow to take them
-							if (iDistance <= 5 && pLoopPlot->getOwner() == NO_PLAYER) // there is no benefit if we already own these tiles
+
+							if (iDistance <= 5 && pLoopPlot->getOwner() == NO_PLAYER)
 							{
-								iHappinessValue = iRingModifier * ComputeHappinessValue(pLoopPlot, pPlayer) * /*6*/ GC.getSETTLER_HAPPINESS_MULTIPLIER();
-								iResourceValue = iRingModifier * ComputeTradeableResourceValue(pLoopPlot, pPlayer) * /*1*/ GC.getSETTLER_RESOURCE_MULTIPLIER();
+								iHappinessValue = iRingModifier * ComputeHappinessValue(pLoopPlot, pPlayer) *       GC.getSETTLER_HAPPINESS_MULTIPLIER();
+								iResourceValue = iRingModifier * ComputeTradeableResourceValue(pLoopPlot, pPlayer) *       GC.getSETTLER_RESOURCE_MULTIPLIER();
 								if (iDistance)
-									iStrategicValue = ComputeStrategicValue(pLoopPlot, pPlayer, iDistance) * /*1*/ GC.getSETTLER_STRATEGIC_MULTIPLIER();  // the ring is included in the computation
+									iStrategicValue = ComputeStrategicValue(pLoopPlot, pPlayer, iDistance) *       GC.getSETTLER_STRATEGIC_MULTIPLIER();
 							}
 
 							iTotalFoodValue += iFoodValue;
@@ -447,25 +447,25 @@ int CvCitySiteEvaluator::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldT
 							
 							if (iPlotValue == 0)
 							{
-								// this tile is so bad it gets negatives
+
 								iPlotValue -= iRingModifier * GC.getSETTLER_FOOD_MULTIPLIER() * 2;
 							}
 							iPlotValue += iStrategicValue;
 
-							// if this tile is a NW boost the value just so that we force the AI to claim them (if we can work it)
+
 							if (pLoopPlot->IsNaturalWonder() && iDistance > 0 && iDistance <= NUM_CITY_RINGS)
 							{
-								//iPlotValue += iPlotValue * 2 + 10;
+
 								iPlotValue += iPlotValue * 2 + 500;
 							}
 
-							// lower value a lot if we already own this tile
+
 							if (iPlotValue > 0 && pLoopPlot->getOwner() == pPlayer->GetID())
 							{
 								iPlotValue /= 4;
 							}
 
-							// add this plot into the total
+
 							rtnValue += iPlotValue;
 
 							FeatureTypes ePlotFeature = pLoopPlot->getFeatureType();
@@ -529,7 +529,7 @@ int CvCitySiteEvaluator::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldT
 										iAdjacentMountains = pLoopPlot->GetNumAdjacentMountains();
 										if (iAdjacentMountains > 0 && iAdjacentMountains < 6)
 										{
-											//give the bonus if it's hills, with additional if bordered by mountains
+
 											rtnValue += m_iIncaMultiplier + (iAdjacentMountains * m_iIncaMultiplier);
 										}
 									}
@@ -538,9 +538,9 @@ int CvCitySiteEvaluator::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldT
 							}
 						}
 					}
-					else // this tile is owned by someone else
+					else
 					{
-						// See if there are other cities nearby (only count major civs)
+
 						if (iClosestEnemyCity > iDistance)
 						{
 							if (pLoopPlot->isCity() && (pLoopPlot->getOwner() < MAX_MAJOR_CIVS))
@@ -569,12 +569,12 @@ int CvCitySiteEvaluator::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldT
 	{
 		rtnValue += iIroquoisForestCount * 10;	
 	}
-	else if (pPlayer->GetPlayerTraits()->GetNaturalWonderYieldModifier() > 0)	//ie: Spain
+	else if (pPlayer->GetPlayerTraits()->GetNaturalWonderYieldModifier() > 0)
 	{
 		rtnValue += iNaturalWonderCount * m_iSpainMultiplier;	
 	}
 
-	// Custom code for Brazil
+
 	ImprovementTypes eBrazilImprovement = (ImprovementTypes)GC.getInfoTypeForString("IMPROVEMENT_BRAZILWOOD_CAMP", true);  
 	if(eBrazilImprovement != NO_IMPROVEMENT)
 	{
@@ -589,7 +589,7 @@ int CvCitySiteEvaluator::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldT
 		}
 	}
 
-	// Custom code for Morocco
+
 	ImprovementTypes eMoroccoImprovement = (ImprovementTypes)GC.getInfoTypeForString("IMPROVEMENT_KASBAH", true);  
 	if(eMoroccoImprovement != NO_IMPROVEMENT)
 	{
@@ -604,7 +604,7 @@ int CvCitySiteEvaluator::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldT
 		}
 	}
 
-	//Custom code for Netherlands
+
 	ImprovementTypes ePolderImprovement = (ImprovementTypes)GC.getInfoTypeForString("IMPROVEMENT_POLDER", true);  
 	if(ePolderImprovement != NO_IMPROVEMENT)
 	{
@@ -621,38 +621,38 @@ int CvCitySiteEvaluator::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldT
 
 	if (rtnValue < 0) rtnValue = 0;
 
-	// Finally, look at the city plot itself and use it as an overall multiplier
+
 	if (pPlot->getResourceType(pPlayer->getTeam()) != NO_RESOURCE)
 	{
-		rtnValue += (int)rtnValue * /*-50*/ GC.getBUILD_ON_RESOURCE_PERCENT() / 100;
+		rtnValue += (int)rtnValue *         GC.getBUILD_ON_RESOURCE_PERCENT() / 100;
 	}
 
 	if (pPlot->isRiver())
 	{
-		rtnValue += (int)rtnValue * /*15*/ GC.getBUILD_ON_RIVER_PERCENT() / 100;
+		rtnValue += (int)rtnValue *        GC.getBUILD_ON_RIVER_PERCENT() / 100;
 	}
 
 	if (pPlot->isCoastalLand(GC.getMIN_WATER_SIZE_FOR_OCEAN()))
 	{
-		// okay, coast used to have lots of gold so players settled there "naturally", it doesn't any more, so I am going to give it a nudge in that direction
-		// slewis - removed Brian(?)'s rtnValue adjustment and raised the BUILD_ON_COAST_PERCENT to 40 from 25
-		//rtnValue += rtnValue > 0 ? 10 : 0;
-		rtnValue += (int)rtnValue * /*40*/ GC.getSETTLER_BUILD_ON_COAST_PERCENT() / 100;
+
+
+
+		rtnValue += (int)rtnValue *        GC.getSETTLER_BUILD_ON_COAST_PERCENT() / 100;
 		int iNavalFlavor = pPlayer->GetGrandStrategyAI()->GetPersonalityAndGrandStrategy((FlavorTypes)m_iNavalIndex);
 		if (iNavalFlavor > 7)
 		{
-			rtnValue += (int)rtnValue * /*40*/ GC.getSETTLER_BUILD_ON_COAST_PERCENT() / 100;
+			rtnValue += (int)rtnValue *        GC.getSETTLER_BUILD_ON_COAST_PERCENT() / 100;
 		}
-		if (pPlayer->getCivilizationInfo().isCoastalCiv()) // we really like the coast (England, Norway, Polynesia, Carthage, etc.)
+		if (pPlayer->getCivilizationInfo().isCoastalCiv())
 		{
 			rtnValue += rtnValue > 0 ? 25 : 0;
 			rtnValue *= 2;
 		}
 	}
 
-	// Nearby Cities?
 
-	// Human
+
+
 #ifdef AUI_WARNING_FIXES
 	if (pPlayer->isHuman())
 #else
@@ -664,7 +664,7 @@ int CvCitySiteEvaluator::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldT
 			rtnValue /= 2;
 		}
 	}
-	// AI
+
 	else
 	{
 		int iGrowthFlavor = pPlayer->GetGrandStrategyAI()->GetPersonalityAndGrandStrategy((FlavorTypes)m_iGrowthIndex);
@@ -680,7 +680,7 @@ int CvCitySiteEvaluator::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldT
 
 		if (iClosestCityOfMine == iSweetSpot) 
 		{
-			// 1.5 was not enough 2.0 was too much, so lets split the difference
+
 			rtnValue *= 175;
 			rtnValue /= 100;
 		}
@@ -694,7 +694,7 @@ int CvCitySiteEvaluator::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldT
 			rtnValue /= 3;
 		}
 
-		// use boldness to decide if we want to push close to enemies
+
 		int iBoldness = pPlayer->GetDiplomacyAI()->GetBoldness();
 		if (iBoldness < 4)
 		{
@@ -724,7 +724,7 @@ int CvCitySiteEvaluator::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldT
 			}
 		}
 
-		// if we are offshore, pull cities in tighter
+
 		if (iCapitalArea != pPlot->getArea())
 		{
 			if (iClosestCityOfMine < 7)
@@ -740,7 +740,7 @@ int CvCitySiteEvaluator::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldT
 	return rtnValue;
 }
 
-/// Retrieve the relative fertility of this plot (alone)
+
 int CvCitySiteEvaluator::PlotFertilityValue(CvPlot* pPlot)
 {
 	int rtnValue = 0;
@@ -759,7 +759,7 @@ int CvCitySiteEvaluator::PlotFertilityValue(CvPlot* pPlot)
 	return rtnValue;
 }
 
-/// How strong a city site can we find nearby for this type of yield?
+
 int CvCitySiteEvaluator::BestFoundValueForSpecificYield(CvPlayer* pPlayer, YieldTypes eYield)
 {
 	pPlayer;
@@ -767,14 +767,14 @@ int CvCitySiteEvaluator::BestFoundValueForSpecificYield(CvPlayer* pPlayer, Yield
 	return 0;
 }
 
-// PROTECTED METHODS (can be overridden in derived classes)
 
-/// Value of plot for providing food
+
+
 int CvCitySiteEvaluator::ComputeFoodValue(CvPlot* pPlot, CvPlayer* pPlayer)
 {
 	int rtnValue = 0;
 
-	// From tile yield
+
 	if(pPlayer == NULL)
 	{
 		rtnValue += pPlot->calculateNatureYield(YIELD_FOOD, NO_TEAM);
@@ -784,7 +784,7 @@ int CvCitySiteEvaluator::ComputeFoodValue(CvPlot* pPlot, CvPlayer* pPlayer)
 		rtnValue += pPlot->calculateNatureYield(YIELD_FOOD, pPlayer->getTeam());
 	}
 
-	// From resource
+
 	TeamTypes eTeam = NO_TEAM;
 	if(pPlayer != NULL)
 	{
@@ -807,12 +807,12 @@ int CvCitySiteEvaluator::ComputeFoodValue(CvPlot* pPlot, CvPlayer* pPlayer)
 	return rtnValue * m_iFlavorMultiplier[YIELD_FOOD];
 }
 
-/// Value of plot for providing Happiness
+
 int CvCitySiteEvaluator::ComputeHappinessValue(CvPlot* pPlot, CvPlayer* pPlayer)
 {
 	int rtnValue = 0;
 
-	// From resource
+
 	TeamTypes eTeam = NO_TEAM;
 	if(pPlayer != NULL)
 	{
@@ -823,13 +823,13 @@ int CvCitySiteEvaluator::ComputeHappinessValue(CvPlot* pPlot, CvPlayer* pPlayer)
 	eResource = pPlot->getResourceType(eTeam);
 	if(eResource != NO_RESOURCE)
 	{
-		// Add a bonus if adds Happiness
+
 		if(!pPlot->isOwned())
 		{
 			rtnValue += GC.getResourceInfo(eResource)->getHappiness();
 		}
 
-		// If we don't have this resource yet, increase it's value
+
 		if(pPlayer)
 		{
 			if(pPlayer->getNumResourceTotal(eResource) == 0)
@@ -840,12 +840,12 @@ int CvCitySiteEvaluator::ComputeHappinessValue(CvPlot* pPlot, CvPlayer* pPlayer)
 	return rtnValue * m_iFlavorMultiplier[SITE_EVALUATION_HAPPINESS];
 }
 
-/// Value of plot for providing hammers
+
 int CvCitySiteEvaluator::ComputeProductionValue(CvPlot* pPlot, CvPlayer* pPlayer)
 {
 	int rtnValue = 0;
 
-	// From tile yield
+
 	if(pPlayer == NULL)
 	{
 		rtnValue += pPlot->calculateNatureYield(YIELD_PRODUCTION, NO_TEAM);
@@ -855,7 +855,7 @@ int CvCitySiteEvaluator::ComputeProductionValue(CvPlot* pPlot, CvPlayer* pPlayer
 		rtnValue += pPlot->calculateNatureYield(YIELD_PRODUCTION, pPlayer->getTeam());
 	}
 
-	// From resource
+
 	TeamTypes eTeam = NO_TEAM;
 	if(pPlayer != NULL)
 	{
@@ -878,12 +878,12 @@ int CvCitySiteEvaluator::ComputeProductionValue(CvPlot* pPlot, CvPlayer* pPlayer
 	return rtnValue * m_iFlavorMultiplier[YIELD_PRODUCTION];
 }
 
-/// Value of plot for providing gold
+
 int CvCitySiteEvaluator::ComputeGoldValue(CvPlot* pPlot, CvPlayer* pPlayer)
 {
 	int rtnValue = 0;
 
-	// From tile yield
+
 	if(pPlayer == NULL)
 	{
 		rtnValue += pPlot->calculateNatureYield(YIELD_GOLD, NO_TEAM);
@@ -893,7 +893,7 @@ int CvCitySiteEvaluator::ComputeGoldValue(CvPlot* pPlot, CvPlayer* pPlayer)
 		rtnValue += pPlot->calculateNatureYield(YIELD_GOLD, pPlayer->getTeam());
 	}
 
-	// From resource
+
 	TeamTypes eTeam = NO_TEAM;
 	if(pPlayer != NULL)
 	{
@@ -916,7 +916,7 @@ int CvCitySiteEvaluator::ComputeGoldValue(CvPlot* pPlot, CvPlayer* pPlayer)
 	return rtnValue * m_iFlavorMultiplier[YIELD_GOLD];
 }
 
-/// Value of plot for providing science
+
 int CvCitySiteEvaluator::ComputeScienceValue(CvPlot* pPlot, CvPlayer* pPlayer)
 {
 	int rtnValue = 0;
@@ -924,7 +924,7 @@ int CvCitySiteEvaluator::ComputeScienceValue(CvPlot* pPlot, CvPlayer* pPlayer)
 	CvAssert(pPlot);
 	if(!pPlot) return rtnValue;
 
-	// From tile yield
+
 	if(pPlayer == NULL)
 	{
 		rtnValue += pPlot->calculateNatureYield(YIELD_SCIENCE, NO_TEAM);
@@ -934,7 +934,7 @@ int CvCitySiteEvaluator::ComputeScienceValue(CvPlot* pPlot, CvPlayer* pPlayer)
 		rtnValue += pPlot->calculateNatureYield(YIELD_SCIENCE, pPlayer->getTeam());
 	}
 
-	// From resource
+
 	TeamTypes eTeam = NO_TEAM;
 	if(pPlayer != NULL)
 	{
@@ -957,7 +957,7 @@ int CvCitySiteEvaluator::ComputeScienceValue(CvPlot* pPlot, CvPlayer* pPlayer)
 	return rtnValue * m_iFlavorMultiplier[YIELD_SCIENCE];
 }
 
-/// Vale of plot for providing faith
+
 int CvCitySiteEvaluator::ComputeFaithValue(CvPlot* pPlot, CvPlayer* pPlayer)
 {
 	int rtnValue = 0;
@@ -965,7 +965,7 @@ int CvCitySiteEvaluator::ComputeFaithValue(CvPlot* pPlot, CvPlayer* pPlayer)
 	CvAssert(pPlot);
 	if(!pPlot) return rtnValue;
 
-	// From tile yield
+
 	if(pPlayer == NULL)
 	{
 		rtnValue += pPlot->calculateNatureYield(YIELD_FAITH, NO_TEAM);
@@ -975,7 +975,7 @@ int CvCitySiteEvaluator::ComputeFaithValue(CvPlot* pPlot, CvPlayer* pPlayer)
 		rtnValue += pPlot->calculateNatureYield(YIELD_FAITH, pPlayer->getTeam());
 	}
 
-	// From resource
+
 	TeamTypes eTeam = NO_TEAM;
 	if(pPlayer != NULL)
 	{
@@ -999,7 +999,7 @@ int CvCitySiteEvaluator::ComputeFaithValue(CvPlot* pPlot, CvPlayer* pPlayer)
 }
 
 
-/// Value of plot for providing tradeable resources
+
 int CvCitySiteEvaluator::ComputeTradeableResourceValue(CvPlot* pPlot, CvPlayer* pPlayer)
 {
 	int rtnValue = 0;
@@ -1007,7 +1007,7 @@ int CvCitySiteEvaluator::ComputeTradeableResourceValue(CvPlot* pPlot, CvPlayer* 
 	CvAssert(pPlot);
 	if(!pPlot) return rtnValue;
 
-	// If we already own this Tile then we already have access to the Strategic Resource
+
 	if(pPlot->isOwned())
 	{
 		return rtnValue;
@@ -1026,14 +1026,14 @@ int CvCitySiteEvaluator::ComputeTradeableResourceValue(CvPlot* pPlot, CvPlayer* 
 	{
 		ResourceUsageTypes eResourceUsage = GC.getResourceInfo(eResource)->getResourceUsage();
 
-		// Multiply number of tradeable resources by flavor value
+
 		if(eResourceUsage == RESOURCEUSAGE_LUXURY || eResourceUsage == RESOURCEUSAGE_STRATEGIC)
 		{
 			rtnValue += pPlot->getNumResource() * m_iFlavorMultiplier[SITE_EVALUATION_RESOURCES];
 
 			if(pPlayer)
 			{
-				// If we don't have this resource yet, increase it's value
+
 				if(pPlayer->getNumResourceTotal(eResource) == 0)
 					rtnValue *= 3;
 			}
@@ -1043,7 +1043,7 @@ int CvCitySiteEvaluator::ComputeTradeableResourceValue(CvPlot* pPlot, CvPlayer* 
 	return rtnValue;
 }
 
-/// Value of plot for providing strategic value
+
 int CvCitySiteEvaluator::ComputeStrategicValue(CvPlot* pPlot, CvPlayer* pPlayer, int iPlotsFromCity)
 {
 	int rtnValue = 0;
@@ -1051,19 +1051,19 @@ int CvCitySiteEvaluator::ComputeStrategicValue(CvPlot* pPlot, CvPlayer* pPlayer,
 	CvAssert(pPlot);
 	if(!pPlot) return rtnValue;
 
-	// Possible chokepoint if impassable terrain and exactly 2 plots from city
+
 	if(iPlotsFromCity == 2 && (pPlot->isImpassable() || pPlot->isMountain()))
 	{
-		rtnValue += /*5*/ GC.getCHOKEPOINT_STRATEGIC_VALUE();
+		rtnValue +=       GC.getCHOKEPOINT_STRATEGIC_VALUE();
 	}
 
-	// Hills in first ring are useful for defense and production
+
 	if(iPlotsFromCity == 1 && pPlot->isHills())
 	{
-		rtnValue += /*3*/ GC.getHILL_STRATEGIC_VALUE();
+		rtnValue +=       GC.getHILL_STRATEGIC_VALUE();
 	}
 
-	// Some Features are less attractive to settle in, (e.g. Jungles, since it takes a while before you can clear them and they slow down movement)
+
 	if(pPlot->getFeatureType() != NO_FEATURE)
 	{
 		int iWeight = GC.getFeatureInfo(pPlot->getFeatureType())->getStartingLocationWeight();
@@ -1073,36 +1073,36 @@ int CvCitySiteEvaluator::ComputeStrategicValue(CvPlot* pPlot, CvPlayer* pPlayer,
 		}
 	}
 
-	// Nearby City
+
 	if(pPlayer != NULL && pPlot->isCity())
 	{
-//		if (pPlot->getOwner() == pPlayer->getID())
+
 		{
-			rtnValue += /*-1000*/ GC.getALREADY_OWNED_STRATEGIC_VALUE();
+			rtnValue +=           GC.getALREADY_OWNED_STRATEGIC_VALUE();
 		}
 	}
 
-	// POSSIBLE FUTURE: Is there any way for us to know to grab land between us and another major civ?
+
 
 	rtnValue *= m_iFlavorMultiplier[SITE_EVALUATION_STRATEGIC];
 
 	return rtnValue;
 }
 
-//=====================================
-// CvSiteEvaluatorForSettler
-//=====================================
-/// Constructor
+
+
+
+
 CvSiteEvaluatorForSettler::CvSiteEvaluatorForSettler(void)
 {
 }
 
-/// Destructor
+
 CvSiteEvaluatorForSettler::~CvSiteEvaluatorForSettler(void)
 {
 }
 
-/// Value of this site for a settler
+
 int CvSiteEvaluatorForSettler::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldTypes eYield, bool bCoastOnly)
 {
 	CvAssert(pPlot);
@@ -1113,9 +1113,9 @@ int CvSiteEvaluatorForSettler::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, 
 		return 0;
 	}
 
-	// Is there any reason this site doesn't work for a settler?
-	//
-	// First must be on coast if settling a new continent
+
+
+
 	bool bIsCoastal = pPlot->isCoastalLand(GC.getMIN_WATER_SIZE_FOR_OCEAN());
 	CvArea* pArea = pPlot->area();
 	CvAssert(pArea);
@@ -1126,14 +1126,14 @@ int CvSiteEvaluatorForSettler::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, 
 		return 0;
 	}
 
-	// Seems okay for a settler, use base class to determine exact value
+
 	else
 	{
-		// if the civ gets a benefit from settling on a new continent (ie: Indonesia)
-		// double the fertility of that plot
+
+
 		int iLuxuryModifier = 0;
-		//if (pPlayer->GetPlayerTraits()->WillGetUniqueLuxury(pArea))
-		if (pPlayer->GetPlayerTraits()->WillGetUniqueLuxury(pArea) && bIsCoastal) // NQMP GJS - Spice Islanders requires coast
+
+		if (pPlayer->GetPlayerTraits()->WillGetUniqueLuxury(pArea) && bIsCoastal)
 		{
 			iLuxuryModifier = CvCitySiteEvaluator::PlotFoundValue(pPlot, pPlayer, eYield) * 2;
 			return iLuxuryModifier;
@@ -1145,30 +1145,30 @@ int CvSiteEvaluatorForSettler::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, 
 	}
 }
 
-//=====================================
-// CvSiteEvaluatorForStart
-//=====================================
-/// Constructor
+
+
+
+
 CvSiteEvaluatorForStart::CvSiteEvaluatorForStart(void)
 {
 }
 
-/// Destructor
+
 CvSiteEvaluatorForStart::~CvSiteEvaluatorForStart(void)
 {
 }
 
-/// Overridden - ignore flavors for initial site selection
+
 void CvSiteEvaluatorForStart::ComputeFlavorMultipliers(CvPlayer*)
 {
-	// Set all to 1; we assign start position without considering flavors yet
+
 	for(int iI = 0; iI < NUM_SITE_EVALUATION_FACTORS; iI++)
 	{
 		m_iFlavorMultiplier[iI] = 1;
 	}
 }
 
-/// Value of this site for a civ starting location
+
 int CvSiteEvaluatorForStart::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldTypes, bool)
 {
 	int rtnValue = 0;
@@ -1184,20 +1184,20 @@ int CvSiteEvaluatorForStart::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, Yi
 		return rtnValue;
 	}
 
-	// Is there any reason this site doesn't work for a start location?
-	//
-	// Not on top of a goody hut
+
+
+
 	if(pPlot->isGoody())
 	{
 		return 0;
 	}
 
-	// We have our own special method of scoring, so don't call the base class for that (like settler version does)
+
 	for(iI = 0; iI < NUM_CITY_PLOTS; iI++)
 	{
 		pLoopPlot = plotCity(pPlot->getX(), pPlot->getY(), iI);
 
-		// Too close to map edge?
+
 		if(pLoopPlot == NULL)
 		{
 			return 0;
@@ -1209,17 +1209,17 @@ int CvSiteEvaluatorForStart::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, Yi
 			if(iDistance > NUM_CITY_RINGS) continue;
 			int iRingModifier = m_iRingModifier[iDistance];
 
-			// Skip the city plot itself for now
+
 			if(iDistance != 0)
 			{
-				rtnValue += iRingModifier * ComputeFoodValue(pLoopPlot, pPlayer) * /*6*/ GC.getSTART_AREA_FOOD_MULTIPLIER();
-				rtnValue += iRingModifier * ComputeHappinessValue(pLoopPlot, pPlayer) * /*12*/ GC.getSTART_AREA_HAPPINESS_MULTIPLIER();
-				rtnValue += iRingModifier * ComputeProductionValue(pLoopPlot, pPlayer) * /*8*/ GC.getSTART_AREA_PRODUCTION_MULTIPLIER();
-				rtnValue += iRingModifier * ComputeGoldValue(pLoopPlot, pPlayer) * /*2*/ GC.getSTART_AREA_GOLD_MULTIPLIER();
-				rtnValue += iRingModifier * ComputeScienceValue(pLoopPlot, pPlayer) * /*1*/ GC.getSTART_AREA_SCIENCE_MULTIPLIER();
-				rtnValue += iRingModifier * ComputeFaithValue(pLoopPlot, pPlayer) * /*1*/ GC.getSTART_AREA_FAITH_MULTIPLIER();
-				rtnValue += iRingModifier * ComputeTradeableResourceValue(pLoopPlot, pPlayer) * /*1*/ GC.getSTART_AREA_RESOURCE_MULTIPLIER();
-				rtnValue += iRingModifier * ComputeStrategicValue(pLoopPlot, pPlayer, iDistance) * /*1*/ GC.getSTART_AREA_STRATEGIC_MULTIPLIER();
+				rtnValue += iRingModifier * ComputeFoodValue(pLoopPlot, pPlayer) *       GC.getSTART_AREA_FOOD_MULTIPLIER();
+				rtnValue += iRingModifier * ComputeHappinessValue(pLoopPlot, pPlayer) *        GC.getSTART_AREA_HAPPINESS_MULTIPLIER();
+				rtnValue += iRingModifier * ComputeProductionValue(pLoopPlot, pPlayer) *       GC.getSTART_AREA_PRODUCTION_MULTIPLIER();
+				rtnValue += iRingModifier * ComputeGoldValue(pLoopPlot, pPlayer) *       GC.getSTART_AREA_GOLD_MULTIPLIER();
+				rtnValue += iRingModifier * ComputeScienceValue(pLoopPlot, pPlayer) *       GC.getSTART_AREA_SCIENCE_MULTIPLIER();
+				rtnValue += iRingModifier * ComputeFaithValue(pLoopPlot, pPlayer) *       GC.getSTART_AREA_FAITH_MULTIPLIER();
+				rtnValue += iRingModifier * ComputeTradeableResourceValue(pLoopPlot, pPlayer) *       GC.getSTART_AREA_RESOURCE_MULTIPLIER();
+				rtnValue += iRingModifier * ComputeStrategicValue(pLoopPlot, pPlayer, iDistance) *       GC.getSTART_AREA_STRATEGIC_MULTIPLIER();
 			}
 
 			if (pPlayer)
@@ -1246,7 +1246,7 @@ int CvSiteEvaluatorForStart::PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, Yi
 
 	if(rtnValue < 0) rtnValue = 0;
 
-	// Finally, look at the city plot itself and use it as an overall multiplier
+
 	if(pPlot->getResourceType() != NO_RESOURCE)
 	{
 		rtnValue += rtnValue * GC.getBUILD_ON_RESOURCE_PERCENT() / 100;

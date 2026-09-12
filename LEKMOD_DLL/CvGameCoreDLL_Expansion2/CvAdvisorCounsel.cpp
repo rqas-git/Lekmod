@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvAdvisorCounsel.h"
 #include "CvGameCoreUtils.h"
@@ -14,7 +14,7 @@
 #include "CvMinorCivAI.h"
 #include "CvTypes.h"
 
-// must be included after all other headers
+
 #include "LintFree.h"
 
 #define NUM_COUNSEL_SLOTS 50
@@ -55,10 +55,10 @@ bool CounselSort(const CvAdvisorCounsel::Counsel& Counsel1, const CvAdvisorCouns
 bool CounselSort(const CvAdvisorCounsel::Counsel Counsel1, const CvAdvisorCounsel::Counsel Counsel2)
 #endif
 {
-	// if the advisors are different types
+
 	if(Counsel1.m_eAdvisor != Counsel2.m_eAdvisor)
 	{
-		// adjust the advisor values so that empty values will be moved to the end of the list
+
 		AdvisorTypes eCounselAdvisor1 = Counsel1.m_eAdvisor;
 		AdvisorTypes eCounselAdvisor2 = Counsel2.m_eAdvisor;
 		if(eCounselAdvisor1 == NO_ADVISOR_TYPE)
@@ -112,7 +112,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 		return;
 	}
 
-	// go through economic strategies
+
 	CvEconomicAI* pEconomicAI = GET_PLAYER(ePlayer).GetEconomicAI();
 
 	for(int iStrategiesLoop = 0; iStrategiesLoop < pEconomicAI->GetEconomicAIStrategies()->GetNumEconomicAIStrategies(); iStrategiesLoop++)
@@ -122,7 +122,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 
 		if(pEconomicAI->IsUsingStrategy(eStrategy))
 		{
-			// if this strategy has an advisor set, then try to add it to the list
+
 			if(pStrategy->GetAdvisor() != NO_ADVISOR_TYPE)
 			{
 				strLoc = Localization::Lookup(pStrategy->GetAdvisorCounselText());
@@ -137,7 +137,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 		}
 	}
 
-	// go through military strategies
+
 	CvMilitaryAI* pMilitaryAI = GET_PLAYER(ePlayer).GetMilitaryAI();
 
 	for(int iStrategiesLoop = 0; iStrategiesLoop < pMilitaryAI->GetMilitaryAIStrategies()->GetNumMilitaryAIStrategies(); iStrategiesLoop++)
@@ -150,7 +150,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 			CvAssert(pStrategy != NULL);
 			if(pStrategy)
 			{
-				// if this strategy has an advisor set, then try to add it to the list
+
 				if(pStrategy->GetAdvisor() != NO_ADVISOR_TYPE)
 				{
 					strLoc = Localization::Lookup(pStrategy->GetAdvisorCounselText());
@@ -166,7 +166,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 		}
 	}
 
-	// go through city strategies
+
 	int iLoop;
 	CvCity* pLoopCity;
 	CvCityStrategyAI* pCityStrategyAI;
@@ -179,7 +179,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 			CvAICityStrategyEntry* pStrategy = pCityStrategyAI->GetAICityStrategies()->GetEntry(i);
 			if(pCityStrategyAI->IsUsingCityStrategy(eStrategy))
 			{
-				// if this strategy has an advisor set, then try to add it to the list
+
 				if(pStrategy->GetAdvisor() != NO_ADVISOR_TYPE)
 				{
 					strLoc = Localization::Lookup(pStrategy->GetAdvisorCounselText());
@@ -196,7 +196,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 		}
 	}
 
-	// find flavor science
+
 	FlavorTypes eFlavorScience = NO_FLAVOR;
 	for(int iFlavorLoop = 0; iFlavorLoop < GC.getNumFlavorTypes(); iFlavorLoop++)
 	{
@@ -207,8 +207,8 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 		}
 	}
 
-	// cycle through all the science advisor tips
-	// along with military recommendations
+
+
 	TechTypes eMilitaryUnitTech = NO_TECH;
 	UnitTypes eRecommendedUnit = NO_UNIT;
 	int iMaxCombatValue = 0;
@@ -224,7 +224,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 		TechTypes eTech = (TechTypes)iTechLoop;
 		if(pPlayerTechs->CanResearch(eTech) && pPlayerTechs->GetCurrentResearch() != eTech)
 		{
-			// go through recommended research for special units
+
 			if(pPlayerTechs->GetCivTechPriority(eTech) > 1)
 			{
 				bool bUniquenessFound = false;
@@ -279,7 +279,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 
 				if(!bUniquenessFound)
 				{
-					// we don't have text for this
+
 					strLoc = Localization::Lookup("TXT_KEY_TECHSTRATEGY_CIV_BONUS");
 					strLoc << pPlayerTechs->GetTechs()->GetEntry(eTech)->GetTextKey();
 					strLoc << GET_PLAYER(ePlayer).getCivilizationInfo().getAdjectiveKey();
@@ -293,10 +293,10 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 				}
 			}
 
-			// go through recommended research for resources
+
 			if(pPlayerTechs->GetLocaleTechPriority(eTech) > 1)
 			{
-				// say we need this for a special resource
+
 				strLoc = Localization::Lookup("TXT_KEY_TECHSTRATEGY_RESOURCE");
 				strLoc << pPlayerTechs->GetTechs()->GetEntry(eTech)->GetTextKey();
 				strLoc << GC.getResourceInfo(pPlayerTechs->GetLocaleTechResource(eTech))->GetTextKey();
@@ -309,7 +309,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 				uiCounselIndex++;
 			}
 
-			// look at available buildings
+
 			int iNumBuildingInfos = GC.getNumBuildingInfos();
 			BuildingTypes eBuilding1 = NO_BUILDING;
 			BuildingTypes eBuilding2 = NO_BUILDING;
@@ -475,7 +475,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 		}
 	}
 
-	// evaluate the player's science yield according to population
+
 	{
 		int iRating = 1;
 		int iScience = GET_PLAYER(ePlayer).GetScience();
@@ -533,9 +533,9 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 
 
 
-	// diplomacy info
-	// go through all the other major civs and build info on them
-	// for each opposing major
+
+
+
 	CvDiplomacyAI* pDiplomacyAI = GET_PLAYER(ePlayer).GetDiplomacyAI();
 	for(int iPlayer = 0; iPlayer < MAX_MAJOR_CIVS; iPlayer++)
 	{
@@ -544,32 +544,32 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 			continue;
 		}
 
-		// reset the ratings per player
+
 		int iMessageRating = 0;
 		AdvisorTypes eAdvisor = NO_ADVISOR_TYPE;
 
 		PlayerTypes eOtherPlayer = (PlayerTypes)iPlayer;
 		TeamTypes eOtherTeam = GET_PLAYER(eOtherPlayer).getTeam();
 
-		// don't evaluate yourself
+
 		if(eOtherPlayer == ePlayer)
 		{
 			continue;
 		}
 
-		// don't evaluate teammates
+
 		if(eOtherTeam == eTeam)
 		{
 			continue;
 		}
 
-		// don't evaluate dead people
+
 		if(!GET_PLAYER(eOtherPlayer).isAlive())
 		{
 			continue;
 		}
 
-		// don't evaluate players we haven't met
+
 		if(!GET_TEAM(eTeam).isHasMet(eOtherTeam))
 		{
 			continue;
@@ -584,10 +584,10 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 			{
 			case WAR_PROJECTION_DESTRUCTION:
 			{
-				//if (GET_TEAM(eTeam).isAtWar(eOtherTeam))
-				//{
+
+
 				int iRating = 99;
-				// warn player to back out!
+
 				if(iRating > iMessageRating)
 				{
 					iMessageRating = iRating;
@@ -595,27 +595,27 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_WARPROJECTION_DESTRUCTION_WAR");
 					strLoc << GET_PLAYER(eOtherPlayer).getCivilizationInfo().GetTextKey();
 				}
-				//}
-				//else
-				//{
-				//	int iRating = 50;
-				//	// warn player to avoid
-				//	if (iRating > iMessageRating)
-				//	{
-				//		iMessageRating = iRating;
-				//		eAdvisor = ADVISOR_FOREIGN;
-				//		strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_WARPROJECTION_DESTRUCTION_PEACE");
-				//		strLoc << GC.getCivilizationInfo(GET_PLAYER(eOtherPlayer).getCivilizationType())->GetTextKey();
-				//	}
-				//}
+
+
+
+
+
+
+
+
+
+
+
+
+
 			}
 			break;
 			case WAR_PROJECTION_DEFEAT:
 			{
-				//if (GET_TEAM(eTeam).isAtWar(eOtherTeam))
-				//{
 
-				// warn player to back out!
+
+
+
 				int iRating = 98;
 				if(iRating > iMessageRating)
 				{
@@ -625,28 +625,28 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 					strLoc << GET_PLAYER(eOtherPlayer).getCivilizationInfo().GetTextKey();
 				}
 
-				//}
-				//else
-				//{
-				//	// warn player to avoid
-				//	int iRating = 49;
-				//	if (iRating > iMessageRating)
-				//	{
-				//		iMessageRating = iRating;
-				//		eAdvisor = ADVISOR_MILITARY;
-				//		strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_WARPROJECTION_DEFEAT_PEACE");
-				//		strLoc << GC.getCivilizationInfo(GET_PLAYER(eOtherPlayer).getCivilizationType())->GetTextKey();
-				//	}
-				//}
+
+
+
+
+
+
+
+
+
+
+
+
+
 			}
 			break;
 			case WAR_PROJECTION_UNKNOWN:
 			case WAR_PROJECTION_STALEMATE:
 			{
-				//if (GET_TEAM(eTeam).isAtWar(eOtherTeam))
-				//{
 
-				// even fight
+
+
+
 				int iRating = 97;
 				if(iRating > iMessageRating)
 				{
@@ -656,19 +656,19 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 					strLoc << GET_PLAYER(eOtherPlayer).getCivilizationInfo().GetTextKey();
 				}
 
-				//}
-				//else
-				//{
-				//	// no warning for other states
-				//}
+
+
+
+
+
 			}
 			break;
 			case WAR_PROJECTION_GOOD:
 			{
-				//if (GET_TEAM(eTeam).isAtWar(eOtherTeam))
-				//{
 
-				// things are going well!
+
+
+
 				int iRating = 96;
 				if(iRating > iMessageRating)
 				{
@@ -678,27 +678,27 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 					strLoc << GET_PLAYER(eOtherPlayer).getCivilizationInfo().GetTextKey();
 				}
 
-				//}
-				//else
-				//{
-				//	// we could rough them up
-				//	int iRating = 48;
-				//	if (iRating > iMessageRating)
-				//	{
-				//		iMessageRating = iRating;
-				//		eAdvisor = ADVISOR_FOREIGN;
-				//		strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_WARPROJECTION_GOOD_PEACE");
-				//		strLoc << GC.getCivilizationInfo(GET_PLAYER(eOtherPlayer).getCivilizationType())->GetTextKey();
-				//	}
-				//}
+
+
+
+
+
+
+
+
+
+
+
+
+
 			}
 			break;
 			case WAR_PROJECTION_VERY_GOOD:
 			{
-				//if (GET_TEAM(eTeam).isAtWar(eOtherTeam))
-				//{
 
-				// things are going very well!
+
+
+
 				int iRating = 97;
 				if(iRating > iMessageRating)
 				{
@@ -708,24 +708,24 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 					strLoc << GET_PLAYER(eOtherPlayer).getCivilizationInfo().GetTextKey();
 				}
 
-				//}
-				//else
-				//{
-				//	// we could take these guys
-				//	int iRating = 97;
-				//	if (iRating > iMessageRating)
-				//	{
-				//		iMessageRating = iRating;
-				//		eAdvisor = ADVISOR_FOREIGN;
-				//		strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_WARPROJECTION_VERY_GOOD_PEACE");
-				//		strLoc << GC.getCivilizationInfo(GET_PLAYER(eOtherPlayer).getCivilizationType())->GetTextKey();
-				//	}
-				//}
+
+
+
+
+
+
+
+
+
+
+
+
+
 			}
 			break;
 			}
 		}
-		else // not at war
+		else
 		{
 			switch(eMilitaryStrengthComparedToUs)
 			{
@@ -816,7 +816,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 			}
 		}
 
-		// look at get military posture
+
 		AggressivePostureTypes eMilitaryAggressivePostureTypes = pDiplomacyAI->GetMilitaryAggressivePosture(eOtherPlayer);
 		if(!GET_TEAM(eTeam).isAtWar(eOtherTeam))
 		{
@@ -865,7 +865,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 			}
 		}
 
-		// look at expansion aggressive posture
+
 		AggressivePostureTypes eExpansionAggressivePostureTypes = pDiplomacyAI->GetExpansionAggressivePosture(eOtherPlayer);
 		if(!GET_TEAM(eTeam).isAtWar(eOtherTeam))
 		{
@@ -995,35 +995,35 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 		}
 	}
 
-	// go through diplomatic list for competitions with other civs with minor civs
+
 	for(int iPlayer = 0; iPlayer < MAX_MAJOR_CIVS; iPlayer++)
 	{
-		// reset the ratings per player
+
 		int iMessageRating = 0;
 		AdvisorTypes eAdvisor = NO_ADVISOR_TYPE;
 
 		PlayerTypes eOtherPlayer = (PlayerTypes)iPlayer;
 		TeamTypes eOtherTeam = GET_PLAYER(eOtherPlayer).getTeam();
 
-		// don't evaluate yourself
+
 		if(eOtherPlayer == ePlayer)
 		{
 			continue;
 		}
 
-		// don't evaluate teammates
+
 		if(eOtherTeam == eTeam)
 		{
 			continue;
 		}
 
-		// don't evaluate dead people
+
 		if(!GET_PLAYER(eOtherPlayer).isAlive())
 		{
 			continue;
 		}
 
-		// don't evaluate players we haven't met
+
 		if(!GET_TEAM(eTeam).isHasMet(eOtherTeam))
 		{
 			continue;
@@ -1117,7 +1117,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 		}
 	}
 
-	// evaluate our gold situation
+
 	{
 		int iMessageRating = 0;
 		AdvisorTypes eAdvisor = ADVISOR_ECONOMIC;
@@ -1181,11 +1181,11 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 		}
 
 
-		if(iGold <= 0)  // we're bankrupt
+		if(iGold <= 0)
 		{
 			if(iGoldIncome <= 0)
 			{
-				//    if our income is negative or zero
+
 				iMessageRating = 99;
 				switch(uiHighestCostCategory)
 				{
@@ -1245,11 +1245,11 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 				}
 			}
 		}
-		else // we're not bankrupt!
+		else
 		{
 			if(iGoldIncome <= 0)
 			{
-				// we're going bankrupt
+
 				if(iGoldIncome < 0 && iGold / abs(iGoldIncome) <= 5)
 				{
 					iMessageRating = 80;
@@ -1357,19 +1357,19 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 		}
 	}
 
-	// finding minor civs that we are about to lose a friendship/ally status with
+
 	for(uint ui = MAX_MAJOR_CIVS; ui < MAX_CIV_PLAYERS; ui++)
 	{
 		int iMessageRating = 0;
 		AdvisorTypes eAdvisor = ADVISOR_FOREIGN;
-		//MinorCivQuestTypes eQuest = NO_MINOR_CIV_QUEST_TYPE;
+
 		PlayerTypes eEnemyPlayer = NO_PLAYER;
 
 		PlayerTypes eMinorPlayer = (PlayerTypes)ui;
 
 		TeamTypes eMinorTeam = GET_PLAYER(eMinorPlayer).getTeam();
 
-		// don't evaluate players we haven't met
+
 		if(!GET_TEAM(eTeam).isHasMet(eMinorTeam))
 		{
 			continue;
@@ -1387,7 +1387,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 				continue;
 			}
 
-			// see if we ganked their city
+
 			PlayerTypes eCapturingPlayer = NO_PLAYER;
 
 			for(uint ui2 = 0; ui2 < MAX_MAJOR_CIVS; ui2++)
@@ -1411,8 +1411,8 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 				}
 			}
 
-			//antonjs: todo: don't show counsel to liberate if the CS was taken over peacefully with buyout (Austria UA)
-			// don't mention it if we conquered the city-state
+
+
 			if(eCapturingPlayer != NO_PLAYER && eCapturingPlayer != ePlayer)
 			{
 				iMessageRating = 10;
@@ -1440,7 +1440,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 
 		if(pMinorCivAI->IsAllies(ePlayer) && pMinorCivAI->IsCloseToNotBeingAllies(ePlayer))
 		{
-			// warn the player they are about to not be an ally with a minor civ
+
 			iMessageRating = 80;
 			if(eEnemyPlayer != NO_PLAYER)
 			{
@@ -1448,61 +1448,61 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 				strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
 				strLoc << GET_PLAYER(eEnemyPlayer).getCivilizationInfo().GetTextKey();
 			}
-			/*
-			else if (eQuest != NO_MINOR_CIV_QUEST_TYPE)
-			{
-				int iQuestData = pMinorCivAI->GetQuestData1(ePlayer, eQuest);
 
-				switch (eQuest)
-				{
-				case MINOR_CIV_QUEST_ROUTE:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_ALMOST_LOST_CITY_STATE_ALLY_QUEST_ROUTE");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					break;
-				case MINOR_CIV_QUEST_KILL_CAMP:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_ALMOST_LOST_CITY_STATE_ALLY_QUEST_KILL_CAMP");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					break;
-				case MINOR_CIV_QUEST_CONNECT_RESOURCE:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_ALMOST_LOST_CITY_STATE_ALLY_QUEST_CONNECT_RESOURCE");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					strLoc << GC.getResourceInfo((ResourceTypes)iQuestData)->GetTextKey();
-					break;
-				case MINOR_CIV_QUEST_CONSTRUCT_WONDER:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_ALMOST_LOST_CITY_STATE_ALLY_QUEST_CONSTRUCT_WONDER");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					strLoc << GC.getBuildingInfo((BuildingTypes)iQuestData)->GetDescription();
-					break;
-				case MINOR_CIV_QUEST_GREAT_PERSON:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_ALMOST_LOST_CITY_STATE_ALLY_QUEST_GREAT_PERSON");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					strLoc << GC.getUnitInfo((UnitTypes)iQuestData)->GetDescription();
-					break;
-				case MINOR_CIV_QUEST_KILL_CITY_STATE:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_ALMOST_LOST_CITY_STATE_ALLY_QUEST_KILL_CITY_STATE");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					strLoc << GC.getMinorCivInfo(GET_PLAYER((PlayerTypes)iQuestData).GetMinorCivAI()->GetMinorCivType())->GetTextKey();
-					break;
-				case MINOR_CIV_QUEST_FIND_PLAYER:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_ALMOST_LOST_CITY_STATE_ALLY_QUEST_FIND_PLAYER");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					strLoc << GET_PLAYER((PlayerTypes)iQuestData).getCivilizationInfo().GetTextKey();
-					break;
-				case MINOR_CIV_QUEST_FIND_NATURAL_WONDER:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_ALMOST_LOST_CITY_STATE_ALLY_QUEST_FIND_NATURAL_WONDER");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					break;
-				default:
-					CvAssertMsg(false, "No entry for this quest type!");
-					break;
-				}
-			}
-			else if (pMinorCivAI->GetTurnsSinceThreatenedByBarbarians() >= 0)
-			{
-				strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_ALMOST_LOST_CITY_STATE_ALLY_QUEST_CLEAR_BARBARIANS");
-				strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-			}
-			*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			else
 			{
 				strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_ALMOST_LOST_CITY_STATE_ALLY");
@@ -1511,7 +1511,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 		}
 		else if(pMinorCivAI->IsFriends(ePlayer) && pMinorCivAI->IsCloseToNotBeingFriends(ePlayer))
 		{
-			// warn the player they are about to not be an friend with a minor civ
+
 			iMessageRating = 60;
 			if(eEnemyPlayer != NO_PLAYER)
 			{
@@ -1519,61 +1519,61 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 				strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
 				strLoc << GET_PLAYER(eEnemyPlayer).getCivilizationInfo().GetTextKey();
 			}
-			/*
-			else if (eQuest != NO_MINOR_CIV_QUEST_TYPE)
-			{
-				int iQuestData = pMinorCivAI->GetQuestData1(ePlayer, eQuest);
 
-				switch (eQuest)
-				{
-				case MINOR_CIV_QUEST_ROUTE:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_ALMOST_LOST_CITY_STATE_FRIENDSHIP_QUEST_ROUTE");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					break;
-				case MINOR_CIV_QUEST_KILL_CAMP:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_ALMOST_LOST_CITY_STATE_FRIENDSHIP_QUEST_KILL_CAMP");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					break;
-				case MINOR_CIV_QUEST_CONNECT_RESOURCE:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_ALMOST_LOST_CITY_STATE_FRIENDSHIP_QUEST_CONNECT_RESOURCE");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					strLoc << GC.getResourceInfo((ResourceTypes)iQuestData)->GetTextKey();
-					break;
-				case MINOR_CIV_QUEST_CONSTRUCT_WONDER:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_ALMOST_LOST_CITY_STATE_FRIENDSHIP_QUEST_CONSTRUCT_WONDER");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					strLoc << GC.getBuildingInfo((BuildingTypes)iQuestData)->GetDescription();
-					break;
-				case MINOR_CIV_QUEST_GREAT_PERSON:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_ALMOST_LOST_CITY_STATE_FRIENDSHIP_QUEST_GREAT_PERSON");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					strLoc << GC.getUnitInfo((UnitTypes)iQuestData)->GetDescription();
-					break;
-				case MINOR_CIV_QUEST_KILL_CITY_STATE:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_ALMOST_LOST_CITY_STATE_FRIENDSHIP_QUEST_KILL_CITY_STATE");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					strLoc << GC.getMinorCivInfo(GET_PLAYER((PlayerTypes)iQuestData).GetMinorCivAI()->GetMinorCivType())->GetTextKey();
-					break;
-				case MINOR_CIV_QUEST_FIND_PLAYER:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_ALMOST_LOST_CITY_STATE_FRIENDSHIP_QUEST_FIND_PLAYER");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					strLoc << GET_PLAYER((PlayerTypes)iQuestData).getCivilizationInfo().GetTextKey();
-					break;
-				case MINOR_CIV_QUEST_FIND_NATURAL_WONDER:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_ALMOST_LOST_CITY_STATE_FRIENDSHIP_QUEST_FIND_NATURAL_WONDER");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					break;
-				default:
-					CvAssertMsg(false, "No entry for this quest type!");
-					break;
-				}
-			}
-			else if (pMinorCivAI->GetTurnsSinceThreatenedByBarbarians() >= 0)
-			{
-				strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_ALMOST_LOST_CITY_STATE_FRIENDSHIP_QUEST_CLEAR_BARBARIANS");
-				strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-			}
-			*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			else
 			{
 				strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_ALMOST_LOST_CITY_STATE_FRIENDSHIP");
@@ -1589,70 +1589,70 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 				strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
 				strLoc << GET_PLAYER(eEnemyPlayer).getCivilizationInfo().GetTextKey();
 			}
-			/*
-			else if (eQuest != NO_MINOR_CIV_QUEST_TYPE)
-			{
-				int iQuestData = pMinorCivAI->GetQuestData1(ePlayer, eQuest);
 
-				switch (eQuest)
-				{
-				case MINOR_CIV_QUEST_ROUTE:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_BEFRIEND_CITY_STATE_QUEST_ROUTE");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					break;
-				case MINOR_CIV_QUEST_KILL_CAMP:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_BEFRIEND_CITY_STATE_QUEST_KILL_CAMP");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					break;
-				case MINOR_CIV_QUEST_CONNECT_RESOURCE:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_BEFRIEND_CITY_STATE_QUEST_CONNECT_RESOURCE");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					strLoc << GC.getResourceInfo((ResourceTypes)iQuestData)->GetTextKey();
-					break;
-				case MINOR_CIV_QUEST_CONSTRUCT_WONDER:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_BEFRIEND_CITY_STATE_QUEST_CONSTRUCT_WONDER");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					strLoc << GC.getBuildingInfo((BuildingTypes)iQuestData)->GetDescription();
-					break;
-				case MINOR_CIV_QUEST_GREAT_PERSON:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_BEFRIEND_CITY_STATE_QUEST_GREAT_PERSON");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					strLoc << GC.getUnitInfo((UnitTypes)iQuestData)->GetDescription();
-					break;
-				case MINOR_CIV_QUEST_KILL_CITY_STATE:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_BEFRIEND_CITY_STATE_QUEST_KILL_CITY_STATE");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					strLoc << GC.getMinorCivInfo(GET_PLAYER((PlayerTypes)iQuestData).GetMinorCivAI()->GetMinorCivType())->GetTextKey();
-					break;
-				case MINOR_CIV_QUEST_FIND_PLAYER:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_BEFRIEND_CITY_STATE_QUEST_FIND_PLAYER");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					strLoc << GET_PLAYER((PlayerTypes)iQuestData).getCivilizationInfo().GetTextKey();
-					break;
-				case MINOR_CIV_QUEST_FIND_NATURAL_WONDER:
-					strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_BEFRIEND_CITY_STATE_QUEST_FIND_NATURAL_WONDER");
-					strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-					break;
-				default:
-					CvAssertMsg(false, "No entry for this quest type!");
-					break;
-				}
-			}
-			else if (pMinorCivAI->GetTurnsSinceThreatenedByBarbarians() >= 0)
-			{
-				strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_BEFRIEND_CITY_STATE_QUEST_CLEAR_BARBARIANS");
-				strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-			}
-			*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			else
 			{
 				iMessageRating = 0;
 			}
-			//else
-			//{
-			//	strLoc = Localization::Lookup("TXT_KEY_DIPLOSTRATEGY_BEFRIEND_CITY_STATE");
-			//	strLoc << GC.getMinorCivInfo(pMinorCivAI->GetMinorCivType())->GetTextKey();
-			//}
+
+
+
+
+
 		}
 
 		if(iMessageRating > 0)
@@ -1667,7 +1667,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 		}
 	}
 
-	// find the biggest city
+
 	CvCity* pBiggestCity = NULL;
 	int iMaxPopulation = 0;
 	for(pLoopCity = GET_PLAYER(ePlayer).firstCity(&iLoop); pLoopCity != NULL; pLoopCity = GET_PLAYER(ePlayer).nextCity(&iLoop))
@@ -1684,7 +1684,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 		CvString strBuildingClass;
 		for(uint uiLoop = 0; uiLoop < 4; uiLoop++)
 		{
-			// for every science improvement building
+
 			switch(uiLoop)
 			{
 			case 0:
@@ -1777,7 +1777,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 	for(uint ui = 0; ui < aiPlots.size(); ui++)
 	{
 		CvPlot* pPlot = NULL;
-		// when we encounter the first plot that is invalid, the rest of the list will be invalid
+
 		if(aiPlots[ui] == -1)
 		{
 			break;
@@ -1797,7 +1797,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 
 		if(GC.getResourceInfo(eResource)->getResourceUsage() == RESOURCEUSAGE_LUXURY || GC.getResourceInfo(eResource)->getResourceUsage() == RESOURCEUSAGE_STRATEGIC)
 		{
-			// if we don't have any of this resource
+
 			if(GET_PLAYER(ePlayer).getNumResourceTotal(eResource) < iNumOfResource)
 			{
 #ifdef AUI_WARNING_FIXES
@@ -1826,10 +1826,10 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 
 					if(GET_PLAYER(ePlayer).canBuild(pPlot, eBuild))
 					{
-						// ensure there is a city working this tile
+
 						if(pPlot->getWorkingCity())
 						{
-							// check for a worker in this plot
+
 							bool bWorkerAlreadyOnIt = false;
 							IDInfo* pPlotUnitNode = pPlot->headUnitNode();
 
@@ -1843,7 +1843,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 									continue;
 								}
 
-								// walk through missions
+
 								int iNumMissions = pLoopUnit->GetLengthMissionQueue();
 								for(int i = 0; i < iNumMissions; i++)
 								{
@@ -1919,7 +1919,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 			continue;
 		}
 
-		// not enough to trade
+
 		if(GET_PLAYER(ePlayer).getNumResourceAvailable(eResource, false) <= 1)
 		{
 			continue;
@@ -1934,13 +1934,13 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 				continue;
 			}
 
-			// if we haven't met or are at war
+
 			if(!GET_TEAM(ePlayerTeam).isHasMet(eOtherTeam) || GET_TEAM(ePlayerTeam).isAtWar(eOtherTeam))
 			{
 				continue;
 			}
 
-			// other player already has some
+
 			if(GET_PLAYER(eOtherPlayer).getNumResourceAvailable(eResource, true) != 0)
 			{
 				continue;
@@ -1959,7 +1959,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 					continue;
 				}
 
-				// other player has some to trade
+
 				if(GET_PLAYER(eOtherPlayer).getNumResourceAvailable(eTradebackResource, false) == 0)
 				{
 					continue;
@@ -1975,7 +1975,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 					ResourceUsageTypes eTradableResourceUsage = GC.getResourceInfo(eTradableResource)->getResourceUsage();
 					ResourceUsageTypes eResourceUsage = GC.getResourceInfo(eResource)->getResourceUsage();
 
-					// prefer trading luxury to strategic
+
 					if(eTradableResourceUsage == RESOURCEUSAGE_STRATEGIC && eResourceUsage == RESOURCEUSAGE_LUXURY)
 					{
 						eTradableResource = eResource;
@@ -2020,7 +2020,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 		uiCounselIndex++;
 	}
 
-	// search for each advisor type. If there isn't an entry of that type, add the default string
+
 	bool abAdvisorUsed[NUM_ADVISOR_TYPES];
 	for(uint ui = 0; ui < NUM_ADVISOR_TYPES; ui++)
 	{
@@ -2068,7 +2068,7 @@ void CvAdvisorCounsel::BuildCounselList(PlayerTypes ePlayer)
 		}
 	}
 
-	// sort the list
+
 	std::sort(&m_aCounsel[0], &m_aCounsel[0] + m_aCounsel.size(), CounselSort);
 }
 

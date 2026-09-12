@@ -73,8 +73,8 @@ int main(){
         if(!logging && requested==1 && n>32){oldCmp[reject]+=before;newCmp[reject]+=sortComparisons+heapComparisons;}
         ++cases; attempted+=a.attempts.size();
     }
-    // Actual snapshot block versus original assignment; include an appended minor
-    // player's plots to verify first-sentinel behavior remains unchanged.
+
+
     typedef std::vector<int> CvPlotsVector;
     struct Player {CvPlotsVector plots; const CvPlotsVector& GetPlots(){return plots;}} player;
     Player* m_pPlayer=&player;

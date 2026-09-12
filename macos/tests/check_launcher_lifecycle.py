@@ -1,4 +1,4 @@
-"""Compile the actual launcher model and exercise its process transitions."""
+
 from pathlib import Path
 import platform
 import subprocess

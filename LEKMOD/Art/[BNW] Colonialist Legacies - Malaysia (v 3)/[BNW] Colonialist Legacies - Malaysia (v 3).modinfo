@@ -42,7 +42,7 @@
   </References>
   <Blocks />
   <Files>
-	<!-- -->
+
     <File md5="90610ABB61DEE694BD310FA69510AE53" import="1">Art/Graphics/Kampung/Coracle_256.dds</File>
     <File md5="FC57BB14E0E85FFF1745668A61CAA7EA" import="1">Art/Graphics/Kampung/southpacific.dds</File>
     <File md5="C1E942858990B65B29879599F417FE1D" import="1">Art/Graphics/Kampung/sv_Kampung.dds</File>

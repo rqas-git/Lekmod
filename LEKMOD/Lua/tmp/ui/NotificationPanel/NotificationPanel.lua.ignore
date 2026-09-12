@@ -1,9 +1,9 @@
--------------------------------------------------
--- edit: MP voting system for vanilla UI
--- edit: FIX Events.NotificationRemoved missing PlayerID argument 
--------------------------------------------------
--- Action Info Panel
--------------------------------------------------
+
+
+
+
+
+
 include( "IconSupport" );
 include( "InstanceManager" );
 
@@ -11,9 +11,9 @@ local g_ActiveNotifications = {};
 local g_Instances = {};
 
 
--------------------------------------------------------------------------------
--- details for dynamically sizing the small notification stack
--------------------------------------------------------------------------------
+
+
+
 local DIPLO_SIZE_GUESS = 120;
 local _, screenY = UIManager:GetScreenSizeVal();
 local _, offsetY = Controls.OuterStack:GetOffsetVal();
@@ -21,22 +21,22 @@ local g_SmallScrollMax = screenY - offsetY - DIPLO_SIZE_GUESS;
 
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function GenericLeftClick( Id )
 	UI.ActivateNotification( Id )
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function GenericRightClick ( Id )
 	UI.RemoveNotification( Id )
 end
 
-------------------------------------------------------------------------------------
--- set up the exceptions
-------------------------------------------------------------------------------------
+
+
+
 Controls["TechButton"]:RegisterCallback(Mouse.eLClick, GenericLeftClick);
 Controls["TechButton"]:RegisterCallback(Mouse.eRClick, GenericRightClick);
 Controls["ProductionButton"]:RegisterCallback(Mouse.eLClick, GenericLeftClick);
@@ -58,9 +58,9 @@ Controls["ChooseArchaeologyButton"]:RegisterCallback(Mouse.eRClick, GenericRight
 Controls["LeagueCallForVotesButton"]:RegisterCallback(Mouse.eRClick, GenericRightClick);
 Controls["ChooseIdeologyButton"]:RegisterCallback(Mouse.eRClick, GenericRightClick);
 
-------------------------------------------------------------------------------------
--- build the list of types we can handle
-------------------------------------------------------------------------------------
+
+
+
 local g_NameTable = {};
 g_NameTable[ -1 ]																= "Generic";
 g_NameTable[ NotificationTypes.NOTIFICATION_POLICY ]							= "SocialPolicy";
@@ -77,16 +77,16 @@ g_NameTable[ NotificationTypes.NOTIFICATION_CITY_GROWTH ]						= "CityGrowth";
 g_NameTable[ NotificationTypes.NOTIFICATION_CITY_TILE ]							= "CityTile";
 g_NameTable[ NotificationTypes.NOTIFICATION_DEMAND_RESOURCE ]					= "BonusResource";
 g_NameTable[ NotificationTypes.NOTIFICATION_UNIT_PROMOTION ]					= "UnitPromoted";
---g_NameTable[ NotificationTypes.NOTIFICATION_WONDER_STARTED ]					= "WonderConstructed";
+
 g_NameTable[ NotificationTypes.NOTIFICATION_WONDER_COMPLETED_ACTIVE_PLAYER]     = "WonderConstructed";
 g_NameTable[ NotificationTypes.NOTIFICATION_WONDER_COMPLETED ]					= "WonderConstructed";
 g_NameTable[ NotificationTypes.NOTIFICATION_WONDER_BEATEN ]						= "WonderConstructed";
 g_NameTable[ NotificationTypes.NOTIFICATION_GOLDEN_AGE_BEGUN_ACTIVE_PLAYER ]	= "GoldenAge";
---g_NameTable[ NotificationTypes.NOTIFICATION_GOLDEN_AGE_BEGUN ]				= "GoldenAge";
+
 g_NameTable[ NotificationTypes.NOTIFICATION_GOLDEN_AGE_ENDED_ACTIVE_PLAYER ]	= "GoldenAge";
---g_NameTable[ NotificationTypes.NOTIFICATION_GOLDEN_AGE_ENDED ]				= "GoldenAge";
+
 g_NameTable[ NotificationTypes.NOTIFICATION_GREAT_PERSON_ACTIVE_PLAYER ]		= "GreatPerson";
---g_NameTable[ NotificationTypes.NOTIFICATION_GREAT_PERSON ]					= "GreatPerson";
+
 g_NameTable[ NotificationTypes.NOTIFICATION_STARVING ]							= "Starving";
 g_NameTable[ NotificationTypes.NOTIFICATION_WAR_ACTIVE_PLAYER ]                 = "War";
 g_NameTable[ NotificationTypes.NOTIFICATION_WAR ]								= "WarOther";
@@ -102,7 +102,7 @@ g_NameTable[ NotificationTypes.NOTIFICATION_PLAYER_KILLED ]						= "CapitalLost"
 g_NameTable[ NotificationTypes.NOTIFICATION_DISCOVERED_LUXURY_RESOURCE ]		= "LuxuryResource";
 g_NameTable[ NotificationTypes.NOTIFICATION_DISCOVERED_STRATEGIC_RESOURCE ]		= "StrategicResource";
 g_NameTable[ NotificationTypes.NOTIFICATION_DISCOVERED_BONUS_RESOURCE ]			= "BonusResource";
---g_NameTable[ NotificationTypes.NOTIFICATION_POLICY_ADOPTION ]					= "Generic";
+
 g_NameTable[ NotificationTypes.NOTIFICATION_DIPLO_VOTE ]						= "Generic";
 g_NameTable[ NotificationTypes.NOTIFICATION_RELIGION_RACE ]						= "Generic";
 g_NameTable[ NotificationTypes.NOTIFICATION_EXPLORATION_RACE ]					= "NaturalWonder";
@@ -235,19 +235,19 @@ g_NameTable[ NotificationTypes.NOTIFICATION_MP_SCRAP_PROPOSAL ] = "MPVotingSyste
 g_NameTable[ NotificationTypes.NOTIFICATION_MP_REMAP_PROPOSAL ] = "MPVotingSystemProposal";
 g_NameTable[ NotificationTypes.NOTIFICATION_MP_PROPOSAL_RESULT ] = "MPVotingSystemResult";
 
-------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------
---- Actual new notification entry point
-------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------
 
--------------------------------------------------
--------------------------------------------------
+
+
+
+
+
+
+
 function OnNotificationAdded( Id, type, toolTip, strSummary, iGameValue, iExtraGameData, ePlayer )
-	--print('------new notification-------')
-	--print('UI_id', Id)
-	--print('type', type)
-	--print('-----------------------------')
+
+
+
+
 
 	if(g_ActiveNotifications[ Id ] ~= nil) then
         return;
@@ -318,8 +318,8 @@ function OnNotificationAdded( Id, type, toolTip, strSummary, iGameValue, iExtraG
 			or type == NotificationTypes.NOTIFICATION_MP_CC_PROPOSAL
 			or type == NotificationTypes.NOTIFICATION_MP_SCRAP_PROPOSAL
 			then
-			--print('irr/cc/scrap notification setup')
-			--print('icon hookup for proposal owner:', iGameValue)
+
+
 			local playerID = Game.GetProposalOwner( iGameValue )
 
 			if type == NotificationTypes.NOTIFICATION_MP_IRR_PROPOSAL then
@@ -329,8 +329,8 @@ function OnNotificationAdded( Id, type, toolTip, strSummary, iGameValue, iExtraG
 			elseif type == NotificationTypes.NOTIFICATION_MP_SCRAP_PROPOSAL then
 				instance.StatusFrame:SetText('[ICON_FLOWER]')
 			end
-			-- debug only
-			--instance.StatusFrame:SetText(Id .. '|' .. Game.GetProposalIDbyUIid(Id) .. '/' .. Game.GetLastProposalID())
+
+
 			
 			LuaEvents.OnProposalCreated()
 			CivIconHookup( playerID, 45, instance.CivIcon, instance.CivIconBG, instance.CivIconShadow, false, true );
@@ -341,11 +341,11 @@ function OnNotificationAdded( Id, type, toolTip, strSummary, iGameValue, iExtraG
 			CivIconHookup( 0, 45, instance.CivIcon, instance.CivIconBG, instance.CivIconShadow, false, true );
 		elseif type == NotificationTypes.NOTIFICATION_MP_PROPOSAL_RESULT then
 			if Game.GetProposalStatus( iGameValue ) == 1 then
-				instance.MPVotingSystemResultCancelImage:SetHide(true)  -- hide cancel frame
+				instance.MPVotingSystemResultCancelImage:SetHide(true)
 			else
-				instance.MPVotingSystemResultCancelImage:SetHide(false)  -- show cancel frame
+				instance.MPVotingSystemResultCancelImage:SetHide(false)
 			end
-			--return IconHookup( 57, 64, GameInfo.Policies.POLICY_LEGALISM.IconAtlas, instance.MPVotingSystemProposalResultImage )
+
 		elseif type == NotificationTypes.NOTIFICATION_PROJECT_COMPLETED then
 			if iGameValue ~= -1 then
 				local portraitIndex = GameInfo.Projects[iGameValue].PortraitIndex;
@@ -417,12 +417,12 @@ function OnNotificationAdded( Id, type, toolTip, strSummary, iGameValue, iExtraG
 			index = team:GetLeaderID();
 			CivIconHookup( index, 45, instance.Peace2Image, instance.Civ2IconBG, instance.Civ2IconShadow, false, true );
 		elseif type == NotificationTypes.NOTIFICATION_GREAT_WORK_COMPLETED_ACTIVE_PLAYER then
-			--if iGameValue ~= -1 then
-				--local portraitIndex = GameInfo.Buildings[iGameValue].PortraitIndex;
-				--if portraitIndex ~= -1 then
-					--IconHookup( portraitIndex, 80, GameInfo.Buildings[iGameValue].IconAtlas, instance.WonderConstructedAlphaAnim );				
-				--end
-			--end
+
+
+
+
+
+
 			if iExtraGameData ~= -1 then
 				CivIconHookup( iExtraGameData, 45, instance.CivIcon, instance.CivIconBG, instance.CivIconShadow, false, true );
 				instance.WonderSmallCivFrame:SetHide(false);				
@@ -454,8 +454,8 @@ end
 Events.NotificationAdded.Add( OnNotificationAdded );
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function RemoveNotificationID( Id )
 
     if( g_ActiveNotifications[ Id ] == nil )
@@ -501,11 +501,11 @@ function RemoveNotificationID( Id )
 	g_ActiveNotifications[ Id ] = nil;    
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function NotificationRemoved( Id )
 
-    --print( "removing Notification " .. Id .. " " .. tostring( g_ActiveNotifications[ Id ] ) .. " " .. tostring( g_NameTable[ g_ActiveNotifications[ Id ] ] ) );
+
         
 	RemoveNotificationID( Id );	
     ProcessStackSizes();
@@ -513,12 +513,12 @@ function NotificationRemoved( Id )
 end
 Events.NotificationRemoved.Add( NotificationRemoved );
 
-----------------------------------------------------------------
--- 'Active' (local human) player has changed
-----------------------------------------------------------------
+
+
+
 function OnNotificationPanelActivePlayerChanged( iActivePlayer, iPrevActivePlayer )
 
-	-- Remove all the UI notifications.  The new player will rebroadcast any persistent ones from their last turn	
+
 	for thisID, thisType in pairs(g_ActiveNotifications) do
 		RemoveNotificationID(thisID);
 	end
@@ -527,8 +527,8 @@ end
 Events.GameplaySetActivePlayer.Add(OnNotificationPanelActivePlayerChanged);
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function ProcessStackSizes()
 
     Controls.BigStack:CalculateSize();
@@ -549,9 +549,9 @@ function ProcessStackSizes()
     Controls.OuterStack:ReprocessAnchoring();	  
 end
 
-----------------------------------------------------------------
--- 'Active' (local human) player has changed
-----------------------------------------------------------------
+
+
+
 function OnNotificationsActivePlayerChanged( iActivePlayer, iPrevActivePlayer )
 	UI.RebroadcastNotifications();
 	ProcessStackSizes();

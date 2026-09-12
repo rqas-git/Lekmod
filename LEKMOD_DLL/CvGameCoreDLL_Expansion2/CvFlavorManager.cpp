@@ -1,18 +1,18 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvFlavorManager.h"
 #include "CvMinorCivAI.h"
 
-// must be included after all other headers
+
 #include "LintFree.h"
 
-/// Constructor
+
 CvFlavorRecipient::CvFlavorRecipient():
 	m_piLatestFlavorValues(NULL)
 #ifdef AUI_WARNING_FIXES
@@ -22,13 +22,13 @@ CvFlavorRecipient::CvFlavorRecipient():
 
 }
 
-/// Destructor
+
 CvFlavorRecipient::~CvFlavorRecipient()
 {
 
 }
 
-/// Initialize data
+
 void CvFlavorRecipient::Init()
 {
 	int iNumFlavors = GC.getNumFlavorTypes();
@@ -36,19 +36,19 @@ void CvFlavorRecipient::Init()
 	memset(m_piLatestFlavorValues, 0, iNumFlavors * sizeof(int));
 }
 
-/// Deallocate memory created in initialize
+
 void CvFlavorRecipient::Uninit()
 {
 	SAFE_DELETE_ARRAY(m_piLatestFlavorValues);
 }
 
-/// Returns whether or not this Recipient is a City
+
 bool CvFlavorRecipient::IsCity()
 {
 	return m_bIsCity;
 }
 
-/// Public function that other classes can call to set/reset this recipient's flavors
+
 void CvFlavorRecipient::SetFlavors(int* piUpdatedFlavorValues)
 {
 	CvAssertMsg(piUpdatedFlavorValues != NULL, "Invalid array of flavor deltas passed to flavor recipient");
@@ -67,13 +67,13 @@ void CvFlavorRecipient::SetFlavors(int* piUpdatedFlavorValues)
 
 		m_piLatestFlavorValues[iI] = piUpdatedFlavorValues[iI];
 
-//		LogFlavors((FlavorTypes) iI);
+
 	}
 
 	FlavorUpdate();
 }
 
-/// Public function that other classes can call to change this recipient's flavors
+
 void CvFlavorRecipient::ChangeFlavors(int* piDeltaFlavorValues, bool bDontLog)
 {
 
@@ -81,8 +81,8 @@ void CvFlavorRecipient::ChangeFlavors(int* piDeltaFlavorValues, bool bDontLog)
 
 	if(!piDeltaFlavorValues) return;
 
-	int iFlavorMinValue = /*-1000*/ GC.getFLAVOR_MIN_VALUE();
-	int iFlavorMaxValue = /*1000*/ GC.getFLAVOR_MAX_VALUE();
+	int iFlavorMinValue =           GC.getFLAVOR_MIN_VALUE();
+	int iFlavorMaxValue =          GC.getFLAVOR_MAX_VALUE();
 
 	int iNumFlavors = GC.getNumFlavorTypes();
 	for(int iI = 0; iI < iNumFlavors; iI++)
@@ -91,7 +91,7 @@ void CvFlavorRecipient::ChangeFlavors(int* piDeltaFlavorValues, bool bDontLog)
 		{
 			m_piLatestFlavorValues[iI] += piDeltaFlavorValues[iI];
 
-			// Make sure within range
+
 			if(m_piLatestFlavorValues[iI] < iFlavorMinValue)
 			{
 				m_piLatestFlavorValues[iI] = iFlavorMinValue;
@@ -111,7 +111,7 @@ void CvFlavorRecipient::ChangeFlavors(int* piDeltaFlavorValues, bool bDontLog)
 	FlavorUpdate();
 }
 
-/// LatestFlavorValue Accessor Function
+
 int CvFlavorRecipient::GetLatestFlavorValue(FlavorTypes eFlavor, bool bAllowNegative)
 {
 	CvAssertMsg(eFlavor > -1, "Out of bounds.");
@@ -125,7 +125,7 @@ int CvFlavorRecipient::GetLatestFlavorValue(FlavorTypes eFlavor, bool bAllowNega
 	return m_piLatestFlavorValues[eFlavor];
 }
 
-/// Constructor
+
 CvFlavorManager::CvFlavorManager(void):
 	m_piPersonalityFlavor(NULL),
 	m_piActiveFlavor(NULL)
@@ -136,21 +136,21 @@ CvFlavorManager::CvFlavorManager(void):
 
 }
 
-/// Destructor
+
 CvFlavorManager::~CvFlavorManager(void)
 {
 	Uninit();
 }
 
-/// Initialize
+
 void CvFlavorManager::Init(CvPlayer* pPlayer)
 {
 	unsigned int iI;
 
-	// Copy off inputs
+
 	m_pPlayer = pPlayer;
 
-	// Allocate memory
+
 #ifdef AUI_WARNING_FIXES
 	SAFE_DELETE_ARRAY(m_piPersonalityFlavor);
 	SAFE_DELETE_ARRAY(m_piActiveFlavor);
@@ -159,17 +159,17 @@ void CvFlavorManager::Init(CvPlayer* pPlayer)
 	m_piActiveFlavor = FNEW(int[GC.getNumFlavorTypes()], c_eCiv5GameplayDLL, 0);
 	m_FlavorTargetList.get_allocator().Reserve((3*64)+100);
 
-	// Clear variables
+
 	Reset();
 
-	// If this is a live player, go ahead and set up his flavor preferences
+
 	PlayerTypes p = pPlayer->GetID();
 	if(p != NO_PLAYER)
 	{
 		SlotStatus s = CvPreGame::slotStatus(p);
 		if((s == SS_TAKEN || s == SS_COMPUTER) && !pPlayer->isBarbarian())
 		{
-			// Copy over leaderhead defaults unless human
+
 			if(!pPlayer->isHuman())
 			{
 				LeaderHeadTypes type = pPlayer->getPersonalityType();
@@ -183,18 +183,18 @@ void CvFlavorManager::Init(CvPlayer* pPlayer)
 
 						for(iI = 0; iI < uiNumFlavorTypes; iI++)
 						{
-							// Majors use Leader XML Flavors
+
 							if(!pPlayer->isMinorCiv())
 							{
 								m_piPersonalityFlavor[iI] = pkLeaderHeadInfo->getFlavorValue(iI);
 							}
-							// Minors use Minor XML Flavors
+
 							else
 							{
 								m_piPersonalityFlavor[iI] = GC.getMinorCivInfo(pPlayer->GetMinorCivAI()->GetMinorCivType())->getFlavorValue(iI);
 							}
 
-							// If no Flavor value is set in the XML use the Default
+
 							if(m_piPersonalityFlavor[iI] == -1)
 							{
 								m_piPersonalityFlavor[iI] = iDefaultFlavorValue;
@@ -203,11 +203,11 @@ void CvFlavorManager::Init(CvPlayer* pPlayer)
 					}
 				}
 
-				// Tweak from default values
+
 				RandomizeWeights();
 			}
 
-			// Human player, just set all flavors to average (5)
+
 			else
 			{
 				int iDefaultFlavorValue = GC.getDEFAULT_FLAVOR_VALUE();
@@ -218,7 +218,7 @@ void CvFlavorManager::Init(CvPlayer* pPlayer)
 				}
 			}
 
-			// Send out updated values to all recipients
+
 			BroadcastBaseFlavors();
 
 			ResetToBasePersonality();
@@ -231,7 +231,7 @@ void CvFlavorManager::Init(CvPlayer* pPlayer)
 	}
 }
 
-/// Deallocate memory created in initialize
+
 void CvFlavorManager::Uninit()
 {
 	SAFE_DELETE_ARRAY(m_piPersonalityFlavor);
@@ -239,7 +239,7 @@ void CvFlavorManager::Uninit()
 	m_FlavorTargetList.clear();
 }
 
-/// Reset member variables
+
 void CvFlavorManager::Reset()
 {
 	int iI;
@@ -251,10 +251,10 @@ void CvFlavorManager::Reset()
 	}
 }
 
-/// Serialization read
+
 void CvFlavorManager::Read(FDataStream& kStream)
 {
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion;
 	kStream >> uiVersion;
 
@@ -270,10 +270,10 @@ void CvFlavorManager::Read(FDataStream& kStream)
 	kStream >> wrapm_piActiveFlavor;
 }
 
-/// Serialization write
+
 void CvFlavorManager::Write(FDataStream& kStream)
 {
-	// Current version number
+
 	uint uiVersion = 1;
 	kStream << uiVersion;
 
@@ -283,20 +283,20 @@ void CvFlavorManager::Write(FDataStream& kStream)
 	kStream << ArrayWrapper<int>(GC.getNumFlavorTypes(), m_piActiveFlavor);
 }
 
-/// Register a new recipient of the player's global flavors
+
 void CvFlavorManager::AddFlavorRecipient(CvFlavorRecipient* pTargetObject, bool bPropegateFlavorValues)
 {
-	// Add this one to our list
+
 	m_FlavorTargetList.push_back(pTargetObject);
 
-	// If we've already been initialized, then go ahead and send out current values
+
 	if(m_piPersonalityFlavor != NULL && bPropegateFlavorValues)
 	{
 		pTargetObject->SetFlavors(m_piPersonalityFlavor);
 	}
 }
 
-/// Remove the recipient
+
 void CvFlavorManager::RemoveFlavorRecipient(CvFlavorRecipient* pTargetObject)
 {
 #ifdef AUI_ITERATOR_POSTFIX_INCREMENT_OPTIMIZATIONS
@@ -323,7 +323,7 @@ void CvFlavorManager::RemoveFlavorRecipient(CvFlavorRecipient* pTargetObject)
 	}
 }
 
-/// Update to a new set of flavors
+
 void CvFlavorManager::ChangeFlavors(int* piDeltaFlavorValues, bool	bPlayerLevelUpdate)
 {
 	CvAssertMsg(piDeltaFlavorValues != NULL, "Invalid array of flavor deltas passed to flavor manager");
@@ -332,8 +332,8 @@ void CvFlavorManager::ChangeFlavors(int* piDeltaFlavorValues, bool	bPlayerLevelU
 
 	if (bPlayerLevelUpdate)
 	{
-		int iFlavorMinValue = /*-1000*/ GC.getFLAVOR_MIN_VALUE();
-		int iFlavorMaxValue = /*1000*/ GC.getFLAVOR_MAX_VALUE();
+		int iFlavorMinValue =           GC.getFLAVOR_MIN_VALUE();
+		int iFlavorMaxValue =          GC.getFLAVOR_MAX_VALUE();
 
 		int iNumFlavors = GC.getNumFlavorTypes();
 		for(int iI = 0; iI < iNumFlavors; iI++)
@@ -342,7 +342,7 @@ void CvFlavorManager::ChangeFlavors(int* piDeltaFlavorValues, bool	bPlayerLevelU
 			{
 				m_piActiveFlavor[iI] += piDeltaFlavorValues[iI];
 
-				// Make sure within range
+
 				if(m_piActiveFlavor[iI] < iFlavorMinValue)
 				{
 					m_piActiveFlavor[iI] =iFlavorMinValue;
@@ -360,7 +360,7 @@ void CvFlavorManager::ChangeFlavors(int* piDeltaFlavorValues, bool	bPlayerLevelU
 	BroadcastFlavors(piDeltaFlavorValues, bPlayerLevelUpdate);
 }
 
-/// Resets active settings to player's base personality
+
 void CvFlavorManager::ResetToBasePersonality()
 {
 	int iI;
@@ -373,7 +373,7 @@ void CvFlavorManager::ResetToBasePersonality()
 	BroadcastBaseFlavors();
 }
 
-/// Make some adjustments to flavors based on the map we're on
+
 void CvFlavorManager::AdjustWeightsForMap()
 {
 	int iTotalLandTiles;
@@ -388,25 +388,25 @@ void CvFlavorManager::AdjustWeightsForMap()
 	if(iNumPlayers > 0)
 	{
 		int iNumFlavorTypes = GC.getNumFlavorTypes();
-		// Find tiles per player
+
 		iTilesPerPlayer = (double)iTotalLandTiles / (double)iNumPlayers;
 
-		// Compute +/- addition
-		//
-		// We want this to be logarithmic, since that is the curve between lots of players on a duel map
-		// and a few player on a huge map.  "FLAVOR_STANDARD_LOG10_TILES_PER_PLAYER" is the typical log10 of
-		// tiles per player.  We go up and down from this point (multiplying by a coefficient) from here
+
+
+
+
+
 		fAdjust = log10(iTilesPerPlayer) - GC.getFLAVOR_STANDARD_LOG10_TILES_PER_PLAYER();
 		fAdjust *= (double)GC.getFLAVOR_EXPANDGROW_COEFFICIENT();
 		iAdjust = (int)fAdjust;
 
-		int iFlavorMaxValue = /*20*/ GC.getPERSONALITY_FLAVOR_MAX_VALUE();
-		int iFlavorMinValue = /*0*/ GC.getPERSONALITY_FLAVOR_MIN_VALUE();
+		int iFlavorMaxValue =        GC.getPERSONALITY_FLAVOR_MAX_VALUE();
+		int iFlavorMinValue =       GC.getPERSONALITY_FLAVOR_MIN_VALUE();
 
 		int iExpansionIndex = GC.getInfoTypeForString("FLAVOR_EXPANSION");
 		int iGrowthIndex = GC.getInfoTypeForString("FLAVOR_GROWTH");
 
-		// Boost expansion
+
 		CvAssert(iExpansionIndex >= 0 && iExpansionIndex < iNumFlavorTypes);
 		if (iExpansionIndex >= 0 && iExpansionIndex < iNumFlavorTypes)
 		{
@@ -417,7 +417,7 @@ void CvFlavorManager::AdjustWeightsForMap()
 			}
 		}
 
-		// Reduce growth
+
 		CvAssert(iGrowthIndex >= 0 && iGrowthIndex < iNumFlavorTypes);
 		if (iGrowthIndex >= 0 && iGrowthIndex < iNumFlavorTypes)
 		{
@@ -428,52 +428,52 @@ void CvFlavorManager::AdjustWeightsForMap()
 			}
 		}
 
-		// Save these off as our core personality and broadcast updates
+
 		ResetToBasePersonality();
 	}
 }
 
-/// Retrieve the current value of one flavor
+
 int CvFlavorManager::GetIndividualFlavor(FlavorTypes eType)
 {
 	CvAssert((int)eType >= 0 && (int)eType < GC.getNumFlavorTypes());
 	return m_piActiveFlavor[eType];
 }
 
-/// Retrieve the current value of all flavors
+
 int* CvFlavorManager::GetAllFlavors()
 {
 	return m_piActiveFlavor;
 }
 
-/// Retrieve the value of one Personality flavor
+
 int CvFlavorManager::GetPersonalityIndividualFlavor(FlavorTypes eType)
 {
 	CvAssert((int)eType >= 0 && (int)eType < GC.getNumFlavorTypes());
 	return m_piPersonalityFlavor[eType];
 }
 
-/// Retrieve the value of all Personality flavors
+
 int* CvFlavorManager::GetAllPersonalityFlavors()
 {
 	return m_piPersonalityFlavor;
 }
 
-// PRIVATE METHODS
 
-/// Make a random adjustment to each flavor value for this leader so they don't play exactly the same
+
+
 void CvFlavorManager::RandomizeWeights()
 {
 	int iI;
 	int iMin, iMax, iPlusMinus;
 
-	iMin = /*0*/ GC.getPERSONALITY_FLAVOR_MIN_VALUE();
-	iMax = /*20*/ GC.getPERSONALITY_FLAVOR_MAX_VALUE();
-	iPlusMinus = /*2*/ GC.getFLAVOR_RANDOMIZATION_RANGE();
+	iMin =       GC.getPERSONALITY_FLAVOR_MIN_VALUE();
+	iMax =        GC.getPERSONALITY_FLAVOR_MAX_VALUE();
+	iPlusMinus =       GC.getFLAVOR_RANDOMIZATION_RANGE();
 
 	for(iI = 0; iI < GC.getNumFlavorTypes(); iI++)
 	{
-		// Don't modify it if it's zero-ed out in the XML
+
 #ifdef AUI_FLAVOR_MANAGER_FIX_RANDOMIZE_WEIGHTS_ZEROED_OUT_FLAVOR
 		if (m_piPersonalityFlavor[iI] >= 0)
 #else
@@ -486,9 +486,9 @@ void CvFlavorManager::RandomizeWeights()
 }
 
 #ifdef AUI_FLAVOR_MANAGER_GET_ADJUSTED_VALUE_USES_BINOM_RNG
-/// Add a random plus/minus to an integer (but keep it in range); distribution remains normal
+
 #else
-/// Add a random plus/minus to an integer (but keep it in range)
+
 #endif
 int CvFlavorManager::GetAdjustedValue(int iOriginalValue, int iPlusMinus, int iMin, int iMax)
 {
@@ -536,7 +536,7 @@ int CvFlavorManager::GetAdjustedValue(int iOriginalValue, int iPlusMinus, int iM
 	return iRtnValue;
 }
 
-/// Sends current flavor settings to all recipients
+
 void CvFlavorManager::BroadcastFlavors(int* piDeltaFlavorValues, bool bPlayerLevelUpdate)
 {
 	Flavor_List::iterator it;
@@ -558,7 +558,7 @@ void CvFlavorManager::BroadcastFlavors(int* piDeltaFlavorValues, bool bPlayerLev
 	}
 }
 
-/// Sends base personality flavor settings to all recipients
+
 void CvFlavorManager::BroadcastBaseFlavors()
 {
 	Flavor_List::iterator it;
@@ -584,10 +584,10 @@ void CvFlavorManager::LogFlavors(FlavorTypes eFlavor)
 
 	if(GC.getLogging() && GC.getAILogging())
 	{
-		// Find the name of this civ
+
 		playerName = m_pPlayer->getCivilizationShortDescription();
 
-		// Open the log file
+
 		if(GC.getPlayerAndCityAILogSplit())
 		{
 			strLogName = "FlavorAILog_" + playerName + ".csv";
@@ -600,17 +600,17 @@ void CvFlavorManager::LogFlavors(FlavorTypes eFlavor)
 		FILogFile* pLog;
 		pLog = LOGFILEMGR.GetLog(strLogName, FILogFile::kDontTimeStamp);
 
-		// Get the leading info for this line
+
 		strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 		strBaseString += playerName + ", ";
 
-		// Dump out the setting for each flavor
+
 		if(eFlavor == NO_FLAVOR)
 		{
 			for(int iI = 0; iI < GC.getNumFlavorTypes(); iI++)
 			{
-				// Only dump if non-zero
-				//		if (m_piLatestFlavorValues[iI] > 0)
+
+
 				{
 					strTemp.Format("Flavor, %s, %d", GC.getFlavorTypes((FlavorTypes)iI).GetCString(), GetIndividualFlavor((FlavorTypes) iI));
 					strOutBuf = strBaseString + strTemp;

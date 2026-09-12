@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 12/24/2015 10:59:11 PM -->
+
 <GameData>
 	
-	<!-- localization -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_TRAIT_SLAYER_OF_TIAMAT" />
 		<Row Tag="TXT_KEY_TRAIT_SLAYER_OF_TIAMAT">

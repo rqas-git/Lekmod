@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 5/4/2016 8:55:44 AM -->
+
 <GameData>
 
-	<!-- Janissaries now cost 20% less -->
+
 	<Units>
 		<Update>
 			<Set Cost="120" FaithCost="240" />

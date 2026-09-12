@@ -1,4 +1,4 @@
--- Compare coastline/lake output, RNG traces, and feature defaults with the original scripts.
+
 assert(_VERSION == 'Lua 5.1')
 local directory = assert(arg[1])
 local variants = {'', 'Rectangular'}

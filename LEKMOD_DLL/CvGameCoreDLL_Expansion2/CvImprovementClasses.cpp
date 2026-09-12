@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	ù 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "ICvDLLUserInterface.h"
 #include "CvGameCoreUtils.h"
@@ -12,18 +12,18 @@
 #include "FireWorks/FRemark.h"
 #include "CvInfosSerializationHelper.h"
 
-// must be included after all other headers
+
 #include "LintFree.h"
 
 #ifdef _MSC_VER
-#pragma warning ( disable : 4505 ) // unreferenced local function has been removed.. needed by REMARK below
-#endif//_MSC_VER
+#pragma warning ( disable : 4505 )
+#endif
 REMARK_GROUP("CvImprovementClasses");
 
 
-//======================================================================================================
-//					CvImprovementResourceInfo
-//======================================================================================================
+
+
+
 CvImprovementResourceInfo::CvImprovementResourceInfo() :
 	m_iDiscoverRand(0),
 	m_bResourceMakesValid(false),
@@ -31,38 +31,38 @@ CvImprovementResourceInfo::CvImprovementResourceInfo() :
 	m_piYieldChange(NULL)
 {
 }
-//------------------------------------------------------------------------------
+
 CvImprovementResourceInfo::~CvImprovementResourceInfo()
 {
 	SAFE_DELETE_ARRAY(m_piYieldChange);
 }
-//------------------------------------------------------------------------------
+
 int CvImprovementResourceInfo::getDiscoverRand() const
 {
 	return m_iDiscoverRand;
 }
-//------------------------------------------------------------------------------
+
 bool CvImprovementResourceInfo::isResourceMakesValid() const
 {
 	return m_bResourceMakesValid;
 }
-//------------------------------------------------------------------------------
+
 bool CvImprovementResourceInfo::isResourceTrade() const
 {
 	return m_bResourceTrade;
 }
-//------------------------------------------------------------------------------
+
 int CvImprovementResourceInfo::getYieldChange(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
 	CvAssertMsg(i > -1, "Index out of bounds");
 	return m_piYieldChange ? m_piYieldChange[i] : -1;
 }
-//------------------------------------------------------------------------------
 
-//======================================================================================================
-//					CvImprovementEntry
-//======================================================================================================
+
+
+
+
 CvImprovementEntry::CvImprovementEntry(void):
 	m_iGoldMaintenance(0),
 	m_iCultureBombRadius(0),
@@ -169,7 +169,7 @@ CvImprovementEntry::CvImprovementEntry(void):
 {
 }
 
-/// Destructor
+
 CvImprovementEntry::~CvImprovementEntry(void)
 {
 	SAFE_DELETE_ARRAY(m_piResourceQuantityRequirements);
@@ -189,7 +189,7 @@ CvImprovementEntry::~CvImprovementEntry(void)
 
 	if(m_paImprovementResource != NULL)
 	{
-		SAFE_DELETE_ARRAY(m_paImprovementResource); // XXX make sure this isn't leaking memory...
+		SAFE_DELETE_ARRAY(m_paImprovementResource);
 	}
 
 #ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
@@ -252,17 +252,17 @@ CvImprovementEntry::~CvImprovementEntry(void)
 #endif
 }
 
-/// Read from XML file
+
 bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 #ifdef LEKMOD_ADJACENT_IMPROVEMENT_YIELD
-	// Recomputed by the database loader after the full improvement list is ready.
+
 	m_bHasAnyAdjacencyYieldBonus = false;
 #endif
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
 		return false;
 
-	//Basic properties
+
 	const char* szArtDefineTag = kResults.GetText("ArtDefineTag");
 	SetArtDefineTag(szArtDefineTag);
 
@@ -314,7 +314,7 @@ bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUti
 	m_bNoTwoAdjacent = kResults.GetBool("NoTwoAdjacent");
 	m_bAdjacentLuxury = kResults.GetBool("AdjacentLuxury");
 	m_bAllowsWalkWater = kResults.GetBool("AllowsWalkWater");
-	m_bAllowsSailLand = kResults.GetBool("AllowsSailLand"); // from Izy
+	m_bAllowsSailLand = kResults.GetBool("AllowsSailLand");
 	m_bCreatedByGreatPerson = kResults.GetBool("CreatedByGreatPerson");
 	m_bSpecificCivRequired = kResults.GetBool("SpecificCivRequired");
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
@@ -338,7 +338,7 @@ bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUti
 	SetIconString(szIconString);
 #endif
 
-	//References
+
 	const char* szWorldsoundscapeAudioScript = kResults.GetText("WorldSoundscapeAudioScript");
 	if(szWorldsoundscapeAudioScript != NULL)
 	{
@@ -356,7 +356,7 @@ bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUti
 	const char* szImprovementUpgrade = kResults.GetText("ImprovementUpgrade");
 	m_iImprovementUpgrade = GC.getInfoTypeForString(szImprovementUpgrade, true);
 
-	//Arrays
+
 	const char* szImprovementType = GetType();
 	const size_t lenImprovementType = strlen(szImprovementType);
 
@@ -396,7 +396,7 @@ bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUti
 
 
 	{
-		//Initialize Improvement Resource Types to number of Resources
+
 		const int iNumResources = kUtility.MaxRows("Resources");
 		m_paImprovementResource = FNEW(CvImprovementResourceInfo[iNumResources], c_eCiv5GameplayDLL, 0);
 
@@ -424,7 +424,7 @@ bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUti
 			pResourceInfo.m_iDiscoverRand = pResourceTypes->GetInt("DiscoveryRand");
 			m_piResourceQuantityRequirements[idx] = pResourceTypes->GetInt("QuantityRequirement");
 
-			//Populate Yields for structure
+
 			kUtility.InitializeArray(pResourceInfo.m_piYieldChange, "Yields");
 
 			pYieldResults->Bind(1, szImprovementType, lenImprovementType, false);
@@ -466,7 +466,7 @@ bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUti
 		pResults->Reset();
 	}
 #endif
-	//TechYieldChanges
+
 	{
 #ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
 		kUtility.Initialize2DArray(m_ppiTechYieldChanges.first, iNumTechs, iNumYields);
@@ -544,7 +544,7 @@ bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUti
 
 	}
 	
-	//ImprovementAdjacentBonus no Civilization but with amount
+
 	{
 		
 		const int iImprovementTypes = kUtility.MaxRows("Improvements");
@@ -586,7 +586,7 @@ bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUti
 
 #endif
 
-	//TechNoFreshWaterYieldChanges
+
 	{
 #ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
 		kUtility.Initialize2DArray(m_ppiTechNoFreshWaterYieldChanges.first, iNumTechs, iNumYields);
@@ -622,7 +622,7 @@ bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUti
 
 	}
 
-	//TechFreshWaterYieldChanges
+
 	{
 #ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
 		kUtility.Initialize2DArray(m_ppiTechFreshWaterYieldChanges.first, iNumTechs, iNumYields);
@@ -658,7 +658,7 @@ bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUti
 
 	}
 
-	//RouteYieldChanges
+
 	{
 		const int iNumRoutes = kUtility.MaxRows("Routes");
 #ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
@@ -698,26 +698,26 @@ bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUti
 	return true;
 }
 
-/// Support for custom improvement icons
+
 #ifdef LEKMOD_CUSTOM_IMPROVEMENT_ICONS
 const char* CvImprovementEntry::GetIconString() const
 {
 	return m_strIconString;
 }
-//------------------------------------------------------------------------------
+
 void CvImprovementEntry::SetIconString(const char* szVal)
 {
 	m_strIconString = szVal;
 }
 #endif
 
-/// The gold maintenance cost
+
 int CvImprovementEntry::GetGoldMaintenance() const
 {
 	return m_iGoldMaintenance;
 }
 
-/// Convert nearby tiles?
+
 int CvImprovementEntry::GetCultureBombRadius() const
 {
 	return m_iCultureBombRadius;
@@ -728,288 +728,288 @@ int CvImprovementEntry::GetCultureBombRadiusNeutral() const
 	return m_iCultureBombRadiusNeutral;
 }
 
-/// How many adjacent tiles must be land?
+
 int CvImprovementEntry::GetRequiresXAdjacentLand() const
 {
 	return m_iRequiresXAdjacentLand;
 }
 
-/// Bonus culture if another Improvement of same type is adjacent
+
 int CvImprovementEntry::GetCultureAdjacentSameType() const
 {
 	return m_iCultureAdjacentSameType;
 }
 
-/// The number of tiles in an area needed for a goody hut to be placed by the map generator
+
 int CvImprovementEntry::GetTilesPerGoody() const
 {
 	return m_iTilesPerGoody;
 }
 
-/// How far goody huts need to be away from each other
+
 int CvImprovementEntry::GetGoodyUniqueRange() const
 {
 	return m_iGoodyUniqueRange;
 }
 
-/// How likely this improvement is to expand into an adjacent tile
+
 int CvImprovementEntry::GetFeatureGrowthProbability() const
 {
 	return m_iFeatureGrowthProbability;
 }
 
-/// Amount of time needed before an improvement upgrades to its next state
+
 int CvImprovementEntry::GetUpgradeTime() const
 {
 	return m_iUpgradeTime;
 }
 
-/// Modifier for how much improvements upgrade if they are adjacent to a river
+
 int CvImprovementEntry::GetRiverSideUpgradeMod() const
 {
 	return m_iRiverSideUpgradeMod;
 }
 
-/// Modifier for how much improvements upgrade if they are on the coast
+
 int CvImprovementEntry::GetCoastalLandUpgradeMod() const
 {
 	return m_iCoastalLandUpgradeMod;
 }
 
-/// Modifier for how much improvements upgrade if they are on a hill
+
 int CvImprovementEntry::GetHillsUpgradeMod() const
 {
 	return m_iHillsUpgradeMod;
 }
 
-/// Modifier for how much improvements upgrade if they are exposed to fresh water
+
 int CvImprovementEntry::GetFreshWaterUpgradeMod() const
 {
 	return m_iFreshWaterUpgradeMod;
 }
 
-/// Modifier for the defensive improvement this improvement provides
+
 int CvImprovementEntry::GetDefenseModifier() const
 {
 	return m_iDefenseModifier;
 }
 
-/// Modifier for the defensive improvement this improvement provides Global ~EAP
+
 int CvImprovementEntry::GetDefenseModifierGlobal() const
 {
 	return m_iDefenseModifierGlobal;
 }
 
-/// Damage done to nearby enemy units
+
 int CvImprovementEntry::GetNearbyEnemyDamage() const
 {
 	return m_iNearbyEnemyDamage;
 }
 
-/// How much gold this improvement provides the pillager
+
 int CvImprovementEntry::GetPillageGold() const
 {
 	return m_iPillageGold;
 }
 
-/// Modifier on the amount of resources generated from the tile with this improvement. (100 doubles output)
+
 int CvImprovementEntry::GetResourceExtractionMod() const
 {
 	return m_iResourceExtractionMod;
 }
 
-/// Do we get any copies of the luxury types that the plot's owner has?
+
 int CvImprovementEntry::GetLuxuryCopiesSiphonedFromMinor() const
 {
 	return m_iLuxuryCopiesSiphonedFromMinor;
 }
 
-/// Returns the type of improvement that results from this improvement being pillaged
+
 int CvImprovementEntry::GetImprovementPillage() const
 {
 	return m_iImprovementPillage;
 }
 
-/// Set the type of improvement that results from this improvement being pillaged
+
 void CvImprovementEntry::SetImprovementPillage(int i)
 {
 	m_iImprovementPillage = i;
 }
 
-/// Returns the type of improvement that results from this improvement growing
+
 int CvImprovementEntry::GetImprovementUpgrade() const
 {
 	return m_iImprovementUpgrade;
 }
 
-/// Set the type of improvement that results from this improvement growing
+
 void CvImprovementEntry::SetImprovementUpgrade(int i)
 {
 	m_iImprovementUpgrade = i;
 }
 
-/// Requires hills to be constructed
+
 bool CvImprovementEntry::IsHillsMakesValid() const
 {
 	return m_bHillsMakesValid;
 }
-// Requires any body of water to build
+
 bool CvImprovementEntry::IsWaterAdjacencyMakesValid() const
 {
 	return m_bWaterAdjacencyMakesValid;
 }
 
-/// Requires fresh water to build
+
 bool CvImprovementEntry::IsFreshWaterMakesValid() const
 {
 	return m_bFreshWaterMakesValid;
 }
 
-/// Requires being adjacent to a river to build
+
 bool CvImprovementEntry::IsRiverSideMakesValid() const
 {
 	return m_bRiverSideMakesValid;
 }
 
-/// Can't be built next on a tile with fresh water
+
 bool CvImprovementEntry::IsNoFreshWater() const
 {
 	return m_bNoFreshWater;
 }
 #if defined(LEKMOD_BUGANDA_LAKE)
-// Requires being adjacent to a city to build
+
 bool CvImprovementEntry::IsAdjacentCityMakesValid() const
 {
 	return m_bAdjacentCityMakesValid;
 }
-// Is this a source of fresh water?
+
 bool CvImprovementEntry::IsFreshWaterSource() const
 {
 	return m_bFreshWaterSource;
 }
 #endif
-/// Requires that it must be built on something other than a hill
+
 bool CvImprovementEntry::IsRequiresFlatlands() const
 {
 	return m_bRequiresFlatlands;
 }
 
-/// Requires that it must be built on something other than a hill or next to fresh water
+
 bool CvImprovementEntry::IsRequiresFlatlandsOrFreshWater() const
 {
 	return m_bRequiresFlatlandsOrFreshWater;
 }
 
-/// Is this only built on top of a feature?
+
 bool CvImprovementEntry::IsRequiresFeature() const
 {
 	return m_bRequiresFeature;
 }
 
-/// Is this only built on top of an improvement?
+
 bool CvImprovementEntry::IsRequiresImprovement() const
 {
 	return m_bRequiresImprovement;
 }
 
-/// Does this remove the resource underneath when built?
+
 bool CvImprovementEntry::IsRemovesResource() const
 {
 	return m_bRemovesResource;
 }
 
-/// Do we prompt for a user choice after this is constructed?
+
 bool CvImprovementEntry::IsPromptWhenComplete() const
 {
 	return m_bPromptWhenComplete;
 }
 
-/// Is this only placed out in the water?
+
 bool CvImprovementEntry::IsWater() const
 {
 	return m_bWater;
 }
 
-/// Is this only placed on the coast?
+
 bool CvImprovementEntry::IsCoastal() const
 {
 	return m_bCoastal;
 }
 
 
-/// Is this a destroyed rather than pillaged?
+
 bool CvImprovementEntry::IsDestroyedWhenPillaged() const
 {
 	return m_bDestroyedWhenPillaged;
 }
 
-/// Is the unit that pillaged this perhaps in an illegal spot?
+
 bool CvImprovementEntry::IsDisplacePillager() const
 {
 	return m_bDisplacePillager;
 }
 
-/// Can this be built on top of Resources?
+
 bool CvImprovementEntry::IsBuildableOnResources() const
 {
 	return m_bBuildableOnResources;
 }
 
-/// Is this a barbarian camp?
+
 bool CvImprovementEntry::IsBarbarianCamp() const
 {
 	return m_bBarbarianCamp;
 }
 
-/// Is this a goody hut?
+
 bool CvImprovementEntry::IsGoody() const
 {
 	return m_bGoody;
 }
 
-/// Is this permanent?
+
 bool CvImprovementEntry::IsPermanent() const
 {
 	return m_bPermanent;
 }
 
-/// Does this improvement need to be built outside of a civ's borders?
+
 bool CvImprovementEntry::IsOutsideBorders() const
 {
 	return m_bOutsideBorders;
 }
 
-/// Can this improvement be built in anyone's lands?
+
 bool CvImprovementEntry::IsIgnoreOwnership() const
 {
 	return m_bIgnoreOwnership;
 }
 
-/// Can this improvement only be built in City-State lands?
+
 bool CvImprovementEntry::IsOnlyCityStateTerritory() const
 {
 	return m_bOnlyCityStateTerritory;
 }
 
-/// Can this improvement not be built adjacent to another one of the same type?
+
 bool CvImprovementEntry::IsNoTwoAdjacent() const
 {
 	return m_bNoTwoAdjacent;
 }
 
-/// Does this improvement need to be built next to a luxury resource?
+
 bool CvImprovementEntry::IsAdjacentLuxury() const
 {
 	return m_bAdjacentLuxury;
 }
 
-/// Does this improvement allows land units to cross water?
+
 bool CvImprovementEntry::IsAllowsWalkWater() const
 {
 	return m_bAllowsWalkWater;
 }
-/// Does this improvement allow naval units to cross land?
-bool CvImprovementEntry::IsAllowsSailLand() const // from Izy
+
+bool CvImprovementEntry::IsAllowsSailLand() const
 {
     return m_bAllowsSailLand;
 }
@@ -1031,7 +1031,7 @@ int CvImprovementEntry::GetStackedDomainDefensePenalty() const
 	return m_iStackedDomainDefensePenalty;
 }
 #endif
-/// Does this improvement need to be built inside or adjacent to a civ's borders?
+
 bool CvImprovementEntry::IsInAdjacentFriendly() const
 {
 	return m_bInAdjacentFriendly;
@@ -1052,13 +1052,13 @@ CivilizationTypes CvImprovementEntry::GetRequiredCivilization() const
 	return m_eRequiredCivilization;
 }
 
-/// DEPRECATED
+
 const char* CvImprovementEntry::GetArtDefineTag() const
 {
 	return m_strArtDefineTag;
 }
 
-/// DEPRECATED
+
 void CvImprovementEntry::SetArtDefineTag(const char* szVal)
 {
 	m_strArtDefineTag = szVal;
@@ -1074,13 +1074,13 @@ void CvImprovementEntry::SetImprovementUsage(const ImprovementUsageTypes usageTy
 	m_eImprovementUsageType = usageType;
 }
 
-/// DEPRECATED
+
 int CvImprovementEntry::GetWorldSoundscapeScriptId() const
 {
 	return m_iWorldSoundscapeScriptId;
 }
 
-/// What resource is required to build this improvement?
+
 int CvImprovementEntry::GetResourceQuantityRequirement(int i) const
 {
 	CvAssertMsg(i < GC.getNumResourceInfos(), "Index out of bounds");
@@ -1088,7 +1088,7 @@ int CvImprovementEntry::GetResourceQuantityRequirement(int i) const
 	return m_piResourceQuantityRequirements ? m_piResourceQuantityRequirements[i] : -1;
 }
 
-/// How much of a resource yield is required before this improvement can be built
+
 int CvImprovementEntry::GetPrereqNatureYield(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
@@ -1101,7 +1101,7 @@ int* CvImprovementEntry::GetPrereqNatureYieldArray()
 	return m_piPrereqNatureYield;
 }
 
-/// How much this improvement improves a certain yield
+
 int CvImprovementEntry::GetYieldChange(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
@@ -1114,7 +1114,7 @@ int* CvImprovementEntry::GetYieldChangeArray()
 	return m_piYieldChange;
 }
 
-/// How much this improvement improves a certain yield for each era of age
+
 int CvImprovementEntry::GetYieldChangePerEra(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
@@ -1122,7 +1122,7 @@ int CvImprovementEntry::GetYieldChangePerEra(int i) const
 	return m_piYieldPerEra ? m_piYieldPerEra[i] : 0;
 }
 
-/// How much being next to a river improves the yield of this improvement
+
 int CvImprovementEntry::GetRiverSideYieldChange(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
@@ -1135,7 +1135,7 @@ int* CvImprovementEntry::GetRiverSideYieldChangeArray()
 	return m_piRiverSideYieldChange;
 }
 
-/// How much being on a coastal tile improves the yield of this improvement
+
 int CvImprovementEntry::GetCoastalLandYieldChange(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
@@ -1148,7 +1148,7 @@ int* CvImprovementEntry::GetCoastalLandYieldChangeArray()
 	return m_piCoastalLandYieldChange;
 }
 
-/// How much being on a hill tile improves the yield of this improvement
+
 int CvImprovementEntry::GetHillsYieldChange(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
@@ -1161,7 +1161,7 @@ int* CvImprovementEntry::GetHillsYieldChangeArray()
 	return m_piHillsYieldChange;
 }
 
-/// How much having access to fresh water improves the yield of this improvement
+
 int CvImprovementEntry::GetFreshWaterYieldChange(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
@@ -1169,12 +1169,12 @@ int CvImprovementEntry::GetFreshWaterYieldChange(int i) const
 	return m_piFreshWaterChange ? m_piFreshWaterChange[i] : 0;
 }
 
-int* CvImprovementEntry::GetFreshWaterYieldChangeArray() // For Moose - CvWidgetData XXX
+int* CvImprovementEntry::GetFreshWaterYieldChangeArray()
 {
 	return m_piFreshWaterChange;
 }
 
-/// How much being adjacent to a city improves the yield of this improvement
+
 int CvImprovementEntry::GetAdjacentCityYieldChange(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
@@ -1187,7 +1187,7 @@ int* CvImprovementEntry::GetAdjacentCityYieldChangeArray()
 	return m_piAdjacentCityYieldChange;
 }
 
-/// How much being adjacent to a mountain improves the yield of this improvement
+
 int CvImprovementEntry::GetAdjacentMountainYieldChange(int i) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
@@ -1200,7 +1200,7 @@ int* CvImprovementEntry::GetAdjacentMountainYieldChangeArray()
 	return m_piAdjacentMountainYieldChange;
 }
 
-/// If this improvement requires a terrain type to be valid
+
 bool CvImprovementEntry::GetTerrainMakesValid(int i) const
 {
 	CvAssertMsg(i < GC.getNumTerrainInfos(), "Index out of bounds");
@@ -1208,7 +1208,7 @@ bool CvImprovementEntry::GetTerrainMakesValid(int i) const
 	return m_pbTerrainMakesValid ? m_pbTerrainMakesValid[i] : false;
 }
 
-/// If this improvement requires a feature to be valid
+
 bool CvImprovementEntry::GetFeatureMakesValid(int i) const
 {
 	CvAssertMsg(i < GC.getNumFeatureInfos(), "Index out of bounds");
@@ -1216,7 +1216,7 @@ bool CvImprovementEntry::GetFeatureMakesValid(int i) const
 	return m_pbFeatureMakesValid ? m_pbFeatureMakesValid[i] : false;
 }
 
-/// If this improvement requires a different improvement to be valid
+
 bool CvImprovementEntry::GetImprovementMakesValid(int i) const
 {
 	CvAssertMsg(i < GC.getNumImprovementInfos(), "Index out of bounds");
@@ -1224,7 +1224,7 @@ bool CvImprovementEntry::GetImprovementMakesValid(int i) const
 	return m_pbImprovementMakesValid ? m_pbImprovementMakesValid[i] : false;
 }
 
-/// How much a tech improves the yield of this improvement
+
 int CvImprovementEntry::GetTechYieldChanges(int i, int j) const
 {
 	CvAssertMsg(i < GC.getNumTechInfos(), "Index out of bounds");
@@ -1257,7 +1257,7 @@ int CvImprovementEntry::GetEraYieldChanges(int i, int j) const
 }
 #endif
 #ifdef LEKMOD_ADJACENT_IMPROVEMENT_YIELD
-/// How much a type of improvement adjacent to this improvement improves the yield of this improvement
+
 int CvImprovementEntry::GetImprovementAdjacentBonus(int i, int j) const
 {
 	CvAssertMsg(i < GC.getNumImprovementInfos(), "Index out of bounds");
@@ -1275,7 +1275,7 @@ int CvImprovementEntry::GetImprovementAdjacentBonusCivilization(int i, int j) co
 	return m_piImprovementAdjacentBonusCivilization[i][j];
 }
 
-// what improvement type is required to be adjacent to this improvement to get the yield bonus
+
 int CvImprovementEntry::GetImprovementAdjacentCivilizationAmount(int i, int j) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
@@ -1294,7 +1294,7 @@ int CvImprovementEntry::GetImprovementAdjacentBonusCivilizationNoAmount(int i, i
 	return m_ppiImprovementAdjacentBonusCivilizationNoAmount[i][j];
 }
 
-// what improvement type is required to be adjacent to this improvement to get the yield bonus
+
 int CvImprovementEntry::GetImprovementAdjacentAmount(int i, int j) const
 {
 	CvAssertMsg(i < NUM_YIELD_TYPES, "Index out of bounds");
@@ -1303,13 +1303,13 @@ int CvImprovementEntry::GetImprovementAdjacentAmount(int i, int j) const
 	CvAssertMsg(j > -1, "Index out of bounds");
 	return m_ppiImprovementAdjacentAmount[i][j];
 }
-// Cache only after all improvement IDs and adjacency arrays have been loaded.
+
 void CvImprovementEntry::CacheAdjacencyYieldBonus()
 {
 	m_bHasAnyAdjacencyYieldBonus = ComputeHasAnyAdjacencyYieldBonus();
 }
 
-// New method to trigger the visual changes when nessesary
+
 bool CvImprovementEntry::HasAnyAdjacencyYieldBonus() const
 {
 	return m_bHasAnyAdjacencyYieldBonus;
@@ -1319,7 +1319,7 @@ bool CvImprovementEntry::ComputeHasAnyAdjacencyYieldBonus() const
 {
 	for (int i = 0; i < GC.getNumImprovementInfos(); ++i)
 	{
-		for (int j = 0; j < NUM_YIELD_TYPES; ++j) // Yield loop
+		for (int j = 0; j < NUM_YIELD_TYPES; ++j)
 		{
 			if (GetImprovementAdjacentBonus(i, j) > 0)
 				return true;
@@ -1332,7 +1332,7 @@ bool CvImprovementEntry::ComputeHasAnyAdjacencyYieldBonus() const
 
 	for (int i = 0; i < NUM_YIELD_TYPES; ++i)
 	{
-		for (int j = 0; j < 6; ++j) // Civilization loop
+		for (int j = 0; j < 6; ++j)
 		{
 			if (GetImprovementAdjacentAmount(i, j) > 0)
 				return true;
@@ -1344,7 +1344,7 @@ bool CvImprovementEntry::ComputeHasAnyAdjacencyYieldBonus() const
 	return false;
 }
 #endif
-/// How much a tech improves the yield of this improvement if it DOES NOT have fresh water
+
 int CvImprovementEntry::GetTechNoFreshWaterYieldChanges(int i, int j) const
 {
 	CvAssertMsg(i < GC.getNumTechInfos(), "Index out of bounds");
@@ -1367,7 +1367,7 @@ int* CvImprovementEntry::GetTechNoFreshWaterYieldChangesArray(int i)
 #endif
 }
 
-/// How much a tech improves the yield of this improvement if it has fresh water
+
 int CvImprovementEntry::GetTechFreshWaterYieldChanges(int i, int j) const
 {
 	CvAssertMsg(i < GC.getNumTechInfos(), "Index out of bounds");
@@ -1390,7 +1390,7 @@ int* CvImprovementEntry::GetTechFreshWaterYieldChangesArray(int i)
 #endif
 }
 
-/// How much a type of route improves the yield of this improvement
+
 int CvImprovementEntry::GetRouteYieldChanges(int i, int j) const
 {
 	CvAssertMsg(i < GC.getNumRouteInfos(), "Index out of bounds");
@@ -1404,7 +1404,7 @@ int CvImprovementEntry::GetRouteYieldChanges(int i, int j) const
 #endif
 }
 
-int* CvImprovementEntry::GetRouteYieldChangesArray(int i)				// For Moose - CvWidgetData XXX
+int* CvImprovementEntry::GetRouteYieldChangesArray(int i)
 {
 #ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
 	return m_ppiRouteYieldChanges.first ? m_ppiRouteYieldChanges.first[i] : NULL;
@@ -1413,7 +1413,7 @@ int* CvImprovementEntry::GetRouteYieldChangesArray(int i)				// For Moose - CvWi
 #endif
 }
 
-/// How much a yield improves when a resource is present with the improvement
+
 int CvImprovementEntry::GetImprovementResourceYield(int i, int j) const
 {
 	CvAssertMsg(i < GC.getNumResourceInfos(), "Index out of bounds");
@@ -1423,7 +1423,7 @@ int CvImprovementEntry::GetImprovementResourceYield(int i, int j) const
 	return m_paImprovementResource[i].m_piYieldChange ? m_paImprovementResource[i].getYieldChange(j) : 0;
 }
 
-/// What resources does this improvement require to be built
+
 bool CvImprovementEntry::IsImprovementResourceMakesValid(int i) const
 {
 	CvAssertMsg(i < GC.getNumResourceInfos(), "Index out of bounds");
@@ -1431,7 +1431,7 @@ bool CvImprovementEntry::IsImprovementResourceMakesValid(int i) const
 	return m_paImprovementResource[i].m_bResourceMakesValid;
 }
 
-/// Does this improvement enable a tradeable resource
+
 bool CvImprovementEntry::IsImprovementResourceTrade(int i) const
 {
 	CvAssertMsg(i < GC.getNumResourceInfos(), "Index out of bounds");
@@ -1439,7 +1439,7 @@ bool CvImprovementEntry::IsImprovementResourceTrade(int i) const
 	return m_paImprovementResource[i].m_bResourceTrade;
 }
 
-/// the chance of the specified Resource appearing randomly when the Improvement is present with no current Resource
+
 int CvImprovementEntry::GetImprovementResourceDiscoverRand(int i) const
 {
 	CvAssertMsg(i < GC.getNumResourceInfos(), "Index out of bounds");
@@ -1447,7 +1447,7 @@ int CvImprovementEntry::GetImprovementResourceDiscoverRand(int i) const
 	return m_paImprovementResource[i].m_iDiscoverRand;
 }
 
-/// Gets the flavor value of the improvement
+
 int CvImprovementEntry::GetFlavorValue(int i) const
 {
 	CvAssertMsg(i < GC.getNumFlavorTypes(), "Index out of bounds");
@@ -1456,28 +1456,28 @@ int CvImprovementEntry::GetFlavorValue(int i) const
 }
 
 
-//=====================================
-// CvPromotionEntryXMLEntries
-//=====================================
-/// Constructor
+
+
+
+
 CvImprovementXMLEntries::CvImprovementXMLEntries(void)
 {
 
 }
 
-/// Destructor
+
 CvImprovementXMLEntries::~CvImprovementXMLEntries(void)
 {
 	DeleteArray();
 }
 
-/// Returns vector of improvement entries
+
 std::vector<CvImprovementEntry*>& CvImprovementXMLEntries::GetImprovementEntries()
 {
 	return m_paImprovementEntries;
 }
 
-/// Number of defined projects
+
 #ifdef AUI_WARNING_FIXES
 uint CvImprovementXMLEntries::GetNumImprovements() const
 #else
@@ -1487,7 +1487,7 @@ int CvImprovementXMLEntries::GetNumImprovements()
 	return m_paImprovementEntries.size();
 }
 
-/// Get a specific entry
+
 #ifdef AUI_WARNING_FIXES
 _Ret_maybenull_ CvImprovementEntry* CvImprovementXMLEntries::GetEntry(uint index)
 #else
@@ -1497,7 +1497,7 @@ CvImprovementEntry* CvImprovementXMLEntries::GetEntry(int index)
 	return m_paImprovementEntries[index];
 }
 
-/// Tell which improvement unlocks a resource
+
 CvImprovementEntry* CvImprovementXMLEntries::GetImprovementForResource(int eResource)
 {
 	for(unsigned int iImprovement = 0; iImprovement < m_paImprovementEntries.size(); ++iImprovement)
@@ -1512,7 +1512,7 @@ CvImprovementEntry* CvImprovementXMLEntries::GetImprovementForResource(int eReso
 	return NULL;
 }
 
-/// Clear improvement entries
+
 void CvImprovementXMLEntries::DeleteArray()
 {
 	for(std::vector<CvImprovementEntry*>::iterator it = m_paImprovementEntries.begin(); it != m_paImprovementEntries.end(); ++it)
@@ -1523,7 +1523,7 @@ void CvImprovementXMLEntries::DeleteArray()
 	m_paImprovementEntries.clear();
 }
 
-/// Helper function to read in an integer array of data sized according to number of building types
+
 void ImprovementArrayHelpers::Read(FDataStream& kStream, int* paiImprovementArray)
 {
 	int iNumEntries;
@@ -1556,7 +1556,7 @@ void ImprovementArrayHelpers::Read(FDataStream& kStream, int* paiImprovementArra
 	}
 }
 
-/// Helper function to write out an integer array of data sized according to number of improvement types
+
 void ImprovementArrayHelpers::Write(FDataStream& kStream, int* paiImprovementArray, int iArraySize)
 {
 	kStream << iArraySize;
@@ -1577,7 +1577,7 @@ void ImprovementArrayHelpers::Write(FDataStream& kStream, int* paiImprovementArr
 	}
 }
 
-/// Helper function to read in an integer array of data sized according to number of building types
+
 void ImprovementArrayHelpers::ReadYieldArray(FDataStream& kStream, int** ppaaiImprovementYieldArray, int iNumYields)
 {
 	int iNumEntries;
@@ -1615,7 +1615,7 @@ void ImprovementArrayHelpers::ReadYieldArray(FDataStream& kStream, int** ppaaiIm
 	}
 }
 
-/// Helper function to write out an integer array of data sized according to number of improvement types
+
 void ImprovementArrayHelpers::WriteYieldArray(FDataStream& kStream, int** ppaaiImprovementYieldArray, int iArraySize)
 {
 	kStream << iArraySize;

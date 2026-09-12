@@ -1,23 +1,23 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_START_POSITIONER_H
 #define CIV5_START_POSITIONER_H
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvContinent
-//!  \brief		A map area that might be the start area for one or more civs
-//
-//!  Key Attributes:
-//!  - Created by CvStartPositioner
-//!  - Used to decide how many civs are allocated to this continent
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvContinent
 {
 public:
@@ -79,23 +79,23 @@ public:
 	}
 
 private:
-	int m_uiFertility;           // Total fertility of all plots in region
-	int m_uiFertilityNextRegion; // Fertility if add one more region
-	int m_iRegionsAssigned;		          // Number of regions
-	int m_iAreaID;						  // Area ID
+	int m_uiFertility;
+	int m_uiFertilityNextRegion;
+	int m_iRegionsAssigned;
+	int m_iAreaID;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvStartRegion
-//!  \brief		A region of the map that can contain one major civ
-//
-//!  Key Attributes:
-//!  - Created by CvStartPositioner
-//!  - Each CvStartRegion should have approximately the same fertility
-//!  - Several minor civs may also start within a region
-//!  - We also make all islands/minor continents too small for a major civ into a start
-//!    region since we may want a minor civ to start there
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
 class CvStartRegion
 {
 public:
@@ -138,22 +138,22 @@ public:
 		return true;
 	}
 
-	CvAreaBoundaries m_Boundaries;  // Edges of region
-	int m_uiFertility;     // Total fertility of all plots in region
-	int m_iAreaID;				    // Area ID
+	CvAreaBoundaries m_Boundaries;
+	int m_uiFertility;
+	int m_iAreaID;
 	bool m_bLargeEnoughForMajorCiv;
 	int m_iNumCivsPlaced;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvPlayerStartRank
-//!  \brief		The ranking of how early this player should "draft" a start location
-//
-//!  Key Attributes:
-//!  - Used in a vector when assigning start positions
-//!  - Allows sorting by start position
-//!  - Rank initially determined by field from Handicap XML ("StartingLocationPercent")
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvPlayerStartRank
 {
 public:
@@ -179,18 +179,18 @@ public:
 	}
 
 	int m_iPlayerID;
-	int m_iRank;      // Set to "StartingLocationPercent" * 10 + (random number from 0 to 9)
+	int m_iRank;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvStartPositioner
-//!  \brief		Divides the map into regions of each fertility and places one major civ in each
-//
-//!  Key Attributes:
-//!  - One instance for the entire game
-//!  - Works with CvSiteEvaluatorForStart to compute fertility of each plot
-//!  - Also divides minor civs between the regions and places them as well
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvStartPositioner
 {
 public:
@@ -217,13 +217,13 @@ private:
 	bool MeetsFoodRequirement(CvPlot* pPlot, TeamTypes eTeam, int iFoodRequirement);
 	int StartingPlotRange() const;
 
-	// Logging
+
 	void LogStartPositionMessage(CvString strMsg);
 
-	// References to other objects
+
 	CvSiteEvaluatorForStart* m_pSiteEvaluator;
 
-	// Internal data
+
 	vector<CvContinent> m_ContinentVector;
 	vector<CvStartRegion> m_StartRegionVector;
 	vector<CvPlayerStartRank> m_PlayerOrder;
@@ -232,4 +232,4 @@ private:
 	int m_iBestFoundValueOnMap;
 };
 
-#endif //CIV5_START_POSITIONER_H
+#endif

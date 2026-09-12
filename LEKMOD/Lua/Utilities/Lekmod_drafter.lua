@@ -1,11 +1,11 @@
--- Lekmod lobby drafter: civ tags + deal logic (Hellblazer parity)
+
 LekmodDrafter = LekmodDrafter or {}
 
 LekmodDrafter.DEFAULT_BANS = 2
 LekmodDrafter.DEFAULT_PICKS = 3
 LekmodDrafter.GUARANTEE_RANDOM = -1
 
--- key -> { tags={...}, displayName=... }
+
 LekmodDrafter.CivMeta = {
   Akkad = { tags = { "modded" }, displayName = "Akkad" },
   Aksum = { tags = { "modded", "seasonal" }, displayName = "Aksum" },
@@ -123,7 +123,7 @@ LekmodDrafter.CivMeta = {
   Zulu = { tags = { "vanilla" }, displayName = "Zulu" },
 }
 
--- Extra Type aliases when key does not match CIVILIZATION_<KEY>
+
 LekmodDrafter.TypeAliases = {
   Golden = "CIVILIZATION_GOLDEN_HORDE",
   Mexican = "CIVILIZATION_MEXICO",
@@ -175,38 +175,38 @@ function LekmodDrafter.IsPlayableCiv(civ)
 	return p == 1 or p == true or p == "true" or p == "1"
 end
 
--- Match a DB civ row to a CivMeta key (best effort).
+
 function LekmodDrafter.FindMetaKeyForCiv(civ)
 	if civ == nil then
 		return nil
 	end
 	local typeName = tostring(civ.Type or "")
-	-- Exact alias reverse lookup
+
 	for key, alias in pairs(LekmodDrafter.TypeAliases) do
 		if alias == typeName then
 			return key
 		end
 	end
-	-- CIVILIZATION_FOO / CIVILIZATION_MC_FOO → Foo / FOO key variants
+
 	local suffix = string.match(typeName, "^CIVILIZATION_(?:MC_|LEKMOD_|D3_)?(.+)$")
 	if suffix ~= nil then
-		-- Try exact CivMeta key casings
+
 		if LekmodDrafter.CivMeta[suffix] ~= nil then
 			return suffix
 		end
-		-- Title-case / common forms
+
 		local lower = string.lower(suffix)
 		for key, _ in pairs(LekmodDrafter.CivMeta) do
 			if string.lower(key) == lower then
 				return key
 			end
-			-- underscores removed
+
 			if string.lower(string.gsub(key, "_", "")) == string.lower(string.gsub(suffix, "_", "")) then
 				return key
 			end
 		end
 	end
-	-- Display / short description match
+
 	local shortDesc = Locale.Lookup(civ.ShortDescription or "")
 	if shortDesc ~= nil and shortDesc ~= "" then
 		local want = string.lower(shortDesc)
@@ -219,7 +219,7 @@ function LekmodDrafter.FindMetaKeyForCiv(civ)
 	return nil
 end
 
--- Resolve drafter key -> civilization ID (or nil if not in DB / not playable).
+
 function LekmodDrafter.ResolveCivID(key)
 	if key == nil then
 		return nil
@@ -253,10 +253,10 @@ function LekmodDrafter.ResolveCivID(key)
 	return nil
 end
 
--- Build map civID -> meta for all playable civs (DB-first so pool is never empty).
+
 function LekmodDrafter.BuildIDIndex()
 	local byID = {}
-	-- Prefer the same query StagingRoom uses for civ pulldowns (reliable in lobby).
+
 	local ok, err = pcall(function()
 		for row in DB.Query([[SELECT ID, Type, ShortDescription, Description, Playable
 			FROM Civilizations WHERE Playable = 1]]) do
@@ -277,7 +277,7 @@ function LekmodDrafter.BuildIDIndex()
 		end
 	end)
 	if not ok or next(byID) == nil then
-		-- Fallback: GameInfo iterator
+
 		for civ in GameInfo.Civilizations() do
 			if LekmodDrafter.IsPlayableCiv(civ) then
 				local key = LekmodDrafter.FindMetaKeyForCiv(civ)
@@ -301,12 +301,12 @@ function LekmodDrafter.NormalizeGuarantee(value)
 	return n
 end
 
---[[
-  rules: DefaultRules()-shaped table
-  playerOrder: array of playerIDs (humans) in deal order
-  bansByPlayer: [playerID] = { civID, civID, ... } (may contain nils/duplicates)
-  returns: { ok=bool, error=string|nil, drafts={[playerID]={civID,...}}, warning=string|nil }
-]]
+
+
+
+
+
+
 function LekmodDrafter.CreateDraft(rules, playerOrder, bansByPlayer)
 	rules = rules or LekmodDrafter.DefaultRules()
 	playerOrder = playerOrder or {}
@@ -341,11 +341,11 @@ function LekmodDrafter.CreateDraft(rules, playerOrder, bansByPlayer)
 	local inland = {}
 	for civID, meta in pairs(byID) do
 		if banned[civID] then
-			-- skip
+
 		elseif rules.vanillaOnly and not LekmodDrafter.HasTag(meta, "vanilla") then
-			-- skip
+
 		elseif rules.seasonalBans and LekmodDrafter.HasTag(meta, "seasonal") then
-			-- seasonal tag = out of seasonal pool
+
 		else
 			table.insert(allowed, civID)
 			if LekmodDrafter.IsCoastal(meta) then
@@ -440,7 +440,7 @@ function LekmodDrafter.CreateDraft(rules, playerOrder, bansByPlayer)
 	return { ok = true, error = nil, drafts = drafts, warning = warning }
 end
 
--- Encode helpers for #LDRAFT# packets (compact). Preserves empty slots as -1.
+
 function LekmodDrafter.EncodeCivList(list)
 	local parts = {}
 	for _, id in ipairs(list or {}) do
@@ -466,4 +466,3 @@ function LekmodDrafter.DecodeCivList(text)
 	end
 	return out
 end
-

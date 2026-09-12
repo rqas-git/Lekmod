@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/11/2015 11:53:40 PM -->
+
 <GameData>
 
-	<!-- Branch Tooltip -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_POLICY_BRANCH_AESTHETICS_HELP" />
 		<Row Tag="TXT_KEY_POLICY_BRANCH_AESTHETICS_HELP">
@@ -29,12 +29,12 @@
 	</Language_RU_RU>
 
 
-	<!-- Aesthetics Opener -->
-	<!-- No changes. -->
+
+
 	
 
-	<!-- Aesthetics Finisher -->
-	<!-- NOTE: tooltip is updated in opener -->
+
+
 	<Resources>
 		<Update>
 			<Set PolicyReveal="POLICY_AESTHETICS_FINISHER" />
@@ -151,7 +151,7 @@
 		</Row>
 	</Language_RU_RU>
 	
-	<!-- Fix tooltips for Hidden Antiquity Sites that reference Exploration tree. -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_RESOURCE_HIDDEN_ARTIFACTS_HELP" />
 		<Row Tag="TXT_KEY_RESOURCE_HIDDEN_ARTIFACTS_HELP">

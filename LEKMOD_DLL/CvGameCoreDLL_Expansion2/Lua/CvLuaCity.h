@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 
 #pragma once
 #ifndef CVLUACITY_H
@@ -15,13 +15,13 @@
 class CvLuaCity : public CvLuaScopedInstance<CvLuaCity, CvCity>
 {
 public:
-	//! Push CvCity methods into table t
+
 	static void PushMethods(lua_State* L, int t);
 
-	//! Required by CvLuaScopedInstance.
+
 	static void HandleMissingInstance(lua_State* L);
 
-	//! Required by CvLuaScopedInstance.
+
 	static const char* GetTypeName();
 
 protected:
@@ -218,8 +218,8 @@ protected:
 
 	static int lGetHighestPopulation(lua_State* L);
 	static int lSetHighestPopulation(lua_State* L);
-	//static int lGetWorkingPopulation(lua_State* L);
-	//static int lGetSpecialistPopulation(lua_State* L);
+
+
 	static int lGetNumGreatPeople(lua_State* L);
 	static int lGetBaseGreatPeopleRate(lua_State* L);
 	static int lGetGreatPeopleRate(lua_State* L);
@@ -325,7 +325,7 @@ protected:
 	static int lGetBuildingDefense(lua_State* L);
 	static int lGetFreeExperience(lua_State* L);
 	static int lGetNukeModifier(lua_State* L);
-	//static int lGetFreeSpecialist(lua_State* L);
+
 
 	static int lIsResistance(lua_State* L);
 	static int lGetResistanceTurns(lua_State* L);
@@ -358,8 +358,8 @@ protected:
 
 	static int lGetNumThingsProduced(lua_State* L);
 
-	//static int lIsCitizensAutomated(lua_State* L);
-	//static int lSetCitizensAutomated(lua_State* L);
+
+
 	static int lIsProductionAutomated(lua_State* L);
 	static int lSetProductionAutomated(lua_State* L);
 	static int lSetCitySizeBoost(lua_State* L);
@@ -373,7 +373,7 @@ protected:
 
 	static int lGetBaseYieldRate(lua_State* L);
 
-	static int lGetBaseYieldRateFromGreatWorks(lua_State* L); // NQMP GJS - Artistic Genius add support for Science from Great Works
+	static int lGetBaseYieldRateFromGreatWorks(lua_State* L);
 
 	static int lGetBaseYieldRateFromTerrain(lua_State* L);
 	static int lChangeBaseYieldRateFromTerrain(lua_State* L);
@@ -531,4 +531,4 @@ protected:
 #endif
 };
 
-#endif //CVLUACITY_H
+#endif

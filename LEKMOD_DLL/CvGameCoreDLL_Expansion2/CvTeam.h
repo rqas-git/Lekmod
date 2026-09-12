@@ -1,14 +1,14 @@
-/*	-------------------------------------------------------------------------------------------------------
-	ù 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #include "FBatchAllocate.h"
-// team.h
+
 
 #ifndef CIV5_TEAM_H
 #define CIV5_TEAM_H
@@ -23,7 +23,7 @@ public:
 	CvTeam();
 	~CvTeam();
 
-	// inlined for performance reasons, only in the dll
+
 	static CvTeam& getTeam(TeamTypes eTeam)
 	{
 		CvAssertMsg(eTeam != NO_TEAM, "eTeam is not assigned a valid value");
@@ -68,14 +68,14 @@ public:
 	int getEnemyPower() const;
 	int getNumNukeUnits() const;
 
-	// DEPRECATED
+
 	TeamTypes GetTeamVotingForInDiplo() const;
 	int GetProjectedVotesFromMinorAllies() const;
 	int GetProjectedVotesFromLiberatedMinors() const;
 	int GetProjectedVotesFromCivs() const;
 	int GetTotalProjectedVotes() const;
 	int GetTotalSecuredVotes() const;
-	// End DEPRECATED
+
 
 	int getAtWarCount(bool bIgnoreMinors) const;
 	int getHasMetCivCount(bool bIgnoreMinors) const;
@@ -104,7 +104,7 @@ public:
 	bool IsMinorCivAggressor() const;
 	bool IsMinorCivWarmonger() const;
 
-	// Some diplo stuff
+
 	bool IsBrokenMilitaryPromise() const;
 	void SetBrokenMilitaryPromise(bool bValue);
 	bool IsBrokenExpansionPromise() const;
@@ -236,7 +236,7 @@ public:
 	int getEmbarkedExtraMoves() const;
 	void changeEmbarkedExtraMoves(int iChange);
 
-	//EAP: Embark visibility on tech
+
 	int getEmbarkedExtraSight() const;
 	void changeEmbarkedExtraSight(int iChange);
 
@@ -270,7 +270,7 @@ public:
 	void ChangeNumTurnsLockedIntoWar(TeamTypes eTeam, int iChange);
 
 #ifdef LEKMOD_CITY_STATE_PEACE_LOCK_FROM_DECLARATION
-	/// True if this team began the current war with eTeam by declaring on a city-state (not by being declared on / ally chain). Used for Lua city-state peace timer.
+
 	bool IsCityStatePeaceLockFromOurDeclaration(TeamTypes eTeam) const;
 	void SetCityStatePeaceLockFromOurDeclaration(TeamTypes eTeam, bool bValue);
 #endif
@@ -378,10 +378,10 @@ public:
 	bool isSimultaneousTurns() const;
 #endif
 
-	// DEPRECATED
+
 	bool IsHomeOfUnitedNations() const;
 	void SetHomeOfUnitedNations(bool bValue);
-	// End DEPRECATED
+
 
 	int getVictoryCountdown(VictoryTypes eIndex) const;
 	void setVictoryCountdown(VictoryTypes eIndex, int iTurnsLeft);
@@ -435,7 +435,7 @@ public:
 	void setDynamicTurnsSimultMode(bool simultaneousTurns);
 #endif
 
-	// Wrapper for giving Players on this Team a notification message
+
 	void AddNotification(NotificationTypes eNotificationType, const char* strMessage, const char* strSummary, int iX = -1, int iY = -1, int iGameDataIndex = -1, int iExtraGameData = -1);
 
 #ifdef AUI_WARNING_FIXES
@@ -476,7 +476,7 @@ protected:
 	int m_iVictoryPoints;
 	int m_iEmbarkedExtraMoves;
 
-	//EAP: Extra embarked visibility on tech
+
 	int m_iEmbarkedExtraSight;
 	int m_iCanEmbarkCount;
 	int m_iDefensiveEmbarkCount;
@@ -591,7 +591,7 @@ protected:
 	void DoMakePeace(TeamTypes eTeam, bool bBumpUnits, bool bSuppressNotification = false);
 };
 
-// helper for accessing static functions
+
 #define GET_TEAM CvTeam::getTeam
 
 #endif

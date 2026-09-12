@@ -1,6 +1,6 @@
-// Ordered common global settings: kind, name, constructor default.
-// Included repeatedly for fields, getters, initialization, and database loading.
-// Preserve this order: it determines field layout and database query order.
+
+
+
 CV_GLOBAL_DEFINE(INT, OPINION_WEIGHT_WE_LIKED_THEIR_PROPOSAL, -15)
 CV_GLOBAL_DEFINE(INT, OPINION_WEIGHT_WE_LIKED_THEIR_PROPOSAL_NUM_TURNS, 45)
 CV_GLOBAL_DEFINE(INT, OPINION_WEIGHT_WE_DISLIKED_THEIR_PROPOSAL, 15)

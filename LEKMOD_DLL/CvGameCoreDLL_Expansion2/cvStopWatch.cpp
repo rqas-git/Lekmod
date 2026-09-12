@@ -1,15 +1,15 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
-//
-//  AUTHOR:		Shaun Seckman	--	1/2010
-//
-//  PURPOSE:	Basic stop watch functionality for profiling.
-//
+
+
+
+
+
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "cvStopWatch.h"
 
@@ -18,8 +18,8 @@
 bool cvStopWatch::ms_bPerfInit = false;
 LARGE_INTEGER cvStopWatch::ms_ticksPerSecond;
 static int ms_nesting = 0;
-//------------------------------------------------------------------------------
-cvStopWatch::cvStopWatch(const char* szName, const char* szLogFile /* = NULL */, uint logFlags /* = 0 */, bool bDisable /* = false */, bool bShowNesting /* = false */):
+
+cvStopWatch::cvStopWatch(const char* szName, const char* szLogFile             , uint logFlags          , bool bDisable              , bool bShowNesting              ):
 	m_szName(szName),
 	m_szLogFile(szLogFile),
 	m_dtseconds(0.0),
@@ -31,13 +31,13 @@ cvStopWatch::cvStopWatch(const char* szName, const char* szLogFile /* = NULL */,
 	++ms_nesting;
 	StartPerfTest();
 }
-//------------------------------------------------------------------------------
+
 cvStopWatch::~cvStopWatch()
 {
 	EndPerfTest();
 	--ms_nesting;
 }
-//------------------------------------------------------------------------------
+
 void cvStopWatch::InitPerfTest()
 {
 	if(!ms_bPerfInit)
@@ -46,14 +46,14 @@ void cvStopWatch::InitPerfTest()
 		ms_bPerfInit = true;
 	}
 }
-//------------------------------------------------------------------------------
+
 void cvStopWatch::StartPerfTest()
 {
 	InitPerfTest();
 	QueryPerformanceCounter(&m_oldTimerVal);
 	m_bStarted = true;
 }
-//------------------------------------------------------------------------------
+
 void cvStopWatch::EndPerfTest()
 {
 	if(!m_bStarted)
@@ -73,12 +73,12 @@ void cvStopWatch::EndPerfTest()
 
 	PerfLog(m_szName, m_dtseconds);
 }
-//------------------------------------------------------------------------------
+
 double cvStopWatch::GetDeltaInSeconds() const
 {
 	return m_dtseconds;
 }
-//------------------------------------------------------------------------------
+
 void cvStopWatch::PerfLog(const char* szName, double dtSeconds)
 {
 	if (!m_bDisable)

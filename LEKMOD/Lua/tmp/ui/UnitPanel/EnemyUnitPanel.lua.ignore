@@ -1,6 +1,6 @@
--------------------------------------------------
--- Enemy Unit Panel Screen 
--------------------------------------------------
+
+
+
 include( "IconSupport" );
 include( "InstanceManager" );
 
@@ -9,7 +9,7 @@ local g_TheirCombatDataIM = InstanceManager:new( "ThemCombatInfo", "Root", Contr
 local g_TheirNoteIM = InstanceManager:new( "ThemCombatNote", "Root", Controls.TheirCombatResultsStack );
 
 local g_NumButtons = 12;
-local g_lastUnitID = -1;		-- Used to determine if a different pUnit has been selected.
+local g_lastUnitID = -1;
 local g_ModifierListLength;
 if OptionsManager.GetSmallUIAssets_Cached() then
 	g_ModifierListLength = 6;
@@ -24,7 +24,7 @@ local g_iPortraitSize = Controls.UnitPortrait:GetSize().x;
 
 local g_bWorldMouseOver = true;
 local g_bShowPanel = false;
-local g_lastHexX = nil;		-- Last hex the mouse was over, so we can refresh the combat odds when the interface mode changes.
+local g_lastHexX = nil;
 local g_lastHexY = nil;
 
 
@@ -55,8 +55,8 @@ function SetName(name)
 	    Controls.ReallyLongUnitName:SetHide(false);
     end
 end
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
+
+
 function UpdateCityPortrait( pCity )
 
 	if pCity == nil then
@@ -86,9 +86,9 @@ function UpdateCityPortrait( pCity )
 end
 
 
---------------------------------------------------------------------------------
--- Refresh Unit portrait and name
---------------------------------------------------------------------------------
+
+
+
 function UpdateUnitPortrait( pUnit )
 
 	if pUnit == nil then
@@ -125,13 +125,13 @@ function UpdateUnitPortrait( pUnit )
 end
 
 
---------------------------------------------------------------------------------
--- Refresh Unit promotions
---------------------------------------------------------------------------------
+
+
+
 function UpdateUnitPromotions(pUnit)
 	local UnitPromotionKey = "UnitPromotion";
 	
-	--Clear Unit Promotions
+
 	local i = 1;
 	while(Controls[UnitPromotionKey..i] ~= nil) do
 		local promotionIcon = Controls[UnitPromotionKey..i];
@@ -141,12 +141,12 @@ function UpdateUnitPromotions(pUnit)
 	end
 	
 	if pUnit then
-		--For each avail promotion, display the icon
+
 		for unitPromotion in GameInfo.UnitPromotions() do
 			local unitPromotionID = unitPromotion.ID;
 			if(pUnit:IsHasPromotion(unitPromotionID)) then
 				
-				-- Get next available promotion button
+
 				local idx = 1;
 				local promotionIcon;
 				repeat
@@ -165,13 +165,13 @@ function UpdateUnitPromotions(pUnit)
 end
 
 
---------------------------------------------------------------------------------
--- Refresh City stats
---------------------------------------------------------------------------------
+
+
+
 function UpdateCityStats(pCity)
 	
-	-- Strength
-	-- Correct Attack City Strength
+
+
 	local strength = math.floor(pCity:GetStrengthValue(false) / 100);
 	
 	strength = strength .. " [ICON_STRENGTH]";
@@ -184,12 +184,12 @@ function UpdateCityStats(pCity)
 end
 
 
---------------------------------------------------------------------------------
--- Refresh Unit stats
---------------------------------------------------------------------------------
+
+
+
 function UpdateUnitStats(pUnit)
 	
-	-- Movement
+
 	local move_denominator = GameDefines["MOVE_DENOMINATOR"];
 	local max_moves = pUnit:MaxMoves() / move_denominator;
 	local szMoveStr = max_moves .. " [ICON_MOVES]";
@@ -197,7 +197,7 @@ function UpdateUnitStats(pUnit)
 	Controls.UnitStatMovement:SetText(szMoveStr);
 	Controls.UnitMovementBox:SetHide(false);
 	
-	-- Strength
+
     local strength = 0;
     if(pUnit:GetDomainType() == DomainTypes.DOMAIN_AIR) then
         strength = pUnit:GetBaseRangedCombatStrength();
@@ -212,7 +212,7 @@ function UpdateUnitStats(pUnit)
 		Controls.UnitStrengthBox:SetHide(true);
 	end		
 	
-	-- Ranged Strength
+
 	local iRangedStrength = 0;
 	if(pUnit:GetDomainType() ~= DomainTypes.DOMAIN_AIR) then
 		iRangedStrength = pUnit:GetBaseRangedCombatStrength();
@@ -230,9 +230,9 @@ function UpdateUnitStats(pUnit)
 end
 
 
---------------------------------------------------------------------------------
--- Format our text please!
---------------------------------------------------------------------------------
+
+
+
 function SetCombatModifierRow(controlTable, modifier, bForMe)
 	controlTable.Text:SetText("");
 	controlTable.Value:SetText("");
@@ -317,10 +317,10 @@ function UpdateCombatOddsUnitVsCity(pMyUnit, pCity)
 	local bBombing = false;
 	local bSweep = false;
 
-	-- Interface mode can indicate the intended attack type.
+
 	local interfaceMode = UI.GetInterfaceMode();
 
-	-- A sweep targets an interceptor, not the city.
+
 	if (interfaceMode == InterfaceModeTypes.INTERFACEMODE_AIR_SWEEP) then
 		return false;
 	elseif (interfaceMode == InterfaceModeTypes.INTERFACEMODE_AIRSTRIKE) then
@@ -340,7 +340,7 @@ function UpdateCombatOddsUnitVsCity(pMyUnit, pCity)
 	if (bBombing and attacker:EvasionProbability() < 100) then
 		iNumVisibleAAUnits = attacker:GetInterceptorCount( battlePlot, nil, false, true, true);
 		if (iNumVisibleAAUnits > 0) then
-			-- There is no defender unit to exclude when bombing a city.
+
 			interceptor = attacker:GetBestInterceptor( battlePlot, nil, false, true, true);
 		end
 	end
@@ -350,8 +350,8 @@ function UpdateCombatOddsUnitVsCity(pMyUnit, pCity)
 		fromPlot = GetMeleeAttackFromPlot(attacker, battlePlot);
 	end
 
-	-- Arguments:
-	-- plot, defender unit, defender city, interceptor, flags
+
+
 	local attackerStrength = attacker:GetMaxAttackStrength( battlePlot, nil, defender, interceptor, bRanged, bBombing, bSweep, fromPlot);
 
 	if (attackerStrength <= 0) then
@@ -359,7 +359,7 @@ function UpdateCombatOddsUnitVsCity(pMyUnit, pCity)
 	end
 
 	local attackerModList = attacker:GetAttackModifierList( battlePlot, nil, defender, interceptor, bRanged, bBombing, bSweep, g_ModifierListLength, fromPlot);
-	-- Bool arguement is bRangedStrike
+
 	local defenderStrength = defender:GetStrengthValue(false);
 	local defenderModList = defender:GetCityCombatModifierList(false);
 
@@ -375,7 +375,7 @@ function UpdateCombatOddsUnitVsCity(pMyUnit, pCity)
 	local interceptorResults = CombatDamage.Interceptor;
 	local attackerDamageInflicted = math.max( 0, defenderResults.FinalDamage - defenderResults.CurrentDamage);
 
-	-- Includes city retaliation and interception.
+
 	local defenderDamageInflicted = math.max( 0, attackerResults.FinalDamage - attackerResults.CurrentDamage);
 	local iInterceptionDamage = 0;
 
@@ -403,7 +403,7 @@ function UpdateCombatOddsUnitVsCity(pMyUnit, pCity)
 
 	if (bRanged or bBombing) then
 		SetCombatIndicator("Green", bBombing and "TXT_KEY_INTERFACEMODE_AIRSTRIKE" or "TXT_KEY_INTERFACEMODE_RANGE_ATTACK");
-	-- A melee strike that reduces the city to 0 HP always captures it (a 1 HP city can never survive melee)
+
 	elseif (defenderResults.FinalDamage >= defenderResults.MaxHitPoints) then
 		SetCombatIndicator("Green", "TXT_KEY_EUPANEL_GUARANTEED_CAPTURE");
 	elseif (attackerResults.CurrentDamage >(attackerResults.MaxHitPoints / 2) and defenderDamageInflicted > 0) then
@@ -442,33 +442,33 @@ function UpdateCombatOddsUnitVsUnit(pMyUnit, pTheirUnit, pBattlePlot)
 		local bRanged = false;
 		local bBombing = false;
 		local bSweep = false;
-		-- Interface mode can give us a hint as to what kind of combat is going on, but it is not guaranteed to be correct.
-		-- need to figure out how to determine the combat type from a right click.
+
+
 		local interfaceMode = UI.GetInterfaceMode();
 		if (interfaceMode == InterfaceModeTypes.INTERFACEMODE_AIR_SWEEP) then
 			bSweep = true;
-		-- Air Unit Bombing Interface Mode
+
 		elseif (interfaceMode == InterfaceModeTypes.INTERFACEMODE_AIRSTRIKE) then
 			bBombing = true;	
-		-- Ranged Unit Attacking Interface Mode
+
 		elseif (interfaceMode == InterfaceModeTypes.INTERFACEMODE_RANGE_ATTACK) then
 			bRanged = true;
-		-- Air Unit Attacking
+
 		elseif (attacker:GetDomainType() == DomainTypes.DOMAIN_AIR) then
 			bBombing = true;
-		-- Special Case: A Unit that is both ranged and melee, but needs to set up for a ranged attack
-		elseif (attacker:GetBaseRangedCombatStrength() > 0) then -- Positive Ranged Combat Strength
-			-- OnlyDefensive means it cannot melee attack.
-			-- MustSetUpToRangedAttack means it cannot ranged attack without setting up first.
+
+		elseif (attacker:GetBaseRangedCombatStrength() > 0) then
+
+
 			if (attacker:IsOnlyDefensive() or (attacker:IsMustSetUpToRangedAttack() and attacker:IsSetUpForRangedAttack())) then
 				bRanged = true;
 			end
 		end
 
-		-- Do we have an interceptor? plot, defender, bLandInterceptorsOnly, bVisibleOnly, bIgnoreActivity
+
 		local iNumVisibleAAUnits = pMyUnit:GetInterceptorCount(battlePlot, nil, false, true, true);
 		local bInterceptPossible = (iNumVisibleAAUnits > 0 and pMyUnit:EvasionProbability() < 100);
-		-- If we have visible interceptors, and the attacker is not immune to interception, then get the best interceptor for this combat.
+
 		if ((bInterceptPossible) and (bBombing or bSweep)) then
 			if (bBombing) then
 				interceptor = attacker:GetBestInterceptor(battlePlot, defender, false, true, true);
@@ -478,11 +478,11 @@ function UpdateCombatOddsUnitVsUnit(pMyUnit, pTheirUnit, pBattlePlot)
 			elseif (bSweep) then
 				interceptor = attacker:GetBestInterceptor(battlePlot, nil, false, true, true);
 			end
-			if (bSweep) then -- interceptors are the defenders in an airsweep.
+			if (bSweep) then
 				defender = interceptor;
 				interceptor = nil;
 				if defender == nil then
-					return; -- no visible interceptors, so we can't simulate a sweep.
+					return;
 				end
 			end
 		end
@@ -537,8 +537,8 @@ function UpdateCombatOddsUnitVsUnit(pMyUnit, pTheirUnit, pBattlePlot)
 				iInterceptionDamage = interceptorResults.DamageInflicted;
 			end
 
-			-- Clamped because this sums two independent combat sims (main attack + ranged support fire); the
-			-- DLL only caps each sim's own FinalDamage, not their Lua-side sum against remaining HP.
+
+
 			local attackerDamageInflicted = math.max(0, defenderResults.FinalDamage - defenderResults.CurrentDamage) + iRangedSupportFireDamage;
 			attackerDamageInflicted = math.min(attackerDamageInflicted, defenderResults.MaxHitPoints - defenderResults.CurrentDamage);
 			local defenderDamageInflicted = math.max(0, attackerResults.FinalDamage - attackerResults.CurrentDamage);
@@ -550,7 +550,7 @@ function UpdateCombatOddsUnitVsUnit(pMyUnit, pTheirUnit, pBattlePlot)
 			Controls.MyDamageValue:SetText("[COLOR_GREEN]" .. attackerDamageInflicted .. "[ENDCOLOR]");
 			Controls.TheirDamageValue:SetText("[COLOR_RED]" .. defenderDamageInflicted .. "[ENDCOLOR]");
 
-			-- Now do text stuff
+
 			local controlTable;
 			local strValue;
 
@@ -570,7 +570,7 @@ function UpdateCombatOddsUnitVsUnit(pMyUnit, pTheirUnit, pBattlePlot)
 					textKey = "TXT_KEY_INTERFACEMODE_AIR_SWEEP";
 				elseif bBombing then
 					textKey = "TXT_KEY_INTERFACEMODE_AIRSTRIKE";
-				else -- bRanged
+				else
 					textKey = "TXT_KEY_INTERFACEMODE_RANGE_ATTACK";
 				end
 				SetCombatIndicator("Green", textKey);
@@ -596,9 +596,9 @@ function UpdateCombatOddsUnitVsUnit(pMyUnit, pTheirUnit, pBattlePlot)
 					SetCombatIndicator("Yellow", "TXT_KEY_EUPANEL_STALEMATE");
 				end
 			end
-			-------------------------
-			-- PRIZE SHIPS PREVIEW --
-			-------------------------
+
+
+
 			if (not bRanged and not bSweep) then
 				local iChance;
 				iChance = pMyUnit:GetCaptureChance(defender);
@@ -721,11 +721,11 @@ function UpdateCombatOddsCityVsCity(myCity, theirCity)
 	local bBombing = false;
 	local bSweep = false;
 
-	-- Attacking city uses range-strike strength.
+
 	local attackerStrength = attacker:GetStrengthValue(true);
 	local attackerModList = attacker:GetCityCombatModifierList(true);
 
-	-- Defending city uses full defensive strength.
+
 	local defenderStrength = defender:GetStrengthValue(false);
 	local defenderModList = defender:GetCityCombatModifierList(false);
 
@@ -734,11 +734,11 @@ function UpdateCombatOddsCityVsCity(myCity, theirCity)
 	end
 
 	local CombatDamage = Game.GetCombatDamage(
-		nil,        -- attacker unit
-		attacker,   -- attacker city
-		nil,        -- defender unit
-		defender,   -- defender city
-		nil,        -- interceptor
+		nil,
+		attacker,
+		nil,
+		defender,
+		nil,
 		battlePlot,
 		bRanged,
 		bBombing,
@@ -796,9 +796,9 @@ function OnInterfaceModeChanged()
 end
 Events.InterfaceModeChanged.Add(OnInterfaceModeChanged);
 
---------------------------------------------------------------------------------
--- Update Health Bar combat preview
---------------------------------------------------------------------------------
+
+
+
 function DoUpdateHealthBars(iMaxMyHP, iTheirMaxHP, myCurrentDamage, theirCurrentDamage, iMyDamageInflicted, iTheirDamageInflicted, iMyExtraDamageInflicted, iTheirExtraDamageInflicted)
 	iMyExtraDamageInflicted = math.max(0, iMyExtraDamageInflicted or 0);
 	iTheirExtraDamageInflicted = math.max(0, iTheirExtraDamageInflicted or 0);
@@ -846,7 +846,7 @@ function DoUpdateHealthBars(iMaxMyHP, iTheirMaxHP, myCurrentDamage, theirCurrent
 		myDamageOffset = 2;
 	end
 
-	-- Main combat damage: flashing red.
+
 	local myNormalDamageBarSize =
 	{
 		x = 8,
@@ -862,7 +862,7 @@ function DoUpdateHealthBars(iMaxMyHP, iTheirMaxHP, myCurrentDamage, theirCurrent
 		Controls.MyDeltaBar:SetHide(true);
 	end
 
-	-- Preliminary damage: flashing orange.
+
 	if myExtraDamageTaken > 0 then
 		local myExtraDamageBarSize =
 		{
@@ -883,13 +883,13 @@ function DoUpdateHealthBars(iMaxMyHP, iTheirMaxHP, myCurrentDamage, theirCurrent
 
 	local theirDamageTaken = math.max(0, math.min(iMyDamageInflicted, theirRemainingHP));
 
-	-- Extra damage is already included in theirDamageTaken.
+
 	local theirExtraDamageTaken = math.min(iMyExtraDamageInflicted, theirDamageTaken);
 	local theirNormalDamageTaken = theirDamageTaken - theirExtraDamageTaken;
 
 	theirCurrentDamage = theirCurrentDamage + theirDamageTaken;
 
-	-- Remaining health.
+
 	local theirHealthPercent = (iTheirMaxHP - theirCurrentDamage) / iTheirMaxHP;
 
 	local theirHealthTimes100 = math.floor(100 * theirHealthPercent + 0.5);
@@ -925,7 +925,7 @@ function DoUpdateHealthBars(iMaxMyHP, iTheirMaxHP, myCurrentDamage, theirCurrent
 		theirDamageOffset = 2;
 	end
 
-	-- Main combat damage: flashing red.
+
 	local theirNormalDamageBarSize =
 	{
 		x = 8,
@@ -941,7 +941,7 @@ function DoUpdateHealthBars(iMaxMyHP, iTheirMaxHP, myCurrentDamage, theirCurrent
 		Controls.TheirDeltaBar:SetHide(true);
 	end
 
-	-- Preliminary damage: flashing orange.
+
 	if theirExtraDamageTaken > 0 then
 		local theirExtraDamageBarSize =
 		{
@@ -959,8 +959,8 @@ function DoUpdateHealthBars(iMaxMyHP, iTheirMaxHP, myCurrentDamage, theirCurrent
 end
 
 
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
+
+
 function OnWorldMouseOver( bWorldHasMouseOver )
     g_bWorldMouseOver = bWorldHasMouseOver;
     
@@ -974,7 +974,7 @@ Events.WorldMouseOver.Add( OnWorldMouseOver );
 
 function UnitRangedAttackOnlyInDomain( pUnit, pPlot )
 	if (pUnit:IsRanged() and pUnit:IsRangeAttackOnlyInDomain()) then
-		-- Walk-water (pontoon) is land-like for domain-restricted ranged attacks.
+
 		local bPlotWater = pPlot:IsWater() and not (pPlot.IsAllowsWalkWater and pPlot:IsAllowsWalkWater());
 		if (pUnit:GetDomainType() == DomainTypes.DOMAIN_LAND and bPlotWater) then
 			return true;
@@ -985,10 +985,10 @@ function UnitRangedAttackOnlyInDomain( pUnit, pPlot )
 	return false;
 end
 
--- Cross-domain melee prediction rules (must match what can actually attack).
+
 function CanShowCrossDomainMeleePrediction( pHeadUnit, pUnit, pBattlePlot )
-	-- Hover units (DOMAIN_HOVER / hovering promo) can always melee land and naval.
-	-- getDomainType() morphs with terrain, so same-domain checks alone miss many cases.
+
+
 	if ((pHeadUnit.IsHoveringUnit and pHeadUnit:IsHoveringUnit()) or (pUnit.IsHoveringUnit and pUnit:IsHoveringUnit())) then
 		return true;
 	end
@@ -1002,9 +1002,9 @@ function CanShowCrossDomainMeleePrediction( pHeadUnit, pUnit, pBattlePlot )
 		return true;
 	end
 
-	-- Walk-water only enables cross-domain when the *defender* is on the pontoon
-	-- (land can attack onto it; naval can fight land stacked there). Naval on a
-	-- pontoon still cannot attack a true land tile.
+
+
+
 	if (pBattlePlot ~= nil and pBattlePlot.IsAllowsWalkWater and pBattlePlot:IsAllowsWalkWater()) then
 		return true;
 	end
@@ -1012,9 +1012,9 @@ function CanShowCrossDomainMeleePrediction( pHeadUnit, pUnit, pBattlePlot )
 	return false;
 end
 
---------------------------------------------------------------------------------
--- Hex has been moused over
---------------------------------------------------------------------------------
+
+
+
 function OnMouseOverHex( hexX, hexY )
 
 	g_lastHexX = hexX;
@@ -1032,8 +1032,8 @@ function OnMouseOverHex( hexX, hexY )
 		local pHeadPlayer = Players[Game.GetActivePlayer()];
 		local pHeadCity = UI.GetHeadSelectedCity();
 		local FightWhileEmbarked = pHeadPlayer:IsEmbarkedMissionAllowed(GameInfoTypes.MISSION_RANGE_ATTACK);
-		local bCtrl = UIManager:GetControl(); -- Hold Control to preview the fight as if the enemy were attacking us (defensive combat).
-		local bEmbarkedFullStrength = pHeadPlayer:IsEmbarkedUnitsFullStrength(); -- Trait: embarked units fight at full strength, so they can melee naval/embarked units too.
+		local bCtrl = UIManager:GetControl();
+		local bEmbarkedFullStrength = pHeadPlayer:IsEmbarkedUnitsFullStrength();
 
 		if (pHeadUnit ~= nil) then
 
@@ -1041,11 +1041,11 @@ function OnMouseOverHex( hexX, hexY )
 
 			if (interfaceMode == InterfaceModeTypes.INTERFACEMODE_AIR_SWEEP) then
 
-				-- A sweep can be contested by an interceptor even when no unit is sitting on the swept tile itself.
+
 				local iTeam = Game.GetActiveTeam();
 
 				if (pPlot:IsRevealed(iTeam, false)) then
-					-- Ignore the interceptor's exact readiness state -- see the comment on the other GetBestInterceptor calls.
+
 					local interceptor = pHeadUnit:GetBestInterceptor(pPlot, nil, false, true, true);
 
 					if (interceptor ~= nil) then
@@ -1067,10 +1067,10 @@ function OnMouseOverHex( hexX, hexY )
 				local iTeam = Game.GetActiveTeam()
 				local pTeam = Teams[iTeam]
 				
-				-- Don't show info for stuff we can't see
+
 				if (pPlot:IsRevealed(iTeam, false)) then
 					
-					-- City
+
 					if (pPlot:IsCity()) then
 						
 						local pCity = pPlot:GetPlotCity();
@@ -1078,7 +1078,7 @@ function OnMouseOverHex( hexX, hexY )
 						if (pTeam:IsAtWar(pCity:GetTeam()) or (UIManager:GetAlt() and pCity:GetOwner() ~= iTeam)) then
 							UpdateCityStats(pCity);
 							if (bCtrl) then
-								UpdateCombatOddsCityVsUnit(pCity, pHeadUnit); -- Defensive preview: simulate their city bombarding us.
+								UpdateCombatOddsCityVsUnit(pCity, pHeadUnit);
 							else
 								UpdateCombatOddsUnitVsCity(pHeadUnit, pCity);
 							end
@@ -1090,26 +1090,26 @@ function OnMouseOverHex( hexX, hexY )
 							g_bShowPanel = true;
 						end
 						
-					-- No City Here
+
 					else
 						
-						-- Can see this plot right now
+
 						if (pPlot:IsVisible(iTeam, false) and not pHeadUnit:IsCityAttackOnly()) then
 							
 							local iNumUnits = pPlot:GetNumUnits();
 							local pUnit;
 							
-							-- Loop through all Units
+
 							for i = 0, iNumUnits do
 								pUnit = pPlot:GetUnit(i);
 								if (pUnit ~= nil and not pUnit:IsInvisible(iTeam, false)) then
 									
-									-- No air units
-									--if (pUnit:GetDomainType() ~= DomainTypes.DOMAIN_AIR) then
+
+
 										
-										-- Other guy must be same domain, OR we must be ranged, OR we must be naval and he is embarked,
-										-- OR we are embarked ourselves and our trait lets embarked units fight at full strength (melee vs. naval/embarked targets),
-										-- OR walk-water (pontoon) enables cross-domain melee.
+
+
+
 										if (CanShowCrossDomainMeleePrediction(pHeadUnit, pUnit, pPlot)
 											or (bEmbarkedFullStrength and pHeadUnit:IsEmbarked() and (pUnit:GetDomainType() == DomainTypes.DOMAIN_SEA or pUnit:IsEmbarked()))) then
 										
@@ -1120,7 +1120,7 @@ function OnMouseOverHex( hexX, hexY )
 												
 												if (pTeam:IsAtWar(pUnit:GetTeam()) or (UIManager:GetAlt() and pUnit:GetOwner() ~= iTeam)) then
 													if (bCtrl) then
-														UpdateCombatOddsUnitVsUnit(pUnit, pHeadUnit); -- Defensive preview: simulate them attacking us.
+														UpdateCombatOddsUnitVsUnit(pUnit, pHeadUnit);
 													else
 														UpdateCombatOddsUnitVsUnit(pHeadUnit, pUnit);
 													end
@@ -1132,7 +1132,7 @@ function OnMouseOverHex( hexX, hexY )
 												end
 											end
 										end
-									--end
+
 								end
 							end
 						end
@@ -1143,10 +1143,10 @@ function OnMouseOverHex( hexX, hexY )
 				local iTeam = Game.GetActiveTeam()
 				local pTeam = Teams[iTeam]
 				
-				-- Don't show info for stuff we can't see
+
 				if (pPlot:IsRevealed(iTeam, false)) then
 					
-					-- City
+
 					if (pPlot:IsCity()) then
 						
 						local pCity = pPlot:GetPlotCity();
@@ -1154,7 +1154,7 @@ function OnMouseOverHex( hexX, hexY )
 						if (pTeam:IsAtWar(pCity:GetTeam()) or (UIManager:GetAlt() and pCity:GetOwner() ~= iTeam)) then
 							UpdateCityStats(pCity);
 							if (bCtrl) then
-								UpdateCombatOddsCityVsUnit(pCity, pHeadUnit); -- Defensive preview: simulate their city bombarding us.
+								UpdateCombatOddsCityVsUnit(pCity, pHeadUnit);
 							else
 								UpdateCombatOddsUnitVsCity(pHeadUnit, pCity);
 							end
@@ -1166,16 +1166,16 @@ function OnMouseOverHex( hexX, hexY )
 							g_bShowPanel = true;
 						end
 						
-					-- No City Here
+
 					else
 						
-						-- Can see this plot right now
+
 						if (pPlot:IsVisible(iTeam, false)) then
 							
 							local iNumUnits = pPlot:GetNumUnits();
 							local pUnit;
 							
-							-- Loop through all Units
+
 							for i = 0, iNumUnits do
 								pUnit = pPlot:GetUnit(i);
 								if (pUnit ~= nil and not pUnit:IsInvisible(iTeam, false)) then
@@ -1186,7 +1186,7 @@ function OnMouseOverHex( hexX, hexY )
 												
 										if (pTeam:IsAtWar(pUnit:GetTeam()) or (UIManager:GetAlt() and pUnit:GetOwner() ~= iTeam)) then
 											if (bCtrl) then
-												UpdateCombatOddsUnitVsUnit(pUnit, pHeadUnit); -- Defensive preview: simulate them attacking us.
+												UpdateCombatOddsUnitVsUnit(pUnit, pHeadUnit);
 											else
 												UpdateCombatOddsUnitVsUnit(pHeadUnit, pUnit);
 											end
@@ -1205,24 +1205,24 @@ function OnMouseOverHex( hexX, hexY )
 				
 			end
 		
-		elseif(pHeadCity ~= nil and pHeadCity:CanRangeStrikeNow()) then	-- no unit selected, what about a city?
+		elseif(pHeadCity ~= nil and pHeadCity:CanRangeStrikeNow()) then
 
 			local myTeamID = Game.GetActiveTeam();
 			local myTeam = Teams[myTeamID];
 
-			-- Don't show info for stuff we can't see
+
 			if (pPlot:IsVisible(myTeamID, false)) then
 
 				if (pPlot:IsCity()) then
 
-					-- Enemy city info
+
 					local theirCity = pPlot:GetPlotCity();
 
 					if (theirCity ~= nil and (myTeam:IsAtWar(theirCity:GetTeam()) or (UIManager:GetAlt() and theirCity:GetOwner() ~= myTeamID))) then
 
 						UpdateCityStats(theirCity);
 						if (bCtrl) then
-							UpdateCombatOddsCityVsCity(theirCity, pHeadCity); -- Defensive preview: simulate their city bombarding ours.
+							UpdateCombatOddsCityVsCity(theirCity, pHeadCity);
 						else
 							UpdateCombatOddsCityVsCity(pHeadCity, theirCity);
 						end
@@ -1239,25 +1239,25 @@ function OnMouseOverHex( hexX, hexY )
 
 					local numUnitsOnPlot = pPlot:GetNumUnits();
 
-					-- Loop through all Units
+
 					for i = 0, numUnitsOnPlot - 1 do
 						local theirUnit = pPlot:GetUnit(i);
 
 
 						if (theirUnit ~= nil and not theirUnit:IsInvisible(myTeamID, false)) then
 
-							-- No air units
+
 							if (theirUnit:GetDomainType() ~= DomainTypes.DOMAIN_AIR) then
 
 								if (myTeam:IsAtWar(theirUnit:GetTeam()) or (UIManager:GetAlt() and theirUnit:GetOwner() ~= myTeamID)) then
 
-									-- Enemy Unit info
+
 									UpdateUnitPortrait(theirUnit);
 									UpdateUnitPromotions(theirUnit);
 									UpdateUnitStats(theirUnit);
 
 									if (bCtrl) then
-										UpdateCombatOddsUnitVsCity(theirUnit, pHeadCity); -- Defensive preview: simulate their unit attacking our city.
+										UpdateCombatOddsUnitVsCity(theirUnit, pHeadCity);
 									else
 										UpdateCombatOddsCityVsUnit(pHeadCity, theirUnit);
 									end
@@ -1286,8 +1286,8 @@ end
 Events.SerialEventMouseOverHex.Add( OnMouseOverHex );
 
 
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
+
+
 function ShowHideHandler( bIsHide, bIsInit )
     if( not bIsInit ) then
         LuaEvents.EnemyPanelHide( bIsHide );

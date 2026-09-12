@@ -1,13 +1,13 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
-//
-//	CvUnit Mission controller
-//
+
+
+
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvUnit.h"
 #include "CvPlot.h"
@@ -25,15 +25,15 @@
 #if !defined(FINAL_RELEASE)
 #include <sstream>
 
-// If defined, various operations related to the movement of units will be logged.
-//#define LOG_UNIT_MOVES
+
+
 #endif
 
-// include this after all other headers
+
 #include "LintFree.h"
 
-//	---------------------------------------------------------------------------
-/// Perform automated mission
+
+
 void CvUnitMission::AutoMission(UnitHandle hUnit)
 {
 	CvAssert(hUnit->getOwner() != NO_PLAYER);
@@ -43,7 +43,7 @@ void CvUnitMission::AutoMission(UnitHandle hUnit)
 	{
 		if(!hUnit->IsBusy() && !hUnit->isDelayedDeath())
 		{
-			// Builders which are being escorted shouldn't wake up every turn... this is annoying!
+
 			bool bEscortedBuilder = false;
 			if(pkMissionNode->eMissionType == CvTypes::getMISSION_BUILD())
 			{
@@ -76,8 +76,8 @@ void CvUnitMission::AutoMission(UnitHandle hUnit)
 	hUnit->doDelayedDeath();
 }
 
-//	---------------------------------------------------------------------------
-/// Queue up a new mission
+
+
 void CvUnitMission::PushMission(UnitHandle hUnit, MissionTypes eMission, int iData1, int iData2, int iFlags, bool bAppend, bool bManual, MissionAITypes eMissionAI, CvPlot* pMissionAIPlot, CvUnit* pMissionAIUnit)
 {
 	if(CvPreGame::isHuman(hUnit->getOwner()))
@@ -101,7 +101,7 @@ void CvUnitMission::PushMission(UnitHandle hUnit, MissionTypes eMission, int iDa
 		hUnit->SetAutomateType(NO_AUTOMATE);
 	}
 
-	// Update Builder Resource info
+
 	if(eMission == CvTypes::getMISSION_BUILD())
 	{
 		const BuildTypes eBuild = (BuildTypes) iData1;
@@ -118,7 +118,7 @@ void CvUnitMission::PushMission(UnitHandle hUnit, MissionTypes eMission, int iDa
 					}
 				}
 
-				//if (hUnit->isHuman())
+
 				{
 					FeatureTypes eFeature = hUnit->plot()->getFeatureType();
 					if(eFeature != NO_FEATURE && pkBuildInfo->isFeatureRemove(eFeature) && pkBuildInfo->getFeatureTime(eFeature) > 0)
@@ -200,7 +200,7 @@ void CvUnitMission::PushMission(UnitHandle hUnit, MissionTypes eMission, int iDa
 
 				int iNumResource = 0;
 
-				// Update the amount of a Resource used up by popped Build
+
 #ifdef AUI_WARNING_FIXES
 				for (uint iResourceLoop = 0; iResourceLoop < GC.getNumResourceInfos(); iResourceLoop++)
 #else
@@ -261,19 +261,19 @@ void CvUnitMission::PushMission(UnitHandle hUnit, MissionTypes eMission, int iDa
 			GC.GetEngineUserInterface()->setHasMovedUnit(true);
 		}
 
-		////gDLL->getEventReporterIFace()->selectionGroupPushMission(this, eMission);
+
 		hUnit.ignoreDestruction(true);
 		hUnit->doDelayedDeath();
 	}
 }
 
-//	---------------------------------------------------------------------------
-/// Retrieve next mission
+
+
 void CvUnitMission::PopMission(UnitHandle hUnit)
 {
 	CvAssert(hUnit->getOwner() != NO_PLAYER);
 
-	// Update Resource info
+
 	if(hUnit->getBuildType() != NO_BUILD)
 	{
 		ImprovementTypes eImprovement = NO_IMPROVEMENT;
@@ -294,7 +294,7 @@ void CvUnitMission::PopMission(UnitHandle hUnit)
 
 		int iNumResource;
 
-		// Update the amount of a Resource used up by popped Build
+
 #ifdef AUI_WARNING_FIXES
 		for (uint iResourceLoop = 0; iResourceLoop < GC.getNumResourceInfos(); iResourceLoop++)
 #else
@@ -338,8 +338,8 @@ void CvUnitMission::PopMission(UnitHandle hUnit)
 	}
 }
 
-//	---------------------------------------------------------------------------
-/// Have a unit wait for another units missions to complete
+
+
 void CvUnitMission::WaitFor(UnitHandle hUnit, UnitHandle hWaitForUnit)
 {
 	if(CvPreGame::isHuman(hUnit->getOwner()))
@@ -360,7 +360,7 @@ void CvUnitMission::WaitFor(UnitHandle hUnit, UnitHandle hWaitForUnit)
 
 	MissionQueue& kQueue = hUnit->m_missionQueue;
 
-	//  Insert head of mission list
+
 	kQueue.insertAtBeginning(&mission);
 
 	CvAssert(kQueue.getLength() < 10);
@@ -373,8 +373,8 @@ void CvUnitMission::WaitFor(UnitHandle hUnit, UnitHandle hWaitForUnit)
 	}
 }
 
-//	---------------------------------------------------------------------------
-/// Periodic update routine to advance the state of missions
+
+
 void CvUnitMission::UpdateMission(UnitHandle& hUnit)
 {
 	CvAssert(hUnit->getOwner() != NO_PLAYER);
@@ -393,7 +393,7 @@ void CvUnitMission::UpdateMission(UnitHandle& hUnit)
 			{
 				if(hUnit->getOwner() == GC.getGame().getActivePlayer())
 				{
-					//if (GC.GetEngineUserInterface()->GetHeadSelectedUnit() == NULL)
+
 					{
 						GC.GetEngineUserInterface()->changeCycleSelectionCounter(1);
 					}
@@ -403,32 +403,32 @@ void CvUnitMission::UpdateMission(UnitHandle& hUnit)
 	}
 }
 
-//	---------------------------------------------------------------------------
-/// Yes, please hit me again. I like pain.
+
+
 void CvUnitMission::ContinueMission(UnitHandle hUnit, int iSteps, int iETA)
 {
-	hUnit->ClearPathCache();		// At the start of the continue, clear any cached path.  The cache will be rebuilt and reused while the mission loops in this method
+	hUnit->ClearPathCache();
 
-	bool bContinueMissionRestart = true;	// to make this function no longer recursive
+	bool bContinueMissionRestart = true;
 	while(bContinueMissionRestart)
 	{
 		bContinueMissionRestart = false;
 
-		bool bDone = false;   // are we done with mission?
-		bool bAction = false; // are we taking an action this turn?
+		bool bDone = false;
+		bool bAction = false;
 
-		// slewis - important modification!
-		// This function may call the pathfinder multiple times.
-		// That can cause partial moves to be impossible in certain circumstances.
-		// We need a way to determine if the pathfinder can be used without breaking the currently built path.
-		// I added unit flags to accomplish this. (While this flag does not necessarily need to be serialized,
-		// the variable is serialized for future proofing.)
+
+
+
+
+
+
 		hUnit->m_iFlags = hUnit->m_iFlags | CvUnit::UNITFLAG_EVALUATING_MISSION;
 
-		// slewis - more important info!
-		// I replaced all the "return"s in this function with "goto"s.
-		// This ensures that every way this function is exited, it always clears out the unit flag evaluation mission.
-		// I know gotos are frowned upon, but if anyone else wants to re-write and test this function, be my guest.
+
+
+
+
 
 		CvAssert(!hUnit->isInCombat());
 		CvAssert(hUnit->HeadMissionQueueNode() != NULL);
@@ -437,7 +437,7 @@ void CvUnitMission::ContinueMission(UnitHandle hUnit, int iSteps, int iETA)
 
 		if(HeadMissionQueueNode(hUnit->m_missionQueue) == NULL)
 		{
-			// just in case...
+
 			hUnit->SetActivityType(ACTIVITY_AWAKE);
 			goto ContinueMissionExit;
 		}
@@ -459,7 +459,7 @@ void CvUnitMission::ContinueMission(UnitHandle hUnit, int iSteps, int iETA)
 				CvPlot* pPlot = GC.getMap().plot(pkMissionData->iData1, pkMissionData->iData2);
 				if(hUnit->IsAutomated() && pPlot->isVisible(hUnit->getTeam()) && hUnit->canMoveInto(*pPlot, CvUnit::MOVEFLAG_ATTACK))
 				{
-					// if we're automated and try to attack, consider this move OVAH
+
 					bDone = true;
 				}
 				else
@@ -478,7 +478,7 @@ void CvUnitMission::ContinueMission(UnitHandle hUnit, int iSteps, int iETA)
 
 									if(!GC.getGame().isOption(GAMEOPTION_NO_TUTORIAL))
 									{
-										// do city alert
+
 										CvPopupInfo kPopup(BUTTONPOPUP_ADVISOR_MODAL);
 										kPopup.iData1 = ADVISOR_MILITARY;
 										kPopup.iData2 = pPlot->GetPlotIndex();
@@ -525,8 +525,8 @@ void CvUnitMission::ContinueMission(UnitHandle hUnit, int iSteps, int iETA)
 			}
 		}
 
-		// extra crash protection, should never happen (but a previous bug in groupAttack was causing a NULL here)
-		// while that bug is fixed, no reason to not be a little more careful
+
+
 		if(HeadMissionQueueNode(hUnit->m_missionQueue) == NULL)
 		{
 			hUnit->SetActivityType(ACTIVITY_AWAKE);
@@ -534,8 +534,8 @@ void CvUnitMission::ContinueMission(UnitHandle hUnit, int iSteps, int iETA)
 		}
 
 		const MissionQueue& kMissionQueue = hUnit->m_missionQueue;
-		// If there are units in the selection group, they can all move, and we're not done
-		//   then try to follow the misision
+
+
 		if(!bDone && hUnit->canMove() && !hUnit->IsDoingPartialMove())
 		{
 			const MissionData& kMissionData = *HeadMissionQueueNode(kMissionQueue);
@@ -561,8 +561,8 @@ void CvUnitMission::ContinueMission(UnitHandle hUnit, int iSteps, int iETA)
 						bDone = true;
 					}
 
-					// Save off the initial ETA, we will feed it back into the UnitPathTo so it can check to see if our ETA grows while we are in the loop.
-					// This can happen as terrain gets revealed.
+
+
 					if(iSteps == 0)
 					{
 						iETA = iThisETA;
@@ -587,7 +587,7 @@ void CvUnitMission::ContinueMission(UnitHandle hUnit, int iSteps, int iETA)
 				CvPlot* pOriginationPlot;
 				CvPlot* pTargetPlot;
 
-				// Get target plot
+
 				pTargetPlot = GC.getMap().plot(kMissionData.iData1, kMissionData.iData2);
 
 				if(pTargetPlot != NULL)
@@ -601,7 +601,7 @@ void CvUnitMission::ContinueMission(UnitHandle hUnit, int iSteps, int iETA)
 						break;
 					}
 
-					// Find unit to move out
+
 #ifdef AUI_WARNING_FIXES
 					for (uint iI = 0; iI < pTargetPlot->getNumUnits(); iI++)
 #else
@@ -612,10 +612,10 @@ void CvUnitMission::ContinueMission(UnitHandle hUnit, int iSteps, int iETA)
 
 						if(pUnit2->AreUnitsOfSameType(*(hUnit)) && pUnit2->ReadyToMove())
 						{
-							// Start the swap
+
 							hUnit->UnitPathTo(HeadMissionQueueNode(kMissionQueue)->iData1, HeadMissionQueueNode(kMissionQueue)->iData2, MOVE_IGNORE_STACKING);
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
-							// Pathfinder can refuse land <-> walk-water even for a 1-tile swap.
+
 							if (hUnit->plot() != pTargetPlot && pOriginationPlot &&
 								pOriginationPlot->isAdjacent(pTargetPlot) &&
 								(pOriginationPlot->IsAllowsWalkWater() || pTargetPlot->IsAllowsWalkWater()) &&
@@ -625,7 +625,7 @@ void CvUnitMission::ContinueMission(UnitHandle hUnit, int iSteps, int iETA)
 							}
 #endif
 
-							// Move the other unit back out
+
 							pUnit2->UnitPathTo(pOriginationPlot->getX(), pOriginationPlot->getY(), MOVE_IGNORE_STACKING);
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
 							if (pUnit2->plot() != pOriginationPlot && pOriginationPlot &&
@@ -714,7 +714,7 @@ void CvUnitMission::ContinueMission(UnitHandle hUnit, int iSteps, int iETA)
 			}
 		}
 
-		// check to see if mission is done
+
 		if(!bDone && (hUnit->HeadMissionQueueNode() != NULL))
 		{
 			const MissionData& kMissionData = *HeadMissionQueueNode(kMissionQueue);
@@ -815,7 +815,7 @@ void CvUnitMission::ContinueMission(UnitHandle hUnit, int iSteps, int iETA)
 				}
 				else
 				{
-					// Set the mission timer to 1 so we will get another UpdateMission call
+
 					hUnit->ChangeMissionTimer(1);
 				}
 			}
@@ -823,7 +823,7 @@ void CvUnitMission::ContinueMission(UnitHandle hUnit, int iSteps, int iETA)
 
 		if(HeadMissionQueueNode(kMissionQueue) != NULL)
 		{
-			// if there is an action, if it's done or there are not moves left, and a player is watching, watch the movement
+
 			if(bAction && (bDone || !hUnit->canMove()) && hUnit->plot()->isVisibleToWatchingHuman())
 			{
 				UpdateMissionTimer(hUnit, iSteps);
@@ -843,7 +843,7 @@ void CvUnitMission::ContinueMission(UnitHandle hUnit, int iSteps, int iETA)
 					gDLL->GameplayUnitWork(pDllUnit.get(), -1);
 				}
 
-				if(hUnit->GetMissionTimer() == 0 && !hUnit->isInCombat())	// Was hUnit->IsBusy(), but its ok to clear the mission if the unit is just completing a move visualization
+				if(hUnit->GetMissionTimer() == 0 && !hUnit->isInCombat())
 				{
 					if(hUnit->getOwner() == GC.getGame().getActivePlayer() && hUnit->IsSelected())
 					{
@@ -853,19 +853,19 @@ void CvUnitMission::ContinueMission(UnitHandle hUnit, int iSteps, int iETA)
 						        (kMissionData.eMissionType == CvTypes::getMISSION_ROUTE_TO()) ||
 						        (kMissionData.eMissionType == CvTypes::getMISSION_MOVE_TO_UNIT()))
 						{
-							// How long does the camera wait before jumping to the next item?
+
 							int iCameraTime;
 
 							if(GET_PLAYER(hUnit->getOwner()).isOption(PLAYEROPTION_QUICK_MOVES))
 							{
 								iCameraTime = 1;
 							}
-							// If our move revealed a Plot, camera jumps slower
+
 							else if(GC.GetEngineUserInterface()->IsSelectedUnitRevealingNewPlots())
 							{
 								iCameraTime = 10;
 							}
-							// No plots revealed by this move, go quicker
+
 							else
 							{
 								iCameraTime = 5;
@@ -885,11 +885,11 @@ void CvUnitMission::ContinueMission(UnitHandle hUnit, int iSteps, int iETA)
 			}
 			else
 			{
-				// if we can still act, process the mission again
+
 				if(hUnit->canMove() && !hUnit->IsDoingPartialMove())
 				{
 					iSteps++;
-					bContinueMissionRestart = true;	// keep looping
+					bContinueMissionRestart = true;
 				}
 				else if(!hUnit->IsBusy() && hUnit->getOwner() == GC.getGame().getActivePlayer() && hUnit->IsSelected())
 				{
@@ -898,13 +898,13 @@ void CvUnitMission::ContinueMission(UnitHandle hUnit, int iSteps, int iETA)
 			}
 		}
 	}
-ContinueMissionExit: // goto destination to clean up the flag value
+ContinueMissionExit:
 	hUnit->m_iFlags =hUnit-> m_iFlags & ~CvUnit::UNITFLAG_EVALUATING_MISSION;
 	GC.getGame().SetCombatWarned(false);
 }
 
-//	---------------------------------------------------------------------------
-/// Eligible to start a new mission?
+
+
 bool CvUnitMission::CanStartMission(UnitHandle hUnit, int iMission, int iData1, int iData2, CvPlot* pPlot, bool bTestVisible)
 {
 	UnitHandle pTargetUnit;
@@ -928,7 +928,7 @@ bool CvUnitMission::CanStartMission(UnitHandle hUnit, int iMission, int iData1, 
 	}
 #endif
 
-	// Prevented by scripting?
+
 	ICvEngineScriptSystem1* pkScriptSystem = gDLL->GetScriptSystem();
 	if(pkScriptSystem)
 	{
@@ -937,12 +937,12 @@ bool CvUnitMission::CanStartMission(UnitHandle hUnit, int iMission, int iData1, 
 		args->Push(hUnit->GetID());
 		args->Push(iMission);
 
-		// Attempt to execute the game events.
-		// Will return false if there are no registered listeners.
+
+
 		bool bResult = false;
 		if(LuaSupport::CallTestAll(pkScriptSystem, "CanStartMission", args.get(), bResult))
 		{
-			// Check the result.
+
 			if(bResult == false)
 			{
 				return false;
@@ -958,7 +958,7 @@ bool CvUnitMission::CanStartMission(UnitHandle hUnit, int iMission, int iData1, 
 	if(iMission == CvTypes::getMISSION_MOVE_TO() ||
 	        iMission == CvTypes::getMISSION_SWAP_UNITS())
 	{
-		if (hUnit->IsImmobile() && hUnit->getDomainType() != DOMAIN_AIR)	// If immobile, we can't move... unless we are an air unit.
+		if (hUnit->IsImmobile() && hUnit->getDomainType() != DOMAIN_AIR)
 		{
 			return false;
 		}
@@ -1147,7 +1147,7 @@ bool CvUnitMission::CanStartMission(UnitHandle hUnit, int iMission, int iData1, 
 	}
 	else if(iMission == CvTypes::getMISSION_HURRY())
 	{
-		//if (hUnit->IsCanRushBuilding(pPlot->getPlotCity(), bTestVisible))
+
 		if(hUnit->canHurry(pPlot, bTestVisible))
 		{
 			return true;
@@ -1218,7 +1218,7 @@ bool CvUnitMission::CanStartMission(UnitHandle hUnit, int iMission, int iData1, 
 	}
 	else if(iMission == CvTypes::getMISSION_GOLDEN_AGE())
 	{
-		//this means to play the animation only
+
 		if(iData1 != -1)
 		{
 			return true;
@@ -1281,7 +1281,7 @@ bool CvUnitMission::CanStartMission(UnitHandle hUnit, int iMission, int iData1, 
 	}
 	else if(iMission == CvTypes::getMISSION_GIVE_POLICIES())
 	{
-		//this means to play the animation only
+
 		if(iData1 != -1)
 		{
 			return true;
@@ -1294,7 +1294,7 @@ bool CvUnitMission::CanStartMission(UnitHandle hUnit, int iMission, int iData1, 
 	}
 	else if(iMission == CvTypes::getMISSION_ONE_SHOT_TOURISM())
 	{
-		//this means to play the animation only
+
 		if(iData1 != -1)
 		{
 			return true;
@@ -1340,8 +1340,8 @@ bool CvUnitMission::CanStartMission(UnitHandle hUnit, int iMission, int iData1, 
 	return false;
 }
 
-//	---------------------------------------------------------------------------
-/// Initiate a mission
+
+
 void CvUnitMission::StartMission(UnitHandle hUnit)
 {
 	bool bDelete;
@@ -1349,7 +1349,7 @@ void CvUnitMission::StartMission(UnitHandle hUnit)
 	bool bNotify;
 
 	static int stackDepth = 0;
-	++stackDepth; // JAR debugging
+	++stackDepth;
 
 	CvAssert(stackDepth < 100);
 
@@ -1372,7 +1372,7 @@ void CvUnitMission::StartMission(UnitHandle hUnit)
 				}
 			}
 
-			--stackDepth; // JAR debugging
+			--stackDepth;
 			return;
 		}
 	}
@@ -1444,7 +1444,7 @@ void CvUnitMission::StartMission(UnitHandle hUnit)
 
 		if(bNotify)
 		{
-			// The entity should not futz with the missions, but...
+
 			CvAssert(GetHeadMissionData(hUnit) == pkQueueData);
 			pkQueueData = GetHeadMissionData(hUnit);
 		}
@@ -1491,7 +1491,7 @@ void CvUnitMission::StartMission(UnitHandle hUnit)
 				MissionData& kMissionData = *hUnit->HeadMissionQueueNode();
 				if(GC.getMap().plot(kMissionData.iData1, kMissionData.iData2) == NULL || !hUnit->canNukeAt(hUnit->plot(), kMissionData.iData1, kMissionData.iData2))
 				{
-					// Invalid, delete the mission
+
 					bDelete = true;
 				}
 			}
@@ -1510,7 +1510,7 @@ void CvUnitMission::StartMission(UnitHandle hUnit)
 				if(hUnit->paradrop(pkQueueData->iData1, pkQueueData->iData2))
 				{
 					bAction = true;
-					// The Paradrop needs to have GameplayUnitMissionEnd, so if no mission timer will be started, do it now.
+
 					if (hUnit->plot()->isActiveVisible() && (!hUnit->isHuman() || !hUnit->plot()->isVisibleToWatchingHuman() || CalculateMissionTimer(hUnit) == 0))
 					{
 						auto_ptr<ICvUnit1> pDllUnit(new CvDllUnit(hUnit.pointer()));
@@ -1532,7 +1532,7 @@ void CvUnitMission::StartMission(UnitHandle hUnit)
 				if(hUnit->rebase(pkQueueData->iData1, pkQueueData->iData2))
 				{
 					bAction = true;
-					// The Rebase needs to have GameplayUnitMissionEnd, so if no mission timer will be started, do it now.
+
 					if (hUnit->plot()->isActiveVisible() && (!hUnit->isHuman() || !hUnit->plot()->isVisibleToWatchingHuman() || CalculateMissionTimer(hUnit) == 0))
 					{
 						auto_ptr<ICvUnit1> pDllUnit(new CvDllUnit(hUnit.pointer()));
@@ -1546,7 +1546,7 @@ void CvUnitMission::StartMission(UnitHandle hUnit)
 				MissionData& kMissionData = *hUnit->HeadMissionQueueNode();
 				if(GC.getMap().plot(kMissionData.iData1, kMissionData.iData2) == NULL || !hUnit->canRangeStrikeAt(kMissionData.iData1, kMissionData.iData2))
 				{
-					// Invalid, delete the mission
+
 					bDelete = true;
 				}
 			}
@@ -1593,7 +1593,7 @@ void CvUnitMission::StartMission(UnitHandle hUnit)
 
 			else if(pkQueueData->eMissionType == CvTypes::getMISSION_HURRY())
 			{
-				//if (hUnit->DoRushBuilding())
+
 				if(hUnit->hurry())
 				{
 					bAction = true;
@@ -1674,7 +1674,7 @@ void CvUnitMission::StartMission(UnitHandle hUnit)
 
 			else if(pkQueueData->eMissionType == CvTypes::getMISSION_GOLDEN_AGE())
 			{
-				//just play animation, not golden age - JW
+
 				if(hUnit->HeadMissionQueueNode()->iData1 != -1)
 				{
 					bAction = true;
@@ -1735,7 +1735,7 @@ void CvUnitMission::StartMission(UnitHandle hUnit)
 
 			else if(pkQueueData->eMissionType == CvTypes::getMISSION_BUILD())
 			{
-				// Gold cost for Improvement construction
+
 				kUnitOwner.GetTreasury()->ChangeGold(-(kUnitOwner.getBuildCost(hUnit->plot(), (BuildTypes)(hUnit->HeadMissionQueueNode()->iData1))));
 
 				auto_ptr<ICvUnit1> pDllUnit(new CvDllUnit(hUnit.pointer()));
@@ -1745,9 +1745,9 @@ void CvUnitMission::StartMission(UnitHandle hUnit)
 			else if(pkQueueData->eMissionType == CvTypes::getMISSION_ROUTE_TO())
 			{
 				auto_ptr<ICvUnit1> pDllUnit(new CvDllUnit(hUnit.pointer()));
-				// Vanilla passed 0 here, which assumed Builds ID 0 was BUILD_ROAD (ENTITY_EVENT_SHOVEL).
-				// Lekmod rebuilds the Builds table with BUILD_REMOVE_FOREST as ID 0, so Route To
-				// played ENTITY_EVENT_CHOP while auto-connecting cities.
+
+
+
 				BuildTypes eWorkBuild = NO_BUILD;
 				hUnit->GetBestBuildRoute(hUnit->plot(), &eWorkBuild);
 				if(eWorkBuild == NO_BUILD)
@@ -1772,7 +1772,7 @@ void CvUnitMission::StartMission(UnitHandle hUnit)
 
 			else if(pkQueueData->eMissionType == CvTypes::getMISSION_GIVE_POLICIES())
 			{
-				//just play animation, not golden age - JW
+
 				if(hUnit->HeadMissionQueueNode()->iData1 != -1)
 				{
 					bAction = true;
@@ -1788,7 +1788,7 @@ void CvUnitMission::StartMission(UnitHandle hUnit)
 
 			else if(pkQueueData->eMissionType == CvTypes::getMISSION_ONE_SHOT_TOURISM())
 			{
-				//just play animation, not golden age - JW
+
 				if(hUnit->HeadMissionQueueNode()->iData1 != -1)
 				{
 					bAction = true;
@@ -1867,8 +1867,8 @@ void CvUnitMission::StartMission(UnitHandle hUnit)
 	--stackDepth;
 }
 
-//	---------------------------------------------------------------------------
-/// Where does this mission end?
+
+
 CvPlot* CvUnitMission::LastMissionPlot(UnitHandle hUnit)
 {
 	const MissionQueueNode* pMissionNode = TailMissionQueueNode(hUnit->m_missionQueue);
@@ -1897,15 +1897,15 @@ CvPlot* CvUnitMission::LastMissionPlot(UnitHandle hUnit)
 	return hUnit->plot();
 }
 
-//	---------------------------------------------------------------------------
-//	Update the mission timer to a new value based on the mission (or lack thereof) in the queue
-//	KWG: The mission timer controls when the next time the unit's mission will be checked, not
-//	     in absolute time, but in passes through the Game Core update loop.  Previously,
-//       this was used to delay processing so that the user could see the visualization of
-//		 units.  The Game Core no longer deals with visualization timing, but this system is
-//		 still used to keep the units sequencing their missions with each other.
-//		 i.e. each unit will get a chance to complete a mission segment, rather than a unit
-//		 exhausting its mission queue all in one go.
+
+
+
+
+
+
+
+
+
 int CvUnitMission::CalculateMissionTimer(UnitHandle hUnit, int iSteps)
 {
 	UnitHandle pTargetUnit;
@@ -1954,7 +1954,7 @@ int CvUnitMission::CalculateMissionTimer(UnitHandle hUnit, int iSteps)
 			}
 		}
 
-		if(hUnit->isHuman() && (hUnit->IsAutomated() /*|| (GET_PLAYER((GC.getGame().isNetworkMultiPlayer()) ? hUnit->getOwner() : GC.getGame().getActivePlayer()).isOption(PLAYEROPTION_QUICK_MOVES))*/))
+		if(hUnit->isHuman() && (hUnit->IsAutomated()                                                                                                                                                   ))
 		{
 			iTime = std::min(iTime, 1);
 		}
@@ -1967,14 +1967,14 @@ int CvUnitMission::CalculateMissionTimer(UnitHandle hUnit, int iSteps)
 	return iTime;
 }
 
-//	---------------------------------------------------------------------------
+
 void CvUnitMission::UpdateMissionTimer(UnitHandle hUnit, int iSteps)
 {
 	hUnit->SetMissionTimer(CalculateMissionTimer(hUnit, iSteps));
 }
 
-//	---------------------------------------------------------------------------
-/// Retrieve a specified mission index in the queue.  Can return NULL
+
+
 const MissionData* CvUnitMission::GetMissionData(UnitHandle hUnit, int iNode)
 {
 	int iCount = 0;
@@ -1997,8 +1997,8 @@ const MissionData* CvUnitMission::GetMissionData(UnitHandle hUnit, int iNode)
 	return NULL;
 }
 
-//	---------------------------------------------------------------------------
-/// Push onto back end of mission queue
+
+
 void CvUnitMission::InsertAtEndMissionQueue(UnitHandle hUnit, MissionData mission, bool bStart)
 {
 	CvAssert(hUnit->getOwner() != NO_PLAYER);
@@ -2022,8 +2022,8 @@ void CvUnitMission::InsertAtEndMissionQueue(UnitHandle hUnit, MissionData missio
 	}
 }
 
-//	---------------------------------------------------------------------------
-/// Delete a specific mission from queue
+
+
 MissionData* CvUnitMission::DeleteMissionQueueNode(UnitHandle hUnit, MissionData* pNode)
 {
 	MissionQueueNode* pNextMissionNode;
@@ -2035,7 +2035,7 @@ MissionData* CvUnitMission::DeleteMissionQueueNode(UnitHandle hUnit, MissionData
 
 	if(pNode == HeadMissionQueueNode(kQueue))
 	{
-		DeactivateHeadMission(hUnit, /*iUnitCycleTimer*/ 1);
+		DeactivateHeadMission(hUnit,                     1);
 	}
 
 	pNextMissionNode = kQueue.deleteNode(pNode);
@@ -2057,11 +2057,11 @@ MissionData* CvUnitMission::DeleteMissionQueueNode(UnitHandle hUnit, MissionData
 	return pNextMissionNode;
 }
 
-//	---------------------------------------------------------------------------
-/// Clear all queued missions
+
+
 void CvUnitMission::ClearMissionQueue(UnitHandle hUnit, int iUnitCycleTimerOverride)
 {
-	//VALIDATE_OBJECT
+
 	CvAssert(hUnit->getOwner() != NO_PLAYER);
 
 	DeactivateHeadMission(hUnit, iUnitCycleTimerOverride);
@@ -2072,7 +2072,7 @@ void CvUnitMission::ClearMissionQueue(UnitHandle hUnit, int iUnitCycleTimerOverr
 	}
 
 	hUnit->ClearPathCache();
-//	hUnit->m_missionQueue.clear();
+
 
 	if((hUnit->getOwner() == GC.getGame().getActivePlayer()) && hUnit->IsSelected())
 	{
@@ -2082,8 +2082,8 @@ void CvUnitMission::ClearMissionQueue(UnitHandle hUnit, int iUnitCycleTimerOverr
 	}
 }
 
-//	---------------------------------------------------------------------------
-/// Start our first mission
+
+
 void CvUnitMission::ActivateHeadMission(UnitHandle hUnit)
 {
 	VALIDATE_OBJECT
@@ -2097,8 +2097,8 @@ void CvUnitMission::ActivateHeadMission(UnitHandle hUnit)
 	}
 }
 
-//	---------------------------------------------------------------------------
-/// Deactivate our first mission, waking up the unit
+
+
 void CvUnitMission::DeactivateHeadMission(UnitHandle hUnit, int iUnitCycleTimer)
 {
 	VALIDATE_OBJECT
@@ -2126,63 +2126,63 @@ void CvUnitMission::DeactivateHeadMission(UnitHandle hUnit, int iUnitCycleTimer)
 	}
 }
 
-//	---------------------------------------------------------------------------
-/// Retrieve the mission after a specific one
+
+
 const MissionQueueNode* CvUnitMission::NextMissionQueueNode(const MissionQueue& kQueue, const MissionQueueNode* pNode)
 {
 	return kQueue.next(pNode);
 }
 
-//	---------------------------------------------------------------------------
-/// Retrieve the mission before a specific one
+
+
 const MissionQueueNode* CvUnitMission::PrevMissionQueueNode(const MissionQueue& kQueue, const MissionQueueNode* pNode)
 {
 	return kQueue.prev(pNode);
 }
 
-//	---------------------------------------------------------------------------
-/// Retrieve the first mission in the queue (const correct version)
+
+
 const MissionQueueNode* CvUnitMission::HeadMissionQueueNode(const MissionQueue& kQueue)
 {
 	return kQueue.head();
 }
 
-//	---------------------------------------------------------------------------
-/// Retrieve the first mission in the queue
+
+
 MissionQueueNode* CvUnitMission::HeadMissionQueueNode(MissionQueue& kQueue)
 {
 	return kQueue.head();
 }
 
-//	---------------------------------------------------------------------------
-/// Retrieve the last mission in the queue (const correct version)
+
+
 const MissionQueueNode* CvUnitMission::TailMissionQueueNode(const MissionQueue& kQueue)
 {
 	return ((MissionQueue&)kQueue).tail();
 }
 
-//	---------------------------------------------------------------------------
-/// Retrieve the last mission in the queue
+
+
 MissionQueueNode* CvUnitMission::TailMissionQueueNode(MissionQueue& kQueue)
 {
 	return kQueue.tail();
 }
 
-//	---------------------------------------------------------------------------
-/// Retrieve a mission from the queue by index
+
+
 MissionData* CvUnitMission::GetMissionFromQueue(MissionQueue& kQueue, int iIndex)
 {
 	return kQueue.getAt(iIndex);
 }
 
-//	---------------------------------------------------------------------------
-/// Get the length of the mission queue
+
+
 int	CvUnitMission::GetLengthMissionQueue(const MissionQueue& kQueue)
 {
 	return kQueue.getLength();
 }
 
-//	---------------------------------------------------------------------------
+
 const MissionData* CvUnitMission::GetHeadMissionData(UnitHandle hUnit)
 {
 	CvAssert(hUnit.pointer() != NULL);
@@ -2191,7 +2191,7 @@ const MissionData* CvUnitMission::GetHeadMissionData(UnitHandle hUnit)
 	return NULL;
 }
 
-//	---------------------------------------------------------------------------
+
 const MissionData* CvUnitMission::IsHeadMission(UnitHandle hUnit, int iMission)
 {
 	CvAssert(hUnit.pointer() != NULL);
@@ -2204,8 +2204,8 @@ const MissionData* CvUnitMission::IsHeadMission(UnitHandle hUnit, int iMission)
 	return NULL;
 }
 
-//	---------------------------------------------------------------------------
-//	Returns true if the is a move mission at the head of the unit queue and it is complete
+
+
 bool CvUnitMission::HasCompletedMoveMission(UnitHandle hUnit)
 {
 	MissionQueueNode* pkMissionNode;
@@ -2227,7 +2227,7 @@ bool CvUnitMission::HasCompletedMoveMission(UnitHandle hUnit)
 				}
 				else
 				{
-					return true;	// Our unit is gone, assume we are done.
+					return true;
 				}
 			}
 			else

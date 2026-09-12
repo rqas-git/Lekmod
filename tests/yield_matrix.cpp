@@ -1,4 +1,4 @@
-// Compile the production statement cache, loader and allocator against SQLite.
+
 #include <cassert>
 #include <cstdio>
 #include <map>
@@ -63,7 +63,7 @@ void checkStatementCache() {
     first->Bind(1, "7");
     assert(first->Step() && first->GetInt(0) == 17);
 
-    // Reuse resets an unfinished statement, retains bindings, and ignores new SQL.
+
     assert(utility.GetOrPrepareResults("first", "invalid SQL") == first);
     assert(DB.prepared == 1);
     assert(first->Step() && first->GetInt(0) == 17);
@@ -74,7 +74,7 @@ void checkStatementCache() {
     assert(utility.GetOrPrepareResults("second", "SELECT ? + 10") != first);
     assert(DB.prepared == 2);
 
-    // Failed preparation is not cached, so a corrected query can retry the key.
+
     assert(utility.GetOrPrepareResults("retry", "invalid SQL") == NULL);
     assert(utility.GetResults("retry") == NULL && DB.prepared == 3);
     Database::Results* retry = utility.GetOrPrepareResults("retry", "SELECT 42");
@@ -97,14 +97,14 @@ void checkSizingStatements() {
     CvDatabaseUtility utility;
     const int before = DB.prepared;
     execute(DB.connection, "CREATE TABLE Sizing (ID INTEGER PRIMARY KEY)");
-    // Retain Civ's existing empty-table convention: NULL max(rowid) becomes 1.
+
     assert(utility.MaxRows("Sizing") == 1);
     execute(DB.connection, "INSERT INTO Sizing VALUES (0),(1),(100)");
     assert(utility.MaxRows("Sizing") == 101);
     execute(DB.connection, "DELETE FROM Sizing WHERE ID = 100");
     assert(utility.MaxRows("Sizing") == 2);
     assert(DB.prepared == before + 1);
-    // A prepared SQLite statement also survives a schema rebuild between calls.
+
     execute(DB.connection, "DROP TABLE Sizing; CREATE TABLE Sizing (ID INTEGER PRIMARY KEY); INSERT INTO Sizing VALUES (7)");
     assert(utility.MaxRows("Sizing") == 8);
     assert(DB.prepared == before + 1);

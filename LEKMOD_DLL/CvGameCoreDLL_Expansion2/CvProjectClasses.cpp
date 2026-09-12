@@ -1,15 +1,15 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "ICvDLLUserInterface.h"
 #include "CvGameCoreUtils.h"
 
-// include this after all other headers!
+
 #include "LintFree.h"
 
 CvProjectEntry::CvProjectEntry(void):
@@ -20,7 +20,7 @@ CvProjectEntry::CvProjectEntry(void):
 	m_piFlavorValue(NULL)
 {
 }
-//------------------------------------------------------------------------------
+
 CvProjectEntry::~CvProjectEntry(void)
 {
 	SAFE_DELETE_ARRAY(m_piResourceQuantityRequirements);
@@ -29,7 +29,7 @@ CvProjectEntry::~CvProjectEntry(void)
 	SAFE_DELETE_ARRAY(m_piProjectsNeeded);
 	SAFE_DELETE_ARRAY(m_piFlavorValue);
 }
-//------------------------------------------------------------------------------
+
 bool CvProjectEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
@@ -63,11 +63,11 @@ bool CvProjectEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility
 	const char* szAnyonePrereqProject = kResults.GetText("AnyonePrereqProject");
 	m_iAnyoneProjectPrereq = GC.getInfoTypeForString(szAnyonePrereqProject, true);
 
-	//Arrays
+
 	const char* szProjectType = GetType();
 	kUtility.PopulateArrayByValue(m_piResourceQuantityRequirements, "Resources", "Project_ResourceQuantityRequirements", "ResourceType", "ProjectType", szProjectType, "Quantity");
 
-	//Victory Thresholds
+
 	{
 		const int iNumVictories = kUtility.MaxRows("Victories");
 
@@ -98,80 +98,80 @@ bool CvProjectEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility
 
 	return true;
 }
-//------------------------------------------------------------------------------
-/// What victory does this contribute to?
+
+
 int CvProjectEntry::GetVictoryPrereq() const
 {
 	return m_iVictoryPrereq;
 }
 
-/// Technology prerequisite
+
 int CvProjectEntry::GetTechPrereq() const
 {
 	return m_iTechPrereq;
 }
 
-/// Is there a project someone must have completed?
+
 int CvProjectEntry::GetAnyoneProjectPrereq() const
 {
 	return m_iAnyoneProjectPrereq;
 }
 
-/// Set whether or not there a project someone must have completed
+
 void CvProjectEntry::SetAnyoneProjectPrereq(int i)
 {
 	m_iAnyoneProjectPrereq = i;
 }
 
-/// Is there a maximum number of these in the world?
+
 int CvProjectEntry::GetMaxGlobalInstances() const
 {
 	return m_iMaxGlobalInstances;
 }
 
-/// Is there a maximum number of these for one team?
+
 int CvProjectEntry::GetMaxTeamInstances() const
 {
 	return m_iMaxTeamInstances;
 }
 
-/// Shields to construct the building
+
 int CvProjectEntry::GetProductionCost() const
 {
 	return m_iProductionCost;
 }
 
-/// Percent chance of intercepting nukes
+
 int CvProjectEntry::GetNukeInterception() const
 {
 	return m_iNukeInterception;
 }
 
-/// Number of Policy branches required to build this project
+
 int CvProjectEntry::GetCultureBranchesRequired() const
 {
 	return m_iCultureBranchesRequired;
 }
 
-/// Does it grant all techs known by X civs? (X is value returned)
+
 int CvProjectEntry::GetTechShare() const
 {
 	return m_iTechShare;
 }
 
-/// Special unit enabled by this wonder
+
 int CvProjectEntry::GetEveryoneSpecialUnit() const
 {
 	return m_iEveryoneSpecialUnit;
 }
 
-/// Percent delay in declaring victory
+
 int CvProjectEntry::GetVictoryDelayPercent() const
 {
 	return m_iVictoryDelayPercent;
 }
 
-/// Find value of flavors associated with this building
+
 int CvProjectEntry::GetFlavorValue(int i) const
 {
 	CvAssertMsg(i < GC.getNumFlavorTypes(), "Index out of bounds");
@@ -185,39 +185,39 @@ int CvProjectEntry::GetFlavorValue(int i) const
 	return 0;
 }
 
-/// Is this a spaceship part?
+
 bool CvProjectEntry::IsSpaceship() const
 {
 	return m_bSpaceship;
 }
 
-/// Does this allow you to build nukes?
+
 bool CvProjectEntry::IsAllowsNukes() const
 {
 	return m_bAllowsNukes;
 }
 
-/// Retrieve movie file name
+
 const char* CvProjectEntry::GetMovieArtDef() const
 {
 	return m_strMovieArtDef;
 }
 
-/// Retrieve sound to play on creation
+
 const char* CvProjectEntry::GetCreateSound() const
 {
 	return m_strCreateSound;
 }
 
-/// Set sound to play on creation
+
 void CvProjectEntry::SetCreateSound(const char* szVal)
 {
 	m_strCreateSound = szVal;
 }
 
-// ARRAYS
 
-/// Resources consumed to construct
+
+
 #ifdef AUI_WARNING_FIXES
 int CvProjectEntry::GetResourceQuantityRequirement(uint i) const
 {
@@ -239,7 +239,7 @@ int CvProjectEntry::GetResourceQuantityRequirement(int i) const
 	return -1;
 }
 
-/// Maximum number of these needed for victory condition
+
 #ifdef AUI_WARNING_FIXES
 int CvProjectEntry::GetVictoryThreshold(uint i) const
 {
@@ -261,7 +261,7 @@ int CvProjectEntry::GetVictoryThreshold(int i) const
 	return -1;
 }
 
-/// Minimum number of these needed for victory condition
+
 #ifdef AUI_WARNING_FIXES
 int CvProjectEntry::GetVictoryMinThreshold(uint i) const
 {
@@ -288,7 +288,7 @@ int CvProjectEntry::GetVictoryMinThreshold(int i) const
 	return 0;
 }
 
-/// Other projects required before this one can be built
+
 #ifdef AUI_WARNING_FIXES
 int CvProjectEntry::GetProjectsNeeded(uint i) const
 {
@@ -310,28 +310,28 @@ int CvProjectEntry::GetProjectsNeeded(int i) const
 	return 0;
 }
 
-//=====================================
-// CvProjectXMLEntries
-//=====================================
-/// Constructor
+
+
+
+
 CvProjectXMLEntries::CvProjectXMLEntries(void)
 {
 
 }
 
-/// Destructor
+
 CvProjectXMLEntries::~CvProjectXMLEntries(void)
 {
 	DeleteArray();
 }
 
-/// Returns vector of project entries
+
 std::vector<CvProjectEntry*>& CvProjectXMLEntries::GetProjectEntries()
 {
 	return m_paProjectEntries;
 }
 
-/// Number of defined projects
+
 #ifdef AUI_WARNING_FIXES
 uint CvProjectXMLEntries::GetNumProjects() const
 #else
@@ -341,7 +341,7 @@ int CvProjectXMLEntries::GetNumProjects()
 	return m_paProjectEntries.size();
 }
 
-/// Clear project entries
+
 void CvProjectXMLEntries::DeleteArray()
 {
 	for(std::vector<CvProjectEntry*>::iterator it = m_paProjectEntries.begin(); it != m_paProjectEntries.end(); ++it)
@@ -352,7 +352,7 @@ void CvProjectXMLEntries::DeleteArray()
 	m_paProjectEntries.clear();
 }
 
-/// Get a specific entry
+
 #ifdef AUI_WARNING_FIXES
 _Ret_maybenull_ CvProjectEntry* CvProjectXMLEntries::GetEntry(uint index)
 #else

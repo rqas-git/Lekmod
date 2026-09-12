@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 
 #include "CvGameCoreDLLPCH.h"
 #include "CvGlobals.h"
@@ -23,12 +23,12 @@
 #include "CvGrandStrategyAI.h"
 #include "cvStopWatch.h"
 
-// must be included after all other headers
+
 #include "LintFree.h"
 
 OBJECT_VALIDATE_DEFINITION(CvCityAI)
 
-// Public Functions...
+
 CvCityAI::CvCityAI()
 {
 	OBJECT_ALLOCATED
@@ -52,8 +52,8 @@ void CvCityAI::AI_uninit()
 	VALIDATE_OBJECT
 }
 
-// FUNCTION: AI_reset()
-// Initializes data members that are serialized.
+
+
 void CvCityAI::AI_reset()
 {
 	VALIDATE_OBJECT
@@ -87,32 +87,32 @@ void CvCityAI::AI_chooseProduction(bool bInterruptWonders)
 	CvCitySpecializationAI* pSpecializationAI = kOwner.GetCitySpecializationAI();
 	bool bBuildWonder = false;
 
-	// See if this is the one AI city that is supposed to be building wonders
+
 	if(pSpecializationAI->GetWonderBuildCity() == this)
 	{
-		// Is it still working on that wonder and we don't want to interrupt it?
+
 		if(!bInterruptWonders)
 		{
 			const BuildingTypes eBuilding = getProductionBuilding();
 			CvBuildingEntry* pkBuilding = (eBuilding != NO_BUILDING)? GC.getBuildingInfo(eBuilding) : NULL;
 			if(pkBuilding && kOwner.GetWonderProductionAI()->IsWonder(*pkBuilding))
 			{
-				return;  // Stay the course
+				return;
 			}
 		}
 
-		// So we're the wonder building city but it is not underway yet...
 
-		// Has the designated wonder been poached by another civ?
+
+
 		BuildingTypes eNextWonder = pSpecializationAI->GetNextWonderDesired();
 		if(!canConstruct(eNextWonder))
 		{
-			// Reset city specialization
+
 			kOwner.GetCitySpecializationAI()->SetSpecializationsDirty(SPECIALIZATION_UPDATE_WONDER_BUILT_BY_RIVAL);
 		}
 		else
 		{
-			// to prevent us from continuously locking into building wonders in one city when there are other high priority items to build
+
 			int iFlavorWonder = kOwner.GetGrandStrategyAI()->GetPersonalityAndGrandStrategy((FlavorTypes)GC.getInfoTypeForString("FLAVOR_WONDER"));
 			int iFlavorGP = kOwner.GetGrandStrategyAI()->GetPersonalityAndGrandStrategy((FlavorTypes)GC.getInfoTypeForString("FLAVOR_GREAT_PEOPLE"));
 			int iFlavor = (iFlavorWonder > iFlavorGP ) ? iFlavorWonder : iFlavorGP;
@@ -198,7 +198,7 @@ void CvCityAI::AI_stealPlots()
 	}
 }
 
-/// How many of our City's plots have been grabbed by someone else?
+
 int CvCityAI::AI_GetNumPlotsAcquiredByOtherPlayer(PlayerTypes ePlayer) const
 {
 	VALIDATE_OBJECT
@@ -208,7 +208,7 @@ int CvCityAI::AI_GetNumPlotsAcquiredByOtherPlayer(PlayerTypes ePlayer) const
 	return m_aiNumPlotsAcquiredByOtherPlayers[ePlayer];
 }
 
-/// Changes how many of our City's plots have been grabbed by someone else
+
 void CvCityAI::AI_ChangeNumPlotsAcquiredByOtherPlayer(PlayerTypes ePlayer, int iChange)
 {
 	VALIDATE_OBJECT
@@ -219,15 +219,15 @@ void CvCityAI::AI_ChangeNumPlotsAcquiredByOtherPlayer(PlayerTypes ePlayer, int i
 }
 
 
-//
-//
-//
+
+
+
 void CvCityAI::read(FDataStream& kStream)
 {
 	VALIDATE_OBJECT
 	CvCity::read(kStream);
 
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion;
 	kStream >> uiVersion;
 
@@ -238,15 +238,15 @@ void CvCityAI::read(FDataStream& kStream)
 	kStream >> m_aiNumPlotsAcquiredByOtherPlayers;
 }
 
-//
-//
-//
+
+
+
 void CvCityAI::write(FDataStream& kStream) const
 {
 	VALIDATE_OBJECT
 	CvCity::write(kStream);
 
-	// Current version number
+
 	uint uiVersion = 1;
 	kStream << uiVersion;
 

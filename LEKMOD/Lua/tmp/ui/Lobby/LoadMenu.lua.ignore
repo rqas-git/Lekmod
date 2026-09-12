@@ -4,11 +4,11 @@ include( "SupportFunctions" );
 include( "UniqueBonuses" );
 include( "MapUtilities" );
 
--- Global Constants
+
 g_InstanceManager = InstanceManager:new( "LoadButton", "InstanceRoot", Controls.LoadFileButtonStack );
 g_ReferencedPackages = InstanceManager:new("ReferencedPackageInstance", "Label", Controls.ReferencedPackagesStack);
 
--- Global Variables
+
 g_ShowCloudSaves = false;
 g_ShowAutoSaves = false;
 
@@ -21,12 +21,12 @@ g_InstanceList = {};
 g_GameType = GameTypes.GAME_SINGLE_PLAYER;
 g_IsInGame = false;
 g_iSelected = -1;
-g_SavedGameModsRequired = nil;	-- The required mods for the currently selected save.
-g_SavedGameDLCRequired = nil;	-- The required DLC for the currently selected save.
+g_SavedGameModsRequired = nil;
+g_SavedGameDLCRequired = nil;
 
-g_CurrentSort = nil;	-- The current sorting technique.
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+g_CurrentSort = nil;
+
+
 function OnStartButton()
 	
 	if g_GameType == GameTypes.GAME_SINGLE_PLAYER or g_GameType == GameTypes.GAME_HOTSEAT_MULTIPLAYER then
@@ -44,7 +44,7 @@ function OnStartButton()
 			end
 		end
 	else
-		-- Multiplayer
+
 		local header = nil;
 		if(g_ShowCloudSaves) then
 			local thisLoadFile = Steam.GetCloudSaveFileName(g_iSelected);
@@ -64,14 +64,14 @@ function OnStartButton()
 			local worldInfo = GameInfo.Worlds[ header.WorldSize ];
 			PreGame.SetWorldSize( worldInfo.ID );
 
-			local strGameName = ""; -- TODO
+			local strGameName = "";
 			
-			-- MOD.EAP : Start
+
 			local lekmod_version = Locale.ConvertTextKey("TXT_KEY_LEKMOD_VERSION");
 			if not string.find(strGameName, lekmod_version) then
 				strGameName = strGameName .. lekmod_version;
 			end	
-			-- MOD.EAP : End
+
 
 			if (Network.IsDedicatedServer()) then
 				PreGame.SetGameOption("GAMEOPTION_PITBOSS", true);
@@ -93,8 +93,8 @@ function OnStartButton()
 end
 Controls.StartButton:RegisterCallback( Mouse.eLClick, OnStartButton );
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 Controls.AutoCheck:RegisterCheckHandler( function(checked)
     g_ShowAutoSaves = checked;
     if(g_ShowAutoSaves) then
@@ -104,8 +104,8 @@ Controls.AutoCheck:RegisterCheckHandler( function(checked)
     UpdateControlStates();
     SetupFileButtonList();
 end);
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 Controls.CloudCheck:RegisterCheckHandler( function(checked)
 	g_ShowCloudSaves = checked;
 	
@@ -120,8 +120,8 @@ Controls.CloudCheck:RegisterCheckHandler( function(checked)
 	SetupFileButtonList();
 end);
 
-----------------------------------------------------------------        
-----------------------------------------------------------------
+
+
 function OnDelete( )
 	Controls.DeleteConfirm:SetHide(false);
 end
@@ -138,17 +138,17 @@ function OnNo( )
 	Controls.DeleteConfirm:SetHide(true);
 end
 Controls.No:RegisterCallback( Mouse.eLClick, OnNo );
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnBack()
     UIManager:DequeuePopup( ContextPtr );
 end
 Controls.BackButton:RegisterCallback( Mouse.eLClick, OnBack );
 
 
-----------------------------------------------------------------   
--- Referenced Packages popup     
-----------------------------------------------------------------   
+
+
+
 Controls.ShowModsButton:RegisterCallback(Mouse.eLClick, function()
 	g_ReferencedPackages:ResetInstances();
 	
@@ -165,7 +165,7 @@ Controls.ShowModsButton:RegisterCallback(Mouse.eLClick, function()
 		if(#name > truncateWidth) then
 			name = string.format("%s... ", string.sub(name, 1, truncateWidth));
 		end 
-		--We always want to at least supply 1 argument.
+
 		local text = string.format("[ICON_BULLET] %s (v. %i)", name, v.Version);
 			
 		referencedPackage.Label:SetText(text);
@@ -175,7 +175,7 @@ Controls.ShowModsButton:RegisterCallback(Mouse.eLClick, function()
 	Controls.ReferencedPackagesScrollPanel:CalculateInternalSize();
 	Controls.ReferencedPackagesWindow:SetHide(false);
 end);
-----------------------------------------------------------------  
+
 Controls.ShowDLCButton:RegisterCallback(Mouse.eLClick, function()
 	g_ReferencedPackages:ResetInstances();
 	
@@ -199,7 +199,7 @@ Controls.ShowDLCButton:RegisterCallback(Mouse.eLClick, function()
 			name = string.format("%s... ", string.sub(name, 1, truncateWidth));
 		end 
 		
-		--We always want to at least supply 1 argument.
+
 		local text = "[ICON_BULLET] " .. name;
 		referencedPackage.Label:SetText(text);
 	end
@@ -208,12 +208,12 @@ Controls.ShowDLCButton:RegisterCallback(Mouse.eLClick, function()
 	Controls.ReferencedPackagesScrollPanel:CalculateInternalSize();
 	Controls.ReferencedPackagesWindow:SetHide(false);
 end);
-----------------------------------------------------------------  
+
 Controls.CloseReferencedPackagesButton:RegisterCallback(Mouse.eLClick, function()
 	Controls.ReferencedPackagesWindow:SetHide(true);
 end);
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function SetSelected( index )
     if( g_iSelected ~= -1 ) then
         g_InstanceList[ g_iSelected ].SelectHighlight:SetHide( true );
@@ -238,12 +238,12 @@ function SetSelected( index )
 
 			local name;
 			if(g_ShowCloudSaves) then
-				name = "";--Locale.ConvertTextKey("TXT_KEY_STEAMCLOUD");
+				name = "";
 			else
 				name = GetDisplayName(g_FileList[g_iSelected]);
 			end
 
-			--Set Save File Text
+
 			TruncateString(Controls.SaveFileName, Controls.DetailsBox:GetSizeX(), name); 
 					
 			if(header.CurrentEra ~= "") then
@@ -282,7 +282,7 @@ function SetSelected( index )
 				end
 			end
 			
-			-- Set Save file time
+
 			local date;
 			if(not g_ShowCloudSaves) then
 				date = UI.GetSavedGameModificationTime(g_FileList[ g_iSelected ]);
@@ -295,7 +295,7 @@ function SetSelected( index )
 				Controls.TimeSaved:SetText("");
 			end		  
 	
-			--First, default it to unkown values.
+
 			local civName = Locale.ConvertTextKey("TXT_KEY_MISC_UNKNOWN");
 			local leaderDescription = Locale.ConvertTextKey("TXT_KEY_MISC_UNKNOWN");
 			
@@ -303,11 +303,11 @@ function SetSelected( index )
 			Controls.CivIcon:SetTextureOffset(questionOffset);
 			Controls.CivIcon:SetToolTipString(unknownString);
 			
-			-- ? leader icon
+
 			IconHookup( 22, 128, "LEADER_ATLAS", Controls.Portrait );
 			
 			if(civ ~= nil) then
-				-- Sets civ icon and tool tip
+
 				civName = Locale.ConvertTextKey(civ.Description);
 				local textureOffset, textureAtlas = IconLookup( civ.PortraitIndex, 64, civ.IconAtlas );
 				if textureOffset ~= nil then       
@@ -316,7 +316,7 @@ function SetSelected( index )
 					Controls.CivIcon:SetToolTipString( Locale.ConvertTextKey( civ.ShortDescription) );
 				end	
 				
-				-- Set Selected Civ Map
+
 				Controls.LargeMapImage:UnloadTexture();
 				local mapTexture = civ.MapImage;
 				Controls.LargeMapImage:SetTexture(mapTexture);
@@ -341,7 +341,7 @@ function SetSelected( index )
 	        IconHookup( mapInfo.IconIndex, 64, mapInfo.IconAtlas, Controls.MapType );
 			Controls.MapType:SetToolTipString(Locale.Lookup(mapInfo.Name));
 							
-			-- Sets map size icon and tool tip
+
 			info = GameInfo.Worlds[ header.WorldSize ];
 			if(info ~= nil) then
 				IconHookup( info.PortraitIndex, 64, info.IconAtlas, Controls.MapSize );
@@ -354,7 +354,7 @@ function SetSelected( index )
 				end
 			end
 			
-			-- Sets handicap icon and tool tip
+
 			info = GameInfo.HandicapInfos[ header.Difficulty ];
 			if(info ~= nil) then
 				IconHookup( info.PortraitIndex, 64, info.IconAtlas, Controls.Handicap );
@@ -367,7 +367,7 @@ function SetSelected( index )
 				end
 			end
 			
-			-- Sets game pace icon and tool tip
+
 			info = GameInfo.GameSpeeds[ header.GameSpeed ];
 			if(info ~= nil) then
 				IconHookup( info.PortraitIndex, 64, info.IconAtlas, Controls.SpeedIcon );
@@ -389,7 +389,7 @@ function SetSelected( index )
 			  	
 			  	
 			  	
-			-- Obtain all of the required mods for the save
+
 			if(g_ShowCloudSaves) then
 				g_SavedGameDLCRequired, g_SavedGameModsRequired = Modding.GetCloudSaveRequirements(g_iSelected);
 			else
@@ -419,13 +419,13 @@ function SetSelected( index )
 		else
 			SetSaveInfoToNone(true);
 		end
-	else -- No saves are selected
+	else
 		SetSaveInfoToNone(false);
     end
 end
 
 function SetSaveInfoToNone(isInvalid)
-	-- Disable ability to enter game if none are selected
+
 	Controls.StartButton:SetDisabled(true);
 	Controls.StartButton:SetToolTipString("");
 	
@@ -434,7 +434,7 @@ function SetSaveInfoToNone(isInvalid)
 	Controls.ShowDLCButton:SetHide(true);
 	Controls.ShowModsButton:SetHide(true);
 	
-	-- Empty all text fields
+
 	if(g_ShowCloudSaves) then
 		Controls.Title:LocalizeAndSetText("TXT_KEY_STEAM_EMPTY_SAVE");
 	elseif(not isInvalid) then
@@ -451,51 +451,51 @@ function SetSaveInfoToNone(isInvalid)
 	Controls.GameType:SetText( "" );
 	Controls.TimeSaved:SetText( "" );
 	
-	-- ? leader icon
+
 	IconHookup( 22, 128, "LEADER_ATLAS", Controls.Portrait );
 	
-	-- Set all icons across bottom of left panel to ?
+
 	if questionOffset ~= nil then      
-		-- Civ Icon 
+
 		Controls.CivIcon:SetTexture( questionTextureSheet );
 		Controls.CivIcon:SetTextureOffset( questionOffset );
 		Controls.CivIcon:SetToolTipString( unknownString );
 
-		-- Map Type Icon 
+
 		Controls.MapType:SetTexture( questionTextureSheet );
 		Controls.MapType:SetTextureOffset( questionOffset );
 		Controls.MapType:SetToolTipString( unknownString );
-		-- Map Size Icon 
+
 		Controls.MapSize:SetTexture( questionTextureSheet );
 		Controls.MapSize:SetTextureOffset( questionOffset );
 		Controls.MapSize:SetToolTipString( unknownString );
-		-- Handicap Icon 
+
 		Controls.Handicap:SetTexture( questionTextureSheet );
 		Controls.Handicap:SetTextureOffset( questionOffset );
 		Controls.Handicap:SetToolTipString( unknownString );
-		-- Game Speed Icon 
+
 		Controls.SpeedIcon:SetTexture( questionTextureSheet );
 		Controls.SpeedIcon:SetTextureOffset( questionOffset );
 		Controls.SpeedIcon:SetToolTipString( unknownString );
 	end
     
-	-- Set Selected Civ Map
+
 	Controls.LargeMapImage:UnloadTexture();
 	local mapTexture="MapRandom512.dds";
 	Controls.LargeMapImage:SetTexture(mapTexture);
 end
-----------------------------------------------------------------        
----------------------------------------------------------------- 
+
+
 function GetDisplayName(file)
 	return Path.GetFileNameWithoutExtension(file);
 end
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function SetupFileButtonList()
     SetSelected( -1 );
     g_InstanceManager:ResetInstances();
     
-    -- build a table of all save file names that we found
+
     g_FileList = {};
     g_SortTable = {};
     g_InstanceList = {};
@@ -574,8 +574,8 @@ function SetupFileButtonList()
     Controls.ScrollPanel:CalculateInternalSize();
     Controls.LoadFileButtonStack:ReprocessAnchoring();
 end
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function UpdateControlStates()
 
 	Controls.AutoCheck:SetCheck(g_ShowAutoSaves);
@@ -589,8 +589,8 @@ function UpdateControlStates()
     end
 end
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function CloudSaveSort( a, b ) 
 
     local aOrder = g_SortTable[ tostring( a ) ];
@@ -654,9 +654,9 @@ function SortByLastModified(a, b)
 end
 
 
-----------------------------------------------------------------        
--- Key Down Processing
-----------------------------------------------------------------        
+
+
+
 function InputHandler( uiMsg, wParam, lParam )
     if uiMsg == KeyEvents.KeyDown then
         if wParam == Keys.VK_ESCAPE then
@@ -671,8 +671,8 @@ function InputHandler( uiMsg, wParam, lParam )
 end
 ContextPtr:SetInputHandler( InputHandler );
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function ShowHideHandler(isHide)
     if( not isHide ) then
 		if( g_IsInGame ) then

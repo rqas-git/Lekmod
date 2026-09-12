@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_MINOR_CIV_AI_H
@@ -77,25 +77,25 @@ FDataStream& operator>>(FDataStream&, MinorCivQuestTypes&);
 typedef FStaticVector< PlayerTypes, MAX_PLAYERS, true, c_eCiv5GameplayDLL > CivsList;
 typedef CvWeightedVector< PlayerTypes, MAX_PLAYERS, true > WeightedCivsList;
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvMinorCivQuest
-//!  \brief		Quest given by a minor civ to a player
-//
-//!  Author:	Anton Strenger
-//
-//!  Key Attributes:
-//!  - Will be contained inside the CvMinorCivAI of the minor civ that gave the quest
-//!  - Plan is to be mostly accessed by CvMinorCivAI class, but perhaps by other gameplay classes as well
-//!  - May be extended with functions for checking if quest is complete, etc.
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
 class CvMinorCivQuest
 {
 public:
-	// Constants
+
 	static const int NO_QUEST_DATA = -1;
 	static const int NO_TURN = -1;
 
-	// Functions
+
 
 	CvMinorCivQuest();
 	CvMinorCivQuest(PlayerTypes eMinor, PlayerTypes eAssignedPlayer, MinorCivQuestTypes eType);
@@ -112,12 +112,12 @@ public:
 	int GetSecondaryData() const;
 	int GetInfluenceReward() const;
 
-	// Contest helper functions
+
 	int GetContestValueForPlayer(PlayerTypes ePlayer);
 	int GetContestValueForLeader();
 	CivsList GetContestLeaders();
 
-	// Quest status for assigned player
+
 	bool IsContestLeader(PlayerTypes ePlayer = NO_PLAYER);
 	bool IsComplete();
 	bool IsRevoked();
@@ -126,13 +126,13 @@ public:
 	bool IsHandled();
 	void SetHandled(bool bValue);
 
-	// Starting and finishing
+
 	void DoStartQuest(int iStartTurn);
 	void DoStartQuestUsingExistingData(CvMinorCivQuest* pExistingQuest);
 	bool DoFinishQuest();
 	bool DoCancelQuest();
 
-	// Public data
+
 	PlayerTypes m_eMinor;
 	PlayerTypes m_eAssignedPlayer;
 	MinorCivQuestTypes m_eType;
@@ -151,20 +151,20 @@ class CvMinorCivPersonalityInfo;
 class CvFlavorManager;
 #endif
 
-typedef FStaticVector< CvMinorCivQuest, SAFE_ESTIMATE_NUM_QUESTS_PER_PLAYER, false, c_eCiv5GameplayDLL > QuestListForPlayer; // will grow size if needed
+typedef FStaticVector< CvMinorCivQuest, SAFE_ESTIMATE_NUM_QUESTS_PER_PLAYER, false, c_eCiv5GameplayDLL > QuestListForPlayer;
 typedef FStaticVector< QuestListForPlayer, MAX_MAJOR_CIVS, false, c_eCiv5GameplayDLL > QuestListForAllPlayers;
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvMinorCivAI
-//!  \brief		Special Information relating to Minor Civs only
-//
-//!  Author:	Jon Shafer
-//
-//!  Key Attributes:
-//!  - Plan is it will be contained in CvPlayerState object within CvPlayer class
-//!  - Should be one instance for each Minor Civ (right now there's one for EVERY Player though)
-//!  - Accessed by any class that needs information relating to Minor Civs
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
 class CvMinorCivAI
 {
 public:
@@ -201,9 +201,9 @@ public:
 	void SetUniqueUnit(UnitTypes eUnit);
 	void DoPickUniqueUnit();
 
-	// ******************************
-	// Main functions
-	// ******************************
+
+
+
 
 	void DoTurn();
 
@@ -223,9 +223,9 @@ public:
 	void AddQuestNotification(CvString sString, CvString sSummaryString, PlayerTypes ePlayer, int iX = -1, int iY = -1, bool bNewQuest = false);
 	void AddBuyoutNotification(CvString sString, CvString sSummaryString, PlayerTypes ePlayer, int iX = -1, int iY = -1);
 
-	// ******************************
-	// Threatened by Barbarians event
-	// ******************************
+
+
+
 
 	bool IsThreateningBarbariansEventActiveForPlayer(PlayerTypes ePlayer);
 	int GetNumThreateningBarbarians();
@@ -239,9 +239,9 @@ public:
 	
 	void DoThreateningBarbKilled(PlayerTypes eKillingPlayer, int iX, int iY);
 
-	// ******************************
-	// Proxy War event
-	// ******************************
+
+
+
 
 	void DoTestProxyWarAnnouncement();
 	void DoTestProxyWarAnnouncementOnFirstContact(PlayerTypes eMajor);
@@ -249,9 +249,9 @@ public:
 	bool IsProxyWarActiveForMajor(PlayerTypes eMajor, PlayerTypes eOtherMajor);
 	bool IsProxyWarActiveForMajor(PlayerTypes eMajor);
 
-	// ******************************
-	// ***** Quests *****
-	// ******************************
+
+
+
 
 	void DoTurnQuests();
 
@@ -302,10 +302,10 @@ public:
 	void SetQuestCountdownForPlayer(PlayerTypes ePlayer, int iValue);
 	void ChangeQuestCountdownForPlayer(PlayerTypes ePlayer, int iChange);
 
-	// For debugging and testing:
+
 	bool AddQuestIfAble(PlayerTypes eMajor, MinorCivQuestTypes eQuest);
 
-	// Specific Details for Quests:
+
 
 	int GetQuestData1(PlayerTypes ePlayer, MinorCivQuestTypes eType) const;
 	int GetQuestData2(PlayerTypes ePlayer, MinorCivQuestTypes eType) const;
@@ -332,9 +332,9 @@ public:
 	bool IsGoodTimeForPledgeToProtectQuest();
 	bool IsGoodTimeForDenounceMajorQuest();
 
-	// ******************************
-	// ***** Friendship *****
-	// ******************************
+
+
+
 
 	void DoFriendship();
 
@@ -390,17 +390,17 @@ public:
 
 	void DoIntrusion();
 
-	// DEPRECATED
+
 	bool IsMajorIntruding(PlayerTypes eMajor) const;
 	void SetMajorIntruding(PlayerTypes eMajor, bool bValue);
-	// END DEPRECATED
+
 
 	bool IsPlayerHasOpenBorders(PlayerTypes ePlayer);
 	bool IsPlayerHasOpenBordersAutomatically(PlayerTypes ePlayer);
 
 	void DoLiberationByMajor(PlayerTypes eLiberator, TeamTypes eConquerorTeam);
 
-	// Protection
+
 	void DoChangeProtectionFromMajor(PlayerTypes eMajor, bool bProtect, bool bPledgeNowBroken = false);
 	bool CanMajorProtect(PlayerTypes eMajor);
 	bool CanMajorStartProtection(PlayerTypes eMajor);
@@ -413,9 +413,9 @@ public:
 	int GetTurnLastPledgeBrokenByMajor(PlayerTypes eMajor) const;
 	void SetTurnLastPledgeBrokenByMajor(PlayerTypes eMajor, int iTurn);
 
-	// ************************************
-	// ***** Friendship - with Benefits ***** - slewis: woah
-	// ************************************
+
+
+
 
 	bool DoMajorCivEraChange(PlayerTypes ePlayer, EraTypes eNewEra);
 
@@ -429,13 +429,13 @@ public:
 #endif
 	int GetCurrentScienceFriendshipBonusTimes100(PlayerTypes ePlayer);
 
-	// Culture bonuses
+
 	int GetCultureFlatFriendshipBonus(PlayerTypes ePlayer, EraTypes eAssumeEra = NO_ERA);
 	int GetCultureFlatAlliesBonus(PlayerTypes ePlayer, EraTypes eAssumeEra = NO_ERA);
 	int GetCurrentCultureFlatBonus(PlayerTypes ePlayer);
 	int GetCurrentCultureBonus(PlayerTypes ePlayer);
 
-	// Happiness bonuses
+
 	int GetHappinessFlatFriendshipBonus(PlayerTypes ePlayer, EraTypes eAssumeEra = NO_ERA);
 	int GetHappinessFlatAlliesBonus(PlayerTypes ePlayer, EraTypes eAssumeEra = NO_ERA);
 	int GetCurrentHappinessFlatBonus(PlayerTypes ePlayer);
@@ -444,13 +444,13 @@ public:
 	int GetCurrentHappinessPerLuxuryBonus(PlayerTypes ePlayer);
 	int GetCurrentHappinessBonus(PlayerTypes ePlayer);
 
-	// Faith bonuses
+
 	int GetFaithFlatFriendshipBonus(PlayerTypes ePlayer, EraTypes eAssumeEra = NO_ERA) const;
 	int GetFaithFlatAlliesBonus(PlayerTypes ePlayer, EraTypes eAssumeEra = NO_ERA) const;
 	int GetCurrentFaithFlatBonus(PlayerTypes ePlayer);
 	int GetCurrentFaithBonus(PlayerTypes ePlayer);
 
-	// Food bonuses
+
 	int GetFriendsCapitalFoodBonus(PlayerTypes ePlayer, EraTypes eAssumeEra = NO_ERA);
 	int GetFriendsOtherCityFoodBonus(PlayerTypes ePlayer, EraTypes eAssumeEra = NO_ERA);
 	int GetAlliesCapitalFoodBonus(PlayerTypes ePlayer);
@@ -458,7 +458,7 @@ public:
 	int GetCurrentCapitalFoodBonus(PlayerTypes ePlayer);
 	int GetCurrentOtherCityFoodBonus(PlayerTypes ePlayer);
 
-	// Unit bonuses
+
 	void DoSeedUnitSpawnCounter(PlayerTypes ePlayer, bool bBias = false);
 	int GetUnitSpawnCounter(PlayerTypes ePlayer);
 	void SetUnitSpawnCounter(PlayerTypes ePlayer, int iValue);
@@ -471,7 +471,7 @@ public:
 	int GetSpawnBaseTurns(PlayerTypes ePlayer);
 	int GetCurrentSpawnEstimate(PlayerTypes ePlayer);
 
-	// Buyout by major civ (Austria UA)
+
 	bool IsBoughtOut() const;
 	PlayerTypes GetMajorBoughtOutBy() const;
 	void SetMajorBoughtOutBy(PlayerTypes eMajor);
@@ -481,9 +481,9 @@ public:
 
 	void DoAcquire(PlayerTypes eMajor, int& iNumUnits, int& iCapitalX, int& iCapitalY);
 
-	// ************************************
-	// ***** Bullying *****
-	// ************************************
+
+
+
 
 	int GetBullyGoldAmount(PlayerTypes eBullyPlayer);
 
@@ -514,19 +514,19 @@ public:
 
 	bool IsEverBulliedByAnyMajor() const;
 	bool IsEverBulliedByMajor(PlayerTypes ePlayer) const;
-	bool IsRecentlyBulliedByAnyMajor() const; //antonjs: consider: replace with a new fn, GetTurnLastBulliedByAnyMajor
-	bool IsRecentlyBulliedByMajor(PlayerTypes ePlayer) const; //antonjs: consider: replace with GetTurnLastBulliedByMajor
+	bool IsRecentlyBulliedByAnyMajor() const;
+	bool IsRecentlyBulliedByMajor(PlayerTypes ePlayer) const;
 	int GetTurnLastBulliedByMajor(PlayerTypes ePlayer) const;
 	void SetTurnLastBulliedByMajor(PlayerTypes ePlayer, int iTurn);
 
-	// ****************
-	// *** Election ***
-	// ****************
+
+
+
 	void DoElection();
 
-	// ***********************************
-	// ***** General Minor Civ Stuff *****
-	// ***********************************
+
+
+
 
 	int GetNumUnitsGifted(PlayerTypes ePlayer);
 	void SetNumUnitsGifted(PlayerTypes ePlayer, int iValue);
@@ -567,9 +567,9 @@ public:
 	bool IsWaryOfTeam(TeamTypes eTeam) const;
 	void SetWaryOfTeam(TeamTypes eTeam, bool bValue);
 
-	// ******************************
-	// ***** Misc Helper Functions *****
-	// ******************************
+
+
+
 
 	bool IsHasMetPlayer(PlayerTypes ePlayer);
 	bool IsAtWarWithPlayersTeam(PlayerTypes ePlayer);
@@ -639,9 +639,9 @@ private:
 #endif
 	int m_aiFriendshipWithMajorTimes100[MAX_MAJOR_CIVS];
 	int m_aiAngerFreeIntrusionCounter[MAX_MAJOR_CIVS];
-	int m_aiPlayerQuests[MAX_MAJOR_CIVS]; //antonjs: DEPRECATED
-	int m_aiQuestData1[MAX_MAJOR_CIVS]; //antonjs: DEPRECATED
-	int m_aiQuestData2[MAX_MAJOR_CIVS]; //antonjs: DEPRECATED
+	int m_aiPlayerQuests[MAX_MAJOR_CIVS];
+	int m_aiQuestData1[MAX_MAJOR_CIVS];
+	int m_aiQuestData2[MAX_MAJOR_CIVS];
 	int m_aiQuestCountdown[MAX_MAJOR_CIVS];
 	int m_aiUnitSpawnCounter[MAX_MAJOR_CIVS];
 	int m_aiNumUnitsGifted[MAX_MAJOR_CIVS];
@@ -671,12 +671,12 @@ private:
 
 
 #ifdef LEKMOD_MINOR_CIV_PERSONALITIES
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class :	CvMinorCivPersonalityInfo
-//
-//  DESC:		Data-driven city-state personality definitions loaded from
-//				Minor_Civ_Personalities and related child tables.
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
 class CvMinorCivPersonalityInfo : public CvBaseInfo
 {
 public:
@@ -767,15 +767,15 @@ protected:
 #endif
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  class :	CvMinorCivInfo
-//
-//  DESC:		Similar class to CvCivilizationInfo.
-//				Stores Minor Civ-specific information, since Minors are not
-//				detailed in CvCivilizationInfo
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvMinorCivInfo : public CvBaseInfo
 {
 public:
@@ -804,11 +804,11 @@ public:
 
 	int GetMinorCivTrait() const;
 
-	// Deprecated Members
+
 	const char* getAdjectiveKeyWide() const;
 	const char* getShortDescriptionKeyWide() const;
 
-	// Arrays
+
 	int getFlavorValue(int i) const;
 	const std::string& getCityNames(int i) const;
 
@@ -817,7 +817,7 @@ public:
 protected:
 	int m_iDefaultPlayerColor;
 	int m_iArtStyleType;
-	int m_iNumLeaders;				 // the number of leaders the Civ has, this is needed so that random leaders can be generated easily
+	int m_iNumLeaders;
 	int m_iMinorCivTrait;
 
 	bool m_bAIPlayable;
@@ -833,13 +833,13 @@ protected:
 	CvString m_strAdjectiveKey;
 	CvString m_wstrAdjective;
 
-	//Deprecated members (please remove these once the char mess is organized)
+
 	CvString m_wstrAdjectiveKey;
 	CvString m_wstrShortDescriptionKey;
 
-	// Arrays
+
 	int* m_piFlavorValue;
 	std::vector<CvString> m_vCityNames;
 };
 
-#endif //CIV5_MINOR_CIV_AI_H
+#endif

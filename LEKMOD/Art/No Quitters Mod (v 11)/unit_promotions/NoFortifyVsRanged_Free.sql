@@ -1,4 +1,4 @@
--- Grant Exposed to Barrage to land ranged combat classes (after promo XML)
+
 INSERT INTO Unit_FreePromotions (UnitType, PromotionType)
 SELECT u.Type, 'PROMOTION_NO_FORTIFY_VS_RANGED'
 FROM Units u

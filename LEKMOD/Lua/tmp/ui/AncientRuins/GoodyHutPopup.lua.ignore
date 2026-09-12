@@ -1,12 +1,12 @@
--------------------------------------------------
--- Goody Hut Popup
--------------------------------------------------
+
+
+
 
 local m_PopupInfo = nil;
 
--------------------------------------------------
--- On Display
--------------------------------------------------
+
+
+
 function OnPopup( popupInfo )
 
 	if( popupInfo.Type ~= ButtonPopupTypes.BUTTONPOPUP_GOODY_HUT_REWARD ) then
@@ -26,7 +26,7 @@ function OnPopup( popupInfo )
 	elseif (pGoodyInfo.Type == "GOODY_CULTURE" or pGoodyInfo.Type == "GOODY_PANTHEON_FAITH" or pGoodyInfo.Type == "GOODY_PROPHET_FAITH") then
 		local iData = popupInfo.Data2;
 		Controls.DescriptionLabel:SetText(Locale.ConvertTextKey(pGoodyInfo.Description, iData));
-	-- MOD.EAP: Support for new Ancient ruins
+
 	elseif (pGoodyInfo.FoodMin > 0 and pGoodyInfo.FoodMax > 0) then
 		local iFood = popupInfo.Data2;
 		Controls.DescriptionLabel:SetText(Locale.ConvertTextKey(pGoodyInfo.Description, iFood));
@@ -51,17 +51,17 @@ end
 Events.SerialEventGameMessagePopup.Add( OnPopup );
 
 
-----------------------------------------------------------------        
--- Input processing
-----------------------------------------------------------------        
+
+
+
 function OnCloseButtonClicked ()
     UIManager:DequeuePopup( ContextPtr );
 end
 Controls.CloseButton:RegisterCallback( Mouse.eLClick, OnCloseButtonClicked );
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function InputHandler( uiMsg, wParam, lParam )
     if uiMsg == KeyEvents.KeyDown then
         if wParam == Keys.VK_ESCAPE or wParam == Keys.VK_RETURN then
@@ -73,8 +73,8 @@ end
 ContextPtr:SetInputHandler( InputHandler );
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function ShowHideHandler( bIsHide, bInitState )
 
     if( not bInitState ) then
@@ -89,7 +89,7 @@ function ShowHideHandler( bIsHide, bInitState )
 end
 ContextPtr:SetShowHideHandler( ShowHideHandler );
 
-----------------------------------------------------------------
--- 'Active' (local human) player has changed
-----------------------------------------------------------------
+
+
+
 Events.GameplaySetActivePlayer.Add(OnCloseButtonClicked);

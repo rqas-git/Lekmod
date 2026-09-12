@@ -1,4 +1,4 @@
-"""Launch gating, Steam repair recovery, and persisted user intent."""
+
 from contextlib import ExitStack, contextmanager
 from datetime import datetime
 import json
@@ -103,7 +103,7 @@ class LauncherTests(unittest.TestCase):
         self.repair.assert_not_called()
         self.open.assert_called_once_with(['/usr/bin/open', 'steam://rungameid/8930'], check=True, timeout=30)
         with game.installation_lock(self.app):
-            pass  # The handoff releases the lock for future launcher actions.
+            pass
 
     def assert_installation_locked(self):
         with self.assertRaisesRegex(RuntimeError, 'Another installer'):

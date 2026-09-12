@@ -1,4 +1,4 @@
-// Compile the actual baseline/current UpdateRouteInfo bodies against deterministic doubles.
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -131,7 +131,7 @@ int main(){
             result.paths.insert(result.paths.end(),GC.land.calls.begin(),GC.land.calls.end());
             result.work=counts;return result;
         };
-        // Reuse the same objects after blockades/harbors change to test invalidation.
+
         for(int update=0;update<3;++update){
             Result old=run(baseline,false),now=run(current,true);
             if(!(old==now)){std::cerr<<"connection mismatch "<<scenario<<":"<<update<<"\n";return 1;}

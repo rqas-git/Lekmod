@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2/14/2016 11:32:38 PM -->
+
 <GameData>
 	
-	<!-- Cultural Revolution now gives +50% Tourism to civs with less happiness than you and a free Golden Age. -->
+
 	<Policies>
 		<Update>
 			<Set LessHappyTourismModifier="50" SharedIdeologyTourismModifier="0" GoldenAgeTurns="10" />

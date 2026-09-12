@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create an isolated, ad-hoc-signed Mac app with Lekmod assets."""
+
 import argparse
 from pathlib import Path
 import shutil

@@ -1,30 +1,30 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 
 #include "CvGameCoreDLLPCH.h"
 #include "CvLuaSupport.h"
 #include "CvLuaLeague.h"
 
-//Utility macro for registering methods
+
 #define Method(Name)			\
 	lua_pushcclosure(L, l##Name, 0);	\
 	lua_setfield(L, t, #Name);
 
 
-// ================================================================================
-//			CvLuaLeague
-// ================================================================================
-//------------------------------------------------------------------------------
+
+
+
+
 void CvLuaLeague::HandleMissingInstance(lua_State* L)
 {
 	luaL_error(L, "Instance no longer exists.");
 }
-//------------------------------------------------------------------------------
+
 void CvLuaLeague::PushMethods(lua_State* L, int t)
 {
 	Method(IsNone);
@@ -88,15 +88,15 @@ void CvLuaLeague::PushMethods(lua_State* L, int t)
 	Method(GetLeagueSplashNextEraDetails);
 	Method(GetGreatPersonRateModifierDetails);
 }
-//------------------------------------------------------------------------------
+
 const char* CvLuaLeague::GetTypeName()
 {
 	return "League";
 }
-//------------------------------------------------------------------------------
-// Lua member methods
-//------------------------------------------------------------------------------
-//bool IsNone();
+
+
+
+
 int CvLuaLeague::lIsNone(lua_State* L)
 {
 #ifdef AUI_WARNING_FIXES
@@ -108,8 +108,8 @@ int CvLuaLeague::lIsNone(lua_State* L)
 #endif
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetID();
+
+
 int CvLuaLeague::lGetID(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -118,8 +118,8 @@ int CvLuaLeague::lGetID(lua_State* L)
 	lua_pushinteger(L, iValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//string GetName();
+
+
 int CvLuaLeague::lGetName(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -129,8 +129,8 @@ int CvLuaLeague::lGetName(lua_State* L)
 	lua_pushstring(L, sResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool CanChangeCustomName();
+
+
 int CvLuaLeague::lCanChangeCustomName(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -140,8 +140,8 @@ int CvLuaLeague::lCanChangeCustomName(lua_State* L)
 	lua_pushboolean(L, bValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsInSession();
+
+
 int CvLuaLeague::lIsInSession(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -150,8 +150,8 @@ int CvLuaLeague::lIsInSession(lua_State* L)
 	lua_pushboolean(L, bValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsInSpecialSession();
+
+
 int CvLuaLeague::lIsInSpecialSession(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -160,8 +160,8 @@ int CvLuaLeague::lIsInSpecialSession(lua_State* L)
 	lua_pushboolean(L, bValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetTurnsUntilSession();
+
+
 int CvLuaLeague::lGetTurnsUntilSession(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -170,8 +170,8 @@ int CvLuaLeague::lGetTurnsUntilSession(lua_State* L)
 	lua_pushinteger(L, iValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetTurnsUntilVictorySession();
+
+
 int CvLuaLeague::lGetTurnsUntilVictorySession(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -180,8 +180,8 @@ int CvLuaLeague::lGetTurnsUntilVictorySession(lua_State* L)
 	lua_pushinteger(L, iValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool CanProposeEnactAnyChoice(ResolutionTypes eResolution, PlayerTypes eProposer);
+
+
 int CvLuaLeague::lCanProposeEnactAnyChoice(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -192,8 +192,8 @@ int CvLuaLeague::lCanProposeEnactAnyChoice(lua_State* L)
 	lua_pushboolean(L, bValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool CanProposeEnact(ResolutionTypes eResolution, PlayerTypes eProposer, int iChoice);
+
+
 int CvLuaLeague::lCanProposeEnact(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -205,8 +205,8 @@ int CvLuaLeague::lCanProposeEnact(lua_State* L)
 	lua_pushboolean(L, bValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool CanProposeRepeal(int iResolutionID, PlayerTypes eProposer);
+
+
 int CvLuaLeague::lCanProposeRepeal(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -217,8 +217,8 @@ int CvLuaLeague::lCanProposeRepeal(lua_State* L)
 	lua_pushboolean(L, bValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsProposed(int iResolutionID, bool bRepeal);
+
+
 int CvLuaLeague::lIsProposed(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -229,8 +229,8 @@ int CvLuaLeague::lIsProposed(lua_State* L)
 	lua_pushboolean(L, bValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//table GetChoicesForDecision(ResolutionDecisionTypes eDecision, PlayerTypes eDecider);
+
+
 int CvLuaLeague::lGetChoicesForDecision(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -254,8 +254,8 @@ int CvLuaLeague::lGetChoicesForDecision(lua_State* L)
 	}
 	return 1;
 }
-//------------------------------------------------------------------------------
-//string GetTextForChoice(ResolutionDecisionTypes eDecision, int iChoice);
+
+
 int CvLuaLeague::lGetTextForChoice(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -266,8 +266,8 @@ int CvLuaLeague::lGetTextForChoice(lua_State* L)
 	lua_pushstring(L, sResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//table GetInactiveResolutions();
+
+
 int CvLuaLeague::lGetInactiveResolutions(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -294,8 +294,8 @@ int CvLuaLeague::lGetInactiveResolutions(lua_State* L)
 	}
 	return 1;
 }
-//------------------------------------------------------------------------------
-//table GetEnactProposals();
+
+
 int CvLuaLeague::lGetEnactProposals(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -320,8 +320,8 @@ int CvLuaLeague::lGetEnactProposals(lua_State* L)
 	}
 	return 1;
 }
-//------------------------------------------------------------------------------
-//table GetEnactProposalsOnHold();
+
+
 int CvLuaLeague::lGetEnactProposalsOnHold(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -346,8 +346,8 @@ int CvLuaLeague::lGetEnactProposalsOnHold(lua_State* L)
 	}
 	return 1;
 }
-//------------------------------------------------------------------------------
-//table GetRepealProposals();
+
+
 int CvLuaLeague::lGetRepealProposals(lua_State* L) 
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -378,8 +378,8 @@ int CvLuaLeague::lGetRepealProposals(lua_State* L)
 	}
 	return 1;
 }
-//------------------------------------------------------------------------------
-//table GetRepealProposalsOnHold();
+
+
 int CvLuaLeague::lGetRepealProposalsOnHold(lua_State* L) 
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -410,8 +410,8 @@ int CvLuaLeague::lGetRepealProposalsOnHold(lua_State* L)
 	}
 	return 1;
 }
-//------------------------------------------------------------------------------
-//table GetActiveResolutions();
+
+
 int CvLuaLeague::lGetActiveResolutions(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -439,8 +439,8 @@ int CvLuaLeague::lGetActiveResolutions(lua_State* L)
 	}
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsMember(PlayerTypes ePlayer);
+
+
 int CvLuaLeague::lIsMember(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -450,8 +450,8 @@ int CvLuaLeague::lIsMember(lua_State* L)
 	lua_pushboolean(L, bValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool CanVote(PlayerTypes ePlayer);
+
+
 int CvLuaLeague::lCanVote(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -461,8 +461,8 @@ int CvLuaLeague::lCanVote(lua_State* L)
 	lua_pushboolean(L, bValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetRemainingVotesForMember(PlayerTypes ePlayer);
+
+
 int CvLuaLeague::lGetRemainingVotesForMember(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -472,8 +472,8 @@ int CvLuaLeague::lGetRemainingVotesForMember(lua_State* L)
 	lua_pushinteger(L, iValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetSpentVotesForMember(PlayerTypes ePlayer);
+
+
 int CvLuaLeague::lGetSpentVotesForMember(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -483,8 +483,8 @@ int CvLuaLeague::lGetSpentVotesForMember(lua_State* L)
 	lua_pushinteger(L, iValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetCoreVotesForMember(PlayerTypes ePlayer);
+
+
 int CvLuaLeague::lGetCoreVotesForMember(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -494,8 +494,8 @@ int CvLuaLeague::lGetCoreVotesForMember(lua_State* L)
 	lua_pushinteger(L, iValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int CalculateStartingVotesForMember(PlayerTypes ePlayer);
+
+
 int CvLuaLeague::lCalculateStartingVotesForMember(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -505,8 +505,8 @@ int CvLuaLeague::lCalculateStartingVotesForMember(lua_State* L)
 	lua_pushinteger(L, iValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool CanPropose(PlayerTypes ePlayer);
+
+
 int CvLuaLeague::lCanPropose(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -516,8 +516,8 @@ int CvLuaLeague::lCanPropose(lua_State* L)
 	lua_pushboolean(L, bValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetRemainingProposalsForMember(PlayerTypes ePlayer);
+
+
 int CvLuaLeague::lGetRemainingProposalsForMember(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -527,8 +527,8 @@ int CvLuaLeague::lGetRemainingProposalsForMember(lua_State* L)
 	lua_pushinteger(L, iValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsHostMember(PlayerTypes ePlayer);
+
+
 int CvLuaLeague::lIsHostMember(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -538,8 +538,8 @@ int CvLuaLeague::lIsHostMember(lua_State* L)
 	lua_pushboolean(L, bValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//PlayerTypes GetHostMember();
+
+
 int CvLuaLeague::lGetHostMember(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -548,8 +548,8 @@ int CvLuaLeague::lGetHostMember(lua_State* L)
 	lua_pushinteger(L, (int)eHost);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsUnitedNations();
+
+
 int CvLuaLeague::lIsUnitedNations(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -558,8 +558,8 @@ int CvLuaLeague::lIsUnitedNations(lua_State* L)
 	lua_pushboolean(L, bValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsProjectActive(LeagueProjectTypes eLeagueProject);
+
+
 int CvLuaLeague::lIsProjectActive(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -569,8 +569,8 @@ int CvLuaLeague::lIsProjectActive(lua_State* L)
 	lua_pushboolean(L, bValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsProjectComplete(LeagueProjectTypes eLeagueProject);
+
+
 int CvLuaLeague::lIsProjectComplete(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -581,8 +581,8 @@ int CvLuaLeague::lIsProjectComplete(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
-//int GetProjectCostPerPlayer(LeagueProjectTypes eLeagueProject);
+
+
 int CvLuaLeague::lGetProjectCostPerPlayer(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -592,8 +592,8 @@ int CvLuaLeague::lGetProjectCostPerPlayer(lua_State* L)
 	lua_pushinteger(L, iValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetProjectBuildingCostPerPlayer(BuildingTypes eRewardBuilding);
+
+
 int CvLuaLeague::lGetProjectBuildingCostPerPlayer(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -603,8 +603,8 @@ int CvLuaLeague::lGetProjectBuildingCostPerPlayer(lua_State* L)
 	lua_pushinteger(L, iValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetProjectCost(LeagueProjectTypes eLeagueProject);
+
+
 int CvLuaLeague::lGetProjectCost(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -614,8 +614,8 @@ int CvLuaLeague::lGetProjectCost(lua_State* L)
 	lua_pushinteger(L, iValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetMemberContribution(PlayerTypes ePlayer, LeagueProjectTypes eLeagueProject);
+
+
 int CvLuaLeague::lGetMemberContribution(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -626,8 +626,8 @@ int CvLuaLeague::lGetMemberContribution(lua_State* L)
 	lua_pushinteger(L, iValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetMemberContributionTier(PlayerTypes ePlayer, LeagueProjectTypes eLeagueProject);
+
+
 int CvLuaLeague::lGetMemberContributionTier(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -638,8 +638,8 @@ int CvLuaLeague::lGetMemberContributionTier(lua_State* L)
 	lua_pushinteger(L, iValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetContributionTierThreshold(int iTier, LeagueProjectTypes eLeagueProject);
+
+
 int CvLuaLeague::lGetContributionTierThreshold(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -651,8 +651,8 @@ int CvLuaLeague::lGetContributionTierThreshold(lua_State* L)
 	lua_pushinteger(L, iValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetArtsyGreatPersonRateModifier();
+
+
 int CvLuaLeague::lGetArtsyGreatPersonRateModifier(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -661,8 +661,8 @@ int CvLuaLeague::lGetArtsyGreatPersonRateModifier(lua_State* L)
 	lua_pushinteger(L, iValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetScienceyGreatPersonRateModifier();
+
+
 int CvLuaLeague::lGetScienceyGreatPersonRateModifier(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -671,8 +671,8 @@ int CvLuaLeague::lGetScienceyGreatPersonRateModifier(lua_State* L)
 	lua_pushinteger(L, iValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//string GetResolutionName(ResolutionTypes eResolution, int iResolutionID, int iProposerChoice, bool bIncludePrefix);
+
+
 int CvLuaLeague::lGetResolutionName(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -685,8 +685,8 @@ int CvLuaLeague::lGetResolutionName(lua_State* L)
 	lua_pushstring(L, sValue.c_str());
 	return 1;
 }
-//------------------------------------------------------------------------------
-//string GetResolutionDetails(ResolutionTypes eResolution, PlayerTypes eObserver, int iResolutionID, int iProposerChoice);
+
+
 int CvLuaLeague::lGetResolutionDetails(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -699,8 +699,8 @@ int CvLuaLeague::lGetResolutionDetails(lua_State* L)
 	lua_pushstring(L, sValue.c_str());
 	return 1;
 }
-//------------------------------------------------------------------------------
-//string GetMemberDetails(PlayerTypes eMember, PlayerTypes eObserver);
+
+
 int CvLuaLeague::lGetMemberDetails(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -711,8 +711,8 @@ int CvLuaLeague::lGetMemberDetails(lua_State* L)
 	lua_pushstring(L, sValue.c_str());
 	return 1;
 }
-//------------------------------------------------------------------------------
-//string GetProjectDetails(LeagueProjectTypes eProject, PlayerTypes eObserver);
+
+
 int CvLuaLeague::lGetProjectDetails(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -723,8 +723,8 @@ int CvLuaLeague::lGetProjectDetails(lua_State* L)
 	lua_pushstring(L, sValue.c_str());
 	return 1;
 }
-//------------------------------------------------------------------------------
-//string GetProjectRewardTierDetails(int iTier, LeagueProjectTypes eProject, PlayerTypes eObserver);
+
+
 int CvLuaLeague::lGetProjectRewardTierDetails(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -736,8 +736,8 @@ int CvLuaLeague::lGetProjectRewardTierDetails(lua_State* L)
 	lua_pushstring(L, sValue.c_str());
 	return 1;
 }
-//------------------------------------------------------------------------------
-//table GetCurrentEffectsSummary(PlayerTypes eObserver);
+
+
 int CvLuaLeague::lGetCurrentEffectsSummary(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -759,8 +759,8 @@ int CvLuaLeague::lGetCurrentEffectsSummary(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//string GetLeagueSplashTitle(LeagueSpecialSessionTypes eGoverningSpecialSession, bool bJustFounded);
+
+
 int CvLuaLeague::lGetLeagueSplashTitle(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -771,8 +771,8 @@ int CvLuaLeague::lGetLeagueSplashTitle(lua_State* L)
 	lua_pushstring(L, sValue.c_str());
 	return 1;
 }
-//------------------------------------------------------------------------------
-//string GetLeagueSplashDescription(LeagueSpecialSessionTypes eGoverningSpecialSession, bool bJustFounded);
+
+
 int CvLuaLeague::lGetLeagueSplashDescription(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -783,8 +783,8 @@ int CvLuaLeague::lGetLeagueSplashDescription(lua_State* L)
 	lua_pushstring(L, sValue.c_str());
 	return 1;
 }
-//------------------------------------------------------------------------------
-//string GetLeagueSplashThisEraDetails(LeagueSpecialSessionTypes eGoverningSpecialSession, bool bJustFounded);
+
+
 int CvLuaLeague::lGetLeagueSplashThisEraDetails(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -795,8 +795,8 @@ int CvLuaLeague::lGetLeagueSplashThisEraDetails(lua_State* L)
 	lua_pushstring(L, sValue.c_str());
 	return 1;
 }
-//------------------------------------------------------------------------------
-//string GetLeagueSplashNextEraDetails(LeagueSpecialSessionTypes eGoverningSpecialSession, bool bJustFounded);
+
+
 int CvLuaLeague::lGetLeagueSplashNextEraDetails(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -807,8 +807,8 @@ int CvLuaLeague::lGetLeagueSplashNextEraDetails(lua_State* L)
 	lua_pushstring(L, sValue.c_str());
 	return 1;
 }
-//------------------------------------------------------------------------------
-//string GetGreatPersonRateModifierDetails(UnitClassTypes eGreatPersonClass);
+
+
 int CvLuaLeague::lGetGreatPersonRateModifierDetails(lua_State* L)
 {
 	CvLeague* pLeague = GetInstance(L);
@@ -818,9 +818,9 @@ int CvLuaLeague::lGetGreatPersonRateModifierDetails(lua_State* L)
 	lua_pushstring(L, sValue.c_str());
 	return 1;
 }
-//------------------------------------------------------------------------------
-// Helper functions
-//------------------------------------------------------------------------------
+
+
+
 #ifdef AUI_WARNING_FIXES
 int CvLuaLeague::lResolutionTableHelper(lua_State* L, const int iTop, const CvResolution& resolution)
 #else
@@ -841,7 +841,7 @@ int CvLuaLeague::lResolutionTableHelper(lua_State* L, const int iTop, CvResoluti
 
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 int CvLuaLeague::lProposalTableHelper(lua_State* L, const int iTop, const CvProposal& proposal)
 #else

@@ -7,7 +7,7 @@ from unittest.mock import Mock, patch
 import zipfile
 
 from reference import ROOT
-# Exercise the worker/controller without requiring a display or a Tk installation.
+
 try:
     import tkinter
 except ImportError:
@@ -91,7 +91,7 @@ class InstallerFlowTests(unittest.TestCase):
                 old.mkdir(parents=True)
                 (old / 'working.txt').write_text('working installation')
                 app.ui_manager.install_mod = UIManager.install_mod.__get__(app.ui_manager, UIManager)
-                # The worker must use the captured path without accessing Tk variables.
+
                 app.install_path_var = SimpleNamespace(get=Mock(side_effect=AssertionError('Tk access from worker')))
                 rename = Path.rename
                 def move(source, target):

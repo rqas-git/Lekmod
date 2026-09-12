@@ -1,17 +1,17 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
-//	CvAchievementUnlocker
-//
-//	Utility methods to test the parameters for individual achievements.
-//	Most of the tests in this file are for achievements that have multiple parameters
-//	that can be achieved in any order.  This keeps the code in a single place.
-//	It is not strictly necessary to put all achievement tests in this file especially if the
-//	test requires many parameters or is adequately tested in a single location in the game core.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #include "CvGameCoreDLLPCH.h"
 #include "CvGameCoreUtils.h"
@@ -27,8 +27,8 @@
 #define UNDEFINED_TYPE -999
 
 int CvAchievementUnlocker::ms_iNumImprovementsPillagedPerTurn = 0;
-//	---------------------------------------------------------------------------
-//	Test the conditions for the ACHIEVEMENT_PSG
+
+
 bool CvAchievementUnlocker::Check_PSG()
 {
 	const int PSG_STAT_MATCH_VALUE = 100;
@@ -48,7 +48,7 @@ bool CvAchievementUnlocker::Check_PSG()
 	}
 	return false;
 }
-//------------------------------------------------------------------------------
+
 void CvAchievementUnlocker::FarmImprovementPillaged()
 {
 	ms_iNumImprovementsPillagedPerTurn++;
@@ -56,17 +56,17 @@ void CvAchievementUnlocker::FarmImprovementPillaged()
 	if(ms_iNumImprovementsPillagedPerTurn >= 9)
 		gDLL->UnlockAchievement(ACHIEVEMENT_SCENARIO_04_PILLAGE);
 }
-//------------------------------------------------------------------------------
+
 void CvAchievementUnlocker::EndTurn()
 {
-	//Reset the per turn counters.
+
 	ms_iNumImprovementsPillagedPerTurn = 0;
 }
 
-//------------------------------------------------------------------------------
+
 void CvAchievementUnlocker::AlexanderConquest(PlayerTypes ePlayer)
 {
-	//Test For Alexander Conquest
+
 	CvGame& kGame = GC.getGame();
 	if (ePlayer == kGame.getActivePlayer())
 	{
@@ -79,26 +79,26 @@ void CvAchievementUnlocker::AlexanderConquest(PlayerTypes ePlayer)
 				{
 					CvPlayer* pPlayer = &GET_PLAYER((PlayerTypes) iPlayerLoop);
 
-					//All known players must be dead and killed by us
+
 					if(GET_TEAM(pPlayer->getTeam()).isHasMet(GET_PLAYER(kGame.getActivePlayer()).getTeam()))
 					{
 						if(!pPlayer->isBarbarian() && !pPlayer->isMinorCiv())
 						{
 							if(pPlayer->isAlive() && pPlayer->GetID() != GET_PLAYER(kGame.getActivePlayer()).GetID())
 							{
-								return;	// Nope.
+								return;
 							}
 						}
 					}
 				}
-				// Yep.
+
 				gDLL->UnlockAchievement(ACHIEVEMENT_SPECIAL_CONQUEST_WORLD);
 			}
 		}
 	}
 }
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+
+
 CvPlayerAchievements::CvPlayerAchievements(const CvPlayer& kPlayer)
 : m_kPlayer(kPlayer)
 , m_iAchievement_XP1_32_Progress(0)
@@ -122,9 +122,9 @@ CvPlayerAchievements::CvPlayerAchievements(const CvPlayer& kPlayer)
 , m_eSkyFortress(static_cast<UnitTypes>(UNDEFINED_TYPE))
 {
 }
-//------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
-void CvPlayerAchievements::AlliedWithCityState(PlayerTypes /*eNewCityStateAlly*/)
+void CvPlayerAchievements::AlliedWithCityState(PlayerTypes                      )
 #else
 void CvPlayerAchievements::AlliedWithCityState(PlayerTypes eNewCityStateAlly)
 #endif
@@ -132,7 +132,7 @@ void CvPlayerAchievements::AlliedWithCityState(PlayerTypes eNewCityStateAlly)
 	if(m_kPlayer.GetID() != GC.getGame().getActivePlayer())
 		return;
 
-	//Cache value if needed
+
 	if(m_ePapalPrimacyType == UNDEFINED_TYPE)
 	{
 		m_ePapalPrimacyType = (BeliefTypes)GC.getInfoTypeForString("BELIEF_PAPAL_PRIMACY", true);
@@ -149,7 +149,7 @@ void CvPlayerAchievements::AlliedWithCityState(PlayerTypes eNewCityStateAlly)
 				if(pReligion->m_Beliefs.HasBelief(m_ePapalPrimacyType))
 				{
 					int iNumAllies = 0;
-					//We've got the belief! How many city state Allies do we have??
+
 					for(int i = 0; i < MAX_CIV_PLAYERS; ++i)
 					{
 						const PlayerTypes ePlayer = static_cast<PlayerTypes>(i);
@@ -171,13 +171,13 @@ void CvPlayerAchievements::AlliedWithCityState(PlayerTypes eNewCityStateAlly)
 		}
 	}
 }
-//------------------------------------------------------------------------------
+
 void CvPlayerAchievements::AddUnit(CvUnit* pUnit)
 {
 	if(m_kPlayer.GetID() != GC.getGame().getActivePlayer())
 		return;
 
-	//Attempt to read from cache
+
 	if(m_eEthiopiaType == UNDEFINED_TYPE)
 	{
 		m_eEthiopiaType = (CivilizationTypes)GC.getInfoTypeForString("CIVILIZATION_ETHIOPIA", true);
@@ -190,7 +190,7 @@ void CvPlayerAchievements::AddUnit(CvUnit* pUnit)
 
 	if(m_eEthiopiaType != NO_CIVILIZATION && m_eGreatProphetType != NO_UNIT)
 	{
-		//* ACHIEVEMENT_XP1_32 - As Ethiopia, earn 5 great prophets
+
 		if(m_kPlayer.getCivilizationType() == m_eEthiopiaType && pUnit->getUnitType() == m_eGreatProphetType)
 		{
 			m_iAchievement_XP1_32_Progress++;
@@ -201,7 +201,7 @@ void CvPlayerAchievements::AddUnit(CvUnit* pUnit)
 		}	
 	}
 }
-//------------------------------------------------------------------------------
+
 void CvPlayerAchievements::AttackedUnitWithUnit(CvUnit* pAttackingUnit, CvUnit* pDefendingUnit)
 {
 	if(m_kPlayer.GetID() != GC.getGame().getActivePlayer())
@@ -233,7 +233,7 @@ void CvPlayerAchievements::AttackedUnitWithUnit(CvUnit* pAttackingUnit, CvUnit* 
 		}
 	}
 }
-//------------------------------------------------------------------------------
+
 void CvPlayerAchievements::BoughtCityState(int iNumUnits)
 {
 	if (iNumUnits >= 15)
@@ -241,7 +241,7 @@ void CvPlayerAchievements::BoughtCityState(int iNumUnits)
 		gDLL->UnlockAchievement(ACHIEVEMENT_XP1_35);
 	}
 }
-//------------------------------------------------------------------------------
+
 void CvPlayerAchievements::KilledUnitWithUnit(CvUnit* pKillingUnit, CvUnit* pKilledUnit)
 {
 	if(m_kPlayer.GetID() != GC.getGame().getActivePlayer())
@@ -264,7 +264,7 @@ void CvPlayerAchievements::KilledUnitWithUnit(CvUnit* pKillingUnit, CvUnit* pKil
 
 	if(m_eDromonType != NO_UNIT && m_eByzantinesType != NO_CIVILIZATION && m_eGreekType != NO_CIVILIZATION)
 	{
-		//* ACHIEVEMENT_XP1_33 - As Byzantines, sink 10 Greek ships with a Dromon
+
 		if(	pKillingUnit->getCivilizationType() == m_eByzantinesType && 
 			pKillingUnit->getUnitType() == m_eDromonType &&
 			pKilledUnit->getCivilizationType() == m_eGreekType &&
@@ -307,7 +307,7 @@ void CvPlayerAchievements::KilledUnitWithUnit(CvUnit* pKillingUnit, CvUnit* pKil
 		}
 	}
 }
-//------------------------------------------------------------------------------
+
 void CvPlayerAchievements::StartTurn()
 {
 	if(m_kPlayer.GetID() != GC.getGame().getActivePlayer())
@@ -360,7 +360,7 @@ void CvPlayerAchievements::StartTurn()
 	ReligionTypes eMyReligion = m_kPlayer.GetReligions()->GetReligionCreatedByPlayer();
 	if (eMyReligion > RELIGION_PANTHEON)
 	{
-		if (GC.getMap().numPlots() >= 80 * 52) // Determine if this is a standard size or larger map.
+		if (GC.getMap().numPlots() >= 80 * 52)
 		{
 			bool bSpreadToAllCapitals = true;
 			for (int iI = 0; iI < MAX_CIV_PLAYERS; ++iI)
@@ -391,13 +391,13 @@ void CvPlayerAchievements::StartTurn()
 	}
 #endif
 }
-//------------------------------------------------------------------------------
+
 void CvPlayerAchievements::EndTurn()
 {
 }
-//-------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
-void CvPlayerAchievements::FinishedBuilding(CvCity* pkCity, BuildingTypes /*eBuilding*/)
+void CvPlayerAchievements::FinishedBuilding(CvCity* pkCity, BuildingTypes              )
 #else
 void CvPlayerAchievements::FinishedBuilding(CvCity* pkCity, BuildingTypes eBuilding)
 #endif
@@ -437,7 +437,7 @@ void CvPlayerAchievements::FinishedBuilding(CvCity* pkCity, BuildingTypes eBuild
 		}
 	}
 }
-//------------------------------------------------------------------------------
+
 void CvPlayerAchievements::Read(FDataStream& kStream)
 {
 	int iVersion = 0;
@@ -445,7 +445,7 @@ void CvPlayerAchievements::Read(FDataStream& kStream)
 	kStream >> m_iAchievement_XP1_32_Progress;
 	kStream >> m_iAchievement_XP1_33_Progress;
 }
-//------------------------------------------------------------------------------
+
 void CvPlayerAchievements::Write(FDataStream& kStream) const
 {
 	int iVersion = 1;
@@ -453,4 +453,3 @@ void CvPlayerAchievements::Write(FDataStream& kStream) const
 	kStream << m_iAchievement_XP1_32_Progress;
 	kStream << m_iAchievement_XP1_33_Progress;
 }
-//------------------------------------------------------------------------------

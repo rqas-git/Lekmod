@@ -1,13 +1,13 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
-// city.h
+
 
 #ifndef CIV5_CITY_H
 #define CIV5_CITY_H
@@ -22,7 +22,7 @@
 
 #include "CvPreGame.h"
 
-// 0 = center of city, 1-6 = the edge of city on points, 7-12 = one tile out
+
 #define NUM_CITY_BUILDING_DISPLAY_SLOTS (13)
 
 class CvPlot;
@@ -151,10 +151,10 @@ public:
 
 	int GetResourceExtraYield(ResourceTypes eResource, YieldTypes eYield) const;
 	void ChangeResourceExtraYield(ResourceTypes eResource, YieldTypes eYield, int iChange);
-#if defined(MISC_CHANGES) // CvCity resource class yield changes
+#if defined(MISC_CHANGES)
 	void ChangeResourceClassExtraYield(ResourceClassTypes eResourceClass, YieldTypes eYield, int iChange);
 #endif
-#if defined(TRADE_REFACTOR) // :)) Trade Connection extra yields
+#if defined(TRADE_REFACTOR)
 	int GetTradeConnectionOriginLandExtraYield(TradeConnectionType eTradeConnection, YieldTypes eYield) const;
 	int GetTradeConnectionOriginSeaExtraYield(TradeConnectionType eTradeConnection, YieldTypes eYield) const;
 	void ChangeTradeConnectionOriginExtraYield(TradeConnectionType eTradeConnection, YieldTypes eYield, bool bSea, int iChange);
@@ -179,7 +179,7 @@ public:
 
 	bool IsBuildingLocalResourceValid(BuildingTypes eBuilding, bool bTestVisible, CvString* toolTipSink = NULL) const;
 
-	// Resource Demanded
+
 
 	ResourceTypes GetResourceDemanded(bool bHideUnknown = true) const;
 	void SetResourceDemanded(ResourceTypes eResource);
@@ -191,7 +191,7 @@ public:
 	void SetResourceDemandedCountdown(int iValue);
 	void ChangeResourceDemandedCountdown(int iChange);
 
-	// End Resource Demanded
+
 
 	int getFoodTurnsLeft() const;
 	bool isProduction() const;
@@ -329,7 +329,7 @@ public:
 
 	bool isCapital() const;
 	bool IsOriginalCapital() const;
-	bool IsOriginalMajorCapital() const; // is the original capital of a major civ
+	bool IsOriginalMajorCapital() const;
 	bool IsEverCapital() const;
 	void SetEverCapital(bool bValue);
 
@@ -415,7 +415,7 @@ public:
 	int getGreatPeopleRateModifier() const;
 	void changeGreatPeopleRateModifier(int iChange);
 
-	// Culture stuff
+
 
 #ifdef AUI_PLAYER_FIX_JONS_CULTURE_IS_T100
 	int GetJONSCultureStoredTimes100() const;
@@ -460,7 +460,7 @@ public:
 	int getCultureRateModifier() const;
 	void changeCultureRateModifier(int iChange);
 
-	// END Culture
+
 
 	int GetFaithPerTurn() const;
 	int GetFaithPerTurnFromBuildings() const;
@@ -600,7 +600,7 @@ public:
 	bool IsIgnoreCityForHappiness() const;
 	void SetIgnoreCityForHappiness(bool bValue);
 	
-	BuildingTypes ChooseFreeWallsBuilding() const; // NQMP GJS - Oligarchy free walls
+	BuildingTypes ChooseFreeWallsBuilding() const;
 	BuildingTypes ChooseFreeGardenBuilding() const;
 	BuildingTypes ChooseFreeCultureBuilding() const;
 	BuildingTypes ChooseFreeFoodBuilding() const;
@@ -650,13 +650,13 @@ public:
 	PlayerTypes GetPlayersReligion() const;
 	void SetPlayersReligion(PlayerTypes eNewValue);
 
-	// Yield
+
 
 	int getSeaPlotYield(YieldTypes eIndex) const;
 	void changeSeaPlotYield(YieldTypes eIndex, int iChange);
 
-	int getMountainScienceYield() const; // NQMP GJS - mountain science yield
-	void changeMountainScienceYield(int iChange); // NQMP GJS - mountain science yield
+	int getMountainScienceYield() const;
+	void changeMountainScienceYield(int iChange);
 
 	int getRiverPlotYield(YieldTypes eIndex) const;
 	void changeRiverPlotYield(YieldTypes eIndex, int iChange);
@@ -675,10 +675,10 @@ public:
 	int getYieldRate(YieldTypes eIndex, bool bIgnoreTrade) const;
 	int getYieldRateTimes100(YieldTypes eIndex, bool bIgnoreTrade) const;
 
-	// Base Yield
+
 	int getBaseYieldRate(YieldTypes eIndex) const;
 
-	int GetBaseYieldRateFromGreatWorks(YieldTypes eIndex) const; // NQMP GJS - Artistic Genius fix to add science to Great Works
+	int GetBaseYieldRateFromGreatWorks(YieldTypes eIndex) const;
 
 	int GetBaseYieldRateFromTerrain(YieldTypes eIndex) const;
 	void ChangeBaseYieldRateFromTerrain(YieldTypes eIndex, int iChange);
@@ -714,7 +714,7 @@ public:
 
 	int GetBaseYieldRateFromThemedBuildings(YieldTypes eIndex) const;
 #endif
-	// END Base Yield
+
 #if defined(LEKMOD_GARRISON_YIELD_EFFECTS)
 	int GetBaseYieldRateFromGarrison(YieldTypes eIndex) const;
 
@@ -749,7 +749,7 @@ public:
 
 	int GetTradeYieldModifier(YieldTypes eIndex, CvString* toolTipSink = NULL) const;
 
-	// END Yield
+
 
 	int getDomainFreeExperience(DomainTypes eIndex) const;
 	void changeDomainFreeExperience(DomainTypes eIndex, int iChange);
@@ -860,7 +860,7 @@ public:
 	bool AreAllUnitsBuilt();
 #endif
 
-	// Plot acquisition
+
 
 #ifdef AUI_CONSTIFY
 	bool CanBuyPlot(int iPlotX = -1, int iPlotY = -1, bool bIgnoreCost = false) const;
@@ -892,7 +892,7 @@ public:
 	void SetNumThingsPurchasedThisTurn(int iValue);
 	void ChangeNumThingsPurchasedThisTurn(int iChange);
 #endif
-	// End plot acquisition
+
 
 	bool isValidBuildingLocation(BuildingTypes eIndex) const;
 
@@ -931,7 +931,7 @@ public:
 	const OrderData* headOrderQueueNode() const;
 	OrderData* headOrderQueueNode();
 	const OrderData* tailOrderQueueNode() const;
-	bool CleanUpQueue(void);  // remove items in the queue that are no longer valid
+	bool CleanUpQueue(void);
 
 	int CreateUnit(UnitTypes eUnitType, UnitAITypes eAIType = NO_UNITAI, bool bUseToSatisfyOperation=true);
 	bool CreateBuilding(BuildingTypes eBuildType);
@@ -992,7 +992,7 @@ public:
 	std::string stackTraceRemark(const FAutoVariableBase&) const;
 
 	bool			IsBusy() const;
-	// Combat related
+
 	const CvUnit*	getCombatUnit() const;
 	CvUnit*			getCombatUnit();
 	void			setCombatUnit(CvUnit* pUnit, bool bAttacking = false);
@@ -1001,11 +1001,11 @@ public:
 	int				getMaxXPValue() const;
 	bool			canEarnGlobalXP() const;
 
-	///
+
 	bool HasBuilding(BuildingTypes iBuildingType) const;
 	bool HasBuildingClass(BuildingClassTypes iBuildingClassType) const;
 
-	int iScratch; // know the scope of your validity
+	int iScratch;
 
 protected:
 	FAutoArchiveClassContainer<CvCity> m_syncArchive;
@@ -1034,7 +1034,7 @@ protected:
 	FAutoVariable<int, CvCity> m_iJONSCultureStored;
 #endif
 	FAutoVariable<int, CvCity> m_iJONSCultureLevel;
-#if !defined(STANDARDIZE_YIELDS) // Remove a bunch of redundant variables
+#if !defined(STANDARDIZE_YIELDS)
 	FAutoVariable<int, CvCity> m_iJONSCulturePerTurnFromBuildings;
 	FAutoVariable<int, CvCity> m_iJONSCulturePerTurnFromPolicies;
 	FAutoVariable<int, CvCity> m_iJONSCulturePerTurnFromSpecialists;
@@ -1065,9 +1065,9 @@ protected:
 	FAutoVariable<int, CvCity> m_iMilitaryProductionModifier;
 	FAutoVariable<int, CvCity> m_iSpaceProductionModifier;
 	FAutoVariable<int, CvCity> m_iFreeExperience;
-	FAutoVariable<int, CvCity> m_iCurrAirlift; // unused
+	FAutoVariable<int, CvCity> m_iCurrAirlift;
 	FAutoVariable<int, CvCity> m_iMaxAirUnits;
-	FAutoVariable<int, CvCity> m_iAirModifier; // unused
+	FAutoVariable<int, CvCity> m_iAirModifier;
 	FAutoVariable<int, CvCity> m_iNukeModifier;
 	int m_iTradeRouteTargetBonus;
 	int m_iTradeRouteRecipientBonus;
@@ -1077,11 +1077,11 @@ protected:
 	FAutoVariable<int, CvCity> m_iStrengthValue;
 	FAutoVariable<int, CvCity> m_iDamage;
 	FAutoVariable<int, CvCity> m_iThreatValue;
-	FAutoVariable<int, CvCity> m_iGarrisonedUnit;  // unused
+	FAutoVariable<int, CvCity> m_iGarrisonedUnit;
 	FAutoVariable<int, CvCity> m_iResourceDemanded;
 	FAutoVariable<int, CvCity> m_iWeLoveTheKingDayCounter;
 	FAutoVariable<int, CvCity> m_iLastTurnGarrisonAssigned;
-	FAutoVariable<int, CvCity> m_iThingsProduced; // total number of units, buildings, wonders, etc. this city has constructed
+	FAutoVariable<int, CvCity> m_iThingsProduced;
 	FAutoVariable<int, CvCity> m_iDemandResourceCounter;
 	FAutoVariable<int, CvCity> m_iResistanceTurns;
 	FAutoVariable<int, CvCity> m_iRazingTurns;
@@ -1096,7 +1096,7 @@ protected:
 
 	FAutoVariable<bool, CvCity> m_bNeverLost;
 	FAutoVariable<bool, CvCity> m_bDrafted;
-	FAutoVariable<bool, CvCity> m_bAirliftTargeted;   // unused
+	FAutoVariable<bool, CvCity> m_bAirliftTargeted;
 	FAutoVariable<bool, CvCity> m_bProductionAutomated;
 	FAutoVariable<bool, CvCity> m_bLayoutDirty;
 	FAutoVariable<bool, CvCity> m_bMadeAttack;
@@ -1183,7 +1183,7 @@ protected:
 
 	mutable FFastSmallFixedList< OrderData, 25, true, c_eCiv5GameplayDLL > m_orderQueue;
 
-	vector<SCityExtraYields> m_yieldChanges; //[NUM_YIELD_TYPES]
+	vector<SCityExtraYields> m_yieldChanges;
 #if defined(TRADE_REFACTOR)
 	int** m_aaiTradeConnectionOriginLandYieldChange;
 	int** m_aaiTradeConnectionOriginSeaYieldChange;
@@ -1207,7 +1207,7 @@ protected:
 
 	mutable int m_bombardCheckTurn;
 
-	// CACHE: cache frequently used values
+
 	mutable int	m_iPopulationRank;
 	mutable bool m_bPopulationRankValid;
 	FAutoVariable<std::vector<int>, CvCity> m_aiBaseYieldRank;
@@ -1217,7 +1217,7 @@ protected:
 #if defined(LEKMOD_LANDMARKS_TOURISM_SOURCE_CULTURE_FIX)
 	FAutoVariable<std::vector<int>, CvCity> m_viWonderYieldCache;
 #endif
-	IDInfo m_combatUnit;		// The unit the city is in combat with
+	IDInfo m_combatUnit;
 
 	void doGrowth();
 	void doProduction(bool bAllowNoProduction);

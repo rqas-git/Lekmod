@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 
 #include "CvGameCoreDLLPCH.h"
 #include "CvGameCoreUtils.h"
@@ -12,11 +12,11 @@
 
 #include "LintFree.h"
 
-//=====================================
-// CvTreasury
-//=====================================
 
-/// Constructor
+
+
+
+
 CvTreasury::CvTreasury():
 	m_iGold(0),
 	m_iGoldPerTurnFromDiplomacy(0),
@@ -37,12 +37,12 @@ CvTreasury::CvTreasury():
 
 }
 
-/// Destructor
+
 CvTreasury::~CvTreasury()
 {
 }
 
-/// Initialize
+
 void CvTreasury::Init(CvPlayer* pPlayer)
 {
 	m_pPlayer = pPlayer;
@@ -68,7 +68,7 @@ void CvTreasury::Init(CvPlayer* pPlayer)
 	m_GoldChangeForTurnTimes100.reserve(750);
 }
 
-/// Deallocate memory created in initialize
+
 void CvTreasury::Uninit()
 {
 
@@ -92,7 +92,7 @@ void CvTreasury::cacheGoldT100ForThisTurn()
 }
 #endif
 
-/// Update treasury for a turn
+
 void CvTreasury::DoGold()
 {
 #ifdef AUI_YIELDS_APPLIED_AFTER_TURN_NOT_BEFORE
@@ -108,7 +108,7 @@ void CvTreasury::DoGold()
 	{
 		SetGold(0);
 
-		if(iGoldAfterThisTurn <= /*-5*/ GC.getDEFICIT_UNIT_DISBANDING_THRESHOLD() * 100)
+		if(iGoldAfterThisTurn <=        GC.getDEFICIT_UNIT_DISBANDING_THRESHOLD() * 100)
 			m_pPlayer->DoDeficit();
 	}
 	else
@@ -116,7 +116,7 @@ void CvTreasury::DoGold()
 		ChangeGoldTimes100(iGoldChange);
 	}
 
-	// Update the amount of gold grossed across lifetime of game
+
 #ifdef AUI_YIELDS_APPLIED_AFTER_TURN_NOT_BEFORE
 	int iGrossGoldChange = getGrossGoldForThisTurn();
 #else
@@ -149,34 +149,34 @@ void CvTreasury::DoGold()
 	}
 }
 
-/// Returns current balance in treasury
+
 int CvTreasury::GetGold() const
 {
 	return m_iGold / 100;
 }
 
-/// Sets current balance in treasury
+
 void CvTreasury::SetGold(int iNewValue)
 {
 	SetGoldTimes100(iNewValue * 100);
 }
 
-/// Modifies current balance in treasury
+
 void CvTreasury::ChangeGold(int iChange)
 {
 	ChangeGoldTimes100(iChange*100);
 }
 
-/// Returns current balance in treasury (in hundredths)
+
 int CvTreasury::GetGoldTimes100() const
 {
 	return m_iGold;
 }
 
-/// Sets current balance in treasury (in hundredths)
+
 void CvTreasury::SetGoldTimes100(int iNewValue)
 {
-	// Minors don't get Gold!
+
 	if(GetGoldTimes100() != iNewValue)
 	{
 		if(iNewValue < 0)
@@ -188,17 +188,17 @@ void CvTreasury::SetGoldTimes100(int iNewValue)
 
 		if(m_pPlayer->GetID() == GC.getGame().getActivePlayer())
 		{
-			// Are we now able to buy a Plot when we weren't before?
-			//if (GetGold() >= m_pPlayer->GetBuyPlotCost() && iOldGold < m_pPlayer->GetBuyPlotCost() && m_pPlayer->getNumCities() > 0)
-			//{
-			//	CvString strBuffer = GetLocalizedText("TXT_KEY_NOTIFICATION_ENOUGH_GOLD_TO_BUY_PLOT");
-			//	CvString strSummary = GetLocalizedText("TXT_KEY_NOTIFICATION_SUMMARY_ENOUGH_GOLD_TO_BUY_PLOT");
-			//	CvNotifications* pNotifications = m_pPlayer->GetNotifications();
-			//	if (pNotifications)
-			//	{
-			//		pNotifications->Add(NOTIFICATION_BUY_TILE, strBuffer, strSummary, -1, -1, -1);
-			//	}
-			//}
+
+
+
+
+
+
+
+
+
+
+
 
 			GC.GetEngineUserInterface()->setDirty(MiscButtons_DIRTY_BIT, true);
 			GC.GetEngineUserInterface()->setDirty(SelectionButtons_DIRTY_BIT, true);
@@ -207,19 +207,19 @@ void CvTreasury::SetGoldTimes100(int iNewValue)
 	}
 }
 
-/// Modifies current balance in treasury (in hundredths)
+
 void CvTreasury::ChangeGoldTimes100(int iChange)
 {
 	SetGoldTimes100(GetGoldTimes100() + iChange);
 }
 
-// Gold from Cities
+
 int CvTreasury::GetGoldFromCities() const
 {
 	return GetGoldFromCitiesTimes100() / 100;
 }
 
-// Gold from Cities times 100
+
 int CvTreasury::GetGoldFromCitiesTimes100(bool bExcludeTradeRoutes) const
 {
 #if !defined(STANDARDIZE_YIELDS)
@@ -239,7 +239,7 @@ int CvTreasury::GetGoldFromCitiesTimes100(bool bExcludeTradeRoutes) const
 #endif
 }
 
-/// Gold Per Turn from Diplomatic Deals
+
 int CvTreasury::GetGoldPerTurnFromDiplomacy() const
 {
 #if !defined(STANDARDIZE_YIELDS)
@@ -249,7 +249,7 @@ int CvTreasury::GetGoldPerTurnFromDiplomacy() const
 #endif
 }
 
-/// Sets Gold Per Turn from Diplomatic Deals
+
 void CvTreasury::SetGoldPerTurnFromDiplomacy(int iValue)
 {
 #if !defined(STANDARDIZE_YIELDS)
@@ -259,13 +259,13 @@ void CvTreasury::SetGoldPerTurnFromDiplomacy(int iValue)
 #endif
 }
 
-/// Changes Gold Per Turn from Diplomatic Deals
+
 void CvTreasury::ChangeGoldPerTurnFromDiplomacy(int iChange)
 {
 	SetGoldPerTurnFromDiplomacy(GetGoldPerTurnFromDiplomacy() + iChange);
 }
 
-/// Get the amount of gold granted by connecting the city
+
 int CvTreasury::GetCityConnectionRouteGoldTimes100(CvCity* pNonCapitalCity) const
 {
 	CvCity* pCapitalCity = m_pPlayer->getCapitalCity();
@@ -276,13 +276,13 @@ int CvTreasury::GetCityConnectionRouteGoldTimes100(CvCity* pNonCapitalCity) cons
 
 	int iGold = 0;
 
-	int iTradeRouteBaseGold = /*100*/ GC.getTRADE_ROUTE_BASE_GOLD();
-	int iTradeRouteCapitalGoldMultiplier = /*0*/ GC.getTRADE_ROUTE_CAPITAL_POP_GOLD_MULTIPLIER();
-	int iTradeRouteCityGoldMultiplier = /*125*/ GC.getTRADE_ROUTE_CITY_POP_GOLD_MULTIPLIER();
+	int iTradeRouteBaseGold =         GC.getTRADE_ROUTE_BASE_GOLD();
+	int iTradeRouteCapitalGoldMultiplier =       GC.getTRADE_ROUTE_CAPITAL_POP_GOLD_MULTIPLIER();
+	int iTradeRouteCityGoldMultiplier =         GC.getTRADE_ROUTE_CITY_POP_GOLD_MULTIPLIER();
 
-	iGold += iTradeRouteBaseGold;	// Base Gold: 0
-	iGold += (pCapitalCity->getPopulation() * iTradeRouteCapitalGoldMultiplier);	// Capital Multiplier
-	iGold += (pNonCapitalCity->getPopulation() * iTradeRouteCityGoldMultiplier);	// City Multiplier
+	iGold += iTradeRouteBaseGold;
+	iGold += (pCapitalCity->getPopulation() * iTradeRouteCapitalGoldMultiplier);
+	iGold += (pNonCapitalCity->getPopulation() * iTradeRouteCityGoldMultiplier);
 	iGold += GetCityConnectionTradeRouteGoldChange() * 100;
 
 	if(GetCityConnectionTradeRouteGoldModifier() != 0)
@@ -295,26 +295,26 @@ int CvTreasury::GetCityConnectionRouteGoldTimes100(CvCity* pNonCapitalCity) cons
 }
 
 
-/// Returns cached amount of Gold being brought in for having Cities connected via a Route
+
 int CvTreasury::GetCityConnectionGold() const
 {
 	return m_iCityConnectionGoldTimes100 / 100;
 }
 
-/// Returns cached amount of Gold being brought in for having Cities connected via a Route
+
 int CvTreasury::GetCityConnectionGoldTimes100() const
 {
 	return m_iCityConnectionGoldTimes100;
 }
 
-/// How much Gold is being brought in for having Cities connected via a Route
+
 void CvTreasury::DoUpdateCityConnectionGold()
 {
 	int iNumGold = 0;
 
 	CvCity* pCapitalCity = m_pPlayer->getCapitalCity();
 
-	// Must have a capital before we can check if other Cities are connected to it!
+
 	if(pCapitalCity != NULL && m_pPlayer->getNumCities() > 1)
 	{
 		CvCity* pLoopCity;
@@ -336,13 +336,13 @@ void CvTreasury::DoUpdateCityConnectionGold()
 }
 
 
-/// How much of a percent bonus do we get for Trade Routes
+
 int CvTreasury::GetCityConnectionTradeRouteGoldModifier() const
 {
 	return m_iCityConnectionTradeRouteGoldModifier;
 }
 
-/// Changes how much of a percent bonus do we get for Trade Routes
+
 void CvTreasury::ChangeCityConnectionTradeRouteGoldModifier(int iChange)
 {
 	if(iChange != 0)
@@ -353,13 +353,13 @@ void CvTreasury::ChangeCityConnectionTradeRouteGoldModifier(int iChange)
 	}
 }
 
-/// How much of a bonus do we get for Trade Routes
+
 int CvTreasury::GetCityConnectionTradeRouteGoldChange() const
 {
 	return m_iCityConnectionTradeRouteGoldChange;
 }
 
-/// Changes how much of a bonus we get for Trade Routes
+
 void CvTreasury::ChangeCityConnectionTradeRouteGoldChange(int iChange)
 {
 	if(iChange != 0)
@@ -370,14 +370,14 @@ void CvTreasury::ChangeCityConnectionTradeRouteGoldChange(int iChange)
 	}
 }
 
-/// Returns the route-type between two cities
+
 bool CvTreasury::HasCityConnectionRouteBetweenCities(CvCity* pFirstCity, CvCity* pSecondCity, bool bBestRoute) const
 {
 	CvCityConnections* pCityConnections = m_pPlayer->GetCityConnections();
 	FASSERT(pCityConnections, "m_pCityConnections is null");
 	if(!pCityConnections)
 	{
-		// invalid value
+
 		return FALSE;
 	}
 
@@ -385,14 +385,14 @@ bool CvTreasury::HasCityConnectionRouteBetweenCities(CvCity* pFirstCity, CvCity*
 	FASSERT(pSecondCity, "pSecondCity is null. Invalid!");
 	if(!pFirstCity || !pSecondCity)
 	{
-		// null city passed in
+
 		return FALSE;
 	}
 
 	FASSERT(pFirstCity != pSecondCity, "Cities are the same and are by default connected?");
 	if(pFirstCity == pSecondCity)
 	{
-		// trying to go to the same city
+
 		return FALSE;
 	}
 
@@ -418,7 +418,7 @@ bool CvTreasury::HasCityConnectionRouteBetweenCities(CvCity* pFirstCity, CvCity*
 
 	if(iFirstCityIndex < 0 || iSecondCityIndex < 0)
 	{
-		// did not find one or both of the cities
+
 		return FALSE;
 	}
 
@@ -438,28 +438,28 @@ bool CvTreasury::HasCityConnectionRouteBetweenCities(CvCity* pFirstCity, CvCity*
 	return FALSE;
 }
 
-/// Gold per turn from international trade routes
+
 int CvTreasury::GetGoldPerTurnFromTradeRoutes() const
 {
-	// needs fixin
+
 	return 0;
-	//return GetGoldPerTurnFromTradeRoutesTimes100() / 100;
+
 }
 
-/// Gold per turn from international trade routes times 100
+
 int CvTreasury::GetGoldPerTurnFromTradeRoutesTimes100() const
 {
 	return 0;
-	//return m_pPlayer->GetTrade()->GetAllTradeValueTimes100(YIELD_GOLD);
+
 }
 
-/// Gold per turn from traits
+
 int CvTreasury::GetGoldPerTurnFromTraits() const
 {
 	return m_pPlayer->getYieldFromTraitsTimes100(YIELD_GOLD);
 }
 
-/// Gold Per Turn from Religion
+
 int CvTreasury::GetGoldPerTurnFromReligion() const
 {
 #if !defined(STANDARDIZE_YIELDS)
@@ -467,7 +467,7 @@ int CvTreasury::GetGoldPerTurnFromReligion() const
 
 	CvGameReligions* pReligions = GC.getGame().GetGameReligions();
 
-	// Founder beliefs
+
 	ReligionTypes eFoundedReligion = pReligions->GetFounderBenefitsReligion(m_pPlayer->GetID());
 	if(eFoundedReligion != NO_RELIGION)
 	{
@@ -491,63 +491,63 @@ int CvTreasury::GetGoldPerTurnFromReligion() const
 #endif
 }
 
-/// Gross income for turn times 100
+
 int CvTreasury::CalculateGrossGold()
 {
 	return CalculateGrossGoldTimes100() / 100;
 }
 
-/// Gross income for turn
+
 int CvTreasury::CalculateGrossGoldTimes100()
 {
 	int iNetGold;
 
-	// Gold from Cities
+
 	iNetGold = GetGoldFromCitiesTimes100();
 
-	// Gold per Turn from Diplomacy
+
 	iNetGold += GetGoldPerTurnFromDiplomacy() * 100;
 
-	// City connection bonuses
+
 	iNetGold += GetCityConnectionGoldTimes100();
 
-	// Religion
+
 	iNetGold += GetGoldPerTurnFromReligion() * 100;
 
-	// International trade
+
 	iNetGold += GetGoldPerTurnFromTraits();
 
 	return iNetGold;
 }
 
-/// Gross income across entire game
+
 int CvTreasury::GetLifetimeGrossGold()
 {
 	return m_iLifetimeGrossGoldIncome;
 }
 
-/// Net income for turn times 100
+
 int CvTreasury::CalculateBaseNetGold()
 {
 	return CalculateBaseNetGoldTimes100() / 100;
 }
 
-/// Net income for turn
+
 int CvTreasury::CalculateBaseNetGoldTimes100()
 {
 	int iNetGold = CalculateGrossGoldTimes100();
 
-	// Remove costs
+
 	iNetGold -= CalculateInflatedCosts() * 100;
 
 	return iNetGold;
 }
 
 
-/// Compute unit maintenance cost for the turn (returns component info)
+
 int CvTreasury::CalculateUnitCost(int& iFreeUnits, int& iPaidUnits, int& iBaseUnitCost, int& iExtraCost)
 {
-	// If player has 0 Cities then no Unit cost
+
 	if(m_pPlayer->getNumCities() == 0)
 	{
 		return 0;
@@ -558,7 +558,7 @@ int CvTreasury::CalculateUnitCost(int& iFreeUnits, int& iPaidUnits, int& iBaseUn
 	CvHandicapInfo& playerHandicap = m_pPlayer->getHandicapInfo();
 	iFreeUnits = playerHandicap.getGoldFreeUnits();
 
-	// Defined in XML by unit info type
+
 	iFreeUnits += m_pPlayer->GetNumMaintenanceFreeUnits();
 	iFreeUnits += m_pPlayer->getBaseFreeUnits();
 
@@ -566,27 +566,27 @@ int CvTreasury::CalculateUnitCost(int& iFreeUnits, int& iPaidUnits, int& iBaseUn
 
 	iBaseUnitCost = iPaidUnits * m_pPlayer->getGoldPerUnitTimes100();
 
-	// Discount on land unit maintenance?
+
 	int iLandUnitMod = m_pPlayer->GetPlayerTraits()->GetLandUnitMaintenanceModifier();
 	if(iLandUnitMod != 0)
 	{
-		int iLandUnits = m_pPlayer->GetNumUnitsWithDomain(DOMAIN_LAND, true /*bMilitaryOnly*/);
+		int iLandUnits = m_pPlayer->GetNumUnitsWithDomain(DOMAIN_LAND, true                  );
 		int iFreeLandUnits = m_pPlayer->GetNumMaintenanceFreeUnits(DOMAIN_LAND, true);
 		int iPaidLandUnits = iLandUnits - iFreeLandUnits;
 		iBaseUnitCost += (iLandUnitMod * iPaidLandUnits * m_pPlayer->getGoldPerUnitTimes100()) / 100;
 	}
 
-	// Discount on naval unit maintenance?
+
 	int iNavalUnitMod = m_pPlayer->GetPlayerTraits()->GetNavalUnitMaintenanceModifier();
 	if(iNavalUnitMod != 0)
 	{
-		int iNavalUnits = m_pPlayer->GetNumUnitsWithDomain(DOMAIN_SEA, true /*bMilitaryOnly*/);
+		int iNavalUnits = m_pPlayer->GetNumUnitsWithDomain(DOMAIN_SEA, true                  );
 		int iFreeNavalUnits = m_pPlayer->GetNumMaintenanceFreeUnits(DOMAIN_SEA, true);
 		int iPaidNavalUnits = iNavalUnits - iFreeNavalUnits;
 		iBaseUnitCost += (iNavalUnitMod * iPaidNavalUnits * m_pPlayer->getGoldPerUnitTimes100()) / 100;
 	}
 
-	// Discounts for units of certain UnitCombat classes
+
 #ifdef AUI_WARNING_FIXES
 	for (uint iI = 0; iI < GC.getNumUnitCombatClassInfos(); iI++)
 #else
@@ -604,63 +604,63 @@ int CvTreasury::CalculateUnitCost(int& iFreeUnits, int& iPaidUnits, int& iBaseUn
 				int iCost = iNumUnits * m_pPlayer->getGoldPerUnitTimes100(); 
 				int iModifiedCost = iNumUnits * m_pPlayer->getGoldPerUnitTimes100() * (100 + iModifier) / 100; 
 				
-				// Reduce cost based on difference
+
 				iBaseUnitCost += (iModifiedCost - iCost);
 			}
 		}
 	}
 
-	iExtraCost = m_pPlayer->getExtraUnitCost() * 100;	// In hundreds to avoid rounding errors
+	iExtraCost = m_pPlayer->getExtraUnitCost() * 100;
 
 	iSupport = iBaseUnitCost + iExtraCost;
 
-	// Game progress factor ranges from 0.0 to 1.0 based on how far into the game we are
+
 	double fGameProgressFactor = double(GC.getGame().getElapsedGameTurns()) / GC.getGame().getDefaultEstimateEndTurn();
 
-	// Multiplicative increase - helps scale costs as game goes on - the HIGHER this number the more is paid
-	double fMultiplyFactor = 1.0 + (fGameProgressFactor* /*8*/ GC.getUNIT_MAINTENANCE_GAME_MULTIPLIER());
-	// Exponential increase - this one really punishes those with a HUGE military - the LOWER this number the more is paid
-	double fExponentialFactor = 1.0 + (fGameProgressFactor / /*7*/ GC.getUNIT_MAINTENANCE_GAME_EXPONENT_DIVISOR());
+
+	double fMultiplyFactor = 1.0 + (fGameProgressFactor*       GC.getUNIT_MAINTENANCE_GAME_MULTIPLIER());
+
+	double fExponentialFactor = 1.0 + (fGameProgressFactor /       GC.getUNIT_MAINTENANCE_GAME_EXPONENT_DIVISOR());
 
 	double fTempCost = fMultiplyFactor * iSupport;
-	fTempCost /= 100;	// Take this out of hundreds now
+	fTempCost /= 100;
 
 	double dFinalCost = pow(fTempCost, fExponentialFactor);
 
-	// A mod at the player level? (Policies, etc.)
+
 	if(m_pPlayer->GetUnitGoldMaintenanceMod() != 0)
 	{
 		dFinalCost *= (100 + m_pPlayer->GetUnitGoldMaintenanceMod());
 		dFinalCost /= 100;
 	}
 
-	// Human bonus for unit maintenance costs
+
 	if(m_pPlayer->isHuman())
 	{
 		dFinalCost *= playerHandicap.getUnitCostPercent();
 		dFinalCost /= 100;
 	}
-	// AI bonus for unit maintenance costs
+
 	else if(!m_pPlayer->IsAITeammateOfHuman())
 	{
 		dFinalCost *= GC.getGame().getHandicapInfo().getAIUnitCostPercent();
 		dFinalCost /= 100;
 	}
 
-	//iFinalCost /= 100;
+
 
 	return std::max(0, int(dFinalCost));
 }
 
-/// Compute unit supply for the turn (returns component info)
+
 int CvTreasury::CalculateUnitSupply(int& iPaidUnits, int& iBaseSupplyCost)
 {
 	int iSupply;
 
-	iPaidUnits = std::max(0, (m_pPlayer->getNumOutsideUnits() - /*3*/ GC.getINITIAL_FREE_OUTSIDE_UNITS()));
+	iPaidUnits = std::max(0, (m_pPlayer->getNumOutsideUnits() -       GC.getINITIAL_FREE_OUTSIDE_UNITS()));
 
-	// JON: This is set to 0 right now, which pretty much means it's disabled
-	iBaseSupplyCost = iPaidUnits* /*0*/ GC.getINITIAL_OUTSIDE_UNIT_GOLD_PERCENT();
+
+	iBaseSupplyCost = iPaidUnits*       GC.getINITIAL_OUTSIDE_UNIT_GOLD_PERCENT();
 	iBaseSupplyCost /= 100;
 
 	iSupply = iBaseSupplyCost;
@@ -671,25 +671,25 @@ int CvTreasury::CalculateUnitSupply(int& iPaidUnits, int& iBaseSupplyCost)
 
 	if(!m_pPlayer->isHuman() && !m_pPlayer->IsAITeammateOfHuman() && !m_pPlayer->isBarbarian())
 	{
-		//iSupply *= gameHandicap->getAIUnitSupplyPercent();	// This is no longer valid
-		//iSupply /= 100;
+
+
 
 		iSupply *= std::max(0, ((GC.getGame().getHandicapInfo().getAIPerEraModifier() * m_pPlayer->GetCurrentEra()) + 100));
 		iSupply /= 100;
 	}
 
-	// Game progress factor ranges from 0.0 to 1.0 based on how far into the game we are
+
 	double fGameProgressFactor = float(GC.getGame().getElapsedGameTurns()) / GC.getGame().getEstimateEndTurn();
 
-	// Multiplicative increase - helps scale costs as game goes on - the HIGHER this number the more is paid
-	double fMultiplyFactor = 1.0 + (fGameProgressFactor* /*8*/ GC.getUNIT_MAINTENANCE_GAME_MULTIPLIER());
-	// Exponential increase - this one really punishes those with a HUGE military - the LOWER this number the more is paid
-	double fExponentialFactor = 1.0 + (fGameProgressFactor / /*7*/ GC.getUNIT_MAINTENANCE_GAME_EXPONENT_DIVISOR());
+
+	double fMultiplyFactor = 1.0 + (fGameProgressFactor*       GC.getUNIT_MAINTENANCE_GAME_MULTIPLIER());
+
+	double fExponentialFactor = 1.0 + (fGameProgressFactor /       GC.getUNIT_MAINTENANCE_GAME_EXPONENT_DIVISOR());
 
 	double fTempCost = fMultiplyFactor * iSupply;
 	int iFinalCost = (int) pow(fTempCost, fExponentialFactor);
 
-	// A mod at the player level? (Policies, etc.)
+
 	if(m_pPlayer->GetUnitSupplyMod() != 0)
 	{
 		iFinalCost *= (100 + m_pPlayer->GetUnitSupplyMod());
@@ -701,7 +701,7 @@ int CvTreasury::CalculateUnitSupply(int& iPaidUnits, int& iBaseSupplyCost)
 	return iFinalCost;
 }
 
-/// Costs to the player (prior to applying inflation)
+
 int CvTreasury::CalculatePreInflatedCosts()
 {
 	int iFreeUnits;
@@ -723,7 +723,7 @@ int CvTreasury::CalculatePreInflatedCosts()
 	return iTotalCosts;
 }
 
-/// Compute inflation for this part of the game
+
 int CvTreasury::CalculateInflationRate()
 {
 	CvGame& kGame = GC.getGame();
@@ -758,7 +758,7 @@ int CvTreasury::CalculateInflationRate()
 	iInflationPerTurnTimes10000 *= std::max(0, 100 + iModifier);
 	iInflationPerTurnTimes10000 /= 100;
 
-	// Keep up to second order terms in binomial series
+
 	int iRatePercent = (iTurns * iInflationPerTurnTimes10000) / 100;
 	iRatePercent += (iTurns * (iTurns - 1) * iInflationPerTurnTimes10000 * iInflationPerTurnTimes10000) / 2000000;
 
@@ -767,58 +767,58 @@ int CvTreasury::CalculateInflationRate()
 	return iRatePercent;
 }
 
-/// Apply inflation - JON: DISABLED. Inflation bad. Money good.
+
 int CvTreasury::CalculateInflatedCosts()
 {
 	int iCosts = CalculatePreInflatedCosts();
 
-	//iCosts *= std::max(0, (CalculateInflationRate() + 100));
-	//iCosts /= 100;
+
+
 
 	return iCosts;
 }
 
-/// What are our gold maintenance costs because of Buildings?
+
 int CvTreasury::GetBuildingGoldMaintenance() const
 {
 	int iMaintenance = GetBaseBuildingGoldMaintenance();
 
-	// Player modifier
+
 	iMaintenance *= (100 + m_pPlayer->GetBuildingGoldMaintenanceMod());
 	iMaintenance /= 100;
 
-	// Modifier for difficulty level
-	CvHandicapInfo& playerHandicap = m_pPlayer->getHandicapInfo();
-	//iMaintenance *= playerHandicap->getBuildingCostPercent();
-	//iMaintenance /= 100;
 
-	// Human bonus for Building maintenance costs
+	CvHandicapInfo& playerHandicap = m_pPlayer->getHandicapInfo();
+
+
+
+
 	if(m_pPlayer->isHuman())
 	{
 		iMaintenance *= playerHandicap.getBuildingCostPercent();
 		iMaintenance /= 100;
 	}
-	// AI bonus for Building maintenance costs
+
 	else if(!m_pPlayer->IsAITeammateOfHuman())
 	{
 		iMaintenance *= GC.getGame().getHandicapInfo().getAIBuildingCostPercent();
 		iMaintenance /= 100;
 	}
 
-	// Start Era mod
+
 	iMaintenance *= GC.getGame().getStartEraInfo().getBuildingMaintenancePercent();
 	iMaintenance /= 100;
 
 	return iMaintenance;
 }
 
-/// What are our BASE gold maintenance costs because of Buildings?
+
 int CvTreasury::GetBaseBuildingGoldMaintenance() const
 {
 	return m_iBaseBuildingGoldMaintenance;
 }
 
-/// What are our gold maintenance costs because of Buildings?
+
 void CvTreasury::SetBaseBuildingGoldMaintenance(int iValue)
 {
 	m_iBaseBuildingGoldMaintenance = iValue;
@@ -829,35 +829,35 @@ void CvTreasury::SetBaseBuildingGoldMaintenance(int iValue)
 	CvAssertMsg(m_iBaseBuildingGoldMaintenance >= 0, "Building Maintenance is negative somehow. Please send Jon this with your last 5 autosaves and what changelist # you're playing.");
 }
 
-/// What are our gold maintenance costs because of Buildings?
+
 void CvTreasury::ChangeBaseBuildingGoldMaintenance(int iChange)
 {
 	SetBaseBuildingGoldMaintenance(GetBaseBuildingGoldMaintenance() + iChange);
 }
 
-/// What are our gold maintenance costs because of Improvements?
+
 int CvTreasury::GetImprovementGoldMaintenance() const
 {
 	int iMaintenance = m_iBaseImprovementGoldMaintenance;
 
-	// Player modifier
+
 	iMaintenance *= (100 + m_pPlayer->GetRouteGoldMaintenanceMod());
 	iMaintenance /= 100;
 
-	// Handicap
+
 	iMaintenance *= m_pPlayer->getHandicapInfo().getRouteCostPercent();
 	iMaintenance /= 100;
 
 	return iMaintenance;
 }
 
-/// What are our gold maintenance costs because of Improvements?
+
 int CvTreasury::GetBaseImprovementGoldMaintenance() const
 {
 	return m_iBaseImprovementGoldMaintenance;
 }
 
-/// What are our gold maintenance costs because of Improvements?
+
 void CvTreasury::SetBaseImprovementGoldMaintenance(int iValue)
 {
 	if(GetBaseImprovementGoldMaintenance() != iValue)
@@ -874,13 +874,13 @@ void CvTreasury::SetBaseImprovementGoldMaintenance(int iValue)
 	}
 }
 
-/// What are our gold maintenance costs because of Improvements?
+
 void CvTreasury::ChangeBaseImprovementGoldMaintenance(int iChange)
 {
 	SetBaseImprovementGoldMaintenance(GetBaseImprovementGoldMaintenance() + iChange);
 }
 
-/// Average change in gold balance over N turns
+
 double CvTreasury::AverageIncome(int iTurns)
 {
 	CvAssertMsg(iTurns > 0, "Invalid number of turns parameter");
@@ -910,7 +910,7 @@ void CvTreasury::LogExpenditure(CvString strExpenditure, int iAmount, int iColum
 		return;
 	}
 
-	// don't log minor civs for now
+
 	if(m_pPlayer->isMinorCiv())
 	{
 		return;
@@ -927,12 +927,12 @@ void CvTreasury::LogExpenditure(CvString strExpenditure, int iAmount, int iColum
 
 	CvString strLog;
 
-	// Find the name of this civ and city
+
 	CvString strPlayerName;
 	strPlayerName = m_pPlayer->getCivilizationShortDescription();
 	CvString strLogName;
 
-	// Open the log file
+
 	if(GC.getPlayerAndCityAILogSplit())
 	{
 		strLogName = "ExpenditureLog_" + strPlayerName + ".csv";
@@ -948,16 +948,16 @@ void CvTreasury::LogExpenditure(CvString strExpenditure, int iAmount, int iColum
 
 	CvString str;
 
-	// civ name
+
 	TreasuryHelpers::AppendToLog(strHeader, strLog, "Civ Name", strPlayerName);
 
-	// turn
+
 	TreasuryHelpers::AppendToLog(strHeader, strLog, "Turn", GC.getGame().getGameTurn());
 
-	// treasury at turn start
+
 	TreasuryHelpers::AppendToLog(strHeader, strLog, "Treasury Before Purchase", m_pPlayer->GetTreasury()->GetGold());
 	
-	// Cost of Plot
+
 	if (iColumn == 1){
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "Cost of Plot:", iAmount);
 	}
@@ -965,7 +965,7 @@ void CvTreasury::LogExpenditure(CvString strExpenditure, int iAmount, int iColum
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "Cost of Plot:", 0);
 	}
 	
-	// City Expenditure and Amount
+
 	if (iColumn == 2){
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "City Bought:", strExpenditure);
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "City Spent:", iAmount);
@@ -975,7 +975,7 @@ void CvTreasury::LogExpenditure(CvString strExpenditure, int iAmount, int iColum
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "City Spent:", 0);
 	}
 	
-	// Unit Upgrade and cost
+
 	if (iColumn == 3){
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "Unit Upgraded:", strExpenditure);
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "Spent on Upgrade:", iAmount);
@@ -985,7 +985,7 @@ void CvTreasury::LogExpenditure(CvString strExpenditure, int iAmount, int iColum
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "Spent on Upgrade:", 0);
 	}
 
-	// City State Gifted and Amount
+
 	if (iColumn == 4){
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "City State Gold Gifted:", strExpenditure);
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "Gold Gift Amount:", iAmount);
@@ -995,7 +995,7 @@ void CvTreasury::LogExpenditure(CvString strExpenditure, int iAmount, int iColum
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "Gold Gift Amount:", 0);
 	}
 	
-	// City State Improved and Amount
+
 	if (iColumn == 5){
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "City State Improved:", strExpenditure);
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "Gold for Improvement Amount:", iAmount);
@@ -1005,7 +1005,7 @@ void CvTreasury::LogExpenditure(CvString strExpenditure, int iAmount, int iColum
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "Gold for Improvement Amount:", 0);
 	}
 
-	// City State Bought and Amount
+
 	if (iColumn == 6){
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "City State Bought:", strExpenditure);
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "Bought for:", iAmount);
@@ -1015,7 +1015,7 @@ void CvTreasury::LogExpenditure(CvString strExpenditure, int iAmount, int iColum
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "Bought for:", 0);
 	}
 	
-	// Emergency City Expenditure Unit and Amount
+
 	if (iColumn == 7){
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "Emergency Unit:", strExpenditure);
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "Emergency Unit Cost:", iAmount);
@@ -1025,7 +1025,7 @@ void CvTreasury::LogExpenditure(CvString strExpenditure, int iAmount, int iColum
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "Emergency Unit Cost:", 0);
 	}
 	
-	// Emergency City Expenditure Unit and Amount
+
 	if (iColumn == 8){
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "Emergency Building:", strExpenditure);
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "Emergency Building Cost:", iAmount);
@@ -1035,7 +1035,7 @@ void CvTreasury::LogExpenditure(CvString strExpenditure, int iAmount, int iColum
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "Emergency Building Cost:", 0);
 	}
 
-	// Research Agreement and Amount
+
 	if (iColumn == 9){
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "Research Agreement with:", strExpenditure);
 		TreasuryHelpers::AppendToLog(strHeader, strLog, "Research Agreement Cost:", iAmount);
@@ -1052,10 +1052,10 @@ void CvTreasury::LogExpenditure(CvString strExpenditure, int iAmount, int iColum
 	pLog->Msg(strLog);
 }
 
-/// Serialization read
+
 void CvTreasury::Read(FDataStream& kStream)
 {
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion;
 
 	kStream >> uiVersion;
@@ -1074,10 +1074,10 @@ void CvTreasury::Read(FDataStream& kStream)
 	kStream >> m_iLifetimeGrossGoldIncome;
 }
 
-/// Serialization write
+
 void CvTreasury::Write(FDataStream& kStream)
 {
-	// Current version number
+
 	uint uiVersion = 1;
 	kStream << uiVersion;
 

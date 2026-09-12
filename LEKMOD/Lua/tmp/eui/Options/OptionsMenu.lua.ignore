@@ -1,13 +1,13 @@
--------------------------------------------------
--- Options Menu
--- modified by bc1 from Civ V 1.0.3.276 code
--- add new options for EUI
--------------------------------------------------
--- edit: Diplomacy stack left/right switch option for EUI
--------------------------------------------------
--- edit: NEW: Ingame Hotkey Manager for EUI
--------------------------------------------------
---print("Loading EUI option menu...",os.clock())
+
+
+
+
+
+
+
+
+
+
 include( "IconSupport" );
 local ipairs = ipairs
 local math_floor = math.floor
@@ -29,8 +29,8 @@ local passwordsNotMatchString = Locale.ConvertTextKey( "TXT_KEY_OPSCREEN_TURN_NO
 local passwordsNotMatchTooltipString = Locale.ConvertTextKey( "TXT_KEY_OPSCREEN_TURN_NOTIFY_SMTP_PASSWORDS_NOT_MATCH_TT" );
 local g_isInGame = ContextPtr:GetID() == "OptionsMenu_InGame"
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 local m_WindowResList = {
 { x=2560, y=2048, bWide=false },
 { x=2560, y=1600, bWide=true },
@@ -47,12 +47,12 @@ local m_WindowResList = {
 { x=1024, y=768,  bWide=false },
 };
 
--- Store array of supported languages.
+
 g_Languages = Locale.GetSupportedLanguages();
 g_SpokenLanguages = Locale.GetSupportedSpokenLanguages();
 
--------------------------------------------------
--------------------------------------------------
+
+
 local iMusicVolumeKnobID    = GetVolumeKnobIDFromName("USER_VOLUME_MUSIC");
 local iSFXVolumeKnobID      = GetVolumeKnobIDFromName("USER_VOLUME_SFX");
 local iSpeechVolumeKnobID   = GetVolumeKnobIDFromName("USER_VOLUME_SPEECH");
@@ -70,8 +70,8 @@ function CacheAudioVolumes()
     m_cachedAmbienceVolumeKnob = GetVolumeKnobValue(iAmbienceVolumeKnobID);
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function RevertToCachedAudioVolumes()
     if m_cachedMusicVolumeKnob and m_cachedSFXVolumeKnob and m_cachedSpeechVolumeKnob and m_cachedAmbienceVolumeKnob then
         SetVolumeKnobValue(iMusicVolumeKnobID, m_cachedMusicVolumeKnob);
@@ -81,22 +81,22 @@ function RevertToCachedAudioVolumes()
     end
 end
 
--------------------------------------------------
--------------------------------------------------
---function SetDefaultGameTabOptions()
---  OptionsManager.SetNoRewardPopups(false);
---  OptionsManager.SetNoTileRecommendations(false);
---  OptionsManager.SetCivilianYields(false);
---  OptionsManager.SetNoBasicHelp(false);
---  m_cachedSinglePlayerEndTurnTimerEnabled = false;
---  m_cachedMultiPlayerEndTurnTimerEnabled = true;
---  OptionsManager.SetTooltip1Seconds( 150 );
---  OptionsManager.SetTooltip2Seconds( 500 );
---  OptionsManager.SetTutorialLevel(0);
---end
 
--------------------------------------------------
--------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function SetDefaultAudioVolumes()
     SetVolumeKnobValue(iMusicVolumeKnobID, 1);
     SetVolumeKnobValue(iSFXVolumeKnobID, 1);
@@ -104,8 +104,8 @@ function SetDefaultAudioVolumes()
     SetVolumeKnobValue(iAmbienceVolumeKnobID, 1);
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnOK()
     EUI_options.SetValue( "AutoClose", Controls.AutoCloseCheckbox:IsChecked() )
     EUI_options.SetValue( "CityAdvisor", Controls.CityAdvisorCheckbox:IsChecked() )
@@ -126,7 +126,7 @@ function OnOK()
         local bCanCommit = false;
         if PreGame.IsMultiplayerGame() then
             if Matchmaking.IsHost() then
-                -- If we are the host of a game, we can change the quick states
+
                 bCanCommit = true;
             end
         else
@@ -147,7 +147,7 @@ function OnOK()
         end
     end
 
-    --update local caches because the hide handler will set values back to cached versions
+
     CacheAudioVolumes();
 
     local bResolutionChanged = OptionsManager.HasUserChangedResolution();
@@ -167,8 +167,8 @@ function OnOK()
 end
 Controls.AcceptButton:RegisterCallback( Mouse.eLClick, OnOK );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnCancel()
     OptionsManager.SyncGameOptionsCache();
     OptionsManager.SyncGraphicsOptionsCache();
@@ -178,8 +178,8 @@ function OnCancel()
 end
 Controls.CancelButton:RegisterCallback( Mouse.eLClick, OnCancel );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnDefault()
     OptionsManager.ResetDefaultGameOptions();
     OptionsManager.ResetDefaultGraphicsOptions();
@@ -188,8 +188,8 @@ function OnDefault()
 end
 Controls.DefaultButton:RegisterCallback( Mouse.eLClick, OnDefault );
 
--------------------------------------------------
--------------------------------------------------
+
+
 local fullscreenRes;
 local windowedResX, windowedResY = 0,0;
 local msaaSetting;
@@ -202,8 +202,8 @@ function SavePreviousResolutionSettings()
     bFullscreen = OptionsManager.GetFullscreen_Cached();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function RestorePreviousResolutionSettings()
     OptionsManager.SetResolution_Cached(fullscreenRes);
     OptionsManager.SetWindowResolution_Cached(windowedResX, windowedResY);
@@ -215,10 +215,10 @@ function RestorePreviousResolutionSettings()
     UpdateGraphicsOptionsDisplay();
 end
 
--------------------------------------------------
--- If we hear a multiplayer game invite was sent, exit
--- so we don't interfere with the transition
--------------------------------------------------
+
+
+
+
 function OnMultiplayerGameInvite()
     if ContextPtr:IsHidden() == false then
         OnCancel();
@@ -228,8 +228,8 @@ end
 Events.MultiplayerGameLobbyInvite.Add( OnMultiplayerGameInvite );
 Events.MultiplayerGameServerInvite.Add( OnMultiplayerGameInvite );
 
--------------------------------------------------
--------------------------------------------------
+
+
 local g_fTimer;
 function OnUpdate( fDTime )
 
@@ -243,8 +243,8 @@ function OnUpdate( fDTime )
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 g_bIsResolutionCountdown = true;
 function ShowResolutionCountdown()
     g_fTimer = 20;
@@ -259,8 +259,8 @@ function ShowResolutionCountdown()
     g_bIsResolutionCountdown = true;
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 g_chosenLanguage = 0;
 function ShowLanguageCountdown()
     g_fTimer = 20;
@@ -284,8 +284,8 @@ function ShowLanguageCountdown()
     g_bIsResolutionCountdown = false;
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnApplyRes()
     if OptionsManager.HasUserChangedResolution() then
         ShowResolutionCountdown()
@@ -295,21 +295,21 @@ function OnApplyRes()
 end
 Controls.ApplyResButton:RegisterCallback( Mouse.eLClick, OnApplyRes );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnResetTutorial()
     OptionsManager.ResetTutorial();
 end
 Controls.ResetTutorialButton:RegisterCallback( Mouse.eLClick, OnResetTutorial);
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnOptionsEvent()
     UIManager:QueuePopup( ContextPtr, PopupPriority.OptionsMenu );
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 local g_isContextPtrHidden, g_needsInitializing = true, true
 ContextPtr:SetShowHideHandler(
 function( isHide, isInit )
@@ -322,7 +322,7 @@ function( isHide, isInit )
 
         if not isHide then
             RefreshTutorialLevelOptions();
-            --options menu is being shown
+
             OptionsManager.SyncGameOptionsCache();
             OptionsManager.SyncGraphicsOptionsCache();
             OptionsManager.SyncResolutionOptionsCache();
@@ -349,7 +349,7 @@ function( isHide, isInit )
             end
 
             if g_isInGame and PreGame.IsMultiplayerGame() and not Matchmaking.IsHost() then
-                -- Not this host, disable
+
                 Controls.MPQuickCombatCheckbox:SetDisabled( true );
                 Controls.MPQuickCombatCheckbox:SetAlpha( 0.5 );
                 Controls.MPQuickMovementCheckbox:SetDisabled(true);
@@ -373,9 +373,9 @@ function( isHide, isInit )
                 Controls.BGBlock:SetHide( true );
             end
         else
-            --options menu is being hidden
+
             RevertToCachedAudioVolumes();
-            -- NEW: Cancel hotkey editbox selection
+
             if next(g_CurrentEditable) ~= nil then
                 OnCancelEditClick(g_CurrentEditable.HotkeyEditCancelButton:GetVoid1(), g_CurrentEditable.HotkeyEditCancelButton:GetVoid2());
             end
@@ -383,9 +383,9 @@ function( isHide, isInit )
     end
 end)
 
--------------------------------------------------
--------------------------------------------------
--- NEW: also check ConfirmResetAllHotkeysPopup
+
+
+
 function OnBack()
     if( Controls.GraphicsChangedPopup:IsHidden() and
         Controls.Countdown:IsHidden() and
@@ -397,18 +397,18 @@ function OnBack()
     Controls.ConfirmResetAllHotkeysPopup:SetHide(true);
     OnCountdownNo();
 end
---Controls.CancelButton:RegisterCallback( Mouse.eLClick, OnBack );
 
 
--------------------------------------------------
--------------------------------------------------
+
+
+
 function OnCategory( which )
     Controls.GamePanel:SetHide(  which ~= 1 );
     Controls.IFacePanel:SetHide( which ~= 2 );
     Controls.VideoPanel:SetHide( which ~= 3 );
     Controls.AudioPanel:SetHide( which ~= 4 );
     Controls.MultiplayerPanel:SetHide( which ~= 5 );
-    -- NEW
+
     Controls.HotkeysPanel:SetHide( which ~= 6 );
 
     Controls.GameHighlight:SetHide(  which ~= 1 );
@@ -416,7 +416,7 @@ function OnCategory( which )
     Controls.VideoHighlight:SetHide( which ~= 3 );
     Controls.AudioHighlight:SetHide( which ~= 4 );
     Controls.MultiplayerHighlight:SetHide( which ~= 5 );
-    -- NEW
+
     Controls.HotkeyManagerHighlight:SetHide( which ~= 6 );
 
     Controls.TitleLabel:SetText( m_PanelNames[ which ] );
@@ -426,7 +426,7 @@ Controls.IFaceButton:RegisterCallback( Mouse.eLClick, OnCategory );
 Controls.VideoButton:RegisterCallback( Mouse.eLClick, OnCategory );
 Controls.AudioButton:RegisterCallback( Mouse.eLClick, OnCategory );
 Controls.MultiplayerButton:RegisterCallback( Mouse.eLClick, OnCategory );
--- NEW
+
 Controls.HotkeyManagerButton:RegisterCallback( Mouse.eLClick, OnCategory );
 
 m_PanelNames = {
@@ -435,24 +435,24 @@ m_PanelNames = {
     Locale.ConvertTextKey( "TXT_KEY_VIDEO_OPTIONS" );
     Locale.ConvertTextKey( "TXT_KEY_AUDIO_OPTIONS" );
     Locale.ConvertTextKey( "TXT_KEY_MULTIPLAYER_OPTIONS" );
-    -- NEW
+
     Locale.ConvertTextKey( "TXT_KEY_HOTKEY_OPTIONS" );
 }
 
 OnCategory( 1 );
 
 
--------------------------------------------------
--- Volume control
--------------------------------------------------
+
+
+
 
 
 function OnGameChangedVolumeLevel( iVolumeKnobID, fNewVolume )
 
-    -- NOTE: testing controls by name is more hardcoded than we'd like
-    -- it would be better to put the slider controls in an array and then test their void1's.
 
-    -- NOTE: we may get messages for volume controls that are not user volume controls, just ignore them
+
+
+
 
     fRealVolume = GetVolumeKnobValue(iVolumeKnobID);
 
@@ -467,7 +467,7 @@ function OnGameChangedVolumeLevel( iVolumeKnobID, fNewVolume )
         Controls.AmbienceVolumeSliderValue:SetText( Locale.ConvertTextKey("TXT_KEY_OPSCREEN_AMBIANCE_SLIDER", newVolume ) );
     end
 end
---Events.AudioVolumeChanged.Add( OnGameChangedVolumeLevel );
+
 
 function OnUIVolumeSliderValueChanged( fNewVolumeLevel, void1 )
     SetVolumeKnobValue(void1, fNewVolumeLevel);
@@ -504,11 +504,11 @@ Controls.EffectsVolumeSliderValue:SetText( Locale.ConvertTextKey("TXT_KEY_OPSCRE
 Controls.SpeechVolumeSliderValue:SetText( Locale.ConvertTextKey("TXT_KEY_OPSCREEN_SPEECH_SLIDER", Locale.ToPercent(GetVolumeKnobValue(iSpeechVolumeKnobID)) ) );
 Controls.AmbienceVolumeSliderValue:SetText( Locale.ConvertTextKey("TXT_KEY_OPSCREEN_AMBIANCE_SLIDER", Locale.ToPercent(GetVolumeKnobValue(iAmbienceVolumeKnobID)) ) );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function Tooltip1TimerSliderChanged(value)
 
-    --print("value: " .. value);
+
 
     i = math_floor(value * 100);
     i = i * 10;
@@ -519,8 +519,8 @@ Controls.Tooltip1TimerSlider:RegisterSliderCallback(Tooltip1TimerSliderChanged)
 Controls.Tooltip1TimerSlider:SetValue(OptionsManager.GetTooltip1Seconds()/1000);
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function Tooltip2TimerSliderChanged(value)
     i = math_floor(value * 100);
     i = i * 10;
@@ -531,59 +531,59 @@ Controls.Tooltip2TimerSlider:RegisterSliderCallback(Tooltip2TimerSliderChanged)
 Controls.Tooltip2TimerSlider:SetValue(OptionsManager.GetTooltip2Seconds()/1000);
 
 
--------------------------------------------------
--- Countdown handlers
--------------------------------------------------
+
+
+
 function OnCountdownYes()
     if g_bIsResolutionCountdown == true then
-        --just hide the menu
+
         Controls.Countdown:SetHide(true);
         SavePreviousResolutionSettings();
     else
-        --apply language, reload UI
+
         Locale.SetCurrentLanguage( g_Languages[g_chosenLanguage].Type );
         Events.SystemUpdateUI( SystemUpdateUIType.ReloadUI );
     end
-    --turn off timer
+
     ContextPtr:ClearUpdate();
 end
 Controls.CountYes:RegisterCallback( Mouse.eLClick, OnCountdownYes );
 
 function OnCountdownNo()
     if g_bIsResolutionCountdown == true then
-        --here we revert resolution options to some old options
+
         Controls.Countdown:SetHide(true);
         RestorePreviousResolutionSettings();
     else
-        --revert language to current setting
+
         Controls.Countdown:SetHide(true);
         Controls.LanguagePull:GetButton():SetText(Locale.GetCurrentLanguage().DisplayName);
     end
-    --turn off timer
+
     ContextPtr:ClearUpdate();
 end
 Controls.CountNo:RegisterCallback( Mouse.eLClick, OnCountdownNo );
 
 function OnGraphicsChangedOK()
-    --close the menu
+
     Controls.GraphicsChangedPopup:SetHide(true);
     OnBack();
 end
 Controls.GraphicsChangedOK:RegisterCallback( Mouse.eLClick, OnGraphicsChangedOK );
 
-----------------------------------------------------------------
--- Input processing
--- NEW: see updated InputHandler below
-----------------------------------------------------------------
---[[function InputHandler( uiMsg, wParam, lParam )
-    if uiMsg == KeyEvents.KeyDown then
-        if wParam == Keys.VK_ESCAPE then
-            OnBack();
-            return true;
-        end
-    end
-end
-ContextPtr:SetInputHandler( InputHandler );--]]
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 m_LeaderText = {
 [0] = Locale.ConvertTextKey("TXT_KEY_OPSCREEN_SETTINGS_MINIMUM"),
@@ -649,9 +649,9 @@ m_MSAAMap = { [0] = 1, 2, 4, 8 }
 
 m_MSAAInvMap = { [0]=0, 0, 1, [4]=2, [8]=3 }
 
-----------------------------------------------------------------
--- Display updating
-----------------------------------------------------------------
+
+
+
 
 function UpdateGameOptionsDisplay()
 
@@ -714,7 +714,7 @@ function UpdateGameOptionsDisplay()
     Controls.TutorialPull:GetButton():SetText( m_TutorialLevelText[ iTutorialLevel ] );
 
     Controls.LanguagePull:GetButton():SetText(Locale.GetCurrentLanguage().DisplayName);
-    Controls.SpokenLanguagePull:GetButton():SetText(Locale.GetCurrentSpokenLanguage().DisplayName); --TODO: make this work like its friends -KS
+    Controls.SpokenLanguagePull:GetButton():SetText(Locale.GetCurrentSpokenLanguage().DisplayName);
 
     Controls.MusicVolumeSlider:SetValue(    GetVolumeKnobValue(iMusicVolumeKnobID) );
     Controls.EffectsVolumeSlider:SetValue(  GetVolumeKnobValue(iSFXVolumeKnobID) );
@@ -752,10 +752,10 @@ end
 Events.GameOptionsChanged.Add(UpdateGameOptionsDisplay);
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function UpdateGraphicsOptionsDisplay()
-    --resolution options
+
     BuildFSResPulldown();
     BuildWResPulldown();
 
@@ -773,7 +773,7 @@ function UpdateGraphicsOptionsDisplay()
     Controls.WResolutionPull:GetButton():SetText( x .. "x" .. y );
     Controls.MSAAPull:GetButton():SetText( m_MSAAText[ m_MSAAInvMap[OptionsManager.GetAASamples_Cached()] ] );
 
-    --graphics options
+
     Controls.VSyncCheck:SetCheck( OptionsManager.GetVSync_Cached() );
     Controls.HDStratCheck:SetCheck( OptionsManager.GetHDStrategicView_Cached() );
     Controls.GPUDecodeCheck:SetCheck( OptionsManager.GetGPUTextureDecode_Cached() );
@@ -798,8 +798,8 @@ end
 Events.GraphicsOptionsChanged.Add(UpdateGraphicsOptionsDisplay);
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function UpdateMultiplayerOptionsDisplay()
     Controls.TurnNotifySteamInviteCheckbox:SetCheck(OptionsManager.GetTurnNotifySteamInvite_Cached());
     Controls.TurnNotifyEmailCheckbox:SetCheck(OptionsManager.GetTurnNotifyEmail_Cached());
@@ -814,12 +814,12 @@ function UpdateMultiplayerOptionsDisplay()
     if OptionsManager.GetLANNickName_Cached then
         Controls.LANNickNameEdit:SetText(OptionsManager.GetLANNickName_Cached());
     end
-    ValidateSmtpPassword(); -- Update passwords match label
+    ValidateSmtpPassword();
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function UpdateOptionsDisplay()
     UpdateGameOptionsDisplay();
     UpdateGraphicsOptionsDisplay();
@@ -827,116 +827,116 @@ function UpdateOptionsDisplay()
 end
 
 
-----------------------------------------------------------------
--- Game Options Handlers
-----------------------------------------------------------------
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
+
+
+
 function OnNoCitizenWarningCheckbox( bIsChecked )
     OptionsManager.SetNoCitizenWarning_Cached( bIsChecked );
 end
 Controls.NoCitizenWarningCheckbox:RegisterCheckHandler( OnNoCitizenWarningCheckbox );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnAutoWorkersDontReplaceCheckbox( bIsChecked )
     OptionsManager.SetAutoWorkersDontReplace_Cached( bIsChecked );
 end
 Controls.AutoWorkersDontReplaceCB:RegisterCheckHandler( OnAutoWorkersDontReplaceCheckbox );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnAutoWorkersDontRemoveFeaturesCheckbox( bIsChecked )
     OptionsManager.SetAutoWorkersDontRemoveFeatures_Cached( bIsChecked );
 end
 Controls.AutoWorkersDontRemoveFeaturesCB:RegisterCheckHandler( OnAutoWorkersDontRemoveFeaturesCheckbox );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnNoRewardPopupsCheckbox( bIsChecked )
     OptionsManager.SetNoRewardPopups_Cached( bIsChecked );
 end
 Controls.NoRewardPopupsCheckbox:RegisterCheckHandler( OnNoRewardPopupsCheckbox );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnNoTileRecommendationsCheckbox( bIsChecked )
     OptionsManager.SetNoTileRecommendations_Cached( bIsChecked );
 end
 Controls.NoTileRecommendationsCheckbox:RegisterCheckHandler( OnNoTileRecommendationsCheckbox );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnCivilianYieldsCheckbox( bIsChecked )
     OptionsManager.SetCivilianYields_Cached( bIsChecked );
 end
 Controls.CivilianYieldsCheckbox:RegisterCheckHandler( OnCivilianYieldsCheckbox );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnNoBasicHelpCheckbox( bIsChecked )
     OptionsManager.SetNoBasicHelp_Cached( bIsChecked );
 end
 Controls.NoBasicHelpCheckbox:RegisterCheckHandler( OnNoBasicHelpCheckbox );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnQuickSelectionAdvCheckbox( bIsChecked )
     OptionsManager.SetQuickSelectionAdvanceEnabled_Cached( bIsChecked );
 end
 Controls.QuickSelectionAdvCheckbox:RegisterCheckHandler( OnQuickSelectionAdvCheckbox );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnAutosaveTurnsChanged( string )
     OptionsManager.SetTurnsBetweenAutosave_Cached( string );
 end
 Controls.AutosaveTurnsEdit:RegisterCallback( OnAutosaveTurnsChanged );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnAutosaveMaxChanged( string )
     OptionsManager.SetNumAutosavesKept_Cached( string );
 end
 Controls.AutosaveMaxEdit:RegisterCallback( OnAutosaveMaxChanged );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnZoomCheck( bIsChecked )
     OptionsManager.SetStraightZoom_Cached( bIsChecked );
 end
 Controls.ZoomCheck:RegisterCheckHandler( OnZoomCheck );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnGridCheck( bIsChecked )
     OptionsManager.SetGridOn_Cached( bIsChecked );
 end
---Controls.GridCheck:RegisterCheckHandler( OnGridCheck );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
+
 function OnSinglePlayerAutoEndTurnCheck( bIsChecked )
     OptionsManager.SetSinglePlayerAutoEndTurnEnabled_Cached(bIsChecked);
 end
 Controls.SinglePlayerAutoEndTurnCheckBox:RegisterCheckHandler(OnSinglePlayerAutoEndTurnCheck);
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnMultiplayerAutoEndTurnCheck( bIsChecked )
     OptionsManager.SetMultiplayerAutoEndTurnEnabled_Cached(bIsChecked);
 end
 Controls.MultiplayerAutoEndTurnCheckbox:RegisterCheckHandler(OnMultiplayerAutoEndTurnCheck);
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnSinglePlayerQuickCombatCheck( bIsChecked )
     if g_isInGame then
         if not PreGame.IsMultiplayerGame() and not PreGame.IsHotSeatGame() then
-            -- In a single player game, store for updating the current game option
+
             m_bInGameQuickCombatState_Cached = bIsChecked;
         end
     end
@@ -944,12 +944,12 @@ function OnSinglePlayerQuickCombatCheck( bIsChecked )
 end
 Controls.SPQuickCombatCheckBox:RegisterCheckHandler(OnSinglePlayerQuickCombatCheck);
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnSinglePlayerQuickMovementCheck( bIsChecked )
     if g_isInGame then
         if not PreGame.IsMultiplayerGame() and not PreGame.IsHotSeatGame() then
-            -- In a single player game, store for updating the current game option
+
             m_bInGameQuickMovementState_Cached = bIsChecked;
         end
     end
@@ -957,12 +957,12 @@ function OnSinglePlayerQuickMovementCheck( bIsChecked )
 end
 Controls.SPQuickMovementCheckBox:RegisterCheckHandler(OnSinglePlayerQuickMovementCheck);
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnMultiplayerQuickCombatCheck( bIsChecked )
     if g_isInGame then
         if PreGame.IsMultiplayerGame() or PreGame.IsHotSeatGame() then
-            -- In a multiplayer game, store for updating the current game option
+
             m_bInGameQuickCombatState_Cached = bIsChecked;
         end
     end
@@ -970,12 +970,12 @@ function OnMultiplayerQuickCombatCheck( bIsChecked )
 end
 Controls.MPQuickCombatCheckbox:RegisterCheckHandler(OnMultiplayerQuickCombatCheck);
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnMultiplayerQuickMovementCheck( bIsChecked )
     if g_isInGame then
         if PreGame.IsMultiplayerGame() or PreGame.IsHotSeatGame() then
-            -- In a multiplayer game, store for updating the current game option
+
             m_bInGameQuickMovementState_Cached = bIsChecked;
         end
     end
@@ -983,11 +983,11 @@ function OnMultiplayerQuickMovementCheck( bIsChecked )
 end
 Controls.MPQuickMovementCheckbox:RegisterCheckHandler(OnMultiplayerQuickMovementCheck);
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnAutoUI( bIsChecked )
     OptionsManager.SetAutoUIAssets_Cached( bIsChecked );
-    --mini dispaly update here
+
     if bIsChecked then
         Controls.SmallUIAssetsCheck:SetCheck( false );
         Controls.SmallUIAssetsCheck:SetDisabled( true );
@@ -1001,84 +1001,84 @@ end
 Controls.AutoUIAssetsCheck:RegisterCheckHandler( OnAutoUI );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnSmallUI( bIsChecked )
     OptionsManager.SetSmallUIAssets_Cached( bIsChecked );
 end
 Controls.SmallUIAssetsCheck:RegisterCheckHandler( OnSmallUI );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnBindMousePull( level )
     OptionsManager.SetBindMouseMode_Cached( level );
     Controls.BindMousePull:GetButton():SetText( m_BindMouseText[ OptionsManager.GetBindMouseMode_Cached() ] );
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnLanguagePull(level)
-    level = level + 1; --offset because the pulldown is 0-based.
+    level = level + 1;
     Controls.LanguagePull:GetButton():SetText( g_Languages[level].DisplayName );
     g_chosenLanguage = level;
     ShowLanguageCountdown();
 end
 
-function OnSpokenLanguagePull(level) --TODO: hook this up too! -KS
+function OnSpokenLanguagePull(level)
     level = level + 1;
     Locale.SetCurrentSpokenLanguage( g_SpokenLanguages[level].Type );
     Controls.SpokenLanguagePull:GetButton():SetText( g_SpokenLanguages[level].DisplayName );
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnPolicyInfo( bIsChecked )
     OptionsManager.SetPolicyInfo_Cached( bIsChecked );
 end
 Controls.PolicyInfo:RegisterCheckHandler( OnPolicyInfo );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnAutoUnitCycleCheck( bIsChecked )
     OptionsManager.SetAutoUnitCycle_Cached( bIsChecked );
 end
 Controls.AutoUnitCycleCheck:RegisterCheckHandler( OnAutoUnitCycleCheck );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnScoreListCheck( bIsChecked )
     OptionsManager.SetScoreList_Cached( bIsChecked );
 end
 Controls.ScoreListCheck:RegisterCheckHandler( OnScoreListCheck );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnMPScoreListCheck( bIsChecked )
     OptionsManager.SetMPScoreList_Cached( bIsChecked );
 end
 Controls.MPScoreListCheck:RegisterCheckHandler( OnMPScoreListCheck );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnEnableMapInertia( bIsChecked )
     OptionsManager.SetEnableMapInertia_Cached( bIsChecked );
 end
 Controls.EnableMapInertiaCheck:RegisterCheckHandler( OnEnableMapInertia );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnSkipIntroVideo( bIsChecked )
     OptionsManager.SetSkipIntroVideo_Cached( bIsChecked );
 end
 Controls.SkipIntroVideoCheck:RegisterCheckHandler( OnSkipIntroVideo );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnTutorialPull( level )
     local iTutorialLevel = level;
 
@@ -1102,40 +1102,40 @@ function OnTutorialPull( level )
 end
 
 
-----------------------------------------------------------------
--- Graphics Options Handlers
-----------------------------------------------------------------
 
----------------------------------------------------------------
-----------------------------------------------------------------
+
+
+
+
+
 function OnHDStrategicView( bIsChecked )
     OptionsManager.SetHDStrategicView_Cached( bIsChecked );
 end
 Controls.HDStratCheck:RegisterCheckHandler( OnHDStrategicView );
 
----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnGPUTextureDecode( bIsChecked )
     OptionsManager.SetGPUTextureDecode_Cached( bIsChecked );
 end
 Controls.GPUDecodeCheck:RegisterCheckHandler( OnGPUTextureDecode );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnMinimizeGrayTiles( bIsChecked )
     OptionsManager.SetMinimizeGrayTiles_Cached( bIsChecked );
 end
 Controls.MinimizeGrayTilesCheck:RegisterCheckHandler( OnMinimizeGrayTiles );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnFadeShadows( bIsChecked )
     OptionsManager.SetFadeShadows_Cached( bIsChecked );
 end
 Controls.FadeShadowsCheck:RegisterCheckHandler( OnFadeShadows );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnFullscreen( bIsChecked )
     OptionsManager.SetFullscreen_Cached( bIsChecked );
     Controls.FSResolutionPull:SetHide( not bIsChecked );
@@ -1145,86 +1145,86 @@ end
 Controls.FullscreenCheck:RegisterCheckHandler( OnFullscreen );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnVSync( bIsChecked )
     OptionsManager.SetVSync_Cached( bIsChecked );
 end
 Controls.VSyncCheck:RegisterCheckHandler( OnVSync );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnLeaderPull( level )
     OptionsManager.SetLeaderQuality_Cached( level );
     Controls.LeaderPull:GetButton():SetText( m_LeaderText[ level ] );
 end
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnOverlayPull( level )
     OptionsManager.SetOverlayLevel_Cached( level );
     Controls.OverlayPull:GetButton():SetText( m_OverlayText[ level ] );
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnShadowPull( level )
     OptionsManager.SetShadowLevel_Cached( level );
     Controls.ShadowPull:GetButton():SetText( m_ShadowText[ level ] );
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnFOWPull( level )
     OptionsManager.SetFOWLevel_Cached( level );
     Controls.FOWPull:GetButton():SetText( m_FOWText[ level ] );
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnTerrainDetailPull( level )
     OptionsManager.SetTerrainDetailLevel_Cached( level );
     Controls.TerrainDetailPull:GetButton():SetText( m_TerrainDetailText[ level ] );
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnTerrainTessPull( level )
     OptionsManager.SetTerrainTessLevel_Cached( level );
     Controls.TerrainTessPull:GetButton():SetText( m_TerrainTessText[ level ] );
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnTerrainShadowPull( level )
     OptionsManager.SetTerrainShadowQuality_Cached( level );
     Controls.TerrainShadowPull:GetButton():SetText( m_TerrainShadowText[ level ] );
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnWaterPull( level )
     OptionsManager.SetWaterQuality_Cached( level );
     Controls.WaterPull:GetButton():SetText( m_WaterText[ level ] );
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnTextureQualityPull( level )
     OptionsManager.SetTextureQuality_Cached( level );
     Controls.TextureQualityPull:GetButton():SetText( m_TextureQualityText[ level ] );
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnWResolutionPull( index )
     local kResInfo = m_WindowResList[ index ];
 
@@ -1237,8 +1237,8 @@ end
 Controls.WResolutionPull:RegisterSelectionCallback( OnWResolutionPull );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnFSResolutionPull( index )
     local kResInfo = m_FullscreenResList[ index ];
 
@@ -1251,8 +1251,8 @@ function OnFSResolutionPull( index )
 end
 Controls.FSResolutionPull:RegisterSelectionCallback( OnFSResolutionPull );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnMSAAPull( level )
     OptionsManager.SetAASamples_Cached( m_MSAAMap[level] );
     Controls.MSAAPull:GetButton():SetText( m_MSAAText[ level ] );
@@ -1260,82 +1260,82 @@ end
 Controls.MSAAPull:RegisterSelectionCallback( OnMSAAPull );
 
 
-----------------------------------------------------------------
--- Multiplayer Options Handlers
-----------------------------------------------------------------
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
+
+
+
 function OnTurnNotifySteamInviteCheck( bIsChecked )
     OptionsManager.SetTurnNotifySteamInvite_Cached(bIsChecked);
 end
 Controls.TurnNotifySteamInviteCheckbox:RegisterCheckHandler(OnTurnNotifySteamInviteCheck);
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnTurnNotifyEmailCheck( bIsChecked )
     OptionsManager.SetTurnNotifyEmail_Cached(bIsChecked);
 end
 Controls.TurnNotifyEmailCheckbox:RegisterCheckHandler(OnTurnNotifyEmailCheck);
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnTurnNotifyEmailAddressChanged( string )
     OptionsManager.SetTurnNotifyEmailAddress_Cached( string );
 end
 Controls.TurnNotifyEmailAddressEdit:RegisterCallback( OnTurnNotifyEmailAddressChanged );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnTurnNotifySmtpEmailChanged( string )
     OptionsManager.SetTurnNotifySmtpEmailAddress_Cached( string );
 end
 Controls.TurnNotifySmtpEmailEdit:RegisterCallback( OnTurnNotifySmtpEmailChanged );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnTurnNotifySmtpHostChanged( string )
     OptionsManager.SetTurnNotifySmtpHost_Cached( string );
 end
 Controls.TurnNotifySmtpHostEdit:RegisterCallback( OnTurnNotifySmtpHostChanged );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnTurnNotifySmtpPortChanged( string )
     OptionsManager.SetTurnNotifySmtpPort_Cached( string );
 end
 Controls.TurnNotifySmtpPortEdit:RegisterCallback( OnTurnNotifySmtpPortChanged );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnTurnNotifySmtpUsernameChanged( string )
     OptionsManager.SetTurnNotifySmtpUsername_Cached( string );
 end
 Controls.TurnNotifySmtpUserEdit:RegisterCallback( OnTurnNotifySmtpUsernameChanged );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnLANNickNameChanged( string )
     OptionsManager.SetLANNickName_Cached( string );
 end
 Controls.LANNickNameEdit:RegisterCallback( OnLANNickNameChanged );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function ValidateSmtpPassword()
     if( Controls.TurnNotifySmtpPassEdit:GetText() and Controls.TurnNotifySmtpPassRetypeEdit:GetText() and
         Controls.TurnNotifySmtpPassEdit:GetText() == Controls.TurnNotifySmtpPassRetypeEdit:GetText() ) then
-        -- password editboxes match.
+
         OptionsManager.SetTurnNotifySmtpPassword_Cached( Controls.TurnNotifySmtpPassEdit:GetText() );
         Controls.StmpPasswordMatchLabel:SetText(passwordsMatchString);
         Controls.StmpPasswordMatchLabel:SetToolTipString(passwordsMatchTooltipString);
         Controls.StmpPasswordMatchLabel:SetColorByName( "Green_Chat" );
     else
-        -- password editboxes do not match.
+
         Controls.StmpPasswordMatchLabel:SetText(passwordsNotMatchString);
         Controls.StmpPasswordMatchLabel:SetToolTipString(passwordsNotMatchTooltipString);
         Controls.StmpPasswordMatchLabel:SetColorByName( "Magenta_Chat" );
@@ -1344,20 +1344,20 @@ end
 Controls.TurnNotifySmtpPassEdit:RegisterCallback( ValidateSmtpPassword );
 Controls.TurnNotifySmtpPassRetypeEdit:RegisterCallback( ValidateSmtpPassword );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnTurnNotifySmtpTLSCheck( bIsChecked )
     OptionsManager.SetTurnNotifySmtpTLS_Cached(bIsChecked);
 end
 Controls.TurnNotifySmtpTLS:RegisterCheckHandler(OnTurnNotifySmtpTLSCheck);
 
 
-----------------------------------------------------------------
--- Pulldowns
-----------------------------------------------------------------
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
+
+
+
 function BuildSinglePulldown( pulldown, textTable )
     local controlTable;
     for i = 0, #textTable do
@@ -1370,15 +1370,15 @@ function BuildSinglePulldown( pulldown, textTable )
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function BuildLeaderQualityPulldown()
 
     local controlTable;
 
     local size = #m_LeaderText;
     if UI.IsDX9() then
-        size = size-1;        -- disallow high leaders on DX9, across the board
+        size = size-1;
     end
 
     for i = 0, size do
@@ -1388,7 +1388,7 @@ function BuildLeaderQualityPulldown()
         controlTable.Button:LocalizeAndSetText( m_LeaderText[i] );
         controlTable.Button:SetVoid1( i );
 
-        -- disallow medium leaders on certain low-end machines
+
         if i == 2 and not UI.AreMediumLeadersAllowed() then
             controlTable.Button:SetDisabled(true);
             controlTable.Button:SetAlpha(.3);
@@ -1400,8 +1400,8 @@ function BuildLeaderQualityPulldown()
 
 end
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function BuildMSAAPulldown()
     local controlTable;
     for i = 0, #m_MSAAText do
@@ -1417,15 +1417,15 @@ function BuildMSAAPulldown()
     Controls.MSAAPull:CalculateInternals();
 end
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function BuildPulldowns()
 
     BuildFSResPulldown();
     BuildWResPulldown();
     BuildMSAAPulldown();
 
-    --BuildSinglePulldown( Controls.TutorialPull, m_TutorialLevelText );
+
     Controls.TutorialPull:RegisterSelectionCallback( OnTutorialPull );
 
     BuildSinglePulldown( Controls.OverlayPull, m_OverlayText );
@@ -1453,14 +1453,14 @@ function BuildPulldowns()
     Controls.TextureQualityPull:RegisterSelectionCallback( OnTextureQualityPull );
 
 
-    ----------------------------------------------------------------
-    -- leader detail pull (special case)
+
+
     local controlTable;
     local count = #m_LeaderText
 
     BuildLeaderQualityPulldown();
     Controls.LeaderPull:RegisterSelectionCallback( OnLeaderPull );
-    ----------------------------------------------------------------
+
 
 
     BuildSinglePulldown( Controls.BindMousePull, m_BindMouseText );
@@ -1484,8 +1484,8 @@ function BuildPulldowns()
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function BuildWResPulldown()
     Controls.WResolutionPull:ClearEntries();
     m_maxX, m_maxY = OptionsManager.GetMaxResolution();
@@ -1507,8 +1507,8 @@ function BuildWResPulldown()
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function BuildFSResPulldown()
 
     Controls.FSResolutionPull:ClearEntries();
@@ -1517,14 +1517,14 @@ function BuildFSResPulldown()
     for i = count, 0, -1 do
         local kResInfo = m_FullscreenResList[i];
 
-            --[[
-            print( "Testing Mode: " .. kResInfo.Width .. " "
-                        .. kResInfo.Height .. " "
-                        .. kResInfo.Adapter .. " "
-                        .. kResInfo.Display .. " "
-                        .. kResInfo.Scale .. " "
-                        .. kResInfo.Refresh );
-            --]]
+
+
+
+
+
+
+
+
 
         if( kResInfo.Height >= 768 and
             kResInfo.Adapter == 0 ) then
@@ -1541,9 +1541,9 @@ function BuildFSResPulldown()
 end
 
 
-----------------------------------------------------------------
--- build the internal list of fullscreen modes
-----------------------------------------------------------------
+
+
+
 m_iResolutionCount = UIManager:GetResCount();
 for i = 0, m_iResolutionCount - 1 do
     local width, height, refresh, scale, display, adapter = UIManager:GetResInfo( i );
@@ -1582,10 +1582,10 @@ function RefreshTutorialLevelOptions()
     BuildSinglePulldown(Controls.TutorialPull, m_TutorialLevelText);
 end
 
-----------------------------------------------------------------
--- add the machine's desktop resolution just in case they're
--- running something weird
-----------------------------------------------------------------
+
+
+
+
 local bFound = false;
 for _, kResInfo in ipairs( m_WindowResList ) do
     if( kResInfo.x == m_maxX and
@@ -1602,11 +1602,11 @@ RefreshTutorialLevelOptions();
 BuildPulldowns();
 UpdateOptionsDisplay();
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnDragSpeedSlider( fSpeed )
 
-    --fSpeed = (fSpeed * 2) + 0.1;
+
     iSpeed = math_floor((fSpeed + 0.02) * 20) / 10;
 
     OptionsManager.SetDragSpeed_Cached( iSpeed );
@@ -1618,11 +1618,11 @@ Controls.DragSpeedSlider:SetValue( OptionsManager.GetDragSpeed() / 2 );
 Controls.DragSpeedValue:SetText( Locale.ConvertTextKey( "TXT_KEY_DRAG_SPEED", OptionsManager.GetDragSpeed() ) );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnPinchSpeedSlider( fSpeed )
 
-    --fSpeed = (fSpeed * 2) + 0.1;
+
     iSpeed = math_floor((fSpeed + 0.02) * 20) / 10;
 
     OptionsManager.SetPinchSpeed_Cached( iSpeed );
@@ -1633,18 +1633,18 @@ Controls.PinchSpeedSlider:RegisterSliderCallback( OnPinchSpeedSlider )
 Controls.PinchSpeedSlider:SetValue( OptionsManager.GetPinchSpeed() / 2 );
 Controls.PinchSpeedValue:SetText( Locale.ConvertTextKey( "TXT_KEY_PINCH_SPEED", OptionsManager.GetPinchSpeed() ) );
 
---print("Finished loading EUI option menu",os.clock())
 
 
-----------------------------------------------------------------
--- NEW: HOTKEY MANAGER START
-----------------------------------------------------------------
--- v1 = legacy ID-keyed store (kept untouched so downgrades still work)
--- v3 = Type-keyed store (survives Builds ID reshuffles)
+
+
+
+
+
+
 local HOTKEY_STORE_VERSION = 3;
 local HOTKEY_LEGACY_VERSION = 1;
 local HOTKEY_MIGRATE_FLAG = "bTypeStoreMigrated";
-local HOTKEY_MIGRATE_TARGET = 2; -- remigrate after Builds ID revert
+local HOTKEY_MIGRATE_TARGET = 2;
 
 HotkeyManagerData = Modding.OpenUserData( "IngameHotkeyManager", HOTKEY_STORE_VERSION );
 local HotkeyManagerDataLegacy = Modding.OpenUserData( "IngameHotkeyManager", HOTKEY_LEGACY_VERSION );
@@ -1662,8 +1662,8 @@ end
 
 local Categories = {[0] = 'InterfaceModes', 'Commands', 'Builds', 'UnitPromotions', 'Specialists', 'Controls', 'Automates', 'Missions', };
 
--- Build IDs used while v35 shipped the reordered Builds table (before the revert).
--- Fallback for untyped Builds rows when that ID meant a different Type than today.
+
+
 local V35_REORDERED_BUILDS_BY_ID = {
 	[0] = "BUILD_REMOVE_FOREST",
 	[1] = "BUILD_REMOVE_JUNGLE",
@@ -1720,15 +1720,15 @@ local V35_REORDERED_BUILDS_BY_ID = {
 };
 
 
--- Universal map from legacy KB to VK keycodes
+
 g_KeyMap = {
-    KB_MOUSE_LBUTTON = {1, "VK_LBUTTON", "LMB"}, --//not used
-    KB_MOUSE_RBUTTON = {2, "VK_RBUTTON", "RMB"}, --//not used
+    KB_MOUSE_LBUTTON = {1, "VK_LBUTTON", "LMB"},
+    KB_MOUSE_RBUTTON = {2, "VK_RBUTTON", "RMB"},
     KB_CANCEL = {},
-    KB_MOUSE_MIDDLEBUTTON = {4, "VK_MBUTTON", "MMB"}, --//not used
-    KB_MOUSE_XBUTTON1 = {}, --//not used
-    KB_MOUSE_XBUTTON2 = {}, --//not used
-    KB_UNUSED_07 = {}, --//not used
+    KB_MOUSE_MIDDLEBUTTON = {4, "VK_MBUTTON", "MMB"},
+    KB_MOUSE_XBUTTON1 = {},
+    KB_MOUSE_XBUTTON2 = {},
+    KB_UNUSED_07 = {},
     KB_BACKSPACE = {8, "VK_BACK", "Backspace"},
     KB_TAB = {9, "VK_TAB", "TAB"},
     KB_UNUSED_0A = {},
@@ -1742,17 +1742,17 @@ g_KeyMap = {
     KB_ALT = {18, "VK_MENU", "..."},
     KB_PAUSE = {19, "VK_PAUSE", "Pause Break"},
     KB_CAPSLOCK = {20, "VK_CAPITAL", "Caps Lock"},
-    KB_KANA = {}, --//language key
+    KB_KANA = {},
     KB_UNUSED_16 = {},
-    KB_JUNJA = {}, --//Language key
-    KB_FINAL = {}, --//Language key
-    KB_HANJA = {},  --//Language key
+    KB_JUNJA = {},
+    KB_FINAL = {},
+    KB_HANJA = {},
     KB_UNUSED_1A = {},
     KB_ESCAPE = {27, "VK_ESCAPE", "Esc"},
-    KB_CONVERT = {}, --//language key
-    KB_NONCONVERT = {}, --//language key
-    KB_ACCEPT = {}, --//language key
-    KB_MODECHANGE = {}, --//language key
+    KB_CONVERT = {},
+    KB_NONCONVERT = {},
+    KB_ACCEPT = {},
+    KB_MODECHANGE = {},
     KB_SPACE = {32, "VK_SPACE", "Spacebar"},
     KB_PGUP = {33, "VK_PRIOR", "Page Up"},
     KB_PGDN = {34, "VK_NEXT", "Page Down"},
@@ -1907,31 +1907,31 @@ g_KeyMap = {
     KB_LAUNCH_APP2 = {183, "VK_LAUNCH_APP2", "[COLOR_GREY]START APP2"},
     KB_UNUSED_B8 = {},
     KB_UNUSED_B9 = {},
-    KB_SEMICOLON = {186, "VK_OEM_1", ";"}, --//semicolon for US keyboards
-    KB_EQUALS = {187, "VK_OEM_PLUS", "="}, --//plus key in US
-    KB_COMMA = {188, "VK_OEM_COMMA", ","}, --//comma key in US
-    KB_MINUS = {189, "VK_OEM_MINUS", "-"}, --//minus key in US
-    KB_PERIOD = {190, "VK_OEM_PERIOD", "."}, --//period key in US
-    KB_SLASH = {191, "VK_OEM_2", "/"}, --//question mark key in US
-    KB_GRAVE = {192, "VK_OEM_3", "~"}, --//tidle key in US
+    KB_SEMICOLON = {186, "VK_OEM_1", ";"},
+    KB_EQUALS = {187, "VK_OEM_PLUS", "="},
+    KB_COMMA = {188, "VK_OEM_COMMA", ","},
+    KB_MINUS = {189, "VK_OEM_MINUS", "-"},
+    KB_PERIOD = {190, "VK_OEM_PERIOD", "."},
+    KB_SLASH = {191, "VK_OEM_2", "/"},
+    KB_GRAVE = {192, "VK_OEM_3", "~"},
 
-    KB_LBRACKET = {219, "VK_OEM_4", "{"}, --//left bracket
-    KB_BACKSLASH = {220, "VK_OEM_5", "\\"}, --//backslash
-    KB_RBRACKET = {221, "VK_OEM_6", "}"}, --//right bracket
-    KB_APOSTROPHE = {222, "VK_OEM_7", "\'"}, --//quotation key
-    KB_OEM_8 = {223, "VK_OEM_8", "VK_OEM_8"}, --//misc keys
+    KB_LBRACKET = {219, "VK_OEM_4", "{"},
+    KB_BACKSLASH = {220, "VK_OEM_5", "\\"},
+    KB_RBRACKET = {221, "VK_OEM_6", "}"},
+    KB_APOSTROPHE = {222, "VK_OEM_7", "\'"},
+    KB_OEM_8 = {223, "VK_OEM_8", "VK_OEM_8"},
 
-    M_ = {}, --//Left mouse button
-    M_ = {}, --//Right
-    M_ = {}, --//Middle
-    M_ = {}, --//4
-    M_ = {}, --//5
+    M_ = {},
+    M_ = {},
+    M_ = {},
+    M_ = {},
+    M_ = {},
     KB_LASTINPUT = {},
 };
 
--------------------------------------------------
--------------------------------------------------
--------------------------------------------------
+
+
+
 function KeySequenceToString(key, bCtrl, bAlt, bShift)
     local keySeqStr = '';
     if bCtrl then
@@ -1950,14 +1950,14 @@ function KeySequenceToString(key, bCtrl, bAlt, bShift)
     return keySeqStr;
 end
 
--------------------------------------------------
--------------------------------------------------
--- returns a table { HotKey, HotKeyPriority, CtrlDown, AltDown, ShiftDown, ActionType, ... }
+
+
+
 local function ParseHotkeyValue(val)
     if type(val) ~= 'string' then
         return nil;
     end
-    -- HK|cat|id|key|ctrl|alt|shift|prio[|ActionType]
+
     local cat, id, key, ctrl, alt, shift, prio, actionType = string.match(val, "^HK|(%d+)|(%d+)|([^|]*)|(%d)|(%d)|(%d)|(%d)|([^|]*)$");
     if key == nil then
         cat, id, key, ctrl, alt, shift, prio = string.match(val, "^HK|(%d+)|(%d+)|([^|]*)|(%d)|(%d)|(%d)|(%d+)$");
@@ -2003,7 +2003,7 @@ local function EncodeHotkeyValue(Cat, Id, HotKey, CtrlDown, AltDown, ShiftDown, 
         tonumber(HotKeyPriority) or 0, tostring(ActionType));
 end
 
--- Stable store key: type_<Category>_<ActionType>  (not numeric IDs)
+
 local function HotkeyStoreName(Cat, ActionType)
     if Categories[Cat] == nil or ActionType == nil or ActionType == '' then
         return nil;
@@ -2058,13 +2058,13 @@ local function DeleteHotkeyRow(storeName)
     end
     for row in HotkeyManagerData.Query(string.format("DELETE FROM SimpleValues WHERE Name = '%s'", storeName:gsub("'", "''"))) do
     end
-    -- Clear Value slot if the API keeps one
+
     HotkeyManagerData.SetValue(storeName, '');
 end
 
--- One-time copy from legacy ID-keyed DB into Type-keyed v3. Legacy file is never written.
+
 function MigrateLegacyHotkeysOnce()
-    -- 2 = remigrate after Builds table was reverted to pre-v35 IDs.
+
     if tonumber(HotkeyManagerData.GetValue(HOTKEY_MIGRATE_FLAG)) == HOTKEY_MIGRATE_TARGET then
         return;
     end
@@ -2127,7 +2127,7 @@ function MigrateLegacyHotkeysOnce()
             return;
         end
 
-        -- Untyped Builds: default to current/pre-v35 IDs. Optional v35-reorder map for mid-v35 saves.
+
         if (actionType == nil or actionType == '') and cat ~= nil and id ~= nil then
             if preferV35BuildIds and cat == 2 and V35_REORDERED_BUILDS_BY_ID[id] ~= nil then
                 actionType = V35_REORDERED_BUILDS_BY_ID[id];
@@ -2146,7 +2146,7 @@ function MigrateLegacyHotkeysOnce()
         end
     end
 
-    -- Snapshot typed rows from current v3 before wipe (mid-v35 rebinds stored by Type).
+
     local typedSnapshots = {};
     for row in HotkeyManagerData.Query("SELECT * FROM SimpleValues WHERE Name != 'bShowInvalidActions' AND Name != '" .. HOTKEY_MIGRATE_FLAG .. "'") do
         local parsed = ParseHotkeyValue(row.Value) or ParseHotkeyValue(HotkeyManagerData.GetValue(row.Name));
@@ -2166,7 +2166,7 @@ function MigrateLegacyHotkeysOnce()
         end
     end
 
-    -- Rebuild type-store: legacy v1 first (pre-v35 ID bindings), then typed overlays.
+
     local stale = {};
     for row in HotkeyManagerData.Query("SELECT Name FROM SimpleValues WHERE Name LIKE 'type_%' OR Name LIKE 'action_%'") do
         table.insert(stale, row.Name);
@@ -2175,23 +2175,23 @@ function MigrateLegacyHotkeysOnce()
         DeleteHotkeyRow(name);
     end
 
-    -- Prefer legacy v1 (left untouched so downgrades still see old ID-keyed data).
+
     for row in HotkeyManagerDataLegacy.Query("SELECT * FROM SimpleValues WHERE Name != 'bShowInvalidActions'") do
         ingestRow(row, function(n) return HotkeyManagerDataLegacy.GetValue(n); end, true, false);
     end
 
-    -- Optional intermediate v2 store from earlier experiments.
+
     local okV2, HotkeyManagerDataV2 = pcall(function()
         return Modding.OpenUserData("IngameHotkeyManager", 2);
     end);
     if okV2 and HotkeyManagerDataV2 ~= nil then
         for row in HotkeyManagerDataV2.Query("SELECT * FROM SimpleValues WHERE Name != 'bShowInvalidActions'") do
-            -- Typed rows from v2 overwrite; untyped v2 may be mid-experiment - only take explicit Types.
+
             ingestRow(row, function(n) return HotkeyManagerDataV2.GetValue(n); end, false, false);
         end
     end
 
-    -- Typed mid-v35 / prior v3 bindings overwrite ID-inferred ones (ActionType is authoritative).
+
     for _, row in ipairs(typedSnapshots) do
         ingestRow(row, nil, false, false);
     end
@@ -2278,13 +2278,13 @@ function GetHotkey( Cat, Id, bBackup )
     return res;
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SendUpdateHotkey( Cat, Id, HotKey, CtrlDown, AltDown, ShiftDown, HotKeyPriority )
     Cat = tonumber(Cat) or -1;
     Id = tonumber(Id) or -1;
     HotKeyPriority = tonumber(HotKeyPriority) or 0;
-    -- here we 'pack' arguments into single 32-bit integer (kind of binary serialization)
+
     if (Cat < 0 or Cat > 15 or
         Id < 0 or Id > 65535 or
         HotKeyPriority < 0 or HotKeyPriority > 15) then
@@ -2292,15 +2292,15 @@ function SendUpdateHotkey( Cat, Id, HotKey, CtrlDown, AltDown, ShiftDown, HotKey
         print('WARNING SendUpdateHotkey: arguments out of bounds');
     else
         local product = (2 ^ 28) + (Cat * 2 ^ 24) + (Id * 2 ^ 8) + 0 + ((CtrlDown and 1 or 0) * 2 ^ 6) + ((AltDown and 1 or 0) * 2 ^ 5) + ((ShiftDown and 1 or 0) * 2 ^ 4) + HotKeyPriority;
-        -- reason? so we can use Pregame object method which is defined both ingame and in the main menu (unlike 'Game' methods)
+
         PreGame.SetLeaderKey(product, HotKey);
         LuaEvents.UpdateHotkey();
     end
 end
 
--------------------------------------------------
--------------------------------------------------
--------------------------------------------------
+
+
+
 function OnHotkeyEditMode( Cat, Id )
     if next(g_CurrentEditable) ~= nil then
         local oldCat = g_CurrentEditable.HotkeyEditButton:GetVoid1();
@@ -2309,21 +2309,21 @@ function OnHotkeyEditMode( Cat, Id )
 
         g_CurrentEditable.HotkeyEditFrontLabel:SetText(KeySequenceToString(g_KeyMap[HK.HotKey] and g_KeyMap[HK.HotKey][3] or '--', HK.CtrlDown, HK.AltDown, HK.ShiftDown));
         g_CurrentEditable.HotkeyEditButtonsBox:SetHide(true);
-        g_CurrentEditable.HotkeyOuterBox:SetColorVal(255/255, 255/255, 200/255, 255/255);  -- COLOR_BEIGE
+        g_CurrentEditable.HotkeyOuterBox:SetColorVal(255/255, 255/255, 200/255, 255/255);
     end
 
     g_InputSeqStr = {'', '', '', ''};
 
     g_StackChildren[Cat][Id].HotkeyEditFrontLabel:LocalizeAndSetText('TXT_KEY_OPSCREEN_EDIT_HOTKEY_MODE');
     g_StackChildren[Cat][Id].HotkeyEditButtonsBox:SetHide(false);
-    g_StackChildren[Cat][Id].HotkeyOuterBox:SetColorVal(231/255, 213/255, 0/255, 255/255);  -- COLOR_YIELD_GOLD
+    g_StackChildren[Cat][Id].HotkeyOuterBox:SetColorVal(231/255, 213/255, 0/255, 255/255);
 
     g_CurrentEditable = g_StackChildren[Cat][Id];
     g_ListenInput = true;
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnConfirmEditClick( Cat, Id )
     g_ListenInput = false;
     if next(g_CurrentEditable) ~= nil then
@@ -2335,7 +2335,7 @@ function OnConfirmEditClick( Cat, Id )
 
         g_CurrentEditable.HotkeyEditFrontLabel:SetText(KeySequenceToString(g_KeyMap[key] and g_KeyMap[key][3], bCtrl, bAlt, bShift));
         g_CurrentEditable.HotkeyEditButtonsBox:SetHide(true);
-        g_CurrentEditable.HotkeyOuterBox:SetColorVal(255/255, 255/255, 200/255, 255/255);  -- COLOR_BEIGE
+        g_CurrentEditable.HotkeyOuterBox:SetColorVal(255/255, 255/255, 200/255, 255/255);
 
         SendUpdateHotkey(Cat, Id, key, bCtrl, bAlt, bShift, 0);
         local actionType = GetActionType(Cat, Id);
@@ -2348,8 +2348,8 @@ function OnConfirmEditClick( Cat, Id )
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnCancelEditClick( Cat, Id )
     g_ListenInput = false;
     if next(g_CurrentEditable) ~= nil then
@@ -2357,37 +2357,37 @@ function OnCancelEditClick( Cat, Id )
 
         g_CurrentEditable.HotkeyEditFrontLabel:SetText(KeySequenceToString(g_KeyMap[HK.HotKey] and g_KeyMap[HK.HotKey][3] or '--', HK.CtrlDown, HK.AltDown, HK.ShiftDown));
         g_CurrentEditable.HotkeyEditButtonsBox:SetHide(true);
-        g_CurrentEditable.HotkeyOuterBox:SetColorVal(255/255, 255/255, 200/255, 255/255);  -- COLOR_BEIGE
+        g_CurrentEditable.HotkeyOuterBox:SetColorVal(255/255, 255/255, 200/255, 255/255);
     end
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnResetHotkeyClick( Cat, Id )
     g_ListenInput = false;
     if next(g_CurrentEditable) ~= nil then
-        -- delete userdata entry and fallback to original hotkey
+
         local actionType = GetActionType(Cat, Id);
         DeleteHotkeyRow(HotkeyStoreName(Cat, actionType));
-        -- Also clear any legacy ID key if present (should not be written anymore)
+
         DeleteHotkeyRow(string.format('action_%d_%d', Cat, Id));
         local HK = GetHotkey(Cat, Id, true);
         SendUpdateHotkey(Cat, Id, HK.HotKey, HK.CtrlDown, HK.AltDown, HK.ShiftDown, 0);
 
         g_CurrentEditable.HotkeyEditFrontLabel:SetText(KeySequenceToString(g_KeyMap[HK.HotKey] and g_KeyMap[HK.HotKey][3] or '--', HK.CtrlDown, HK.AltDown, HK.ShiftDown));
         g_CurrentEditable.HotkeyEditButtonsBox:SetHide(true);
-        g_CurrentEditable.HotkeyOuterBox:SetColorVal(255/255, 255/255, 200/255, 255/255);  -- COLOR_BEIGE
+        g_CurrentEditable.HotkeyOuterBox:SetColorVal(255/255, 255/255, 200/255, 255/255);
     end
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnResetAllHotkeysClick()
     g_ListenInput = false;
     if next(g_CurrentEditable) ~= nil then
         OnCancelEditClick(g_CurrentEditable.HotkeyEditCancelButton:GetVoid1(), g_CurrentEditable.HotkeyEditCancelButton:GetVoid2());
     end
-    -- delete userdata entry and fallback to original hotkey
+
     local actions = {};
     for row in HotkeyManagerData.Query("SELECT Name, ActionSubType, ActionIndex, ActionType, Value FROM SimpleValues WHERE Name != 'bShowInvalidActions' AND Name != '" .. HOTKEY_MIGRATE_FLAG .. "'") do
         local cat = row.ActionSubType;
@@ -2420,8 +2420,8 @@ function OnResetAllHotkeysClick()
     Controls.ConfirmResetAllHotkeysPopup:SetHide(true);
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function ShowConfirmResetAllHotkeysPopup()
     g_ListenInput = false;
     if next(g_CurrentEditable) ~= nil then
@@ -2439,17 +2439,17 @@ Controls.ResetAllHotkeysButton:RegisterCallback(Mouse.eLClick, ShowConfirmResetA
 Controls.ConfirmResetAllHotkeysYes:RegisterCallback(Mouse.eLClick, OnResetAllHotkeysClick);
 Controls.ConfirmResetAllHotkeysNo:RegisterCallback(Mouse.eLClick, CloseConfirmResetAllHotkeysPopup);
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnShowInvalidHotkeysCheckbox( bIsChecked )
     g_bShowInvalidActions = bIsChecked and 1 or 0;
     HotkeyManagerData.SetValue('bShowInvalidActions', g_bShowInvalidActions);
     for cat, it in next, g_StackChildren do
         for _, entry in next, it do
-            --local cat = entry.HotkeyEditButton:GetVoid1();
+
             local id = entry.HotkeyEditButton:GetVoid2();
             if (cat ~= 2 and cat ~= 3 and cat ~= 5 and GameInfo[Categories[cat]][id].Visible == false) or (cat == 3 and (GameInfo[Categories[cat]][id].CannotBeChosen or (GameInfo[Categories[cat]][id].IconAtlas == 'ABILITY_ATLAS'))) then
-                --print(GameInfo[Categories[cat]][id].Description, GameInfo[Categories[cat]][id].Visible)
+
                 entry.Root:SetHide( not bIsChecked )
             end
         end
@@ -2464,8 +2464,8 @@ function OnShowInvalidHotkeysCheckbox( bIsChecked )
 end
 Controls.ShowInvalidHotkeysCheckbox:RegisterCheckHandler( OnShowInvalidHotkeysCheckbox );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnCategoryButtonClick( Cat )
     g_StackStacks[Cat].Root:SetHide(not g_StackStacks[Cat].Root:IsHidden());
     Controls.HotkeysStack:CalculateSize();
@@ -2473,9 +2473,9 @@ function OnCategoryButtonClick( Cat )
     Controls.ScrollPanel:CalculateInternalSize();
 end
 
--------------------------------------------------
--------------------------------------------------
--------------------------------------------------
+
+
+
 function BackupActions()
     print('hotkeys backup START')
     for row in HotkeyManagerData.Query("DROP TABLE IF EXISTS backup") do
@@ -2506,8 +2506,8 @@ function BackupActions()
         end
     end
 
-    -- Keyed by (ActionSubType, ActionType) so a reset-to-default lookup survives
-    -- Builds table ID reshuffles; Name/ActionIndex are kept only as a legacy fallback.
+
+
     local Categories = {[0] = 'InterfaceModes', 'Commands', 'Builds', 'UnitPromotions', 'Specialists', 'Controls', 'Automates', 'Missions', };
     for Cat,category in next,Categories do
         for row in DB.Query(string.format("SELECT * FROM %s", category)) do
@@ -2520,10 +2520,10 @@ function BackupActions()
     print('hotkeys backup END')
 end
 
--------------------------------------------------
--------------------------------------------------
--- on script load, make sure all columns are presented
--- in user data DB. if not, recreate the missing ones
+
+
+
+
 function VerifyUserDataIntegrity()
     local columns = {};
     local newColumns = {
@@ -2556,9 +2556,9 @@ function VerifyUserDataIntegrity()
     end
 end
 
--------------------------------------------------
--------------------------------------------------
--- on script load, send all user's previously saved hotkeys 
+
+
+
 function InitHotkeys()
     local applied = 0;
     for row in HotkeyManagerData.Query("SELECT Name, Value, ActionSubType, ActionIndex, HotKey, CtrlDown, AltDown, ShiftDown, HotKeyPriority, ActionType FROM SimpleValues WHERE Name != 'bShowInvalidActions' AND Name != '" .. HOTKEY_MIGRATE_FLAG .. "'") do
@@ -2592,7 +2592,7 @@ function InitHotkeys()
             actionType = nameType;
         end
 
-        -- Always resolve Type -> current ID so Builds reshuffles keep working.
+
         if cat ~= nil then
             id = ResolveActionId(cat, id, actionType);
         end
@@ -2604,11 +2604,11 @@ function InitHotkeys()
     print(string.format("HotkeyManager: InitHotkeys applied %d binding(s)", applied));
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function BuildHotkeyManagerControls()
     for cat, it in ipairs(Categories) do
-        -- 'Automates' category is removed, change it here if needed. 
+
         if it ~= 'Specialists' and it ~= 'Automates' then
             local instance = {};
             ContextPtr:BuildInstanceForControl("CategorySeparator", instance, Controls.HotkeysStack);
@@ -2642,14 +2642,14 @@ function BuildHotkeyManagerControls()
                     instance.HotkeyDescriptionLabel:LocalizeAndSetToolTip(data[i].Help or it == 'Builds' and data[i].Recommendation or '');
                     instance.HotkeyDescriptionIcon:LocalizeAndSetToolTip(data[i].Help or it == 'Builds' and data[i].Recommendation or '');
                     instance.HotkeyDescriptionIcon32:LocalizeAndSetToolTip(data[i].Help or it == 'Builds' and data[i].Recommendation or '');
-                    -- illustrate actions
+
                     if it == 'Controls' then
-                        -- skip
+
                         instance.HotkeyDescriptionIcon:SetHide(true);
                     elseif it == 'UnitPromotions' or it == 'Specialists' then
-                        -- PortraitIndex/IconAtlas
+
                         if data[i].PortraitIndex ~= -1 then
-                            if data[i].IconAtlas == 'ABILITY_ATLAS' then  -- no size 45 icons here :(
+                            if data[i].IconAtlas == 'ABILITY_ATLAS' then
                                 IconHookup( data[i].PortraitIndex, 32, data[i].IconAtlas, instance.HotkeyDescriptionIcon32 );
                                 instance.HotkeyDescriptionIcon:SetHide(true);
                                 instance.HotkeyDescriptionIcon32:SetHide(false);
@@ -2660,8 +2660,8 @@ function BuildHotkeyManagerControls()
                             instance.HotkeyDescriptionIcon:SetHide(true);
                         end
                     else
-                        -- IconIndex/IconAtlas
-                        if data[i].Type == 'MISSION_FOUND' then  -- special care for city found mission
+
+                        if data[i].Type == 'MISSION_FOUND' then
                             instance.HotkeyDescriptionIcon:SetTextureAndResize("Assets/UI/Art/Icons/BuildCity36.dds");
                             instance.HotkeyDescriptionIcon:SetOffsetVal(instance.HotkeyDescriptionIcon:GetOffsetX() + 5, instance.HotkeyDescriptionIcon:GetOffsetY());
                         elseif data[i].IconIndex ~= -1 then
@@ -2691,9 +2691,9 @@ function BuildHotkeyManagerControls()
 
                     g_StackChildren[cat][i] = instance;
 
-                    -- exclude invisible (internal) actions
-                    -- exclude embedded promotions
-                    -- it seems all promotions from 'ABILITY_ATLAS' are embedded as well.
+
+
+
                     if (g_bShowInvalidActions == 0) and ((it ~= 'Builds' and it ~= 'Controls' and it ~= 'UnitPromotions' and data[i].Visible == false) or (it == 'UnitPromotions' and (data[i].CannotBeChosen or (data[i].IconAtlas == 'ABILITY_ATLAS')))) then
                         instance.Root:SetHide(true);
                     end
@@ -2714,11 +2714,11 @@ function BuildHotkeyManagerControls()
     Controls.ShowInvalidHotkeysCheckbox:SetCheck( g_bShowInvalidActions == 1 );
 end
 
-----------------------------------------------------------------
--- Key Down Processing
-----------------------------------------------------------------
+
+
+
 function InputHandler( uiMsg, wParam, lParam )
-    --print(uiMsg, wParam)
+
     if( g_ListenInput == true and g_CurrentEditable ~= nil) then
         local keySeqStr = ''
         if uiMsg == KeyEvents.KeyDown or uiMsg == 260 then
@@ -2759,10 +2759,10 @@ function InputHandler( uiMsg, wParam, lParam )
 end
 ContextPtr:SetInputHandler( InputHandler );
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
 
--- use UI:HasShownLegal() to backup xml hotkeys info EXACTLY once on initial application loading
+
+
+
 if not UI:HasShownLegal() then
     BackupActions()
 end
@@ -2770,7 +2770,3 @@ VerifyUserDataIntegrity();
 MigrateLegacyHotkeysOnce();
 InitHotkeys();
 BuildHotkeyManagerControls();
-
--------------------------------------------------------------------------------
--- HOTKEY MANAGER END
--------------------------------------------------------------------------------

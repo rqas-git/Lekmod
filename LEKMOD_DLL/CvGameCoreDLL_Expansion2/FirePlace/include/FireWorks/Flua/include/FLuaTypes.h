@@ -1,14 +1,14 @@
-//------------------------------------------------------------------------------------------------
-//
-//  ***************** FIRAXIS GAME ENGINE   ********************
-//
-//! \file		FLuaTypes.h
-//! \author		Eric Jordan -- 3/12/2009
-//! \brief		Classes that wrap lua types for C++
-//
-//------------------------------------------------------------------------------------------------
-//  Copyright (c) 2009 Firaxis Games, Inc. All rights reserved.
-//------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 
 #ifndef FLuaTypes_h
 #define FLuaTypes_h
@@ -16,8 +16,8 @@
 
 #include "FLuaCommon.h"
 
-// FLUA_EXPOSE_TO_TABLE_EX(FUNC, NAME)
-// Adds FUNC to TABLE with NAME as the function name in lua
+
+
 #define FLUA_EXPOSE_TO_TABLE_EX(FUNC, NAME, TABLE) \
 	void LuaExpose_##NAME##(lua_State *L) { \
 		FLua::Table t(L, #TABLE); \
@@ -30,8 +30,8 @@
 	} \
 	static FLua::StaticFunctions::CustomRegistrar LuaReg_##NAME##(&LuaExpose_##NAME##)
 
-// FLUA_EXPOSE_TO_TABLE(FUNC)
-// Adds FUNC to TABLE with FUNC as the function name in lua
+
+
 #define FLUA_EXPOSE_TO_TABLE(FUNC, TABLE) FLUA_EXPOSE_TO_TABLE_EX(FUNC, FUNC, TABLE)
 
 namespace FLua
@@ -39,7 +39,7 @@ namespace FLua
 	class Metatable;
 	class String;
 
-	// SharedLuaRegistry - Determines if FLua may assume that all lua states share the same registry.
+
 	class SharedLuaRegistry
 	{
 	public:
@@ -55,19 +55,19 @@ namespace FLua
 	public:
 		Value();
 		Value(const Value &kRhs);
-		Value(const StackValue &kStackValue); // Get from lua stack value
-		Value(lua_State *L, int iStackIndex); // Get from the lua stack
-		Value(lua_State *L, _In_z_ const char *szName); // Find with FLua::GetGlobal
+		Value(const StackValue &kStackValue);
+		Value(lua_State *L, int iStackIndex);
+		Value(lua_State *L, _In_z_ const char *szName);
 		~Value();
 
 		void Swap(Value &kRhs);
 
 		const Value &operator =(const Value &kRhs);
-		void Set(lua_State *L, int iStackIndex); // Get from the lua stack
-		void Set(lua_State *L, _In_z_ const char *szName); // Find with FLua::GetGlobal
+		void Set(lua_State *L, int iStackIndex);
+		void Set(lua_State *L, _In_z_ const char *szName);
 
 		inline void Clear() { Unref(); }
-		void LuaStateDestroyed(); // Warning: Only call if the lua state has already been destroyed
+		void LuaStateDestroyed();
 
 		inline bool Valid() const { return m_pkLuaState && m_iRef != LUA_NOREF; }
 
@@ -84,7 +84,7 @@ namespace FLua
 		String ToString() const;
 		const void *ToPointer() const;
 
-		// Basic type conversions
+
 		inline operator bool() const { return GetAs<bool>(); }
 		inline operator int() const { return GetAs<int>(); }
 		inline operator char() const { return GetAs<char>(); }
@@ -94,14 +94,14 @@ namespace FLua
 		inline operator const char*() const { return GetAs<const char*>(); }
 		template<class T> _Ret_opt_ operator T*() const { return GetAs<T*>(); }
 		
-		// GetAs - Interpret this value as a specific C++ type
+
 		template<class T>
 		T GetAs() const {
-			T ret = T(); // Don't use with reference types!!! ...EVER!!!
+			T ret = T();
 
-			// Try pushing this value onto the lua stack
+
 			if( Push() ) {
-				// Get the lua analog for this type off of the lua stack
+
 #if defined(LEKMOD_MACOS)
 				typedef typename Details::LuaAnalog<T>::Result Analog;
 #else
@@ -109,19 +109,19 @@ namespace FLua
 #endif
 				Analog analog = Details::Get<Analog>(m_pkLuaState, lua_gettop(m_pkLuaState));
 
-				// Validate the value from lua
+
 				bool bValid(true); Details::ArgValidator<T>::Validate(analog, bValid);
 
-				// Convert and return the value if it is valid
+
 				if( bValid ) ret = Details::FromLuaAnalog<T>::Convert(analog);
 
-				// Finally pop the lua value off of the stack
+
 				lua_pop(m_pkLuaState, 1);
 			}
 			return ret;
 		}
 
-		// IsOfType - Determines if the value may be cast to a pointer of type T
+
 		template<class T>
 		bool IsOfType() const {
 			if( Push() ) {
@@ -134,7 +134,7 @@ namespace FLua
 
 		Metatable GetMetatable() const;
 
-		// FromCFunction - Makes an FLua::Value out of a C function
+
 		template<class TFunc>
 		static Value FromCFunction(lua_State *L, TFunc pfn, _In_z_ const char *szFuncName)
 		{
@@ -146,7 +146,7 @@ namespace FLua
 
 		inline lua_State *GetLuaState() const { return m_pkLuaState; }
 
-		// WARNING: LuaValue owns this lua ref!
+
 		inline int GetRef() const { return m_iRef; }
 
 	private:
@@ -180,7 +180,7 @@ namespace FLua
 
 		inline void Clear() { m_kLuaVal.Clear(); }
 
-		// Warning: Only call if the lua state has already been destroyed
+
 		inline void LuaStateDestroyed() { m_kLuaVal.LuaStateDestroyed(); }
 
 		bool Valid() const;
@@ -190,11 +190,11 @@ namespace FLua
 		inline const bool operator ==(const Value &kRhs) const { return m_kLuaVal == kRhs; }
 		inline const bool operator !=(const Value &kRhs) const { return !(m_kLuaVal == kRhs); }
 
-		// Concat operators
+
 		String operator +(const String &sRhs) const;
 		String operator +( _In_z_ const char *szRhs) const;
 
-		// Prepend and Append functionality
+
 		void Prepend(const String &sStart);
 		void Prepend( _In_z_ const char *szStart);
 		void Append(const String &sEnd);
@@ -218,7 +218,7 @@ namespace FLua
 		Table(const StackValue &kStackValue) : m_kLuaVal(kStackValue) {}
 		Table(lua_State *L, int iStackIndex) : m_kLuaVal(L, iStackIndex) {}
 		Table(lua_State *L, const char *szName) : m_kLuaVal(L, szName) {}
-		explicit Table(lua_State *L) : m_kLuaVal(L, LUA_GLOBALSINDEX) {} // Globals table for lua state
+		explicit Table(lua_State *L) : m_kLuaVal(L, LUA_GLOBALSINDEX) {}
 		~Table() {}
 
 		static Table Create(lua_State *L, unsigned int uiArrayReserve = 0, unsigned int uiNonArrayReserve = 0);
@@ -232,7 +232,7 @@ namespace FLua
 
 		inline void Clear() { m_kLuaVal.Clear(); }
 
-		// Warning: Only call if the lua state has already been destroyed
+
 		inline void LuaStateDestroyed() { m_kLuaVal.LuaStateDestroyed(); }
 
 		bool Valid() const;
@@ -259,10 +259,10 @@ namespace FLua
 		inline const Value &GetLuaValue() const { return m_kLuaVal; }
 		inline lua_State *GetLuaState() const { return m_kLuaVal.GetLuaState(); }
 
-		// WARNING: LuaValue owns this lua ref!
+
 		inline int GetRef() const { return m_kLuaVal.GetRef(); }
 
-		// Represents a field for the [const char*] operator
+
 		class Field {
 		private:
 			friend Table;
@@ -277,9 +277,9 @@ namespace FLua
 				{
 					KeyAnalog keyAnalog = Details::ToLuaAnalog<KeyAnalog>::Convert(key);
 					lua_checkstack(L, 1);
-					Details::Push(L, keyAnalog); // Push the key
-					m_kKey.Set(L, -1);	// Ref the key
-					lua_pop(L, 1); // Pop the key
+					Details::Push(L, keyAnalog);
+					m_kKey.Set(L, -1);
+					lua_pop(L, 1);
 				}
 			}
 
@@ -303,17 +303,17 @@ namespace FLua
 			Value m_kKey;
 		};
 
-		// [] operators
+
 		template<class T> inline Field operator [](T key) { return Field(*this, key); }
 		template<class T> inline const Field operator [](T key) const { return Field(*this, key); }
 
-		// GetField - Get the value for a given field
+
 		const Value GetField( _In_z_ const char *szField) const;
 		const Value GetField(int iIndex) const;
 		const Value GetField(const Value &kKey) const;
 		bool PushField(const Value &kKey) const;
 
-		// SetField - Assign a value to a field
+
 		template<class T>
 		void SetField( _In_z_ const char *szField, T val) {
 			if( Push() ) {
@@ -323,7 +323,7 @@ namespace FLua
 				lua_checkstack(L, 1);
 				Details::Push(L, analog);
 				lua_setfield(L, -2, szField);
-				lua_pop(L, 1); // Pop the table
+				lua_pop(L, 1);
 			}
 		}
 
@@ -336,7 +336,7 @@ namespace FLua
 				lua_checkstack(L, 1);
 				Details::Push(L, analog);
 				lua_rawseti(L, -2, iIndex);
-				lua_pop(L, 1); // Pop the table
+				lua_pop(L, 1);
 			}
 		}
 
@@ -350,7 +350,7 @@ namespace FLua
 				if( kKey.Push() ) {
 					if( lua_isnil(L, -1) )
 					{
-						lua_pop(L, 1); // Pop the nil key
+						lua_pop(L, 1);
 						Details::Error("nil key sent to FLua::Table::SetField");
 					}
 					else
@@ -362,16 +362,16 @@ namespace FLua
 #endif
 						Analog analog = Details::ToLuaAnalog<Analog>::Convert(val);
 						lua_checkstack(L, 1);
-						Details::Push(L, analog); // Push the value
-						lua_rawset(L, -3); // Set the field (pops key and value)
+						Details::Push(L, analog);
+						lua_rawset(L, -3);
 					}
 				}
 				else Details::Error("Invalid key sent to FLua::Table::SetField");
-				lua_pop(L, 1); // Pop the table
+				lua_pop(L, 1);
 			}
 		}
 
-		// SetFieldToNil - nil out a field
+
 		void SetFieldToNil( _In_z_ const char *szField);
 		void SetFieldToNil(int iIndex);
 
@@ -394,8 +394,8 @@ namespace FLua
 
 			struct Pos
 			{
-				Value first; // Key
-				Value second; // Value
+				Value first;
+				Value second;
 			};
 
 		public:
@@ -430,9 +430,9 @@ namespace FLua
 	class Metatable : public Table
 	{
 	public:
-		Metatable(const Value &kLuaValue); // Get the metatable for a FLua::Value
-		Metatable(lua_State *L, int iStackIndex); // Get the metatable for the value at iStackIndex 
-		Metatable(lua_State *L, _In_z_ const char *szName); // Get the metatable for a global
+		Metatable(const Value &kLuaValue);
+		Metatable(lua_State *L, int iStackIndex);
+		Metatable(lua_State *L, _In_z_ const char *szName);
 	};
 
 	class Function
@@ -457,7 +457,7 @@ namespace FLua
 
 		inline void Clear() { m_kLuaVal.Clear(); }
 
-		// Warning: Only call if the lua state has already been destroyed
+
 		inline void LuaStateDestroyed() { m_kLuaVal.LuaStateDestroyed(); }
 
 		bool Valid() const;
@@ -472,18 +472,18 @@ namespace FLua
 		inline const Value &GetLuaValue() const { return m_kLuaVal; }
 		inline lua_State *GetLuaState() const { return m_kLuaVal.GetLuaState(); }
 
-		// WARNING: LuaValue owns this lua ref!
+
 		inline int GetRef() const { return m_kLuaVal.GetRef(); }
 
-		// 0 args
+
 		Value operator()() const {
 			Value kRetVal;
 			Details::LockAccess();
 			if( Push() ) {
 				lua_State *L = GetLuaState();
 				if( Details::CallWithErrorHandling(L, 0, 1) ) {
-					kRetVal.Set(L, -1); // Get the return value
-					lua_pop(L, 1); // Clean up the stack
+					kRetVal.Set(L, -1);
+					lua_pop(L, 1);
 				}
 			}
 			else Details::Error(_T("Attempt to call a FLua::Function with an invalid function"));
@@ -494,7 +494,7 @@ namespace FLua
 		template<class TRet>
 		TRet CallAsDelegate() const { return (TRet)operator()(); }
 
-		// 1 arg
+
 		template <class TArg0>
 		Value operator()(TArg0 a0) const {
 			Value kRetVal;
@@ -520,7 +520,7 @@ namespace FLua
 		template<class TRet, class TArg0>
 		TRet CallAsDelegate(TArg0 a0) const { return (TRet)operator()<TArg0>(a0); }
 
-		// 2 args
+
 		template <class TArg0, class TArg1>
 		Value operator()(TArg0 a0, TArg1 a1) const {
 			Value kRetVal;
@@ -550,7 +550,7 @@ namespace FLua
 		template<class TRet, class TArg0, class TArg1>
 		TRet CallAsDelegate(TArg0 a0, TArg1 a1) const { return (TRet)operator()<TArg0, TArg1>(a0, a1); }
 
-		// 3 args
+
 		template <class TArg0, class TArg1, class TArg2>
 		Value operator()(TArg0 a0, TArg1 a1, TArg2 a2) const {
 			Value kRetVal;
@@ -583,7 +583,7 @@ namespace FLua
 		template<class TRet, class TArg0, class TArg1, class TArg2>
 		TRet CallAsDelegate(TArg0 a0, TArg1 a1, TArg2 a2) const { return (TRet)operator()<TArg0, TArg1, TArg2>(a0, a1, a2); }
 
-		// 4 args
+
 		template <class TArg0, class TArg1, class TArg2, class TArg3>
 		Value operator()(TArg0 a0, TArg1 a1, TArg2 a2, TArg3 a3) const {
 			Value kRetVal;
@@ -621,7 +621,7 @@ namespace FLua
 			return (TRet)operator()<TArg0, TArg1, TArg2, TArg3>(a0, a1, a2, a3);
 		}
 
-		// 5 args
+
 		template <class TArg0, class TArg1, class TArg2, class TArg3, class TArg4>
 		Value operator()(TArg0 a0, TArg1 a1, TArg2 a2, TArg3 a3, TArg4 a4) const {
 			Value kRetVal;
@@ -666,10 +666,10 @@ namespace FLua
 		Value m_kLuaVal;
 	};
 
-	// Stack manipulation for lua types
+
 	namespace Details
 	{
-		// For Values
+
 		template<> struct LuaAnalog<Value>{ typedef StackValue Result; };
 		template<> struct LuaAnalog<Value&>{ typedef Value Result; };
 		template<> struct LuaAnalog<const Value&>{ typedef StackValue Result; };
@@ -713,7 +713,7 @@ namespace FLua
 			}
 		}
 
-		// For Strings
+
 		template<> struct LuaAnalog<String>{ typedef StackValue Result; };
 		template<> struct LuaAnalog<String&>{ typedef String Result; };
 		template<> struct LuaAnalog<const String&>{ typedef StackValue Result; };
@@ -740,7 +740,7 @@ namespace FLua
 			}
 		}
 
-		// For Functions
+
 		template<> struct LuaAnalog<Function>{ typedef StackValue Result; };
 		template<> struct LuaAnalog<Function&>{ typedef Function Result; };
 		template<> struct LuaAnalog<const Function&>{ typedef StackValue Result; };
@@ -783,7 +783,7 @@ namespace FLua
 		struct ArgValidator<Function>{
 			static inline void Validate(StackValue &arg, bool &bValid) {
 				if( arg.GetType() != TYPE_FUNCTION ) {
-					// TODO: Figure out what to do about potentially needing to convert typename string to wide char
+
 					Error(_T("Bad argument: Expected function but got %s"), arg.GetTypeName());
 					bValid = false;
 				}
@@ -796,14 +796,14 @@ namespace FLua
 		struct ArgValidator<Function&>{
 			static inline void Validate(Function &arg, bool &bValid) {
 				if( !arg.Valid() ) {
-					// TODO: Figure out what to do about potentially needing to convert typename string to wide char
+
 					Error(_T("Bad argument: Expected function but got %s"), arg.GetLuaValue().GetTypeName());
 					bValid = false;
 				}
 			}
 		};
 
-		// For Tables
+
 		template<> struct LuaAnalog<Table>{ typedef StackValue Result; };
 		template<> struct LuaAnalog<Table&>{ typedef Table Result; };
 		template<> struct LuaAnalog<const Table&>{ typedef StackValue Result; };
@@ -847,7 +847,7 @@ namespace FLua
 			}
 		}
 
-		// For Table Fields
+
 		template<> struct PushAnalog<Table::Field>{ typedef Value Result; };
 		template<> struct PushAnalog<const Table::Field>{ typedef Value Result; };
 		template<> struct PushAnalog<Table::Field&>{ typedef Value Result; };

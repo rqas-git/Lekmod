@@ -48,7 +48,8 @@ class YieldMatrixTests(unittest.TestCase):
                           'bool CvDatabaseUtility::Initialize2DArray(int**& ppArray, const char*',
                           'void CvDatabaseUtility::SetYieldMatrix('):
             start = source.index(signature)
-            implementations.append(source[start:source.index('//------------------------------------------------------------------------------', start)])
+            end = source.index('\n}', start) + 2
+            implementations.append(source[start:end])
         with tempfile.TemporaryDirectory() as folder:
             folder = Path(folder)
             (folder / 'production_matrix.h').write_text('\n'.join(implementations))

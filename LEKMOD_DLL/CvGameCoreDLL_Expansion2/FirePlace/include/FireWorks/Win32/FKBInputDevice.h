@@ -1,44 +1,44 @@
-//	$Revision: #2 $		$Author: mbreitkreutz $ 	$DateTime: 2005/06/13 13:35:55 $
-//------------------------------------------------------------------------------------------------
-//
-//  *****************   FIRAXIS GAME ENGINE   ********************
-//
-//  FILE:    FKBInputDevice.h
-//
-//  AUTHOR:  Mustafa Thamer  --  09/10/2003
-//
-//  PURPOSE: Contains abstract class for sampling keyboard input 
-//
-//------------------------------------------------------------------------------------------------
-//  Copyright (c) 2004 Firaxis Games, Inc. All rights reserved.
-//------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #ifndef		FKBINPUTDEVICE_H
 #define		FKBINPUTDEVICE_H
 #pragma		once
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  CLASS:      FKBInputDevice
-//
-//  PURPOSE:    Abstract base class for sampling keyboard input.
-//
-//+++++++++++++++++++++++++
+
+
+
+
+
+
+
 
 #include "..\FInputDevice.h"
 
 class FKBInputDevice : public FInputDevice
 {
 public:
-	enum Modifiers		// bit flags
+	enum Modifiers
 	{
 		CTRL	= 0x1,
 		ALT		= 0x2,
 		SHIFT	= 0x4
 	};
 
-	// these input events are added to the input map (if appropriate) whenever the input device is sampled.
-	// currently only uses keyboard input events.
+
+
 	enum InputType		
 	{
 		KB_NONE = INPUT_NONE  ,
@@ -53,7 +53,7 @@ public:
 		KB_7          ,
 		KB_8          ,
 		KB_9          ,
-		KB_MINUS      ,	    /* - on main keyboard */		
+		KB_MINUS      ,
 		KB_A          ,
 		KB_B         ,
 		KB_C          ,
@@ -85,11 +85,11 @@ public:
 		KB_TAB        ,
 		KB_LBRACKET   ,
 		KB_RBRACKET   ,
-		KB_RETURN     ,		/* Enter on main keyboard */
+		KB_RETURN     ,
 		KB_LCONTROL   ,
 		KB_SEMICOLON  ,
 		KB_APOSTROPHE ,
-		KB_GRAVE      ,		/* accent grave */
+		KB_GRAVE      ,
 		KB_LSHIFT     ,
 		KB_BACKSLASH  ,
 		KB_COMMA      ,
@@ -156,12 +156,12 @@ public:
 	FKBInputDevice() {}
 	~FKBInputDevice() {}
 
-	// converters
+
 	static unsigned long GetVKCode(uint);
 	static unsigned int GetAsciiCode(uint, bool bShift);
 	static InputType GetInputType(unsigned long uiVkCode);
 
-	// immediate mode accessors
+
 	bool IsKeyDown(InputType key) const; 
 	bool IsKeyUp(InputType key) const; 
 	bool IsAltKeyDown() const { return IsKeyDown(KB_LALT) || IsKeyDown(KB_RALT);	}
@@ -172,4 +172,4 @@ public:
 	bool IsCapsLockDown() const { return IsKeyDown(KB_CAPSLOCK); }
 };
 
-#endif	//FKBINPUTDEVICE
+#endif

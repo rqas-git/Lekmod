@@ -1,11 +1,11 @@
 function runConfig()
---[[
 
-MOD.EAP: Here you can change the settings of the map script if you are not running a (correctly) modified database.
 
-]]
 
--- In this config, for vanilla support, we assume the default resources and their values
+
+
+
+
 local iron_ID = 0;
 local horse_ID = 1;
 local coal_ID = 2;
@@ -15,7 +15,7 @@ local uranium_ID = 5;
 
 
 
--- default strategic resource amounts for major deposits and minor deposits
+
 Default_Stategic_Resource_Amounts_Major = {
 
     [iron_ID] = 6,
@@ -40,7 +40,7 @@ Default_Stategic_Resource_Amounts_Minor = {
 
 Default_Resource_Frequencies = {
 
-    -- 0 recommended for strategics.
+
     [iron_ID] = 0,
     [horse_ID] = 0,
     [coal_ID] = 0,
@@ -50,8 +50,8 @@ Default_Resource_Frequencies = {
 
 };
 
--- Default Values for Resource Preferences. Same structure as in the database. The Higher the preference value the less
--- likely it is to spawn on the specified terrain/feature.
+
+
 
 Default_Resource_Preferences = {
 
@@ -84,8 +84,8 @@ Default_Resource_Preferences = {
 }
 end
 
--- Default Resources we exclude by default (artifacts, antiquity sites, slaves, etc.)
--- Normally set in the database, but if you are not using a modified database you can set them here.
+
+
 
 function CheckSpecialCases(resourceType)
 

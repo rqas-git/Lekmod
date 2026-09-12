@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	ù 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 
 #pragma once
 #ifndef CVLUADEAL_H
@@ -15,13 +15,13 @@
 class CvLuaDeal : public CvLuaScopedInstance<CvLuaDeal, CvDeal>
 {
 public:
-	//! Push CvCity methods into table t
+
 	static void PushMethods(lua_State* L, int t);
 
-	//! Required by CvLuaScopedInstance.
+
 	static void HandleMissingInstance(lua_State* L);
 
-	//! Required by CvLuaScopedInstance.
+
 	static const char* GetTypeName();
 
 protected:
@@ -185,7 +185,7 @@ protected:
 		return BasicLuaMethod(L, &CvDeal::AddDeclarationOfFriendship);
 	};
 
-	static int lAddVoteCommitment(lua_State* L); // Too many args for template, defined in cpp
+	static int lAddVoteCommitment(lua_State* L);
 
 	static int lChangeGoldTrade(lua_State* L)
 	{
@@ -237,9 +237,9 @@ protected:
 	{
 		return BasicLuaMethod(L, &CvDeal::RemoveThirdPartyEmbargo);
 	};
-	static int lRemoveVoteCommitment(lua_State* L); // Too many args for template, defined in cpp
+	static int lRemoveVoteCommitment(lua_State* L);
 
 	static TradedItemList::iterator m_iterator;
 };
 
-#endif //CVLUADEAL_H
+#endif

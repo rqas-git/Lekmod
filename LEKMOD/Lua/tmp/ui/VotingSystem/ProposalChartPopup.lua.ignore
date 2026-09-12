@@ -1,8 +1,8 @@
--------------------------------------------------
--- edit: MP voting system for EUI & vanilla UI
--------------------------------------------------
--- Diplomacy and Advisors Buttons that float out in the screen
--------------------------------------------------
+
+
+
+
+
 include( "IconSupport" );
 include( "SupportFunctions"  );
 include( "InstanceManager" );
@@ -18,15 +18,15 @@ local SEPARATOR_MARGIN = 10;
 local g_MPVotingSystemLastId = 0
 
 local function onVoteReceived( Id, playerId, bVote )
-	--print('--- vote received --- Id:', Id, 'playerId:', playerId, 'bVote:', bVote)
+
 	if Id == g_MPVotingSystemLastId then
 		UpdateAndSort(Id, 0);
 	end
 end
 
 local function onProposalResult( Id, expires, OwnerId, SubjectId, iType, Status)
-	--print('--- proposal Result received --- Id:', Id)
-	--print('--- expires ' .. expires .. ' Type: ' .. iType .. ' Owner: ' .. OwnerId .. ' SubjectId: ' .. SubjectId .. ' RESULT: ' .. Status)
+
+
 	local pActivePlayer = Players[Game.GetActivePlayer()];
 	local sMessage =''
 	local sSummary = ''
@@ -37,15 +37,15 @@ local function onProposalResult( Id, expires, OwnerId, SubjectId, iType, Status)
 		end
 		if (Status == 1) then
 			if iType == 1001 then
-				-- defeat screen comes with NetworkKickedPopup
+
 				if Matchmaking.IsHost() then
 					Matchmaking.KickPlayer(SubjectId)
 				end
 			elseif iType == 1002 then
-				--Events.EndGameShow(EndGameTypes.Diplomatic, Players[SubjectId]:GetTeam())
+
 				Game.SetWinner(Players[SubjectId]:GetTeam(), GameInfoTypes.VICTORY_DIPLOMATIC); 
 			elseif iType == 1003 then
-				--Events.EndGameShow(-1, Players[Game.GetActivePlayer()]:GetTeam())  -- scrap screen
+
 				Game.SetWinner(Players[Game.GetActivePlayer()]:GetTeam(), GameInfoTypes.VICTORY_SCRAP);
 			elseif iType == 1004 then
 				Game.SetWinner(Players[Game.GetActivePlayer()]:GetTeam(), GameInfoTypes.VICTORY_SCRAP);
@@ -65,17 +65,17 @@ GameEvents.MPVotingSystemVote.Add(onVoteReceived)
 GameEvents.MPVotingSystemProposalResult.Add(onProposalResult)
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function IsActiveHuman( pPlayer )
-	-- Is this player really controlled by a human player?  
-	-- This check handles the fact that pPlayer:IsHuman() returns true for unoccupied observer slots. DOH!
+
+
 	return (Network.IsPlayerConnected(pPlayer:GetID()) or (pPlayer:IsHuman() and not pPlayer:IsObserver()));
 end     
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function MPListSort( a, b )
      local aScore = g_SortTable[ tostring( a ) ];
      local bScore = g_SortTable[ tostring( b ) ];
@@ -84,19 +84,19 @@ function MPListSort( a, b )
 end
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function sortByPlayerID( pPlayer )
-	-- Always sort by score now that multiplayer turn order is shown in the Turn Queue UI.
+
 	return false;
-	-- return (not pPlayer:IsSimultaneousTurns() and Game.IsNetworkMultiPlayer());
+
 end
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function BuildStaticTeamsList()
-	--print('BuildStaticTeamsList() invoked')
+
      for iPlayer = 0, GameDefines.MAX_MAJOR_CIVS - 1 do
     
         local pPlayer = Players[ iPlayer ];
@@ -120,8 +120,8 @@ end
 
 local g_bShowPings = false;
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function UpdatePlayerData( pPlayer, controlTable, Id )
 
 	local iTeam = pPlayer:GetTeam();
@@ -132,27 +132,27 @@ function UpdatePlayerData( pPlayer, controlTable, Id )
 	local bIsNetworkMP = Game.IsNetworkMultiPlayer();
 	local bIsPitboss = Game.IsOption("GAMEOPTION_PITBOSS");
 
-	-- Hide dead players
+
 	if(not pPlayer:IsAlive() and not pPlayer:IsObserver()) then
 		controlTable.Root:SetHide(true);
 	else
 		controlTable.Root:SetHide(false);
 	end
 
-	-- Determine the size of player entry
+
 	controlTable.PlayerDataStack:CalculateSize();
 	controlTable.Root:SetSizeX(controlTable.PlayerDataStack:GetSizeX());
 	
-	-- Update seperator size
+
 	controlTable.Seperator:SetSizeX( controlTable.PlayerDataStack:GetSizeX() - SEPARATOR_MARGIN);
 	
-    -- name
+
     if( bIsHuman ) then
 		local activePlayer = Game.GetActivePlayer();
 		if( Game.IsGameMultiPlayer() == false and bIsLocalPlayer ) then         
 			controlTable.Name:LocalizeAndSetText( "TXT_KEY_YOU" );
 		elseif( pPlayer:IsObserver() and not Network.IsPlayerConnected(pPlayer:GetID()) ) then
-			-- empty observer slot
+
 			controlTable.Name:LocalizeAndSetText( "TXT_KEY_SLOTTYPE_OPEN" );
 		else
 			controlTable.Name:SetText(pPlayer:GetNickName());
@@ -165,18 +165,18 @@ function UpdatePlayerData( pPlayer, controlTable, Id )
 		end
     end
     
-    -- icon
+
     CivIconHookup( bMet and pPlayer:GetID() or -1, 45, controlTable.Icon, controlTable.CivIconBG, controlTable.CivIconShadow, false, true );
 
 
-    -- war color
+
     if( g_pLocalTeam:IsAtWar( pPlayer:GetTeam() ) ) then
         controlTable.Name:SetColorByName( "COLOR_NEGATIVE_TEXT" );
     else
         controlTable.Name:SetColorByName( "White" );
     end
     
-    -- vote data
+
     local playerID = pPlayer:GetID();
 
     local bIsEligible = Game.GetProposalVoterEligibility(Id, playerID);
@@ -202,7 +202,7 @@ function UpdatePlayerData( pPlayer, controlTable, Id )
     	controlTable.IconBox:SetAlpha( 1 );
     else
     	controlTable.Vote:SetText( "" )
-    	-- turn finished
+
 		controlTable.Name:SetAlpha( 0.5 );
     	controlTable.IconBox:SetAlpha( 0.2 );
     end
@@ -219,12 +219,12 @@ function UpdatePlayerData( pPlayer, controlTable, Id )
 
 end
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function TeamHasObservers(pTeam, teamData)
 
     if( pTeam:GetNumMembers() == 1 ) then
-        -- single member team
+
         local pPlayer = teamData;
 		if( pPlayer:IsObserver() and PreGame.GetSlotClaim(pPlayer:GetID()) == SlotClaim.SLOTCLAIM_ASSIGNED ) then
 			return true;
@@ -240,10 +240,10 @@ function TeamHasObservers(pTeam, teamData)
 	return false;
 end
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function BuildControls()
-	--print('BuildControls() invoked')
+
 
     for iTeam, teamData in pairs( g_TeamData ) do
         local pTeam = Teams[ iTeam ];
@@ -251,16 +251,16 @@ function BuildControls()
 		local bObserverTeam = TeamHasObservers(pTeam, teamData);
         if( pTeam:GetNumMembers() == 1 and not bObserverTeam) then
 
-            -- single member team
+
             local pPlayer = teamData;
 
-            -- Make sure they're alive
+
             if( pPlayer:IsAlive() ) then
                 local controlTable = {};
                 ContextPtr:BuildInstanceForControl( "PlayerEntry", controlTable, Controls.MPListStack );
                 g_PlayerEntries[ pPlayer:GetID() ] = controlTable;
 
-                --UpdatePlayerData( pPlayer, controlTable, Id );
+
             end
         else
             local teamEntry = {};
@@ -274,12 +274,12 @@ function BuildControls()
                     g_PlayerEntries[ pPlayer:GetID() ] = controlTable;
                     controlTable.Seperator:SetHide( true );
 																		
-                    --UpdatePlayerData( pPlayer, controlTable, Id );
+
                 end
             end
             
             if(bObserverTeam) then 
-				-- OBSERVER_TEAM
+
 				teamEntry.TeamName:LocalizeAndSetText( "TXT_KEY_MULTIPLAYER_OBSERVER_TEAM_NAME" );
 			else			
 				teamEntry.TeamName:LocalizeAndSetText( "TXT_KEY_MULTIPLAYER_DEFAULT_TEAM_NAME", iTeam + 1 );
@@ -305,8 +305,8 @@ function BuildControls()
 end
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function UpdateAndSort(Id, iResult)
 
 	if Id ~= nil then
@@ -320,20 +320,20 @@ function UpdateAndSort(Id, iResult)
 		end
 	end
 	local proposalType = Game.GetProposalType(Id);
-	--print('proposalType:', proposalType)
+
 	local owner = Players[Game.GetProposalOwner(Id)] and Players[Game.GetProposalOwner(Id)]:GetName() or nil;
 	local subject = Game.GetProposalSubject(Id);
-	--print(Id, iResult, 'SUBJECT', subject, 'OWNER', owner)
+
 	if subject ~= -1 then
 		subject = Players[subject]:GetName()
 	end
-	if proposalType == 0 then  -- irr
+	if proposalType == 0 then
 		Controls.ProposalName:LocalizeAndSetText("TXT_KEY_MP_PROPOSAL_SCREEN_SUMMARY_IRR")
-	elseif proposalType == 1 then  -- cc
+	elseif proposalType == 1 then
 		Controls.ProposalName:LocalizeAndSetText("TXT_KEY_MP_PROPOSAL_SCREEN_SUMMARY_CC", subject)
-	elseif proposalType == 2 then  -- scrap
+	elseif proposalType == 2 then
 		Controls.ProposalName:LocalizeAndSetText("TXT_KEY_MP_PROPOSAL_SCREEN_SUMMARY_SCRAP")
-	elseif proposalType == 3 then  -- remap
+	elseif proposalType == 3 then
 		Controls.ProposalName:LocalizeAndSetText("TXT_KEY_MP_PROPOSAL_SCREEN_SUMMARY_REMAP")
 	end
 	if owner then
@@ -392,15 +392,15 @@ function UpdateAndSort(Id, iResult)
                   
     	g_SortTable[ tostring( teamEntry.Root ) ] = score;
         
-    	-- sort all the players on the team
+
     	teamEntry.TeamStack:SortChildren( MPListSort );
 	end
     
-    -- sort all of the teams
+
 	Controls.MPListStack:SortChildren( MPListSort );
-  	--print('updating buttons for Id:', Id)
-  	--print('result:', iResult)
-	if iResult == 0 then  -- no result yet
+
+
+	if iResult == 0 then
 		Controls.ProposalResultLabel:SetHide(true);
   		Controls.VoteYesButton:SetHide(false)
   		Controls.VoteNoButton:SetHide(false)
@@ -422,42 +422,42 @@ function UpdateAndSort(Id, iResult)
   		    print('Id was nil! don\'t press voteyes/voteno!')
     	end
 	else
-		--print('ProposalResultLabel')
+
 		Controls.ProposalResultLabel:SetHide(false);
-		--print('votey/n')
+
   		Controls.VoteYesButton:SetHide(true)
   		Controls.VoteNoButton:SetHide(true)
-		if iResult == 1 then  -- result is passed
-			--print('iResult1')
+		if iResult == 1 then
+
 			Controls.ProposalResultLabel:LocalizeAndSetText("TXT_KEY_MP_PROPOSAL_SCREEN_PROPOSAL_PASSED");
-		elseif iResult == 2 then  -- result is failed
-			--print('iResult2')
+		elseif iResult == 2 then
+
 			Controls.ProposalResultLabel:LocalizeAndSetText("TXT_KEY_MP_PROPOSAL_SCREEN_PROPOSAL_FAILED");
 		end
     end
-	--print('ReprocessAnchoring')
+
     Controls.MPListStack:ReprocessAnchoring();
 end
 
 function OnPopup( popupInfo )
-	--print('OnPopup start')
+
 	if( popupInfo.Type == ButtonPopupTypes.BUTTONPOPUP_MODDER_0 ) then
 		m_PopupInfo = popupInfo;
 		UpdateAndSort(m_PopupInfo.Data1, m_PopupInfo.Data2)
         if ( ContextPtr:IsHidden() == true ) then
-			--print('OnPopup received Id:', m_PopupInfo.Data1)
-			--print('OnPopup result:', m_PopupInfo.Data2)
+
+
         	UIManager:QueuePopup( ContextPtr, PopupPriority.InGameUtmost );
         end
 	end
 end
 Events.SerialEventGameMessagePopup.Add( OnPopup );
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 
 function OnClose()
-	--print("Dequeuing proposal chart");
+
     Events.SerialEventGameMessagePopupProcessed.CallImmediate(ButtonPopupTypes.BUTTONPOPUP_MODDER_0, 0);
 	UIManager:DequeuePopup( ContextPtr );
 end
@@ -467,9 +467,9 @@ Events.GameplaySetActivePlayer.Add(OnClose);
 
 
 
-----------------------------------------------------------------
--- Key Down Processing
-----------------------------------------------------------------
+
+
+
 function InputHandler( uiMsg, wParam, lParam )
     if( uiMsg == KeyEvents.KeyDown )
     then
@@ -481,11 +481,11 @@ function InputHandler( uiMsg, wParam, lParam )
 end
 ContextPtr:SetInputHandler( InputHandler );
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 
 BuildStaticTeamsList();
 BuildControls();
 
-Controls.VoteYesButton:RegisterCallback( Mouse.eLClick, function() Network.SendGiftUnit(g_MPVotingSystemLastId, -5); end );  -- Yes
-Controls.VoteNoButton:RegisterCallback( Mouse.eLClick, function() Network.SendGiftUnit(g_MPVotingSystemLastId, -6); end );  -- No
+Controls.VoteYesButton:RegisterCallback( Mouse.eLClick, function() Network.SendGiftUnit(g_MPVotingSystemLastId, -5); end );
+Controls.VoteNoButton:RegisterCallback( Mouse.eLClick, function() Network.SendGiftUnit(g_MPVotingSystemLastId, -6); end );

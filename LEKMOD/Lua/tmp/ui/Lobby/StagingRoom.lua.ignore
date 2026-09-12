@@ -1,20 +1,20 @@
-------------------------------------------------- 
--- Staging Room Screen
--------------------------------------------------
+
+
+
 include( "IconSupport" );
 include( "SupportFunctions"  );
 include( "InstanceManager" );
 include( "UniqueBonuses" );
 include( "MPGameOptions" );
-include( "TurnStatusBehavior" ); -- for turn status button behavior
+include( "TurnStatusBehavior" );
 include( "Lekmod_version.lua" );
 include( "Lekmod_staging_draft.lua" );
 
--------------------------------------------------
--- Globals
--------------------------------------------------
--- m_SlotInstances / m_PlayerNames are globals so Lekmod_staging_draft.lua can
--- align ban boxes and draft icons with the visible player list.
+
+
+
+
+
 m_SlotInstances = {};
 local g_ChatInstances = {};
 local g_LobbyChatHistory = {};
@@ -22,7 +22,7 @@ local g_bRequestedLobbyChatHistory = false;
 local bFlipper = false;
 local g_bSentUiCheckWarning = false;
 
--- UserData key shared with DiploCorner for lobby → in-game chat handoff.
+
 local LOBBY_CHAT_USERDATA = "LekmodLobbyChat";
 local LOBBY_CHAT_REQ = "#LCHREQ#";
 local LOBBY_CHAT_CLEAR = "#LCHCLEAR#";
@@ -41,20 +41,20 @@ local m_bTeamsValid = false;
 
 local m_bEditOptions = false;
 
-local g_fCountdownTimer = -1;  --Start game countdown timer.  Set to -1 when not in use.
+local g_fCountdownTimer = -1;
 
--- slot type pulldown options for the local player
+
 local g_localSlotTypeOptions = { "TXT_KEY_SLOTTYPE_OPEN", 
 																	"TXT_KEY_SLOTTYPE_OBSERVER" }
 
--- slot type pulldown options for non-local players
+
 local g_slotTypeOptions = { "TXT_KEY_SLOTTYPE_OPEN", 
 														"TXT_KEY_SLOTTYPE_HUMANREQ", 
 														"TXT_KEY_SLOTTYPE_AI",
 														"TXT_KEY_SLOTTYPE_OBSERVER",
 														"TXT_KEY_SLOTTYPE_CLOSED" }
 														
--- Associates an int value with our slotTypes so that we can index them in different pulldowns  											
+
 local g_slotTypeData = {};
 g_slotTypeData["TXT_KEY_SLOTTYPE_OPEN"]			= { tooltip = "TXT_KEY_SLOTTYPE_OPEN_TT",			index=0 };
 g_slotTypeData["TXT_KEY_SLOTTYPE_HUMANREQ"]	= { tooltip = "TXT_KEY_SLOTTYPE_HUMANREQ_TT", index=1 };
@@ -69,9 +69,9 @@ local PlayerConnectedStr = Locale.ConvertTextKey( "TXT_KEY_MP_PLAYER_CONNECTED" 
 local PlayerConnectingStr = Locale.ConvertTextKey( "TXT_KEY_MP_PLAYER_CONNECTING" );
 local PlayerNotConnectedStr = Locale.ConvertTextKey( "TXT_KEY_MP_PLAYER_NOTCONNECTED" );							
 														
--------------------------------------------------
--- Determine if the screen is for the dedicated server ingame screen										
--------------------------------------------------
+
+
+
 function IsInGameScreen()
 	if(	PreGame.GameStarted() 
 			and Matchmaking.IsHost() 
@@ -82,9 +82,9 @@ function IsInGameScreen()
 	return false;
 end
 
--------------------------------------------------
--- retrieve player names
--------------------------------------------------
+
+
+
 function BuildPlayerNames()
     local playerList = Matchmaking.GetPlayerList();
     
@@ -98,30 +98,30 @@ function BuildPlayerNames()
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnEditHost()
     UIManager:PushModal( Controls.SetCivNames );
 	LuaEvents.SetCivNameEditSlot(0);
 end
 Controls.LocalEditButton:RegisterCallback( Mouse.eLClick, OnEditHost );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function ShowHideExitButton()
 	local bShow = IsInGameScreen();
 	Controls.ExitButton:SetHide( not bShow );
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnExitGame()
 	Events.UserRequestClose();
 end
 Controls.ExitButton:RegisterCallback( Mouse.eLClick, OnExitGame );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function ShowHideBackButton()
 	local bShow = not IsInGameScreen();
 	Controls.BackButton:SetHide( not bShow );
@@ -130,23 +130,23 @@ function ShowHideBackButton()
 	end
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function ShowHideInviteButton()
 	local bShow = PreGame.IsInternetGame() and not Network.IsDedicatedServer();
 	Controls.InviteButton:SetHide( not bShow );
 end
--------------------------------------------------
--------------------------------------------------
+
+
 function OnInviteButton()
     Steam.ActivateInviteOverlay();
 end
 Controls.InviteButton:RegisterCallback( Mouse.eLClick, OnInviteButton );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function ShowHideSaveButton()
-	local bDisable = g_fCountdownTimer ~= -1; -- Disable the save game button while the countdown is active.
+	local bDisable = g_fCountdownTimer ~= -1;
 	local bShow = Matchmaking.IsHost();
 	Controls.SaveButton:SetHide(not bShow);
   if( bDisable ) then
@@ -157,15 +157,15 @@ function ShowHideSaveButton()
 		Controls.SaveButton:SetAlpha( 1.0 );
   end
   
-  -- Only show the game configuration tooltip if we'd be saving the game configuration vs. an actual game save.
+
   if(PreGame.GameStarted()) then 
 		Controls.SaveButton:LocalizeAndSetToolTip( "" );
   else
 		Controls.SaveButton:LocalizeAndSetToolTip( "TXT_KEY_SAVE_GAME_CONFIGURATION_TT" );
 	end
 end
--------------------------------------------------
--------------------------------------------------
+
+
 function OnSaveButton()
 	if Draft_PersistToPreGame ~= nil then
 		Draft_PersistToPreGame();
@@ -174,8 +174,8 @@ function OnSaveButton()
 end
 Controls.SaveButton:RegisterCallback( Mouse.eLClick, OnSaveButton );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnCivilopediaButton()
 	if Draft_OpenCivilopedia ~= nil then
 		Draft_OpenCivilopedia("");
@@ -185,18 +185,18 @@ if Controls.CivilopediaButton ~= nil then
 	Controls.CivilopediaButton:RegisterCallback( Mouse.eLClick, OnCivilopediaButton );
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function ShowHideStrategicViewButton()
 	local bShow = IsInGameScreen();
 	Controls.StrategicViewButton:SetHide( not bShow );
 end
--------------------------------------------------
--------------------------------------------------      
+
+
 function OnStrategicView()
 	local bIsObserver = PreGame.GetSlotStatus( Game.GetActivePlayer() ) == SlotStatus.SS_OBSERVER;
 	if (bIsObserver) then
-		-- Observer gets to toggle the world view completely off.
+
 		local eViewType = GetGameViewRenderType();
 		if (eViewType == GameViewTypes.GAMEVIEW_NONE) then
 			SetGameViewRenderType(GameViewTypes.GAMEVIEW_STANDARD);			
@@ -213,8 +213,8 @@ function OnStrategicView()
 end
 Controls.StrategicViewButton:RegisterCallback( Mouse.eLClick, OnStrategicView );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnCancel()
 	Controls.RemoveButton:SetHide(true);
 
@@ -227,7 +227,7 @@ function OnCancel()
     if( civIndex ~= -1 ) then
         civ = GameInfo.Civilizations[ civIndex ];
 
-        -- Use the Civilization_Leaders table to cross reference from this civ to the Leaders table
+
         local leader = GameInfo.Leaders[GameInfo.Civilization_Leaders( "CivilizationType = '" .. civ.Type .. "'" )().LeaderheadType];
 		local leaderDescription = leader.Description;
 		
@@ -244,25 +244,25 @@ end
 Controls.RemoveButton:RegisterCallback( Mouse.eLClick, OnCancel );
 
 
--------------------------------------------------
--- Context OnUpdate
--------------------------------------------------
+
+
+
 function OnStagingUpdate( fDTime )
 	if Draft_SyncBanScroll ~= nil then
 		Draft_SyncBanScroll();
 	end
 
-	-- Countdown only runs while g_fCountdownTimer is active (>= 0).
+
 	if( g_fCountdownTimer < 0 ) then
 		return;
 	end
 
 	g_fCountdownTimer = g_fCountdownTimer - fDTime;
 	if( not Network.IsEveryoneConnected() ) then
-		-- not all players are connected anymore.  This is probably due to a player join in progress.
+
 		StopCountdown();
 	elseif( g_fCountdownTimer <= 0 ) then
-			-- Timer elapsed, launch the game if we're the host.
+
 	    if(m_bIsHost) then
 				LaunchGame();
 			end
@@ -280,9 +280,9 @@ function EnsureStagingUpdate()
 	ContextPtr:SetUpdate( OnStagingUpdate );
 end
 
--------------------------------------------------
--- Start Game Launch Countdown
--------------------------------------------------
+
+
+
 function StartCountdown()
 	g_fCountdownTimer = 10;
 	local countdownString = Locale.ConvertTextKey("TXT_KEY_GAMESTART_COUNTDOWN_FORMAT", math.floor(g_fCountdownTimer) );
@@ -294,31 +294,31 @@ function StartCountdown()
 	EnsureStagingUpdate();
 end
 
--------------------------------------------------
--- Stop Game Launch Countdown
--------------------------------------------------
+
+
+
 function StopCountdown()
 	Controls.CountdownButton:SetHide(true);
 	g_fCountdownTimer = -1;
 	if Draft_RefreshBottomButtonBar ~= nil then
 		Draft_RefreshBottomButtonBar();
 	end
-	-- Keep OnStagingUpdate alive for ban/player scroll sync + version checks
-	-- (ClearUpdate here broke ban-column scroll for non-host clients).
+
+
 	EnsureStagingUpdate();
 end
 
 
--------------------------------------------------
--- Launch Game
--------------------------------------------------
+
+
+
 function LaunchGame()
 
 	if Draft_PersistToPreGame ~= nil then
 		Draft_PersistToPreGame();
 	end
 	if (PreGame.IsHotSeatGame()) then
-		-- In case they changed the DLC.  This won't do anything if it is already setup properly.
+
 		local prevCursor = UIManager:SetUICursor( 1 );
 		Modding.ActivateAllowedDLC();
 		UIManager:SetUICursor( prevCursor );
@@ -328,11 +328,11 @@ function LaunchGame()
 end
 Controls.LaunchButton:RegisterCallback( Mouse.eLClick, LaunchGame );
 
--------------------------------------------------
--- Event Handler:  Hot Join Events
--------------------------------------------------
+
+
+
 function OnHotJoinStarted()
-	-- Display hot joining popup if we're a hot joiner.
+
 	if(Network.IsPlayerHotJoining(Matchmaking.GetLocalID())) then
 		Controls.HotJoinPopup:SetHide(false);
 	end
@@ -340,22 +340,22 @@ end
 Events.MultiplayerHotJoinStarted.Add(OnHotJoinStarted);
 
 function OnHotJoinCompleted()
-	-- Remove hot join popup on completion.
+
 	Controls.HotJoinPopup:SetHide(true);
 	
-	-- The hot joiner's network connection status needs to be updated.
+
 	RefreshPlayerList();
 end
 Events.MultiplayerHotJoinCompleted.Add(OnHotJoinCompleted);
 
--------------------------------------------------
--- Event Handler: MultiplayerGameLaunched
--------------------------------------------------
+
+
+
 function OnGameLaunched()
 
 	PersistLobbyChatHistory();
 	ClearLobbyChat();
-	-- Mark before memory reset so the flag is stored in the save (turn-0 loads included).
+
 	if Draft_MarkGameLaunched ~= nil then
 		Draft_MarkGameLaunched();
 	end
@@ -368,8 +368,8 @@ end
 Events.MultiplayerGameLaunched.Add( OnGameLaunched );
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function GetPlayerIDBySelectionIndex(selectionIndex)
 	if(selectionIndex == 0) then
 		return Matchmaking.GetLocalID();
@@ -379,8 +379,8 @@ function GetPlayerIDBySelectionIndex(selectionIndex)
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function CivSelected( selectionIndex, civID )
 	local playerID = GetPlayerIDBySelectionIndex(selectionIndex);
 	if( playerID >= 0 ) then
@@ -394,22 +394,22 @@ function CivSelected( selectionIndex, civID )
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function InviteSelected( selectionIndex, playerChoiceID )
 
 	local slotInstance = m_SlotInstances[ selectionIndex ];
 
 	if slotInstance then
 
-		if ( playerChoiceID == -1 ) then -- AI
+		if ( playerChoiceID == -1 ) then
 
     		slotInstance.InvitePulldown:GetButton():LocalizeAndSetText( "TXT_KEY_AI_NICKNAME" );
 
-		else -- TODO: Send Invite and Lock Slot
+		else
 
 			slotInstance.InvitePulldown:GetButton():SetText( Locale.ConvertTextKey("TXT_KEY_WAITING_FOR_INVITE_RESPONSE", "TEMP" ) );
---			slotInstance.InvitePulldown:GetButton():SetText( "Waiting for Player..." );
+
 
 		end
 
@@ -417,18 +417,18 @@ function InviteSelected( selectionIndex, playerChoiceID )
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnKickPlayer( selectionIndex )
 	local playerID = GetPlayerIDBySelectionIndex(selectionIndex);
-	-- Do not pass true: that hides StagingRoom and previously wiped lobby chat on every kick confirm.
+
 	UIManager:PushModal(Controls.ConfirmKick);	
 	local playerName = m_SlotInstances[selectionIndex].PlayerNameLabel:GetText();
 	LuaEvents.SetKickPlayer(playerID, playerName);
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnEditPlayer( selectionIndex )
 	local playerID = GetPlayerIDBySelectionIndex(selectionIndex);
 	UIManager:PushModal(Controls.SetCivNames);
@@ -436,22 +436,22 @@ function OnEditPlayer( selectionIndex )
 	UpdateDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnSwapPlayer( selectionIndex )
 	local playerID = GetPlayerIDBySelectionIndex(selectionIndex);
 	Network.SetPlayerDesiredSlot(playerID);
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnReadyCheck( bChecked )
 	PreGame.SetReady( Matchmaking.GetLocalID(), bChecked );
 	Network.BroadcastPlayerInfo();
 	UpdateDisplay();
 	CheckGameAutoStart();	
 	ShowHideSaveButton();
-	-- Lock / unlock draft + ban interactions with game-ready state.
+
 	if Draft_RefreshBanUI ~= nil then
 		Draft_RefreshBanUI();
 	end
@@ -462,13 +462,13 @@ end
 Controls.LocalReadyCheck:RegisterCheckHandler( OnReadyCheck );
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnSelectTeam( selectionIndex, playerChoiceID )
 	local playerID = GetPlayerIDBySelectionIndex(selectionIndex);
 	PreGame.SetTeam(playerID, playerChoiceID);
 	local slotInstance = m_SlotInstances[selectionIndex];
-	local teamID = playerChoiceID + 1; -- Real programmers count from zero.
+	local teamID = playerChoiceID + 1;
 	if( slotInstance ~= nil ) then
 		slotInstance.TeamLabel:LocalizeAndSetText( "TXT_KEY_MULTIPLAYER_DEFAULT_TEAM_NAME", teamID );
 	else
@@ -480,14 +480,14 @@ function OnSelectTeam( selectionIndex, playerChoiceID )
 end
 
 
---------------------------------------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------------------------------------
+
+
 function DoCheckTeams()
 
     m_bTeamsValid = false;
     local teamTest = -1;
     
-    -- Find the team of the first valid player.  We can't simply use the host's team because they could be an observer.
+
     for i = 0, GameDefines.MAX_MAJOR_CIVS do
 			if( PreGame.GetSlotStatus( i ) == SlotStatus.SS_COMPUTER or PreGame.GetSlotStatus( i ) == SlotStatus.SS_TAKEN ) then
 				teamTest = PreGame.GetTeam( i );
@@ -507,8 +507,8 @@ function DoCheckTeams()
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnHandicapTeam( selectionIndex, handicap )
 	local listingEntry = m_SlotInstances[selectionIndex];
 
@@ -522,8 +522,8 @@ function OnHandicapTeam( selectionIndex, handicap )
 	Network.BroadcastPlayerInfo();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnPlayerName( selectionIndex, id )
 	local playerID = GetPlayerIDBySelectionIndex(selectionIndex);
 	if (id == 0) then 
@@ -540,10 +540,10 @@ function OnPlayerName( selectionIndex, id )
 
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetSlotToHuman(playerID)
-	-- Sets the given playerID slot to be human. Assumes that slot hasn't already been done so.
+
 	PreGame.SetSlotStatus( playerID, SlotStatus.SS_TAKEN );
 	PreGame.SetHandicap( playerID, 3 );
 	if (PreGame.GetNickName(playerID) == "") then
@@ -552,47 +552,47 @@ function SetSlotToHuman(playerID)
 end
 
 function OnSlotType( playerID, id )
-	-- NOTE: Slot type pulldowns store the slot's playerID rather than the selection Index in their voids.
-	--print("OnSlotType ID:" .. id);
-	--print("	Player ID:" .. playerID);
-	local resetReadyStatus = false; -- In most cases, changing a slottype resets the player's ready status.
+
+
+
+	local resetReadyStatus = false;
 
 	if(id == g_slotTypeData["TXT_KEY_SLOTTYPE_OPEN"].index) then
-		-- TXT_KEY_SLOTTYPE_OPEN - Open human player slot.
+
 		if(not Network.IsPlayerConnected(playerID)) then
-			-- Can't open a slot occupied by a human.
+
 			PreGame.SetSlotStatus( playerID, SlotStatus.SS_OPEN );
 			PreGame.SetSlotClaim( playerID, SlotClaim.SLOTCLAIM_ASSIGNED );		
 			resetReadyStatus = true;
 		end
 	elseif(id == g_slotTypeData["TXT_KEY_PLAYER_TYPE_HUMAN"].index) then
-		-- TXT_KEY_PLAYER_TYPE_HUMAN
+
 		if(PreGame.GetSlotStatus( playerID ) ~= SlotStatus.SS_TAKEN) then
 			SetSlotToHuman(playerID);
 			resetReadyStatus = true;
 		end
 	elseif(id == g_slotTypeData["TXT_KEY_SLOTTYPE_HUMANREQ"].index) then
-		-- TXT_KEY_SLOTTYPE_HUMANREQ 
+
 		if(not Network.IsPlayerConnected(playerID)) then
-			-- Don't open the slot if someone is already occupying it.
+
 			PreGame.SetSlotStatus( playerID, SlotStatus.SS_OPEN );	
 			resetReadyStatus = true;
 		elseif(Network.IsPlayerConnected(playerID) and PreGame.GetSlotStatus( playerID ) == SlotStatus.SS_OBSERVER) then
-			-- Setting human required on an human occupied observer slot switches them to normal player mode.
+
 			SetSlotToHuman(playerID);
 			resetReadyStatus = true;
 		end
 		PreGame.SetSlotClaim( playerID, SlotClaim.SLOTCLAIM_RESERVED );
 	elseif(id == g_slotTypeData["TXT_KEY_SLOTTYPE_AI"].index) then
-		-- TXT_KEY_SLOTTYPE_AI
+
 		local bCanEnableAISlots = PreGame.GetMultiplayerAIEnabled();
 		if(bCanEnableAISlots and not Network.IsPlayerConnected(playerID)) then
-			-- only switch to AI if AI are enabled in multiplayer.
+
 			PreGame.SetSlotStatus( playerID, SlotStatus.SS_COMPUTER );
     	PreGame.SetHandicap( playerID, 1 );
     	resetReadyStatus = true;
 			if ( PreGame.IsHotSeatGame() ) then
-				-- Reset so the player can force a rebuild
+
 				PreGame.SetNickName( playerID, "" );
 				PreGame.SetLeaderName( playerID, "" );
 				PreGame.SetCivilizationDescription( playerID, "" );
@@ -601,11 +601,11 @@ function OnSlotType( playerID, id )
 			end
 		end
 	elseif(id == g_slotTypeData["TXT_KEY_SLOTTYPE_OBSERVER"].index) then
-		-- TXT_KEY_SLOTTYPE_OBSERVER
+
 		PreGame.SetSlotStatus( playerID, SlotStatus.SS_OBSERVER );
 		resetReadyStatus = true;
 	elseif(id == g_slotTypeData["TXT_KEY_SLOTTYPE_CLOSED"].index) then
-		-- TXT_KEY_SLOTTYPE_CLOSED
+
 		if(not Network.IsPlayerConnected(playerID)) then
 			PreGame.SetSlotStatus( playerID, SlotStatus.SS_CLOSED );
 			PreGame.SetSlotClaim( playerID, SlotClaim.SLOTCLAIM_ASSIGNED );
@@ -622,22 +622,22 @@ function OnSlotType( playerID, id )
 end
 
 
--------------------------------------------------
--- Refresh Player List
--------------------------------------------------
+
+
+
 function RefreshPlayerList()
     m_HostID  = Matchmaking.GetHostID();
     m_bIsHost = Matchmaking.IsHost();
 	m_bLaunchReady = true;
 	
-	-- Get the Current Player List
+
 	local playerTable = Matchmaking.GetPlayerList();
 	
 	for i = 1, #m_SlotInstances do
 		m_SlotInstances[i].Root:SetHide( true );
 	end
 
-	-- Display Each Player
+
 	if( playerTable ) then
 		for i, playerInfo in ipairs( playerTable ) do
 		  local playerID = playerInfo.playerID;
@@ -656,7 +656,7 @@ function RefreshPlayerList()
 	Controls.SlotStack:ReprocessAnchoring();
 	Controls.ListingScrollPanel:CalculateInternalSize();
 
-	-- Keep ban column in sync when slots are added/removed/retyped.
+
 	if Draft_RefreshBanUI ~= nil then
 		Draft_RefreshBanUI();
 	end
@@ -666,23 +666,23 @@ function RefreshPlayerList()
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function UpdatePlayer( slotInstance, playerInfo )
 
 	local bIsPitboss = PreGame.GetGameOption("GAMEOPTION_PITBOSS");
 	
-	-- Player Listing Entry
+
 	if(slotInstance ~= nil) then
 		slotInstance.Root:SetHide( false );
 
 		local playerName = playerInfo.playerName or Locale.ConvertTextKey( "TXT_KEY_MULTIPLAYER_DEFAULT_PLAYER_NAME", playerID + 1);
 		local playerID   = playerInfo.playerID;
 
-		--------------------------------------------------------------
-		-- Handle Civ Info
+
+
 		
-        --slotInstance.Portrait
+
         
 		local civIndex = PreGame.GetCivilization( playerID );
 		local activeCivSlot = (PreGame.GetSlotStatus( playerID ) == SlotStatus.SS_COMPUTER 
@@ -690,7 +690,7 @@ function UpdatePlayer( slotInstance, playerInfo )
 		if( civIndex ~= -1 and activeCivSlot ) then
 			civ = GameInfo.Civilizations[ civIndex ];
 
-			-- Use the Civilization_Leaders table to cross reference from this civ to the Leaders table
+
 			local leader = GameInfo.Leaders[GameInfo.Civilization_Leaders( "CivilizationType = '" .. civ.Type .. "'" )().LeaderheadType];
 			local leaderDescription = leader.Description;
 			
@@ -704,8 +704,8 @@ function UpdatePlayer( slotInstance, playerInfo )
 			end
 		else   
 			if ( not activeCivSlot or PreGame.IsCivilizationKeyAvailable( playerID ) ) then
-				--------------------------------------------------------------
-				-- Random Civ             
+
+
 				slotInstance.CivLabel:LocalizeAndSetText( "TXT_KEY_RANDOM_LEADER" );
 				slotInstance.CivLabel:LocalizeAndSetToolTip( "" );
 
@@ -715,8 +715,8 @@ function UpdatePlayer( slotInstance, playerInfo )
 					Draft_ApplyLeaderPortraitHelp(slotInstance.PortraitButton, -1, slotInstance.PortraitHoverAnim);
 				end
 			else
-				--------------------------------------------------------------
-				-- A player has chosen a civilization we don't have access to
+
+
 				slotInstance.CivLabel:LocalizeAndSetText( "TXT_KEY_UNAVAILABLE_LEADER" );
 				slotInstance.CivLabel:LocalizeAndSetToolTip( "TXT_KEY_UNAVAILABLE_LEADER_HELP", Locale.ConvertTextKey( PreGame.GetCivilizationPackageTextKey( playerID ) ) );
 
@@ -734,36 +734,36 @@ function UpdatePlayer( slotInstance, playerInfo )
 			Controls.LocalReadyCheck:LocalizeAndSetToolTip( "TXT_KEY_MP_READY_CHECK_UNAVAILABLE_DATA_HELP" );				
 		end
 
-		--------------------------------------------------------------
-		-- Set Team
-		local teamID = PreGame.GetTeam(playerID) + 1; -- Real programmers count from zero.
+
+
+		local teamID = PreGame.GetTeam(playerID) + 1;
 		slotInstance.TeamLabel:LocalizeAndSetText( "TXT_KEY_MULTIPLAYER_DEFAULT_TEAM_NAME", teamID );
-		--------------------------------------------------------------
+
 		
-		--------------------------------------------------------------
-		-- Set Handicap
+
+
 		local tHandicap = GameInfo.HandicapInfos( "ID = '" .. PreGame.GetHandicap( playerID ) .. "'" )();
 		if (tHandicap ~= nil) then
 			slotInstance.HandicapLabel:LocalizeAndSetText( tHandicap.Description );
 		end
-		--------------------------------------------------------------
-		
-		--------------------------------------------------------------
-		-- Update Turn Status
-		UpdateTurnStatusForPlayerID(playerID);
-		--------------------------------------------------------------
 
-		--------------------------------------------------------------
-		-- Set Slot Type
+		
+
+
+		UpdateTurnStatusForPlayerID(playerID);
+
+
+
+
 		local slotTypeStr = GetSlotTypeString(playerID);
 		slotInstance.SlotTypeLabel:LocalizeAndSetText( slotTypeStr );
 		slotInstance.SlotTypeLabel:LocalizeAndSetToolTip( g_slotTypeData[slotTypeStr].tooltip );		
-		--------------------------------------------------------------
+
 		
-		-------------------------------------------------------------
-		-- Refresh slottype pulldown
+
+
 		PopulateSlotTypePulldown( slotInstance.SlotTypePulldown, playerID, g_slotTypeOptions );
-		-------------------------------------------------------------
+
 	
         local bIsHuman  = (PreGame.GetSlotStatus( playerID ) == SlotStatus.SS_TAKEN);
         local bIsLocked = (PreGame.GetSlotClaim( playerID ) == SlotClaim.SLOTCLAIM_RESERVED) or
@@ -771,7 +771,7 @@ function UpdatePlayer( slotInstance, playerInfo )
         local bIsClosed = (PreGame.GetSlotStatus( playerID ) == SlotStatus.SS_CLOSED);
         local bIsObserver = PreGame.GetSlotStatus( playerID ) == SlotStatus.SS_OBSERVER;
 
-				-- You can't change this slot's options.
+
         local bIsDisabled = ( (PreGame.GetSlotStatus( playerID ) == SlotStatus.SS_CLOSED) or 
 															(PreGame.GetSlotStatus( playerID ) == SlotStatus.SS_OBSERVER) or
 															((PreGame.GetSlotStatus( playerID ) == SlotStatus.SS_OPEN)
@@ -781,8 +781,8 @@ function UpdatePlayer( slotInstance, playerInfo )
 																			 and PreGame.GetSlotClaim( playerID ) == SlotClaim.SLOTCLAIM_RESERVED);
         local bIsHotSeat = PreGame.IsHotSeatGame();
         local bIsReady;
-        local bCantChangeCiv;		-- Can't change civilization
-        local bCantChangeTeam;	-- can't change teams
+        local bCantChangeCiv;
+        local bCantChangeTeam;
         
 				local bSlotTypeDisabled;
 
@@ -791,28 +791,28 @@ function UpdatePlayer( slotInstance, playerInfo )
 												 slotInstance.PlayerNameLabel:GetOffsetX(), playerName); 
 					slotInstance.InvitePulldown:GetButton():SetText( playerName );
 					
-					-- You can only change the slot's civ/team if you're in hotseat mode.
+
 					if( bIsHotSeat ) then 
-						bIsReady = PreGame.IsReady( m_HostID ); -- same ready status as host (local player)
+						bIsReady = PreGame.IsReady( m_HostID );
 						bCantChangeCiv = PreGame.IsReady( m_HostID );
 						bCantChangeTeam = PreGame.IsReady( m_HostID );
 					else
 						bIsReady = PreGame.IsReady( playerID );
 						bCantChangeCiv = true;
-						bCantChangeTeam = not m_bIsHost or PreGame.IsReady( m_HostID ); -- The host can override human's team selection
+						bCantChangeTeam = not m_bIsHost or PreGame.IsReady( m_HostID );
 					end
 					
-					bSlotTypeDisabled = not m_bIsHost or PreGame.IsReady( m_HostID ); -- The host can override slot types
+					bSlotTypeDisabled = not m_bIsHost or PreGame.IsReady( m_HostID );
         else
-					bIsReady = not bIsEmptyHumanRequiredSlot and -- Empty human required slots block game readiness.
-											(bIsObserver and (PreGame.IsReady( playerID ) or (not Network.IsPlayerConnected( playerID ) and PreGame.IsReady( m_HostID ))) or -- human observers manually ready up if occupied or ready up with the host if empty.
-											(not bIsObserver and PreGame.IsReady( m_HostID )) or -- non-observers share ready status with the host.
-											(PreGame.GetLoadFileName() ~= "" and PreGame.GetSlotStatus( playerID ) == SlotStatus.SS_CLOSED)); -- prevent closed player slots from blocking game startup when loading save games -tsmith
+					bIsReady = not bIsEmptyHumanRequiredSlot and
+											(bIsObserver and (PreGame.IsReady( playerID ) or (not Network.IsPlayerConnected( playerID ) and PreGame.IsReady( m_HostID ))) or
+											(not bIsObserver and PreGame.IsReady( m_HostID )) or
+											(PreGame.GetLoadFileName() ~= "" and PreGame.GetSlotStatus( playerID ) == SlotStatus.SS_CLOSED));
             
 					if( m_bIsHost ) then
 						bSlotTypeDisabled = PreGame.IsReady( m_HostID );
 						
-						-- Host can't change the team/civ of open/closed slots.
+
 						bCantChangeCiv = bIsDisabled or PreGame.IsReady( m_HostID ) or bIsEmptyHumanRequiredSlot;
 						bCantChangeTeam = bIsDisabled or PreGame.IsReady( m_HostID );
 					else
@@ -822,12 +822,12 @@ function UpdatePlayer( slotInstance, playerInfo )
           end
           
           if(Network.IsPlayerConnected(playerID)) then 
-						-- Use the player name if a player is network connected to the game (observers only)
+
           	TruncateString(slotInstance.PlayerNameLabel, slotInstance.PlayerNameBox:GetSizeX() - 
 							slotInstance.PlayerNameLabel:GetOffsetX(), playerName); 
 						slotInstance.InvitePulldown:GetButton():SetText( playerName );
           else
-						-- The default for non-humans is to display the slot type as the player name.
+
 						local playerNameTextKey = GetSlotTypeString(playerID);
 						TruncateString(slotInstance.PlayerNameLabel, slotInstance.PlayerNameBox:GetSizeX() - 
 												 slotInstance.PlayerNameLabel:GetOffsetX(), Locale.ConvertTextKey(playerNameTextKey)); 
@@ -836,13 +836,13 @@ function UpdatePlayer( slotInstance, playerInfo )
         end
         
         if(PreGame.GameStarted()) then 
-					-- Can't change anything after the game has been started.
+
 					bCantChangeCiv = true;
 					bCantChangeTeam = true;
 					bSlotTypeDisabled = true;
 				end
         
-				-- You can't auto launch the game if someone isn't ready.
+
         if( not bIsReady ) then
 					m_bLaunchReady = false;
         end
@@ -869,12 +869,12 @@ function UpdatePlayer( slotInstance, playerInfo )
 		slotInstance.PlayerNameLabel:SetHide( false );
 	  slotInstance.InvitePulldown:SetHide( true );
 		   
-		-- Note: You can't change slot types, civs, or teams after the game has started.   
+
     slotInstance.CivPulldown:SetHide( bCantChangeCiv or (PreGame.GetLoadFileName() ~= "") or PreGame.GameStarted() );
     slotInstance.TeamPulldown:SetHide( bCantChangeTeam or (PreGame.GetLoadFileName() ~= "") or PreGame.GameStarted() );
     slotInstance.SlotTypePulldown:SetHide( bSlotTypeDisabled or (PreGame.GetLoadFileName() ~= "") or PreGame.GameStarted() );
     
-    -- Hide Civ/Team labels for open/closed slots
+
     slotInstance.TeamLabel:SetHide(bIsDisabled);
 		slotInstance.CivLabel:SetHide(bIsDisabled); 
 
@@ -888,52 +888,52 @@ function UpdatePlayer( slotInstance, playerInfo )
 			slotInstance.PingTimeLabel:SetHide( true );
 		end
 
-        --slotInstance.DisableBlock:SetHide( not bIsDisabled );
+
         
 		if( m_bIsHost ) then
 			if( bIsHotSeat ) then
 				slotInstance.KickButton:SetHide( true );
 				slotInstance.EditButton:SetHide( bIsDisabled or not bIsHuman );				
-				--slotInstance.EnableCheck:SetHide( false );
+
 				slotInstance.PingTimeLabel:SetHide( true );
 				slotInstance.LockCheck:SetHide( true );				
 			else
-				--slotInstance.EnableCheck:SetHide( bIsHuman or bCantChangeCiv );
+
 				slotInstance.LockCheck:SetHide( bIsHuman or bCantChangeCiv );
 				slotInstance.KickButton:SetHide( not bIsHuman and not Network.IsPlayerConnected(playerID));
 				slotInstance.EditButton:SetHide( true );
 			end
 		else
-			--slotInstance.EnableCheck:SetHide( true );
+
 			slotInstance.LockCheck:SetHide( true );
       slotInstance.KickButton:SetHide( true );
 			slotInstance.EditButton:SetHide( true );
 		end
 		
-		-- Handle swap button highlight
-		local highlightSwap = (Network.GetPlayerDesiredSlot(Matchmaking.GetLocalID()) == playerID) -- We want to switch to this slot
-			or (Network.GetPlayerDesiredSlot(playerID) == Matchmaking.GetLocalID()); -- They want to switch with us.
+
+		local highlightSwap = (Network.GetPlayerDesiredSlot(Matchmaking.GetLocalID()) == playerID)
+			or (Network.GetPlayerDesiredSlot(playerID) == Matchmaking.GetLocalID());
 		slotInstance.SwapButtonHighAlpha:SetHide( not highlightSwap );
     slotInstance.SwapButton:SetHide( bIsHotSeat or PreGame.IsReady(Matchmaking.GetLocalID()) or (PreGame.GetSlotStatus(playerID) == SlotStatus.SS_CLOSED));  
         
-        --TEMP: S.S, hiding lock since it doesn't do anything and too many people believe it's the cause of MP probs.
+
         slotInstance.LockCheck:SetHide( true );
         
         slotInstance.HostIcon:SetHide( playerID ~= m_HostID );		
         
-     -- Player connected indicator
+
     if(bIsHuman or bIsObserver) then
 			slotInstance.ConnectionStatus:SetHide(false);
 			if(Network.IsPlayerHotJoining(playerID)) then
-				-- Player is hot joining.
+
 				slotInstance.ConnectionStatus:SetTextureOffsetVal(0,32);
 				slotInstance.ConnectionStatus:SetToolTipString( PlayerConnectingStr );
 			elseif(Network.IsPlayerConnected(playerID)) then
-				-- fully connected
+
 				slotInstance.ConnectionStatus:SetTextureOffsetVal(0,0);
 				slotInstance.ConnectionStatus:SetToolTipString( PlayerConnectedStr );
 			else
-				-- Not connected
+
 				slotInstance.ConnectionStatus:SetTextureOffsetVal(0,96);
 				slotInstance.ConnectionStatus:SetToolTipString( PlayerNotConnectedStr );		
 			end		
@@ -947,7 +947,7 @@ function UpdatePlayer( slotInstance, playerInfo )
 	end
 end
 
-----------------------------------------------
+
 function UpdateTurnStatusForPlayerID( iPlayerID )
 	if(Players ~= nil) then
 		local pPlayer = Players[iPlayerID];
@@ -962,18 +962,18 @@ function UpdateTurnStatusForPlayerID( iPlayerID )
 					break;
 				end
 			end
-			if(slotInstance ~= nil) then -- minor civs don't have slot instances.
+			if(slotInstance ~= nil) then
 				UpdateTurnStatus(pPlayer, slotInstance.Icon, slotInstance.ActiveTurnAnim, m_SlotInstances);
 			end
 		end
 	end
 end
 
--- Here are all the events for which we need to update a given player's turn status.
+
 Events.AIProcessingStartedForPlayer.Add( UpdateTurnStatusForPlayerID );
 Events.AIProcessingEndedForPlayer.Add( UpdateTurnStatusForPlayerID );
 
-----------------------------------------------
+
 function UpdateTurnStatusForAll()
 	UpdateTurnStatusForPlayerID(Matchmaking.GetLocalID());
 	for iSlot, slotInstance in pairs( m_SlotInstances ) do
@@ -983,29 +983,29 @@ end
 Events.NewGameTurn.Add( UpdateTurnStatusForAll );
 Events.RemotePlayerTurnEnd.Add( UpdateTurnStatusForAll );
 
-----------------------------------------------
 
 
 
--------------------------------------------------
--------------------------------------------------
+
+
+
 function UpdateLocalPlayer( playerInfo )
-	--------------------------------------------------------------
-	-- Fill In Slot Info
+
+
 	local playerName = playerInfo.playerName or Locale.ConvertTextKey( "TXT_KEY_MULTIPLAYER_DEFAULT_PLAYER_NAME", Matchmaking.GetLocalID() + 1);
 	
 	Controls.RemoveButton:SetHide( true );
-    --------------------------------------------------------------
-    -- Get player civ
+
+
 	local civIndex = PreGame.GetCivilization( Matchmaking.GetLocalID() );
 	local activeCivSlot = (PreGame.GetSlotStatus( Matchmaking.GetLocalID() ) == SlotStatus.SS_COMPUTER 
 													or PreGame.GetSlotStatus( Matchmaking.GetLocalID() ) == SlotStatus.SS_TAKEN);
 	if( civIndex ~= -1 and activeCivSlot ) then
-		--------------------------------------------------------------
-		-- Selected a Civ
+
+
 		civ = GameInfo.Civilizations[ civIndex ];
 
-		-- Use the Civilization_Leaders table to cross reference from this civ to the Leaders table
+
 		local leader = GameInfo.Leaders( "Type = '" .. GameInfo.Civilization_Leaders( "CivilizationType = '" .. civ.Type .. "'" )().LeaderheadType .. "'" )();
 		local leaderDescription = leader.Description;
 		
@@ -1017,8 +1017,8 @@ function UpdateLocalPlayer( playerInfo )
 			Draft_ApplyLeaderPortraitHelp(Controls.PortraitButton, civIndex, Controls.PortraitHoverAnim);
 		end
 	else   
-		--------------------------------------------------------------
-		-- Random Civ             
+
+
         
 		Controls.CivLabel:LocalizeAndSetText( "TXT_KEY_RANDOM_LEADER" );
 		IconHookup( 22, 64, "LEADER_ATLAS", Controls.Portrait );
@@ -1027,40 +1027,40 @@ function UpdateLocalPlayer( playerInfo )
 			Draft_ApplyLeaderPortraitHelp(Controls.PortraitButton, -1, Controls.PortraitHoverAnim);
 		end
 	end
-	--------------------------------------------------------------
+
 	
-	--------------------------------------------------------------
-	-- Determine turn completed status.
+
+
 	UpdateTurnStatusForPlayerID(Matchmaking.GetLocalID());
-  --------------------------------------------------------------
+
 	
-	--------------------------------------------------------------
-	-- Set Team
-	local teamID = PreGame.GetTeam(Matchmaking.GetLocalID()) + 1; -- Real programmers count from zero.
+
+
+	local teamID = PreGame.GetTeam(Matchmaking.GetLocalID()) + 1;
 	Controls.TeamLabel:LocalizeAndSetText( "TXT_KEY_MULTIPLAYER_DEFAULT_TEAM_NAME", teamID );
-	--------------------------------------------------------------
+
 	
-	--------------------------------------------------------------
-	-- Set Handicap
+
+
 	Controls.HandicapLabel:LocalizeAndSetText( GameInfo.HandicapInfos( "ID = '" .. PreGame.GetHandicap( Matchmaking.GetLocalID() ) .. "'" )().Description );
-	--------------------------------------------------------------
+
 	
-	-------------------------------------------------------------
-	-- Set Slot Type
+
+
 	local slotTypeStr = GetSlotTypeString(Matchmaking.GetLocalID());
 	Controls.SlotTypeLabel:LocalizeAndSetText( slotTypeStr );
 	Controls.SlotTypeLabel:LocalizeAndSetToolTip( g_slotTypeData[slotTypeStr].tooltip );		
-	--------------------------------------------------------------
+
 	
-	-------------------------------------------------------------
-	-- Refresh slottype pulldown
+
+
 	PopulateSlotTypePulldown( Controls.SlotTypePulldown, Matchmaking.GetLocalID(), g_localSlotTypeOptions );
-	-------------------------------------------------------------
+
 	
 	local bIsHotSeat = PreGame.IsHotSeatGame();
 	local bIsObserver = ( (PreGame.GetSlotStatus( Matchmaking.GetLocalID() ) == SlotStatus.SS_OBSERVER) );
-	-----------------------------------------------------------
-	-- Ready Status
+
+
 	local bIsReady = PreGame.IsReady( Matchmaking.GetLocalID() );
 	Controls.LocalReadyCheck:SetHide(false);
 	if( not bIsReady ) then
@@ -1071,7 +1071,7 @@ function UpdateLocalPlayer( playerInfo )
 	local bCantChangeTeam = bIsReady or (PreGame.GetLoadFileName() ~= "") or bIsObserver or PreGame.GameStarted();
 	local bSlotTypeDisabled = bIsReady or (PreGame.GetLoadFileName() ~= "") or bIsHotSeat or Network.IsDedicatedServer() or PreGame.GameStarted();
 	
-	-- Hide Civ/Team/Handicap labels for observers
+
   Controls.TeamLabel:SetHide(bIsObserver);
 	Controls.CivLabel:SetHide(bIsObserver); 
 	Controls.HandicapLabel:SetHide(bIsObserver);
@@ -1087,18 +1087,18 @@ function UpdateLocalPlayer( playerInfo )
 	Controls.SlotTypePulldown:SetHide( bSlotTypeDisabled );
 	Controls.HandicapPulldown:SetHide( bCantChangeCiv );
   Controls.HostIcon:SetHide( Matchmaking.GetLocalID() ~= m_HostID );
-	---------------------------------------------------------
+
 	
 end
 
 
 
--------------------------------------------------
--- Back Button Handler
--------------------------------------------------
+
+
+
 function BackButtonClick()
 	if (Matchmaking.IsLaunchingGame()) then
-		return;	-- Can't exit while launching.
+		return;
 	end
 	HandleExitRequest();
 end
@@ -1106,9 +1106,9 @@ Controls.BackButton:RegisterCallback( Mouse.eLClick, BackButtonClick );
 Controls.HotJoinCancelButton:RegisterCallback( Mouse.eLClick, BackButtonClick );
 
 
--------------------------------------------------
--- Lobby chat history (host-synced, transferred into in-game chat on launch)
--------------------------------------------------
+
+
+
 function ClearLobbyChat()
 	Controls.ChatStack:DestroyAllChildren();
 	g_ChatInstances = {};
@@ -1198,7 +1198,7 @@ function RequestLobbyChatHistory()
 	if( PreGame.IsHotSeatGame() or Matchmaking.IsHost() or g_bRequestedLobbyChatHistory ) then
 		return;
 	end
-	-- Hotjoin into a started game: host is already in DiploCorner, not the lobby.
+
 	if( PreGame.GameStarted() ) then
 		return;
 	end
@@ -1206,9 +1206,9 @@ function RequestLobbyChatHistory()
 	Network.SendChat( LOBBY_CHAT_REQ );
 end
 
--------------------------------------------------
--- ui_check.bat missing: announce in lobby chat
--------------------------------------------------
+
+
+
 function SendUiCheckNotLaunchedIfNeeded()
 	if( PreGame.IsHotSeatGame() or g_bSentUiCheckWarning ) then
 		return;
@@ -1281,18 +1281,18 @@ function DisplayLobbyChatMessage( fromPlayer, text, playerName, bSkipSound, bFor
 	end
 end
 
--------------------------------------------------
--- Leave the Game
--------------------------------------------------
+
+
+
 function HandleExitRequest()
 	
-	StopCountdown(); -- Make sure there is no countdown going.
+	StopCountdown();
 	ClearLobbyChat();
 
-	-- Full draft wipe when leaving the lobby screen.
-	-- Host backing out voids the lobby for everyone; clients only clear local UI.
-	-- Do NOT reset from disconnect/kick of other players (see Draft_OnPlayerKicked).
-	-- clearPersist=true so the next new lobby doesn't inherit PreGame draft options.
+
+
+
+
 	local isHost = Matchmaking.IsHost();
 	if Draft_ResetState ~= nil then
 		Draft_ResetState(true);
@@ -1300,7 +1300,7 @@ function HandleExitRequest()
 	
 	Matchmaking.LeaveMultiplayerGame();
 	if ( not PreGame.IsHotSeatGame() ) then
-		-- Refresh the lobby as we enter it
+
 		if ( PreGame.IsInternetGame() and not isHost ) then
 			Matchmaking.RefreshInternetGameList();
 		elseif ( not PreGame.IsInternetGame() and not isHost ) then
@@ -1308,8 +1308,8 @@ function HandleExitRequest()
 		end
 	end
 	if PreGame.GetLoadFileName() ~= "" then
-		-- If there is a load file name, then we may have went in to the staging room with a loaded game
-		-- This can set a lot of things we don't want on at this time.
+
+
 		
 		local bIsInternet = PreGame.IsInternetGame();
 		local eGameType = PreGame.GetGameType();
@@ -1325,9 +1325,9 @@ function HandleExitRequest()
 end
 
 
-----------------------------------------------------------------
--- Connection Established
-----------------------------------------------------------------
+
+
+
 function OnConnect( playerID )
     if( ContextPtr:IsHidden() == false ) then
 
@@ -1340,28 +1340,28 @@ end
 Events.ConnectedToNetworkHost.Add( OnConnect );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnDisconnectOrPossiblyUpdate()
 	if( ContextPtr:IsHidden() == false ) then
-		BuildPlayerNames(); -- Player names need to be rebuilt because this event could have been for a player ID swap.
+		BuildPlayerNames();
 		UpdateDisplay();
 		UpdatePageTabView(true);
 		ShowHideInviteButton();
 		ShowHideSaveButton();
-		CheckGameAutoStart(); -- Player disconnects can affect the game start countdown.
+		CheckGameAutoStart();
 	end
 end
 Events.MultiplayerGamePlayerUpdated.Add( OnDisconnectOrPossiblyUpdate );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnDisconnect( playerID )
     if( ContextPtr:IsHidden() == false ) then
 			if(Network.IsPlayerKicked(playerID)) then
 				OnChat( playerID, -1, Locale.ConvertTextKey( "TXT_KEY_KICKED" ) );
-				-- Host clears that player's bans; normal disconnect keeps slot bans.
+
 				if Draft_OnPlayerKicked ~= nil then
 					Draft_OnPlayerKicked(playerID);
 				end
@@ -1373,8 +1373,8 @@ function OnDisconnect( playerID )
 end
 Events.MultiplayerGamePlayerDisconnected.Add( OnDisconnect );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnHostMigration( playerID )
     if( ContextPtr:IsHidden() == false ) then
     	OnChat( playerID, -1, Locale.ConvertTextKey( "TXT_KEY_HOST_MIGRATION" ) );
@@ -1383,26 +1383,26 @@ end
 Events.MultiplayerGameHostMigration.Add( OnHostMigration );
 
 
-----------------------------------------------------------------
--- UPDATE CURRENT SETTINGS
-----------------------------------------------------------------
+
+
+
 function UpdateDisplay()
 	if( ContextPtr:IsHidden() == false ) then
 		UpdateOptions();
 		RefreshPlayerList();
 		DoCheckTeams();
 
-		-- Allow the host to manually start the game when loading a game.
+
 		if(m_bIsHost and PreGame.GetLoadFileName() ~= "" and not IsInGameScreen()) then
 			Controls.LaunchButton:SetHide( false );	
 			Controls.LaunchButton:SetDisabled( not Network.IsEveryoneConnected() );
 			
-			-- Set launch button tool tip.
+
 			if ( not Network.IsEveryoneConnected() ) then
-				-- Launch button is blocked by a player joining the game.
+
 				Controls.LaunchButton:LocalizeAndSetToolTip( "TXT_KEY_LAUNCH_GAME_BLOCKED_PLAYER_JOINING" );
 			else
-				-- Launch button is functional.  No tooltip needed.
+
 				Controls.LaunchButton:SetToolTipString();
 			end	        
 		else
@@ -1416,13 +1416,13 @@ function UpdateDisplay()
 end
 
 
--------------------------------------------------
--- CHECK FOR GAME AUTO START
--------------------------------------------------
-function CheckGameAutoStart()
--- Check to see if we should start/stop the multiplayer game.
 
-	-- Check to make sure we don't have too many players for this map.
+
+
+function CheckGameAutoStart()
+
+
+
 	local totalPlayers = 0;
 	for i = 0, GameDefines.MAX_MAJOR_CIVS do
 		if( PreGame.GetSlotStatus( i ) == SlotStatus.SS_COMPUTER or PreGame.GetSlotStatus( i ) == SlotStatus.SS_TAKEN ) then
@@ -1435,37 +1435,37 @@ function CheckGameAutoStart()
 	local bPlayerCountValid = (totalPlayers <= maxPlayers);
 		
 	if(m_bLaunchReady and m_bTeamsValid and bPlayerCountValid and not PreGame.GameStarted() and Network.IsEveryoneConnected()) then
-		-- Everyone has readied up and we can start.
+
 		if(PreGame.IsHotSeatGame()) then
-			-- Hotseat skips the countdown.
+
 			LaunchGame();
 		else
 			StartCountdown();
 		end
 	else
-		-- We can't autostart now, stop the countdown incase we started it earlier.
+
 		StopCountdown();
 	end
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnPreGameDirty()
     if( ContextPtr:IsHidden() == false ) then
-	    UpdateDisplay(); -- includes Draft_OnUpdateDisplay -> ban-ready PreGame pull
+	    UpdateDisplay();
 		UpdatePageTabView(true);
-		CheckGameAutoStart();  -- Check for autostart because this event could to due to a ready status changing.
+		CheckGameAutoStart();
 	end
 end
 Events.PreGameDirty.Add( OnPreGameDirty );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function UpdatePingTimeLabel( kLabel, playerID )
 	local iPingTime = Network.GetPingTime( playerID );
 	if (iPingTime >= 0) then
-		iPingTime = math.clamp(iPingTime, 0, 99999); --limit value to something that can be displayed in 5 chars.
+		iPingTime = math.clamp(iPingTime, 0, 99999);
 		kLabel:SetHide( false );
 		if (iPingTime == 0) then
 			kLabel:LocalizeAndSetText("TXT_KEY_STAGING_ROOM_UNDER_1_MS");
@@ -1482,15 +1482,15 @@ function UpdatePingTimeLabel( kLabel, playerID )
 		kLabel:SetHide( true );
 	end			
 end
--------------------------------------------------
--------------------------------------------------
+
+
 function OnPingTimesChanged()
     if( ContextPtr:IsHidden() == false and not PreGame.IsHotSeatGame()) then
 
-		-- Get the Current Player List
+
 		local playerTable = Matchmaking.GetPlayerList();
 		
-		-- Display Each Player
+
 		if( playerTable ) then
 			for i, playerInfo in ipairs( playerTable ) do
 				local playerID = playerInfo.playerID;
@@ -1513,9 +1513,9 @@ function OnPingTimesChanged()
 end
 Events.MultiplayerPingTimesChanged.Add( OnPingTimesChanged );
 
-----------------------------------------------------------------        
--- Input Handler
-----------------------------------------------------------------        
+
+
+
 function InputHandler( uiMsg, wParam, lParam )
 	if Draft_HandleInput ~= nil then
 		local handled = Draft_HandleInput( uiMsg, wParam, lParam );
@@ -1525,7 +1525,7 @@ function InputHandler( uiMsg, wParam, lParam )
 	end
 	if uiMsg == KeyEvents.KeyDown then
 		if wParam == Keys.VK_ESCAPE then
-			-- Prefer closing Civilopedia over leaving the lobby.
+
 			if Draft_CloseCivilopedia ~= nil and Draft_CloseCivilopedia() then
 				return true;
 			end
@@ -1544,8 +1544,8 @@ function InputHandler( uiMsg, wParam, lParam )
 end
 ContextPtr:SetInputHandler( InputHandler );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function UpdatePageTitle()
 	local bIsModding = (ContextPtr:LookUpControl("../.."):GetID() == "ModMultiplayerSelectScreen");
 	if(IsInGameScreen()) then
@@ -1560,11 +1560,11 @@ function UpdatePageTitle()
 		Controls.TitleLabel:LocalizeAndSetText( "{TXT_KEY_MULTIPLAYER_STAGING_ROOM:upper}" );
 	end
 end
--------------------------------------------------
--------------------------------------------------
+
+
 function UpdatePageTabView(bUpdateOnly)
 	if Draft_UpdatePageTabView ~= nil and g_DraftPageMode ~= nil then
-		-- Three-mode Players / Draft Rules / Options
+
 		if g_DraftPageMode == "options" then
 			m_bEditOptions = true;
 		elseif g_DraftPageMode == "draft" then
@@ -1625,11 +1625,11 @@ function UpdatePageTabView(bUpdateOnly)
 		PopulateMapSizePulldown();
 
 		RefreshMapScripts();	
-		PreGame.SetRandomMapScript(false);	-- Random map scripts is not supported in multiplayer
+		PreGame.SetRandomMapScript(false);
 		UpdateGameOptionsDisplay(bUpdateOnly);	
 	else
 		if (PreGame.IsHotSeatGame()) then
-			-- In case they changed the DLC
+
 			local prevCursor = UIManager:SetUICursor( 1 );
 			local bChanged = Modding.ActivateAllowedDLC();																		
 			UIManager:SetUICursor( prevCursor );
@@ -1638,8 +1638,8 @@ function UpdatePageTabView(bUpdateOnly)
 		end
 	end
 end
--------------------------------------------------
--------------------------------------------------
+
+
 function OnPlayersPageTab()
 	if (m_bEditOptions) then
 		m_bEditOptions = false;
@@ -1648,8 +1648,8 @@ function OnPlayersPageTab()
 end
 Controls.PlayersPageTab:RegisterCallback( Mouse.eLClick, OnPlayersPageTab );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnOptionsPageTab()
 	if (not m_bEditOptions) then
 		m_bEditOptions = true;
@@ -1658,20 +1658,20 @@ function OnOptionsPageTab()
 end
 Controls.OptionsPageTab:RegisterCallback( Mouse.eLClick, OnOptionsPageTab );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function ShowHideHandler( bIsHide, bIsInit )
 
-		--print("ShowHideHandler Hide: " .. tostring(bIsHide) .. " Init: " .. tostring(bIsInit));
-    -- Do not clear chat on hide: PushModal(..., true) for ConfirmKick temporarily hides
-    -- this screen and wiping chat there is what cleared the lobby on kick.
+
+
+
     
-    -- Create slot instances.
+
     if ( bIsInit ) then
 			CreateSlots();
 		end
     
-    -- Show background image if this is the ingame dedicated server screen.
+
     if( not bIsHide 
 			and IsInGameScreen() ) then
 			Controls.AtlasLogo:SetHide(false);
@@ -1680,8 +1680,8 @@ function ShowHideHandler( bIsHide, bIsInit )
     end
     
     if( not bIsHide ) then
-		-- Returning from Civilopedia (or other temporary overlays) must not run the full
-		-- lobby reinit — ActivateDLC / Draft_Init / BuildSlots wipe and rebuild the UI.
+
+
 		local lightReturn = (g_SkipStagingFullRefresh == true);
 		g_SkipStagingFullRefresh = false;
 
@@ -1703,25 +1703,25 @@ function ShowHideHandler( bIsHide, bIsInit )
 			PreGame.GetGameOption("GAMEOPTION_PITBOSS") == 1 and
 			OptionsManager.GetTurnNotifySmtpHost_Cached() ~= "" and
 			OptionsManager.GetTurnNotifySmtpPassword_Cached() == "" ) then
-			-- Display email smtp password prompt if we're hosting a pitboss game and the password is blank.
+
 			UIManager:PushModal(Controls.ChangeSmtpPassword, true);		
 		end
     
-		-- Activate only the DLC allowed for this MP game.  Mods will also deactivated/activate too.
+
 		if (not ContextPtr:IsHotLoad()) then
 			local prevCursor = UIManager:SetUICursor( 1 );
 			local bChanged = Modding.ActivateAllowedDLC();		
 			UIManager:SetUICursor( prevCursor );
 		
-			-- Send out an event to continue on, as the ActivateDLC may have swapped out the UI	
+
 			Events.SystemUpdateUI( SystemUpdateUIType.RestoreUI, "StagingRoom" );
 		end
 				
 		if ( PreGame.IsHotSeatGame() ) then		
-			-- If Hot Seat, just 'ready' the host
+
 			Controls.LocalReadyCheck:SetHide(true);
 			PreGame.SetReady( Matchmaking.GetLocalID() );
-			-- Hide the chat panel		
+
 			Controls.ChatBox:SetHide( true );
 		else
 			Controls.ChatBox:SetHide( false );
@@ -1735,12 +1735,12 @@ function ShowHideHandler( bIsHide, bIsInit )
 		ShowHideInviteButton();		
 		ShowHideStrategicViewButton();
 		UpdatePageTabView(true);
-		StopCountdown(); -- Make sure the countdown is stopped if we're toggling the hide status of the screen.
+		StopCountdown();
 			
 		AdjustScreenSize();
 	
 		ValidateCivSelections();
-   		BuildSlots();		-- Populate the civs for the slots.  This can change so it must be done every time.
+        BuildSlots();
         BuildPlayerNames();
 		if Draft_Init ~= nil then
 			Draft_Init();
@@ -1750,7 +1750,7 @@ function ShowHideHandler( bIsHide, bIsInit )
 		UIManager:SetUICursor( 0 );
 		RequestLobbyChatHistory();
 		SendUiCheckNotLaunchedIfNeeded();
-		-- Ban-ready is PreGame-synced (pulled in Draft_SyncBanScroll / PreGameDirty).
+
 		if( not PreGame.IsHotSeatGame() ) then
 			EnsureStagingUpdate();
 		end
@@ -1760,16 +1760,16 @@ end
 ContextPtr:SetShowHideHandler( ShowHideHandler );
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function UpdateOptions()
 
-	-- Set Game Name
+
 	local strGameName = Matchmaking.GetCurrentGameName();
 
 	Controls.NameLabel:SetText( strGameName );
 	
-	-- Game State Indicator
+
 	if( PreGame.GameStarted() ) then
 		Controls.HotJoinBox:SetHide( false );
 		Controls.LoadingBox:SetHide( true );	
@@ -1781,7 +1781,7 @@ function UpdateOptions()
 	  Controls.LoadingBox:SetHide( true );
 	end
 	
-	-- Set Max Turns if set
+
 	local maxTurns = PreGame.GetMaxTurns();
 	if(maxTurns == 0) then
 		Controls.MaxTurns:SetHide(true);
@@ -1790,7 +1790,7 @@ function UpdateOptions()
 		Controls.MaxTurns:SetText(Locale.ConvertTextKey("TXT_KEY_MAX_TURNS", maxTurns));
 	end
 	
-	-- Show turn timer value if set.
+
 	if(PreGame.GetGameOption("GAMEOPTION_END_TURN_TIMER_ENABLED") == 1) then
 		Controls.TurnTimer:SetHide(false);
 		local turnTimerStr = Locale.ConvertTextKey("TXT_KEY_MP_OPTION_TURN_TIMER");
@@ -1808,8 +1808,8 @@ function UpdateOptions()
 		Controls.TurnTimer:SetHide(true);
 	end
 			
-	-- Set Start Era
---	Controls.StartEraLabel:SetText( Locale.ConvertTextKey("TXT_KEY_START_ERA", Locale.ConvertTextKey(GameInfo.Eras[ PreGame.GetEra() ].Description)));
+
+
 	local eraInfo = GameInfo.Eras[PreGame.GetEra()];
 	if(eraInfo == nil) then
 		Controls.StartEraLabel:SetText( Locale.ConvertTextKey("TXT_KEY_MISC_UNKNOWN") );
@@ -1817,12 +1817,12 @@ function UpdateOptions()
 		Controls.StartEraLabel:SetText( Locale.ConvertTextKey( GameInfo.Eras[ PreGame.GetEra() ].Description ) );		
 	end
 	
-	-- Set Turn Mode
+
 	local turnModeStr = GetTurnModeStr();
 	Controls.TurnModeLabel:LocalizeAndSetText(turnModeStr);
 	Controls.TurnModeLabel:LocalizeAndSetToolTip(GetTurnModeToolTipStr(turnModeStr));
 
-	-- Set Game Map Type
+
 	if( not PreGame.IsRandomMapScript() ) then   
 		local mapScriptFileName = Locale.ToLower(PreGame.GetMapScript());
 		local mapScript = nil;
@@ -1841,7 +1841,7 @@ function UpdateOptions()
 				Controls.MapTypeLabel:LocalizeAndSetText(mapInfo.Name);
 				Controls.MapTypeLabel:LocalizeAndSetToolTip(mapInfo.Description);
 			else
-				-- print("Cannot get info for map or map script - " .. tostring(mapScriptFileName));
+
 				local fileTitle = Path.GetFileName(PreGame.GetMapScript());
 				if (fileTitle ~= nil) then
 					Controls.MapTypeLabel:SetText("[COLOR_RED]" .. fileTitle .. "[ENDCOLOR]");
@@ -1856,7 +1856,7 @@ function UpdateOptions()
 		Controls.MapTypeLabel:LocalizeAndSetToolTip( "TXT_KEY_RANDOM_MAP_SCRIPT_HELP" );
 	end
 	
-	-- Set Map Size
+
 	if(not PreGame.IsRandomWorldSize() ) then
 		info = GameInfo.Worlds[ PreGame.GetWorldSize() ];
 		Controls.MapSizeLabel:LocalizeAndSetText( info.Description );
@@ -1866,17 +1866,17 @@ function UpdateOptions()
 		Controls.MapSizeLabel:LocalizeAndSetToolTip( "TXT_KEY_RANDOM_MAP_SIZE_HELP" );
 	end
 	
-    -- Set Game Pace Slot
+
     info = GameInfo.GameSpeeds[ PreGame.GetGameSpeed() ];
 	Controls.GameSpeedLabel:LocalizeAndSetText( info.Description );
 	Controls.GameSpeedLabel:LocalizeAndSetToolTip( info.Help );
 	
-	-- Game Options
+
 	g_AdvancedOptionIM:ResetInstances();
 	g_AdvancedOptionsList = {};
 	
     local count = 1;
-    -- When there's 8 or more players connected to us (9 player game), warn that it's an unsupported game.
+
     
     local totalPlayers = 0;
     for i = 0, GameDefines.MAX_MAJOR_CIVS do
@@ -1887,7 +1887,7 @@ function UpdateOptions()
 		end
 	end
 
-	-- Is it a private game?
+
     if(PreGame.IsPrivateGame()) then
 		local controlTable = g_AdvancedOptionIM:GetInstance();
 		g_AdvancedOptionsList[count] = controlTable;
@@ -1917,14 +1917,14 @@ function UpdateOptions()
 		end
 	end
 	
-	-- Update scrollable panel
+
 	Controls.AdvancedOptions:CalculateSize();
 	Controls.GameOptionsSummary:CalculateInternalSize();
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function PopulateCivPulldown( pullDown, playerID )
 
     local controlTable = {};
@@ -1972,9 +1972,9 @@ function PopulateCivPulldown( pullDown, playerID )
 		end
 	end
 
-    ------------------------------------------------------------------------------------------------
-    -- set up the random slot (disabled while draft-locked)
-    ------------------------------------------------------------------------------------------------
+
+
+
 	if not draftLocked then
 		controlTable = {};
 		local usedCustom = pcall(function()
@@ -2009,7 +2009,7 @@ function PopulateCivPulldown( pullDown, playerID )
 		end
 	end
 	
--- Sorting Civs by Short Description
+
 	table.sort(civEntries, function(a,b)
 		local astr = Locale.ConvertTextKey(a.ShortDescription);
 		local bstr = Locale.ConvertTextKey(b.ShortDescription);
@@ -2026,7 +2026,7 @@ function PopulateCivPulldown( pullDown, playerID )
 		end
 		return a0 < b0
 	end);
--- Sorting Civs by Short Description END
+
 
 	for i,v in ipairs(civEntries) do
 		
@@ -2048,9 +2048,9 @@ function PopulateCivPulldown( pullDown, playerID )
 end
 
 
--------------------------------------------------
--- TODO: This only gets called once.  We need something more dynamic.
--------------------------------------------------
+
+
+
 function PopulateInvitePulldown( pullDown, playerID )
 
 	local controlTable = {};
@@ -2066,7 +2066,7 @@ function PopulateInvitePulldown( pullDown, playerID )
 
 	if friendList then
 
-		-- Populate with Steam friends.
+
 		for i = 1, #friendList do
 
 			local controlTable = {};
@@ -2085,8 +2085,8 @@ function PopulateInvitePulldown( pullDown, playerID )
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function PopulateTeamPulldown( pullDown, playerID )
 
 	local playerTable = Matchmaking.GetPlayerList();
@@ -2094,7 +2094,7 @@ function PopulateTeamPulldown( pullDown, playerID )
 
 	pullDown:ClearEntries();
 
-	-- Display Each Player
+
 	if playerTable then
     	count = #playerTable;
 		
@@ -2104,7 +2104,7 @@ function PopulateTeamPulldown( pullDown, playerID )
 			pullDown:BuildEntry( "InstanceOne", controlTable );
 			
 			controlTable.Button:SetText( Locale.ConvertTextKey("TXT_KEY_MULTIPLAYER_DEFAULT_TEAM_NAME", i) );
-			controlTable.Button:SetVoids( playerID, i-1 ); -- TODO: playerID is really more like the slot position.
+			controlTable.Button:SetVoids( playerID, i-1 );
 
 		end
 
@@ -2115,8 +2115,8 @@ function PopulateTeamPulldown( pullDown, playerID )
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function PopulateHandicapPulldown( pullDown, playerID )
 
 	pullDown:ClearEntries();
@@ -2137,8 +2137,8 @@ function PopulateHandicapPulldown( pullDown, playerID )
 
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function PopulateSlotTypePulldown( pullDown, playerID, slotTypeOptions )
 
 	pullDown:ClearEntries();
@@ -2151,22 +2151,22 @@ function PopulateSlotTypePulldown( pullDown, playerID, slotTypeOptions )
 		
 		if(PreGame.IsHotSeatGame()) then
 			if(typeName == "TXT_KEY_SLOTTYPE_HUMANREQ") then
-				-- "Human Required" slot type is the "Human" slot type in hotseat mode.
+
 				typeName = "TXT_KEY_PLAYER_TYPE_HUMAN";
 			elseif(typeName == "TXT_KEY_SLOTTYPE_OBSERVER") then
-				-- observer mode not allowed in hotseat mode.
+
 				createEntry = false;
 			elseif(typeName == "TXT_KEY_SLOTTYPE_OPEN") then
-				-- open mode is redundent in hotseat mode.
+
 				createEntry = false;
 			end
 		elseif(Network.IsPlayerConnected(playerID)) then
-			-- player is actively occupying this slot
+
 			if(typeName == "TXT_KEY_SLOTTYPE_OPEN") then
-				-- transform open slottype position to human (for changing from an observer to normal human player)
+
 				typeName = "TXT_KEY_PLAYER_TYPE_HUMAN";
 			elseif(typeName == "TXT_KEY_SLOTTYPE_CLOSED" or typeName == "TXT_KEY_SLOTTYPE_AI") then
-				-- Don't allow those types on human occupied slots.
+
 				createEntry = false;
 			end
 		end
@@ -2186,16 +2186,16 @@ function PopulateSlotTypePulldown( pullDown, playerID, slotTypeOptions )
 end
 
 
---------------------------------------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------------------------------------
--- Slot Type 
---------------------------------------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------------------------------------
 
--------------------------------------------------
--------------------------------------------------
+
+
+
+
+
+
+
 function GetSlotTypeString( playerID )
-	-- print("GetSlotTypeString playerID: " .. playerID .. " GetSlotStatus: " .. PreGame.GetSlotStatus(playerID) .. " GetSlotClaim: " .. PreGame.GetSlotClaim(playerID));
+
 	if(PreGame.GetSlotStatus( playerID ) == SlotStatus.SS_COMPUTER) then
 		return "TXT_KEY_SLOTTYPE_AI";
 	elseif(PreGame.GetSlotStatus( playerID ) == SlotStatus.SS_OBSERVER) then
@@ -2206,10 +2206,10 @@ function GetSlotTypeString( playerID )
 		return "TXT_KEY_PLAYER_TYPE_HUMAN";	
 	elseif(PreGame.GetSlotClaim( playerID ) == SlotClaim.SLOTCLAIM_RESERVED) then
 		if ( PreGame.IsHotSeatGame() ) then
-			-- reserved slots are human players in hotseat mode.
+
 			return "TXT_KEY_PLAYER_TYPE_HUMAN";
 		else
-			-- In normal multiplayer, reserved slots in the staging room indicate that this slot must be occupied by a human player for the game to start.                   
+
 			return "TXT_KEY_SLOTTYPE_HUMANREQ";
     end
 	end
@@ -2218,25 +2218,25 @@ function GetSlotTypeString( playerID )
 end
 
 
---------------------------------------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------------------------------------
--- Chat
---------------------------------------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------------------------------------
 
--------------------------------------------------
--------------------------------------------------
+
+
+
+
+
+
+
 function OnChat( fromPlayer, toPlayer, text, eTargetType )
 	if( text == nil or text == "" ) then
 		return;
 	end
 
-	-- Ignore leftover handshake protocol from older clients.
+
 	if LekmodVersion.StartsWith( text, LekmodVersion.OLD_HANDSHAKE_PREFIX ) then
 		return;
 	end
 
-	-- System "Game:" announcements (kicks, warnings).
+
 	if LekmodVersion.IsGameChat( text ) then
 		local body = LekmodVersion.GetGameChatBody( text );
 		AppendLobbyChatHistory( -1, body, LekmodVersion.GAME_CHAT_NAME );
@@ -2246,13 +2246,13 @@ function OnChat( fromPlayer, toPlayer, text, eTargetType )
 		return;
 	end
 
-	-- Civ draft protocol (must not show in chat).
+
 	if Draft_IsProtocol ~= nil and Draft_IsProtocol( text ) then
 		Draft_HandleProtocol( fromPlayer, text );
 		return;
 	end
 
-	-- Joiner asked for history: host privately dumps the buffer.
+
 	if( text == LOBBY_CHAT_REQ ) then
 		if( Matchmaking.IsHost() ) then
 			SendLobbyChatHistoryToPlayer( fromPlayer );
@@ -2260,7 +2260,7 @@ function OnChat( fromPlayer, toPlayer, text, eTargetType )
 		return;
 	end
 
-	-- Host told joiner to reset before applying the dump.
+
 	if( text == LOBBY_CHAT_CLEAR ) then
 		if( not Matchmaking.IsHost() ) then
 			Controls.ChatStack:DestroyAllChildren();
@@ -2270,7 +2270,7 @@ function OnChat( fromPlayer, toPlayer, text, eTargetType )
 		return;
 	end
 
-	-- Encoded history entry from host → joiner.
+
 	local syncFromPlayer, syncName, syncText = DecodeLobbyChatSync( text );
 	if( syncFromPlayer ~= nil and syncText ~= nil ) then
 		if( Matchmaking.IsHost() ) then
@@ -2302,11 +2302,11 @@ end
 Events.GameMessageChat.Add( OnChat );
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SendChat( text )
     if( string.len( text ) > 0 ) then
-		-- Never let players manually send protocol messages.
+
 		if( LekmodVersion.IsHiddenChatProtocol( text ) or LekmodVersion.IsGameChat( text ) ) then
 			Controls.ChatEntry:ClearString();
 			return;
@@ -2318,8 +2318,8 @@ end
 Controls.ChatEntry:RegisterCallback( SendChat );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnEnable( bIsCheck, slotNumber )
 	local playerID = GetPlayerIDBySelectionIndex( slotNumber );
 
@@ -2330,7 +2330,7 @@ function OnEnable( bIsCheck, slotNumber )
     		PreGame.SetSlotStatus( playerID, SlotStatus.SS_COMPUTER );
     		PreGame.SetHandicap( playerID, 1 );
 			if ( PreGame.IsHotSeatGame() ) then
-				-- Reset so the player can force a rebuild
+
 				PreGame.SetNickName( playerID, "" );
 				PreGame.SetLeaderName( playerID, "" );
 				PreGame.SetCivilizationDescription( playerID, "" );
@@ -2346,8 +2346,8 @@ function OnEnable( bIsCheck, slotNumber )
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnLock( bIsCheck, slotNumber )
 
 	local playerID = GetPlayerIDBySelectionIndex( slotNumber );
@@ -2361,9 +2361,9 @@ function OnLock( bIsCheck, slotNumber )
     UpdateDisplay();
 end
 
-----------------------------------------------------------------
--- create the slots
-----------------------------------------------------------------
+
+
+
 function CreateSlots()
 	for i = 1, GameDefines.MAX_MAJOR_CIVS, 1 do
 
@@ -2390,9 +2390,9 @@ function CreateSlots()
 	end
 end
 
-----------------------------------------------------------------
--- build the slots
-----------------------------------------------------------------
+
+
+
 function BuildSlots()
 	for i = 1, GameDefines.MAX_MAJOR_CIVS, 1 do
 
@@ -2413,7 +2413,7 @@ function BuildSlots()
 	    
 	end
 
-	-- Setup Local Slot
+
 	PopulateCivPulldown( Controls.CivPulldown, 0 );
 	PopulateTeamPulldown( Controls.TeamPulldown, 0 );
 	PopulateHandicapPulldown( Controls.HandicapPulldown, 0 );
@@ -2422,19 +2422,19 @@ function BuildSlots()
 	end
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnDLCChanged()
     if( ContextPtr:IsHidden() == false ) then
         ValidateCivSelections();
-	   	BuildSlots();		-- Populate the civs for the slots.  This can change so it must be done every time.
+        BuildSlots();
 		UpdateDisplay();
 	end
 end
 Events.AfterModsDeactivate.Add( OnDLCChanged );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnVersionMismatch( iPlayerID, playerName, bIsHost )
     if( bIsHost ) then
         Events.FrontEndPopup.CallImmediate( Locale.ConvertTextKey( "TXT_KEY_MP_VERSION_MISMATCH_FOR_HOST", playerName ) );
@@ -2447,12 +2447,12 @@ end
 Events.PlayerVersionMismatchEvent.Add( OnVersionMismatch );
 
 
------------------------------------------------------------------
--- Adjust for resolution
------------------------------------------------------------------
+
+
+
 function AdjustScreenSize()
-	-- Height + width (1280x720 clamp) are applied in Draft_AdjustScreenSize so
-	-- column offsets stay aligned with the scaled MainGrid.
+
+
 	if Draft_AdjustScreenSize ~= nil then
 		Draft_AdjustScreenSize();
 	else
@@ -2479,8 +2479,8 @@ function AdjustScreenSize()
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnUpdateUI( type, tag, iData1, iData2, strData1 )
     if( type == SystemUpdateUIType.ScreenResize ) then
         AdjustScreenSize();
@@ -2488,10 +2488,10 @@ function OnUpdateUI( type, tag, iData1, iData2, strData1 )
 end
 Events.SystemUpdateUI.Add( OnUpdateUI );
 
--------------------------------------------------
+
 function OnAbandoned(eReason)
 	if( UI.GetCurrentGameState() == GameStateTypes.CIV5_GS_MAIN_MENU ) then
-		-- Still in the front end
+
 		if (eReason == NetKicked.BY_HOST) then
 			Events.FrontEndPopup.CallImmediate( "TXT_KEY_MP_KICKED" );
 		elseif (eReason == NetKicked.NO_HOST) then
@@ -2504,5 +2504,5 @@ function OnAbandoned(eReason)
 end
 Events.MultiplayerGameAbandoned.Add( OnAbandoned );
 
--------------------------------------------------
+
 AdjustScreenSize();

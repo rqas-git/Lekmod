@@ -1,6 +1,6 @@
--------------------------------------------------
--- TradeRouteHelpers.lua (Vibe coded. not sorry, this was giving me a headache)
--------------------------------------------------
+
+
+
 
 local TRADE_CONNECTION_INTERNATIONAL = GameInfoTypes.TRADE_CONNECTION_INTERNATIONAL or 0
 local YIELD_SCIENCE = GameInfoTypes.YIELD_SCIENCE
@@ -354,13 +354,13 @@ local function BuildSingleSide(pPlayer, pOriginCity, pTargetCity, eConnectionTyp
 		if totalValue ~= 0 then
 			totalText = string.format("%s %+g%s", totalText, totalValue, yieldIcon)
 		end
-	end -- end yield loop
+	end
 
 	local hasDetails =
 		next(potentialYourBuildings) or next(potentialTheirBuildings) or
 		next(resourceSources) or next(potentialPolicies) or next(potentialBeliefs)
 
-	-- Some special science bonuses
+
 	local technologyText = ""
 	if eConnectionType == TRADE_CONNECTION_INTERNATIONAL
 		and IsMajorCiv(pOriginOwner)

@@ -1,16 +1,16 @@
--------------------------------------------------------------------------------
--- edit: keep gift/tribute screens open despite global events (except war) for
--- vanilla UI
--------------------------------------------------------------------------------  
+
+
+
+
 local bActiveTakeScreen = false;
 local bActiveGiveScreen = false;
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--- City State Diplo Popup
---
--- Authors: Anton Strenger
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
+
+
+
+
+
 print("Peace Block part 2 loaded");
 
 include( "IconSupport" );
@@ -35,7 +35,7 @@ local kiPledgedToProtect = 5;
 local kiDeclaredWar = 6;
 local kiRevokedProtection = 7;
 local m_iLastAction = kiNoAction;
-local m_iPendingAction = kiNoAction; -- For bullying dialog popups
+local m_iPendingAction = kiNoAction;
 local PEACE_LOCK_TURNS = 8;
 
 function OnTurnChangedForCityStatePopup()
@@ -47,14 +47,14 @@ end
 Events.NewGameTurn.Add(OnTurnChangedForCityStatePopup);
 Events.ActivePlayerTurnStart.Add(OnTurnChangedForCityStatePopup);
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--- HANDLERS AND HELPERS
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
+
+
+
 function SetButtonSize(textControl, buttonControl, animControl, buttonHL)
 
-	--print(textControl:GetText());
+
 	local sizeY = textControl:GetSizeY() + WordWrapOffset;
 	buttonControl:SetSizeY(sizeY);
 	animControl:SetSizeY(sizeY+WordWrapAnimOffset);
@@ -111,9 +111,9 @@ ContextPtr:SetShowHideHandler( ShowHideHandler );
 
 
 
--------------------------------------------------
--- On Event Received
--------------------------------------------------
+
+
+
 function OnEventReceived( popupInfo )
 	
 	local bGreeting = popupInfo.Type == ButtonPopupTypes.BUTTONPOPUP_CITY_STATE_GREETING;
@@ -151,9 +151,9 @@ function OnEventReceived( popupInfo )
 end
 Events.SerialEventGameMessagePopup.Add( OnEventReceived );
 
--------------------------------------------------
--- On Game Info Dirty
--------------------------------------------------
+
+
+
 function OnGameDataDirty()
 
 	if (ContextPtr:IsHidden()) then
@@ -165,12 +165,12 @@ function OnGameDataDirty()
 end
 Events.SerialEventGameDataDirty.Add(OnGameDataDirty);
 
--------------------------------------------------
--- On Display
--------------------------------------------------
+
+
+
 function OnDisplay()
     
-	-- print("Displaying City State Diplo Popup");
+
     
     local iActivePlayer = Game.GetActivePlayer();
     local pActivePlayer = Players[iActivePlayer];
@@ -188,15 +188,15 @@ function OnDisplay()
 	local bAllies = pPlayer:IsAllies(iActivePlayer);
 	local bFriends = pPlayer:IsFriends(iActivePlayer);
 	
-	-- At war?
+
 	local bWar = pActiveTeam:IsAtWar(iTeam);
 
-	-- Update colors
+
 	local primaryColor, secondaryColor = pPlayer:GetPlayerColors();
 	primaryColor, secondaryColor = secondaryColor, primaryColor;
 	local textColor = {x = primaryColor.x, y = primaryColor.y, z = primaryColor.z, w = 1};
 
-	-- Title
+
 	strTitle = Locale.ConvertTextKey("{"..pPlayer:GetCivilizationShortDescriptionKey()..":upper}");
 	Controls.TitleLabel:SetText(strTitle);
 	Controls.TitleLabel:SetColor(textColor, 0);
@@ -207,7 +207,7 @@ function OnDisplay()
 	local trait = GameInfo.MinorCivilizations[sMinorCivType].MinorCivTrait;
 	Controls.TitleIcon:SetTexture(GameInfo.MinorCivTraits[trait].TraitTitleIcon);
 	
-	-- Set Background Image
+
 	lastBackgroundImage = GameInfo.MinorCivTraits[trait].BackgroundImage;
 	Controls.BackgroundImage:SetTexture(lastBackgroundImage);
 	
@@ -226,7 +226,7 @@ function OnDisplay()
 	Controls.PositiveStatusMeter:SetToolTipString(strStatusTT);
 	Controls.NegativeStatusMeter:SetToolTipString(strStatusTT);
 	
-	-- Trait
+
 	local strTraitText = GetCityStateTraitText(iPlayer);
 	local strTraitTT = GetCityStateTraitToolTip(iPlayer);
 	
@@ -236,23 +236,23 @@ function OnDisplay()
 	Controls.TraitInfo:SetToolTipString(strTraitTT);
 	Controls.TraitLabel:SetToolTipString(strTraitTT);
 	
-	-- Personality
+
 	local strPersonalityText, strPersonalityTT = GetMinorCivPersonalityDisplayText(pPlayer);
 	
 	Controls.PersonalityInfo:SetText(strPersonalityText);
 	Controls.PersonalityInfo:SetToolTipString(strPersonalityTT);
 	Controls.PersonalityLabel:SetToolTipString(strPersonalityTT);
 	
-	-- Ally Status
+
 	local iAlly = pPlayer:GetAlly();
 	local bHideIcon = true;
 	local bHideText = true;
-	-- begin NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
+
 	local bRefusesBribes = false;
 	local bIsDiplomaticMarriage = false;
-	-- end NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
+
 	if (iAlly ~= nil and iAlly ~= -1) then
-		-- begin NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
+
 		local iNumAlliedTurnsRequired = Players[iAlly]:GetNumTurnsBeforeMinorAlliesRefuseBribes();
 		if (iNumAlliedTurnsRequired > 0 and pPlayer:GetAlliedTurns() >= iNumAlliedTurnsRequired) then
 			bIsDiplomaticMarriage = true;
@@ -260,7 +260,7 @@ function OnDisplay()
 				bRefusesBribes = true;
 			end
 		end
-		-- end NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
+
 		if (iAlly ~= iActivePlayer) then
 			if (Teams[Players[iAlly]:GetTeam()]:IsHasMet(Game.GetActiveTeam())) then
 				bHideIcon = false;
@@ -276,7 +276,7 @@ function OnDisplay()
 		bHideText = false;
 	end
 	local strAlly = GetAllyText(iActivePlayer, iPlayer);
-	-- begin NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
+
 	if (bIsDiplomaticMarriage) then
 		if (bRefusesBribes) then
 			bHideText = false;
@@ -287,17 +287,17 @@ function OnDisplay()
 			strAlly = strAlly .. "[ENDCOLOR]";
 		end
 	end
-	-- end NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
+
 	Controls.AllyText:SetText(strAlly);
 	local strAllyTT = GetAllyToolTip(iActivePlayer, iPlayer);
-	-- begin NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
+
 	if (bIsDiplomaticMarriage) then
 		strAllyTT = Locale.ConvertTextKey("TXT_KEY_POPUP_MINOR_WE_ARE_MARRIED") .. "[NEWLINE][NEWLINE]" .. strAllyTT;
 	end
 	if (bRefusesBribes) then
 		strAllyTT = Locale.ConvertTextKey("TXT_KEY_POPUP_MINOR_REFUSE_BRIBE_REASON", Locale.ConvertTextKey(Players[iAlly]:GetCivilizationShortDescriptionKey())) .. "[NEWLINE][NEWLINE]" .. strAllyTT;
 	end
-	-- end NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
+
 	Controls.AllyIcon:SetToolTipString(strAllyTT);
 	Controls.AllyIconBG:SetToolTipString(strAllyTT);
 	Controls.AllyIconShadow:SetToolTipString(strAllyTT);
@@ -306,7 +306,7 @@ function OnDisplay()
 	Controls.AllyIconContainer:SetHide(bHideIcon);
 	Controls.AllyText:SetHide(bHideText);
 	
-	-- Nearby Resources
+
 	local pCapital = pPlayer:GetCapitalCity();
 	if (pCapital ~= nil) then
 		
@@ -317,8 +317,8 @@ function OnDisplay()
 		local thisX = pCapital:GetX();
 		local thisY = pCapital:GetY();
 		
-		local iRange = GameDefines["MINOR_CIV_RESOURCE_SEARCH_RADIUS"]; --5
-		local iCloseRange = math.floor(iRange/2); --2
+		local iRange = GameDefines["MINOR_CIV_RESOURCE_SEARCH_RADIUS"];
+		local iCloseRange = math.floor(iRange/2);
 		local tResourceList = {};
 		
 		for iDX = -iRange, iRange, 1 do
@@ -380,44 +380,44 @@ function OnDisplay()
 		Controls.ResourcesInfo:SetHide(true);
 	end
 
-	-- Body text
+
 	local strText;
 	
-	-- Active Quests
+
 	UpdateActiveQuests();
 	
-	-- Peace
+
 	if (not bWar) then
 		
-		-- Were we sent here because we clicked a notification for a new quest?
+
 		if (m_iLastAction == kiNoAction and m_bNewQuestAvailable) then
 			strText = Locale.ConvertTextKey("TXT_KEY_CITY_STATE_DIPLO_HELLO_QUEST_MESSAGE");
 		
-		-- Did we just make peace?
+
 		elseif (m_iLastAction == kiMadePeace) then
 			strText = Locale.ConvertTextKey("TXT_KEY_CITY_STATE_DIPLO_PEACE_JUST_MADE");
 			
-		-- Did we just bully gold?
+
 		elseif (m_iLastAction == kiBulliedGold) then
 			strText = Locale.ConvertTextKey("TXT_KEY_CITY_STATE_DIPLO_JUST_BULLIED");
 		
-		-- Did we just bully a worker?
+
 		elseif (m_iLastAction == kiBulliedUnit) then
 			strText = Locale.ConvertTextKey("TXT_KEY_CITY_STATE_DIPLO_JUST_BULLIED_WORKER");
 		
-		-- Did we just give gold?
+
 		elseif (m_iLastAction == kiGiftedGold) then
 			strText = Locale.ConvertTextKey("TXT_KEY_CITY_STATE_DIPLO_JUST_SUPPORTED");
 		
-		-- Did we just PtP?
+
 		elseif (m_iLastAction == kiPledgedToProtect) then
 			strText = Locale.ConvertTextKey("TXT_KEY_CITY_STATE_PLEDGE_RESPONSE");
 		
-		-- Did we just revoke a PtP?
+
 		elseif (m_iLastAction == kiRevokedProtection) then
 			strText = Locale.ConvertTextKey("TXT_KEY_CITY_STATE_DIPLO_JUST_REVOKED_PROTECTION");
 		
-		-- Normal peaceful hello, with info about active quests
+
 		else
 			if (pPlayer:IsProtectedByMajor(iActivePlayer)) then
 				strText = Locale.ConvertTextKey("TXT_KEY_CITY_STATE_DIPLO_HELLO_PEACE_PROTECTED");
@@ -430,13 +430,13 @@ function OnDisplay()
 			
 			local iNumPlayersAtWar = 0;
 			
-			-- Loop through all the Majors the active player knows
+
 			for iPlayerLoop = 0, GameDefines.MAX_MAJOR_CIVS-1, 1 do
 				
 				pOtherPlayer = Players[iPlayerLoop];
 				iOtherTeam = pOtherPlayer:GetTeam();
 				
-				-- Don't test war with active player!
+
 				if (iPlayerLoop ~= iActivePlayer) then
 					if (pOtherPlayer:IsAlive()) then
 						if (pTeam:IsAtWar(iOtherTeam)) then
@@ -454,13 +454,13 @@ function OnDisplay()
 			end
 		end
 		
-		-- Tell the City State to stop gifting us Units (if they are)
+
 		Controls.NoUnitSpawningButton:SetHide(true);
 		if (pPlayer:GetMinorCivTrait() == MinorCivTraitTypes.MINOR_CIV_TRAIT_MILITARISTIC) then
 			if (bFriends) then
 				Controls.NoUnitSpawningButton:SetHide(false);
 				
-				-- Player has said to turn it off
+
 				local strSpawnText;
 				if (pPlayer:IsMinorCivUnitSpawningDisabled(iActivePlayer)) then
 					strSpawnText = Locale.ConvertTextKey("TXT_KEY_CITY_STATE_TURN_SPAWNING_ON");
@@ -501,7 +501,7 @@ function OnDisplay()
 			Controls.WarButton:SetToolTipString(nil);
 		end
 		
-	-- War
+
 	else
 		local iTurnsAtWar = 0;
 		if (pActiveTeam.GetNumTurnsAtWar) then
@@ -509,11 +509,11 @@ function OnDisplay()
 		end
 		local bInfluencePeaceBlocked = pPlayer:IsInfluenceTooLowForPeace(iActivePlayer);
 		local strPeaceBaseText = Locale.Lookup("TXT_KEY_LEKMOD_CITY_STATE_MAKE_PEACE");
-		-- Peace cooldown UI only applies when we declared war on this city-state; not ally-chain / CS-initiated wars
+
 		local bPeaceLockFromOurDow = (pActiveTeam.IsCityStatePeaceLockFromOurDeclaration and pActiveTeam:IsCityStatePeaceLockFromOurDeclaration(iTeam)) or false;
 		local iPeaceTurnsRemaining = 0;
 		if (bPeaceLockFromOurDow) then
-			-- Use only PEACE_LOCK_TURNS - turnsAtWar (DLL resets turns at manual CS DOW). Do not mix GetNumTurnsLockedIntoWar or turnsAtWar==0 jumps to 8.
+
 			iPeaceTurnsRemaining = math.max(0, PEACE_LOCK_TURNS - iTurnsAtWar);
 		end
 		if (iPeaceTurnsRemaining <= 0 and bInfluencePeaceBlocked) then
@@ -524,7 +524,7 @@ function OnDisplay()
 			end
 		end
 		
-		-- Locked war timer: only while peace is not ally-blocked (timer hides if CS joins an enemy ally; returns when that clears if turns remain)
+
 		if (iPeaceTurnsRemaining > 0 and not pPlayer:IsPeaceBlocked(iActiveTeam)) then
 			strText = Locale.ConvertTextKey("TXT_KEY_CITY_STATE_DIPLO_HELLO_WARMONGER");
 			Controls.PeaceButton:SetHide(false);
@@ -532,15 +532,15 @@ function OnDisplay()
 			Controls.PeaceAnim:SetHide(true);
 			Controls.PeaceLabel:SetText(Locale.Lookup("TXT_KEY_LEKMOD_CITY_STATE_PEACE_TURNS_REMAINING", iPeaceTurnsRemaining));
 			Controls.PeaceButton:SetToolTipString(Locale.Lookup("TXT_KEY_LEKMOD_CITY_STATE_PEACE_TURNS_REMAINING_TT", iPeaceTurnsRemaining));
-		-- Warmongering / influence blocked player
-		-- NQ_PEACE_BLOCKED_IF_INFLUENCE_TOO_LOW begin
-		--if (pPlayer:IsPeaceBlocked(iActiveTeam)) then
+
+
+
 		elseif (pPlayer:IsPeaceBlocked(iActiveTeam) or bInfluencePeaceBlocked) then
-		-- NQ_PEACE_BLOCKED_IF_INFLUENCE_TOO_LOW end
+
 			strText = Locale.ConvertTextKey("TXT_KEY_CITY_STATE_DIPLO_HELLO_WARMONGER");
 			Controls.PeaceButton:SetHide(true);
 			
-		-- Normal War
+
 		else
 			strText = Locale.ConvertTextKey("TXT_KEY_CITY_STATE_DIPLO_HELLO_WAR");
 			Controls.PeaceButton:SetHide(false);
@@ -557,41 +557,41 @@ function OnDisplay()
 		
 	end
 	
-	-- Pledge to Protect
+
 	local bShowPledgeButton = false;
 	local bEnablePledgeButton = false;
 	local bShowRevokeButton = false;
 	local bEnableRevokeButton = false;
 	local strProtectButton = Locale.Lookup("TXT_KEY_POP_CSTATE_PLEDGE_TO_PROTECT");
-	local strProtectTT = Locale.Lookup("TXT_KEY_POP_CSTATE_PLEDGE_TT", GameDefines.MINOR_FRIENDSHIP_ANCHOR_MOD_PROTECTED, 10); --antonjs: todo: xml
+	local strProtectTT = Locale.Lookup("TXT_KEY_POP_CSTATE_PLEDGE_TT", GameDefines.MINOR_FRIENDSHIP_ANCHOR_MOD_PROTECTED, 10);
 	local strRevokeProtectButton = Locale.Lookup("TXT_KEY_POP_CSTATE_REVOKE_PROTECTION");
 	local strRevokeProtectTT = Locale.Lookup("TXT_KEY_POP_CSTATE_REVOKE_PROTECTION_TT");
 	
 	if (not bWar) then
-		-- PtP in effect
+
 		if (pPlayer:IsProtectedByMajor(iActivePlayer)) then
 			bShowRevokeButton = true;
-			-- Can we revoke it?
+
 			if (pPlayer:CanMajorWithdrawProtection(iActivePlayer)) then
 				bEnableRevokeButton = true;
 			else
 				bEnableRevokeButton = false;
 				strRevokeProtectButton = "[COLOR_WARNING_TEXT]" .. strRevokeProtectButton .. "[ENDCOLOR]";
-				local iTurnsCommitted = (pPlayer:GetTurnLastPledgedProtectionByMajor(iActivePlayer) + 10) - Game.GetGameTurn(); --antonjs: todo: xml
+				local iTurnsCommitted = (pPlayer:GetTurnLastPledgedProtectionByMajor(iActivePlayer) + 10) - Game.GetGameTurn();
 				strRevokeProtectTT = strRevokeProtectTT .. Locale.Lookup("TXT_KEY_POP_CSTATE_REVOKE_PROTECTION_DISABLED_COMMITTED_TT", iTurnsCommitted);
 			end
-		-- No PtP
+
 		else
 			bShowPledgeButton = true;
-			-- Can we pledge?
+
 			if (pPlayer:CanMajorStartProtection(iActivePlayer)) then
 				bEnablePledgeButton = true;
 			else
 				bEnablePledgeButton = false;
 				strProtectButton = "[COLOR_WARNING_TEXT]" .. strProtectButton .. "[ENDCOLOR]";
 				local iLastTurnPledgeBroken = pPlayer:GetTurnLastPledgeBrokenByMajor(iActivePlayer);
-				if (iLastTurnPledgeBroken >= 0) then -- (-1) means never happened
-					local iTurnsUntilRecovered = (iLastTurnPledgeBroken + 20) - Game.GetGameTurn(); --antonjs: todo: xml
+				if (iLastTurnPledgeBroken >= 0) then
+					local iTurnsUntilRecovered = (iLastTurnPledgeBroken + 20) - Game.GetGameTurn();
 					strProtectTT = strProtectTT .. Locale.Lookup("TXT_KEY_POP_CSTATE_PLEDGE_DISABLED_MISTRUST_TT", iTurnsUntilRecovered);
 				else
 					local iMinimumInfForPledge = GameDefines["FRIENDSHIP_THRESHOLD_CAN_PLEDGE_TO_PROTECT"];
@@ -633,7 +633,7 @@ function OnDisplay()
 		Controls.WarButton:SetHide(true);
 	end
 	
-	-- Buyout (Austria UA)
+
 	local iBuyoutCost = pPlayer:GetBuyoutCost(iActivePlayer);
 	local strButtonLabel = Locale.ConvertTextKey( "TXT_KEY_POP_CSTATE_BUYOUT");
 	local strToolTip = Locale.ConvertTextKey( "TXT_KEY_POP_CSTATE_BUYOUT_TT", iBuyoutCost );
@@ -649,7 +649,7 @@ function OnDisplay()
 			strButtonLabel = "[COLOR_WARNING_TEXT]" .. strButtonLabel .. "[ENDCOLOR]";
 			strToolTip = Locale.ConvertTextKey("TXT_KEY_POP_CSTATE_BUYOUT_DISABLED_TT", GameDefines.MINOR_CIV_BUYOUT_TURNS, iBuyoutCost);
 		end
-		--antonjs: todo: disable button entirely, in case bWar doesn't update in time for the callback to disallow buyout in wartime
+
 		Controls.BuyoutButton:SetHide(false);
 		Controls.BuyoutAnim:SetHide(true);
 	else
@@ -669,7 +669,7 @@ function OnDisplay()
 	SetButtonSize(Controls.NoUnitSpawningLabel, Controls.NoUnitSpawningButton, Controls.NoUnitSpawningAnim, Controls.NoUnitSpawningButtonHL);
 	SetButtonSize(Controls.BuyoutLabel, Controls.BuyoutButton, Controls.BuyoutAnim, Controls.BuyoutButtonHL);
 	
-	-- NEW: stay at the current menu level, update visible buttons 
+
 	if bWar == false and bActiveGiveScreen == true and not DoesMinorCivPersonalityBlockGifts(pPlayer) and not IsMinorCivMajorBlockedByAlliedWar(pPlayer, iActivePlayer) then
 		PopulateGiftChoices()
 		Controls.GiveStack:SetHide(false)
@@ -699,9 +699,9 @@ function UpdateActiveQuests()
 	Controls.QuestLabel:SetToolTipString(sToolTipText);
 end
 
--------------------------------------------------
--- On Quest Info Clicked
--------------------------------------------------
+
+
+
 function OnQuestInfoClicked()
 	local iActivePlayer = Game.GetActivePlayer();
 	local pMinor = Players[g_iMinorCivID];
@@ -720,15 +720,15 @@ function OnQuestInfoClicked()
 end
 Controls.QuestInfo:RegisterCallback( Mouse.eLClick, OnQuestInfoClicked );
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--- MAIN MENU
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
 
-----------------------------------------------------------------
--- Pledge
-----------------------------------------------------------------
+
+
+
+
+
+
+
+
 function OnPledgeButtonClicked ()
 	
 	local iActivePlayer = Game.GetActivePlayer();
@@ -745,9 +745,9 @@ function OnPledgeButtonClicked ()
 end
 Controls.PledgeButton:RegisterCallback( Mouse.eLClick, OnPledgeButtonClicked );
 
-----------------------------------------------------------------
--- Revoke Pledge
-----------------------------------------------------------------
+
+
+
 function OnRevokePledgeButtonClicked ()
 	
 	local iActivePlayer = Game.GetActivePlayer();
@@ -760,9 +760,9 @@ function OnRevokePledgeButtonClicked ()
 end
 Controls.RevokePledgeButton:RegisterCallback( Mouse.eLClick, OnRevokePledgeButtonClicked );
 
-----------------------------------------------------------------
--- Buyout
-----------------------------------------------------------------
+
+
+
 function OnBuyoutButtonClicked()
 	local iActivePlayer = Game.GetActivePlayer();
 	local pMinor = Players[g_iMinorCivID];
@@ -775,17 +775,17 @@ end
 Controls.BuyoutButton:RegisterCallback( Mouse.eLClick, OnBuyoutButtonClicked );
 
 
-----------------------------------------------------------------
--- War
-----------------------------------------------------------------
+
+
+
 function OnWarButtonClicked ()
 	UI.AddPopup{ Type = ButtonPopupTypes.BUTTONPOPUP_DECLAREWARMOVE, Data1 = g_iMinorCivTeamID, Option1 = true};
 end
 Controls.WarButton:RegisterCallback( Mouse.eLClick, OnWarButtonClicked );
 
-----------------------------------------------------------------
--- Peace
-----------------------------------------------------------------
+
+
+
 function OnPeaceButtonClicked ()
     
 	Network.SendChangeWar(g_iMinorCivTeamID, false);
@@ -793,16 +793,16 @@ function OnPeaceButtonClicked ()
 end
 Controls.PeaceButton:RegisterCallback( Mouse.eLClick, OnPeaceButtonClicked );
 
-----------------------------------------------------------------
--- Stop/Start Unit Spawning
-----------------------------------------------------------------
+
+
+
 function OnStopStartSpawning()
     local pPlayer = Players[g_iMinorCivID];
     local iActivePlayer = Game.GetActivePlayer();
 	
 	local bSpawningDisabled = pPlayer:IsMinorCivUnitSpawningDisabled(iActivePlayer);
 	
-	-- Update the text based on what state we're changing to
+
 	local strSpawnText;
 	if (bSpawningDisabled) then
 		strSpawnText = Locale.ConvertTextKey("TXT_KEY_CITY_STATE_TURN_SPAWNING_OFF");
@@ -816,9 +816,9 @@ function OnStopStartSpawning()
 end
 Controls.NoUnitSpawningButton:RegisterCallback( Mouse.eLClick, OnStopStartSpawning );
 
-----------------------------------------------------------------
--- Open Give Submenu
-----------------------------------------------------------------
+
+
+
 function OnGiveButtonClicked ()
 	if (DoesMinorCivPersonalityBlockGifts(Players[g_iMinorCivID]) or IsMinorCivMajorBlockedByAlliedWar(Players[g_iMinorCivID], Game.GetActivePlayer())) then
 		return;
@@ -833,9 +833,9 @@ function OnGiveButtonClicked ()
 end
 Controls.GiveButton:RegisterCallback( Mouse.eLClick, OnGiveButtonClicked );
 
-----------------------------------------------------------------
--- Open Take Submenu
-----------------------------------------------------------------
+
+
+
 function OnTakeButtonClicked ()
 	if (DoesMinorCivPersonalityBlockTribute(Players[g_iMinorCivID])) then
 		return;
@@ -850,9 +850,9 @@ function OnTakeButtonClicked ()
 end
 Controls.TakeButton:RegisterCallback( Mouse.eLClick, OnTakeButtonClicked );
 
-----------------------------------------------------------------
--- Close
-----------------------------------------------------------------
+
+
+
 function OnCloseButtonClicked ()
 	bActiveGiveScreen = false
 	bActiveTakeScreen = false
@@ -860,9 +860,9 @@ function OnCloseButtonClicked ()
 end
 Controls.CloseButton:RegisterCallback( Mouse.eLClick, OnCloseButtonClicked );
 
-----------------------------------------------------------------
--- Find On Map
-----------------------------------------------------------------
+
+
+
 function OnFindOnMapButtonClicked ()
 	local pPlayer = Players[g_iMinorCivID];
 	if (pPlayer) then
@@ -877,11 +877,11 @@ function OnFindOnMapButtonClicked ()
 end
 Controls.FindOnMapButton:RegisterCallback( Mouse.eLClick, OnFindOnMapButtonClicked );
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--- GIFT MENU
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
+
+
+
 local iGoldGiftLarge = GameDefines["MINOR_GOLD_GIFT_LARGE"];
 local iGoldGiftMedium = GameDefines["MINOR_GOLD_GIFT_MEDIUM"];
 local iGoldGiftSmall = GameDefines["MINOR_GOLD_GIFT_SMALL"];
@@ -892,7 +892,7 @@ function PopulateGiftChoices()
 	local iActivePlayer = Game.GetActivePlayer();
 	local pActivePlayer = Players[iActivePlayer];
 	
-	-- begin NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
+
 	local bRefusesBribes = false;
 	local iPlayerAlly = pPlayer:GetAlly();
 	if (iPlayerAlly ~= nil and iPlayerAlly ~= -1) then
@@ -903,22 +903,22 @@ function PopulateGiftChoices()
 			end
 		end
 	end
-	-- end NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
 
-	-- Small Gold
+
+
 	local iNumGoldPlayerHas = pActivePlayer:GetGold();
 	
 	iGold = iGoldGiftSmall;
 	iLowestGold = iGold;
 	iFriendshipAmount = pPlayer:GetFriendshipFromGoldGift(iActivePlayer, iGold);
 	local buttonText = Locale.ConvertTextKey("TXT_KEY_POPUP_MINOR_GOLD_GIFT_AMOUNT", iGold, iFriendshipAmount);
-	-- begin NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
+
 	if (bRefusesBribes) then
 		buttonText = "[COLOR_WARNING_TEXT]" .. Locale.ConvertTextKey("TXT_KEY_POPUP_MINOR_REFUSES_BRIBES") .. "[ENDCOLOR]";
 		Controls.SmallGiftAnim:SetHide(true);
 	elseif (iNumGoldPlayerHas < iGold) then
-	--if (iNumGoldPlayerHas < iGold) then
-	-- end NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
+
+
 		buttonText = "[COLOR_WARNING_TEXT]" .. buttonText .. "[ENDCOLOR]";
 		Controls.SmallGiftAnim:SetHide(true);
 	else
@@ -927,17 +927,17 @@ function PopulateGiftChoices()
 	Controls.SmallGift:SetText(buttonText);
 	SetButtonSize(Controls.SmallGift, Controls.SmallGiftButton, Controls.SmallGiftAnim, Controls.SmallGiftButtonHL);
 	
-	-- Medium Gold
+
 	iGold = iGoldGiftMedium;
 	iFriendshipAmount = pPlayer:GetFriendshipFromGoldGift(iActivePlayer, iGold);
 	local buttonText = Locale.ConvertTextKey("TXT_KEY_POPUP_MINOR_GOLD_GIFT_AMOUNT", iGold, iFriendshipAmount);
-	-- begin NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
+
 	if (bRefusesBribes) then
 		buttonText = "";
 		Controls.SmallGiftAnim:SetHide(true);
 	elseif (iNumGoldPlayerHas < iGold) then
-	--if (iNumGoldPlayerHas < iGold) then
-	-- end NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
+
+
 		buttonText = "[COLOR_WARNING_TEXT]" .. buttonText .. "[ENDCOLOR]";
 		Controls.MediumGiftAnim:SetHide(true);
 	else
@@ -946,17 +946,17 @@ function PopulateGiftChoices()
 	Controls.MediumGift:SetText(buttonText);
 	SetButtonSize(Controls.MediumGift, Controls.MediumGiftButton, Controls.MediumGiftAnim, Controls.MediumGiftButtonHL);
 	
-	-- Large Gold
+
 	iGold = iGoldGiftLarge;
 	iFriendshipAmount = pPlayer:GetFriendshipFromGoldGift(iActivePlayer, iGold);
 	local buttonText = Locale.ConvertTextKey("TXT_KEY_POPUP_MINOR_GOLD_GIFT_AMOUNT", iGold, iFriendshipAmount);
-	-- begin NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
+
 	if (bRefusesBribes) then
 		buttonText = "";
 		Controls.SmallGiftAnim:SetHide(true);
 	elseif (iNumGoldPlayerHas < iGold) then
-	--if (iNumGoldPlayerHas < iGold) then
-	-- end NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
+
+
 		buttonText = "[COLOR_WARNING_TEXT]" .. buttonText .. "[ENDCOLOR]";
 		Controls.LargeGiftAnim:SetHide(true);
 	else
@@ -966,7 +966,7 @@ function PopulateGiftChoices()
 	SetButtonSize(Controls.LargeGift, Controls.LargeGiftButton, Controls.LargeGiftAnim, Controls.LargeGiftButtonHL);
 	
 	
-	-- Unit
+
 	local iInfluence = pPlayer:GetFriendshipFromUnitGift(iActivePlayer, false, true);
 	local iTravelTurns = GameDefines.MINOR_UNIT_GIFT_TRAVEL_TURNS;
 	local buttonText = Locale.ConvertTextKey("TXT_KEY_POP_CSTATE_GIFT_UNIT", iInfluence);
@@ -983,8 +983,8 @@ function PopulateGiftChoices()
 	Controls.UnitGiftButton:SetToolTipString(tooltipText);
 	SetButtonSize(Controls.UnitGift, Controls.UnitGiftButton, Controls.UnitGiftAnim, Controls.UnitGiftButtonHL);
 	
-	-- Tile Improvement
-	-- Only allowed for allies
+
+
 	iGold = pPlayer:GetGiftTileImprovementCost(iActivePlayer);
 	local buttonText = Locale.ConvertTextKey("TXT_KEY_POPUP_MINOR_GIFT_TILE_IMPROVEMENT", iGold);
 	if (not pPlayer:CanMajorGiftTileImprovement(iActivePlayer)) then
@@ -996,19 +996,19 @@ function PopulateGiftChoices()
 	Controls.TileImprovementGift:SetText(buttonText);
 	SetButtonSize(Controls.TileImprovementGift, Controls.TileImprovementGiftButton, Controls.TileImprovementGiftAnim, Controls.TileImprovementGiftButtonHL);
 	
-	-- Tooltip info
+
 	local iFriendsAmount = GameDefines["FRIENDSHIP_THRESHOLD_FRIENDS"];
 	local iAlliesAmount = GameDefines["FRIENDSHIP_THRESHOLD_ALLIES"];
     local iFriendship = pPlayer:GetMinorCivFriendshipWithMajor(iActivePlayer);
 	local strInfoTT = Locale.ConvertTextKey("TXT_KEY_POP_CSTATE_GOLD_STATUS_TT", iFriendsAmount, iAlliesAmount, iFriendship);
 	
-	-- begin NQ_FIX_CITY_STATE_GIFT_TOOLTIPS
-	-- we get ride of these 2 lines so that the tooltip isn't cluttered with (only semi-accurate) extraneous info
-	--strInfoTT = strInfoTT .. "[NEWLINE][NEWLINE]";
-	--strInfoTT = strInfoTT .. Locale.ConvertTextKey("TXT_KEY_POP_CSTATE_GOLD_TT");
-	-- end NQ_FIX_CITY_STATE_GIFT_TOOLTIPS
 
-	-- begin NQ_FIX_CITY_STATE_GIFT_TOOLTIPS
+
+
+
+
+
+
 	local strSmallGiftButtonTT = strInfoTT;
 	if (iNumGoldPlayerHas < iGoldGiftSmall) then
 		strSmallGiftButtonTT = "[COLOR_NEGATIVE_TEXT]" .. Locale.ConvertTextKey("TXT_KEY_POPUP_MINOR_NOT_ENOUGH_GOLD") .. "[ENDCOLOR][NEWLINE][NEWLINE]" .. strSmallGiftButtonTT;
@@ -1026,14 +1026,14 @@ function PopulateGiftChoices()
 		strLargeGiftButtonTT = "[COLOR_NEGATIVE_TEXT]" .. Locale.ConvertTextKey("TXT_KEY_POPUP_MINOR_NOT_ENOUGH_GOLD") .. "[ENDCOLOR][NEWLINE][NEWLINE]" .. strLargeGiftButtonTT;
 	end
 	Controls.LargeGiftButton:SetToolTipString(strLargeGiftButtonTT);
-	-- end NQ_FIX_CITY_STATE_GIFT_TOOLTIPS
+
 	
 	UpdateButtonStack();
 end
 
-----------------------------------------------------------------
--- Gold Gifts
-----------------------------------------------------------------
+
+
+
 function OnSmallGold ()
 	local iActivePlayer = Game.GetActivePlayer();
 	local pActivePlayer = Players[iActivePlayer];
@@ -1072,9 +1072,9 @@ function OnBigGold ()
 	end
 end
 Controls.LargeGiftButton:RegisterCallback( Mouse.eLClick, OnBigGold );
-----------------------------------------------------------------
--- Gift Unit
-----------------------------------------------------------------
+
+
+
 function OnGiftUnit()
     UIManager:DequeuePopup( ContextPtr );
 
@@ -1085,9 +1085,9 @@ function OnGiftUnit()
 end
 Controls.UnitGiftButton:RegisterCallback( Mouse.eLClick, OnGiftUnit );
 
-----------------------------------------------------------------
--- Gift Improvement
-----------------------------------------------------------------
+
+
+
 function OnGiftTileImprovement()
 	local pMinor = Players[g_iMinorCivID];
 	local iActivePlayer = Game.GetActivePlayer();
@@ -1103,9 +1103,9 @@ function OnGiftTileImprovement()
 end
 Controls.TileImprovementGiftButton:RegisterCallback( Mouse.eLClick, OnGiftTileImprovement );
 
-----------------------------------------------------------------
--- Close Give Submenu
-----------------------------------------------------------------
+
+
+
 function OnCloseGive()
 	bActiveGiveScreen = false
 	Controls.GiveStack:SetHide(true);
@@ -1115,21 +1115,21 @@ function OnCloseGive()
 end
 Controls.ExitGiveButton:RegisterCallback( Mouse.eLClick, OnCloseGive );
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--- TAKE MENU
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
-local iBullyGoldInfluenceLost = (GameDefines["MINOR_FRIENDSHIP_DROP_BULLY_GOLD_SUCCESS"] / 100) * -1; -- Since XML value is times 100 for fidelity, and negative
-local iBullyUnitInfluenceLost = (GameDefines["MINOR_FRIENDSHIP_DROP_BULLY_WORKER_SUCCESS"] / 100) * -1; -- Since XML value is times 100 for fidelity, and negative
-local iBullyUnitMinimumPop = 3; --antonjs: todo: XML
+
+
+
+
+
+local iBullyGoldInfluenceLost = (GameDefines["MINOR_FRIENDSHIP_DROP_BULLY_GOLD_SUCCESS"] / 100) * -1;
+local iBullyUnitInfluenceLost = (GameDefines["MINOR_FRIENDSHIP_DROP_BULLY_WORKER_SUCCESS"] / 100) * -1;
+local iBullyUnitMinimumPop = 3;
 
 function PopulateTakeChoices()	
 	local pPlayer = Players[g_iMinorCivID];
 	local iActivePlayer = Game.GetActivePlayer();
 	local buttonText = "";
 	local ttText = "";
-	-- begin NQ_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS_FROM_POLICIES
+
 	local iBullyGold = pPlayer:GetMinorCivBullyGoldAmount(iActivePlayer);
 	local pActivePlayer = Players[iActivePlayer];
 	local iBullyGoldInflueneGained = pActivePlayer:GetMinorFriendshipGainBullyGoldSuccess();
@@ -1149,13 +1149,13 @@ function PopulateTakeChoices()
 		end
 		Controls.GoldTributeAnim:SetHide(false);
 	end
-	-- end NQ_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS_FROM_POLICIES
+
 	
 	Controls.GoldTributeLabel:SetText(buttonText);
 	Controls.GoldTributeButton:SetToolTipString(ttText);
 	SetButtonSize(Controls.GoldTributeLabel, Controls.GoldTributeButton, Controls.GoldTributeAnim, Controls.GoldTributeButtonHL);
 	
-	local sBullyUnit = GameInfo.Units["UNIT_WORKER"].Description; --antonjs: todo: XML or fn
+	local sBullyUnit = GameInfo.Units["UNIT_WORKER"].Description;
 	buttonText = Locale.Lookup("TXT_KEY_POPUP_MINOR_BULLY_UNIT_AMOUNT", sBullyUnit, iBullyUnitInfluenceLost);
 	ttText = pPlayer:GetMajorBullyUnitDetails(iActivePlayer);
 	if (not pPlayer:CanMajorBullyUnit(iActivePlayer)) then
@@ -1171,9 +1171,9 @@ function PopulateTakeChoices()
 	UpdateButtonStack();
 end
 
-----------------------------------------------------------------
--- Bully confirmation
-----------------------------------------------------------------
+
+
+
 function OnBullyButtonClicked ()
 
 	local listofProtectingCivs = {};
@@ -1181,7 +1181,7 @@ function OnBullyButtonClicked ()
 			
 		pOtherPlayer = Players[iPlayerLoop];
 			
-		-- Don't test protection status with active player!
+
 		if (iPlayerLoop ~= Game.GetActivePlayer()) then
 			if (pOtherPlayer:IsAlive()) then
 				if (pOtherPlayer:IsProtectingMinor(g_iMinorCivID)) then
@@ -1214,9 +1214,9 @@ function OnBullyButtonClicked ()
 	Controls.BGBlock:SetHide(true);
 end
 
-----------------------------------------------------------------
--- Take Gold
-----------------------------------------------------------------
+
+
+
 function OnGoldTributeButtonClicked()
 	local pPlayer = Players[g_iMinorCivID];
 	local iActivePlayer = Game.GetActivePlayer();
@@ -1229,9 +1229,9 @@ function OnGoldTributeButtonClicked()
 end
 Controls.GoldTributeButton:RegisterCallback( Mouse.eLClick, OnGoldTributeButtonClicked );
 
-----------------------------------------------------------------
--- Take Unit
-----------------------------------------------------------------
+
+
+
 function OnUnitTributeButtonClicked()
 	local pPlayer = Players[g_iMinorCivID];
 	local iActivePlayer = Game.GetActivePlayer();
@@ -1244,9 +1244,9 @@ function OnUnitTributeButtonClicked()
 end
 Controls.UnitTributeButton:RegisterCallback( Mouse.eLClick, OnUnitTributeButtonClicked );
 
-----------------------------------------------------------------
--- Close Take Submenu
-----------------------------------------------------------------
+
+
+
 function OnCloseTake()
 	bActiveTakeScreen = false
 	Controls.GiveStack:SetHide(true);
@@ -1256,11 +1256,11 @@ function OnCloseTake()
 end
 Controls.ExitTakeButton:RegisterCallback( Mouse.eLClick, OnCloseTake );
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--- BULLY CONFIRMATION POPUP
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
+
+
+
 function OnYesBully( )
 	local iActivePlayer = Game.GetActivePlayer();
 	if (m_iPendingAction == kiBulliedGold) then
@@ -1287,7 +1287,7 @@ function OnNoBully( )
 end
 Controls.NoBully:RegisterCallback( Mouse.eLClick, OnNoBully );
 
--------------------------------------------------
--- 'Active' (local human) player has changed
--------------------------------------------------
+
+
+
 Events.GameplaySetActivePlayer.Add(OnCloseButtonClicked);

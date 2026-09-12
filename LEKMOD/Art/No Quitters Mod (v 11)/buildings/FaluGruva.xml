@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-14 15:07:35 -->
+
 <GameData>
 
-	<!-- [New UB] Falu Gruva (replaces Ironworks): +8 Production, +8 Gold, hills provide +1 Production, and +4 merchant points. Also provides +6 Tourism at Flight. -->
+
 	<Buildings>
 		<Row>
 			<Type>BUILDING_FALU_GRUVA</Type>
@@ -71,7 +71,7 @@
 		</Row>
 	</Building_Flavors>
 
-	<!-- localization -->
+
 	<Language_en_US>
 		<Row Tag="TXT_KEY_BUILDING_FALU_GRUVA">
 			<Text>Falu Gruva [COLOR_CYAN]*[ENDCOLOR]</Text>

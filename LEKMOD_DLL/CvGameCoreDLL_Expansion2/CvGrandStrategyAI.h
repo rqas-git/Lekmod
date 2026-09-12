@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_GRAND_STRATEGY_AI_H
@@ -12,15 +12,15 @@
 
 #include "CvDiplomacyAI.h"
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvGrandStrategyAI
-//!  \brief		Information about the Grand Strategy of a single AI player
-//
-//!  Author:	Jon Shafer
-//
-//!  Key Attributes:
-//!  - Object created by CvPlayer
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvGrandStrategyAI
 {
 public:
@@ -74,9 +74,9 @@ public:
 	int GetPersonalityAndGrandStrategy(FlavorTypes eFlavorType);
 #endif
 
-	// **********
-	// Stuff relating to guessing what other Players are up to
-	// **********
+
+
+
 
 	void DoGuessOtherPlayersActiveGrandStrategy();
 
@@ -103,22 +103,22 @@ private:
 
 	int* m_paiGrandStrategyPriority;
 
-	// **********
-	// Stuff relating to guessing what other Players are up to
-	// **********
+
+
+
 
 	int* m_eGuessOtherPlayerActiveGrandStrategy;
 	int* m_eGuessOtherPlayerActiveGrandStrategyConfidence;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIGrandStrategyXMLEntry
-//!  \brief		A single entry in the AI Grand Strategy XML file
-//
-//!  Key Attributes:
-//!  - Populated from XML\???? (not sure what path/name you want)
-//!  - Array of these contained in CvAIGrandStrategyXMLEntries class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvAIGrandStrategyXMLEntry: public CvBaseInfo
 {
 public:
@@ -127,7 +127,7 @@ public:
 
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
 
-	// Accessor Functions
+
 #ifdef AUI_WARNING_FIXES
 	int GetFlavorValue(uint i) const;
 	int GetFlavorModValue(uint i) const;
@@ -143,24 +143,24 @@ private:
 	int* m_piFlavorModValue;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIGrandStrategyXMLEntries
-//!  \brief		Game-wide information about possible AI strategies
-//
-//! Key Attributes:
-//! - Plan is it will be contained in CvGameRules object within CvGame class
-//! - Populated from XML\???? (not sure what path/name you want)
-//! - Contains an array of CvAIGrandStrategyXMLEntry from the above XML file
-//! - One instance for the entire game
-//! - Accessed heavily by CvPlayerAIStrategy class (which stores the AI strategy state for 1 player)
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
 class CvAIGrandStrategyXMLEntries
 {
 public:
 	CvAIGrandStrategyXMLEntries(void);
 	~CvAIGrandStrategyXMLEntries(void);
 
-	// Accessor functions
+
 	std::vector<CvAIGrandStrategyXMLEntry*>& GetAIGrandStrategyEntries();
 #ifdef AUI_WARNING_FIXES
 	uint GetNumAIGrandStrategies() const;
@@ -176,4 +176,4 @@ private:
 	std::vector<CvAIGrandStrategyXMLEntry*> m_paAIGrandStrategyEntries;
 };
 
-#endif //CIV5_GRAND_STRATEGY_AI_H
+#endif

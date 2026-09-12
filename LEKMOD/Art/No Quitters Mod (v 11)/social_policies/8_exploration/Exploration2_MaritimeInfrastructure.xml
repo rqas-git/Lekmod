@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2/13/2016 3:17:38 AM -->
+
 <GameData>
 	
-	<!-- Now provides +50% hammers to lighthouse, harbor, seaport -->
+
 	<Policy_BuildingClassProductionModifiers>
 		<Row>
 			<PolicyType>POLICY_MARITIME_INFRASTRUCTURE</PolicyType>

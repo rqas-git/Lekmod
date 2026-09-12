@@ -1,13 +1,13 @@
-/*	-------------------------------------------------------------------------------------------------------
-	ù 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
 
-//	AUTHOR:  Soren Johnson
-//	PURPOSE: Game map class
+
+
+
+
+
+
+
+
+
 
 #include "CvGameCoreDLLPCH.h"
 #include "CvMap.h"
@@ -23,18 +23,18 @@
 #include "CvAStar.h"
 #include "CvInfos.h"
 #include "CvInfosSerializationHelper.h"
-// for GUIDs
+
 typedef struct tagMSG* LPMSG;
 #include <objbase.h>
 
-// must be included after all other headers
+
 #include "LintFree.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// CvLandmass
-//////////////////////////////////////////////////////////////////////////
 
-//	--------------------------------------------------------------------------------
+
+
+
+
 CvLandmass::CvLandmass()
 {
 	m_iID = -1;
@@ -45,13 +45,13 @@ CvLandmass::CvLandmass()
 	m_iCentroidY = 0;
 }
 
-//	--------------------------------------------------------------------------------
+
 CvLandmass::~CvLandmass()
 {
 
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvLandmass::init(int iID, bool bWater)
 {
 	m_iID = iID;
@@ -62,25 +62,25 @@ void CvLandmass::init(int iID, bool bWater)
 	m_iCentroidY = 0;
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvLandmass::GetID() const
 {
 	return m_iID;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvLandmass::SetID(int iID)
 {
 	m_iID = iID;
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvLandmass::getNumTiles() const
 {
 	return m_iNumTiles;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvLandmass::changeNumTiles(int iChange)
 {
 	if(iChange != 0)
@@ -97,32 +97,32 @@ void CvLandmass::changeNumTiles(int iChange)
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvLandmass::ChangeCentroidX(int iChange)
 {
 	m_iCentroidX = (m_iCentroidX + iChange);
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvLandmass::ChangeCentroidY(int iChange)
 {
 	m_iCentroidY = (m_iCentroidY + iChange);
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvLandmass::isWater() const
 {
 	return m_bWater;
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvLandmass::isLake() const
 {
 	return (m_bWater && (m_iNumTiles <= GC.getLAKE_MAX_AREA_SIZE()));
 }
 
 
-//	--------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 int CvLandmass::GetContinentType() const
 #else
@@ -132,7 +132,7 @@ char CvLandmass::GetContinentType() const
 	return m_cContinentType;
 }
 
-//	--------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 void CvLandmass::SetContinentType(const int cContinent)
 #else
@@ -142,7 +142,7 @@ void CvLandmass::SetContinentType(const char cContinent)
 	m_cContinentType = cContinent;
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvLandmass::GetCentroidX()
 {
 	if(m_iNumTiles > 0)
@@ -153,7 +153,7 @@ int CvLandmass::GetCentroidX()
 	return -1;
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvLandmass::GetCentroidY()
 {
 	if(m_iNumTiles > 0)
@@ -165,10 +165,10 @@ int CvLandmass::GetCentroidY()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvLandmass::read(FDataStream& kStream)
 {
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion;
 	kStream >> uiVersion;
 
@@ -183,10 +183,10 @@ void CvLandmass::read(FDataStream& kStream)
 	kStream >> m_cContinentType;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvLandmass::write(FDataStream& kStream) const
 {
-	// Current version number
+
 	uint uiVersion = 1;
 	kStream << uiVersion;
 
@@ -203,14 +203,14 @@ void CvLandmass::write(FDataStream& kStream) const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 FDataStream& operator<<(FDataStream& saveTo, const CvLandmass& readFrom)
 {
 	readFrom.write(saveTo);
 	return saveTo;
 }
 
-//	--------------------------------------------------------------------------------
+
 FDataStream& operator>>(FDataStream& loadFrom, CvLandmass& writeTo)
 {
 	writeTo.read(loadFrom);
@@ -218,11 +218,11 @@ FDataStream& operator>>(FDataStream& loadFrom, CvLandmass& writeTo)
 }
 
 static uint sgCvMapInstanceCount = 0;
-//////////////////////////////////////////////////////////////////////////////
 
-// Public Functions...
 
-//	--------------------------------------------------------------------------------
+
+
+
 CvMap::CvMap()
 {
 	CvMapInitData defaultMapData;
@@ -253,18 +253,18 @@ CvMap::CvMap()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 CvMap::~CvMap()
 {
 	uninit();
 	--sgCvMapInstanceCount;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::InitPlots()
 {
 	m_pMapPlots = FNEW(CvPlot[numPlots()], c_eCiv5GameplayDLL, 0);
-	//allocate all the memory we need up front
+
 
 	int iNumPlots = numPlots();
 
@@ -352,8 +352,8 @@ void CvMap::InitPlots()
 	m_kPlotManager.Init(getGridWidth(), getGridHeight());
 }
 
-//	--------------------------------------------------------------------------------
-void CvMap::init(CvMapInitData* pInitInfo/*=NULL*/)
+
+void CvMap::init(CvMapInitData* pInitInfo         )
 {
 	int iX, iY;
 
@@ -363,28 +363,28 @@ void CvMap::init(CvMapInitData* pInitInfo/*=NULL*/)
 	                                        getSeaLevelInfo().GetDescription());
 
 
-	//--------------------------------
-	// Init saved data
+
+
 	reset(pInitInfo);
 
-	//--------------------------------
-	// Init containers
+
+
 	m_areas.Init();
 	m_landmasses.Init();
 
 #ifdef AUI_ASTAR_CACHE_PLOTS_AT_NODES
-	//--------------------------------
-	// Init plot data
+
+
 	InitPlots();
 #endif
 
-	//--------------------------------
-	// Init non-saved data
+
+
 	setup();
 
 #ifndef AUI_ASTAR_CACHE_PLOTS_AT_NODES
-	//--------------------------------
-	// Init other game data
+
+
 	InitPlots();
 #endif
 
@@ -401,7 +401,7 @@ void CvMap::init(CvMapInitData* pInitInfo/*=NULL*/)
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::uninit()
 {
 	SAFE_DELETE_ARRAY(m_paiNumResource);
@@ -433,24 +433,24 @@ void CvMap::uninit()
 	m_kPlotManager.Uninit();
 }
 
-//	--------------------------------------------------------------------------------
-// FUNCTION: reset()
-// Initializes data members that are serialized.
+
+
+
 void CvMap::reset(CvMapInitData* pInitInfo)
 {
-	//--------------------------------
-	// Uninit class
+
+
 	uninit();
 
 	m_iAIMapHints = 0;
-	//
-	// set grid size
-	// initially set in terrain cell units
-	//
-	m_iGridWidth = (CvPreGame::worldSize() != NO_WORLDSIZE) ?  getWorldInfo().getGridWidth(): 0;	//todotw:tcells wide
+
+
+
+
+	m_iGridWidth = (CvPreGame::worldSize() != NO_WORLDSIZE) ?  getWorldInfo().getGridWidth(): 0;
 	m_iGridHeight = (CvPreGame::worldSize() != NO_WORLDSIZE) ? getWorldInfo().getGridHeight(): 0;
 
-	// allow grid size override
+
 	if(pInitInfo)
 	{
 		m_iGridWidth	= pInitInfo->m_iGridW;
@@ -473,9 +473,9 @@ void CvMap::reset(CvMapInitData* pInitInfo)
 	m_iBottomLatitude = std::min(m_iBottomLatitude, 90);
 	m_iBottomLatitude = std::max(m_iBottomLatitude, -90);
 
-	//
-	// set wrapping
-	//
+
+
+
 	m_bWrapX = true;
 	m_bWrapY = false;
 
@@ -515,9 +515,9 @@ void CvMap::reset(CvMapInitData* pInitInfo)
 }
 
 
-//	--------------------------------------------------------------------------------
-// FUNCTION: setup()
-// Initializes all data that is not serialized but needs to be initialized after loading.
+
+
+
 void CvMap::setup()
 {
 	GC.getPathFinder().Initialize(getGridWidth(), getGridHeight(), isWrapX(), isWrapY(), PathDest, PathDestValid, PathHeuristic, PathCost, PathValid, PathAdd, PathNodeAdd, UnitPathInitialize, UnitPathUninitialize, NULL);
@@ -539,9 +539,9 @@ void CvMap::setup()
 }
 
 
-//////////////////////////////////////
-// graphical only setup
-//////////////////////////////////////
+
+
+
 void CvMap::setupGraphical()
 {
 	if(!GC.IsGraphicsInitialized())
@@ -568,7 +568,7 @@ void CvMap::setupGraphical()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::erasePlots()
 {
 #ifdef AUI_WARNING_FIXES
@@ -579,12 +579,12 @@ void CvMap::erasePlots()
 	for(iI = 0; iI < numPlots(); iI++)
 #endif
 	{
-		plotByIndexUnchecked(iI)->erase(true/*bEraseUnitsIfWater*/);
+		plotByIndexUnchecked(iI)->erase(true                      );
 	}
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::setRevealedPlots(TeamTypes eTeam, bool bNewValue, bool bTerrainOnly)
 {
 #ifdef AUI_WARNING_FIXES
@@ -600,7 +600,7 @@ void CvMap::setRevealedPlots(TeamTypes eTeam, bool bNewValue, bool bTerrainOnly)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::setAllPlotTypes(PlotTypes ePlotType)
 {
 
@@ -617,7 +617,7 @@ void CvMap::setAllPlotTypes(PlotTypes ePlotType)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::doTurn()
 {
 #ifdef AUI_WARNING_FIXES
@@ -633,7 +633,7 @@ void CvMap::doTurn()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::updateFog()
 {
 #if defined(AUI_WARNING_FIXES) && defined(AUI_USE_OPENMP)
@@ -655,7 +655,7 @@ void CvMap::updateFog()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::updateDeferredFog()
 {
 	for(uint uiI=0; uiI < m_vDeferredFogPlots.size(); uiI++)
@@ -666,7 +666,7 @@ void CvMap::updateDeferredFog()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::updateVisibility()
 {
 #if defined(AUI_WARNING_FIXES) && defined(AUI_USE_OPENMP)
@@ -687,7 +687,7 @@ void CvMap::updateVisibility()
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::updateLayout(bool bDebug)
 {
 #ifdef AUI_WARNING_FIXES
@@ -706,7 +706,7 @@ void CvMap::updateLayout(bool bDebug)
 	DLLUI->setDirty(PlotData_DIRTY_BIT,false);
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::updateSight(bool bIncrement)
 {
 #ifdef AUI_WARNING_FIXES
@@ -722,7 +722,7 @@ void CvMap::updateSight(bool bIncrement)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::updateCenterUnit()
 {
 #if defined(AUI_WARNING_FIXES) && defined(AUI_USE_OPENMP)
@@ -744,7 +744,7 @@ void CvMap::updateCenterUnit()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::updateWorkingCity(CvPlot* pPlot, int iRange)
 {
 	if(pPlot && iRange > 0)
@@ -755,9 +755,9 @@ void CvMap::updateWorkingCity(CvPlot* pPlot, int iRange)
 		for (int iDY = -iRange; iDY <= iRange; iDY++)
 		{
 			iMaxDX = iRange - MAX(0, iDY);
-			for (iDX = -iRange - MIN(0, iDY); iDX <= iMaxDX; iDX++) // MIN() and MAX() stuff is to reduce loops (hexspace!)
+			for (iDX = -iRange - MIN(0, iDY); iDX <= iMaxDX; iDX++)
 			{
-				// No need for range check because loops are set up properly
+
 				pLoopPlot = plotXY(pPlot->getX(), pPlot->getY(), iDX, iDY);
 #else
 		for(int iX = -iRange; iX <= iRange; iX++)
@@ -787,7 +787,7 @@ void CvMap::updateWorkingCity(CvPlot* pPlot, int iRange)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::updateYield()
 {
 #ifdef AUI_WARNING_FIXES
@@ -802,8 +802,8 @@ void CvMap::updateYield()
 	}
 }
 
-//	--------------------------------------------------------------------------------
-//	Update the adjacency cache values
+
+
 void CvMap::updateAdjacency()
 {
 #if defined(AUI_WARNING_FIXES) && defined(AUI_USE_OPENMP)
@@ -825,7 +825,7 @@ void CvMap::updateAdjacency()
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::verifyUnitValidPlot()
 {
 #ifdef AUI_WARNING_FIXES
@@ -841,7 +841,7 @@ void CvMap::verifyUnitValidPlot()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 CvPlot* CvMap::syncRandPlot(int iFlags, int iArea, int iMinUnitDistance, int iTimeout)
 {
 	CvPlot* pPlot;
@@ -879,9 +879,9 @@ CvPlot* CvMap::syncRandPlot(int iFlags, int iArea, int iMinUnitDistance, int iTi
 					for (iDY = -iMinUnitDistance; iDY <= iMinUnitDistance; iDY++)
 					{
 						iMaxDX = iMinUnitDistance - MAX(0, iDY);
-						for (iDX = -iMinUnitDistance - MIN(0, iDY); iDX <= iMaxDX; iDX++) // MIN() and MAX() stuff is to reduce loops (hexspace!)
+						for (iDX = -iMinUnitDistance - MIN(0, iDY); iDX <= iMaxDX; iDX++)
 						{
-							// No need for range check because loops are set up properly
+
 							pLoopPlot = plotXY(pTestPlot->getX(), pTestPlot->getY(), iDX, iDY);
 #else
 					for(iDX = -(iMinUnitDistance); iDX <= iMinUnitDistance; iDX++)
@@ -991,7 +991,7 @@ CvPlot* CvMap::syncRandPlot(int iFlags, int iArea, int iMinUnitDistance, int iTi
 	return pPlot;
 }
 
-//	--------------------------------------------------------------------------------
+
 CvCity* CvMap::findCity(int iX, int iY, PlayerTypes eOwner, TeamTypes eTeam, bool bSameArea, bool bCoastalOnly, TeamTypes eTeamAtWarWith, DirectionTypes eDirection, const CvCity* pSkipCity)
 {
 	CvCity* pLoopCity;
@@ -1006,7 +1006,7 @@ CvCity* CvMap::findCity(int iX, int iY, PlayerTypes eOwner, TeamTypes eTeam, boo
 	if (pCheckPlot == NULL)
 		return NULL;
 
-	// XXX look for barbarian cities???
+
 
 	iBestValue = MAXINT;
 	pBestCity = NULL;
@@ -1054,7 +1054,7 @@ CvCity* CvMap::findCity(int iX, int iY, PlayerTypes eOwner, TeamTypes eTeam, boo
 }
 
 
-//	--------------------------------------------------------------------------------
+
 CvUnit* CvMap::findUnit(int iX, int iY, PlayerTypes eOwner, bool bReadyToSelect, bool bWorkers)
 {
 	CvUnit* pLoopUnit;
@@ -1098,7 +1098,7 @@ CvUnit* CvMap::findUnit(int iX, int iY, PlayerTypes eOwner, bool bReadyToSelect,
 }
 
 
-//	--------------------------------------------------------------------------------
+
 CvPlot* CvMap::findNearestStartPlot(int iX, int iY, PlayerTypes& eOwner)
 {
 	eOwner = NO_PLAYER;
@@ -1131,7 +1131,7 @@ CvPlot* CvMap::findNearestStartPlot(int iX, int iY, PlayerTypes& eOwner)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 CvArea* CvMap::findBiggestArea(bool bWater)
 {
 	CvArea* pLoopArea;
@@ -1161,7 +1161,7 @@ CvArea* CvMap::findBiggestArea(bool bWater)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvMap::getMapFractalFlags()
 {
 	int wrapX = 0;
@@ -1180,8 +1180,8 @@ int CvMap::getMapFractalFlags()
 }
 
 
-//	--------------------------------------------------------------------------------
-//	Check plots for wetlands or seaWater.  Returns true if found
+
+
 bool CvMap::findWater(CvPlot* pPlot, int iRange, bool bFreshWater)
 {
 	CvPlot* pLoopPlot;
@@ -1194,9 +1194,9 @@ bool CvMap::findWater(CvPlot* pPlot, int iRange, bool bFreshWater)
 	for (iDY = -iRange; iDY <= iRange; iDY++)
 	{
 		iMaxDX = iRange - MAX(0, iDY);
-		for (iDX = -iRange - MIN(0, iDY); iDX <= iMaxDX; iDX++) // MIN() and MAX() stuff is to reduce loops (hexspace!)
+		for (iDX = -iRange - MIN(0, iDY); iDX <= iMaxDX; iDX++)
 		{
-			// No need for range check because loops are set up properly
+
 			pLoopPlot = plotXY(iPlotX, iPlotY, iDX, iDY);
 #else
 	for(iDX = -(iRange); iDX <= iRange; iDX++)
@@ -1229,21 +1229,21 @@ bool CvMap::findWater(CvPlot* pPlot, int iRange, bool bFreshWater)
 	return false;
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvMap::plotX(int iIndex) const
 {
 	return (iIndex % getGridWidth());
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvMap::plotY(int iIndex) const
 {
 	return (iIndex / getGridWidth());
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvMap::maxPlotDistance()
 {
 #ifdef NQM_FAST_COMP
@@ -1253,7 +1253,7 @@ int CvMap::maxPlotDistance()
 #endif
 }
 
-//	--------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 uint CvMap::getLandPlots() const
 #else
@@ -1264,7 +1264,7 @@ int CvMap::getLandPlots()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::changeLandPlots(int iChange)
 {
 #ifdef AUI_WARNING_FIXES
@@ -1277,7 +1277,7 @@ void CvMap::changeLandPlots(int iChange)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 uint CvMap::getOwnedPlots() const
 #else
@@ -1288,7 +1288,7 @@ int CvMap::getOwnedPlots()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::changeOwnedPlots(int iChange)
 {
 #ifdef AUI_WARNING_FIXES
@@ -1301,56 +1301,56 @@ void CvMap::changeOwnedPlots(int iChange)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvMap::getTopLatitude()
 {
 	return m_iTopLatitude;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvMap::getBottomLatitude()
 {
 	return m_iBottomLatitude;
 }
 
-//	--------------------------------------------------------------------------------
+
 WorldSizeTypes CvMap::getWorldSize()
 {
 	return CvPreGame::worldSize();
 }
 
-//	--------------------------------------------------------------------------------
+
 const CvWorldInfo& CvMap::getWorldInfo() const
 {
 	return CvPreGame::worldInfo();
 }
 
-//	--------------------------------------------------------------------------------
+
 ClimateTypes CvMap::getClimate()
 {
 	return CvPreGame::climate();
 }
 
-//	--------------------------------------------------------------------------------
+
 const CvClimateInfo& CvMap::getClimateInfo() const
 {
 	return CvPreGame::climateInfo();
 }
 
-//	--------------------------------------------------------------------------------
+
 SeaLevelTypes CvMap::getSeaLevel()
 {
 	return CvPreGame::seaLevel();
 }
 
-//	--------------------------------------------------------------------------------
+
 const CvSeaLevelInfo& CvMap::getSeaLevelInfo() const
 {
 	return CvPreGame::seaLevelInfo();
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvMap::getRandomResourceQuantity(ResourceTypes eIndex)
 {
 	CvResourceInfo* thisResourceInfo = GC.getResourceInfo(eIndex);
@@ -1359,7 +1359,7 @@ int CvMap::getRandomResourceQuantity(ResourceTypes eIndex)
 
 	int iNumRands = 0;
 
-	// Find how many types of resources quantities there can be to pick from
+
 	for(int iLoop = 0; iLoop < GC.getNUM_RESOURCE_QUANTITY_TYPES(); iLoop++)
 	{
 		if(thisResourceInfo->getResourceQuantityType(iLoop) <= 0)
@@ -1377,7 +1377,7 @@ int CvMap::getRandomResourceQuantity(ResourceTypes eIndex)
 	return thisResourceInfo->getResourceQuantityType(iRand);
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvMap::getNumResources(ResourceTypes eIndex)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -1386,7 +1386,7 @@ int CvMap::getNumResources(ResourceTypes eIndex)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::changeNumResources(ResourceTypes eIndex, int iChange)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -1396,7 +1396,7 @@ void CvMap::changeNumResources(ResourceTypes eIndex, int iChange)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvMap::getNumResourcesOnLand(ResourceTypes eIndex)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -1405,7 +1405,7 @@ int CvMap::getNumResourcesOnLand(ResourceTypes eIndex)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::changeNumResourcesOnLand(ResourceTypes eIndex, int iChange)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -1414,21 +1414,21 @@ void CvMap::changeNumResourcesOnLand(ResourceTypes eIndex, int iChange)
 	CvAssert(getNumResourcesOnLand(eIndex) >= 0);
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvMap::getIndexAfterLastArea()
 {
 	return m_areas.GetIndexAfterLast();
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvMap::getNumAreas()
 {
 	return m_areas.GetCount();
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvMap::getNumLandAreas()
 {
 	CvArea* pLoopArea;
@@ -1449,42 +1449,42 @@ int CvMap::getNumLandAreas()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 CvArea* CvMap::getArea(int iID)
 {
 	return m_areas.GetAt(iID);
 }
 
 
-//	--------------------------------------------------------------------------------
+
 CvArea* CvMap::addArea()
 {
 	return m_areas.Add();
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::deleteArea(int iID)
 {
 	m_areas.RemoveAt(iID);
 }
 
 
-//	--------------------------------------------------------------------------------
+
 CvArea* CvMap::firstArea(int* pIterIdx, bool bRev)
 {
 	return !bRev ? m_areas.BeginIter(pIterIdx) : m_areas.EndIter(pIterIdx);
 }
 
 
-//	--------------------------------------------------------------------------------
+
 CvArea* CvMap::nextArea(int* pIterIdx, bool bRev)
 {
 	return !bRev ? m_areas.NextIter(pIterIdx) : m_areas.PrevIter(pIterIdx);
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::recalculateAreas()
 {
 	int iI;
@@ -1503,7 +1503,7 @@ void CvMap::recalculateAreas()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvMap::calculateInfluenceDistance(CvPlot* pSource, CvPlot* pDest, int iMaxRange, bool bCorrectButSlower)
 {
 	CvAStarNode* pNode;
@@ -1533,24 +1533,24 @@ int CvMap::calculateInfluenceDistance(CvPlot* pSource, CvPlot* pDest, int iMaxRa
 		}
 	}
 
-	return -1; // no passable path exists
+	return -1;
 }
 
 
 
-//	--------------------------------------------------------------------------------
-//
-// read object from a stream
-// used during load
-//
+
+
+
+
+
 void CvMap::Read(FDataStream& kStream)
 {
 	CvMapInitData defaultMapData;
 
-	// Init data before load
+
 	reset(&defaultMapData);
 
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion;
 	kStream >> uiVersion;
 
@@ -1590,7 +1590,7 @@ void CvMap::Read(FDataStream& kStream)
 		}
 	}
 
-	// call the read of the free list CvArea class allocations
+
 	kStream >> m_areas;
 
 	kStream >> m_landmasses;
@@ -1605,13 +1605,13 @@ void CvMap::Read(FDataStream& kStream)
 	gDLL->DoMapSetup(numPlots());
 }
 
-//	--------------------------------------------------------------------------------
-// save object to a stream
-// used during save
-//
+
+
+
+
 void CvMap::Write(FDataStream& kStream) const
 {
-	// Current version number
+
 	uint uiVersion = 1;
 	kStream << uiVersion;
 
@@ -1644,7 +1644,7 @@ void CvMap::Write(FDataStream& kStream) const
 		m_pMapPlots[iI].write(kStream);
 	}
 
-	// call the read of the free list CvArea class allocations
+
 	kStream << m_areas;
 
 	kStream << m_landmasses;
@@ -1654,27 +1654,27 @@ void CvMap::Write(FDataStream& kStream) const
 }
 
 
-//	--------------------------------------------------------------------------------
-//
-// used for loading WB maps
-//
+
+
+
+
 void CvMap::rebuild(int iGridW, int iGridH, int iTopLatitude, int iBottomLatitude, bool bWrapX, bool bWrapY, WorldSizeTypes eWorldSize, ClimateTypes eClimate, SeaLevelTypes eSeaLevel)
 {
 	CvMapInitData initData(iGridW, iGridH, iTopLatitude, iBottomLatitude, bWrapX, bWrapY);
 
-	// Set init core data
+
 	CvPreGame::setWorldSize(eWorldSize, true);
 	CvPreGame::setClimate(eClimate);
 	CvPreGame::setSeaLevel(eSeaLevel);
 
-	// Init map
+
 	init(&initData);
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// Protected Functions...
-//////////////////////////////////////////////////////////////////////////
+
+
+
 
 void CvMap::calculateAreas()
 {
@@ -1715,7 +1715,7 @@ void CvMap::calculateAreas()
 			pArea->setAreaBoundaries(boundaries);
 		}
 
-		// Update area boundaries if they've grown
+
 		else
 		{
 			int iX, iY;
@@ -1745,22 +1745,22 @@ void CvMap::calculateAreas()
 }
 
 
-//	--------------------------------------------------------------------------------
-/// How many Natural Wonders are there in the world?
+
+
 int CvMap::GetNumNaturalWonders() const
 {
 	return m_iNumNaturalWonders;
 }
 
-//	--------------------------------------------------------------------------------
-/// Changes count on how many Natural Wonders are there in the world
+
+
 void CvMap::ChangeNumNaturalWonders(int iChange)
 {
 	m_iNumNaturalWonders += iChange;
 }
 
-//	--------------------------------------------------------------------------------
-/// Put Natural Wonders on the map - this could be a LUA script
+
+
 void CvMap::DoPlaceNaturalWonders()
 {
 	FeatureTypes eNWFeature = NO_FEATURE;
@@ -1789,7 +1789,7 @@ void CvMap::DoPlaceNaturalWonders()
 		{
 			eNWFeature = eFeature;
 
-			// hackery - this should be more data driven but the engine side isn't
+
 
 			if(strcmp(feature->GetType(), "FEATURE_EVEREST") == 0)
 			{
@@ -1824,7 +1824,7 @@ void CvMap::DoPlaceNaturalWonders()
 		}
 	}
 
-	// No Natural Wonder Feature, abort!
+
 	if(eNWFeature == NO_FEATURE)
 	{
 		return;
@@ -1832,8 +1832,8 @@ void CvMap::DoPlaceNaturalWonders()
 
 	int iNumNaturalWondersToAdd = getWorldInfo().getNumNaturalWonders();
 
-	int iCoastDistance = -1;	// Should be in XML
-	int iAnotherNWDistance = 5;	// Should be in XML
+	int iCoastDistance = -1;
+	int iAnotherNWDistance = 5;
 
 	int iCount = 0;
 
@@ -1849,7 +1849,7 @@ void CvMap::DoPlaceNaturalWonders()
 
 	int iNumMapPlots = numPlots();
 
-	// Determine the max number of NWs we can have in a single Area
+
 	CvArea* pLoopArea;
 	int iLoop;
 	int iNumValidAreas = 0;
@@ -1876,7 +1876,7 @@ void CvMap::DoPlaceNaturalWonders()
 
 	int iMaxNWsOneArea = 2;
 
-	// If we have more Natural Wonders than we have Areas then we have to handle things differently - more can be placed in one Area than normal
+
 	if(iNumNaturalWondersToAdd > iNumValidAreas)
 	{
 		iMaxNWsOneArea = iNumNaturalWondersToAdd - iNumValidAreas + 1;
@@ -1890,43 +1890,43 @@ void CvMap::DoPlaceNaturalWonders()
 
 		pRandPlot = plotByIndex(iPlotRand);
 
-		// No Water Tiles
+
 		if(pRandPlot->isWater())
 		{
 			continue;
 		}
 
-		// No River Tiles either (don't want them carved up)
+
 		if(pRandPlot->isRiver())
 		{
 			continue;
 		}
 
-		// No Tiles with Resources
+
 		if(pRandPlot->getResourceType() != NO_RESOURCE)
 		{
 			continue;
 		}
 
-		// No Tiles with Improvements (Goody Huts)
+
 		if(pRandPlot->getImprovementType() != NO_IMPROVEMENT)
 		{
 			continue;
 		}
 
-		// Can't have too many NWs in one Area
+
 		if(getArea(pRandPlot->getArea())->GetNumNaturalWonders() >= iMaxNWsOneArea)
 		{
 			continue;
 		}
 
-		// Has to be in the central band of the map.  If the latitude is too extreme we might end up on a islelet surrounded by Ice or something
-		if(pRandPlot->getLatitude() > /*65*/ iMaxLatitudeForNW)
+
+		if(pRandPlot->getLatitude() >        iMaxLatitudeForNW)
 		{
 			continue;
 		}
 
-		// Can't be a starting Plot for ANY player (including Minors)
+
 		if(pRandPlot->isStartingPlot())
 		{
 			continue;
@@ -1934,7 +1934,7 @@ void CvMap::DoPlaceNaturalWonders()
 
 		bool bValid;
 
-		// Does it have to be close to the coast?
+
 		if(iCoastDistance != -1)
 		{
 			bValid = false;
@@ -1943,9 +1943,9 @@ void CvMap::DoPlaceNaturalWonders()
 			for (iPlotLoopY = -iCoastDistance; iPlotLoopY <= iCoastDistance; iPlotLoopY++)
 			{
 				iMaxDX = iCoastDistance - MAX(0, iPlotLoopY);
-				for (iPlotLoopX = -iCoastDistance - MIN(0, iPlotLoopY); iPlotLoopX <= iMaxDX; iPlotLoopX++) // MIN() and MAX() stuff is to reduce loops (hexspace!)
+				for (iPlotLoopX = -iCoastDistance - MIN(0, iPlotLoopY); iPlotLoopX <= iMaxDX; iPlotLoopX++)
 				{
-					// No need for range check because loops are set up properly
+
 					pLoopPlot = plotXY(pRandPlot->getX(), pRandPlot->getY(), iPlotLoopX, iPlotLoopY);
 #else
 			for(iPlotLoopX = -iCoastDistance; iPlotLoopX <= iCoastDistance; iPlotLoopX++)
@@ -1961,7 +1961,7 @@ void CvMap::DoPlaceNaturalWonders()
 						{
 							if(!pLoopPlot->isLake())
 							{
-								// Found a Plot within 2 plots of "the Ocean"
+
 								bValid = true;
 								break;
 							}
@@ -1975,7 +1975,7 @@ void CvMap::DoPlaceNaturalWonders()
 				}
 			}
 
-			// Plot not within 2 of Ocean
+
 			if(!bValid)
 			{
 				continue;
@@ -1984,14 +1984,14 @@ void CvMap::DoPlaceNaturalWonders()
 
 		bValid = true;
 
-		// Can't be too close to another Natural Wonder
+
 #ifdef AUI_HEXSPACE_DX_LOOPS
 		for (iPlotLoopY = -iAnotherNWDistance; iPlotLoopY <= iAnotherNWDistance; iPlotLoopY++)
 		{
 			iMaxDX = iAnotherNWDistance - MAX(0, iPlotLoopY);
-			for (iPlotLoopX = -iAnotherNWDistance - MIN(0, iPlotLoopY); iPlotLoopX <= iMaxDX; iPlotLoopX++) // MIN() and MAX() stuff is to reduce loops (hexspace!)
+			for (iPlotLoopX = -iAnotherNWDistance - MIN(0, iPlotLoopY); iPlotLoopX <= iMaxDX; iPlotLoopX++)
 			{
-				// No need for range check because loops are set up properly
+
 				pLoopPlot = plotXY(pRandPlot->getX(), pRandPlot->getY(), iPlotLoopX, iPlotLoopY);
 #else
 		for(iPlotLoopX = -iAnotherNWDistance; iPlotLoopX <= iAnotherNWDistance; iPlotLoopX++)
@@ -2005,7 +2005,7 @@ void CvMap::DoPlaceNaturalWonders()
 				{
 					if(pLoopPlot->IsNaturalWonder())
 					{
-						// Found a NW too close
+
 						bValid = false;
 						break;
 					}
@@ -2018,13 +2018,13 @@ void CvMap::DoPlaceNaturalWonders()
 			}
 		}
 
-		// Natural Wonder too close
+
 		if(!bValid)
 		{
 			continue;
 		}
 
-		// see if we can add the volcano
+
 		if(featureVolcano != NO_FEATURE)
 		{
 			if(!pRandPlot->isAdjacentToLand())
@@ -2032,12 +2032,12 @@ void CvMap::DoPlaceNaturalWonders()
 				pRandPlot->setPlotType(PLOT_MOUNTAIN);
 				pRandPlot->setFeatureType(featureVolcano);
 				iNumNaturalWondersToAdd--;
-				featureVolcano = NO_FEATURE;	// Prevent this one from being placed again
+				featureVolcano = NO_FEATURE;
 				continue;
 			}
 		}
 
-		// see if we can add the reef
+
 		if(featureReef != NO_FEATURE)
 		{
 			if(!pRandPlot->isMountain() && pRandPlot->isAdjacentToShallowWater())
@@ -2060,19 +2060,19 @@ void CvMap::DoPlaceNaturalWonders()
 						}
 					}
 					iNumNaturalWondersToAdd--;
-					featureReef = NO_FEATURE;	// Prevent this one from being placed again
+					featureReef = NO_FEATURE;
 					continue;
 				}
 			}
 		}
 
-		// see if we can add the lake
+
 		if(featureLake != NO_FEATURE)
 		{
 			if(pRandPlot->isHills())
 			{
 				int iHillCount = 0;
-				// if we have a couple of hills nearby already
+
 				for(int iI = 0; iI < NUM_DIRECTION_TYPES; ++iI)
 				{
 					CvPlot* pAdjacentPlot = plotDirection(pRandPlot->getX(), pRandPlot->getY(), ((DirectionTypes)iI));
@@ -2086,7 +2086,7 @@ void CvMap::DoPlaceNaturalWonders()
 				}
 				if(iHillCount > 2)
 				{
-					// we are stamping the terrain
+
 					for(int iI = 0; iI < NUM_DIRECTION_TYPES; ++iI)
 					{
 						CvPlot* pAdjacentPlot = plotDirection(pRandPlot->getX(), pRandPlot->getY(), ((DirectionTypes)iI));
@@ -2099,18 +2099,18 @@ void CvMap::DoPlaceNaturalWonders()
 					pRandPlot->setPlotType(PLOT_MOUNTAIN);
 					pRandPlot->setFeatureType(featureLake);
 					iNumNaturalWondersToAdd--;
-					featureLake = NO_FEATURE;	// Prevent this one from being placed again
+					featureLake = NO_FEATURE;
 					continue;
 				}
 			}
 		}
 
-		// see if we can add Everest
+
 		if(featureEverest != NO_FEATURE)
 		{
 			if(pRandPlot->isMountain() && GC.getGame().getMapRandNum(100, "Natural Wonder") > 75)
 			{
-				// we are stamping the terrain
+
 				for(int iI = 0; iI < NUM_DIRECTION_TYPES; ++iI)
 				{
 					CvPlot* pAdjacentPlot = plotDirection(pRandPlot->getX(), pRandPlot->getY(), ((DirectionTypes)iI));
@@ -2130,12 +2130,12 @@ void CvMap::DoPlaceNaturalWonders()
 				pRandPlot->setPlotType(PLOT_MOUNTAIN);
 				pRandPlot->setFeatureType(featureEverest);
 				iNumNaturalWondersToAdd--;
-				featureEverest = NO_FEATURE;	// Prevent this one from being placed again
+				featureEverest = NO_FEATURE;
 				continue;
 			}
 		}
 
-		// randomly pick one of the other three - but not if this is a coastal plot, because they look terrible there
+
 		if(pRandPlot->isCoastalLand())
 		{
 			continue;
@@ -2149,7 +2149,7 @@ void CvMap::DoPlaceNaturalWonders()
 				pRandPlot->setPlotType(PLOT_MOUNTAIN);
 				pRandPlot->setFeatureType(featureCrater);
 				iNumNaturalWondersToAdd--;
-				featureCrater = NO_FEATURE;	// Prevent this one from being placed again
+				featureCrater = NO_FEATURE;
 				continue;
 			}
 		}
@@ -2160,7 +2160,7 @@ void CvMap::DoPlaceNaturalWonders()
 				pRandPlot->setPlotType(PLOT_MOUNTAIN);
 				pRandPlot->setFeatureType(featureFuji);
 				iNumNaturalWondersToAdd--;
-				featureFuji = NO_FEATURE;	// Prevent this one from being placed again
+				featureFuji = NO_FEATURE;
 				continue;
 			}
 		}
@@ -2171,14 +2171,14 @@ void CvMap::DoPlaceNaturalWonders()
 				pRandPlot->setPlotType(PLOT_MOUNTAIN);
 				pRandPlot->setFeatureType(featureMesa);
 				iNumNaturalWondersToAdd--;
-				featureMesa = NO_FEATURE;	// Prevent this one from being placed again
+				featureMesa = NO_FEATURE;
 				continue;
 			}
 		}
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::DefaultContinentStamper()
 {
 	const int iNumContinentTypes = 4;
@@ -2196,7 +2196,7 @@ void CvMap::DefaultContinentStamper()
 	CvLandmass* pLoopMass;
 	int iLoop;
 
-	// find the 4 (because that is how many art styles we have) biggest continents - if there aren't 4, oh well
+
 	for(pLoopMass = firstLandmass(&iLoop); pLoopMass != NULL; pLoopMass = nextLandmass(&iLoop))
 	{
 		if(!pLoopMass->isWater())
@@ -2207,7 +2207,7 @@ void CvMap::DefaultContinentStamper()
 			{
 				if(iNumTiles >= iMinimumThresholdToBeAContinentIMHO && iNumTiles > iLargeContinentsSize[iBestContinent])
 				{
-					// push the rest of the tiles down one and store this
+
 					for(int iloop=iNumContinentTypes-1; iloop>iBestContinent; iloop--)
 					{
 						iLargeContinentsID[iloop] = iLargeContinentsID[iloop-1];
@@ -2221,7 +2221,7 @@ void CvMap::DefaultContinentStamper()
 		}
 	}
 
-	// for each of these large continents give them unique art style (randomly)
+
 	shuffleArray(iLargeContinentsArtStyle, 4, GC.getGame().getMapRand());
 	for(int i=0; i < iNumContinentTypes; i++)
 	{
@@ -2241,19 +2241,19 @@ void CvMap::DefaultContinentStamper()
 		iLargeContinentsY[i] = pLandmass->GetCentroidY();
 	}
 
-	// for all landmasses in the game
+
 	for(pLoopMass = firstLandmass(&iLoop); pLoopMass != NULL; pLoopMass = nextLandmass(&iLoop))
 	{
 		int iX = pLoopMass->GetCentroidX();
 		int iY = pLoopMass->GetCentroidY();
-		// if water continent type = 0
+
 		if(pLoopMass->isWater())
 		{
 			pLoopMass->SetContinentType(0);
 		}
-		else // if land
+		else
 		{
-			// continent type = continent type of the closest of the "big four"
+
 			int iBestPlotDistance = 999999;
 			for(int i=0; i < iNumLargeContinents; i++)
 			{
@@ -2267,7 +2267,7 @@ void CvMap::DefaultContinentStamper()
 		}
 	}
 
-	// now stamp all plots with the relevant data
+
 #ifdef AUI_WARNING_FIXES
 	for (uint iI = 0; iI < numPlots(); iI++)
 #else
@@ -2283,21 +2283,21 @@ void CvMap::DefaultContinentStamper()
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvMap::getIndexAfterLastLandmass()
 {
 	return m_landmasses.GetIndexAfterLast();
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvMap::getNumLandmasses()
 {
 	return m_landmasses.GetCount();
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvMap::getNumLandLandmasses()
 {
 	CvLandmass* pLoopLandmass;
@@ -2318,41 +2318,41 @@ int CvMap::getNumLandLandmasses()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 CvLandmass* CvMap::getLandmass(int iID)
 {
 	return m_landmasses.GetAt(iID);
 }
 
 
-//	--------------------------------------------------------------------------------
+
 CvLandmass* CvMap::addLandmass()
 {
 	return m_landmasses.Add();
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::deleteLandmass(int iID)
 {
 	m_landmasses.RemoveAt(iID);
 }
 
 
-//	--------------------------------------------------------------------------------
+
 CvLandmass* CvMap::firstLandmass(int* pIterIdx, bool bRev)
 {
 	return !bRev ? m_landmasses.BeginIter(pIterIdx) : m_landmasses.EndIter(pIterIdx);
 }
 
 
-//	--------------------------------------------------------------------------------
+
 CvLandmass* CvMap::nextLandmass(int* pIterIdx, bool bRev)
 {
 	return !bRev ? m_landmasses.NextIter(pIterIdx) : m_landmasses.PrevIter(pIterIdx);
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::recalculateLandmasses()
 {
 #ifdef AUI_WARNING_FIXES
@@ -2370,7 +2370,7 @@ void CvMap::recalculateLandmasses()
 	calculateLandmasses();
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::calculateLandmasses()
 {
 	CvPlot* pLoopPlot;
@@ -2379,7 +2379,7 @@ void CvMap::calculateLandmasses()
 
 	CvAStar& thePathfinder = GC.getAreaFinder();
 
-	// change the area pathfinder to use these funcs instead
+
 	thePathfinder.SetValidFunc(LandmassValid);
 	thePathfinder.SetNotifyListFunc(JoinLandmass);
 
@@ -2405,21 +2405,21 @@ void CvMap::calculateLandmasses()
 	thePathfinder.SetValidFunc(AreaValid);
 	thePathfinder.SetNotifyListFunc(JoinArea);
 
-	// KWG: Rebuild the yields here.  Yes, this is called during the landmass rebuild process if the landmass' 'lake' field changes, but
-	//      there is a problem with that. The yield bonus for a lake is dependent on the proximity to a plot that is a lake, and not the general landmass
-	//		'lake' flag.  During recalculation, a neighboring plot's 'lake' flag may not be set yet because it is in a landmass that has yet to be calculated
-	//		resulting in the wrong yield being applied to a plot.
+
+
+
+
 	updateYield();
 }
 
-//	---------------------------------------------------------------------------
+
 int CvMap::Validate()
 {
-	//SS: Patch Trade Connections.
-	//Just after the BNW Launch trade connection data could be corrupted due to razing cities.
-	//This function is used because it's called immediately after serialization.
-	//Iterate through all trade connections.
-	//Clear the connection if the source or dest city does not exist.
+
+
+
+
+
 	CvGameTrade* pGameTrade = GC.getGame().GetGameTrade();
 	if(pGameTrade)
 	{
@@ -2467,13 +2467,13 @@ int CvMap::Validate()
 	return iErrors;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvMap::ChangeAIMapHint(int iMapHint)
 {
 	m_iAIMapHints |= iMapHint;
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvMap::GetAIMapHint()
 {
 	return m_iAIMapHints;

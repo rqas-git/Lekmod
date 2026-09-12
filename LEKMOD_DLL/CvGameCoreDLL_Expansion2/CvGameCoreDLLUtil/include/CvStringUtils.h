@@ -1,10 +1,10 @@
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//!	 \file		CvstringUtils.h
-//!  \brief     Public header common string functions
-//!
-//!		This header includes utility functions for changing string encoding.
-//!
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 #pragma once
 
 namespace CvStringUtils

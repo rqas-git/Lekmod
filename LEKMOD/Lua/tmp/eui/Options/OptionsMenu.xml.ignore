@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- edit: Diplomacy stack left/right switch option for EUI -->
-<!-- edit: Ingame Hotkey Manager for EUI -->
-<!-- edit: Larger Espionage Overview option for EUI -->
+
+
+
 <Context ColorSet="Beige_Black" Font="TwCenMT22" FontStyle="Shadow">
 
 
 	<Box ID="BGBlock" Style="BGBlock" />
 
-	<!-- Listing Button Instance -->
+
 
 	<Grid Size="960,658" Anchor="C,C" Offset="0,36" Style="Grid9DetailFive140" ConsumeMouse="1">
 
-		<!-- Side treatments -->
+
 		<Box Style="MenuLeftSideTreatment"/>
 		<Box Style="MenuRightSideTreatment"/>
 
 		<Box Style="MenuTopTreatment"/>
 		<Box Style="MenuBottomTreatment"/>
 
-		<!-- Panel Header Text -->
+
 		<Label ID="TitleLabel" Style="MenuTitleCaption" />
 
 		<Label Anchor="C,T" Offset="0,18" Font="TwCenMT22" FontStyle="SoftShadow" ColorSet="Beige_Black_Alpha" />
 
-		<!-- Top Panel GridSquareHL8-->
+
 		<Box Anchor="C,T" Size="926,29" Offset="0,44" Color="0.0.0.128" >
 
 			<Stack Anchor="L,T" Size="926,32" Offset="0,3" Padding="0" StackGrowth="Right">
@@ -65,7 +65,7 @@
 				<Grid ID="AudioHighlight" Anchor="C,C" Size="160,26" Style="Grid9FrameTurns" Hidden="1" />
 			</Button>
 			
-			<!-- NEW: shorten this tab a bit -->
+
 			<Button ID="MultiplayerButton" Void1="5" Anchor="L,T" Size="160,24" Font="TwCenMT18" String="TXT_KEY_MULTIPLAYER_OPTIONS_SHORT" >
 				<ShowOnMouseOver>
 				<AlphaAnim Anchor="L,T" Size="160,27" Pause="0" Cycle="Bounce" Speed="1" AlphaStart="2" AlphaEnd="1">
@@ -75,7 +75,7 @@
 				<Grid ID="MultiplayerHighlight" Anchor="C,C" Size="160,26" Style="Grid9FrameTurns" Hidden="1" />
 			</Button>
 
-			<!-- NEW: Hotkey Manager tab -->
+
 			<Button ID="HotkeyManagerButton" Void1="6" Anchor="L,T" Size="100,24" Font="TwCenMT18" String="TXT_KEY_HOTKEY_OPTIONS_SHORT" >
 				<ShowOnMouseOver>
 				<AlphaAnim Anchor="L,T" Size="120,27" Pause="0" Cycle="Bounce" Speed="1" AlphaStart="2" AlphaEnd="1">
@@ -92,9 +92,9 @@
 		</Box>
 
 
-		<!-- <Image Anchor="C,B" Offset="0,150" Texture="HorizontalTrim.dds" Size="971.5" / -->
 
-		<!-- Game Options -->
+
+
 		<Container ID="GamePanel" Size="971,500" Offset="0,44" Hidden="1" >
 
 			<Stack Anchor="R,T" Offset="550,50" Padding="10" >
@@ -144,7 +144,7 @@
 
 		</Container>
 
-		<!-- Interface Options -->
+
 		<Container ID="IFacePanel" Size="971,500" Offset="0,44" Hidden="1">
 			<Stack Anchor="R,T" Offset="550,50" Padding="8" >
 				<CheckBox ID="PolicyInfo" Anchor="R,C" String="TXT_KEY_OPSCREEN_SHOW_ALL_POLICY_INFO" IsChecked="0" ToolTip="TXT_KEY_OPSCREEN_SHOW_ALL_POLICY_INFO_TT" />
@@ -212,10 +212,10 @@
 
 		</Container>
 
-		<!-- Video Options -->
+
 		<Container ID="VideoPanel" Size="971,500" Offset="0,44" Hidden="1" >
 
-			<!-- Resolution Options-->
+
 			<Grid Offset="40,50" Size="395,200" Color="White,128" Style="Grid9FrameButtons" >
 				<Stack Anchor ="R,T" Offset ="10,20">
 					<PullDown ID="FSResolutionPull" Style="GenericPullDown" ScrollThreshold="200" SpaceForScroll="0" Size="210,32" >
@@ -234,7 +234,7 @@
 				</GridButton>
 			</Grid>
 
-			<!-- Other Video Options-->
+
 			<Stack Offset="546,270" Anchor="R,T">
 				<CheckBox ID="VSyncCheck" Anchor="R,T" String="TXT_KEY_OPSCREEN_VSYNC" IsChecked="1" ToolTip="TXT_KEY_OPSCREEN_RESTART_REQ_TT" />
 				<CheckBox ID="HDStratCheck" Anchor="R,T" String="TXT_KEY_OPSCREEN_HIGH_DETAIL_STRAT_VIEW" IsChecked="0" ToolTip="TXT_KEY_OPSCREEN_HIGH_DETAIL_STRAT_VIEW_TT" />
@@ -282,18 +282,18 @@
 					<Label Anchor="L,C" AnchorSide="o,i" Offset="10,0" WrapWidth="250" LeadingOffset="-10" String="TXT_KEY_OPSCREEN_TEXTURE_QUALITY" />
 				</PullDown>
 
-				<!--
-						&TerrainSettings::g_uCacheSize
-						&TerrainSettings::g_uTilesToCalcPerFrame
-						&TerrainSettings::g_uNumContinents
-						-->
+
+
+
+
+
 			</Stack>
 			<Box ID="VideoPanelBlock" Offset="16,28" Size="928,460" Color="Black.200" Hidden="1" ConsumeMouse="1" >
 				<Label Font="TwCenMT24" Offset="0,30" Anchor="C,T" String="TXT_KEY_OPSCREEN_VDOP_DISABLED" />
 			</Box>
 		</Container>
 
-		<!-- Audio Options -->
+
 		<Container ID="AudioPanel" Size="971,500" Hidden="1" >
 
 			<Stack Anchor="C,T" Padding="12" Offset="0,130" >
@@ -312,10 +312,10 @@
 
 		</Container>
 
-		<!-- Multiplayer Options -->
+
 		<Container ID="MultiplayerPanel" Size="971,500" Hidden="1" >
 
-			<!-- Turn Notify Options -->
+
 			<Grid Offset="40,100" Size="395,200" Color="White,128" Style="Grid9FrameButtons" >
 			<Label Anchor="C,T" Offset="0,5" WrapWidth="250" LeadingOffset="-10" String="TXT_KEY_OPSCREEN_TURN_NOTIFY_OPTIONS" />
 			<Box Anchor="C,T" Offset="0,30" Size="375,160" Color="0,0,0,0">
@@ -333,7 +333,7 @@
 			</Box>
 			</Grid>
 
-			<!-- Turn Notify Host Options -->
+
 			<Grid Offset="440,100" Size="460,280" Color="White,128" Style="Grid9FrameButtons" >
 			<Label Anchor="C,T" Offset="0,5" WrapWidth="250" LeadingOffset="-10" String="TXT_KEY_OPSCREEN_TURN_NOTIFY_HOST_OPTIONS" />
 			<Stack Anchor="L,T" Offset="10,30" Padding="10" StackGrowth="Bottom">
@@ -387,7 +387,7 @@
 			</Stack>
 			</Grid>
 
-			<!-- LAN Nick Name Option -->
+
 			<Grid Offset="40,350" Size="395,200" Color="White,128" Style="Grid9FrameButtons" >
 				<Label Anchor="C,T" Offset="0,5" WrapWidth="250" LeadingOffset="-10" String="TXT_KEY_MULTIPLAYER_LAN_GAME" />
 				<Stack Anchor="L,T" Offset="10,30" Padding="10" StackGrowth="Bottom">
@@ -402,7 +402,7 @@
 			</Grid>
 		</Container>
 		
-		<!-- NEW: Hotkey Manager -->
+
 		<Container ID="HotkeysPanel" Size="971,550" Hidden="1" >
 			<ScrollPanel Anchor="C,T" Size="880,467" Offset="0,80" Vertical="1" ID="ScrollPanel" >
 				<Stack ID="HotkeysStack" Anchor="C,T" Padding="0" StackGrowth="Bottom">
@@ -417,45 +417,45 @@
 			<CheckBox ID="ShowInvalidHotkeysCheckbox" WrapWidth="200" Offset="220,55" Anchor="L,B" String="TXT_KEY_OPSCREEN_SHOW_ALL_ACTIONS" Font="TwCenMT18" IsChecked="0" ToolTip="TXT_KEY_OPSCREEN_SHOW_ALL_ACTIONS_TT" ButtonTexture="assets/UI/Art/Controls/CheckBox2TheBox.dds" />
 		</Container>
 
-		<!-- Cancel Button -->
+
 		<Box Anchor="C,B" AnchorSide="I.I" Offset="0,54" Size="910,56" Color="255,255,255,0" >
 			<GridButton ID="CancelButton" Anchor="L,B" Style="SmallButton" Size="150,32" Offset="14,0" StateOffsetIncrement="0,0" >
 			<Label Anchor="C,C" String="TXT_KEY_OPSCREEN_CANCEL_BUTTON" Font="TwCenMT18" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" />
 			</GridButton>
 		</Box>
 
-		<!-- Defaults Button -->
+
 		<GridButton ID="DefaultButton" Anchor="C,B" Size="200,32" Offset="0,54" Style="SmallButton" ToolTip="TXT_KEY_OPSCREEN_DEFAULTS_BUTTON_TT">
 			<Label Anchor="C,C" String="TXT_KEY_OPSCREEN_DEFAULTS_BUTTON" Font="TwCenMT18" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" />
 		</GridButton>
 
-		<!-- Accept Button -->
+
 		<GridButton ID="AcceptButton" Anchor="R,B" Offset="38,54" Size="260,45" Style="BaseButton" String="TXT_KEY_OPSCREEN_SAVE_BUTTON" ToolTip="TXT_KEY_OPSCREEN_SAVE_BUTTON_TT" />
 	</Grid>
 
-	<!-- Graphics options changed popup -->
+
 	<Box ID="GraphicsChangedPopup" Color="Black.128" Size="Full.Full" Hidden="1" ConsumeMouseOver="1" >
 		<Grid Size="400,225" Anchor="C,C" Padding="0,20" Style="Grid9DetailFive140" Hidden="0" >
 
-			<!-- Side treatments -->
+
 			<Box Style="PopupLeftSideTreatment"/>
 			<Box Style="PopupRightSideTreatment"/>
 			<Box Style="PopupNotificationTopTreatment"/>
 
 			<Label ID="GraphicsChangedMessage" Anchor="C,T" Offset="0,60" WrapWidth="300" String="TXT_KEY_OPSCREEN_VDOP_RESTART" Font="TwCenMT20" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" />
 
-			<!-- OK Button -->
+
 			<GridButton ID="GraphicsChangedOK" Style="BaseButton" Size="300,30" Anchor="C,B" Offset="0,60" Hidden="0">
 			<Label Anchor="C,C" String="TXT_KEY_OK_BUTTON" ColorSet="Beige_Black" Font="TwCenMT20" FontStyle="Shadow" />
 			</GridButton>
 		</Grid>
 	</Box>
 
-	<!-- Resolution/Language Countdown -->
+
 	<Box ID="Countdown" Color="Black.128" Size="Full.Full" Hidden="1" ConsumeMouseOver="1" >
 		<Grid Size="400,300" Anchor="C,C" Padding="0,20" Style="Grid9DetailFive140" Hidden="0" >
 
-			<!-- Side treatments -->
+
 			<Box Style="PopupLeftSideTreatment"/>
 			<Box Style="PopupRightSideTreatment"/>
 			<Box Style="PopupNotificationTopTreatment"/>
@@ -466,11 +466,11 @@
 			</Stack>
 
 			<Stack ID="ButtonStack" Anchor="C,B" Offset="0,60" Padding="10" StackGrowth="Bottom">
-			<!-- Yes Button -->
+
 			<GridButton ID="CountYes" Style="BaseButton" Size="300,30" Anchor="C,T" Hidden="0">
 				<Label Anchor="C,C" ColorSet="Beige_Black" Font="TwCenMT20" FontStyle="Shadow" />
 			</GridButton>
-			<!-- No Button -->
+
 			<GridButton ID="CountNo" Style="BaseButton" Size="300,30" Anchor="C,T" Hidden="0">
 				<Label Anchor="C,C" ColorSet="Beige_Black" Font="TwCenMT20" FontStyle="Shadow" />
 			</GridButton>
@@ -478,11 +478,11 @@
 		</Grid>
 	</Box>
 	
-	<!-- NEW: Reset all hotkeys confirmation popup -->
+
 	<Box ID="ConfirmResetAllHotkeysPopup" Color="Black.128" Size="Full.Full" Hidden="1" ConsumeMouseOver="1" >
 		<Grid Size="400,300" Anchor="C,C" Padding="0,20" Style="Grid9DetailFive140" Hidden="0" >
 
-			<!-- Side treatments -->
+
 			<Box Style="PopupLeftSideTreatment"/>
 			<Box Style="PopupRightSideTreatment"/>
 			<Box Style="PopupNotificationTopTreatment"/>
@@ -490,11 +490,11 @@
 			<Label Anchor="C,T"  Offset="0,74" WrapWidth="300" Font="TwCenMT22" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" String="TXT_KEY_OPSCREEN_CONFIRM" />
 
 			<Stack Anchor="C,B" Offset="0,80" Padding="24" StackGrowth="Bottom" ID="ButtonStack">
-			  <!-- Yes Button -->
+
 			  <GridButton ID="ConfirmResetAllHotkeysYes" Style="SmallButton" Size="250,36" Anchor="C,T" Hidden="0">
 			    <Label Anchor="C,C" Offset="0,0" String="TXT_KEY_YES_BUTTON" ColorSet="Beige_Black" Font="TwCenMT22" FontStyle="Shadow" />
 			  </GridButton>
-			  <!-- No Button -->
+
 			  <GridButton ID="ConfirmResetAllHotkeysNo" Style="SmallButton" Size="250,36" Anchor="C,T" Hidden="0">
 			    <Label Anchor="C,C" Offset="0,0" String="TXT_KEY_NO_BUTTON" ColorSet="Beige_Black" Font="TwCenMT22" FontStyle="Shadow" />
 			  </GridButton>
@@ -502,7 +502,7 @@
 		</Grid>
 	</Box>
 
-	<!-- NEW: Instances for hotkeys screen -->
+
 	<Instance Name="KeyEntry" >
         <Container ID="Root" Anchor="L,T" Size="200,34" Offset="-30,0" ConsumeMouse="1" Hidden="0">
 			<Box Anchor="L,C" Size="200,34" ID="HotkeyEditButtonsBox" Color="0,0,0,0" Hidden="1">

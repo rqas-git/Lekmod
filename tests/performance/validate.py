@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Deterministic differential checks for the performance edits.
 
-Uses actual Lua scripts and source-extracted C++ methods with controlled engine
-doubles. These tests measure eliminated operations, not whole-game turn times.
-Requires clang++ and lupa with its Lua 5.1 runtime. Run from any directory.
-"""
+
+
+
+
+
 import argparse
 import hashlib
 import json
@@ -12,6 +12,8 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from source_text import canonical
 from next_checks import cpp_checks, shuffle_checks, normalize_trade_section
 import additional_checks
 
@@ -58,18 +60,22 @@ def trade_checks(directory, address_sanitizer=False):
     path = 'LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvTradeClasses.cpp'
     current = source(path)
     baseline = subprocess.check_output(['git', 'show', f'{TRADE_BASE}:{path}'], cwd=ROOT).decode(errors='replace')
-    start, end = baseline.index('/// Get all available TR'), baseline.index('// sort player numbers')
-    current_start, current_end = current.index('/// Get all available TR'), current.index('// sort player numbers')
-    assert baseline[start:end] == normalize_trade_section(current[current_start:current_end])
+    old_candidates = extract(baseline, 'void CvTradeAI::GetAvailableTR(')
+    new_candidates = extract(current, 'void CvTradeAI::GetAvailableTR(')
+    assert canonical(old_candidates) == canonical(normalize_trade_section(new_candidates))
     def ranking(text):
-        start = text.index('// sort player numbers\nstruct TRSortElement')
-        return text[start:text.index('/// ChooseTradeUnitTargetPlot', start)]
+        start = text.index('struct TRSortElement')
+        end = text.index('bool CvTradeAI::ChooseTradeUnitTargetPlot(', start)
+        end = text.rfind('#ifdef AUI_CONSTIFY', start, end)
+        return text[start:end]
     old = ranking(baseline).replace('TRSortElement', 'BaselineTRSortElement').replace('SortTR', 'BaselineSortTR')
     old = old.replace('::PrioritizeTradeRoutes(', '::PrioritizeTradeRoutesBaseline(')
     start = baseline.index('#ifdef AUI_CONSTIFY\nstd::vector<CvString> CvPlayerTrade::GetPlotToolTips(')
     end = baseline.index('#ifdef AUI_CONSTIFY\nstd::vector<CvString> CvPlayerTrade::GetPlotMouseoverToolTips(', start)
     tooltip = baseline[start:end]
-    assert tooltip in current  # The oracle and UI tooltip implementation stay untouched.
+    current_start = current.index('#ifdef AUI_CONSTIFY\nstd::vector<CvString> CvPlayerTrade::GetPlotToolTips(')
+    current_end = current.index('#ifdef AUI_CONSTIFY\nstd::vector<CvString> CvPlayerTrade::GetPlotMouseoverToolTips(', current_start)
+    assert canonical(tooltip) == canonical(current[current_start:current_end])
     start = baseline.index('{', baseline.index('bool CvGameTrade::IsTradeRouteIndexEmpty(int iIndex)'))
     empty = 'bool CvGameTrade::IsTradeRouteIndexEmpty(int iIndex) const\n' + baseline[start:baseline.index('\n}\n', start)+3]
     substitutions = {
@@ -103,7 +109,7 @@ def connections(directory):
     path = 'LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvCityConnections.cpp'
     current, baseline = source(path), source(path, True)
     old_method = extract(baseline, 'void CvCityConnections::UpdateRouteInfo(')
-    # Preserve the audited capacity fix on both sides; vary only performance edits.
+
     old_growth = extract(old_method, 'if(vpCities.size() > m_uiRouteInfosDimension)')
     new_growth = extract(current, 'if(m_aiCityPlotIDs.size() > m_uiRouteInfosDimension)')
     old_method = old_method.replace(old_growth, new_growth).replace('::UpdateRouteInfo(', '::UpdateRouteInfoBaseline(')
@@ -119,7 +125,7 @@ def metadata(directory):
     current, baseline = source(prefix+'CvImprovementClasses.cpp'), source(prefix+'CvImprovementClasses.cpp', True)
     old = extract(baseline, 'bool CvImprovementEntry::HasAnyAdjacencyYieldBonus() const')
     compute = extract(current, 'bool CvImprovementEntry::ComputeHasAnyAdjacencyYieldBonus() const')
-    assert old.replace('HasAnyAdjacencyYieldBonus', 'ComputeHasAnyAdjacencyYieldBonus') == compute
+    assert canonical(old.replace('HasAnyAdjacencyYieldBonus', 'ComputeHasAnyAdjacencyYieldBonus')) == canonical(compute)
     predicates = old.replace('HasAnyAdjacencyYieldBonus', 'HasAnyAdjacencyYieldBonusBaseline')
     for signature in ('void CvImprovementEntry::CacheAdjacencyYieldBonus()',
                       'bool CvImprovementEntry::HasAnyAdjacencyYieldBonus() const',
@@ -159,7 +165,7 @@ def lua_checks(lua_path):
     funcs = lua.globals()
     result = {'runtime': lua.eval('_VERSION')}
     dummy = source('LEKMOD/Lua/Lekmod_global_dummies.lua')
-    optimized_line = 'break -- The application loop below already visits every eligible city.'
+    optimized_line = 'break'
     assert dummy.count(optimized_line) == 1
     dummy_before = dummy.replace(optimized_line, '')
     cases = old_writes = new_writes = 0
@@ -217,7 +223,7 @@ def main():
         result['next_batch'] = cpp_checks(Path(temp), source, extract, compile_run)
         result['additional'] = additional_checks.cpp_checks(Path(temp), source, extract, compile_run)
     result['lua'] = lua_checks(args.lua_python_path)
-    # Include committed validated sources too, rather than only current dirty files.
+
     paths = [
         'LEKMOD/Lua/Civilizations/Lekmod_uae.lua', 'LEKMOD/Lua/Lekmod_global_dummies.lua',
         'LEKMOD/Lua/Lekmod_policies.lua', 'Lekmap/HBMapmakerUtilities.lua',
@@ -229,7 +235,7 @@ def main():
         'CvImprovementClasses.cpp', 'CvImprovementClasses.h', 'CvPlot.cpp', 'CvGameCoreUtils.h',
         'CvPromotionClasses.cpp', 'CvPromotionClasses.h', 'CvBuilderTaskingAI.cpp',
         'CvTradeClasses.cpp', 'CvTradeClasses.h', 'Lua/CvLuaPlayer.cpp', 'Lua/CvLuaPlayer.h')]
-    # Record the shared implementations introduced by the integrated refactors.
+
     paths += ['LEKMOD_DLL/CvGameCoreDLL_Expansion2/' + name for name in (
         'CvDatabaseUtility.h', 'CvBeliefClasses.cpp', 'CvBuildingClasses.cpp',
         'CvInfos.cpp', 'CvMinorCivAI.cpp', 'CvPolicyClasses.cpp', 'CvTechClasses.cpp',

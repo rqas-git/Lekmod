@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvGameCoreDLLUtil.h"
 #include "CvInternalGameCoreUtils.h"
@@ -18,10 +18,10 @@
 
 #include "LintFree.h"
 
-//=====================================
-// CvGreatWork
-//=====================================
-/// Default Constructor
+
+
+
+
 CvGreatWork::CvGreatWork()
 	: m_eType(NO_GREAT_WORK)
 	, m_eClassType(NO_GREAT_WORK_CLASS)
@@ -34,7 +34,7 @@ CvGreatWork::CvGreatWork()
 {
 }
 
-/// Constructor
+
 CvGreatWork::CvGreatWork(CvString szGreatPersonName, GreatWorkType eType, GreatWorkClass eClassType, int iTurn, EraTypes eEra, PlayerTypes ePlayer)
 	: m_szGreatPersonName(szGreatPersonName)
 	, m_eType(eType)
@@ -46,7 +46,7 @@ CvGreatWork::CvGreatWork(CvString szGreatPersonName, GreatWorkType eType, GreatW
 	m_iTurnFounded = GC.getGame().getGameTurn();
 }
 
-/// Serialization read
+
 FDataStream& operator>>(FDataStream& loadFrom, CvGreatWork& writeTo)
 {
 	int iTemp;
@@ -85,7 +85,7 @@ FDataStream& operator>>(FDataStream& loadFrom, CvGreatWork& writeTo)
 	return loadFrom;
 }
 
-/// Serialization write
+
 FDataStream& operator<<(FDataStream& saveTo, const CvGreatWork& readFrom)
 {
 	uint uiVersion = 3;
@@ -105,10 +105,10 @@ FDataStream& operator<<(FDataStream& saveTo, const CvGreatWork& readFrom)
 	return saveTo;
 }
 
-//=====================================
-// CvGameCulture
-//=====================================
-/// Constructor
+
+
+
+
 CvGameCulture::CvGameCulture(void)
 {
 	m_CurrentGreatWorks.clear();
@@ -116,12 +116,12 @@ CvGameCulture::CvGameCulture(void)
 	m_bReportedSomeoneInfluential = false;
 }
 
-/// Destructor
+
 CvGameCulture::~CvGameCulture(void)
 {
 }
 
-/// Run the turn culture computations for all the players
+
 void CvGameCulture::DoTurn()
 {
 	for (uint uiPlayer = 0; uiPlayer < MAX_MAJOR_CIVS; uiPlayer++)
@@ -135,7 +135,7 @@ void CvGameCulture::DoTurn()
 	}
 }
 
-// Factory method to create a Great Work, returns index of the new work
+
 int CvGameCulture::CreateGreatWork(GreatWorkType eType, GreatWorkClass eClass, PlayerTypes ePlayer, EraTypes eEra, CvString szCreator)
 {
 	CvGreatWork newGreatWork;
@@ -167,7 +167,7 @@ GreatWorkClass CvGameCulture::GetGreatWorkClass(int iIndex) const
 	return pWork->m_eClassType;
 }
 
-/// Returns UI tooltip for this Great Work
+
 CvString CvGameCulture::GetGreatWorkTooltip(int iIndex, PlayerTypes eOwner) const
 {
 	CvAssertMsg(iIndex < GetNumGreatWorks(), "Bad Great Work index");
@@ -178,7 +178,7 @@ CvString CvGameCulture::GetGreatWorkTooltip(int iIndex, PlayerTypes eOwner) cons
 	CvString strYearString;
 	CvGameTextMgr::setDateStr(strYearString,
 		pWork->m_iTurnFounded,
-		false /*bSave*/,
+		false          ,
 		GC.getGame().getCalendar(),
 		GC.getGame().getStartYear(),
 		GC.getGame().getGameSpeedType());
@@ -201,14 +201,14 @@ CvString CvGameCulture::GetGreatWorkTooltip(int iIndex, PlayerTypes eOwner) cons
 	szTooltip += ")";
 	szTooltip += "[NEWLINE]";
 	CvString cultureString;
-#if defined(LEKMOD_GREAT_WORK_YIELD_EFFECTS) // some of this is useful
+#if defined(LEKMOD_GREAT_WORK_YIELD_EFFECTS)
 	CvPlayerCulture* pCulture = GET_PLAYER(eOwner).GetCulture();
 	int iCityID, iSlot;
 	BuildingTypes eBuilding;
 	pCulture->GetGreatWorkLocation(iIndex, iCityID, eBuilding, iSlot);
 #endif
-#if !defined(LEKMOD_GREAT_WORK_YIELD_EFFECTS) // redo the Yield thing, its not much better actually, but w/e
-#if defined(MISC_CHANGES) // Show Yields being Added to Great Works in the Hover Tooltip
+#if !defined(LEKMOD_GREAT_WORK_YIELD_EFFECTS)
+#if defined(MISC_CHANGES)
 	int iFoodPerWork = 0;
 	iFoodPerWork += GET_PLAYER(eOwner).GetGreatWorkYieldChange(YIELD_FOOD);
 	int iProductionPerWork = 0;
@@ -236,14 +236,14 @@ CvString CvGameCulture::GetGreatWorkTooltip(int iIndex, PlayerTypes eOwner) cons
 #if !defined(LEK_YIELD_TOURISM)
 #if !defined(LEKMOD_GREAT_WORK_YIELD_EFFECTS)
 	int iTourismPerWork = GC.getBASE_TOURISM_PER_GREAT_WORK();
-	iTourismPerWork += GET_PLAYER(eOwner).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_EXTRA_TOURISM_PER_GREAT_WORK); // NQMP GJS - Cultural Exchange
+	iTourismPerWork += GET_PLAYER(eOwner).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_EXTRA_TOURISM_PER_GREAT_WORK);
 #else
 	int iTourismPerWork = GC.getGreatWorkClassInfo(pWork->m_eClassType)->getBaseTourism();
 	iTourismPerWork += GET_PLAYER(eOwner).GetGreatWorkClassTourismChange(pWork->m_eClassType);
 	int iMod = GET_PLAYER(eOwner).getCity(iCityID)->GetCityBuildings()->GetGreatWorksTourismModifier();
 	iTourismPerWork = (iTourismPerWork * (100 + iMod)) / 100;
 #endif
-#if !defined(MISC_CHANGES) // Build Tooltip String Dynamically
+#if !defined(MISC_CHANGES)
 	cultureString.Format("+%d [ICON_CULTURE], +%d [ICON_TOURISM]", iCulturePerWork, iTourismPerWork);
 #else
 	if (iTourismPerWork != 0) cultureString += CvString::format("+%d [ICON_TOURISM] ", iTourismPerWork);
@@ -290,7 +290,7 @@ CvString CvGameCulture::GetGreatWorkTooltip(int iIndex, PlayerTypes eOwner) cons
 	return szTooltip;
 }
 
-/// Returns name of this Great Work
+
 CvString CvGameCulture::GetGreatWorkName(int iIndex) const
 {
 	CvAssertMsg (iIndex < GetNumGreatWorks(), "Bad Great Work index");
@@ -299,7 +299,7 @@ CvString CvGameCulture::GetGreatWorkName(int iIndex) const
 	return CultureHelpers::GetGreatWorkName(pWork->m_eType);
 }
 
-/// Returns artist of this Great Work
+
 CvString CvGameCulture::GetGreatWorkArtist(int iIndex) const
 {
 	CvAssertMsg (iIndex < GetNumGreatWorks(), "Bad Great Work index");
@@ -311,7 +311,7 @@ CvString CvGameCulture::GetGreatWorkArtist(int iIndex) const
 	return szArtist;
 }
 
-/// Returns era of this Great Work
+
 CvString CvGameCulture::GetGreatWorkEra(int iIndex) const
 {
 	CvAssertMsg (iIndex < GetNumGreatWorks(), "Bad Great Work index");
@@ -322,7 +322,7 @@ CvString CvGameCulture::GetGreatWorkEra(int iIndex) const
 	CvString strYearString;
 	CvGameTextMgr::setDateStr(strYearString,
 		pWork->m_iTurnFounded,
-		false /*bSave*/,
+		false          ,
 		GC.getGame().getCalendar(),
 		GC.getGame().getStartYear(),
 		GC.getGame().getGameSpeedType());
@@ -368,10 +368,10 @@ PlayerTypes CvGameCulture::GetGreatWorkController(int iIndex) const
 {
 	CvAssertMsg (iIndex < GetNumGreatWorks(), "Bad Great Work index");
 	
-	// for each player
-	//   for each building
-	//     for each slot
-	//       check to see if it holds this work
+
+
+
+
 
 	for (uint uiPlayer = 0; uiPlayer < MAX_MAJOR_CIVS; uiPlayer++)
 	{
@@ -415,10 +415,10 @@ int CvGameCulture::GetGreatWorkCurrentThemingBonus (int iIndex) const
 {
 	CvAssertMsg (iIndex < GetNumGreatWorks(), "Bad Great Work index");
 
-	// for each player
-	//   for each building
-	//     for each slot
-	//       check to see if it holds this work
+
+
+
+
 
 	for (uint uiPlayer = 0; uiPlayer < MAX_MAJOR_CIVS; uiPlayer++)
 	{
@@ -459,7 +459,7 @@ int CvGameCulture::GetGreatWorkCurrentThemingBonus (int iIndex) const
 	return 0;
 }
 
-/// Swap the great works!
+
 bool CvGameCulture::SwapGreatWorks (PlayerTypes ePlayer1, int iWork1, PlayerTypes ePlayer2, int iWork2)
 {
 	if (ePlayer1 == NO_PLAYER || ePlayer2 == NO_PLAYER)
@@ -493,7 +493,7 @@ bool CvGameCulture::SwapGreatWorks (PlayerTypes ePlayer1, int iWork1, PlayerType
 		return false;
 	}
 	
-	// We can't trade things that aren't in our swappable slots
+
 	bool bFoundSwappable = false;
 	if (eClass1 == eWritingClass)
 	{
@@ -655,11 +655,11 @@ bool CvGameCulture::SwapGreatWorks (PlayerTypes ePlayer1, int iWork1, PlayerType
 		return false;
 	}
 
-	// remove existing great works
+
 	pCity1->GetCityBuildings()->SetBuildingGreatWork(eBuildingClass1, iSwapIndex1, NO_GREAT_WORK);
 	pCity2->GetCityBuildings()->SetBuildingGreatWork(eBuildingClass2, iSwapIndex2, NO_GREAT_WORK);
 
-	// add in new works
+
 	pCity1->GetCityBuildings()->SetBuildingGreatWork(eBuildingClass1, iSwapIndex1, iWork2);
 	pCity2->GetCityBuildings()->SetBuildingGreatWork(eBuildingClass2, iSwapIndex2, iWork1);
 	
@@ -692,10 +692,10 @@ void CvGameCulture::MoveGreatWorks(PlayerTypes ePlayer, int iCity1, int iBuildin
 	pCity2->GetCityBuildings()->SetBuildingGreatWork((BuildingClassTypes)iBuildingClass2, iWorkIndex2, workType1);
 }
 
-/// How many civs do we need to be influential over to win?
+
 int CvGameCulture::GetNumCivsInfluentialForWin() const
 {
-	// How many players are alive?
+
 	int iAliveMajors = 0;
 	for(int iPlayerLoop = 0; iPlayerLoop < MAX_PLAYERS; iPlayerLoop++)
 	{
@@ -706,12 +706,12 @@ int CvGameCulture::GetNumCivsInfluentialForWin() const
 		}
 	}
 
-	return iAliveMajors - 1;  // Don't have to be influential over yourself
+	return iAliveMajors - 1;
 }
 
-// SERIALIZATION
 
-/// Serialization read
+
+
 FDataStream& operator>>(FDataStream& loadFrom, CvGameCulture& writeTo)
 {
 	uint uiVersion;
@@ -743,7 +743,7 @@ FDataStream& operator>>(FDataStream& loadFrom, CvGameCulture& writeTo)
 	return loadFrom;
 }
 
-/// Serialization write
+
 FDataStream& operator<<(FDataStream& saveTo, const CvGameCulture& readFrom)
 {
 	uint uiVersion = 2;
@@ -765,10 +765,10 @@ FDataStream& operator<<(FDataStream& saveTo, const CvGameCulture& readFrom)
 	return saveTo;
 }
 
-//=====================================
-// CvGreatWorkInMyEmpire
-//=====================================
-/// Default Constructor
+
+
+
+
 CvGreatWorkInMyEmpire::CvGreatWorkInMyEmpire()
 : m_iGreatWorkIndex(-1)
 , m_iCityID(-1)
@@ -777,7 +777,7 @@ CvGreatWorkInMyEmpire::CvGreatWorkInMyEmpire()
 {
 }
 
-/// Constructor
+
 CvGreatWorkInMyEmpire::	CvGreatWorkInMyEmpire(int iIndex, int iCityID, BuildingTypes eBuilding, int iSlot, PlayerTypes ePlayer, EraTypes eEra)
 : m_iGreatWorkIndex(iIndex)
 , m_iCityID(iCityID)
@@ -788,10 +788,10 @@ CvGreatWorkInMyEmpire::	CvGreatWorkInMyEmpire(int iIndex, int iCityID, BuildingT
 {
 }
 
-//=====================================
-// CvGreatWorkBuildingInMyEmpire
-//=====================================
-/// Default Constructor
+
+
+
+
 CvGreatWorkBuildingInMyEmpire::CvGreatWorkBuildingInMyEmpire()
 : m_iCityID(-1)
 , m_eBuilding(NO_BUILDING)
@@ -800,7 +800,7 @@ CvGreatWorkBuildingInMyEmpire::CvGreatWorkBuildingInMyEmpire()
 	m_bEndangered = false;
 }
 
-/// Constructor
+
 CvGreatWorkBuildingInMyEmpire::	CvGreatWorkBuildingInMyEmpire(int iCityID, BuildingTypes eBuilding)
 : m_iCityID(iCityID)
 , m_eBuilding(eBuilding)
@@ -809,21 +809,21 @@ CvGreatWorkBuildingInMyEmpire::	CvGreatWorkBuildingInMyEmpire(int iCityID, Build
 	m_bEndangered = false;
 }
 
-//=====================================
-// CvPlayerCulture
-//=====================================
-/// Constructor
+
+
+
+
 CvPlayerCulture::CvPlayerCulture(void):
 m_pPlayer(NULL)
 {
 }
 
-/// Destructor
+
 CvPlayerCulture::~CvPlayerCulture(void)
 {
 }
 
-/// Initialize class data
+
 void CvPlayerCulture::Init(CvPlayer* pPlayer)
 {
 	m_pPlayer = pPlayer;
@@ -850,9 +850,9 @@ void CvPlayerCulture::Init(CvPlayer* pPlayer)
 	m_iTurnIdeologySwitch = -1;
 }
 
-// GREAT WORKS
 
-/// Is there a Great Work slot of the appropriate type somewhere?
+
+
 bool CvPlayerCulture::HasAvailableGreatWorkSlot(GreatWorkSlotType eGreatWorkSlot)
 {
 	int iLoop;
@@ -866,7 +866,7 @@ bool CvPlayerCulture::HasAvailableGreatWorkSlot(GreatWorkSlotType eGreatWorkSlot
 	return false;
 }
 
-/// How many open Great Work slots do we have of a certain type?
+
 int CvPlayerCulture::GetNumAvailableGreatWorkSlots(GreatWorkSlotType eGreatWorkSlot) const
 {
 	int iLoop;
@@ -879,14 +879,14 @@ int CvPlayerCulture::GetNumAvailableGreatWorkSlots(GreatWorkSlotType eGreatWorkS
 	return iCount;
 }
 
-/// Return the city (and building/slot) of the city that can provide the closest Great Work slot)
+
 CvCity *CvPlayerCulture::GetClosestAvailableGreatWorkSlot(int iX, int iY, GreatWorkSlotType eGreatWorkSlot, BuildingClassTypes *eBuildingClass, int *iSlot) const
 {
 	int iLoop;
 	int iBestDistance = MAX_INT;
 	CvCity *pBestCity = NULL;
-	BuildingClassTypes eBuildingClassReturned = NO_BUILDINGCLASS; // Passed by reference below
-	int iSlotReturned = -1; // Passed by reference below
+	BuildingClassTypes eBuildingClassReturned = NO_BUILDINGCLASS;
+	int iSlotReturned = -1;
 
 	for (CvCity* pCity = m_pPlayer->firstCity(&iLoop); pCity != NULL; pCity = m_pPlayer->nextCity(&iLoop))
 	{
@@ -907,7 +907,7 @@ CvCity *CvPlayerCulture::GetClosestAvailableGreatWorkSlot(int iX, int iY, GreatW
 	return pBestCity;
 }
 
-/// How many Great Works are in the entire empure?
+
 int CvPlayerCulture::GetNumGreatWorks() const
 {
 	CvCity* pLoopCity = NULL;
@@ -922,7 +922,7 @@ int CvPlayerCulture::GetNumGreatWorks() const
 	return iRtnValue;
 }
 
-/// How many Great Work slots are in the entire empire?
+
 int CvPlayerCulture::GetNumGreatWorkSlots() const
 {
 	CvCity* pLoopCity = NULL;
@@ -937,7 +937,7 @@ int CvPlayerCulture::GetNumGreatWorkSlots() const
 	return iRtnValue;
 }
 
-/// How many Great Work slots of a particular type?
+
 int CvPlayerCulture::GetNumGreatWorkSlots(GreatWorkSlotType eSlotType) const
 {
 	CvCity* pLoopCity = NULL;
@@ -952,7 +952,7 @@ int CvPlayerCulture::GetNumGreatWorkSlots(GreatWorkSlotType eSlotType) const
 	return iRtnValue;
 }
 
-/// Does this player have this great work in one of their buildings
+
 bool CvPlayerCulture::ControlsGreatWork (int iIndex)
 {
 	CvCity* pLoopCity = NULL;
@@ -1028,7 +1028,7 @@ bool CvPlayerCulture::GetGreatWorkLocation(int iSearchIndex, int &iReturnCityID,
 	return false;	
 }
 
-/// AI routine to decide what Great Work swapping should take place (including placing Great Works up for swap from another player)
+
 void CvPlayerCulture::DoSwapGreatWorks()
 {
 	GreatWorkClass eWritingClass = (GreatWorkClass)GC.getInfoTypeForString("GREAT_WORK_LITERATURE");
@@ -1126,7 +1126,7 @@ void CvPlayerCulture::DoSwapGreatWorks()
 	MoveWorks (CvTypes::getGREAT_WORK_SLOT_MUSIC(), aGreatWorkBuildingsMusic, aGreatWorksMusic, aNull);
 }
 
-/// Sorts building by AI priority which determines the order they should be evaluated when applying theming bonuses
+
 static bool SortThemingBonus(const CvGreatWorkBuildingInMyEmpire& kEntry1, const CvGreatWorkBuildingInMyEmpire& kEntry2)
 {
 	CvBuildingEntry *pEntry1 = GC.GetGameBuildings()->GetEntry(kEntry1.m_eBuilding);
@@ -1150,12 +1150,12 @@ static bool SortThemingBonus(const CvGreatWorkBuildingInMyEmpire& kEntry1, const
 	return false;
 }
 
-/// Overall routine that orchestrates all the maneuvering of Great Works between buildings and players for one AI turn
+
 void CvPlayerCulture::MoveWorks (GreatWorkSlotType eType, vector<CvGreatWorkBuildingInMyEmpire> &buildings, vector<CvGreatWorkInMyEmpire> &works1, vector<CvGreatWorkInMyEmpire> &works2)
 {
 	std::sort (buildings.begin(), buildings.end(), SortThemingBonus);
 
-	// First building that are not endangered
+
 	vector<CvGreatWorkBuildingInMyEmpire>::iterator itBuilding;
 #ifdef AUI_ITERATOR_POSTFIX_INCREMENT_OPTIMIZATIONS
 	for (itBuilding = buildings.begin(); itBuilding != buildings.end(); ++itBuilding)
@@ -1166,14 +1166,14 @@ void CvPlayerCulture::MoveWorks (GreatWorkSlotType eType, vector<CvGreatWorkBuil
 		if (!itBuilding->m_bEndangered)
 		{
 			itBuilding->m_bThemed = false;
-			if (ThemeBuilding(itBuilding, works1, works2, false /*bConsiderOtherPlayers*/))
+			if (ThemeBuilding(itBuilding, works1, works2, false                          ))
 			{
 				itBuilding->m_bThemed = true;
 			}
 		}
 	}
 
-	// Then endangered ones
+
 #ifdef AUI_ITERATOR_POSTFIX_INCREMENT_OPTIMIZATIONS
 	for (itBuilding = buildings.begin(); itBuilding != buildings.end(); ++itBuilding)
 #else
@@ -1183,21 +1183,21 @@ void CvPlayerCulture::MoveWorks (GreatWorkSlotType eType, vector<CvGreatWorkBuil
 		if (itBuilding->m_bEndangered)
 		{
 			itBuilding->m_bThemed = false;
-			if (ThemeBuilding(itBuilding, works1, works2, false /*bConsiderOtherPlayers*/))
+			if (ThemeBuilding(itBuilding, works1, works2, false                          ))
 			{
 				itBuilding->m_bThemed = true;
 			}
 		}
 	}
 
-	// One more pass through those that are not endangered to see if swapping with another player would help (as long as this isn't Music)
+
 	if (eType != CvTypes::getGREAT_WORK_SLOT_MUSIC())
 	{
 		for (itBuilding = buildings.begin(); itBuilding != buildings.end(); itBuilding++)
 		{
 			if (!itBuilding->m_bEndangered && !itBuilding->m_bThemed)
 			{
-				if (ThemeBuilding(itBuilding, works1, works2, true /*bConsiderOtherPlayers*/))
+				if (ThemeBuilding(itBuilding, works1, works2, true                          ))
 				{
 					itBuilding->m_bThemed = true;
 				}
@@ -1205,8 +1205,8 @@ void CvPlayerCulture::MoveWorks (GreatWorkSlotType eType, vector<CvGreatWorkBuil
 		}
 	}
 
-	// Set the first work left that we haven't themed as something we'd be willing to trade
-	//    for Writing
+
+
 	if (eType == CvTypes::getGREAT_WORK_SLOT_LITERATURE())
 	{
 		if (works1.size() > 0)
@@ -1219,7 +1219,7 @@ void CvPlayerCulture::MoveWorks (GreatWorkSlotType eType, vector<CvGreatWorkBuil
 		}
 	}
 
-	//    for Art and Artifacts
+
 	else
 	{
 		if (eType == CvTypes::getGREAT_WORK_SLOT_ART_ARTIFACT())
@@ -1246,7 +1246,7 @@ void CvPlayerCulture::MoveWorks (GreatWorkSlotType eType, vector<CvGreatWorkBuil
 		}
 	}
 
-	// Fill unthemed buildings, first those that aren't endangered
+
 #ifdef AUI_ITERATOR_POSTFIX_INCREMENT_OPTIMIZATIONS
 	for (itBuilding = buildings.begin(); itBuilding != buildings.end(); ++itBuilding)
 #else
@@ -1271,7 +1271,7 @@ void CvPlayerCulture::MoveWorks (GreatWorkSlotType eType, vector<CvGreatWorkBuil
 	}
 }
 
-/// Uses the available Great Works to fill a building with those works that provide the best Theming Bonus
+
 bool CvPlayerCulture::ThemeBuilding(vector<CvGreatWorkBuildingInMyEmpire>::const_iterator buildingIt, vector<CvGreatWorkInMyEmpire> &works1, vector<CvGreatWorkInMyEmpire> &works2, bool bConsiderOtherPlayers)
 {
 	CvGameCulture *pkGameCulture = GC.getGame().GetGameCulture();
@@ -1292,7 +1292,7 @@ bool CvPlayerCulture::ThemeBuilding(vector<CvGreatWorkBuildingInMyEmpire>::const
 		return false;
 	}
 
-	// Try each of the theming bonuses for this building
+
 	for (int iI = 0; iI < pkEntry->GetNumThemingBonuses(); iI++)
 	{
 		CvThemingBonusInfo *pkBonusInfo = pkEntry->GetThemingBonusInfo(iI);
@@ -1304,7 +1304,7 @@ bool CvPlayerCulture::ThemeBuilding(vector<CvGreatWorkBuildingInMyEmpire>::const
 		{
 			worksToConsider = works2;
 		}
-		// Dedicated routine to handle the equal art/artifact case
+
 		else if (pkBonusInfo->IsMustBeEqualArtArtifact())
 		{
 			if (ThemeEqualArtArtifact(*buildingIt, iI, pkEntry->GetGreatWorkCount(), works1, works2, bConsiderOtherPlayers))
@@ -1325,21 +1325,21 @@ bool CvPlayerCulture::ThemeBuilding(vector<CvGreatWorkBuildingInMyEmpire>::const
 			}
 		}
 
-		// If not enough works, try other theming bonuses
+
 		int iCountSlots = pkEntry->GetGreatWorkCount();
 		if (worksToConsider.size() < (unsigned int)iCountSlots)
 		{
 			continue;
 		}
 
-		// Try each of the works as the starter
+
 #ifdef AUI_ITERATOR_POSTFIX_INCREMENT_OPTIMIZATIONS
 		for (it = worksToConsider.begin(); it != worksToConsider.end(); ++it)
 #else
 		for (it = worksToConsider.begin(); it != worksToConsider.end(); it++)
 #endif
 		{
-			// First, make sure this "starter" is valid
+
 			if (pkBonusInfo->IsRequiresOwner() && it->m_ePlayer != m_pPlayer->GetID())
 			{
 				continue;
@@ -1357,7 +1357,7 @@ bool CvPlayerCulture::ThemeBuilding(vector<CvGreatWorkBuildingInMyEmpire>::const
 			aPlayersSeen.push_back(it->m_ePlayer);
 			aErasSeen.push_back(it->m_eEra);
 
-			// Loop through the rest looking for works that will match up
+
 			it2 = it;
 			for (it2++; it2 != worksToConsider.end() && aWorksChosen.size() < (unsigned int)iCountSlots; it2++)
 			{
@@ -1369,14 +1369,14 @@ bool CvPlayerCulture::ThemeBuilding(vector<CvGreatWorkBuildingInMyEmpire>::const
 				}
 			}
 
-			// Did we theme it properly?
+
 			bool bThemedProperly = false;
 			if (aWorksChosen.size() == iCountSlots && CultureHelpers::GetThemingBonusIndex(m_pPlayer->GetID(), pkEntry, aWorksChosen) == iI)
 			{
 				bThemedProperly = true;
 			}
 
-			// If we are one work short, let's look to other players
+
 			else if (bConsiderOtherPlayers && aWorksChosen.size() == (iCountSlots - 1) && (pkEntry->GetGreatWorkSlotType() != CvTypes::getGREAT_WORK_SLOT_MUSIC()))
 			{
 				for (int iLoopPlayer = 0; iLoopPlayer < MAX_MAJOR_CIVS; iLoopPlayer++)
@@ -1406,7 +1406,7 @@ bool CvPlayerCulture::ThemeBuilding(vector<CvGreatWorkBuildingInMyEmpire>::const
 							iToBeDiscardedWorkIndex = CultureHelpers::FindWorkNotChosen(works1, aWorksChosen);
 						}
 
-						// Does this work fit?
+
 						if (iToBeAcquiredWorkIndex != NO_GREAT_WORK && iToBeDiscardedWorkIndex != NO_GREAT_WORK)
 						{
 							EraTypes eEra = pkGameCulture->m_CurrentGreatWorks[iToBeAcquiredWorkIndex].m_eEra;
@@ -1423,7 +1423,7 @@ bool CvPlayerCulture::ThemeBuilding(vector<CvGreatWorkBuildingInMyEmpire>::const
 
 										LogSwapWorks(ePlayer, iToBeDiscardedWorkIndex, iToBeAcquiredWorkIndex);
 
-										// Update works list
+
 										tempWorks.clear();
 										if (!pkBonusInfo->IsMustBeArtifact())
 										{
@@ -1461,7 +1461,7 @@ bool CvPlayerCulture::ThemeBuilding(vector<CvGreatWorkBuildingInMyEmpire>::const
 										}
 
 										CultureHelpers::SendArtSwapNotification(pkEntry->GetGreatWorkSlotType(), pkBonusInfo->IsMustBeArt(), m_pPlayer->GetID(), ePlayer, iToBeDiscardedWorkIndex, iToBeAcquiredWorkIndex);
-										break;  // Themed it through acquisition
+										break;
 									}
 								}
 							}
@@ -1484,7 +1484,7 @@ bool CvPlayerCulture::ThemeBuilding(vector<CvGreatWorkBuildingInMyEmpire>::const
 					}
 				}
 
-				// Remove these works from those to consider later
+
 				tempWorks.clear();
 #ifdef AUI_ITERATOR_POSTFIX_INCREMENT_OPTIMIZATIONS
 				for (it3 = works1.begin(); it3 != works1.end(); ++it3)
@@ -1492,7 +1492,7 @@ bool CvPlayerCulture::ThemeBuilding(vector<CvGreatWorkBuildingInMyEmpire>::const
 				for (it3 = works1.begin(); it3 != works1.end(); it3++)
 #endif
 				{
-					// Copy it over if not chosen, updating its location
+
 					if (find(aWorksChosen.begin(), aWorksChosen.end(), it3->m_iGreatWorkIndex) == aWorksChosen.end())
 					{
 						GetGreatWorkLocation(it3->m_iGreatWorkIndex, it3->m_iCityID, it3->m_eBuilding, it3->m_iSlot);
@@ -1508,7 +1508,7 @@ bool CvPlayerCulture::ThemeBuilding(vector<CvGreatWorkBuildingInMyEmpire>::const
 				for (it3 = works2.begin(); it3 != works2.end(); it3++)
 #endif
 				{
-					// Copy it over if not chosen, updating its location
+
 					if (find(aWorksChosen.begin(), aWorksChosen.end(), it3->m_iGreatWorkIndex) == aWorksChosen.end())
 					{
 						GetGreatWorkLocation(it3->m_iGreatWorkIndex, it3->m_iCityID, it3->m_eBuilding, it3->m_iSlot);
@@ -1517,7 +1517,7 @@ bool CvPlayerCulture::ThemeBuilding(vector<CvGreatWorkBuildingInMyEmpire>::const
 				}
 				works2 = tempWorks;
 
-				// All done
+
 				LogThemedBuilding(buildingIt->m_iCityID, buildingIt->m_eBuilding, pkBonusInfo->GetBonus());
 				return true;
 			}
@@ -1526,8 +1526,8 @@ bool CvPlayerCulture::ThemeBuilding(vector<CvGreatWorkBuildingInMyEmpire>::const
 	return false;
 }
 
-/// Specialized version of ThemeBuilding() that handles those buildings that are split between Art and Artifact
-bool CvPlayerCulture::ThemeEqualArtArtifact(CvGreatWorkBuildingInMyEmpire kBldg, int iThemingBonusIndex, int iNumSlots, vector<CvGreatWorkInMyEmpire> &works1, vector<CvGreatWorkInMyEmpire> &works2, bool /*bConsiderOtherPlayers*/)
+
+bool CvPlayerCulture::ThemeEqualArtArtifact(CvGreatWorkBuildingInMyEmpire kBldg, int iThemingBonusIndex, int iNumSlots, vector<CvGreatWorkInMyEmpire> &works1, vector<CvGreatWorkInMyEmpire> &works2, bool                          )
 {
 	CvGameCulture *pkGameCulture = GC.getGame().GetGameCulture();
 
@@ -1553,14 +1553,14 @@ bool CvPlayerCulture::ThemeEqualArtArtifact(CvGreatWorkBuildingInMyEmpire kBldg,
 
 	CvThemingBonusInfo *pkBonusInfo = pkEntry->GetThemingBonusInfo(iThemingBonusIndex);
 
-	// Try each of the Artifacts as the starter
+
 #ifdef AUI_ITERATOR_POSTFIX_INCREMENT_OPTIMIZATIONS
 	for (it = works2.begin(); it != works2.end(); ++it)
 #else
 	for (it = works2.begin(); it != works2.end(); it++)
 #endif
 	{
-		// First, make sure this "starter" is valid
+
 		if (pkBonusInfo->IsRequiresOwner() && it->m_ePlayer != m_pPlayer->GetID())
 		{
 			continue;
@@ -1578,7 +1578,7 @@ bool CvPlayerCulture::ThemeEqualArtArtifact(CvGreatWorkBuildingInMyEmpire kBldg,
 		aArtifactsPlayersSeen.push_back(it->m_ePlayer);
 		aArtifactsErasSeen.push_back(it->m_eEra);
 
-		// Loop through the rest looking for works that will match up
+
 		vector<CvGreatWorkInMyEmpire>::const_iterator it2 = it;
 		for (it2++; it2 != works2.end() && aArtifactsChosen.size() < (unsigned int)iWorksInHalf; it2++)
 		{
@@ -1590,18 +1590,18 @@ bool CvPlayerCulture::ThemeEqualArtArtifact(CvGreatWorkBuildingInMyEmpire kBldg,
 			}
 		}
 
-		// Do we have the right amount of art?
+
 		if (aArtifactsChosen.size() == iWorksInHalf)
 		{
 			vector<int> aWorksChosen;
 			vector<PlayerTypes> aPlayersSeen;
 			vector<EraTypes> aErasSeen;
 
-			// Now see if we can get the right number of art works to work as well
+
 			vector<CvGreatWorkInMyEmpire>::const_iterator it3;
 			for (it3 = works1.begin(); it3 != works1.end() && aWorksChosen.size() < (unsigned int)iNumSlots; it3++)
 			{
-				// First, make sure this "starter" is valid
+
 				if (pkBonusInfo->IsRequiresOwner() && it3->m_ePlayer != m_pPlayer->GetID())
 				{
 					continue;
@@ -1627,7 +1627,7 @@ bool CvPlayerCulture::ThemeEqualArtArtifact(CvGreatWorkBuildingInMyEmpire kBldg,
 				aPlayersSeen.push_back(it3->m_ePlayer);
 				aErasSeen.push_back(it3->m_eEra);
 
-				// Loop through the rest looking for works that will match up
+
 				vector<CvGreatWorkInMyEmpire>::const_iterator it4 = it3;
 				for (it4++; it4 != works1.end() && aWorksChosen.size() < (unsigned int)iNumSlots; it4++)
 				{
@@ -1639,14 +1639,14 @@ bool CvPlayerCulture::ThemeEqualArtArtifact(CvGreatWorkBuildingInMyEmpire kBldg,
 					}
 				}
 
-				// Did we theme it properly?
+
 				bool bThemedProperly = false;
 				if (aWorksChosen.size() == iNumSlots && CultureHelpers::GetThemingBonusIndex(m_pPlayer->GetID(), pkEntry, aWorksChosen) == iThemingBonusIndex)
 				{
 					bThemedProperly = true;
 				}
 
-				// If we are one work short, let's look to other players for a last piece of art
+
 				else if (aWorksChosen.size() == (iNumSlots - 1))
 				{
 					for (int iLoopPlayer = 0; iLoopPlayer < MAX_MAJOR_CIVS; iLoopPlayer++)
@@ -1657,7 +1657,7 @@ bool CvPlayerCulture::ThemeEqualArtArtifact(CvGreatWorkBuildingInMyEmpire kBldg,
 							int iToBeAcquiredWorkIndex = kPlayer.GetCulture()->GetSwappableArtIndex();
 							int iToBeDiscardedWorkIndex = CultureHelpers::FindWorkNotChosen(works1, aWorksChosen);
 
-							// Does this work fit?
+
 							if (iToBeAcquiredWorkIndex != NO_GREAT_WORK && iToBeDiscardedWorkIndex != NO_GREAT_WORK)
 							{
 								EraTypes eEra = pkGameCulture->m_CurrentGreatWorks[iToBeAcquiredWorkIndex].m_eEra;
@@ -1672,7 +1672,7 @@ bool CvPlayerCulture::ThemeEqualArtArtifact(CvGreatWorkBuildingInMyEmpire kBldg,
 										{
 											bThemedProperly = true;
 
-											// Update works list
+
 											tempWorks.clear();
 #ifdef AUI_ITERATOR_POSTFIX_INCREMENT_OPTIMIZATIONS
 											for (it5 = works1.begin(); it5 != works1.end(); ++it5)
@@ -1690,7 +1690,7 @@ bool CvPlayerCulture::ThemeEqualArtArtifact(CvGreatWorkBuildingInMyEmpire kBldg,
 											works1 = tempWorks;
 
 											CultureHelpers::SendArtSwapNotification(pkEntry->GetGreatWorkSlotType(), pkBonusInfo->IsMustBeArt(), m_pPlayer->GetID(), ePlayer, iToBeDiscardedWorkIndex, iToBeAcquiredWorkIndex);
-											break;  // Themed it through acquisition
+											break;
 										}
 									}
 								}
@@ -1721,7 +1721,7 @@ bool CvPlayerCulture::ThemeEqualArtArtifact(CvGreatWorkBuildingInMyEmpire kBldg,
 						}
 					}
 
-					// Remove these works from those to consider later
+
 					tempWorks.clear();
 #ifdef AUI_ITERATOR_POSTFIX_INCREMENT_OPTIMIZATIONS
 					for (it5 = works1.begin(); it5 != works1.end(); ++it5)
@@ -1729,7 +1729,7 @@ bool CvPlayerCulture::ThemeEqualArtArtifact(CvGreatWorkBuildingInMyEmpire kBldg,
 					for (it5 = works1.begin(); it5 != works1.end(); it5++)
 #endif
 					{
-						// Copy it over if not chosen, updating its location
+
 						if (find(aWorksChosen.begin(), aWorksChosen.end(), it5->m_iGreatWorkIndex) == aWorksChosen.end())
 						{
 							GetGreatWorkLocation(it5->m_iGreatWorkIndex, it5->m_iCityID, it5->m_eBuilding, it5->m_iSlot);
@@ -1745,7 +1745,7 @@ bool CvPlayerCulture::ThemeEqualArtArtifact(CvGreatWorkBuildingInMyEmpire kBldg,
 					for (it5 = works2.begin(); it5 != works2.end(); it5++)
 #endif
 					{
-						// Copy it over if not chosen, updating its location
+
 						if (find(aWorksChosen.begin(), aWorksChosen.end(), it5->m_iGreatWorkIndex) == aWorksChosen.end())
 						{
 							GetGreatWorkLocation(it5->m_iGreatWorkIndex, it5->m_iCityID, it5->m_eBuilding, it5->m_iSlot);
@@ -1754,7 +1754,7 @@ bool CvPlayerCulture::ThemeEqualArtArtifact(CvGreatWorkBuildingInMyEmpire kBldg,
 					}
 					works2 = tempWorks;
 
-					// All done
+
 					LogThemedBuilding(kBldg.m_iCityID, kBldg.m_eBuilding, pkBonusInfo->GetBonus());
 					return true;
 				}
@@ -1764,7 +1764,7 @@ bool CvPlayerCulture::ThemeEqualArtArtifact(CvGreatWorkBuildingInMyEmpire kBldg,
 	return false;
 }
 
-/// Simple version of ThemeBuilding() which just fills in a building with ANY Great Works, not ones that provide a theming bonus
+
 bool CvPlayerCulture::FillBuilding(vector<CvGreatWorkBuildingInMyEmpire>::const_iterator buildingIt, vector<CvGreatWorkInMyEmpire> &works1, vector<CvGreatWorkInMyEmpire> &works2)
 {
 	CvBuildingEntry *pkEntry = GC.getBuildingInfo(buildingIt->m_eBuilding);
@@ -1805,7 +1805,7 @@ bool CvPlayerCulture::FillBuilding(vector<CvGreatWorkBuildingInMyEmpire>::const_
 		MoveWorkIntoSlot(worksToConsider[iI], buildingIt->m_iCityID, buildingIt->m_eBuilding, iI);
 	}
 
-	// Remove these works from those to consider later
+
 	if (aWorksChosen.size() > 0)
 	{
 		vector<CvGreatWorkInMyEmpire>::iterator it2;
@@ -1818,7 +1818,7 @@ bool CvPlayerCulture::FillBuilding(vector<CvGreatWorkBuildingInMyEmpire>::const_
 		for (it2 = works1.begin(); it2 != works1.end(); it2++)
 #endif
 		{
-			// Copy it over if not chosen, updating its location
+
 			if (find(aWorksChosen.begin(), aWorksChosen.end(), it2->m_iGreatWorkIndex) == aWorksChosen.end())
 			{
 				GetGreatWorkLocation(it2->m_iGreatWorkIndex, it2->m_iCityID, it2->m_eBuilding, it2->m_iSlot);
@@ -1834,7 +1834,7 @@ bool CvPlayerCulture::FillBuilding(vector<CvGreatWorkBuildingInMyEmpire>::const_
 		for (it2 = works2.begin(); it2 != works2.end(); it2++)
 #endif
 		{
-			// Copy it over if not chosen, updating its location
+
 			if (find(aWorksChosen.begin(), aWorksChosen.end(), it2->m_iGreatWorkIndex) == aWorksChosen.end())
 			{
 				GetGreatWorkLocation(it2->m_iGreatWorkIndex, it2->m_iCityID, it2->m_eBuilding, it2->m_iSlot);
@@ -1846,7 +1846,7 @@ bool CvPlayerCulture::FillBuilding(vector<CvGreatWorkBuildingInMyEmpire>::const_
 	return true;
 }
 
-/// Lower-level routine to perform the swap between two Great Works within your own empire
+
 void CvPlayerCulture::MoveWorkIntoSlot (CvGreatWorkInMyEmpire kWork, int iCityID, BuildingTypes eBuilding, int iSlot)
 {
 	CvBuildingEntry *pkToEntry = GC.getBuildingInfo(eBuilding);
@@ -1912,15 +1912,15 @@ void CvPlayerCulture::SetSwappableMusicIndex (int iIndex)
 }
 
 
-// ARCHAEOLOGY
 
-/// Add to the list of plots where we have archaeologists waiting for orders
+
+
 void CvPlayerCulture::AddDigCompletePlot(CvPlot *pPlot)
 {
 	m_aDigCompletePlots.push_back(pPlot);
 }
 
-/// Remove a plot from the list of plots where we have archaeologists waiting for orders
+
 void CvPlayerCulture::RemoveDigCompletePlot(CvPlot *pPlot)
 {
 	vector<CvPlot *>::const_iterator it;
@@ -1939,13 +1939,13 @@ void CvPlayerCulture::RemoveDigCompletePlot(CvPlot *pPlot)
 	}
 }
 
-/// Reset the list of plots where we have an archaeologist waiting for orders
+
 void CvPlayerCulture::ResetDigCompletePlots()
 {
 	m_aDigCompletePlots.clear();
 }
 
-/// Find the next plot where we have an archaeologist waiting for orders
+
 CvPlot *CvPlayerCulture::GetNextDigCompletePlot() const
 {
 	CvPlot *pRtnValue = NULL;
@@ -1958,7 +1958,7 @@ CvPlot *CvPlayerCulture::GetNextDigCompletePlot() const
 	return pRtnValue;
 }
 
-/// Find the next archaeologist waiting for orders
+
 CvUnit *CvPlayerCulture::GetNextDigCompleteArchaeologist(CvPlot **ppPlot) const
 {
 	CvUnit *pRtnValue = NULL;
@@ -1988,7 +1988,7 @@ CvUnit *CvPlayerCulture::GetNextDigCompleteArchaeologist(CvPlot **ppPlot) const
 	return pRtnValue;
 }
 
-/// Is there a dig that completed at this plot?
+
 bool CvPlayerCulture::HasDigCompleteHere(CvPlot *pPlot) const
 {
 	vector<CvPlot *>::const_iterator it;
@@ -2008,20 +2008,20 @@ bool CvPlayerCulture::HasDigCompleteHere(CvPlot *pPlot) const
 	return false;
 }
 
-/// How much culture can we receive from cashing in a written artifact?
+
 int CvPlayerCulture::GetWrittenArtifactCulture() const
 {
-	// Culture boost based on 8 previous turns; same as GREAT_WRITER; move to XML?
-	int iValue = m_pPlayer->GetCultureYieldFromPreviousTurns(GC.getGame().getGameTurn(), 8 /*iPreviousTurnsToCount */);
 
-	// Modify based on game speed
+	int iValue = m_pPlayer->GetCultureYieldFromPreviousTurns(GC.getGame().getGameTurn(), 8                           );
+
+
 	iValue *= GC.getGame().getGameSpeedInfo().getCulturePercent();
 	iValue /= 100;
 
 	return iValue;
 }
 
-/// AI routine - choose what to do with a completed dig site
+
 ArchaeologyChoiceType CvPlayerCulture::GetArchaeologyChoice(CvPlot *pPlot)
 {
 	ArchaeologyChoiceType eRtnValue = ARCHAEOLOGY_DO_NOTHING;
@@ -2033,7 +2033,7 @@ ArchaeologyChoiceType CvPlayerCulture::GetArchaeologyChoice(CvPlot *pPlot)
 		eRtnValue = ARCHAEOLOGY_ARTIFACT_WRITING;
 	}
 	
-	// No slots? Definitely go for Landmark or Cultural Renaissance
+
 	if (!HasAvailableGreatWorkSlot(eArtArtifactSlot))
 	{
 		if (pPlot->HasWrittenArtifact())
@@ -2046,12 +2046,12 @@ ArchaeologyChoiceType CvPlayerCulture::GetArchaeologyChoice(CvPlot *pPlot)
 		}
 	}
 
-	// Outside territory? Go for artifact ...
+
 	else if (pPlot->getOwner() != m_pPlayer->GetID())
 	{
 		eRtnValue = ARCHAEOLOGY_ARTIFACT_PLAYER1;
 
-		// ... unless this is a city state we want to influence to help with diplo victory
+
 		if (pPlot->getOwner() != NO_PLAYER && GET_PLAYER(pPlot->getOwner()).isMinorCiv())
 		{
 			if (m_pPlayer->GetGrandStrategyAI()->GetActiveGrandStrategy() == (AIGrandStrategyTypes) GC.getInfoTypeForString("AIGRANDSTRATEGY_UNITED_NATIONS"))
@@ -2064,13 +2064,13 @@ ArchaeologyChoiceType CvPlayerCulture::GetArchaeologyChoice(CvPlot *pPlot)
 		}
 	}
 
-	// Not a tile a city can work?  Go for artifact
+
 	else if (pPlot->getWorkingCity() == NULL)
 	{
 		eRtnValue = ARCHAEOLOGY_ARTIFACT_PLAYER1;
 	}
 
-	// Otherwise go for Landmark if from Ancient Era, or if have enough other Archaeologists and Antiquity sites to fill all slots
+
 	else if (pPlot->GetArchaeologicalRecord().m_eEra == 0)
 	{
 		eRtnValue = ARCHAEOLOGY_LANDMARK;
@@ -2078,8 +2078,8 @@ ArchaeologyChoiceType CvPlayerCulture::GetArchaeologyChoice(CvPlot *pPlot)
 
 	else
 	{
-		int iNumArchaeologists = m_pPlayer->GetNumUnitsWithUnitAI(UNITAI_ARCHAEOLOGIST, true) - 1 /* For this one that just completed work */;
-		int iNumSites = m_pPlayer->GetEconomicAI()->GetVisibleAntiquitySites() - 1 /* For this one then just was completed */;
+		int iNumArchaeologists = m_pPlayer->GetNumUnitsWithUnitAI(UNITAI_ARCHAEOLOGIST, true) - 1                                            ;
+		int iNumSites = m_pPlayer->GetEconomicAI()->GetVisibleAntiquitySites() - 1                                           ;
 		int iNumGreatWorkSlots = m_pPlayer->GetCulture()->GetNumAvailableGreatWorkSlots(eArtArtifactSlot);
 		int iLimitingFactor = min(iNumArchaeologists, iNumSites);
 
@@ -2100,12 +2100,12 @@ ArchaeologyChoiceType CvPlayerCulture::GetArchaeologyChoice(CvPlot *pPlot)
 		}
 	}
 
-	// If chose an artifact, would player 2's be better?
+
 	if (eRtnValue == ARCHAEOLOGY_ARTIFACT_PLAYER1)
 	{
 		if (pPlot->GetArchaeologicalRecord().m_ePlayer2 == m_pPlayer->GetID())
 		{
-			// For now have AI player try to collect their own artifacts
+
 			eRtnValue = ARCHAEOLOGY_ARTIFACT_PLAYER2;
 		}
 	}
@@ -2113,7 +2113,7 @@ ArchaeologyChoiceType CvPlayerCulture::GetArchaeologyChoice(CvPlot *pPlot)
 	return eRtnValue;
 }
 
-/// Make things happen at an archaeology dig
+
 void CvPlayerCulture::DoArchaeologyChoice (ArchaeologyChoiceType eChoice)
 {
 	CvGameCulture *pCulture = GC.getGame().GetGameCulture();
@@ -2145,14 +2145,14 @@ void CvPlayerCulture::DoArchaeologyChoice (ArchaeologyChoiceType eChoice)
 					{
 						CvPlayer &kOwner = GET_PLAYER(pPlot->getOwner());
 
-						// City-state owned territory?
+
 						if (kOwner.isMinorCiv())
 						{
 							int iFriendship = GC.getLANDMARK_MINOR_FRIENDSHIP_CHANGE();
 							kOwner.GetMinorCivAI()->ChangeFriendshipWithMajor(m_pPlayer->GetID(), iFriendship);
 						}
 
-						// AI major civ owned territory?
+
 						else if (!kOwner.isHuman())
 						{
 							kOwner.GetDiplomacyAI()->ChangeNumLandmarksBuiltForMe(m_pPlayer->GetID(), 1);
@@ -2209,17 +2209,17 @@ void CvPlayerCulture::DoArchaeologyChoice (ArchaeologyChoiceType eChoice)
 					GET_PLAYER(pPlot->getOwner()).GetDiplomacyAI()->ChangeNegativeArchaeologyPoints(pUnit->getOwner(), 10);
 				}
 
-				// Culture boost based on 8 previous turns; same as GREAT_WRITER; move to XML?
-				int iValue = m_pPlayer->GetCultureYieldFromPreviousTurns(GC.getGame().getGameTurn(), 8 /*iPreviousTurnsToCount */);
 
-				// Modify based on game speed
+				int iValue = m_pPlayer->GetCultureYieldFromPreviousTurns(GC.getGame().getGameTurn(), 8                           );
+
+
 				iValue *= GC.getGame().getGameSpeedInfo().getCulturePercent();
 				iValue /= 100;
 
 				m_pPlayer->changeJONSCulture(iValue);
 
 #ifdef UPDATE_CULTURE_NOTIFICATION_DURING_TURN
-				// if this is the human player, have the popup come up so that he can choose a new policy
+
 				if (m_pPlayer->isAlive() && m_pPlayer->isHuman() && m_pPlayer->getNumCities() > 0)
 				{
 					m_pPlayer->TestMidTurnPolicyNotification();
@@ -2237,9 +2237,9 @@ void CvPlayerCulture::DoArchaeologyChoice (ArchaeologyChoiceType eChoice)
 	}
 }
 
-// CULTURAL INFLUENCE
 
-/// Update cultural influence numbers for this turn
+
+
 void CvPlayerCulture::DoTurn()
 {
 	int iInfluentialCivsForWin = GC.getGame().GetGameCulture()->GetNumCivsInfluentialForWin();
@@ -2247,7 +2247,7 @@ void CvPlayerCulture::DoTurn()
 
 	for (int iLoopPlayer = 0; iLoopPlayer < MAX_MAJOR_CIVS; iLoopPlayer++)
 	{
-		// Move over last turn's numbers
+
 		m_aiLastTurnCulturalInfluence[iLoopPlayer] = m_aiCulturalInfluence[iLoopPlayer];
 
 		CvPlayer &kOtherPlayer = GET_PLAYER((PlayerTypes)iLoopPlayer);
@@ -2271,7 +2271,7 @@ void CvPlayerCulture::DoTurn()
 	if (iThisTurnInfluentialCivs > 0 && !GC.getGame().GetGameCulture()->GetReportedSomeoneInfluential())
 	{
 		if(bCultureVictoryValid)
-		{//This civilization is the first civ to be influential over another civs.  Notify the masses!
+		{
 			strSummary = GetLocalizedText("TXT_KEY_NOTIFICATION_CULTURE_VICTORY_SOMEONE_INFLUENTIAL");
 			CvString							targFirstInfluentialInfo = GetLocalizedText("TXT_KEY_NOTIFICATION_CULTURE_VICTORY_SOMEONE_INFLUENTIAL_ACTIVE_PLAYER_TT");
 			Localization::String	someoneFirstInfluentialInfo = Localization::Lookup("TXT_KEY_NOTIFICATION_CULTURE_VICTORY_SOMEONE_INFLUENTIAL_TT");
@@ -2315,7 +2315,7 @@ void CvPlayerCulture::DoTurn()
 	if (!m_bReportedTwoCivsAway && iThisTurnInfluentialCivs > 0 && iThisTurnInfluentialCivs == iInfluentialCivsForWin - 2 && GC.getGame().countMajorCivsEverAlive() >= 4)
 	{
 		if(bCultureVictoryValid)
-		{//This civilization is the first civ to be two civilizations away from getting a cultural victory.  Notify the masses!
+		{
 			CvString							targCloseTwoSummary = GetLocalizedText("TXT_KEY_NOTIFICATION_CULTURE_VICTORY_WITHIN_TWO_ACTIVE_PLAYER");
 			Localization::String	targCloseTwoInfo = Localization::Lookup("TXT_KEY_NOTIFICATION_CULTURE_VICTORY_WITHIN_TWO_ACTIVE_PLAYER_TT");
 			CvString							someoneCloseTwoSummary = GetLocalizedText("TXT_KEY_NOTIFICATION_CULTURE_VICTORY_WITHIN_TWO");
@@ -2355,7 +2355,7 @@ void CvPlayerCulture::DoTurn()
 	if (!m_bReportedOneCivAway && iThisTurnInfluentialCivs == iInfluentialCivsForWin - 1 && GC.getGame().countMajorCivsEverAlive() >= 3)
 	{
 		if(bCultureVictoryValid)
-		{//This civilization is the first civ to be one civilizations away from getting a cultural victory.  Notify the masses!
+		{
 			CvString							targCloseOneSummary = GetLocalizedText("TXT_KEY_NOTIFICATION_CULTURE_VICTORY_WITHIN_ONE_ACTIVE_PLAYER");
 			Localization::String	targCloseOneInfo = Localization::Lookup("TXT_KEY_NOTIFICATION_CULTURE_VICTORY_WITHIN_ONE_ACTIVE_PLAYER_TT");
 			CvString							someoneCloseOneSummary = GetLocalizedText("TXT_KEY_NOTIFICATION_CULTURE_VICTORY_WITHIN_ONE");
@@ -2394,7 +2394,7 @@ void CvPlayerCulture::DoTurn()
 
 	if (m_pPlayer->isHuman() && !GC.getGame().isGameMultiPlayer())
 	{
-		// check for having city-state artifacts
+
 		std::vector<int> aiCityStateArtifact;
 		int iLoop;
 		CvCity* pLoopCity = NULL;
@@ -2448,7 +2448,7 @@ void CvPlayerCulture::DoTurn()
 			}
 		}
 
-		// check for having broadcast towers filled
+
 		PolicyBranchTypes eCurrentBranchType = m_pPlayer->GetPlayerPolicies()->GetLateGamePolicyTree();
 
 		if (eCurrentBranchType == (PolicyBranchTypes)GC.getPOLICY_BRANCH_FREEDOM())
@@ -2498,19 +2498,19 @@ void CvPlayerCulture::DoTurn()
 	LogCultureData();
 }
 
-/// What was our total culture generated throughout the game last turn?
+
 int CvPlayerCulture::GetLastTurnLifetimeCulture() const
 {
 	return m_iLastTurnLifetimeCulture;
 }
 
-/// Set our total culture generated throughout the game  - last turn's number
+
 void CvPlayerCulture::SetLastTurnLifetimeCulture(int iValue)
 {
 	m_iLastTurnLifetimeCulture = iValue;
 }
 
-/// What is our cultural influence now?
+
 int CvPlayerCulture::GetInfluenceOn(PlayerTypes ePlayer) const
 {
 	CvAssertMsg (ePlayer >= 0, "Invalid player index");
@@ -2521,7 +2521,7 @@ int CvPlayerCulture::GetInfluenceOn(PlayerTypes ePlayer) const
 	return m_aiCulturalInfluence[iIndex];
 }
 
-// What is our cultural influence now?
+
 void CvPlayerCulture::ChangeInfluenceOn(PlayerTypes ePlayer, int iValue)
 {
 	CvAssertMsg (ePlayer >= 0, "Invalid player index");
@@ -2532,7 +2532,7 @@ void CvPlayerCulture::ChangeInfluenceOn(PlayerTypes ePlayer, int iValue)
 	m_aiCulturalInfluence[iIndex] = m_aiCulturalInfluence[iIndex] + iValue;
 }
 
-/// What was our cultural influence last turn?
+
 int CvPlayerCulture::GetLastTurnInfluenceOn(PlayerTypes ePlayer) const
 {
 	CvAssertMsg (ePlayer >= 0, "Invalid player index");
@@ -2543,7 +2543,7 @@ int CvPlayerCulture::GetLastTurnInfluenceOn(PlayerTypes ePlayer) const
 	return m_aiLastTurnCulturalInfluence[iIndex];
 }
 
-/// Influence being applied each turn
+
 int CvPlayerCulture::GetInfluencePerTurn(PlayerTypes ePlayer) const
 {
 	int iRtnValue = 0;
@@ -2555,19 +2555,19 @@ int CvPlayerCulture::GetInfluencePerTurn(PlayerTypes ePlayer) const
 	if ((int)ePlayer != m_pPlayer->GetID() && kOtherPlayer.isAlive() && !kOtherPlayer.isMinorCiv() && kOtherTeam.isHasMet(m_pPlayer->getTeam()))
 	{
 #if !defined(LEKMOD_GREAT_FIREWALL_PLAYER_EFFECT)
-		// check to see if the other player has the Great Firewall
+
 		bool bTargetHasGreatFirewall = false;
 
 		int iLoopCity;
 		CvCity* pLoopCity;
 
-		// only check for firewall if the internet influence spread modifier is > 0
+
 		int iTechSpreadModifier = m_pPlayer->GetInfluenceSpreadModifier();
 		if (iTechSpreadModifier > 0)
 		{
 			for (pLoopCity = GET_PLAYER(ePlayer).firstCity(&iLoopCity); pLoopCity != NULL; pLoopCity = GET_PLAYER(ePlayer).nextCity(&iLoopCity))
 			{
-				// Buildings
+
 				for (int jJ = 0; jJ < GC.getNumBuildingClassInfos(); jJ++)
 				{
 					BuildingClassTypes eBuildingClass = (BuildingClassTypes)jJ;
@@ -2604,10 +2604,10 @@ int CvPlayerCulture::GetInfluencePerTurn(PlayerTypes ePlayer) const
 #if !defined(LEK_YIELD_TOURISM) && !defined(STANDARDIZE_YIELDS)
 		int iLoopCity;
 		CvCity* pLoopCity;
-		// Loop through each of our cities
+
 		for (pLoopCity = m_pPlayer->firstCity(&iLoopCity); pLoopCity != NULL; pLoopCity = m_pPlayer->nextCity(&iLoopCity))
 		{
-			// Design has changed so modifier is always player-to-player so only need to get it once and can apply it at the end
+
 			if (pLoopCity->isCapital())
 			{
 				iModifier = pLoopCity->GetCityCulture()->GetTourismMultiplier(kOtherPlayer.GetID(), false, false, false, false, false);
@@ -2615,8 +2615,8 @@ int CvPlayerCulture::GetInfluencePerTurn(PlayerTypes ePlayer) const
 
 			int iInfluenceToAdd = pLoopCity->GetCityCulture()->GetBaseTourism();
 
-			// if we have the internet online, check to see if the opponent has the firewall
-			// if they have the firewall, deduct the internet bonus from them
+
+
 #if !defined(LEKMOD_GREAT_FIREWALL_PLAYER_EFFECT)
 			if (iTechSpreadModifier > 0 && bTargetHasGreatFirewall)
 #else
@@ -2648,7 +2648,7 @@ int CvPlayerCulture::GetInfluencePerTurn(PlayerTypes ePlayer) const
 
 }
 
-/// Current influence level on this player
+
 InfluenceLevelTypes CvPlayerCulture::GetInfluenceLevel(PlayerTypes ePlayer) const
 {
 	InfluenceLevelTypes eRtnValue;
@@ -2698,17 +2698,17 @@ InfluenceLevelTypes CvPlayerCulture::GetInfluenceLevel(PlayerTypes ePlayer) cons
 	return eRtnValue;
 }
 
-/// Current influence trend on this player
+
 InfluenceLevelTrend CvPlayerCulture::GetInfluenceTrend(PlayerTypes ePlayer) const
 {
 	InfluenceLevelTrend eRtnValue = INFLUENCE_TREND_STATIC;
 
 	CvPlayer &kOtherPlayer = GET_PLAYER(ePlayer);
 
-	// PctTurn1 = InfluenceT1 / LifetimeCultureT1
-	// PctTurn2 = InfluenceT2 / LifetimeCultureT2
+
+
 	
-	// So if looking at is PctT2 > PctT1, can see if  (InfluenceT2 * LifetimeCultureT1) > (InfluenceT1 * LifetimeCultureT2)
+
 #ifdef AUI_YIELDS_APPLIED_AFTER_TURN_NOT_BEFORE
 	int iOtherPlayerLastTurnLifetimeCulture = kOtherPlayer.GetCulture()->GetLastTurnLifetimeCulture();
 	int iOtherPlayerThisTurnLifetimeCulture = kOtherPlayer.GetJONSCultureEverGenerated();
@@ -2743,7 +2743,7 @@ InfluenceLevelTrend CvPlayerCulture::GetInfluenceTrend(PlayerTypes ePlayer) cons
 	return eRtnValue;
 }
 
-/// If influence is rising, how many turns until we get to Influential? (999 if not rising fast enough to make it there eventually)
+
 int CvPlayerCulture::GetTurnsToInfluential(PlayerTypes ePlayer) const
 {
 	CvPlayer &kOtherPlayer = GET_PLAYER(ePlayer);
@@ -2774,7 +2774,7 @@ int CvPlayerCulture::GetTurnsToInfluential(PlayerTypes ePlayer) const
 		{
 			iRtnValue = iNumerator / iDivisor;
 
-			// Round up
+
 			if (iNumerator % iDivisor != 0)
 			{
 				iRtnValue++;
@@ -2785,7 +2785,7 @@ int CvPlayerCulture::GetTurnsToInfluential(PlayerTypes ePlayer) const
 	return iRtnValue;
 }
 
-/// How many civs do we have influence culture over?
+
 int CvPlayerCulture::GetNumCivsInfluentialOn() const
 {
 	int iRtnValue = 0;
@@ -2805,7 +2805,7 @@ int CvPlayerCulture::GetNumCivsInfluentialOn() const
 	return iRtnValue;
 }
 
-/// How many other civs are in the game?
+
 int CvPlayerCulture::GetNumCivsToBeInfluentialOn() const
 {
 	int iRtnValue = 0;
@@ -2822,11 +2822,11 @@ int CvPlayerCulture::GetNumCivsToBeInfluentialOn() const
 	return iRtnValue;
 }
 
-/// Which civ is the one we need to do the most work on to get to Influential culture?
+
 PlayerTypes CvPlayerCulture::GetCivLowestInfluence(bool bCheckOpenBorders) const
 {
 	PlayerTypes eRtnValue = NO_PLAYER;
-	int iLowestPercent = GC.getCULTURE_LEVEL_INFLUENTIAL();   // Don't want to target civs if already influential
+	int iLowestPercent = GC.getCULTURE_LEVEL_INFLUENTIAL();
 
 	for (int iLoopPlayer = 0; iLoopPlayer < MAX_MAJOR_CIVS; iLoopPlayer++)
 	{
@@ -2857,9 +2857,9 @@ PlayerTypes CvPlayerCulture::GetCivLowestInfluence(bool bCheckOpenBorders) const
 	return eRtnValue;
 }
 
-// NON-CULTURE TOURISM BONUSES
 
-/// Get extra science from trade routes based on current influence level
+
+
 int CvPlayerCulture::GetInfluenceTradeRouteScienceBonus(PlayerTypes ePlayer) const
 {
 	int iRtnValue = 0;
@@ -2887,7 +2887,7 @@ int CvPlayerCulture::GetInfluenceTradeRouteScienceBonus(PlayerTypes ePlayer) con
 	return iRtnValue;
 }
 
-/// Get reduction in conquest times and population loss based on current influence level
+
 int CvPlayerCulture::GetInfluenceCityConquestReduction(PlayerTypes ePlayer) const
 {
 	int iRtnValue = 0;
@@ -2915,7 +2915,7 @@ int CvPlayerCulture::GetInfluenceCityConquestReduction(PlayerTypes ePlayer) cons
 	return iRtnValue;
 }
 
-/// Get spy time to establish surveillance based on current influence level
+
 int CvPlayerCulture::GetInfluenceSurveillanceTime(PlayerTypes ePlayer) const
 {
 	int iRtnValue = 3;
@@ -2931,7 +2931,7 @@ int CvPlayerCulture::GetInfluenceSurveillanceTime(PlayerTypes ePlayer) const
 	}
 	else
 	{
-		// Have a major power ally?
+
 		CvPlayer &kCityState = GET_PLAYER(ePlayer);
 		if (kCityState.isMinorCiv())
 		{
@@ -2950,12 +2950,12 @@ int CvPlayerCulture::GetInfluenceSurveillanceTime(PlayerTypes ePlayer) const
 	return iRtnValue;
 }
 
-/// Get extra spy rank in city state allies based on current influence level
+
 int CvPlayerCulture::GetInfluenceCityStateSpyRankBonus(PlayerTypes eCityStatePlayer) const
 {
 	int iRtnValue = 0;
 
-	// Have a major power ally?
+
 	CvPlayer &kCityState = GET_PLAYER(eCityStatePlayer);
 	if (kCityState.isMinorCiv())
 	{
@@ -2981,7 +2981,7 @@ int CvPlayerCulture::GetInfluenceCityStateSpyRankBonus(PlayerTypes eCityStatePla
 	return iRtnValue;
 }
 
-/// Get extra spy rank in major civ cities based on current influence level
+
 int CvPlayerCulture::GetInfluenceMajorCivSpyRankBonus(PlayerTypes ePlayer) const
 {
 	int iRtnValue = 0;
@@ -3000,7 +3000,7 @@ int CvPlayerCulture::GetInfluenceMajorCivSpyRankBonus(PlayerTypes ePlayer) const
 	return iRtnValue;
 }
 
-/// Get spy rank tooltip associated with bonus from cultural influence
+
 CvString CvPlayerCulture::GetInfluenceSpyRankTooltip(CvString szName, CvString szRank, PlayerTypes ePlayer)
 {
 	CvString szRtnValue = GetLocalizedText("TXT_KEY_EO_SPY_RANK_TT", szName, szRank);
@@ -3037,7 +3037,7 @@ int CvPlayerCulture::GetTourismTimes100() const
 {
 	return m_pPlayer->getYieldTimes100(YIELD_TOURISM, false);
 }
-/// What is my total tourism per turn (before modifiers)
+
 int CvPlayerCulture::GetTourism()
 {
 	return GetTourismTimes100() / 100;
@@ -3057,7 +3057,7 @@ int CvPlayerCulture::GetTourism()
 #endif
 }
 
-/// At the player level, what is the modifier for tourism between these players?
+
 int CvPlayerCulture::GetTourismModifierWith(PlayerTypes ePlayer) const
 {
 	int iMultiplier = 0;
@@ -3066,13 +3066,13 @@ int CvPlayerCulture::GetTourismModifierWith(PlayerTypes ePlayer) const
 	PolicyBranchTypes eMyIdeology = m_pPlayer->GetPlayerPolicies()->GetLateGamePolicyTree();
 	PolicyBranchTypes eTheirIdeology = kPlayer.GetPlayerPolicies()->GetLateGamePolicyTree();
 
-	// Open borders with this player
+
 	if (kTeam.IsAllowsOpenBordersToTeam(m_pPlayer->getTeam()))
 	{
 		iMultiplier += GetTourismModifierOpenBorders();
 	}
 
-	// Trade route to one of this player's cities from here
+
 	if (GC.getGame().GetGameTrade()->IsPlayerConnectedToPlayer(m_pPlayer->GetID(), ePlayer))
 	{
 		iMultiplier += GetTourismModifierTradeRoute();
@@ -3099,7 +3099,7 @@ int CvPlayerCulture::GetTourismModifierWith(PlayerTypes ePlayer) const
 	int iCommonFoeMod = m_pPlayer->GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_MOD_COMMON_FOE);
 	if (iCommonFoeMod > 0)
 	{
-		// NQMP GJS - new Cult of Personality BEGIN
+
 		int rank = 0;
 		int totalEnemies = 0;
 		int myStrength = m_pPlayer->GetMilitaryMight();
@@ -3118,31 +3118,31 @@ int CvPlayerCulture::GetTourismModifierWith(PlayerTypes ePlayer) const
 			}
 		}
 
-		// divide the tourism boost into chunks, so that lowest player gets 0%, highest gets 100%, and the rest are evenly distributed in between
-		// so for example in a 6 player game, based on the player being 6th/5th/4th/3rd/2nd/1st in military strength they get 0%/20%/40%/60%/80%/100% boost
+
+
 		if (totalEnemies > 0)
 		{
 			iCommonFoeMod = iCommonFoeMod * (totalEnemies - rank) / totalEnemies;
 			iMultiplier += iCommonFoeMod;
 		}
-		/*
-		// old code
-		PlayerTypes eLoopPlayer;
-		for(int iPlayerLoop = 0; iPlayerLoop < MAX_MAJOR_CIVS; iPlayerLoop++)
-		{
-			eLoopPlayer = (PlayerTypes) iPlayerLoop;
 
-			if (eLoopPlayer != ePlayer && eLoopPlayer != m_pPlayer->GetID() && m_pPlayer->GetDiplomacyAI()->IsPlayerValid(eLoopPlayer))
-			{
-				// Are they at war with me too?
-				if (GET_TEAM(m_pPlayer->getTeam()).isAtWar(GET_PLAYER(eLoopPlayer).getTeam()) && GET_TEAM(kPlayer.getTeam()).isAtWar(GET_PLAYER(eLoopPlayer).getTeam()))
-				{
-					iMultiplier += iCommonFoeMod;
-				}
-			}
-		}
-		*/
-		// NQMP GJS - new Cult of Personality END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	}
 	int iSharedIdeologyMod = m_pPlayer->GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_MOD_SHARED_IDEOLOGY);
 	if (iSharedIdeologyMod > 0)
@@ -3167,7 +3167,7 @@ int CvPlayerCulture::GetTourismModifierWith(PlayerTypes ePlayer) const
 	return iMultiplier;
 }
 
-/// Tooltip for GetTourismModifierWith()
+
 CvString CvPlayerCulture::GetTourismModifierWithTooltip(PlayerTypes ePlayer) const
 {
 	CvString szRtnValue = "";
@@ -3176,15 +3176,15 @@ CvString CvPlayerCulture::GetTourismModifierWithTooltip(PlayerTypes ePlayer) con
 	PolicyBranchTypes eMyIdeology = m_pPlayer->GetPlayerPolicies()->GetLateGamePolicyTree();
 	PolicyBranchTypes eTheirIdeology = kPlayer.GetPlayerPolicies()->GetLateGamePolicyTree();
 
-	// POSITIVE MODIFIERS
 
-	// Open borders with this player
+
+
 	if (kTeam.IsAllowsOpenBordersToTeam(m_pPlayer->getTeam()))
 	{
 		szRtnValue += "[COLOR_POSITIVE_TEXT]" + GetLocalizedText("TXT_KEY_CO_PLAYER_TOURISM_OPEN_BORDERS", GetTourismModifierOpenBorders()) + "[ENDCOLOR]";
 	}
 
-	// Trade route to one of this player's cities from here
+
 	if (GC.getGame().GetGameTrade()->IsPlayerConnectedToPlayer(m_pPlayer->GetID(), ePlayer))
 	{
 		szRtnValue += "[COLOR_POSITIVE_TEXT]" + GetLocalizedText("TXT_KEY_CO_PLAYER_TOURISM_TRADE_ROUTE", GetTourismModifierTradeRoute()) + "[ENDCOLOR]";
@@ -3216,7 +3216,7 @@ CvString CvPlayerCulture::GetTourismModifierWithTooltip(PlayerTypes ePlayer) con
 	int iCommonFoeMod = m_pPlayer->GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_MOD_COMMON_FOE);
 	if (iCommonFoeMod > 0)
 	{
-		// NQMP GJS - new Cult of Personality BEGIN
+
 		int rank = 0;
 		int totalEnemies = 0;
 		int myStrength = m_pPlayer->GetMilitaryMight();
@@ -3235,32 +3235,32 @@ CvString CvPlayerCulture::GetTourismModifierWithTooltip(PlayerTypes ePlayer) con
 			}
 		}
 
-		// divide the tourism boost into chunks, so that lowest player gets 0%, highest gets 100%, and the rest are evenly distributed in between
-		// so for example in a 6 player game, based on the player being 6th/5th/4th/3rd/2nd/1st in military strength they get 0%/20%/40%/60%/80%/100% boost
+
+
 		if (totalEnemies > 0)
 		{
 			iCommonFoeMod = iCommonFoeMod * (totalEnemies - rank) / totalEnemies;
 			szRtnValue += "[COLOR_POSITIVE_TEXT]" + GetLocalizedText("TXT_KEY_CO_PLAYER_TOURISM_COMMON_FOE", iCommonFoeMod) + "[ENDCOLOR]";
 		}
 
-		/*
-		// old code
-		PlayerTypes eLoopPlayer;
-		for(int iPlayerLoop = 0; iPlayerLoop < MAX_MAJOR_CIVS; iPlayerLoop++)
-		{
-			eLoopPlayer = (PlayerTypes) iPlayerLoop;
 
-			if (eLoopPlayer != ePlayer && eLoopPlayer != m_pPlayer->GetID() && m_pPlayer->GetDiplomacyAI()->IsPlayerValid(eLoopPlayer))
-			{
-				// Are they at war with me too?
-				if (GET_TEAM(m_pPlayer->getTeam()).isAtWar(GET_PLAYER(eLoopPlayer).getTeam()) && GET_TEAM(kPlayer.getTeam()).isAtWar(GET_PLAYER(eLoopPlayer).getTeam()))
-				{
-					szRtnValue += "[COLOR_POSITIVE_TEXT]" + GetLocalizedText("TXT_KEY_CO_PLAYER_TOURISM_COMMON_FOE", iCommonFoeMod) + "[ENDCOLOR]";
-				}
-			}
-		}
-		*/
-		// NQMP GJS - new Cult of Personality END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	}
 
 	int iLessHappyMod = m_pPlayer->GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_MOD_LESS_HAPPY);
@@ -3277,7 +3277,7 @@ CvString CvPlayerCulture::GetTourismModifierWithTooltip(PlayerTypes ePlayer) con
 		szRtnValue += "[COLOR_POSITIVE_TEXT]" + GetLocalizedText("TXT_KEY_CO_PLAYER_TOURISM_CARNIVAL", m_pPlayer->GetPlayerTraits()->GetGoldenAgeTourismModifier()) + "[ENDCOLOR]";
 	}
 
-	// NEUTRAL MODIFIERS
+
 	if (!kTeam.IsAllowsOpenBordersToTeam(m_pPlayer->getTeam()))
 	{
 		szRtnValue += "[COLOR_GREY]" + GetLocalizedText("TXT_KEY_CO_PLAYER_TOURISM_OPEN_BORDERS", 0) + "[ENDCOLOR]";		
@@ -3298,7 +3298,7 @@ CvString CvPlayerCulture::GetTourismModifierWithTooltip(PlayerTypes ePlayer) con
 		}
 	}
 
-	// NEGATIVE MODIFIERS
+
 	if (eMyIdeology != NO_POLICY_BRANCH_TYPE && eTheirIdeology != NO_POLICY_BRANCH_TYPE && eMyIdeology != eTheirIdeology)
 	{
 		szRtnValue += "[COLOR_NEGATIVE_TEXT]" + GetLocalizedText("TXT_KEY_CO_PLAYER_TOURISM_DIFFERENT_IDEOLOGIES", GC.getTOURISM_MODIFIER_DIFFERENT_IDEOLOGIES()) + "[ENDCOLOR]";
@@ -3307,61 +3307,61 @@ CvString CvPlayerCulture::GetTourismModifierWithTooltip(PlayerTypes ePlayer) con
 	return szRtnValue;
 }
 
-/// Tourism modifier (base plus policy boost) - shared religion
+
 int CvPlayerCulture::GetTourismModifierSharedReligion() const
 {
 	return GC.getTOURISM_MODIFIER_SHARED_RELIGION() + m_pPlayer->GetPlayerPolicies()->GetNumericModifier(POLICYMOD_SHARED_RELIGION_TOURISM_MODIFIER);
 }
 
-/// Tourism modifier (base plus policy boost) - trade route
+
 int CvPlayerCulture::GetTourismModifierTradeRoute() const
 {
 	return GC.getTOURISM_MODIFIER_SHARED_RELIGION() + m_pPlayer->GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TRADE_ROUTE_TOURISM_MODIFIER);
 }
 
-/// Tourism modifier (base plus policy boost) - open borders
+
 int CvPlayerCulture::GetTourismModifierOpenBorders() const
 {
 	return GC.getTOURISM_MODIFIER_SHARED_RELIGION() + m_pPlayer->GetPlayerPolicies()->GetNumericModifier(POLICYMOD_OPEN_BORDERS_TOURISM_MODIFIER);
 }
 
-/// Is the populace satisfied?
+
 PublicOpinionTypes CvPlayerCulture::GetPublicOpinionType() const
 {
 	return m_eOpinion;
 }
 
-/// Which ideology would the populace prefer?
+
 PolicyBranchTypes CvPlayerCulture::GetPublicOpinionPreferredIdeology() const
 {
 	return m_ePreferredIdeology;
 }
 
-/// Tooltip breaking down public opinion
+
 CvString CvPlayerCulture::GetPublicOpinionTooltip() const
 {
 	return m_strOpinionTooltip;
 }
 
-/// Unhappiness generated from public opinion
+
 int CvPlayerCulture::GetPublicOpinionUnhappiness() const
 {
 	return m_iOpinionUnhappiness;
 }
 
-/// Tooltip breaking down public opinion unhappiness
+
 CvString CvPlayerCulture::GetPublicOpinionUnhappinessTooltip() const
 {
 	return m_strOpinionUnhappinessTooltip;
 }
 
-/// Which civ is putting the largest cultural pressure on us?
+
 PlayerTypes CvPlayerCulture::GetPublicOpinionBiggestInfluence() const
 {
 	return m_eOpinionBiggestInfluence;
 }
 
-/// What turn did we switch ideologies
+
 int CvPlayerCulture::GetTurnIdeologySwitch() const
 {
 	return m_iTurnIdeologySwitch;
@@ -3371,19 +3371,19 @@ void CvPlayerCulture::SetTurnIdeologySwitch(int iValue)
 	m_iTurnIdeologySwitch = iValue;
 }
 
-/// How strong will a concert tour be right now?
+
 int CvPlayerCulture::GetTourismBlastStrength(int iMultiplier)
 {
 	int iStrength = iMultiplier * GetTourism();
 	
-	// Scale by game speed
+
 	iStrength *= GC.getGame().getGameSpeedInfo().getCulturePercent();
 	iStrength /= 100;
 
 	return max(iStrength, GC.getMINIUMUM_TOURISM_BLAST_STRENGTH());
 }
 
-/// Add tourism with all known civs
+
 void CvPlayerCulture::AddTourismAllKnownCivs(int iTourism)
 {
 	PlayerTypes eLoopPlayer;
@@ -3398,9 +3398,9 @@ void CvPlayerCulture::AddTourismAllKnownCivs(int iTourism)
 	}
 }
 
-// PRIVATE METHODS
 
-/// Once per turn calculation of public opinion data
+
+
 void CvPlayerCulture::DoPublicOpinion()
 {
 	m_eOpinion = NO_PUBLIC_OPINION;
@@ -3424,7 +3424,7 @@ void CvPlayerCulture::DoPublicOpinion()
 
 	PolicyBranchTypes eCurrentIdeology = m_pPlayer->GetPlayerPolicies()->GetLateGamePolicyTree();
 
-	// We have an ideology, so public opinion matters
+
 	if (eCurrentIdeology != NO_POLICY_BRANCH_TYPE)
 	{
 		int iPressureForFreedom = 0;
@@ -3435,7 +3435,7 @@ void CvPlayerCulture::DoPublicOpinion()
 		CvString strAutocracyPressureString = "";
 		CvString strOrderPressureString = "";
 
-		// Look at World Congress
+
 		iPressureForFreedom += GC.getGame().GetGameLeagues()->GetPressureForIdeology(m_pPlayer->GetID(), eFreedomBranch);
 		if (iPressureForFreedom > 0)
 		{
@@ -3473,7 +3473,7 @@ void CvPlayerCulture::DoPublicOpinion()
 			strWorldIdeologyPressureString += sTemp.toUTF8();
 		}
 
-		// Look at each civ
+
 		for (int iLoopPlayer = 0; iLoopPlayer < MAX_MAJOR_CIVS; iLoopPlayer++)
 		{
 			CvPlayer &kPlayer = GET_PLAYER((PlayerTypes)iLoopPlayer);
@@ -3529,7 +3529,7 @@ void CvPlayerCulture::DoPublicOpinion()
 			}
 		}
 
-		// Now compute satisfaction with this branch compared to two other ones
+
 		int iDissatisfaction = 0;
 		if (eCurrentIdeology == eFreedomBranch)
 		{
@@ -3589,7 +3589,7 @@ void CvPlayerCulture::DoPublicOpinion()
 			}
 		}
 
-		// Compute effects of dissatisfaction
+
 		int iPerCityUnhappy = 1;
 		int iUnhappyPerXPop = 10;
 		if (m_eOpinion != PUBLIC_OPINION_CONTENT)
@@ -3608,7 +3608,7 @@ void CvPlayerCulture::DoPublicOpinion()
 			}
 #ifdef NQ_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER_FROM_POLICIES
 			int iUnhappinessModifier = m_pPlayer->GetPlayerPolicies()->GetNumericModifier(POLICYMOD_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER);
-#if defined(TRAITIFY) // Ideology Pressure Unhappiness Modifier from Traits
+#if defined(TRAITIFY)
 			iUnhappinessModifier += m_pPlayer->GetPlayerTraits()->GetIdeologyPressureUnhappinessModifier();
 #endif
 			m_iOpinionUnhappiness = ComputePublicOpinionUnhappiness(iDissatisfaction, iPerCityUnhappy, iUnhappyPerXPop, iUnhappinessModifier);
@@ -3617,7 +3617,7 @@ void CvPlayerCulture::DoPublicOpinion()
 #endif
 
 
-			// Find civ exerting greatest pressure
+
 			int iGreatestDominance = -1;
 			for (int iLoopPlayer = 0; iLoopPlayer < MAX_MAJOR_CIVS; iLoopPlayer++)
 			{
@@ -3641,7 +3641,7 @@ void CvPlayerCulture::DoPublicOpinion()
 			}
 		}
 
-		// Build tooltip
+
 		if (strFreedomPressureString.size() > 0)
 		{
 			Localization::String locText = Localization::Lookup("TXT_KEY_CO_OPINION_TT_FOR_FREEDOM");
@@ -3709,7 +3709,7 @@ void CvPlayerCulture::DoPublicOpinion()
 #ifdef NQ_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER_FROM_POLICIES
 #ifndef LEKMOD_IDEO_PRESSURE_CHANGE
 			int iUnhappinessModifier = m_pPlayer->GetPlayerPolicies()->GetNumericModifier(POLICYMOD_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER);
-#if defined(TRAITIFY) // Ideology Pressure Unhappiness Modifier from Traits
+#if defined(TRAITIFY)
 			iUnhappinessModifier += m_pPlayer->GetPlayerTraits()->GetIdeologyPressureUnhappinessModifier();
 #endif
 			locText = Localization::Lookup("TXT_KEY_CO_OPINION_TT_UNHAPPINESS_LINE5");
@@ -3735,7 +3735,7 @@ void CvPlayerCulture::DoPublicOpinion()
 	}
 }
 
-/// What would the unhappiness be if we chose this Ideology?
+
 int CvPlayerCulture::ComputeHypotheticalPublicOpinionUnhappiness(PolicyBranchTypes eBranch)
 {
 	int iDissatisfaction = 0;
@@ -3749,12 +3749,12 @@ int CvPlayerCulture::ComputeHypotheticalPublicOpinionUnhappiness(PolicyBranchTyp
 		return 0;
 	}
 
-	// Start with World Congress
+
 	int iPressureForFreedom = GC.getGame().GetGameLeagues()->GetPressureForIdeology(m_pPlayer->GetID(), eFreedomBranch);
 	int iPressureForAutocracy = GC.getGame().GetGameLeagues()->GetPressureForIdeology(m_pPlayer->GetID(), eAutocracyBranch);
 	int iPressureForOrder = GC.getGame().GetGameLeagues()->GetPressureForIdeology(m_pPlayer->GetID(), eOrderBranch);
 
-	// Look at each civ
+
 	for (int iLoopPlayer = 0; iLoopPlayer < MAX_MAJOR_CIVS; iLoopPlayer++)
 	{
 		CvPlayer &kPlayer = GET_PLAYER((PlayerTypes)iLoopPlayer);
@@ -3840,7 +3840,7 @@ int CvPlayerCulture::ComputeHypotheticalPublicOpinionUnhappiness(PolicyBranchTyp
 	{
 #ifdef NQ_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER_FROM_POLICIES
 		int iUnhappinessModifier = m_pPlayer->GetPlayerPolicies()->GetNumericModifier(POLICYMOD_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER);
-#if defined(TRAITIFY) // Ideology Pressure Unhappiness Modifier from Traits
+#if defined(TRAITIFY)
 		iUnhappinessModifier += m_pPlayer->GetPlayerTraits()->GetIdeologyPressureUnhappinessModifier();
 #endif
 		return ComputePublicOpinionUnhappiness(iDissatisfaction, iPerCityUnhappy, iUnhappyPerXPop, iUnhappinessModifier);
@@ -3852,13 +3852,13 @@ int CvPlayerCulture::ComputeHypotheticalPublicOpinionUnhappiness(PolicyBranchTyp
 
 bool CvPlayerCulture::WantsDiplomatDoingPropaganda(PlayerTypes eTargetPlayer) const
 {
-	// only return the top two
+
 	int iFirstValue = NO_INFLUENCE_LEVEL;
 	int iSecondValue = NO_INFLUENCE_LEVEL;
 	PlayerTypes eFirstPlayer = NO_PLAYER;
 	PlayerTypes eSecondPlayer = NO_PLAYER;
 
-	// only do this if everybody is exotic
+
 	for (uint ui = 0; ui < MAX_MAJOR_CIVS; ui++)
 	{
 		PlayerTypes ePlayer = (PlayerTypes)ui;
@@ -3894,12 +3894,12 @@ bool CvPlayerCulture::WantsDiplomatDoingPropaganda(PlayerTypes eTargetPlayer) co
 	return (eFirstPlayer == eTargetPlayer || eSecondPlayer == eTargetPlayer);
 }
 
-/// How many diplomats could I possibly want now?
+
 int CvPlayerCulture::GetMaxPropagandaDiplomatsWanted() const
 {
 	int iRtnValue = 0;
 
-	// determine which civs have run out of techs to steal
+
 	for(uint ui = 0; ui < MAX_MAJOR_CIVS; ui++)
 	{
 		PlayerTypes eOtherPlayer = (PlayerTypes)ui;
@@ -3918,7 +3918,7 @@ int CvPlayerCulture::GetMaxPropagandaDiplomatsWanted() const
 	return iRtnValue;
 }
 
-/// Summary of all culture/tourism coming from theming bonuses
+
 int CvPlayerCulture::GetTotalThemingBonuses() const
 {
 	int iRtnValue = 0;
@@ -3933,9 +3933,9 @@ int CvPlayerCulture::GetTotalThemingBonuses() const
 	return iRtnValue;
 }
 
-// PRIVATE METHODS
 
-/// Compute effects of dissatisfaction
+
+
 #ifdef NQ_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER_FROM_POLICIES
 int CvPlayerCulture::ComputePublicOpinionUnhappiness(int iDissatisfaction, int &iPerCityUnhappy, int &iUnhappyPerXPop, int iUnhappinessModifier)
 #else
@@ -3966,7 +3966,7 @@ int CvPlayerCulture::ComputePublicOpinionUnhappiness(int iDissatisfaction, int &
 		totalUnhappiness /= 100;
 	}
 #else
-	// Lekmod: halve first; then apply each policy's IdeologyPressureUnhappinessModifier as a separate % step (multiplicative), then trait once.
+
 	UNREFERENCED_PARAMETER(iUnhappinessModifier);
 	totalUnhappiness /= 2;
 	int iMult = m_pPlayer->GetPlayerPolicies()->GetIdeologyPressureUnhappinessMultiplierTimes100();
@@ -3996,9 +3996,9 @@ int CvPlayerCulture::ComputePublicOpinionUnhappiness(int iDissatisfaction, int &
 #endif
 }
 
-// LOGGING FUNCTIONS
 
-/// Build log filename
+
+
 void CvPlayerCulture::LogCultureData()
 {
 	CvTeam &pTeam = GET_TEAM(m_pPlayer->getTeam());
@@ -4026,16 +4026,16 @@ void CvPlayerCulture::LogCultureData()
 	CvCity *pCity;
 	int iSpecialists = 0;
 
-	// civ name
+
 	AppendToLog(strHeader, strLog, "Civ Name", strPlayerName);
 
-	// turn
+
 	AppendToLog(strHeader, strLog, "Turn", GC.getGame().getGameTurn());
 
-	// # cities
+
 	AppendToLog(strHeader, strLog, "# Cities", m_pPlayer->getNumCities());
 
-	// Guilds
+
 	TechTypes eTechDrama = (TechTypes)GC.getInfoTypeForString("TECH_DRAMA", true);
 	TechTypes eTechGuilds = (TechTypes)GC.getInfoTypeForString("TECH_GUILDS", true);
 	TechTypes eTechAcoustics = (TechTypes)GC.getInfoTypeForString("TECH_ACOUSTICS", true);
@@ -4097,7 +4097,7 @@ void CvPlayerCulture::LogCultureData()
 	}
 }
 
-/// Utility function - AppendToLog
+
 void CvPlayerCulture::AppendToLog(CvString& strHeader, CvString& strLog, CvString strHeaderValue, CvString strValue)
 {
 	strHeader += strHeaderValue;
@@ -4171,12 +4171,12 @@ void CvPlayerCulture::LogSwapWorks(PlayerTypes eOtherPlayer, int iWorkDiscarded,
 	pLog->Msg(strLine);
 }
 
-/// Build log filename
+
 CvString CvPlayerCulture::GetLogFileName(CvString& playerName) const
 {
 	CvString strLogName;
 
-	// Open the log file
+
 	if(GC.getPlayerAndCityAILogSplit())
 	{
 		strLogName = "CultureAILog_" + playerName + ".csv";
@@ -4189,9 +4189,9 @@ CvString CvPlayerCulture::GetLogFileName(CvString& playerName) const
 	return strLogName;
 }
 
-// SERIALIZATION
 
-/// Serialization read
+
+
 FDataStream& operator>>(FDataStream& loadFrom, CvPlayerCulture& writeTo)
 {
 	uint uiVersion;
@@ -4301,7 +4301,7 @@ FDataStream& operator>>(FDataStream& loadFrom, CvPlayerCulture& writeTo)
 	return loadFrom;
 }
 
-/// Serialization write
+
 FDataStream& operator<<(FDataStream& saveTo, const CvPlayerCulture& readFrom)
 {
 	uint uiVersion = 6;
@@ -4347,10 +4347,10 @@ FDataStream& operator<<(FDataStream& saveTo, const CvPlayerCulture& readFrom)
 	return saveTo;
 }
 
-//=====================================
-// CvCityCulture
-//=====================================
-/// Constructor
+
+
+
+
 #ifdef AUI_CITY_FIX_COMPONENT_CONSTRUCTORS_CONTAIN_POINTERS
 CvCityCulture::CvCityCulture(CvCity* pCity):
 	m_pCity(pCity)
@@ -4361,36 +4361,36 @@ m_pCity(NULL)
 {
 }
 
-/// Destructor
+
 CvCityCulture::~CvCityCulture(void)
 {
 }
 
-/// Initialize class data
+
 void CvCityCulture::Init(CvCity* pCity)
 {
 	m_pCity = pCity;
 }
 
-/// How many Great Works are in the city?
+
 int CvCityCulture::GetNumGreatWorks() const
 {
 	return m_pCity->GetCityBuildings()->GetNumGreatWorks();
 }
 
-/// How many Great Works slots are available in the city? (counting both open and filled and counting all types)
+
 int CvCityCulture::GetNumGreatWorkSlots() const
 {
 	return (m_pCity->GetCityBuildings()->GetNumAvailableGreatWorkSlots() + GetNumGreatWorks());
 }
 
-/// How many OPEN Great Works slots of a particular type are available in the city?
+
 int CvCityCulture::GetNumAvailableGreatWorkSlots(GreatWorkSlotType eSlotType) const
 {
 	return (m_pCity->GetCityBuildings()->GetNumAvailableGreatWorkSlots(eSlotType));
 }
 
-/// Clear out Great Works in a city (used by scenarios)
+
 void CvCityCulture::ClearGreatWorks()
 {
 	CvPlayer &kCityPlayer = GET_PLAYER(m_pCity->getOwner());
@@ -4416,7 +4416,7 @@ void CvCityCulture::ClearGreatWorks()
 	}
 }
 
-/// Which type of Great Work slot can we add with the cheapest available culture building?
+
 GreatWorkSlotType CvCityCulture::GetSlotTypeFirstAvailableCultureBuilding() const
 {
 	int iCheapest = MAX_INT;
@@ -4452,22 +4452,22 @@ GreatWorkSlotType CvCityCulture::GetSlotTypeFirstAvailableCultureBuilding() cons
 	return eRtnValue;
 }
 
-/// Compute raw tourism from this city
+
 int CvCityCulture::GetBaseTourismBeforeModifiers()
 {
-	// If we're in Resistance, then no Tourism!
+
 	if (m_pCity->IsResistance() || m_pCity->IsRazing())
 	{
 		return 0;
 	}
 #if !defined(LEK_YIELD_TOURISM)
 #if !defined(LEKMOD_GREAT_WORK_YIELD_EFFECTS)
-	int iBonusTourismPerGreatWork = GET_PLAYER(m_pCity->getOwner()).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_EXTRA_TOURISM_PER_GREAT_WORK); // NQMP GJS - Cultural Exchange
+	int iBonusTourismPerGreatWork = GET_PLAYER(m_pCity->getOwner()).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_EXTRA_TOURISM_PER_GREAT_WORK);
 
-	int iBonusTourismPerWonder = GET_PLAYER(m_pCity->getOwner()).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_PER_WONDER); // NQMP GJS - Flourishing of the Arts
+	int iBonusTourismPerWonder = GET_PLAYER(m_pCity->getOwner()).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_PER_WONDER);
 	int iTotalBonusTourismForWonders = m_pCity->getNumWorldWonders() * iBonusTourismPerWonder;
 
-	int iBase = GetNumGreatWorks() * (GC.getBASE_TOURISM_PER_GREAT_WORK() + iBonusTourismPerGreatWork) + iTotalBonusTourismForWonders; // NQMP GJS - Cultural Exchange
+	int iBase = GetNumGreatWorks() * (GC.getBASE_TOURISM_PER_GREAT_WORK() + iBonusTourismPerGreatWork) + iTotalBonusTourismForWonders;
 
 	int iBonus = (m_pCity->GetCityBuildings()->GetGreatWorksTourismModifier() * iBase / 100);
 	iBase += iBonus;
@@ -4484,14 +4484,14 @@ int CvCityCulture::GetBaseTourismBeforeModifiers()
 		int iNumWorksOfClass = m_pCity->GetCityBuildings()->GetNumGreatWorks(eClass);
 		iBase += iNumWorksOfClass * (iBaseTourismPerGreatWork + iBonusTourismPerGreatWork);
 	}
-	int iBonusTourismPerWonder = GET_PLAYER(m_pCity->getOwner()).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_PER_WONDER); // NQMP GJS - Flourishing of the Arts
+	int iBonusTourismPerWonder = GET_PLAYER(m_pCity->getOwner()).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_PER_WONDER);
 	int iTotalBonusTourismForWonders = m_pCity->getNumWorldWonders() * iBonusTourismPerWonder;
 	iBase += iTotalBonusTourismForWonders;
 
 	int iBonus = (m_pCity->GetCityBuildings()->GetGreatWorksTourismModifier() * iBase / 100);
 	iBase += iBonus;
 
-	//iBase += GetTourismFromWorkedImprovements(); // Vatican legacy, workaround until I can puzzle out this Tourism-as-yield issue
+
 #endif
 	iBase += m_pCity->GetCityBuildings()->GetThemingBonuses(YIELD_CULTURE);
 
@@ -4515,7 +4515,7 @@ int CvCityCulture::GetBaseTourismBeforeModifiers()
 			iBase += m_pCity->GetCityBuildings()->GetNumBuildingsFromFaith() * iFaithBuildingTourism;
 		}
 
-		// Buildings
+
 		for (int jJ = 0; jJ < GC.getNumBuildingClassInfos(); jJ++)
 		{
 			BuildingClassTypes eBuildingClass = (BuildingClassTypes)jJ;
@@ -4539,7 +4539,7 @@ int CvCityCulture::GetBaseTourismBeforeModifiers()
 		}
 	}
 #if defined(MISC_CHANGES)
-	// Buildings - Without Religion
+
 	{
 		int iMountainCount = m_pCity->GetNumMountainsNearCity(3, true);
 		for (int jJ = 0; jJ < GC.getNumBuildingClassInfos(); jJ++)
@@ -4571,7 +4571,7 @@ int CvCityCulture::GetBaseTourismBeforeModifiers()
 		}
 	}
 #endif
-	// Tech enhanced Tourism
+
 	for (int jJ = 0; jJ < GC.getNumBuildingClassInfos(); jJ++)
 	{
 		BuildingClassTypes eBuildingClass = (BuildingClassTypes)jJ;
@@ -4592,7 +4592,7 @@ int CvCityCulture::GetBaseTourismBeforeModifiers()
 			{
 				int iTourism = pkEntry->GetTechEnhancedTourism();
 #ifdef LEKMOD_TECH_ENHANCED_TOURISM_MULTIPLIER
-				//multiply for the amount of this building in the city (in case of duplicates)
+
 				iTourism *= m_pCity->GetCityBuildings()->GetNumBuilding(eBuilding);
 #endif
 				if (iTourism > 0 && GET_TEAM(m_pCity->getTeam()).GetTeamTechs()->HasTech((TechTypes)pkEntry->GetEnhancedYieldTech()))
@@ -4614,7 +4614,7 @@ int CvCityCulture::GetBaseTourismBeforeModifiers()
 
 }
 
-/// What is the tourism output ignoring player-specific modifiers?
+
 int CvCityCulture::GetBaseTourism()
 {
 #if !defined(LEK_YIELD_TOURISM)
@@ -4675,7 +4675,7 @@ int CvCityCulture::GetBaseTourism()
 #endif
 }
 
-/// What is the tourism modifier for one player
+
 int CvCityCulture::GetTourismMultiplier(PlayerTypes ePlayer, bool bIgnoreReligion, bool bIgnoreOpenBorders, bool bIgnoreTrade, bool bIgnorePolicies, bool bIgnoreIdeologies) const
 {
 	int iMultiplier = 0;
@@ -4687,7 +4687,7 @@ int CvCityCulture::GetTourismMultiplier(PlayerTypes ePlayer, bool bIgnoreReligio
 
 	if (!bIgnoreReligion)
 	{
-		// City shares religion with this player
+
 		ReligionTypes ePlayerReligion = kCityPlayer.GetReligions()->GetReligionInMostCities();
 		if (ePlayerReligion != NO_RELIGION && kPlayer.GetReligions()->HasReligionInMostCities(ePlayerReligion))
 		{
@@ -4697,7 +4697,7 @@ int CvCityCulture::GetTourismMultiplier(PlayerTypes ePlayer, bool bIgnoreReligio
 
 	if (!bIgnoreOpenBorders)
 	{
-		// Open borders with this player
+
 		if (kTeam.IsAllowsOpenBordersToTeam(kCityPlayer.getTeam()))
 		{
 			iMultiplier += kCityPlayer.GetCulture()->GetTourismModifierOpenBorders();
@@ -4706,7 +4706,7 @@ int CvCityCulture::GetTourismMultiplier(PlayerTypes ePlayer, bool bIgnoreReligio
 
 	if (!bIgnoreTrade)
 	{
-		// Trade route to one of this player's cities from here
+
 		if (GC.getGame().GetGameTrade()->IsPlayerConnectedToPlayer(m_pCity->getOwner(), ePlayer))
 		{
 			iMultiplier += kCityPlayer.GetCulture()->GetTourismModifierTradeRoute();
@@ -4739,7 +4739,7 @@ int CvCityCulture::GetTourismMultiplier(PlayerTypes ePlayer, bool bIgnoreReligio
 		int iCommonFoeMod = kCityPlayer.GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_MOD_COMMON_FOE);
 		if (iCommonFoeMod > 0)
 		{
-			// NQMP GJS - new Cult of Personality BEGIN
+
 			int rank = 0;
 			int totalEnemies = 0;
 			int myStrength = kCityPlayer.GetMilitaryMight();
@@ -4758,32 +4758,32 @@ int CvCityCulture::GetTourismMultiplier(PlayerTypes ePlayer, bool bIgnoreReligio
 				}
 			}
 
-			// divide the tourism boost into chunks, so that lowest player gets 0%, highest gets 100%, and the rest are evenly distributed in between
-			// so for example in a 6 player game, based on the player being 6th/5th/4th/3rd/2nd/1st in military strength they get 0%/20%/40%/60%/80%/100% boost
+
+
 			if (totalEnemies > 0)
 			{
 				iCommonFoeMod = iCommonFoeMod * (totalEnemies - rank) / totalEnemies;
 				iMultiplier += iCommonFoeMod;
 			}
 
-			/*
-			// old code
-			PlayerTypes eLoopPlayer;
-			for(int iPlayerLoop = 0; iPlayerLoop < MAX_MAJOR_CIVS; iPlayerLoop++)
-			{
-				eLoopPlayer = (PlayerTypes) iPlayerLoop;
 
-				if(eLoopPlayer != ePlayer && eLoopPlayer != m_pCity->getOwner() && kCityPlayer.GetDiplomacyAI()->IsPlayerValid(eLoopPlayer))
-				{
-					// Are they at war with me too?
-					if (GET_TEAM(kCityPlayer.getTeam()).isAtWar(GET_PLAYER(eLoopPlayer).getTeam()) && GET_TEAM(kPlayer.getTeam()).isAtWar(GET_PLAYER(eLoopPlayer).getTeam()))
-					{
-						iMultiplier += iCommonFoeMod;
-					}
-				}
-			}
-			*/
-			// NQMP GJS - new Cult of Personality END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		}
 
 		int iSharedIdeologyMod = kCityPlayer.GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_MOD_SHARED_IDEOLOGY);
@@ -4796,29 +4796,29 @@ int CvCityCulture::GetTourismMultiplier(PlayerTypes ePlayer, bool bIgnoreReligio
 		}
 	}
 
-	// LATER add top science city and research agreement with this player???
+
 
 	return iMultiplier;
 }
 
-/// What is the tooltip describing the tourism output?
+
 CvString CvCityCulture::GetTourismTooltip()
 {
 	CvString szRtnValue = "";
 #if !defined(LEK_YIELD_TOURISM)
 #if !defined(LEKMOD_GREAT_WORK_YIELD_EFFECTS)
-	int iBonusTourismPerGreatWork = GET_PLAYER(m_pCity->getOwner()).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_EXTRA_TOURISM_PER_GREAT_WORK); // NQMP GJS - Cultural Exchange
-	int iGWTourism = GetNumGreatWorks() * (GC.getBASE_TOURISM_PER_GREAT_WORK() + iBonusTourismPerGreatWork); // NQMP GJS - Cultural Exchange
+	int iBonusTourismPerGreatWork = GET_PLAYER(m_pCity->getOwner()).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_EXTRA_TOURISM_PER_GREAT_WORK);
+	int iGWTourism = GetNumGreatWorks() * (GC.getBASE_TOURISM_PER_GREAT_WORK() + iBonusTourismPerGreatWork);
 	iGWTourism += (m_pCity->GetCityBuildings()->GetGreatWorksTourismModifier() * iGWTourism / 100);
 	szRtnValue = GetLocalizedText("TXT_KEY_CO_CITY_TOURISM_GREAT_WORKS", iGWTourism, m_pCity->GetCityCulture()->GetNumGreatWorks());
 
-	// NQMP GJS - Flourishing of the Arts BEGIN
+
 	int iBonusTourismPerWonder = GET_PLAYER(m_pCity->getOwner()).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_PER_WONDER);
 	int iNumWorldWonders = m_pCity->getNumWorldWonders();
 	int iTotalBonusTourismForWonders = iNumWorldWonders * iBonusTourismPerWonder;
 	iTotalBonusTourismForWonders += (m_pCity->GetCityBuildings()->GetGreatWorksTourismModifier() * iTotalBonusTourismForWonders / 100);
-	szRtnValue = GetLocalizedText("TXT_KEY_CO_CITY_TOURISM_GREAT_WORKS", iGWTourism, (int)m_pCity->GetCityCulture()->GetNumGreatWorks(), iTotalBonusTourismForWonders, iNumWorldWonders); // edited
-	// NQMP GJS - Flourishing of the Arts END
+	szRtnValue = GetLocalizedText("TXT_KEY_CO_CITY_TOURISM_GREAT_WORKS", iGWTourism, (int)m_pCity->GetCityCulture()->GetNumGreatWorks(), iTotalBonusTourismForWonders, iNumWorldWonders);
+
 
 	int iThemingBonuses = m_pCity->GetCityBuildings()->GetThemingBonuses();
 	if (iThemingBonuses > 0)
@@ -4827,7 +4827,7 @@ CvString CvCityCulture::GetTourismTooltip()
 		szRtnValue += GetLocalizedText("TXT_KEY_CO_CITY_TOURISM_THEMING_BONUSES", iThemingBonuses);
 	}
 
-	// Landmarks, Wonders, Natural Wonders, Improvements
+
 	int iTileTourism = 0;
 	int iPercent = m_pCity->GetCityBuildings()->GetLandmarksTourismPercent();
 	if (iPercent > 0)
@@ -4854,7 +4854,7 @@ CvString CvCityCulture::GetTourismTooltip()
 		szRtnValue += GetLocalizedText("TXT_KEY_CO_TOURISM_PER_CITY", iFromTourismPerCity);
 	}
 #endif
-	// Beliefs
+
 	int iSacredSitesTourism = 0;
 	int iReligiousArtTourism = 0;
 	ReligionTypes eMajority = m_pCity->GetCityReligions()->GetReligiousMajority();
@@ -4900,7 +4900,7 @@ CvString CvCityCulture::GetTourismTooltip()
 		szRtnValue += GetLocalizedText("TXT_KEY_CO_CITY_TOURISM_RELIGIOUS_ART", iReligiousArtTourism);
 	}
 
-	// Tech enhanced Tourism
+
 	for (int jJ = 0; jJ < GC.getNumBuildingClassInfos(); jJ++)
 	{
 		BuildingClassTypes eBuildingClass = (BuildingClassTypes)jJ;
@@ -4920,7 +4920,7 @@ CvString CvCityCulture::GetTourismTooltip()
 			{
 				int iTechEnhancedTourism = GC.getBuildingInfo(eBuilding)->GetTechEnhancedTourism();
 #ifdef LEKMOD_TECH_ENHANCED_TOURISM_MULTIPLIER
-				//multiply for the amount of this building in the city (in case of duplicates)
+
 				iTechEnhancedTourism *= m_pCity->GetCityBuildings()->GetNumBuilding(eBuilding);
 #endif
 				if (iTechEnhancedTourism > 0 && GET_TEAM(m_pCity->getTeam()).GetTeamTechs()->HasTech((TechTypes)GC.getBuildingInfo(eBuilding)->GetEnhancedYieldTech()))
@@ -4935,7 +4935,7 @@ CvString CvCityCulture::GetTourismTooltip()
 		}
 	}
 #if defined(MISC_CHANGES)
-	// Tourism Per Mountain from buildings
+
 	for (int jJ = 0; jJ < GC.getNumBuildingClassInfos(); jJ++)
 	{
 		BuildingClassTypes eBuildingClass = (BuildingClassTypes)jJ;
@@ -4993,12 +4993,12 @@ CvString CvCityCulture::GetTourismTooltip()
 		}
 	}
 
-	// Get policy bonuses
+
 	int iLessHappyMod = kCityPlayer.GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_MOD_LESS_HAPPY);
 	int iCommonFoeMod = kCityPlayer.GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_MOD_COMMON_FOE);
 	int iSharedIdeologyMod = kCityPlayer.GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_MOD_SHARED_IDEOLOGY);
 
-	// If generating any, itemize which players we have bonuses with
+
 	if (iGWTourism > 0 || iTileTourism > 0)
 	{
 		for (int iLoopPlayer = 0; iLoopPlayer < MAX_MAJOR_CIVS; iLoopPlayer++)
@@ -5007,7 +5007,7 @@ CvString CvCityCulture::GetTourismTooltip()
 			PolicyBranchTypes eTheirIdeology = kPlayer.GetPlayerPolicies()->GetLateGamePolicyTree();
 			if (kPlayer.isAlive() && !kPlayer.isMinorCiv() && iLoopPlayer != m_pCity->getOwner() && GET_TEAM(kCityPlayer.getTeam()).isHasMet(GET_PLAYER((PlayerTypes)iLoopPlayer).getTeam()))
 			{
-				// City shares religion with this player
+
 				if (kPlayer.GetReligions()->HasReligionInMostCities(ePlayerReligion))
 				{
 					if (sharedReligionCivs.length() > 0)
@@ -5017,7 +5017,7 @@ CvString CvCityCulture::GetTourismTooltip()
 					sharedReligionCivs += kPlayer.getCivilizationShortDescription();
 				}
 
-				// Open borders with this player
+
 				CvTeam& kTeam = GET_TEAM(kPlayer.getTeam());
 				if (kTeam.IsAllowsOpenBordersToTeam(eTeam))
 				{
@@ -5028,7 +5028,7 @@ CvString CvCityCulture::GetTourismTooltip()
 					openBordersCivs += kPlayer.getCivilizationShortDescription();
 				}
 
-				// Trade route with this player
+
 				if (GC.getGame().GetGameTrade()->IsPlayerConnectedToPlayer(m_pCity->getOwner(), (PlayerTypes)iLoopPlayer))
 				{
 					if (tradeRouteCivs.length() > 0)
@@ -5038,7 +5038,7 @@ CvString CvCityCulture::GetTourismTooltip()
 					tradeRouteCivs += kPlayer.getCivilizationShortDescription();
 				}
 
-				// POLICY BONUSES
+
 				if (iLessHappyMod > 0)
 				{
 					if (kCityPlayer.GetExcessHappiness() > kPlayer.GetExcessHappiness())
@@ -5052,7 +5052,7 @@ CvString CvCityCulture::GetTourismTooltip()
 				}
 				if (iCommonFoeMod > 0)
 				{
-					// NQMP GJS - new Cult of Personality BEGIN
+
 					int rank = 0;
 					int totalEnemies = 0;
 					int myStrength = kCityPlayer.GetMilitaryMight();
@@ -5071,37 +5071,37 @@ CvString CvCityCulture::GetTourismTooltip()
 						}
 					}
 
-					// divide the tourism boost into chunks, so that lowest player gets 0%, highest gets 100%, and the rest are evenly distributed in between
-					// so for example in a 6 player game, based on the player being 6th/5th/4th/3rd/2nd/1st in military strength they get 0%/20%/40%/60%/80%/100% boost
+
+
 					if (totalEnemies > 0)
 					{
 						iCommonFoeMod = iCommonFoeMod * (totalEnemies - rank) / totalEnemies;
 					}
 
-					/*
-					// old code
-					PlayerTypes eLoopPlayer;
-					for(int iPlayerLoop = 0; iPlayerLoop < MAX_MAJOR_CIVS; iPlayerLoop++)
-					{
-						eLoopPlayer = (PlayerTypes) iPlayerLoop;
-						if(eLoopPlayer !=(PlayerTypes) iLoopPlayer && eLoopPlayer != m_pCity->getOwner() && kCityPlayer.GetDiplomacyAI()->IsPlayerValid(eLoopPlayer))
-						{
-							// Are they at war with me too?
-							if (GET_TEAM(kCityPlayer.getTeam()).isAtWar(GET_PLAYER(eLoopPlayer).getTeam()) && GET_TEAM(kPlayer.getTeam()).isAtWar(GET_PLAYER(eLoopPlayer).getTeam()))
-							{
-								if (commonFoeCivs.length() > 0)
-								{
-									commonFoeCivs += ", ";
-								}
-								commonFoeCivs += kPlayer.getCivilizationShortDescription();
-							}
-						}
-					}
-					*/
-					// NQMP GJS - new Cult of Personality END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 				}
 
-				// Shared ideology bonus (comes from a policy)
+
 				if (iSharedIdeologyMod > 0)
 				{
 					if (eMyIdeology != NO_POLICY_BRANCH_TYPE && eTheirIdeology != NO_POLICY_BRANCH_TYPE && eMyIdeology == eTheirIdeology)
@@ -5114,7 +5114,7 @@ CvString CvCityCulture::GetTourismTooltip()
 					}
 				}
 
-				// Different ideology penalty (applies all the time)
+
 				if (eMyIdeology != NO_POLICY_BRANCH_TYPE && eTheirIdeology != NO_POLICY_BRANCH_TYPE && eMyIdeology != eTheirIdeology)
 				{
 					if (differentIdeologyCivs.length() > 0)
@@ -5126,7 +5126,7 @@ CvString CvCityCulture::GetTourismTooltip()
 			}
 		}
 
-		// Build the strings
+
 		if (sharedReligionCivs.length() > 0)
 		{
 			if (szRtnValue.length() > 0)
@@ -5170,7 +5170,7 @@ CvString CvCityCulture::GetTourismTooltip()
 				szRtnValue += "[NEWLINE][NEWLINE]";
 			}
 			szTemp = GetLocalizedText("TXT_KEY_CO_CITY_TOURISM_COMMON_FOE_BONUS", iCommonFoeMod);
-			szRtnValue += szTemp /*+ commonFoeCivs*/; // NQMP GJS - new Cult of Personality - commented out this bit
+			szRtnValue += szTemp                    ;
 		}
 		if (sharedIdeologyCivs.length() > 0)
 		{
@@ -5228,7 +5228,7 @@ CvString CvCityCulture::GetTourismTooltip()
 	int iTotal = 0;
 	int iModifier = 0;
 	int iGreatWorkTourismMod = m_pCity->GetCityBuildings()->GetGreatWorksTourismModifier();
-	// Landmarks, Wonders, Natural Wonders, Improvements
+
 	int iPercent = m_pCity->GetCityBuildings()->GetLandmarksTourismPercent();
 	if (iPercent > 0)
 	{
@@ -5243,20 +5243,20 @@ CvString CvCityCulture::GetTourismTooltip()
 		szRtnValue += GetLocalizedText("TXT_KEY_YIELD_FROM_LANDMARKS", iTemp, szIcon);
 	}
 	iTotal += iTemp;
-	// Terrain
-	iTemp = 0;// GetTourismFromWorkedImprovements(); // Vatican legacy, workaround until I can puzzle out this Tourism-as-yield issue;
+
+	iTemp = 0;
 	if (iTemp > 0)
 	{
 		szRtnValue += "[NEWLINE][ICON_BULLET]";
 		szRtnValue += GetLocalizedText("TXT_KEY_YIELD_FROM_TERRAIN", iTemp, szIcon);
 	}
 	iTotal += iTemp;
-	// Buildings Y 
+
 	iTemp = 0;
-	int iBonusTourismPerWonder = GET_PLAYER(m_pCity->getOwner()).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_PER_WONDER); // NQMP GJS - Flourishing of the Arts
+	int iBonusTourismPerWonder = GET_PLAYER(m_pCity->getOwner()).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_PER_WONDER);
 	int iTotalBonusTourismForWonders = m_pCity->getNumWorldWonders() * iBonusTourismPerWonder;
 	iTemp += iTotalBonusTourismForWonders;
-	int iBonusBuilding = (iGreatWorkTourismMod * iTemp / 100); // Also effects Flourishing Wonder benefit for some reason.
+	int iBonusBuilding = (iGreatWorkTourismMod * iTemp / 100);
 	iTemp += iBonusBuilding;
 	for (int iBuildingLoop = 0; iBuildingLoop < GC.getNumBuildingClassInfos(); iBuildingLoop++)
 	{
@@ -5277,7 +5277,7 @@ CvString CvCityCulture::GetTourismTooltip()
 		{
 			int iTechEnhancedTourism = GC.getBuildingInfo(eBuilding)->GetTechEnhancedTourism();
 #ifdef LEKMOD_TECH_ENHANCED_TOURISM_MULTIPLIER
-			//multiply for the amount of this building in the city (in case of duplicates)
+
 			iTechEnhancedTourism *= iNumBuildingInCity;
 #endif
 			if (iTechEnhancedTourism > 0 && GET_TEAM(m_pCity->getTeam()).GetTeamTechs()->HasTech((TechTypes)GC.getBuildingInfo(eBuilding)->GetEnhancedYieldTech()))
@@ -5304,7 +5304,7 @@ CvString CvCityCulture::GetTourismTooltip()
 		szRtnValue += GetLocalizedText("TXT_KEY_YIELD_FROM_BUILDINGS", iTemp, szIcon);
 	}
 	iTotal += iTemp;
-	// Religion Y
+
 	iTemp = 0;
 	ReligionTypes eMajority = m_pCity->GetCityReligions()->GetReligiousMajority();
 	const CvReligion* pReligion = GC.getGame().GetGameReligions()->GetReligion(eMajority, m_pCity->getOwner());
@@ -5337,7 +5337,7 @@ CvString CvCityCulture::GetTourismTooltip()
 		szRtnValue += GetLocalizedText("TXT_KEY_YIELD_FROM_RELIGION", iTemp, szIcon);
 	}
 	iTotal += iTemp;
-	// Great Works Y
+
 	iTemp = 0;
 	for (int iGWC = 0; iGWC < GC.getNumGreatWorkClassInfos(); iGWC++)
 	{
@@ -5357,7 +5357,7 @@ CvString CvCityCulture::GetTourismTooltip()
 		szRtnValue += GetLocalizedText("TXT_KEY_YIELD_FROM_GREAT_WORKS", iTemp, szIcon);
 	}
 	iTotal += iTemp;
-	// Policies
+
 #ifdef NQ_TOURISM_PER_CITY
 	iTemp = GET_PLAYER(m_pCity->getOwner()).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_PER_CITY);
 	if (iTemp > 0)
@@ -5367,7 +5367,7 @@ CvString CvCityCulture::GetTourismTooltip()
 	}
 #endif
 	iTotal += iTemp;
-	// Themes
+
 	iTemp = m_pCity->GetCityBuildings()->GetThemingBonuses(YIELD_CULTURE);
 	if (iTemp > 0)
 	{
@@ -5377,10 +5377,10 @@ CvString CvCityCulture::GetTourismTooltip()
 	iTotal += iTemp;
 	szRtnValue += "[NEWLINE]----------------[NEWLINE]";
 	szRtnValue += GetLocalizedText("TXT_KEY_YIELD_BASE", iTotal, szIcon);
-	// Modifiers Y
+
 	int iTotalModifier = 100;
 	iModifier = 0;
-	// Building Modifiers
+
 	for (int jJ = 0; jJ < GC.getNumBuildingInfos(); jJ++)
 	{
 		BuildingTypes eBuilding = (BuildingTypes)jJ;
@@ -5410,14 +5410,14 @@ CvString CvCityCulture::GetTourismTooltip()
 		szRtnValue += GetLocalizedText("TXT_KEY_PRODMOD_YIELD", iModifier);
 	}
 	iTotalModifier += iModifier;
-	// The Internet
+
 	iModifier = kCityPlayer.GetInfluenceSpreadModifier();
 	if (iModifier > 0)
 	{
 		szRtnValue += GetLocalizedText("TXT_KEY_PRODMOD_YIELD_INFLUENCE", iModifier);
 	}
 	iTotalModifier += iModifier;
-	// International Games
+
 	int iInternationalTurns = kCityPlayer.GetTourismBonusTurns() > 0;
 	if (iInternationalTurns > 0)
 	{
@@ -5425,14 +5425,14 @@ CvString CvCityCulture::GetTourismTooltip()
 		szRtnValue += GetLocalizedText("TXT_KEY_PRODMOD_YIELD_TEMPORARY", iModifier);
 	}
 	iTotalModifier += iModifier;
-	// League Holy City Modifier
+
 	iModifier = GC.getGame().GetGameLeagues()->GetCityTourismModifier(m_pCity->getOwner(), m_pCity);
 	if (iModifier > 0)
 	{
 		szRtnValue += GetLocalizedText("TXT_KEY_PRODMOD_YIELD_WORLD_RELIGION", iModifier);
 	}
 	iTotalModifier += iModifier;
-	// Carnival
+
 	iModifier = kCityPlayer.GetPlayerTraits()->GetGoldenAgeTourismModifier();
 	if (kCityPlayer.isGoldenAge() && iModifier > 0)
 	{
@@ -5446,7 +5446,7 @@ CvString CvCityCulture::GetTourismTooltip()
 	}
 	szRtnValue += "[NEWLINE]----------------[NEWLINE]";
 	szRtnValue += GetLocalizedText("TXT_KEY_YIELD_TOTAL", iTotal, szIcon);
-	// tourism peer to peer mods
+
 	int iLessHappyMod = kCityPlayer.GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_MOD_LESS_HAPPY);
 	int iCommonFoeMod = kCityPlayer.GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_MOD_COMMON_FOE);
 	int iSharedIdeologyMod = kCityPlayer.GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_MOD_SHARED_IDEOLOGY);
@@ -5458,7 +5458,7 @@ CvString CvCityCulture::GetTourismTooltip()
 			PolicyBranchTypes eTheirIdeology = kPlayer.GetPlayerPolicies()->GetLateGamePolicyTree();
 			if (kPlayer.isAlive() && !kPlayer.isMinorCiv() && iLoopPlayer != m_pCity->getOwner() && GET_TEAM(kCityPlayer.getTeam()).isHasMet(GET_PLAYER((PlayerTypes)iLoopPlayer).getTeam()))
 			{
-				// City shares religion with this player
+
 				if (kPlayer.GetReligions()->HasReligionInMostCities(ePlayerReligion))
 				{
 					if (sharedReligionCivs.length() > 0)
@@ -5468,7 +5468,7 @@ CvString CvCityCulture::GetTourismTooltip()
 					sharedReligionCivs += kPlayer.getCivilizationShortDescription();
 				}
 
-				// Open borders with this player
+
 				CvTeam& kTeam = GET_TEAM(kPlayer.getTeam());
 				if (kTeam.IsAllowsOpenBordersToTeam(eTeam))
 				{
@@ -5479,7 +5479,7 @@ CvString CvCityCulture::GetTourismTooltip()
 					openBordersCivs += kPlayer.getCivilizationShortDescription();
 				}
 
-				// Trade route with this player
+
 				if (GC.getGame().GetGameTrade()->IsPlayerConnectedToPlayer(m_pCity->getOwner(), (PlayerTypes)iLoopPlayer))
 				{
 					if (tradeRouteCivs.length() > 0)
@@ -5489,7 +5489,7 @@ CvString CvCityCulture::GetTourismTooltip()
 					tradeRouteCivs += kPlayer.getCivilizationShortDescription();
 				}
 
-				// POLICY BONUSES
+
 				if (iLessHappyMod > 0)
 				{
 					if (kCityPlayer.GetExcessHappiness() > kPlayer.GetExcessHappiness())
@@ -5503,7 +5503,7 @@ CvString CvCityCulture::GetTourismTooltip()
 				}
 				if (iCommonFoeMod > 0)
 				{
-					// NQMP GJS - new Cult of Personality BEGIN
+
 					int rank = 0;
 					int totalEnemies = 0;
 					int myStrength = kCityPlayer.GetMilitaryMight();
@@ -5522,37 +5522,37 @@ CvString CvCityCulture::GetTourismTooltip()
 						}
 					}
 
-					// divide the tourism boost into chunks, so that lowest player gets 0%, highest gets 100%, and the rest are evenly distributed in between
-					// so for example in a 6 player game, based on the player being 6th/5th/4th/3rd/2nd/1st in military strength they get 0%/20%/40%/60%/80%/100% boost
+
+
 					if (totalEnemies > 0)
 					{
 						iCommonFoeMod = iCommonFoeMod * (totalEnemies - rank) / totalEnemies;
 					}
 
-					/*
-					// old code
-					PlayerTypes eLoopPlayer;
-					for(int iPlayerLoop = 0; iPlayerLoop < MAX_MAJOR_CIVS; iPlayerLoop++)
-					{
-						eLoopPlayer = (PlayerTypes) iPlayerLoop;
-						if(eLoopPlayer !=(PlayerTypes) iLoopPlayer && eLoopPlayer != m_pCity->getOwner() && kCityPlayer.GetDiplomacyAI()->IsPlayerValid(eLoopPlayer))
-						{
-							// Are they at war with me too?
-							if (GET_TEAM(kCityPlayer.getTeam()).isAtWar(GET_PLAYER(eLoopPlayer).getTeam()) && GET_TEAM(kPlayer.getTeam()).isAtWar(GET_PLAYER(eLoopPlayer).getTeam()))
-							{
-								if (commonFoeCivs.length() > 0)
-								{
-									commonFoeCivs += ", ";
-								}
-								commonFoeCivs += kPlayer.getCivilizationShortDescription();
-							}
-						}
-					}
-					*/
-					// NQMP GJS - new Cult of Personality END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 				}
 
-				// Shared ideology bonus (comes from a policy)
+
 				if (iSharedIdeologyMod > 0)
 				{
 					if (eMyIdeology != NO_POLICY_BRANCH_TYPE && eTheirIdeology != NO_POLICY_BRANCH_TYPE && eMyIdeology == eTheirIdeology)
@@ -5565,7 +5565,7 @@ CvString CvCityCulture::GetTourismTooltip()
 					}
 				}
 
-				// Different ideology penalty (applies all the time)
+
 				if (eMyIdeology != NO_POLICY_BRANCH_TYPE && eTheirIdeology != NO_POLICY_BRANCH_TYPE && eMyIdeology != eTheirIdeology)
 				{
 					if (differentIdeologyCivs.length() > 0)
@@ -5577,7 +5577,7 @@ CvString CvCityCulture::GetTourismTooltip()
 			}
 		}
 
-		// Build the strings
+
 		if (sharedReligionCivs.length() > 0)
 		{
 			if (szRtnValue.length() > 0)
@@ -5621,7 +5621,7 @@ CvString CvCityCulture::GetTourismTooltip()
 				szRtnValue += "[NEWLINE][NEWLINE]";
 			}
 			szTemp = GetLocalizedText("TXT_KEY_CO_CITY_TOURISM_COMMON_FOE_BONUS", iCommonFoeMod);
-			szRtnValue += szTemp /*+ commonFoeCivs*/; // NQMP GJS - new Cult of Personality - commented out this bit
+			szRtnValue += szTemp                    ;
 		}
 		if (sharedIdeologyCivs.length() > 0)
 		{
@@ -5657,18 +5657,18 @@ CvString CvCityCulture::GetTourismTooltip()
 	PolicyBranchTypes eMyIdeology = kCityPlayer.GetPlayerPolicies()->GetLateGamePolicyTree();
 	ReligionTypes ePlayerReligion = kCityPlayer.GetReligions()->GetReligionInMostCities();
 
-	// Great Works
+
 
 #else
 	return szRtnValue;
 #endif
 }
-/// What is the tooltip describing the tourism output?
+
 CvString CvCityCulture::GetFilledSlotsTooltip()
 {
 	CvString szRtnValue = "";
 #if defined(LEKMOD_GREAT_WORK_YIELD_EFFECTS)
-	// static_cast<GreatWorkClass>()
+
 	const int iGWWriting = m_pCity->GetCityBuildings()->GetNumGreatWorks(static_cast<GreatWorkClass>(GC.getInfoTypeForString("GREAT_WORK_LITERATURE")));
 	int iGWArt = m_pCity->GetCityBuildings()->GetNumGreatWorks(static_cast<GreatWorkClass>(GC.getInfoTypeForString("GREAT_WORK_ART_ARTIFACT")));
 	iGWArt += m_pCity->GetCityBuildings()->GetNumGreatWorks(static_cast<GreatWorkClass>(GC.getInfoTypeForString("GREAT_WORK_ART")));
@@ -5683,7 +5683,7 @@ CvString CvCityCulture::GetFilledSlotsTooltip()
 	return szRtnValue;
 }
 
-/// What is the tooltip describing the tourism output?
+
 CvString CvCityCulture::GetTotalSlotsTooltip()
 {
 	CvString szRtnValue = "";
@@ -5709,7 +5709,7 @@ CvString CvCityCulture::GetTotalSlotsTooltip()
 	return szRtnValue;
 }
 
-// Does this building ever give a theming bonus
+
 bool CvCityCulture::IsThemingBonusPossible(BuildingClassTypes eBuildingClass) const
 {
 	CvPlayer &kPlayer = GET_PLAYER(m_pCity->getOwner());
@@ -5836,9 +5836,9 @@ CvString CvCityCulture::GetThemingTooltip(BuildingClassTypes eBuildingClass) con
 	return szRtnValue;
 }
 
-// PRIVATE FUNCTIONS
 
-/// City's current culture from wonders
+
+
 int CvCityCulture::GetCultureFromWonders() const
 {
 #if !defined(LEKMOD_LANDMARKS_TOURISM_SOURCE_CULTURE_FIX)
@@ -5866,7 +5866,7 @@ int CvCityCulture::GetCultureFromWonders() const
 							iRtnValue += GC.getGame().GetGameLeagues()->GetWorldWonderYieldChange(m_pCity->getOwner(), YIELD_CULTURE);
 #if defined(LEKMOD_LANDMARKS_TOURISM_SOURCE_CULTURE_FIX)
 							BuildingClassTypes eBuildingClass = (BuildingClassTypes)pkBuildingInfo->GetBuildingClassType();
-							// Mirrors CvCity::changeNumWorldWonders (CulturePerWonder) and processBuilding culture components for this wonder.
+
 							iRtnValue += kPlayer.GetCulturePerWonder();
 							ReligionTypes eMajority = m_pCity->GetCityReligions()->GetReligiousMajority();
 							if (eMajority != NO_RELIGION)
@@ -5947,13 +5947,13 @@ int CvCityCulture::GetCultureFromWonders() const
 #endif
 }
 
-/// City's current culture from natural wonders
+
 int CvCityCulture::GetCultureFromNaturalWonders() const
 {
 	int iRtnValue = 0;
 	CvPlot* pLoopPlot;
 
-	// Look at all workable Plots
+
 	for(int iPlotLoop = 0; iPlotLoop < NUM_CITY_PLOTS; iPlotLoop++)
 	{
 		if(iPlotLoop != CITY_HOME_PLOT)
@@ -5962,10 +5962,10 @@ int CvCityCulture::GetCultureFromNaturalWonders() const
 
 			if(pLoopPlot != NULL)
 			{
-				// Is this a Plot this City controls?
+
 				if(pLoopPlot->getWorkingCity() != NULL && pLoopPlot->getWorkingCity()->GetID() == m_pCity->GetID())
 				{
-					// Working the Plot?
+
 					if (m_pCity->GetCityCitizens()->IsWorkingPlot(pLoopPlot))
 					{
 						if(pLoopPlot->getFeatureType() != NO_FEATURE && GC.getFeatureInfo(pLoopPlot->getFeatureType())->IsNaturalWonder())
@@ -5984,13 +5984,13 @@ int CvCityCulture::GetCultureFromNaturalWonders() const
 	return iRtnValue;
 }
 
-/// City's current culture from improvements
+
 int CvCityCulture::GetCultureFromImprovements() const
 {
 	int iRtnValue = 0;
 	CvPlot* pLoopPlot;
 
-	// Look at all workable Plots
+
 	for(int iPlotLoop = 0; iPlotLoop < NUM_CITY_PLOTS; iPlotLoop++)
 	{
 		if(iPlotLoop != CITY_HOME_PLOT)
@@ -5999,10 +5999,10 @@ int CvCityCulture::GetCultureFromImprovements() const
 
 			if(pLoopPlot != NULL)
 			{
-				// Is this a Plot this City controls?
+
 				if(pLoopPlot->getWorkingCity() != NULL && pLoopPlot->getWorkingCity()->GetID() == m_pCity->GetID())
 				{
-					// Working the Plot?
+
 					if (m_pCity->GetCityCitizens()->IsWorkingPlot(pLoopPlot))
 					{
 						ImprovementTypes eImprovement = pLoopPlot->getImprovementType();
@@ -6028,7 +6028,7 @@ int CvCityCulture::GetCultureFromImprovements() const
 	return iRtnValue;
 }
 
-/// Log out data on Great Works in this city
+
 void CvCityCulture::LogGreatWorks(FILogFile* pLog)
 {
 	CvString strMsg;
@@ -6051,7 +6051,7 @@ void CvCityCulture::LogGreatWorks(FILogFile* pLog)
 	pLog->Msg(strMsg);
 }
 
-/// Which of the theming bonuses for this building is active
+
 int CvCityCulture::GetThemingBonusIndex(BuildingClassTypes eBuildingClass) const
 {  
 	vector<int> aGreatWorkIndices;
@@ -6069,10 +6069,10 @@ int CvCityCulture::GetThemingBonusIndex(BuildingClassTypes eBuildingClass) const
 					int iNumSlots = pkBuilding->GetGreatWorkCount();
 					if (m_pCity->GetCityBuildings()->GetNumGreatWorksInBuilding(eBuildingClass) < iNumSlots)
 					{
-						return -1;  // No theming bonus if some slots still empty
+						return -1;
 					}
 
-					// Store info on the attributes of all our Great Works
+
 					for (int iI = 0; iI < iNumSlots; iI++)
 					{
 						int iGreatWork = m_pCity->GetCityBuildings()->GetBuildingGreatWork(eBuildingClass, iI);
@@ -6087,28 +6087,28 @@ int CvCityCulture::GetThemingBonusIndex(BuildingClassTypes eBuildingClass) const
 	return -1;
 }
 
-// HELPER FUNCTIONS
 
-/// Build a name for this artifact
+
+
 GreatWorkType CultureHelpers::GetArtifact(CvPlot *pPlot)
 {
 	CvArchaeologyData archData = pPlot->GetArchaeologicalRecord();
 
-	// Writing?  If so we already know which one it is
+
 	if (archData.m_eArtifactType == CvTypes::getARTIFACT_WRITING())
 	{
 		return archData.m_eWork;
 	}
 
-	// Otherwise normal retrieval of Great Work
+
 	GreatWorkType eGreatWork = NO_GREAT_WORK;
 
-	//Developer Note:
-	//This could probably be shrunk down into a single SQL query but for now I'll leave it as 2.
-	//The idea here is that we grab all possible items for a specific era and then pick 1 at random.
-	//If there are no items for that era, we use NULL and grab those items.
-	//Since era-agnostic and era-specific items are mutually exclusive, we must first check for the the 
-	//existence of era-specific items.
+
+
+
+
+
+
 	const char* szSql = "SELECT gw.ID FROM GreatWorks as gw "
 						"left outer join Eras on gw.EraType == Eras.Type "
 						"inner join GreatWorkArtifactClasses on gw.ArtifactClassType == GreatWorkArtifactClasses.Type "
@@ -6266,16 +6266,16 @@ int CultureHelpers::GetThemingBonusIndex(PlayerTypes eOwner, CvBuildingEntry *pk
 		int iNumSlots = pkEntry->GetGreatWorkCount();
 		if (aGreatWorkIndices.size() != iNumSlots)
 		{
-			return -1;  // No theming bonus if some slots still empty or too many entries
+			return -1;
 		}
 
-		// Store info on the attributes of all our Great Works
+
 		for (int iI = 0; iI < iNumSlots; iI++)
 		{
 			int iGreatWork = aGreatWorkIndices[iI];
 			CvGreatWork work = pCulture->m_CurrentGreatWorks[iGreatWork];
 
-			// Check Great Work class
+
 			if (work.m_eClassType == eArtifactClass)
 			{
 				iCountArtifact++;
@@ -6285,18 +6285,18 @@ int CultureHelpers::GetThemingBonusIndex(PlayerTypes eOwner, CvBuildingEntry *pk
 				iCountArt++;
 			}
 
-			// Store era and player
+
 			aErasSeen.push_back(work.m_eEra);
 			aPlayersSeen.push_back(work.m_ePlayer);
 		}
 
-		// Now see if we match a theme bonus
+
 		int iNumThemes = pkEntry->GetNumThemingBonuses();
 		for (int jJ = 0; jJ < iNumThemes; jJ++)
 		{
 			bool bValid = true;
 
-			// Can we rule this out based on type?
+
 			CvThemingBonusInfo *bonusInfo = pkEntry->GetThemingBonusInfo(jJ);
 			if (bValid && bonusInfo->IsMustBeArt() && iCountArtifact > 0)
 			{
@@ -6311,7 +6311,7 @@ int CultureHelpers::GetThemingBonusIndex(PlayerTypes eOwner, CvBuildingEntry *pk
 				bValid = false;
 			}
 
-			// Can we rule this out based on era?
+
 			if (bValid && bonusInfo->IsSameEra())
 			{
 				int eFirstEra = aErasSeen[0];
@@ -6341,7 +6341,7 @@ int CultureHelpers::GetThemingBonusIndex(PlayerTypes eOwner, CvBuildingEntry *pk
 				}
 			}
 
-			// Can we rule this out based on player?
+
 			if (bValid && bonusInfo->IsRequiresOwner())
 			{
 				for (unsigned int kK = 0; kK < aPlayersSeen.size(); kK++)
@@ -6391,7 +6391,7 @@ int CultureHelpers::GetThemingBonusIndex(PlayerTypes eOwner, CvBuildingEntry *pk
 				}
 			}
 
-			// Haven't ruled it out?  Then this is it (ASSUMES THEMING BONUSES FOR A BUILDING ARE IN SORTED ORDER IN DB!)
+
 			if (bValid)
 			{
 				return jJ;
@@ -6405,7 +6405,7 @@ bool CultureHelpers::IsValidForThemingBonus(CvThemingBonusInfo *pBonusInfo, EraT
 {
 	bool bValid = true;
 
-	// Can we rule this out based on era?
+
 	if (bValid && pBonusInfo->IsSameEra())
 	{
 		if (eEra != aErasSeen[0])
@@ -6421,7 +6421,7 @@ bool CultureHelpers::IsValidForThemingBonus(CvThemingBonusInfo *pBonusInfo, EraT
 		}
 	}
 
-	// Can we rule this out based on player?
+
 	if (bValid && pBonusInfo->IsRequiresOwner())
 	{
 		if (ePlayer != eOwner)

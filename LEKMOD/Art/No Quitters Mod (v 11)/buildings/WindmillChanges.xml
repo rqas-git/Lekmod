@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-29 02:49:55 -->
+
 <GameData>
 	
-	<!-- Windmills no longer require flat land -->
+
 	<Buildings>
 		<Update>
 			<Set Flat="false" />
@@ -10,7 +10,7 @@
 		</Update>
 	</Buildings>
 
-	<!-- localization -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_BUILDING_WINDMILL_HELP" />
 		<Row Tag="TXT_KEY_BUILDING_WINDMILL_HELP">

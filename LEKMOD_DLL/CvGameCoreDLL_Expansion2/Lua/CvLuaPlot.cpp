@@ -1,17 +1,17 @@
-/*	-------------------------------------------------------------------------------------------------------
-	ù 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//!	 \file		CvLuaPlot.cpp
-//!  \brief     Private implementation to CvLuaPlot.
-//!
-//!		This file includes the implementation for a Lua Plot object.
-//!
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #include <CvGameCoreDLLPCH.h>
 #include "CvLuaSupport.h"
 #include "CvLuaArea.h"
@@ -20,12 +20,12 @@
 #include "CvLuaUnit.h"
 #include "../CvGameCoreUtils.h"
 
-//Utility macro for registering methods
+
 #define Method(Name)			\
 	lua_pushcclosure(L, l##Name, 0);	\
 	lua_setfield(L, t, #Name);
 
-//------------------------------------------------------------------------------
+
 void CvLuaPlot::PushMethods(lua_State* L, int t)
 {
 	Method(CanHaveFeature);
@@ -279,21 +279,21 @@ void CvLuaPlot::PushMethods(lua_State* L, int t)
 	Method(GetCityPurchaseID);
 	Method(SetCityPurchaseID);
 }
-//------------------------------------------------------------------------------
+
 void CvLuaPlot::HandleMissingInstance(lua_State* L)
 {
 	DefaultHandleMissingInstance(L);
 }
-//------------------------------------------------------------------------------
+
 const char* CvLuaPlot::GetTypeName()
 {
 	return "Plot";
 }
-//------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
-// Lua Methods
-//------------------------------------------------------------------------------
+
+
+
+
 int CvLuaPlot::lCanHaveFeature(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -305,7 +305,7 @@ int CvLuaPlot::lCanHaveFeature(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaPlot::lGetFeatureType(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -315,7 +315,7 @@ int CvLuaPlot::lGetFeatureType(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaPlot::lGetTerrainType(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -324,7 +324,7 @@ int CvLuaPlot::lGetTerrainType(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaPlot::lIsRiver(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -333,7 +333,7 @@ int CvLuaPlot::lIsRiver(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaPlot::lIsWater(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -342,14 +342,14 @@ int CvLuaPlot::lIsWater(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
 int CvLuaPlot::lIsAllowsWalkWater(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::IsAllowsWalkWater);
 }
 #endif
-//------------------------------------------------------------------------------
+
 int CvLuaPlot::lSetFeatureType(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -362,7 +362,7 @@ int CvLuaPlot::lSetFeatureType(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaPlot::lSetTerrainType(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -375,15 +375,15 @@ int CvLuaPlot::lSetTerrainType(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
 
 
 
-//------------------------------------------------------------------------------
-// CyPlot methods
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//bool isNone();
+
+
+
+
+
+
 int CvLuaPlot::lIsNone(lua_State* L)
 {
 #ifdef AUI_WARNING_FIXES
@@ -396,42 +396,42 @@ int CvLuaPlot::lIsNone(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void erase();
+
+
 int CvLuaPlot::lErase(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::erase);
 }
 
-//------------------------------------------------------------------------------
-//int getTeam();
+
+
 int CvLuaPlot::lGetTeam(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getTeam);
 }
 
-//------------------------------------------------------------------------------
-//void nukeExplosion(int iRange, CyUnit* pNukeUnit);
+
+
 int CvLuaPlot::lNukeExplosion(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::nukeExplosion);
 }
 
-//------------------------------------------------------------------------------
-//void updateFog();
+
+
 int CvLuaPlot::lUpdateFog(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::updateFog);
 }
 
-//------------------------------------------------------------------------------
-//void updateVisibility();
+
+
 int CvLuaPlot::lUpdateVisibility(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::updateVisibility);
 }
-//------------------------------------------------------------------------------
-//bool isAdjacentToArea(CyArea* pArea);
+
+
 int CvLuaPlot::lIsAdjacentToArea(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -442,8 +442,8 @@ int CvLuaPlot::lIsAdjacentToArea(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool shareAdjacentArea(CyPlot* pPlot);
+
+
 int CvLuaPlot::lShareAdjacentArea(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -454,57 +454,57 @@ int CvLuaPlot::lShareAdjacentArea(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isAdjacentToLand();
+
+
 int CvLuaPlot::lIsAdjacentToLand(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isAdjacentToLand);
 }
-//------------------------------------------------------------------------------
-//bool IsAdjacentToShallowWater()
+
+
 int CvLuaPlot::lIsAdjacentToShallowWater(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isAdjacentToShallowWater);
 }
-//------------------------------------------------------------------------------
-//bool isCoastalLand();
+
+
 int CvLuaPlot::lIsCoastalLand(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isCoastalLand);
 }
 
-//------------------------------------------------------------------------------
-//bool isWithinTeamCityRadius(TeamTypes eTeam, PlayerTypes eIgnorePlayer);
+
+
 int CvLuaPlot::lIsWithinTeamCityRadius(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isWithinTeamCityRadius);
 }
-//------------------------------------------------------------------------------
-//bool isLake();
+
+
 int CvLuaPlot::lIsLake(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isLake);
 }
-//------------------------------------------------------------------------------
-//bool isFreshWater();
+
+
 int CvLuaPlot::lIsFreshWater(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isFreshWater);
 }
 
-//------------------------------------------------------------------------------
-//bool isRiverSide();
+
+
 int CvLuaPlot::lIsRiverSide(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isRiverSide);
 }
-//------------------------------------------------------------------------------
-//bool isRiverConnection(DirectionTypes eDirection);
+
+
 int CvLuaPlot::lIsRiverConnection(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isRiverConnection);
 }
-//------------------------------------------------------------------------------
+
 int CvLuaPlot::lIsRiverCrossingFlowClockwise(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -513,20 +513,20 @@ int CvLuaPlot::lIsRiverCrossingFlowClockwise(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getNearestLandArea();
+
+
 int CvLuaPlot::lGetNearestLandArea(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getNearestLandArea);
 }
-//------------------------------------------------------------------------------
-//int seeFromLevel(TeamTypes eTeam);
+
+
 int CvLuaPlot::lSeeFromLevel(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::seeFromLevel);
 }
-//------------------------------------------------------------------------------
-//CvPlot* getNearestLandPlot();
+
+
 int CvLuaPlot::lGetNearestLandPlot(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -534,50 +534,50 @@ int CvLuaPlot::lGetNearestLandPlot(lua_State* L)
 	CvLuaPlot::Push(L, pkNearestPlot);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int seeThroughLevel();
+
+
 int CvLuaPlot::lSeeThroughLevel(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::seeThroughLevel);
 }
-//------------------------------------------------------------------------------
-//bool canHaveResource(ResourceTypes eResource, bool bIgnoreLatitude);
+
+
 int CvLuaPlot::lCanHaveResource(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::canHaveResource);
 }
-//------------------------------------------------------------------------------
-//bool canHaveImprovement(ImprovementTypes eImprovement, TeamTypes eTeam, bool bPotential);
+
+
 int CvLuaPlot::lCanHaveImprovement(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::canHaveImprovement);
 }
-//------------------------------------------------------------------------------
-//bool canBuild(BuildTypes eBuild, PlayerTypes ePlayer, bool bTestVisible);
+
+
 int CvLuaPlot::lCanBuild(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::canBuild);
 }
-//------------------------------------------------------------------------------
-//int getBuildTime(BuildTypes eBuild);
+
+
 int CvLuaPlot::lGetBuildTime(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getBuildTime);
 }
-//------------------------------------------------------------------------------
-//int getBuildTurnsLeft(BuildTypes eBuild, int iNowExtra, int iThenExtra);
+
+
 int CvLuaPlot::lGetBuildTurnsLeft(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getBuildTurnsLeft);
 }
-//------------------------------------------------------------------------------
-//int getBuildTurnsTotal(BuildTypes eBuild);
+
+
 int CvLuaPlot::lGetBuildTurnsTotal(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getBuildTurnsTotal);
 }
-//------------------------------------------------------------------------------
-//int getFeatureProduction(BuildTypes eBuild, TeamTypes eTeam, CyCity* ppCity);
+
+
 int CvLuaPlot::lGetFeatureProduction(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -591,8 +591,8 @@ int CvLuaPlot::lGetFeatureProduction(lua_State* L)
 	return 1;
 }
 #ifdef NQ_FOOD_FROM_CHOPS
-//------------------------------------------------------------------------------
-//int getFeatureFood(BuildTypes eBuild, TeamTypes eTeam, CyCity* ppCity);
+
+
 int CvLuaPlot::lGetFeatureFood(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -606,8 +606,8 @@ int CvLuaPlot::lGetFeatureFood(lua_State* L)
 	return 1;
 }
 #endif
-//------------------------------------------------------------------------------
-//CyUnit* getBestDefender(PlayerTypes eOwner, PlayerTypes eAttackingPlayer, CyUnit* pAttacker, bool bTestAtWar, bool bTestPotentialEnemy, bool bTestCanMove);
+
+
 int CvLuaPlot::lGetBestDefender(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -621,8 +621,8 @@ int CvLuaPlot::lGetBestDefender(lua_State* L)
 	CvLuaUnit::Push(L, pkUnit.pointer());
 	return 1;
 }
-//------------------------------------------------------------------------------
-//CvUnit* getSelectedUnit();
+
+
 int CvLuaPlot::lGetSelectedUnit(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -630,82 +630,82 @@ int CvLuaPlot::lGetSelectedUnit(lua_State* L)
 	CvLuaUnit::Push(L, pkUnit);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getUnitPower(PlayerTypes eOwner);
+
+
 int CvLuaPlot::lGetUnitPower(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getUnitPower);
 }
 
-//------------------------------------------------------------------------------
-//int defenseModifier(TeamTypes iDefendTeam, bool bIgnoreBuilding, bool bHelp);
+
+
 int CvLuaPlot::lDefenseModifier(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::defenseModifier);
 }
-//------------------------------------------------------------------------------
-//int movementCost(CyUnit* pUnit, CyPlot* pFromPlot);
+
+
 int CvLuaPlot::lMovementCost(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::movementCost);
 }
 
-//------------------------------------------------------------------------------
-//int getExtraMovePathCost();
+
+
 int CvLuaPlot::lGetExtraMovePathCost(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getExtraMovePathCost);
 }
-//------------------------------------------------------------------------------
-//void changeExtraMovePathCost(int iChange);
+
+
 int CvLuaPlot::lChangeExtraMovePathCost(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::changeExtraMovePathCost);
 }
 
-//------------------------------------------------------------------------------
-//bool isAdjacentOwned();
+
+
 int CvLuaPlot::lIsAdjacentOwned(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isAdjacentOwned);
 }
-//------------------------------------------------------------------------------
-//bool isAdjacentPlayer(PlayerTypes ePlayer, bool bLandOnly);
+
+
 int CvLuaPlot::lIsAdjacentPlayer(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isAdjacentPlayer);
 }
-//------------------------------------------------------------------------------
-//bool isAdjacentTeam(TeamTypes eTeam, bool bLandOnly);
+
+
 int CvLuaPlot::lIsAdjacentTeam(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isAdjacentTeam);
 }
-//------------------------------------------------------------------------------
-//bool isOwned();
+
+
 int CvLuaPlot::lIsOwned(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isOwned);
 }
-//------------------------------------------------------------------------------
-//bool isBarbarian();
+
+
 int CvLuaPlot::lIsBarbarian(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isBarbarian);
 }
-//------------------------------------------------------------------------------
-//bool isRevealedBarbarian();
+
+
 int CvLuaPlot::lIsRevealedBarbarian(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isRevealedBarbarian);
 }
-//------------------------------------------------------------------------------
+
 int CvLuaPlot::lHasBarbarianCamp(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::HasBarbarianCamp);
 }
-//------------------------------------------------------------------------------
-//bool isVisible(TeamTypes eTeam, bool bDebug);
+
+
 int CvLuaPlot::lIsVisible(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -715,8 +715,8 @@ int CvLuaPlot::lIsVisible(lua_State* L)
 	lua_pushboolean(L, pkPlot->isVisible(eTeam, bDebug));
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isActiveVisible(bool bDebug);
+
+
 int CvLuaPlot::lIsActiveVisible(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -729,14 +729,14 @@ int CvLuaPlot::lIsActiveVisible(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isVisibleToWatchingHuman();
+
+
 int CvLuaPlot::lIsVisibleToWatchingHuman(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isVisibleToWatchingHuman);
 }
-//------------------------------------------------------------------------------
-//bool isAdjacentVisible(TeamTypes eTeam, bool bDebug);
+
+
 int CvLuaPlot::lIsAdjacentVisible(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -750,45 +750,45 @@ int CvLuaPlot::lIsAdjacentVisible(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isAdjacentNonvisible(TeamTypes eTeam);
+
+
 int CvLuaPlot::lIsAdjacentNonvisible(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isAdjacentNonvisible);
 }
-//------------------------------------------------------------------------------
-//bool isAdjacentRevealed(TeamTypes eTeam);
+
+
 int CvLuaPlot::lIsAdjacentRevealed(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isAdjacentRevealed);
 }
-//------------------------------------------------------------------------------
-//bool isAdjacentNonrevealed(TeamTypes eTeam);
+
+
 int CvLuaPlot::lIsAdjacentNonrevealed(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isAdjacentNonrevealed);
 }
 
-//------------------------------------------------------------------------------
-//void removeGoody();
+
+
 int CvLuaPlot::lRemoveGoody(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::removeGoody);
 }
-//------------------------------------------------------------------------------
-//bool isGoody();
+
+
 int CvLuaPlot::lIsGoody(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isGoody);
 }
-//------------------------------------------------------------------------------
-//bool isRevealedGoody(TeamTypes eTeam);
+
+
 int CvLuaPlot::lIsRevealedGoody(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isRevealedGoody);
 }
-//------------------------------------------------------------------------------
-//bool IsFriendlyTerritory(PlayerTypes ePlayer);
+
+
 int CvLuaPlot::lIsFriendlyTerritory(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -799,14 +799,14 @@ int CvLuaPlot::lIsFriendlyTerritory(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
-//bool isCity();
+
+
 int CvLuaPlot::lIsCity(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isCity);
 }
-//------------------------------------------------------------------------------
-//bool isFriendlyCity(CyUnit* pUnit, bool bCheckImprovement);
+
+
 int CvLuaPlot::lIsFriendlyCity(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -817,8 +817,8 @@ int CvLuaPlot::lIsFriendlyCity(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isEnemyCity(CyUnit* pUnit);
+
+
 int CvLuaPlot::lIsEnemyCity(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -827,21 +827,21 @@ int CvLuaPlot::lIsEnemyCity(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isBeingWorked();
+
+
 int CvLuaPlot::lIsBeingWorked(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isBeingWorked);
 }
 
-//------------------------------------------------------------------------------
-//bool isUnit();
+
+
 int CvLuaPlot::lIsUnit(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isUnit);
 }
-//------------------------------------------------------------------------------
-//bool isVisibleEnemyDefender(CyUnit* pUnit);
+
+
 int CvLuaPlot::lIsVisibleEnemyDefender(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -851,26 +851,26 @@ int CvLuaPlot::lIsVisibleEnemyDefender(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getNumDefenders(PlayerTypes ePlayer);
+
+
 int CvLuaPlot::lGetNumDefenders(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getNumDefenders);
 }
-//------------------------------------------------------------------------------
-//int getNumVisibleEnemyDefenders(CyUnit* pUnit);
+
+
 int CvLuaPlot::lGetNumVisibleEnemyDefenders(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getNumVisibleEnemyDefenders);
 }
-//------------------------------------------------------------------------------
-//int getNumVisiblePotentialEnemyDefenders(CyUnit* pUnit);
+
+
 int CvLuaPlot::lGetNumVisiblePotentialEnemyDefenders(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getNumVisiblePotentialEnemyDefenders);
 }
-//------------------------------------------------------------------------------
-//bool isVisibleEnemyUnit(PlayerTypes ePlayer);
+
+
 int CvLuaPlot::lIsVisibleEnemyUnit(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -879,14 +879,14 @@ int CvLuaPlot::lIsVisibleEnemyUnit(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isVisibleOtherUnit(PlayerTypes ePlayer);
+
+
 int CvLuaPlot::lIsVisibleOtherUnit(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isVisibleOtherUnit);
 }
-//------------------------------------------------------------------------------
-//int getNumFriendlyUnitsOfType(CvUnit* pUnit);
+
+
 int CvLuaPlot::lGetNumFriendlyUnitsOfType(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -898,19 +898,19 @@ int CvLuaPlot::lGetNumFriendlyUnitsOfType(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isFighting();
+
+
 int CvLuaPlot::lIsFighting(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isFighting);
 }
-//------------------------------------------------------------------------------
-//bool isRoute();
+
+
 int CvLuaPlot::lIsRoute(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isRoute);
 }
-//------------------------------------------------------------------------------
+
 int CvLuaPlot::lIsTradeRoute(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -919,8 +919,8 @@ int CvLuaPlot::lIsTradeRoute(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isValidDomainForLocation(CyUnit* pUnit);
+
+
 int CvLuaPlot::lIsValidDomainForLocation(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -930,8 +930,8 @@ int CvLuaPlot::lIsValidDomainForLocation(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isValidDomainForAction(CyUnit* pUnit);
+
+
 int CvLuaPlot::lIsValidDomainForAction(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -941,45 +941,45 @@ int CvLuaPlot::lIsValidDomainForAction(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isImpassable();
+
+
 int CvLuaPlot::lIsImpassable(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isImpassable);
 }
 
-//------------------------------------------------------------------------------
-//int getX();
+
+
 int CvLuaPlot::lGetX(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getX);
 }
-//------------------------------------------------------------------------------
-//int getY();
+
+
 int CvLuaPlot::lGetY(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getY);
 }
-//------------------------------------------------------------------------------
-//bool at(int iX, int iY);
+
+
 int CvLuaPlot::lAt(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::at);
 }
-//------------------------------------------------------------------------------
-//bool GetIndex();
+
+
 int CvLuaPlot::lGetPlotIndex(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::GetPlotIndex);
 }
-//------------------------------------------------------------------------------
-//int getLatitude();
+
+
 int CvLuaPlot::lGetLatitude(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getLatitude);
 }
-//------------------------------------------------------------------------------
-//CyArea* area();
+
+
 int CvLuaPlot::lArea(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -987,8 +987,8 @@ int CvLuaPlot::lArea(lua_State* L)
 	CvLuaArea::Push(L, pkArea);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//CyArea* waterArea();
+
+
 int CvLuaPlot::lWaterArea(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -996,51 +996,51 @@ int CvLuaPlot::lWaterArea(lua_State* L)
 	CvLuaArea::Push(L, pkArea);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getArea();
+
+
 int CvLuaPlot::lGetArea(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getArea);
 }
-//------------------------------------------------------------------------------
-//int setArea();
+
+
 int CvLuaPlot::lSetArea(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::setArea);
 }
-//------------------------------------------------------------------------------
-//int getFeatureVariety();
+
+
 int CvLuaPlot::lGetFeatureVariety(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getFeatureVariety);
 }
 
-//------------------------------------------------------------------------------
-//int getOwnershipDuration();
+
+
 int CvLuaPlot::lGetOwnershipDuration(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getOwnershipDuration);
 }
-//------------------------------------------------------------------------------
-//bool isOwnershipScore();
+
+
 int CvLuaPlot::lIsOwnershipScore(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isOwnershipScore);
 }
-//------------------------------------------------------------------------------
-//void setOwnershipDuration(int iNewValue);
+
+
 int CvLuaPlot::lSetOwnershipDuration(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::setOwnershipDuration);
 }
-//------------------------------------------------------------------------------
-//void changeOwnershipDuration(int iChange);
+
+
 int CvLuaPlot::lChangeOwnershipDuration(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::changeOwnershipDuration);
 }
-//------------------------------------------------------------------------------
-//plot GetInlandCorner()
+
+
 int CvLuaPlot::lGetInlandCorner(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -1049,200 +1049,200 @@ int CvLuaPlot::lGetInlandCorner(lua_State* L)
 	CvLuaPlot::Push(L, pkInlandCorner);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getImprovementDuration();
+
+
 int CvLuaPlot::lGetImprovementDuration(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getImprovementDuration);
 }
-//------------------------------------------------------------------------------
-//void setImprovementDuration(int iNewValue);
+
+
 int CvLuaPlot::lSetImprovementDuration(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::setImprovementDuration);
 }
-//------------------------------------------------------------------------------
-//void changeImprovementDuration(int iChange);
+
+
 int CvLuaPlot::lChangeImprovementDuration(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::changeImprovementDuration);
 }
 
-//------------------------------------------------------------------------------
-//int getUpgradeProgress();
+
+
 int CvLuaPlot::lGetUpgradeProgress(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getUpgradeProgress);
 }
-//------------------------------------------------------------------------------
-//int getUpgradeTimeLeft(ImprovementTypes eImprovement, PlayerTypes ePlayer);
+
+
 int CvLuaPlot::lGetUpgradeTimeLeft(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getUpgradeTimeLeft);
 }
 
-//------------------------------------------------------------------------------
-//void setUpgradeProgress(int iNewValue);
+
+
 int CvLuaPlot::lSetUpgradeProgress(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::setUpgradeProgress);
 }
-//------------------------------------------------------------------------------
-//void changeUpgradeProgress(int iChange);
+
+
 int CvLuaPlot::lChangeUpgradeProgress(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::changeUpgradeProgress);
 }
-//------------------------------------------------------------------------------
-//int getCityRadiusCount();
+
+
 int CvLuaPlot::lGetCityRadiusCount(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getCityRadiusCount);
 }
-//------------------------------------------------------------------------------
-//int isCityRadius();
+
+
 int CvLuaPlot::lIsCityRadius(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isCityRadius);
 }
 
-//------------------------------------------------------------------------------
-//bool isStartingPlot();
+
+
 int CvLuaPlot::lIsStartingPlot(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isStartingPlot);
 }
-//------------------------------------------------------------------------------
-//void setStartingPlot(bool bNewValue);
+
+
 int CvLuaPlot::lSetStartingPlot(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::setStartingPlot);
 }
-//------------------------------------------------------------------------------
-//bool isNEOfRiver();
+
+
 int CvLuaPlot::lIsNEOfRiver(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isNEOfRiver);
 }
-//------------------------------------------------------------------------------
-//void setNEOfRiver(bool bNewValue, FlowDirectionTypes eRiverDir);
+
+
 int CvLuaPlot::lSetNEOfRiver(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::setNEOfRiver);
 }
-//------------------------------------------------------------------------------
-//bool isWOfRiver();
+
+
 int CvLuaPlot::lIsWOfRiver(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isWOfRiver);
 }
-//------------------------------------------------------------------------------
-//void setWOfRiver(bool bNewValue, FlowDirectionTypes eRiverDir);
+
+
 int CvLuaPlot::lSetWOfRiver(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::setWOfRiver);
 }
-//------------------------------------------------------------------------------
-//bool isNWOfRiver();
+
+
 int CvLuaPlot::lIsNWOfRiver(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isNWOfRiver);
 }
-//------------------------------------------------------------------------------
-//void setNWOfRiver(bool bNewValue, FlowDirectionTypes eRiverDir);
+
+
 int CvLuaPlot::lSetNWOfRiver(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::setNWOfRiver);
 }
-//------------------------------------------------------------------------------
-//FlowDirectionTypes getRiverEFlowDirection();
+
+
 int CvLuaPlot::lGetRiverEFlowDirection(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getRiverEFlowDirection);
 }
-//------------------------------------------------------------------------------
-//FlowDirectionTypes getRiverSEFlowDirection();
+
+
 int CvLuaPlot::lGetRiverSEFlowDirection(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getRiverSEFlowDirection);
 }
-//------------------------------------------------------------------------------
-//FlowDirectionTypes getRiverSWFlowDirection();
+
+
 int CvLuaPlot::lGetRiverSWFlowDirection(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getRiverSWFlowDirection);
 }
 
-//------------------------------------------------------------------------------
-//bool isPotentialCityWork();
+
+
 int CvLuaPlot::lIsPotentialCityWork(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isPotentialCityWork);
 }
-//------------------------------------------------------------------------------
-//bool isPotentialCityWorkForArea(CyArea* pArea);
+
+
 int CvLuaPlot::lIsPotentialCityWorkForArea(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isPotentialCityWorkForArea);
 }
 
-//------------------------------------------------------------------------------
-//PlayerTypes getOwner();
+
+
 int CvLuaPlot::lGetOwner(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getOwner);
 }
-//------------------------------------------------------------------------------
-//void setOwner(PlayerTypes eNewValue, int iAcquiringCityID, bool bCheckUnits = true, bool bUpdateResources = true);
+
+
 int CvLuaPlot::lSetOwner(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::setOwner);
 }
-//------------------------------------------------------------------------------
-//PlotTypes getPlotType();
+
+
 int CvLuaPlot::lGetPlotType(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getPlotType);
 }
-//------------------------------------------------------------------------------
-//bool isFlatlands();
+
+
 int CvLuaPlot::lIsFlatlands(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isFlatlands);
 }
-//------------------------------------------------------------------------------
-//bool isHills();
+
+
 int CvLuaPlot::lIsHills(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isHills);
 }
-//------------------------------------------------------------------------------
-//bool isOpenGround();
+
+
 int CvLuaPlot::lIsOpenGround(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isOpenGround);
 }
-//------------------------------------------------------------------------------
-//bool isRoughGround();
+
+
 int CvLuaPlot::lIsRoughGround(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isRoughGround);
 }
-//------------------------------------------------------------------------------
-//bool isMountain();
+
+
 int CvLuaPlot::lIsMountain(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isMountain);
 }
 
-//------------------------------------------------------------------------------
-//void setPlotType(PlotTypes eNewValue, bool bRecalculate, bool bRebuildGraphics, bool bEraseUnitsIfWater);
+
+
 int CvLuaPlot::lSetPlotType(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::setPlotType);
 }
-//------------------------------------------------------------------------------
-//ResourceTypes getResourceType(TeamTypes eTeam);
+
+
 int CvLuaPlot::lGetResourceType(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -1268,76 +1268,76 @@ int CvLuaPlot::lGetResourceType(lua_State* L)
 		return 1;
 	}
 }
-//------------------------------------------------------------------------------
-//ResourceTypes getNonObsoleteResourceType(TeamTypes eTeam);
+
+
 int CvLuaPlot::lGetNonObsoleteResourceType(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getNonObsoleteResourceType);
 }
-//------------------------------------------------------------------------------
-//void setResourceType(ResourceTypes eNewValue, int iNumResource);
+
+
 int CvLuaPlot::lSetResourceType(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::setResourceType);
 }
-//------------------------------------------------------------------------------
-//int getNumResource();
+
+
 int CvLuaPlot::lGetNumResource(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getNumResource);
 }
-//------------------------------------------------------------------------------
-//void setNumResource(int iNum);
+
+
 int CvLuaPlot::lSetNumResource(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::setNumResource);
 }
-//------------------------------------------------------------------------------
-//void changeNumResource(int iChange);
+
+
 int CvLuaPlot::lChangeNumResource(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::changeNumResource);
 }
 
-//------------------------------------------------------------------------------
-//ImprovementTypes getImprovementType();
+
+
 int CvLuaPlot::lGetImprovementType(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getImprovementType);
 }
-//------------------------------------------------------------------------------
-//void setImprovementType(ImprovementTypes eNewValue);
+
+
 int CvLuaPlot::lSetImprovementType(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::setImprovementType);
 }
-//------------------------------------------------------------------------------
-//void setImprovementType(bool b);
+
+
 int CvLuaPlot::lSetImprovementPillaged(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::SetImprovementPillaged);
 }
-//------------------------------------------------------------------------------
-//RouteTypes getRouteType();
+
+
 int CvLuaPlot::lGetRouteType(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getRouteType);
 }
-//------------------------------------------------------------------------------
-//void setRouteType(RouteTypes eNewValue);
+
+
 int CvLuaPlot::lSetRouteType(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::setRouteType);
 }
-//------------------------------------------------------------------------------
+
 int CvLuaPlot::lIsRoutePillaged(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
 	lua_pushboolean(L, pkPlot->IsRoutePillaged());
 	return 1;
 }
-//------------------------------------------------------------------------------
-//CyCity* getPlotCity();
+
+
 int CvLuaPlot::lGetPlotCity(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -1345,8 +1345,8 @@ int CvLuaPlot::lGetPlotCity(lua_State* L)
 	CvLuaCity::Push(L, pkCity);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//CyCity* getWorkingCity();
+
+
 int CvLuaPlot::lGetWorkingCity(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -1354,8 +1354,8 @@ int CvLuaPlot::lGetWorkingCity(lua_State* L)
 	CvLuaCity::Push(L, pkCity);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//CyCity* getWorkingCityOverride();
+
+
 int CvLuaPlot::lGetWorkingCityOverride(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -1363,20 +1363,20 @@ int CvLuaPlot::lGetWorkingCityOverride(lua_State* L)
 	CvLuaCity::Push(L, pkCity);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getReconCount();
+
+
 int CvLuaPlot::lGetReconCount(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getReconCount);
 }
-//------------------------------------------------------------------------------
-//int getRiverCrossingCount();
+
+
 int CvLuaPlot::lGetRiverCrossingCount(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getRiverCrossingCount);
 }
-//------------------------------------------------------------------------------
-//int getYield(YieldTypes eIndex);
+
+
 int CvLuaPlot::lGetYield(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -1385,26 +1385,26 @@ int CvLuaPlot::lGetYield(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int calculateNatureYield(YieldTypes eIndex, TeamTypes eTeam, bool bIgnoreFeature = false);
+
+
 int CvLuaPlot::lCalculateNatureYield(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::calculateNatureYield);
 }
-//------------------------------------------------------------------------------
-//int calculateBestNatureYield(YieldTypes eIndex, TeamTypes eTeam);
+
+
 int CvLuaPlot::lCalculateBestNatureYield(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::calculateBestNatureYield);
 }
-//------------------------------------------------------------------------------
-//int calculateTotalBestNatureYield(TeamTypes eTeam);
+
+
 int CvLuaPlot::lCalculateTotalBestNatureYield(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::calculateTotalBestNatureYield);
 }
-//------------------------------------------------------------------------------
-//int calculateImprovementYieldChange(ImprovementTypes eImprovement, YieldTypes eYield, PlayerTypes ePlayer, bool bOptimal, RouteTypes eAssumeThisRoute);
+
+
 int CvLuaPlot::lCalculateImprovementYieldChange(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -1418,62 +1418,62 @@ int CvLuaPlot::lCalculateImprovementYieldChange(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int calculateYield(YieldTypes eIndex, bool bDisplay);
+
+
 int CvLuaPlot::lCalculateYield(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::calculateYield);
 }
-//------------------------------------------------------------------------------
-//bool hasYield();
+
+
 int CvLuaPlot::lHasYield(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::hasYield);
 }
-//------------------------------------------------------------------------------
-//bool GetYieldWithBuild();
+
+
 int CvLuaPlot::lGetYieldWithBuild(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getYieldWithBuild);
 }
-//------------------------------------------------------------------------------
-//int countNumAirUnits(TeamTypes ePlayer);
+
+
 int CvLuaPlot::lCountNumAirUnits(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::countNumAirUnits);
 }
-//------------------------------------------------------------------------------
-//int getFoundValue(PlayerTypes eIndex);
+
+
 int CvLuaPlot::lGetFoundValue(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getFoundValue);
 }
-//------------------------------------------------------------------------------
-//bool isBestAdjacentFound(PlayerTypes eIndex);
+
+
 int CvLuaPlot::lIsBestAdjacentFound(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isBestAdjacentFound);
 }
-//------------------------------------------------------------------------------
-//int getPlayerCityRadiusCount(PlayerTypes eIndex);
+
+
 int CvLuaPlot::lGetPlayerCityRadiusCount(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getPlayerCityRadiusCount);
 }
-//------------------------------------------------------------------------------
-//bool isPlayerCityRadius(PlayerTypes eIndex);
+
+
 int CvLuaPlot::lIsPlayerCityRadius(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isPlayerCityRadius);
 }
-//------------------------------------------------------------------------------
-//int getVisibilityCount(TeamTypes eTeam);
+
+
 int CvLuaPlot::lGetVisibilityCount(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getVisibilityCount);
 }
-//------------------------------------------------------------------------------
-//void changeVisibilityCount(TeamTypes eTeam, int iChange, InvisibleTypes eSeeInvisibleType, bool bInformExplorationTracking, bool bAlwaysSeeInvisible);
+
+
 int CvLuaPlot::lChangeVisibilityCount(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -1487,8 +1487,8 @@ int CvLuaPlot::lChangeVisibilityCount(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
-//PlayerTypes getRevealedOwner(TeamTypes eTeam, bool bDebug);
+
+
 int CvLuaPlot::lGetRevealedOwner(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -1502,8 +1502,8 @@ int CvLuaPlot::lGetRevealedOwner(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//TeamTypes getRevealedTeam(TeamTypes eTeam, bool bDebug);
+
+
 int CvLuaPlot::lGetRevealedTeam(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -1517,14 +1517,14 @@ int CvLuaPlot::lGetRevealedTeam(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isRiverCrossing(DirectionTypes eIndex);
+
+
 int CvLuaPlot::lIsRiverCrossing(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isRiverCrossing);
 }
-//------------------------------------------------------------------------------
-//bool IsRiverCrossingToPlot(DirectionTypes eIndex);
+
+
 int CvLuaPlot::lIsRiverCrossingToPlot(lua_State* L)
 {
 	bool bIsCrossingRiver = false;
@@ -1539,8 +1539,8 @@ int CvLuaPlot::lIsRiverCrossingToPlot(lua_State* L)
 	lua_pushboolean(L, bIsCrossingRiver);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isRevealed(TeamTypes eTeam, bool bDebug);
+
+
 int CvLuaPlot::lIsRevealed(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -1554,8 +1554,8 @@ int CvLuaPlot::lIsRevealed(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setRevealed(TeamTypes eTeam, bool bNewValue, bool bTerrainOnly, TeamTypes eFromTeam);
+
+
 int CvLuaPlot::lSetRevealed(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -1567,8 +1567,8 @@ int CvLuaPlot::lSetRevealed(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
-//ImprovementTypes getRevealedImprovementType(TeamTypes eTeam, bool bDebug);
+
+
 int CvLuaPlot::lGetRevealedImprovementType(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -1582,8 +1582,8 @@ int CvLuaPlot::lGetRevealedImprovementType(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//RouteTypes getRevealedRouteType(TeamTypes eTeam, bool bDebug);
+
+
 int CvLuaPlot::lGetRevealedRouteType(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -1597,44 +1597,44 @@ int CvLuaPlot::lGetRevealedRouteType(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getBuildProgress(BuildTypes eBuild);
+
+
 int CvLuaPlot::lGetBuildProgress(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getBuildProgress);
 }
-//------------------------------------------------------------------------------
-//bool changeBuildProgress(BuildTypes eBuild, int iChange, TeamTypes eTeam);
+
+
 int CvLuaPlot::lChangeBuildProgress(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::changeBuildProgress);
 }
-//------------------------------------------------------------------------------
-//int getInvisibleVisibilityCount(TeamTypes eTeam, InvisibleTypes eInvisible);
+
+
 int CvLuaPlot::lGetInvisibleVisibilityCount(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getInvisibleVisibilityCount);
 }
-//------------------------------------------------------------------------------
-//bool isInvisibleVisible(TeamTypes eTeam, InvisibleTypes eInvisible);
+
+
 int CvLuaPlot::lIsInvisibleVisible(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::isInvisibleVisible);
 }
-//------------------------------------------------------------------------------
-//void changeInvisibleVisibilityCount(TeamTypes eTeam, InvisibleTypes eInvisible, int iChange);
+
+
 int CvLuaPlot::lChangeInvisibleVisibilityCount(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::changeInvisibleVisibilityCount);
 }
-//------------------------------------------------------------------------------
-//int getNumUnits();
+
+
 int CvLuaPlot::lGetNumUnits(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::getNumUnits);
 }
-//------------------------------------------------------------------------------
-//CvUnit* getUnit(int iIndex);
+
+
 int CvLuaPlot::lGetUnit(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -1644,8 +1644,8 @@ int CvLuaPlot::lGetUnit(lua_State* L)
 	CvLuaUnit::Push(L, pkUnit);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getNumLayerUnits();
+
+
 int CvLuaPlot::lGetNumLayerUnits(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -1654,8 +1654,8 @@ int CvLuaPlot::lGetNumLayerUnits(lua_State* L)
 	lua_pushinteger(L, pkPlot->getNumLayerUnits(iLayerID));
 	return 1;
 }
-//------------------------------------------------------------------------------
-//CvUnit* getUnit(int iIndex);
+
+
 int CvLuaPlot::lGetLayerUnit(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -1666,8 +1666,8 @@ int CvLuaPlot::lGetLayerUnit(lua_State* L)
 	CvLuaUnit::Push(L, pkUnit);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//string getScriptData();
+
+
 int CvLuaPlot::lGetScriptData(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -1675,8 +1675,8 @@ int CvLuaPlot::lGetScriptData(lua_State* L)
 	lua_pushstring(L, strResult.c_str());
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setScriptData(string szNewValue);
+
+
 int CvLuaPlot::lSetScriptData(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
@@ -1686,13 +1686,13 @@ int CvLuaPlot::lSetScriptData(lua_State* L)
 	return 0;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaPlot::lGetActiveFogOfWarMode(lua_State* L)
 {
 	CvPlot* pkPlot = GetInstance(L);
 
 	int fow = 0;
-	// convert from game fog of war defines to engine fog of war defines
+
 	switch(pkPlot->GetActiveFogOfWarMode())
 	{
 	case FOGOFWARMODE_OFF:
@@ -1713,15 +1713,15 @@ int CvLuaPlot::lGetActiveFogOfWarMode(lua_State* L)
 	lua_pushinteger(L, fow);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsImprovementPillaged() const
+
+
 int CvLuaPlot::lIsImprovementPillaged(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::IsImprovementPillaged);
 }
 
-//------------------------------------------------------------------------------
-//bool CvPlot::canSeePlot(CvPlot *pPlot, TeamTypes eTeam, int iRange, DirectionTypes eFacingDirection)
+
+
 int CvLuaPlot::lCanSeePlot(lua_State* L)
 {
 	CvPlot* pkThisPlot = GetInstance(L);
@@ -1741,7 +1741,7 @@ int CvLuaPlot::lCanSeePlot(lua_State* L)
 
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaPlot::lGetContinentArtType(lua_State* L)
 {
 	CvPlot* pkThisPlot = GetInstance(L);
@@ -1756,7 +1756,7 @@ int CvLuaPlot::lGetContinentArtType(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaPlot::lSetContinentArtType(lua_State* L)
 {
 	CvPlot* pkThisPlot = GetInstance(L);
@@ -1768,8 +1768,8 @@ int CvLuaPlot::lSetContinentArtType(lua_State* L)
 	return 0;
 }
 
-//------------------------------------------------------------------------------
-//bool CvPlot::IsResourceConnectedByImprovement(iImprovement)
+
+
 int CvLuaPlot::lIsResourceConnectedByImprovement(lua_State* L)
 {
 	bool bResult = false;
@@ -1785,7 +1785,7 @@ int CvLuaPlot::lIsResourceConnectedByImprovement(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaPlot::lIsBuildRemovesFeature(lua_State* L)
 {
 	CvPlot* kPlot = GetInstance(L);
@@ -1800,7 +1800,7 @@ int CvLuaPlot::lIsBuildRemovesFeature(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaPlot::lGetArchaeologyArtifactType(lua_State* L)
 {
 	CvPlot* kPlot = GetInstance(L);
@@ -1809,7 +1809,7 @@ int CvLuaPlot::lGetArchaeologyArtifactType(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaPlot::lGetArchaeologyArtifactEra(lua_State* L)
 {
 	CvPlot* kPlot = GetInstance(L);
@@ -1818,7 +1818,7 @@ int CvLuaPlot::lGetArchaeologyArtifactEra(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaPlot::lGetArchaeologyArtifactPlayer1(lua_State* L)
 {
 	CvPlot* kPlot = GetInstance(L);
@@ -1827,7 +1827,7 @@ int CvLuaPlot::lGetArchaeologyArtifactPlayer1(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaPlot::lGetArchaeologyArtifactPlayer2(lua_State* L)
 {
 	CvPlot* kPlot = GetInstance(L);
@@ -1836,7 +1836,7 @@ int CvLuaPlot::lGetArchaeologyArtifactPlayer2(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaPlot::lGetArchaeologyArtifactWork(lua_State* L)
 {
 	CvPlot* kPlot = GetInstance(L);
@@ -1845,33 +1845,32 @@ int CvLuaPlot::lGetArchaeologyArtifactWork(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
-//bool HasWrittenArtifact();
+
+
 int CvLuaPlot::lHasWrittenArtifact(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::HasWrittenArtifact);
 }
 
-//------------------------------------------------------------------------------
-//int GetCityPurchaseID();
+
+
 int CvLuaPlot::lGetCityPurchaseID(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::GetCityPurchaseID);
 }
 
-//------------------------------------------------------------------------------
-//void SetCityPurchaseID(int ID);
+
+
 int CvLuaPlot::lSetCityPurchaseID(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::SetCityPurchaseID);
 }
 
 #ifdef LEKMOD_NEW_LUA_METHODS
-//------------------------------------------------------------------------------
-//void setFreshWater(bool bValues);
+
+
 int CvLuaPlot::lSetFreshWater(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlot::setFreshWater);
 }
 #endif
-//------------------------------------------------------------------------------

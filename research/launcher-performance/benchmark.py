@@ -1,4 +1,4 @@
-"""Compare launcher validation without opening Steam or modifying the game."""
+
 import argparse
 import json
 from pathlib import Path
@@ -51,7 +51,7 @@ def main():
             patch.object(launcher.installer, 'install', side_effect=RuntimeError('Benchmark will not repair the game')), \
             patch.object(launcher, 'uninstall', side_effect=RuntimeError('Benchmark will not uninstall')):
         for trial in range(args.iterations):
-            # Alternate the order to avoid always giving the candidate warmer caches.
+
             order = [('baseline', baseline), ('candidate', launcher)]
             if trial % 2:
                 order.reverse()

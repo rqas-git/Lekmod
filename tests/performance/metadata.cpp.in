@@ -23,7 +23,7 @@ struct Globals {
 } GC;
 long reads=0, coastCalls=0, neighborCalls=0;
 #define CvAssertMsg(a,b) assert(a)
-// Checked subscripts retain the production table dimensions and catch index errors.
+
 struct Matrix {
     struct Row {
         std::vector<int> v;
@@ -105,7 +105,7 @@ int main(){
                 reads=0;bool now=entry.HasAnyAdjacencyYieldBonus();newReads+=reads;
                 assert(old==now);++metadataCases;
             }
-            // Reload/recache the entry with a different final-ID dependency.
+
             entry.ResetCache();assert(!entry.HasAnyAdjacencyYieldBonus());
             entry.m_ppiImprovementAdjacentBonus[n-1][5]=1;
             prefetchComplete();assert(entry.HasAnyAdjacencyYieldBonus());

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-25 05:44:53 -->
+
 <GameData>
 
-	<!-- +100 Gold (Quick Speed) per City the first time it converts. -->
+
 	<Beliefs>
 		<Update>
 			<Set GoldPerFirstCityConversion="100" />
@@ -10,7 +10,7 @@
 		</Update>
 	</Beliefs>
 
-	<!-- localization -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_BELIEF_INITIATION_RITES" />
 		<Row Tag="TXT_KEY_BELIEF_INITIATION_RITES">

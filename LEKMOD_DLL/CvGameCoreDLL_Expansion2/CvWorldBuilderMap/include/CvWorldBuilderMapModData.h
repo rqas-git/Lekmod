@@ -1,21 +1,21 @@
-//---------------------------------------------------------------------------------------
-//
-//  *****************   CIV 5 World Builder Map   ********************
-//
-//  FILE:    CvWorldBuilderMapModData.h
-//
-//  AUTHOR:  Eric Jordan  --  5/13/2010
-//
-//  PURPOSE:
-//		This little monstrosity was created to support the Civ 5 World Builder map format.
-//		It's designed to allow modders to inject custom data formats into their map files.
-//
-//      If you are a modder looking at this then run!  You can access this functionality
-//      from the world builder UI and script.
-//
-//---------------------------------------------------------------------------------------
-//  Copyright (c) 2010 Firaxis Games, Inc. All rights reserved.
-//---------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #pragma once
 #ifndef CvWorldBuilderMapModData_h
@@ -93,7 +93,7 @@ public:
 private:
 	ModDataEntry(ModType &kModType, dword *aFields);
 
-	// There is no definition for this as this class is not supposed to use assignment
+
 	const ModDataEntry &operator=(const ModDataEntry &kRhs);
 
 	ModType &m_kModType;
@@ -112,7 +112,7 @@ public:
 		TYPE_BOOL = 0,
 		TYPE_FLOAT,
 		TYPE_STRING,
-		TYPE_ENUM // Must be last
+		TYPE_ENUM
 	};
 
 	void AddField(const char *szName, bool bDefaultValue);
@@ -136,7 +136,7 @@ private:
 	struct Field
 	{
 		dword dwFieldType;
-		dword dwFieldName; // String ID
+		dword dwFieldName;
 		dword dwDefault;
 	};
 
@@ -144,7 +144,7 @@ private:
 	ModType(const ModType &kRhs);
 	~ModType() {}
 
-	// There is no definition for this as this class is not supposed to use assignment
+
 	const ModType &operator=(const ModType &kRhs);
 
 	void Clear();
@@ -172,9 +172,9 @@ public:
 	ModType m_kMapModData;
 	ModType m_kPlotModData;
 
-	// Yep, this returns by value.  Don't worry editing it still
-	// edits the real mod data.  The ModDataEntry is really just
-	// a reference to a ModType and a memory location to store fields.
+
+
+
 	ModDataEntry GetMapDataEntry();
 	ModDataEntry GetPlotDataEntry(uint uiPlot);
 
@@ -187,4 +187,4 @@ private:
 	ModDataStringBuffer m_kStringBuffer;
 };
 
-#endif // CvWorldBuilderMapModData_h
+#endif

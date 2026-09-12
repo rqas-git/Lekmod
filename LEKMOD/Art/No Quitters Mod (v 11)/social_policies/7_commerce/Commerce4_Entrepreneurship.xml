@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/12/2015 3:35:42 AM -->
+
 <GameData>
 
-	<!-- Entrepreneurship -->
+
 	<Policies>
 		<Update>
 			<Set TradeMissionGoldModifier="0" GreatMerchantRateModifier="0" RouteGoldMaintenanceMod="-50" BuildingGoldMaintenanceMod="-25" />
@@ -35,8 +35,8 @@
 	</Language_RU_RU>
 	
 
-	<!-- Grand Bazaar is gifted in Capital when Entrepreneurship is selected. This is all done in the Lua file. -->
-	<!-- Commerce: Grand Bazaar -->
+
+
 	<BuildingClasses>
 		<Row>
 			<Type>BUILDINGCLASS_GRAND_BAZAAR</Type>

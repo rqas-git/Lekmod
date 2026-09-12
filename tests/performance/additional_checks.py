@@ -1,6 +1,7 @@
-"""Focused checks for the minimal follow-up optimizations."""
+
 from pathlib import Path
 import subprocess
+from source_text import canonical
 
 PREFIX = 'LEKMOD_DLL/CvGameCoreDLL_Expansion2/'
 BASE = '2742e9d29bcf184d41d31272b0e5f07f18dfecf1'
@@ -11,7 +12,7 @@ def cpp_checks(directory, source, extract, compile_run):
     def old(path):
         return subprocess.check_output(['git', 'show', f'{BASE}:{path}'], cwd=root).decode(errors='replace')
     def method(text, signature):
-        # Some signatures are followed by #endif before the opening brace.
+
         result = extract(text, signature)
         return result[:result.index('{')].replace('#endif\n', '') + result[result.index('{'):]
     trade = source(PREFIX+'CvTradeClasses.cpp')
@@ -40,8 +41,8 @@ def cpp_checks(directory, source, extract, compile_run):
     binding = source(PREFIX+'Lua/CvLuaPlayer.cpp')
     assert 'Method(GetNumInternationalTradeRoutesFromCity);' in binding
     assert 'CvLuaCity::GetInstance(L, 2)' in extract(binding, 'int CvLuaPlayer::lGetNumInternationalTradeRoutesFromCity(')
-    # The rich UI API remains unchanged; the new query is only an alternative.
-    assert extract(binding, 'int CvLuaPlayer::lGetTradeRoutes(') == extract(old(PREFIX+'Lua/CvLuaPlayer.cpp'), 'int CvLuaPlayer::lGetTradeRoutes(')
+
+    assert canonical(extract(binding, 'int CvLuaPlayer::lGetTradeRoutes(')) == canonical(extract(old(PREFIX+'Lua/CvLuaPlayer.cpp'), 'int CvLuaPlayer::lGetTradeRoutes('))
 
     astar = source(PREFIX+'CvAStar.cpp')
     header = source(PREFIX+'CvAStar.h')
@@ -60,7 +61,7 @@ def cpp_checks(directory, source, extract, compile_run):
 
 
 def lua_checks(lua, source):
-    # Execute both actual Kilwa callbacks, including the old-DLL fallback.
+
     root = Path(__file__).resolve().parents[2]
     baseline = subprocess.check_output(['git', 'show', f'{BASE}:LEKMOD/Lua/Civilizations/Lekmod_kilwa.lua'], cwd=root).decode()
     current = source('LEKMOD/Lua/Civilizations/Lekmod_kilwa.lua')
@@ -74,13 +75,13 @@ def lua_checks(lua, source):
             assert before == after
             assert new_tables == (0 if native else old_tables)
             checks += 1
-    # Parse the entire edited UI chunk, not just its extracted test fragments.
+
     panel = source('LEKMOD/Lua/tmp/eui/NotificationPanel/NotificationPanel.lua.ignore')
     lua.eval('function(s) assert(loadstring(s)) end')(panel)
     old_panel = subprocess.check_output(['git', 'show', f'{BASE}:LEKMOD/Lua/tmp/eui/NotificationPanel/NotificationPanel.lua.ignore'], cwd=root).decode()
     def fragment(text, start):
         first = text.index(start)
-        return text[first:text.index('-- disable the button', first)]
+        return text[first:text.index('instance.Button:SetDisabled(', first)]
     before = fragment(old_panel, 'instance.TheirTradeItems:SetText( table_concat( theirTradeItems ) )')
     after = fragment(panel, 'local theirTradeText = table_concat( theirTradeItems )')
     for size in range(10):

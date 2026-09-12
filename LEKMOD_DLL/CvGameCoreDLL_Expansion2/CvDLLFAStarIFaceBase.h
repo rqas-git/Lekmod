@@ -3,14 +3,14 @@
 #ifndef CvDLLFAStarIFaceBase_h
 #define CvDLLFAStarIFaceBase_h
 
-//
-// abstract interface for FAStar functions used by DLL
-//
+
+
+
 
 class CvAStar;
 class FAStarNode;
 
-// Function prototype for Cost and Validity functions
+
 typedef int(*CvAPointFunc)(int, int, const void*, CvAStar*);
 typedef int(*CvAHeuristic)(int, int, int, int);
 typedef int(*CvAStarFunc)(FAStarNode*, FAStarNode*, int, const void*, CvAStar*);
@@ -34,4 +34,4 @@ public:
 	virtual void ForceReset(CvAStar*) = 0;
 };
 
-#endif	// CvDLLFAStarIFaceBase_h
+#endif

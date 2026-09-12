@@ -4,7 +4,7 @@
 
 
 
-    <!-- Combat Info Label Instances -->
+
     <Instance Name="UsCombatInfo" >
         <Box ID="Root" Size="250,15" Color="0,0,0,0" HideBox="1">
             <Label Anchor="R,C" Offset="52.0" String=" " Font="TwCenMT14" WrapWidth="170" LeadingOffset="-6" ID="Text" >
@@ -26,7 +26,7 @@
             <Label Anchor="L,C" Offset="20,0" Font="TwCenMT14" ID="Text" />
         </Box>
     </Instance>
-    <!-- Stacks for Combat Result Info -->
+
     <Grid Anchor="L,B" Offset="109,160" Size="520,160" Padding="0,26" Style="Grid9FrameBlack" Hidden="0" ID="DetailsGrid" >
 
         <Box  Anchor="C,C" AnchorSide="o,o" Offset="0,0" Size="2,160" Color="255,255,200,32" HideBox="0" ID="DetailsSeperator" >
@@ -52,7 +52,7 @@
             </Stack>
         </Box>
         <Container Anchor="C,T" Size="12,80" Offset="0,24" >
-            <!-- Health Bars  -->
+
             <Box Anchor="C,T" AnchorSide="I.I" Size="12,120" Offset="-12,0" Color="0,0,0,200" Hidden="0">
                 <Image Anchor="C,B"  Offset="0,2"  Texture="assets/UI/Art/UnitPanel/HealthBarGreen.dds" Size="8.55" Hidden="0" ID="MyGreenBar"/>
                 <Image Anchor="C,B"  Offset="0,2"  Texture="assets/UI/Art/UnitPanel/HealthBarYellow.dds" Size="8.50" Hidden="1" ID="MyYellowBar"/>
@@ -104,11 +104,11 @@
 
     </Grid>
     <Box Anchor="L,B" Size="166,128" Offset="244,0" Color="PlayerColor2,200" Hidden="1" />
-    <!-- Unit Portrait -->
+
     <Grid Anchor="L,B" Offset="370,-39" Size="316,208"  Padding="0,0" Style="Grid9DetailFive140" Hidden="0" >
 
         <Stack Anchor="L,C" Offset="18,0"  Padding="0" Size="0,0" StackGrowth="Bottom">
-            <!-- Promotions -->
+
             <Box Anchor="R,T" Size="280,26" Offset="0,0" Color="White,0" HideBox="0">
                 <Stack Anchor="L,T"  Offset="-2,-4" Padding="-7"  StackGrowth="Right">
                     <Image Size="32,32"  TextureOffset="0,0" Texture="Promotions256.dds" ID="UnitPromotion1"  />
@@ -121,7 +121,7 @@
                 </Stack>
 
             </Box>
-            <!-- XP METER -->
+
             <Grid Anchor="R,C" Offset="0,0" Size="280,12" Padding="0,0" Style="Grid9FrameTurns" >
                 <Image Anchor="L,T"  Offset="3,2"  Texture="assets/UI/Art/UnitPanel/XPmeter.dds" Size="269,7" Hidden="1" ID=""/>
             </Grid>
@@ -159,9 +159,9 @@
 
         </Image>
     </Grid>
-    <!-- Next/Prev Unit -->
+
     <Box Anchor="R,B" Size="274,22" Offset="216,125" Color="0,0,0,0" >
-        <!-- Upgrades -->
+
         <Label Anchor="C,C" String="TXT_KEY_EUPANEL_CURRENT_STATUS" Offset="0,30" Font="TwCenMT18" ColorSet="Beige_Black_Alpha" FontStyle="Shadow"  Hidden="1" />
     </Box>
 </Context>

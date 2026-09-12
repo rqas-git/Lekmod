@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/2/2015 11:21:33 PM -->
+
 <GameData>
 	
-	<!-- Merchant Confederacy now also gives +2 Production, +2 Food, and +1 Influence per turn. -->
+
 	<Policies>
 		<Update>
 			<Set ProtectedMinorPerTurnInfluence="100" />

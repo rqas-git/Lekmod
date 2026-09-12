@@ -1,14 +1,14 @@
-//------------------------------------------------------------------------------------------------
-//
-//  ***************** FIRAXIS GAME ENGINE   ********************
-//
-//! \file		FLuaFStringSupport.h
-//! \author		Eric Jordan -- 3/12/2009
-//! \brief		Include to file to provide FString support for FLua.  Requires FString.
-//
-//------------------------------------------------------------------------------------------------
-//  Copyright (c) 2009 Firaxis Games, Inc. All rights reserved.
-//------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 
 #ifndef FLuaFStringSupport_h
 #define FLuaFStringSupport_h
@@ -29,10 +29,10 @@ namespace FLua
 		template<> static const char *DescribeType<FStringA&>() { return "FString"; }
 		template<> static const char *DescribeType<const FStringA&>() { return "const FString"; }
 
-		// wchar support
+
 		static inline void Push(lua_State *L, const wchar* szVal)
 		{
-			// Convert string to UTF-8 for lua
+
 			FStringA sConverted;
 			FStringW::CopyToUTF8(szVal, &sConverted);
 			lua_pushstring(L, sConverted.c_str());

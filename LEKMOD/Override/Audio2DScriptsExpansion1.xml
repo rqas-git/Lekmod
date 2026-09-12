@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?> 
-<!-- carved into tree bark by murena2 -->
+
 <Script2DFile> 
 	<Script2DSounds>
-		<!-- Civilization Music -->
+
 		<Script2DSound>
 			<ScriptID>AS2D_LEADER_MUSIC_VENEZ_PEACE</ScriptID>
 			<SoundID>SND_LEADER_MUSIC_VENEZ_PEACE</SoundID>
@@ -240,4 +240,3 @@
 		</Script2DSound>
 	</Script2DSounds>
 </Script2DFile> 
-

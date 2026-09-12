@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Install this checkout's native Lekmod and/or Lekmap into Civilization V."""
+
 import argparse
 from datetime import datetime, timezone
 import json
@@ -71,7 +71,7 @@ def install(app, component='both', jobs=4, skip_build=False, log=print,
                 raise RuntimeError('Native library missing. Run without --skip-build to build it.')
             check_imports(library, app)
         ensure_closed()
-        # Revalidate after the build in case Steam changed the installation.
+
         preflight(app, component)
         before_core = sha256(app / CORE)
         before_host = sha256(app / 'Contents/MacOS/Civilization V')
@@ -81,11 +81,11 @@ def install(app, component='both', jobs=4, skip_build=False, log=print,
             state = installed_state(staged)
             if (not mod and before_core != STOCK_CORE_SHA256
                     and state.get('core_sha256') != before_core):
-                # A maps-only update must not bless an independently replaced core.
+
                 state.pop('stock_core_sha256', None)
                 state.pop('lekmod', None)
             if mod:
-                # Only modify the staged bundle; the previous packages remain in the backup.
+
                 for package in (staged / ASSETS / 'DLC').iterdir():
                     if package.name.upper().startswith('LEKMOD'):
                         if package.is_symlink() or package.is_file():

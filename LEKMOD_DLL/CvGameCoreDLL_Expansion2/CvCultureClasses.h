@@ -1,31 +1,31 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_CULTURE_CLASSES_H
 #define CIV5_CULTURE_CLASSES_H
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS: CvGreatWork
-//!  \brief All the information about a single Great Work
-//
-//!  Key Attributes:
-//!  - Stores the work's name and type
-//!  - Stores creation info (GP, year, era, player)
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvGreatWork
 {
 public:
 	CvGreatWork();
 	CvGreatWork(CvString szGreatPersonName, GreatWorkType eType, GreatWorkClass eClassType, int iTurn, EraTypes eEra, PlayerTypes ePlayer);
 
-	// Public data
+
 	CvString m_szGreatPersonName;
 	GreatWorkType m_eType;
 	GreatWorkClass m_eClassType;
@@ -42,16 +42,16 @@ FDataStream& operator<<(FDataStream&, const CvGreatWork&);
 
 typedef FStaticVector<CvGreatWork, MAX_MAJOR_CIVS, false, c_eCiv5GameplayDLL > GreatWorkList;
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:		CvGameCulture
-//!  \brief		All the information about culture at the game level
-//
-//!  Key Attributes:
-//!  - Core data in this class is a list of CvGreatWorks
-//!  - This object is created inside the CvGame object and accessed through CvGame
-//!  - Provides convenience functions to the other game subsystems to quickly summarize
-//!    information on the Great Works (and other culture elements) in place
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
 class CvGameCulture
 {
 public:
@@ -60,7 +60,7 @@ public:
 
 	void DoTurn();
 
-	// Great Works
+
 	int CreateGreatWork(GreatWorkType eType, GreatWorkClass eClassType, PlayerTypes ePlayer, EraTypes eEra, CvString szCreator);
 	int GetNumGreatWorks() const
 	{
@@ -84,7 +84,7 @@ public:
 
 	GreatWorkList m_CurrentGreatWorks;
 
-	// Culture Victory
+
 	int GetNumCivsInfluentialForWin() const;
 	bool GetReportedSomeoneInfluential() const
 	{
@@ -135,7 +135,7 @@ public:
 	CvGreatWorkInMyEmpire();
 	CvGreatWorkInMyEmpire(int iIndex, int iCityID, BuildingTypes eBuilding, int iSlot, PlayerTypes ePlayer, EraTypes eEra);
 
-	// Public data
+
 	int m_iGreatWorkIndex;
 	int m_iCityID;
 	BuildingTypes m_eBuilding;
@@ -150,22 +150,22 @@ public:
 	CvGreatWorkBuildingInMyEmpire();
 	CvGreatWorkBuildingInMyEmpire(int iCityID, BuildingTypes eBuilding);
 
-	// Public data
+
 	int m_iCityID;
 	BuildingTypes m_eBuilding;
 	bool m_bThemed;
 	bool m_bEndangered;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:		CvPlayerCulture
-//!  \brief		All the information about culture at the player level
-//
-//!  Key Attributes:
-//!  - This object is created inside the CvPlayer object and accessed through CvPlayer
-//!  - Provides convenience functions to the other game subsystems to quickly summarize
-//!    information on available Great Work slots at the player level
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvPlayerCulture
 {
 public:
@@ -174,7 +174,7 @@ public:
 
 	void Init(CvPlayer* pPlayer);
 
-	// Great Work routines
+
 	bool HasAvailableGreatWorkSlot(GreatWorkSlotType eGreatWorkSlot);
 	int GetNumAvailableGreatWorkSlots(GreatWorkSlotType eGreatWorkSlot) const;
 	CvCity *GetClosestAvailableGreatWorkSlot(int iX, int iY, GreatWorkSlotType eGreatWorkSlot, BuildingClassTypes *eBuildingClass, int *iSlot) const;
@@ -199,7 +199,7 @@ public:
 	void SetSwappableArtifactIndex (int iIndex);
 	void SetSwappableMusicIndex (int iIndex);
 
-	// Archaeology 
+
 	void AddDigCompletePlot(CvPlot *pPlot);
 	void RemoveDigCompletePlot(CvPlot *pPlot);
 	void ResetDigCompletePlots();
@@ -209,10 +209,10 @@ public:
 	int GetWrittenArtifactCulture() const;
 
 	void DoArchaeologyChoice (ArchaeologyChoiceType eChoice);
-	//    AI support routine - move elsewhere later?
+
 	ArchaeologyChoiceType GetArchaeologyChoice(CvPlot *pPlot);
  
-	// Cultural Influence
+
 	void DoTurn();
 	int GetLastTurnLifetimeCulture() const;
 	void SetLastTurnLifetimeCulture(int iValue);
@@ -257,10 +257,10 @@ public:
 	bool WantsDiplomatDoingPropaganda(PlayerTypes ePlayer) const;
 	int GetMaxPropagandaDiplomatsWanted() const;
 
-	// Bonus stats
+
 	int GetTotalThemingBonuses() const;
 
-	// Public data
+
 	vector<CvPlot *> m_aDigCompletePlots;
 	int m_iLastTurnLifetimeCulture;
 	int m_aiCulturalInfluence[MAX_MAJOR_CIVS];
@@ -287,7 +287,7 @@ private:
 	int ComputePublicOpinionUnhappiness(int iDissatisfaction, int &iPerCityUnhappy, int &iUnhappyPerXPop);
 #endif
 
-	// Logging functions
+
 	void LogCultureData();
 	void LogThemedBuilding(int iCityID, BuildingTypes eBuilding, int iBonus);
 	void LogSwapWorks(PlayerTypes eOtherPlayer, int iWorkDiscarded, int iWorkAcquired);
@@ -302,15 +302,15 @@ private:
 FDataStream& operator>>(FDataStream&, CvPlayerCulture&);
 FDataStream& operator<<(FDataStream&, const CvPlayerCulture&);
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:		CvCityCulture
-//!  \brief		Provides summary information on culture and tourism at the city level
-//
-//!  Key Attributes:
-//!  - This object is created inside the CvCity object and accessed through CvCity
-//!  - Provides convenience functions to the other game subsystems to quickly summarize
-//!    information on culture and tourism at the city level
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvCityCulture
 {
 public:
@@ -369,4 +369,4 @@ namespace CultureHelpers
 	void SendArtSwapNotification(GreatWorkSlotType eType, bool bArt, PlayerTypes eOriginator, PlayerTypes eReceipient, int iWorkFromOriginator, int iWorkFromRecipient);
 }
 
-#endif //CIV5_CULTURE_CLASSES_H
+#endif

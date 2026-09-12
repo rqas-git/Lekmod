@@ -1,4 +1,4 @@
-"""Shared UI selection and materialization for source checkouts and release archives."""
+
 import json
 from pathlib import Path
 import shutil
@@ -9,8 +9,8 @@ class MissingUISource(RuntimeError):
 
 
 def load_manifest(lekmod):
-    # Older downloadable releases predate the manifest. Use the installer's bundled
-    # copy, or this checkout's copy when running the installer from source.
+
+
     for path in (Path(lekmod) / 'ui_manifest.json',
                  Path(__file__).with_name('ui_manifest.json'),
                  Path(__file__).resolve().parents[1] / 'LEKMOD/ui_manifest.json'):
@@ -23,7 +23,7 @@ def load_manifest(lekmod):
 
 
 def relative_path(root, relative):
-    """Resolve the Windows asset spelling on case-sensitive filesystems too."""
+
     root = Path(root).resolve()
     current = root
     for part in relative.replace('\\', '/').split('/'):
@@ -44,7 +44,7 @@ def relative_path(root, relative):
 
 def resolve_source(lekmod, source, manifest):
     sources = [manifest.get('aliases', {}).get(source, source), source]
-    # A few old archives used the earlier SocialPolicyPopup directory.
+
     if source == 'ui/Popups/SocialPolicyPopup.lua':
         sources.append('ui/ToolTips/SocialPolicyPopup.lua')
     for candidate in dict.fromkeys(sources):
@@ -64,7 +64,7 @@ def file_pairs(entries):
 
 
 def selected_files(manifest, want_eui=False, eui_folder=None):
-    """Yield (source, destination) pairs in the original copy order."""
+
     for rule in manifest['rules']:
         entries = rule['files']
         if want_eui and 'eui' in rule:
@@ -84,7 +84,7 @@ def configure_ui(lekmod, want_eui=False, eui_folder=None, preserve_all=True, log
     lekmod = Path(lekmod)
     manifest = load_manifest(lekmod)
     ui = lekmod / 'Lua/UI'
-    # Resolve the entire plan before removing any existing UI files.
+
     plan = []
     for source, target in selected_files(manifest, want_eui, eui_folder):
         try:
@@ -92,7 +92,7 @@ def configure_ui(lekmod, want_eui=False, eui_folder=None, preserve_all=True, log
         except MissingUISource as error:
             if strict:
                 raise
-            log(str(error))  # Older releases may omit newer overlays; retain the GUI's fallback.
+            log(str(error))
     preserved = {p.name: p.read_bytes() for p in ui.glob('*') if p.is_file()
                  and (preserve_all or p.name in manifest['preserve'])}
     if ui.exists():
@@ -120,7 +120,7 @@ def stamp_ui(lekmod):
 
 
 def materialize_release(lekmod):
-    """Restore release/bootstrap paths, including aliases used by older installers."""
+
     lekmod = Path(lekmod)
     manifest = load_manifest(lekmod)
     for source, target in selected_files(manifest):
@@ -138,7 +138,7 @@ def materialize_release(lekmod):
 
 
 def render_batch(lekmod, manifest):
-    """Generate the standalone checker without requiring Python or newer PowerShell."""
+
     lekmod = Path(lekmod).resolve()
     lines = ['@echo off', 'pushd "%~dp0"', 'set "patchfolder=%cd%"', 'cd ..',
              'set "euifolder=UI_bc1_xits"', 'if exist "UI_bc1" set "euifolder=UI_bc1"']
@@ -154,7 +154,7 @@ def render_batch(lekmod, manifest):
             path = str(path).replace('/', '\\')
             lines.append(f'{indent}copy /y "%patchfolder%\\{path}" "%patchfolder%\\Lua\\UI\\{target}" > nul')
         if not entries:
-            lines.append(indent + 'rem Use the installed EUI file.')
+            lines.append(indent + 'ver > nul')
 
     for rule in manifest['rules']:
         if 'eui' not in rule:

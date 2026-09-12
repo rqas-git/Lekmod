@@ -1,4 +1,4 @@
-"""Read-only measurements for the next launcher/startup performance audit."""
+
 from collections import defaultdict
 from contextlib import redirect_stdout
 from datetime import datetime, timezone
@@ -18,7 +18,7 @@ import launcher
 
 
 def metadata_snapshot(root):
-    """Time a complete metadata walk; this is NOT a content-integrity check."""
+
     records = []
     def visit(directory):
         with os.scandir(directory) as entries:
@@ -44,8 +44,8 @@ def main():
         evidence['timings'].append({'operation': name, 'seconds': time.perf_counter() - start})
         return result
 
-    # Ignore-resources is diagnostic only: it intentionally omits the resource
-    # check and must never be substituted into the launcher's current validator.
+
+
     for trial in range(3):
         for name, flags in [('full_signature', []), ('code_only_diagnostic', ['--ignore-resources'])]:
             result = timed(name, lambda flags=flags: subprocess.run(

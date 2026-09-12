@@ -21,4 +21,4 @@ namespace Database
 		const char* m_pszFilename;
 	};
 
-}	//namespace Database
+}

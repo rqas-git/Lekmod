@@ -1,11 +1,11 @@
-------------------------------------------------------------------------------
---	FILE:	 Lekmapv2.2.lua (Modified Pangaea_Plus.lua)
---	AUTHOR:  Original Bob Thomas, Changes HellBlazer, lek10, EnormousApplePie, Cirra, Meota
---	PURPOSE: Global map script - Simulates a Pan-Earth Supercontinent, with
---           numerous tectonic island chains.
-------------------------------------------------------------------------------
---	Copyright (c) 2011 Firaxis Games, Inc. All rights reserved.
-------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 
 include("HBMapGenerator");
 include("HBFractalWorld");
@@ -14,7 +14,7 @@ include("HBTerrainGenerator");
 include("IslandMaker");
 include("MultilayeredFractal");
 
-------------------------------------------------------------------------------
+
 include("HBMapOptions");
 
 function GetMapScriptInfo()
@@ -27,14 +27,14 @@ function GetMapScriptInfo()
 		SortIndex = 2,
 		SupportsMultiplayer = true,
 		CustomOptions = LekmapOptions.Create({
-			[11] = { -- Land Size X
+			[11] = {
 				DefaultValue = 8,
 			},
-			[12] = { -- Land Size Y
+			[12] = {
 				DefaultValue = 13,
 			},
 		}, {
-			{ -- 15
+			{
 				Name = "Coastal Spawns",
 				Values = {
 					"Coastal Civs Only",
@@ -44,7 +44,7 @@ function GetMapScriptInfo()
 				DefaultValue = 1,
 				SortPriority = -85,
 			},
-			{ -- 16
+			{
 				Name = "Coastal Luxes",
 				Values = {
 					"Guaranteed",
@@ -53,7 +53,7 @@ function GetMapScriptInfo()
 				DefaultValue = 1,
 				SortPriority = -84,
 			},
-			{ -- 17
+			{
 				Name = "Inland Sea Spawns",
 				Values = {
 					"Allowed",
@@ -62,7 +62,7 @@ function GetMapScriptInfo()
 				DefaultValue = 2,
 				SortPriority = -83,
 			},
-			{ -- 18
+			{
 				Name = "Radius Size",
 				Values = {
 					"0 - to the edge",
@@ -74,7 +74,7 @@ function GetMapScriptInfo()
 				DefaultValue = 5,
 				SortPriority = -82,
 			},
-			{ -- 19
+			{
 				Name = "Holy Radius Factor",
 				Values = {
 					"1,5",
@@ -85,7 +85,7 @@ function GetMapScriptInfo()
 				DefaultValue = 2,
 				SortPriority = -81,
 			},
-			{ -- 20
+			{
 				Name = "Outside Region",
 				Values = {
 					"TXT_KEY_MAP_OPTION_HILLS",
@@ -97,7 +97,7 @@ function GetMapScriptInfo()
 				DefaultValue = 3,
 				SortPriority = -80,
 			},
-			{ -- 21
+			{
 				Name = "Desert Size",
 				Values = {
 					"sparse",
@@ -107,7 +107,7 @@ function GetMapScriptInfo()
 				DefaultValue = 2,
 				SortPriority = -79,
 			},
-			{ -- 22
+			{
 				Name = "TXT_KEY_MAP_OPTION_CENTER_REGION",
 				Values = {
 					"TXT_KEY_MAP_OPTION_HILLS",
@@ -123,9 +123,9 @@ function GetMapScriptInfo()
 		}),
 	};
 end
-------------------------------------------------------------------------------
+
 function GetMapInitData(worldSize)
-	
+
 	local LandSizeX = 28 + (Map.GetCustomOption(11) * 2);
 	local LandSizeY = 18 + (Map.GetCustomOption(12) * 2);
 
@@ -133,55 +133,55 @@ function GetMapInitData(worldSize)
 
 	worldsizes = {
 
-		[GameInfo.Worlds.WORLDSIZE_DUEL.ID] = {LandSizeX, LandSizeY}, -- 720
-		[GameInfo.Worlds.WORLDSIZE_TINY.ID] = {LandSizeX, LandSizeY}, -- 1664
-		[GameInfo.Worlds.WORLDSIZE_SMALL.ID] = {LandSizeX, LandSizeY}, -- 2480
-		[GameInfo.Worlds.WORLDSIZE_STANDARD.ID] = {LandSizeX, LandSizeY}, -- 3900
-		[GameInfo.Worlds.WORLDSIZE_LARGE.ID] = {LandSizeX, LandSizeY}, -- 6076
-		[GameInfo.Worlds.WORLDSIZE_HUGE.ID] = {LandSizeX, LandSizeY} -- 9424
+		[GameInfo.Worlds.WORLDSIZE_DUEL.ID] = {LandSizeX, LandSizeY},
+		[GameInfo.Worlds.WORLDSIZE_TINY.ID] = {LandSizeX, LandSizeY},
+		[GameInfo.Worlds.WORLDSIZE_SMALL.ID] = {LandSizeX, LandSizeY},
+		[GameInfo.Worlds.WORLDSIZE_STANDARD.ID] = {LandSizeX, LandSizeY},
+		[GameInfo.Worlds.WORLDSIZE_LARGE.ID] = {LandSizeX, LandSizeY},
+		[GameInfo.Worlds.WORLDSIZE_HUGE.ID] = {LandSizeX, LandSizeY}
 		}
-		
+
 	local grid_size = worldsizes[worldSize];
-	--
+
 	local world = GameInfo.Worlds[worldSize];
 	if (world ~= nil) then
 		return {
 			Width = grid_size[1],
 			Height = grid_size[2],
 			WrapX = false,
-		}; 
+		};
 	end
 
 end
-------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function MultilayeredFractal:GeneratePlotsByRegion()
-	-- Sirian's MultilayeredFractal controlling function.
-	-- You -MUST- customize this function for each script using MultilayeredFractal.
-	--
-	-- This implementation is specific to Donut.
+
+
+
+
 	local iW, iH = Map.GetGridSize();
 	local fracFlags = {FRAC_WRAP_X = false, FRAC_POLAR = true};
 
-	-- Get user input.
-	hole_type = Map.GetCustomOption(22) -- Global
-	
-	-- Get user input.
-	radiusSize = Map.GetCustomOption(18) -- Global
+
+	hole_type = Map.GetCustomOption(22)
+
+
+	radiusSize = Map.GetCustomOption(18)
 	radiusSize = radiusSize - 1;
-	-- Get user input.
-	holyRadiusFactor = Map.GetCustomOption(19) -- Global
+
+	holyRadiusFactor = Map.GetCustomOption(19)
 	if holyRadiusFactor == 1 then
 		holyRadiusFactor = 1.5;
 	end
-	
-		-- Get user input.
-	outsideTerrainType = Map.GetCustomOption(20) -- Global
-	
+
+
+	outsideTerrainType = Map.GetCustomOption(20)
+
 	if outsideTerrainType == 5 then
 		outsideTerrainType = 1 + Map.Rand(4, "Random terrain type for outside region - Donut Lua");
 	end
-	
+
 	if hole_type == 6 then
 		hole_type = 1 + Map.Rand(5, "Random terrain type for center region - Donut Lua");
 	end
@@ -226,7 +226,7 @@ function MultilayeredFractal:GeneratePlotsByRegion()
 					self.wholeworldPlotTypes[i] = PlotTypes.PLOT_MOUNTAIN;
 				elseif outsideTerrainType == 3 then
 					self.wholeworldPlotTypes[i] = PlotTypes.PLOT_OCEAN;
-				else -- standard type
+				else
 					local val = terrainFrac:GetHeight(x, y);
 					local hillsVal = hillsFrac:GetHeight(x, y);
 					if val >= iPeaksThreshold then
@@ -241,7 +241,7 @@ function MultilayeredFractal:GeneratePlotsByRegion()
 						self.wholeworldPlotTypes[i] = PlotTypes.PLOT_LAND;
 					end
 				end
-			elseif fDistance < iHoleRadius and hole_type < 4 then -- Plot is in hole of donut.
+			elseif fDistance < iHoleRadius and hole_type < 4 then
 				if hole_type == 1 then
 					self.wholeworldPlotTypes[i] = PlotTypes.PLOT_HILLS;
 				elseif hole_type == 2 then
@@ -249,7 +249,7 @@ function MultilayeredFractal:GeneratePlotsByRegion()
 				else
 					self.wholeworldPlotTypes[i] = PlotTypes.PLOT_OCEAN;
 				end
-			else -- standard type
+			else
 				local val = terrainFrac:GetHeight(x, y);
 				local hillsVal = hillsFrac:GetHeight(x, y);
 				if val >= iPeaksThreshold then
@@ -267,32 +267,32 @@ function MultilayeredFractal:GeneratePlotsByRegion()
 		end
 	end
 
-	-- Plot Type generation completed. Return global plot array.
+
 	return self.wholeworldPlotTypes
 end
-------------------------------------------------------------------------------
+
 function GeneratePlotTypes()
 	print("Setting Plot Types (Lua Donut) ...");
 
 	local layered_world = MultilayeredFractal.Create();
 	local plotsDonut = layered_world:GeneratePlotsByRegion();
-	
+
 	SetPlotTypes(plotsDonut);
 
 	GenerateCoasts();
 end
-------------------------------------------------------------------------------
 
-----------------------------------------------------------------------------------
+
+
 function TerrainGenerator:GenerateTerrainAtPlot(iX, iY)
 	local plot = Map.GetPlot(iX, iY);
 	if (plot:IsWater()) then
 		local val = plot:GetTerrainType();
-		if val == TerrainTypes.NO_TERRAIN then -- Error handling.
+		if val == TerrainTypes.NO_TERRAIN then
 			val = self.terrainGrass;
 			plot:SetPlotType(PlotTypes.PLOT_LAND, false, false);
 		end
-		return val;	 
+		return val;
 	end
 
 	local iW, iH = Map.GetGridSize();
@@ -306,7 +306,7 @@ function TerrainGenerator:GenerateTerrainAtPlot(iX, iY)
 	if iX ~= iCenterX or iY ~= iCenterY then
 		fDistance = math.sqrt(((iX - iCenterX) ^ 2) + ((iY - iCenterY) ^ 2));
 	end
-	if fDistance < iHoleRadius and hole_type == 4 then -- Desert plot in center.
+	if fDistance < iHoleRadius and hole_type == 4 then
 		terrainVal = self.terrainDesert;
 	else
 		local desertVal = self.deserts:GetHeight(iX, iY);
@@ -317,15 +317,15 @@ function TerrainGenerator:GenerateTerrainAtPlot(iX, iY)
 			terrainVal = self.terrainPlains;
 		end
 	end
-	
+
 	return terrainVal;
 end
-----------------------------------------------------------------------------------
+
 function GenerateTerrain()
 	print("Generating Terrain (Lua Donut) ...");
-	-- desertSize
 
-	local desertSize = 2 + 10 * Map.GetCustomOption(21); -- desertSize 12/22/32
+
+	local desertSize = 2 + 10 * Map.GetCustomOption(21);
 	local args = {
 		iDesertPercent = desertSize,
 	};
@@ -333,33 +333,32 @@ function GenerateTerrain()
 	local terraingen = TerrainGenerator.Create(args);
 
 	terrainTypes = terraingen:GenerateTerrain();
-	
-	SetTerrainTypes(terrainTypes);
-	
-	-- FixIslands();
-end
-------------------------------------------------------------------------------
 
-------------------------------------------------------------------------------
+	SetTerrainTypes(terrainTypes);
+
+
+end
+
+
+
 function FeatureGenerator:AddIceAtPlot(plot, iX, iY, lat)
-	-- No ice.
+
 end
-------------------------------------------------------------------------------
+
 function FeatureGenerator:AddJunglesAtPlot(plot, iX, iY, lat)
-	-- No jungle.
+
 end
-------------------------------------------------------------------------------
+
 function AddFeatures()
 	print("Adding Features (Lua Donut) ...");
 
 	local featuregen = FeatureGenerator.Create();
 
-	-- False parameter removes mountains from coastlines.
+
 	featuregen:AddFeatures(false);
 end
-------------------------------------------------------------------------------
 
 
-------------------------------------------------------------------------------
+
+
 include("HBRegionalStartPlotSystem");
-------------------------------------------------------------------------------

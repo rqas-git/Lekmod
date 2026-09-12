@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""JSON-lines service for the native Lekmod launcher."""
+
 import argparse
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import ExitStack, redirect_stdout
@@ -31,7 +31,7 @@ REQUIRED_DLC = ('Expansion', 'Expansion2', 'DLC_Deluxe',
 
 
 def connection_status(text, started):
-    """Use only connection events from the currently running Steam session."""
+
     for line in reversed(text.splitlines()):
         match = re.match(r'\[([^]]+)\] \[([^],]+)', line)
         if not match:
@@ -81,7 +81,7 @@ def emit(event, **data):
 
 
 def steam_ready(app):
-    """The Steam URL must refer to this installed game, not a detached app copy."""
+
     steamapps = app.parent.parent.parent
     if steamapps.name != 'steamapps' or app.parent.parent.name != 'common':
         raise RuntimeError('Choose Civilization V inside a Steam library; detached app copies cannot launch through Steam.')
@@ -104,9 +104,9 @@ def verify_signature(app):
 
 
 def inspect(app, desired, log=lambda _: None):
-    # codesign can verify the bundle while this thread fingerprints the mod.
-    # Wait for the worker before returning, including on errors, so a launch
-    # never releases its installation lock with checks still in flight.
+
+
+
     with ThreadPoolExecutor(max_workers=1) as worker:
         return _inspect(app, desired, log, worker)
 
@@ -220,7 +220,7 @@ def _inspect(app, desired, log, worker):
 def run_action(app, desired, action, log=lambda _: None):
     with ExitStack() as locks:
         if action == 'launch':
-            # Keep one authoritative inspection locked through the Steam handoff.
+
             locks.enter_context(installation_lock(app))
         report = inspect(app, desired, log)
         if action == 'status':
@@ -239,8 +239,8 @@ def run_action(app, desired, action, log=lambda _: None):
                 uninstall(app, component, log=log)
             return inspect(app, desired, log)
         if action == 'repair' or not report['ready']:
-            # The installer takes its own lock. Inspect the repaired app only
-            # after reacquiring ours, so no unlocked report authorizes launch.
+
+
             locks.close()
             log('Installing and repairing Lekmod. The previous game app will be kept as a backup…')
             installer.install(app, component='lekmod' if installed_state(app).get('lekmap') is False else 'both',
@@ -260,7 +260,7 @@ def run_action(app, desired, action, log=lambda _: None):
 class Progress(io.TextIOBase):
     def write(self, text):
         if text.strip():
-            # Installer helpers write to stdout; reserve it for structured messages.
+
             sys.__stdout__.write(json.dumps(dict(event='progress', message=text.strip())) + '\n')
             sys.__stdout__.flush()
         return len(text)

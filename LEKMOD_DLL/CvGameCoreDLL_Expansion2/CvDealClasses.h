@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CV_DEAL_CLASSES_H
@@ -24,71 +24,71 @@ enum TradeableItems
     TRADE_ITEM_OPEN_BORDERS,
     TRADE_ITEM_DEFENSIVE_PACT,
     TRADE_ITEM_RESEARCH_AGREEMENT,
-    TRADE_ITEM_TRADE_AGREEMENT, // not in use
+    TRADE_ITEM_TRADE_AGREEMENT,
     TRADE_ITEM_PERMANENT_ALLIANCE,
     TRADE_ITEM_SURRENDER,
     TRADE_ITEM_TRUCE,
     TRADE_ITEM_PEACE_TREATY,
     TRADE_ITEM_THIRD_PARTY_PEACE,
     TRADE_ITEM_THIRD_PARTY_WAR,
-    TRADE_ITEM_THIRD_PARTY_EMBARGO, // not in use
+    TRADE_ITEM_THIRD_PARTY_EMBARGO,
     TRADE_ITEM_ALLOW_EMBASSY,
-	TRADE_ITEM_DECLARATION_OF_FRIENDSHIP,	// Only "traded" between human players
+	TRADE_ITEM_DECLARATION_OF_FRIENDSHIP,
 	TRADE_ITEM_VOTE_COMMITMENT,
     NUM_TRADEABLE_ITEMS,
 };
 FDataStream& operator>>(FDataStream&, TradeableItems&);
 FDataStream& operator<<(FDataStream&, const TradeableItems&);
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  STRUCT: CvTradedItem
-//!  \brief Information about one item being exchanged between two players
-//
-//!  Key Attributes:
-//!  - Multiple CvTradedItems can be packaged together into a single deal
-//!  - Typically contained inside a CvDeal (where there is a vector of CvTradedItems)
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 struct CvTradedItem
 {
 	CvTradedItem();
 	bool operator==(const CvTradedItem& rhs) const;
 
-	TradeableItems m_eItemType;		// What type of item is this
+	TradeableItems m_eItemType;
 	int m_iDuration;
 #ifdef AUI_YIELDS_APPLIED_AFTER_TURN_NOT_BEFORE
 	int m_iTurnsRemaining;
 #else
 	int m_iFinalTurn;
 #endif
-	int m_iData1;					// Any additional data?
+	int m_iData1;
 	int m_iData2;
 	int m_iData3;
 #ifdef AUI_WARNING_FIXES
-	PlayerTypes m_eFromPlayer;      // Which player is giving up this item?
+	PlayerTypes m_eFromPlayer;
 	bool m_bFlag1;
 #else
 	bool m_bFlag1;
-	PlayerTypes m_eFromPlayer;      // Which player is giving up this item?
+	PlayerTypes m_eFromPlayer;
 #endif
-	bool m_bFromRenewed;		    // Was this trade item used in a renewal?
-	bool m_bToRenewed;				// Was this trade item
+	bool m_bFromRenewed;
+	bool m_bToRenewed;
 };
 FDataStream& OldLoad(FDataStream&, CvTradedItem&);
 FDataStream& operator>>(FDataStream&, CvTradedItem&);
 FDataStream& operator<<(FDataStream&, const CvTradedItem&);
 typedef FFastList< CvTradedItem, c_eMPoolTypeGame, 0 > TradedItemList;
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS: CvDeal
-//!  \brief All the information about a single deal
-//
-//!  Key Attributes:
-//!  - Core data in this class is a vector of CvTradedItems
-//!  - Also stores the players involved and the turn the deal ends (if any)
-//!  - Populated through calls to a group of methods that each create and add a CvTradedItem
-//!  - These methods to create CvTradedItems have customized parameters so the external caller
-//!    doesnt need to know how the data is stored internally
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
 class CvDeal
 {
 public:
@@ -105,7 +105,7 @@ public:
 	virtual ~CvDeal();
 	CvDeal& operator=(const CvDeal& source);
 
-	// Public data
+
 	PlayerTypes m_eFromPlayer;
 	PlayerTypes m_eToPlayer;
 	int m_iStartTurn;
@@ -117,8 +117,8 @@ public:
 	PlayerTypes m_eDemandingPlayer;
 	PlayerTypes m_eRequestingPlayer;
 
-	bool m_bConsideringForRenewal; // is currently considering renewing this deal
-	bool m_bCheckedForRenewal; // this deal has been discussed with the player for renewal
+	bool m_bConsideringForRenewal;
+	bool m_bCheckedForRenewal;
 	bool m_bDealCancelled;
 
 	TradedItemList m_TradedItems;
@@ -151,22 +151,22 @@ public:
 		return m_iFinalTurn;
 	};
 
-	// Peace Treaty stuff
+
 	PeaceTreatyTypes GetPeaceTreatyType() const;
 	void SetPeaceTreatyType(PeaceTreatyTypes eTreaty);
 
 	PlayerTypes GetSurrenderingPlayer() const;
 	void SetSurrenderingPlayer(PlayerTypes ePlayer);
 
-	// Is this deal a demand from someone?
+
 	PlayerTypes GetDemandingPlayer() const;
 	void SetDemandingPlayer(PlayerTypes ePlayer);
 
-	// Is this deal a request from someone?
+
 	PlayerTypes GetRequestingPlayer() const;
 	void SetRequestingPlayer(PlayerTypes ePlayer);
 
-	// Misc important functions
+
 
 	int GetGoldAvailable(PlayerTypes ePlayer, TradeableItems eItemToBeChanged);
 
@@ -176,7 +176,7 @@ public:
 	bool IsLuxuryTradeTargetAlreadyHasResource(PlayerTypes eFromPlayer, PlayerTypes eToPlayer, ResourceTypes eResource);
 #endif
 
-	// Methods to add a CvTradedItem to a deal
+
 	void AddGoldTrade(PlayerTypes eFrom, int iAmount);
 	void AddGoldPerTurnTrade(PlayerTypes eFrom, int iAmount, int iDuration);
 	void AddMapTrade(PlayerTypes eFrom);
@@ -240,16 +240,16 @@ FDataStream& operator>>(FDataStream&, CvDeal&);
 FDataStream& operator<<(FDataStream&, const CvDeal&);
 
 typedef FStaticVector<CvDeal, 20, false, c_eCiv5GameplayDLL > DealList;
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS: CvGameDeals
-//!  \brief All the information about deals made between players
-//
-//!  Key Attributes:
-//!  - Core data in this class is a list of CvDeals
-//!  - This object is created inside the CvGame object and accessed through CvGame
-//!  - Provides convenience functions to the other game subsystems to quickly summarize
-//!    information on the deals in place
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
 class CvGameDeals
 {
 public:
@@ -309,7 +309,7 @@ public:
 
 	static void PrepareRenewDeal(CvDeal* pOldDeal, const CvDeal* pNewDeal);
 
-	// Variables below should really be lists to support easy deletion
+
 	DealList m_ProposedDeals;
 	DealList m_CurrentDeals;
 	DealList m_HistoricalDeals;
@@ -322,10 +322,10 @@ protected:
 
 	CvDeal m_TempDeal;
 
-	//Programmer Note:
-	//Rather than use the common idiom of using the index of the deal in an array as the public
-	//identifier to the deal, I chose to use a system where the index will always be unique even
-	//after deals are destroyed.  This technique is prone to fewer bugs w/ heavily threaded apps.
+
+
+
+
 	std::vector<std::pair<uint, CvDeal*> > m_Deals;
 	unsigned int m_uiDealCounter;
 };
@@ -334,4 +334,4 @@ FDataStream& OldLoad(FDataStream& loadFrom, CvGameDeals& writeTo);
 FDataStream& operator>>(FDataStream&, CvGameDeals&);
 FDataStream& operator<<(FDataStream&, const CvGameDeals&);
 
-#endif // CV_DEAL_CLASSES_H
+#endif

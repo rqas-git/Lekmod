@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/11/2015 10:45:56 PM -->
+
 <GameData>
 
-	<!-- ORGANIZED RELIGION -->
+
 	<Policy_BuildingClassCultureChanges>
 		<Row>
 			<PolicyType>POLICY_ORGANIZED_RELIGION</PolicyType>

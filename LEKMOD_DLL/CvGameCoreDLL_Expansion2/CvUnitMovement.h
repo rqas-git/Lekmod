@@ -3,7 +3,7 @@
 
 #pragma once
 
-// A static class containing movement operations for a unit
+
 class CvUnitMovement
 {
 public:
@@ -19,4 +19,4 @@ public:
 
 };
 
-#endif // CVUNITMOVEMENT_H
+#endif

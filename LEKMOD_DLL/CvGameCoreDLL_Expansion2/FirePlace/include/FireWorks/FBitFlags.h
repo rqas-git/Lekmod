@@ -1,14 +1,14 @@
-//------------------------------------------------------------------------------------------------
-//
-//  *****************   FIRAXIS GAME ENGINE   ********************
-//
-//! \file		FBitFlags.h
-//! \author		Bart Muzzin -- 5-2-2006
-//! \brief		Going to finally make a bitflags macro!
-//
-//------------------------------------------------------------------------------------------------
-//  Copyright (c) 2006 Firaxis Games, Inc. All rights reserved.
-//------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 
 #pragma once
 #ifndef FBITFLAGS_H
@@ -57,4 +57,4 @@ public:
 
 typedef FTBitFlag<unsigned int> FBitFlag;
 
-#endif // FBITFLAGS_H
+#endif

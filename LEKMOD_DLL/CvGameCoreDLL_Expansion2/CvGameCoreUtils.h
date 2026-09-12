@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 #ifndef CIV5_GAMECORE_UTILS_H
 #define CIV5_GAMECORE_UTILS_H
@@ -56,7 +56,7 @@ inline int wrapCoordDifference(int iDiff, uint uiRange, bool bWrap)
 {
 	if(bWrap)
 	{
-		if(iDiff > (int)(uiRange >> 1))		// Using an unsigned int so we can safely assume that value >> 1 == value / 2
+		if(iDiff > (int)(uiRange >> 1))
 		{
 			return (iDiff - (int)uiRange);
 		}
@@ -93,10 +93,10 @@ inline int hexspaceXToX(int iHexspaceX, int iHexspaceY)
 
 inline int hexDistance(int iDX, int iDY)
 {
-	// I'm assuming iDX and iDY are in hex-space
+
 #ifdef NQM_GAME_CORE_UTILS_OPTIMIZATIONS
-	// Delnar: Using abs() because I trust the compiler to generate more efficient code than if I'd write an abs(int) function myself, especially if the CPU has an abs(int) operation
-	if ((iDX ^ iDY) >= 0)  // the signs match
+
+	if ((iDX ^ iDY) >= 0)
 	{
 		return abs(iDX) + abs(iDY);
 	}
@@ -105,7 +105,7 @@ inline int hexDistance(int iDX, int iDY)
 		return MAX(abs(iDX), abs(iDY));
 	}
 #else
-	if((iDX >= 0) == (iDY >= 0))  // the signs match
+	if((iDX >= 0) == (iDY >= 0))
 	{
 		int iAbsDX = iDX >= 0 ? iDX : -iDX;
 		int iAbsDY = iDY >= 0 ? iDY : -iDY;
@@ -120,26 +120,26 @@ inline int hexDistance(int iDX, int iDY)
 #endif
 }
 
-//
-//
-//// 4 | 4 | 3 | 3 | 3 | 4 | 4
-//// -------------------------
-//// 4 | 3 | 2 | 2 | 2 | 3 | 4
-//// -------------------------
-//// 3 | 2 | 1 | 1 | 1 | 2 | 3
-//// -------------------------
-//// 3 | 2 | 1 | 0 | 1 | 2 | 3
-//// -------------------------
-//// 3 | 2 | 1 | 1 | 1 | 2 | 3
-//// -------------------------
-//// 4 | 3 | 2 | 2 | 2 | 3 | 4
-//// -------------------------
-//// 4 | 4 | 3 | 3 | 3 | 4 | 4
-////
-//// Returns the distance between plots according to the pattern above...
-//
-//// not anymore - We are using hexes now!
-//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 inline int plotDistance(int iX1, int iY1, int iX2, int iY2)
 {
 	int iDX;
@@ -149,39 +149,39 @@ inline int plotDistance(int iX1, int iY1, int iX2, int iY2)
 
 #ifdef GAMECOREUTILS_FIX_PLOT_DISTANCE
 	const CvMap& kMap = GC.getMap();
-	// equidistant column joint fix (on X-wrapped maps):
+
 	if ((kMap.isWrapX()) && (abs(iWrappedDX * 2) == kMap.getGridWidth()) && (iDY % 2 != 0) && ((iY1 % 2 == 0) == (iWrappedDX > (kMap.getGridWidth() >> 2))))
 	{
-		iWrappedDX *= -1;  // change polarity
+		iWrappedDX *= -1;
 	}
 	if ((kMap.isWrapX()) && (abs(iWrappedDX * 2) == kMap.getGridWidth()) && (abs(iWrappedDY) < abs(iY2 - iY1)) && (iDY % 2 == 0) && (iX2 - iX1 < 0))
 	{
-		iWrappedDX *= -1;  // change polarity
+		iWrappedDX *= -1;
 	}
-	// special case when map is toroidal AND map height is odd
-	// TODO works but ugly
+
+
 	if ((kMap.isWrapX()) && (kMap.getGridHeight() % 2 != 0) && (iY1 % 2 == kMap.getGridWidth() % 2) && (iY2 % 2 == 0) &&
 		(abs(iWrappedDY) < abs(iY2 - iY1)) && (abs(iX2 - iX1) == kMap.getGridWidth() / 2 + ((kMap.getGridWidth() % 2 == 1) && (iX2 - iX1 > 0)) ? 1 : 0))
 	{
-		iWrappedDX -= (iWrappedDX > 0) - (iWrappedDX < 0);  // decrease regardless of polarity
+		iWrappedDX -= (iWrappedDX > 0) - (iWrappedDX < 0);
 	}
 #endif
 
-	// convert to hex-space coordinates - the coordinate system axes are E and NE (not orthogonal)
+
 	int iHX1 = xToHexspaceX(iX1, iY1);
 	int iHX2 = xToHexspaceX(iX1 + iWrappedDX, iY1 + iWrappedDY);
 
 #ifdef GAMECOREUTILS_FIX_PLOT_DISTANCE
-	// obvious bug
+
 	iDX = abs(iHX2 - iHX1);
 #else
 	iDX = abs(dxWrap(iHX2 - iHX1));
 #endif
 
 #ifdef NQM_GAME_CORE_UTILS_OPTIMIZATIONS
-	if (((iHX2 - iHX1) ^ (iWrappedDY)) >= 0)  // the signs match
+	if (((iHX2 - iHX1) ^ (iWrappedDY)) >= 0)
 #else
-	if((iHX2 - iHX1 >= 0) == (iWrappedDY >= 0))  // the signs match
+	if((iHX2 - iHX1 >= 0) == (iWrappedDY >= 0))
 #endif
 	{
 		return iDX + iDY;
@@ -195,25 +195,25 @@ inline int plotDistance(int iX1, int iY1, int iX2, int iY2)
 #endif
 	}
 }
-//
-//// 3 | 3 | 3 | 3 | 3 | 3 | 3
-//// -------------------------
-//// 3 | 2 | 2 | 2 | 2 | 2 | 3
-//// -------------------------
-//// 3 | 2 | 1 | 1 | 1 | 2 | 3
-//// -------------------------
-//// 3 | 2 | 1 | 0 | 1 | 2 | 3
-//// -------------------------
-//// 3 | 2 | 1 | 1 | 1 | 2 | 3
-//// -------------------------
-//// 3 | 2 | 2 | 2 | 2 | 2 | 3
-//// -------------------------
-//// 3 | 3 | 3 | 3 | 3 | 3 | 3
-////
-//// Returns the distance between plots according to the pattern above...
-//
-//// not anymore - we are using hexes now
-//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 inline CvPlot* plotDirection(int iX, int iY, DirectionTypes eDirection)
 {
 	if(eDirection == NO_DIRECTION)
@@ -222,12 +222,12 @@ inline CvPlot* plotDirection(int iX, int iY, DirectionTypes eDirection)
 	}
 	else
 	{
-		// convert to hex-space coordinates - the coordinate system axes are E and NE (not orthogonal)
+
 		iX = xToHexspaceX(iX , iY);
 		iX += GC.getPlotDirectionX()[eDirection];
 		iY += GC.getPlotDirectionY()[eDirection];
 
-		// convert from hex-space coordinates to the storage array
+
 		iX = hexspaceXToX(iX, iY);
 
 		return GC.getMap().plot(iX, iY);
@@ -236,13 +236,13 @@ inline CvPlot* plotDirection(int iX, int iY, DirectionTypes eDirection)
 
 inline CvPlot* plotXY(int iX, int iY, int iDX, int iDY)
 {
-	// convert the start coord to hex-space coordinates
+
 	int iStartHexX = xToHexspaceX(iX, iY);
 
 	int iPlotHexX = iStartHexX + iDX;
-	int iPlotY = iY + iDY; // Y is the same in both coordinate systems
+	int iPlotY = iY + iDY;
 
-	// convert from hex-space coordinates to the storage array
+
 	iPlotHexX = hexspaceXToX(iPlotHexX, iPlotY);
 
 	return GC.getMap().plot(iPlotHexX , iPlotY);
@@ -250,20 +250,20 @@ inline CvPlot* plotXY(int iX, int iY, int iDX, int iDY)
 
 inline CvPlot* PlotFromHex(CvMap& kMap, int iHexX, int iHexY)
 {
-	// NOTE: Y is the same in both hex space and grid space.
+
 	return kMap.plot( hexspaceXToX(iHexX, iHexY), iHexY );	
 }
 
 inline CvPlot* plotXYWithRangeCheck(int iX, int iY, int iDX, int iDY, int iRange)
 {
 #ifdef NQM_GAME_CORE_UTILS_OPTIMIZATIONS
-	// I'm assuming iDX and iDY are in hex-space
+
 	if (hexDistance(iDX, iDY) > iRange)
 #else
 	int hexRange;
 
-	// I'm assuming iDX and iDY are in hex-space
-	if((iDX >= 0) == (iDY >= 0))  // the signs match
+
+	if((iDX >= 0) == (iDY >= 0))
 	{
 		int iAbsDX = iDX >= 0 ? iDX : -iDX;
 		int iAbsDY = iDY >= 0 ? iDY : -iDY;
@@ -284,7 +284,7 @@ inline CvPlot* plotXYWithRangeCheck(int iX, int iY, int iDX, int iDY, int iRange
 
 	return plotXY(iX, iY, iDX, iDY);
 }
-//	----------------------------------------------------------------------------
+
 inline DirectionTypes directionXY(int iSourceX, int iSourceY, int iDestX, int iDestY)
 {
 	int iSourceHexX = xToHexspaceX(iSourceX, iSourceY);
@@ -319,7 +319,7 @@ inline DirectionTypes directionXY(int iSourceX, int iSourceY, int iDestX, int iD
 			return DIRECTION_WEST;
 		}
 	}
-	else// if (iWrappedYOffset < 0)
+	else
 	{
 		if(iWrappedXOffset > 0)
 		{
@@ -331,7 +331,7 @@ inline DirectionTypes directionXY(int iSourceX, int iSourceY, int iDestX, int iD
 		}
 	}
 }
-//	----------------------------------------------------------------------------
+
 inline DirectionTypes directionXY(const CvPlot* pFromPlot, const CvPlot* pToPlot)
 {
 	return directionXY(pFromPlot->getX(), pFromPlot->getY(),
@@ -339,8 +339,8 @@ inline DirectionTypes directionXY(const CvPlot* pFromPlot, const CvPlot* pToPlot
 
 }
 
-/// Find the nearest "spike" direction that we are clockwise of
-/// this assumes that the offsets are in hexspace
+
+
 inline DirectionTypes hexspaceSpikeDirection(const int iXOffset, const int iYOffset)
 {
 	if(iYOffset > 0)
@@ -353,7 +353,7 @@ inline DirectionTypes hexspaceSpikeDirection(const int iXOffset, const int iYOff
 		{
 			return DIRECTION_NORTHWEST;
 		}
-		else //if (-iXOffset > iYOffset)
+		else
 		{
 			return DIRECTION_WEST;
 		}
@@ -373,7 +373,7 @@ inline DirectionTypes hexspaceSpikeDirection(const int iXOffset, const int iYOff
 			return DIRECTION_WEST;
 		}
 	}
-	else// if (iYOffset < 0)
+	else
 	{
 		if(iXOffset > -iYOffset)
 		{
@@ -460,7 +460,7 @@ TechTypes getDiscoveryTech(UnitTypes eUnit, PlayerTypes ePlayer);
 
 int CompareWeights(const void* a, const void* b);
 
-// PlotUnitFunc's...
+
 bool PUF_isPlayer(const CvUnit* pUnit, int iData1, int iData2 = -1);
 bool PUF_isTeam(const CvUnit* pUnit, int iData1, int iData2 = -1);
 bool PUF_isCombatTeam(const CvUnit* pUnit, int iData1, int iData2);
@@ -485,7 +485,7 @@ bool PUF_makeInfoBarDirty(CvUnit* pUnit, int iData1 = -1, int iData2 = -1);
 bool PUF_isNoMission(const CvUnit* pUnit, int iData1 = -1, int iData2 = -1);
 bool PUF_isFiniteRange(const CvUnit* pUnit, int iData1 = -1, int iData2 = -1);
 
-// Inet Stuff
+
 void sendGameStats(char* pURL);
 
 int baseYieldToSymbol(int iNumYieldTypes, int iYieldStack);
@@ -509,7 +509,7 @@ bool ExtractGUID(const char* pszGUID, GUID& kGUID, UINT* puiStartIndex = NULL);
 void ClearGUID(GUID& kGUID);
 bool IsGUIDEmpty(const GUID& kGUID);
 
-//The following templates are used to aide migration from the old text system to the new one.
+
 inline CvString GetLocalizedText(const char* szString)
 {
 	Localization::String text = Localization::Lookup(szString);
@@ -520,7 +520,7 @@ inline CvString GetLocalizedText(const char* szString)
 	str.assign(szComposedString, bytes);
 	return str;
 }
-//------------------------------------------------------------------------------
+
 template<typename T>
 inline CvString GetLocalizedText(const char* szString, T arg1)
 {
@@ -533,7 +533,7 @@ inline CvString GetLocalizedText(const char* szString, T arg1)
 	str.assign(szComposedString, bytes);
 	return str;
 }
-//------------------------------------------------------------------------------
+
 template<typename T1, typename T2>
 inline CvString GetLocalizedText(const char* szString, const T1& arg1, const T2& arg2)
 {
@@ -546,7 +546,7 @@ inline CvString GetLocalizedText(const char* szString, const T1& arg1, const T2&
 	str.assign(szComposedString, bytes);
 	return str;
 }
-//------------------------------------------------------------------------------
+
 template<typename T1, typename T2, typename T3>
 inline CvString GetLocalizedText(const char* szString, const T1& arg1, const T2& arg2, const T3& arg3)
 {
@@ -559,7 +559,7 @@ inline CvString GetLocalizedText(const char* szString, const T1& arg1, const T2&
 	str.assign(szComposedString, bytes);
 	return str;
 }
-//------------------------------------------------------------------------------
+
 template<typename T1, typename T2, typename T3, typename T4>
 inline CvString GetLocalizedText(const char* szString, const T1& arg1, const T2& arg2, const T3& arg3, const T4& arg4)
 {
@@ -572,7 +572,7 @@ inline CvString GetLocalizedText(const char* szString, const T1& arg1, const T2&
 	str.assign(szComposedString, bytes);
 	return str;
 }
-//------------------------------------------------------------------------------
+
 template<typename T1, typename T2, typename T3, typename T4, typename T5>
 inline CvString GetLocalizedText(const char* szString, const T1& arg1, const T2& arg2, const T3& arg3, const T4& arg4, const T5& arg5)
 {

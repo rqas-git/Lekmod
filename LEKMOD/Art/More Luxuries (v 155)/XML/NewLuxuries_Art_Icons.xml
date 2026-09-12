@@ -41,8 +41,8 @@
 	</IconFontTextures>
 
 	<IconFontMapping>
-		<!-- Delete any luxury font icons with the same name so there's no conflict. -->
-		<!-- <Delete IconName="ICON_RES_COCOA"/> -->
+
+
 		<Delete IconName="ICON_RES_COFFEE"/>
 		<Delete IconName="ICON_RES_TEA"/>
 		<Delete IconName="ICON_RES_TOBACCO"/>
@@ -53,13 +53,13 @@
 		<Delete IconName="ICON_RES_CORAL"/>
 		<Delete IconName="ICON_RES_LAPIS"/>
 		<Delete IconName="ICON_RES_GLASS"/>
-		<!--
-		<Row>
-			<IconName>ICON_RES_COCOA</IconName>
-			<IconFontTexture>ICON_FONT_TEXTURE_NEWLUXURIES</IconFontTexture>
-			<IconMapping>1</IconMapping>
-		</Row>
-		-->
+
+
+
+
+
+
+
 		<Row>
 			<IconName>ICON_RES_COFFEE</IconName>
 			<IconFontTexture>ICON_FONT_TEXTURE_NEWLUXURIES</IconFontTexture>

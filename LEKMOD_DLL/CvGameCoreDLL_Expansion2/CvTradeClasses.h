@@ -1,16 +1,16 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_TRADE_CLASSES_H
 #define CIV5_TRADE_CLASSES_H
 
-// The map layer the trade units reside on
+
 #define TRADE_UNIT_MAP_LAYER	1
 
 struct TradeConnectionPlot
@@ -92,7 +92,7 @@ public:
 
 #ifdef AUI_CONSTIFY
 	bool IsValidTradeRoutePath(const CvCity* pOriginCity, const CvCity* pDestCity, DomainTypes eDomain) const;
-	// Internal enumeration cache: initialize to -1 for each origin/domain.
+
 	bool IsValidTradeRoutePathWithCachedRange(const CvCity* pOriginCity, const CvCity* pDestCity, DomainTypes eDomain, int& iCachedRange) const;
 	CvPlot* GetPlotAdjacentToWater(const CvPlot* pTarget, const CvPlot* pOrigin) const;
 
@@ -117,7 +117,7 @@ public:
 	bool IsTradeRouteIndexEmpty(int iIndex) const;
 #else
 	bool IsValidTradeRoutePath (CvCity* pOriginCity, CvCity* pDestCity, DomainTypes eDomain);
-	// Internal enumeration cache: initialize to -1 for each origin/domain.
+
 	bool IsValidTradeRoutePathWithCachedRange (CvCity* pOriginCity, CvCity* pDestCity, DomainTypes eDomain, int& iCachedRange);
 	CvPlot* GetPlotAdjacentToWater (CvPlot* pTarget, CvPlot* pOrigin);
 
@@ -149,9 +149,9 @@ public:
 	bool IsTradeRouteIndexEmpty(const TradeConnectionList::const_iterator it) const;
 #endif
 
-	void ClearAllCityTradeRoutes (CvPlot* pPlot); // called when a city is captured or traded
-	void ClearAllCivTradeRoutes (PlayerTypes ePlayer); // called from world congress code
-	void ClearAllCityStateTradeRoutes (void); // called from world congress code
+	void ClearAllCityTradeRoutes (CvPlot* pPlot);
+	void ClearAllCivTradeRoutes (PlayerTypes ePlayer);
+	void ClearAllCityStateTradeRoutes (void);
 #ifdef NQM_TEAM_TRADE_ROUTES_CANCELLED_NOT_DESTROYED_FOR_WAR_DEFENDER_ON_DOW
 	void CancelTradeBetweenTeams(TeamTypes eTeam1, TeamTypes eTeam2, bool bReturnUnits = false);
 	void InvalidateTradeBetweenTeams(TeamTypes eOriginTeam, TeamTypes eDestinationTeam);
@@ -159,7 +159,7 @@ public:
 	void CancelTradeBetweenTeams (TeamTypes eTeam1, TeamTypes eTeam2);
 #endif
 
-	void DoAutoWarPlundering(TeamTypes eTeam1, TeamTypes eTeam2); // when war is declared, both sides plunder each others trade routes for cash!
+	void DoAutoWarPlundering(TeamTypes eTeam1, TeamTypes eTeam2);
 
 #ifdef AUI_CONSTIFY
 	int GetNumTradeRoutesInPlot(const CvPlot* pPlot) const;
@@ -200,18 +200,18 @@ public:
 	int GetTechDifference (PlayerTypes ePlayer, PlayerTypes ePlayer2);
 #endif
 
-	void CreateVis (int iIndex); // Create the trade unit vis unit
+	void CreateVis (int iIndex);
 #ifdef AUI_WARNING_FIXES
 	CvUnit* GetVis(uint iIndex) const;
 #else
 	CvUnit* GetVis(int iIndex);
 #endif
-	// trade unit movement
-	bool MoveUnit (int iIndex); // move a trade unit along its path for all its movement points
-	bool StepUnit (int iIndex); // move a trade unit a single step along its path (called by MoveUnit)
+
+	bool MoveUnit (int iIndex);
+	bool StepUnit (int iIndex);
 #ifdef AUI_ITERATORIZE
-	bool MoveUnit(TradeConnectionList::iterator it); // move a trade unit along its path for all its movement points
-	bool StepUnit(TradeConnectionList::iterator it); // move a trade unit a single step along its path (called by MoveUnit)
+	bool MoveUnit(TradeConnectionList::iterator it);
+	bool StepUnit(TradeConnectionList::iterator it);
 #endif
 
 	void DisplayTemporaryPopupTradeRoute(int iPlotX, int iPlotY, TradeConnectionType type, DomainTypes eDomain);
@@ -221,7 +221,7 @@ public:
 	void LogTradeMsg(CvString& strMsg);
 
 	TradeConnectionList m_aTradeConnections;
-	int m_iNextID; // used to assign IDs to trade routes to avoid confusion when some are disrupted in multiplayer
+	int m_iNextID;
 
 	int m_aaiTechDifference[MAX_MAJOR_CIVS][MAX_MAJOR_CIVS];
 
@@ -255,12 +255,12 @@ public:
 	void Uninit(void);
 	void Reset(void);
 
-	// Functions invoked each player turn
+
 	void DoTurn(void);
 	void MoveUnits(void);
 
 #if defined(TRADE_REFACTOR)
-	// Base Values
+
 	int GetTradeConnectionBaseValueTimes100(const TradeConnection& kTradeConnection, YieldTypes eYield, bool bAsOriginPlayer);
 	int GetTradeConnectionGPTValueTimes100(const TradeConnection& kTradeConnection, YieldTypes eYield, bool bAsOriginPlayer, bool bOriginCity);
 	int GetTradeConnectionResourceValueTimes100(const TradeConnection& kTradeConnection, YieldTypes eYield, bool bAsOriginPlayer);
@@ -270,12 +270,12 @@ public:
 	int GetTradeConnectionPolicyValueTimes100(const TradeConnection& kTradeConnection, YieldTypes eYield, bool bAsOriginPlayer);
 	int GetTradeConnectionTraitValueTimes100(const TradeConnection& kTradeConnection, YieldTypes eYield, bool bAsOriginPlayer);
 	int GetTradeConnectionReligionValueTimes100(const TradeConnection& kTradeConnection, YieldTypes eYield, bool bAsOriginPlayer);
-	// Mods
+
 	int GetTradeConnectionPolicyValueModifierTimes100(const TradeConnection& kTradeConnection, YieldTypes eYield, bool bAsOriginPlayer);
 	int GetTradeConnectionTraitValueModifierTimes100(const TradeConnection& kTradeConnection, YieldTypes eYield, bool bAsOriginPlayer);
 	int GetTradeConnectionDomainValueModifierTimes100(const TradeConnection& kTradeConnection, YieldTypes eYield);
 	int GetTradeConnectionRiverValueModifierTimes100(const TradeConnection& kTradeConnection, YieldTypes eYield, bool bAsOriginPlayer);
-	// Sum of All
+
 	int GetTradeConnectionValueTimes100(const TradeConnection& kTradeConnection, YieldTypes eYield, bool bAsOriginPlayer, bool bIncludeModifiers = true);
 #else
 	int GetTradeConnectionBaseValueTimes100(const TradeConnection& kTradeConnection, YieldTypes eYield, bool bAsOriginPlayer);
@@ -290,7 +290,7 @@ public:
 	int GetTradeConnectionRiverValueModifierTimes100(const TradeConnection& kTradeConnection, YieldTypes eYield, bool bAsOriginPlayer);
 	int GetTradeConnectionValueTimes100 (const TradeConnection& kTradeConnection, YieldTypes eYield, bool bAsOriginPlayer);
 #endif
-	void UpdateTradeConnectionValues (void); // updates the all the values for the trade routes that go to and from this player
+	void UpdateTradeConnectionValues (void);
 
 #ifdef AUI_CONSTIFY
 	int GetTradeValuesAtCityTimes100(const CvCity* const pCity, YieldTypes eYield) const;
@@ -329,12 +329,12 @@ public:
 	std::vector<int> GetTradeUnitsAtPlot(const CvPlot* pPlot, bool bFailAtFirstFound, bool bExcludingMe, bool bOnlyWar) const;
 	std::vector<int> GetTradePlotsAtPlot(const CvPlot* pPlot, bool bFailAtFirstFound, bool bExcludingMe, bool bOnlyWar) const;
 
-	std::vector<int> GetOpposingTradeUnitsAtPlot(const CvPlot* pPlot, bool bFailAtFirstFound) const; // returns the ID of trade connections with units at that plot
+	std::vector<int> GetOpposingTradeUnitsAtPlot(const CvPlot* pPlot, bool bFailAtFirstFound) const;
 	bool ContainsOpposingPlayerTradeUnit(const CvPlot* pPlot) const;
 
-	std::vector<int> GetEnemyTradeUnitsAtPlot(const CvPlot* pPlot, bool bFailAtFirstFound) const; // returns the ID of trade connections with units at that plot
+	std::vector<int> GetEnemyTradeUnitsAtPlot(const CvPlot* pPlot, bool bFailAtFirstFound) const;
 	bool ContainsEnemyTradeUnit(const CvPlot* pPlot) const;
-	std::vector<int> GetEnemyTradePlotsAtPlot(const CvPlot* pPlot, bool bFailAtFirstFound) const; // returns the ID of trade connections that go through that plot
+	std::vector<int> GetEnemyTradePlotsAtPlot(const CvPlot* pPlot, bool bFailAtFirstFound) const;
 	bool ContainsEnemyTradePlot(const CvPlot* pPlot) const;
 #else
 	TradeConnection* GetTradeConnection(CvCity* pOriginCity, CvCity* pDestCity);
@@ -347,12 +347,12 @@ public:
 	std::vector<int> GetTradeUnitsAtPlot(const CvPlot* pPlot, bool bFailAtFirstFound, bool bExcludingMe, bool bOnlyWar);
 	std::vector<int> GetTradePlotsAtPlot(const CvPlot* pPlot, bool bFailAtFirstFound, bool bExcludingMe, bool bOnlyWar);
 
-	std::vector<int> GetOpposingTradeUnitsAtPlot(const CvPlot* pPlot, bool bFailAtFirstFound); // returns the ID of trade connections with units at that plot
+	std::vector<int> GetOpposingTradeUnitsAtPlot(const CvPlot* pPlot, bool bFailAtFirstFound);
 	bool ContainsOpposingPlayerTradeUnit(const CvPlot* pPlot);
 
-	std::vector<int> GetEnemyTradeUnitsAtPlot(const CvPlot* pPlot, bool bFailAtFirstFound); // returns the ID of trade connections with units at that plot
+	std::vector<int> GetEnemyTradeUnitsAtPlot(const CvPlot* pPlot, bool bFailAtFirstFound);
 	bool ContainsEnemyTradeUnit(const CvPlot* pPlot);
-	std::vector<int> GetEnemyTradePlotsAtPlot(const CvPlot* pPlot, bool bFailAtFirstFound); // returns the ID of trade connections that go through that plot
+	std::vector<int> GetEnemyTradePlotsAtPlot(const CvPlot* pPlot, bool bFailAtFirstFound);
 	bool ContainsEnemyTradePlot(const CvPlot* pPlot);
 #endif
 
@@ -450,4 +450,4 @@ public:
 FDataStream& operator>>(FDataStream&, CvTradeAI&);
 FDataStream& operator<<(FDataStream&, const CvTradeAI&);
 
-#endif //CIV5_TRADE_CLASSES_H
+#endif

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/11/2015 6:46:54 PM -->
+
 <GameData>
 	
-	<!-- OLD TAGS -->
+
 	
 	<Language_en_US>
 		<Delete Tag="" />
@@ -30,7 +30,7 @@
 	</Language_RU_RU>
 
 	
-	<!-- NEW TAGS -->
+
 
 	<Language_en_US>
 		<Row Tag="">

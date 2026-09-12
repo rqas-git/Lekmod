@@ -1,10 +1,10 @@
--- modified by Temudjin from 1.0.3.142 code
--------------------------------------------------
--- FrontEnd
--------------------------------------------------
 
--- Flipped to true by ui_check.bat / the installer. include() cannot see extra
--- files dumped in Lua/UI, so this flag lives in the FrontEnd script itself.
+
+
+
+
+
+
 local LEKMOD_UI_CHECK_DONE = false
 
 local function MarkLekmodUiCheckDone()
@@ -38,8 +38,8 @@ end
 
 function ShowHideHandler( bIsHide, bIsInit )
 
-		-- Check for game invites first.  If we have a game invite, we will have flipped 
-		-- the Civ5App::eHasShownLegal and not show the legal/touch screens.
+
+
 		UI:CheckForCommandLineInvitation();
 
     if not bIsHide then
@@ -47,7 +47,7 @@ function ShowHideHandler( bIsHide, bIsInit )
         Controls.AtlasLogo:SetTexture( "oracle_background.dds" );
     	UIManager:SetUICursor( 0 );
 		if not IsUiCheckConfigured() then
-			-- Manual install without ui_check.bat: block the menus.
+
 			UIManager:QueuePopup( Controls.LegalScreen, PopupPriority.LegalScreen );
 		else
 			MarkLekmodUiCheckDone();

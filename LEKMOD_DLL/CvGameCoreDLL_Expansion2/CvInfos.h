@@ -1,19 +1,19 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
-//
-//  AUTHOR:	Eric MacDonald  --  8/2003
-//					Mustafa Thamer 11/2004
-//					Jon Shafer - 03/2005
-//
-//  PURPOSE: All Civ4 info classes and the base class for them
-//
+
+
+
+
+
+
+
 #ifndef CV_INFO_H
 #define CV_INFO_H
 
@@ -21,7 +21,7 @@
 
 #include <unordered_map>
 
-#pragma warning( disable: 4251 )		// needs to have dll-interface to be used by clients of class
+#pragma warning( disable: 4251 )
 #pragma warning( disable: 4127 )
 
 #if defined(MOD_RESOURCES_PRODUCTION_COST_MODIFIERS)
@@ -41,9 +41,9 @@ struct ProductionCostModifiers
 
 class CvDatabaseUtility;
 
-//------------------------------------------------------------------------------
-// CvBaseInfo: New basic info adapter for game data.
-//------------------------------------------------------------------------------
+
+
+
 class CvBaseInfo
 {
 public:
@@ -116,10 +116,10 @@ private:
 FDataStream& operator<<(FDataStream&, const CvBaseInfo&);
 FDataStream& operator>>(FDataStream&, CvBaseInfo&);
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvHotkeyInfo
-//!  \brief		Holds the hotkey info for an info class.
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvHotKeyInfo : public CvBaseInfo
 {
 public:
@@ -196,9 +196,9 @@ protected:
 	CvString m_strDisabledHelp;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvSpecialistInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvSpecialistInfo : public CvHotKeyInfo
 {
 public:
@@ -222,7 +222,7 @@ public:
 	const char* getGreatPersonIconString() const;
 	void setGreatPersonIconString(const char* szVal);
 #endif
-	// Arrays
+
 	int getYieldChange(int i) const;
 	const int* getYieldChangeArray() const;
 	int getFlavorValue(int i) const;
@@ -248,7 +248,7 @@ protected:
 #endif
 	CvString m_strTexture;
 
-	// Arrays
+
 
 	int* m_piYieldChange;
 	int* m_piFlavorValue;
@@ -259,9 +259,9 @@ private:
 
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvMissionInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvMissionInfo : public CvHotKeyInfo
 {
 public:
@@ -291,17 +291,17 @@ protected:
 	CvString m_strWaypoint;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvControlInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvControlInfo : public CvHotKeyInfo
 {
-	//Empty?
+
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvCommandInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvCommandInfo : public CvHotKeyInfo
 {
 public:
@@ -324,9 +324,9 @@ protected:
 	bool m_bAll;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvAutomateInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvAutomateInfo : public CvHotKeyInfo
 {
 public:
@@ -352,9 +352,9 @@ protected:
 	bool m_bVisible;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvActionInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvActionInfo
 {
 public:
@@ -379,7 +379,7 @@ public:
 	ActionSubTypes getSubType() const;
 	void setSubType(ActionSubTypes eSubType);
 
-	// functions to replace the CvInfoBase calls
+
 	const char* GetType() const;
 	const char* GetDescription() const;
 	const char* GetCivilopedia() const;
@@ -388,7 +388,7 @@ public:
 	const char* GetStrategy() const;
 	const char* GetTextKey() const;
 
-	// functions to replace the CvHotkey calls
+
 	int getActionInfoIndex() const;
 	int getHotKeyVal() const;
 	int getHotKeyPriority() const;
@@ -416,13 +416,13 @@ private:
 	CvHotKeyInfo* getHotkeyInfo() const;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// class	: CvMultiUnitFormationInfo
-//
-// \brief	: Holds information relating to a formation of multiple units (for AI use)
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 class CvFormationSlotEntry
 {
 public:
@@ -459,9 +459,9 @@ protected:
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvSpecialUnitInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvSpecialUnitInfo : public CvBaseInfo
 {
 public:
@@ -471,7 +471,7 @@ public:
 	bool isValid() const;
 	bool isCityLoad() const;
 
-	// Arrays
+
 	bool isCarrierUnitAIType(int i) const;
 	int getProductionTraits(int i) const;
 
@@ -481,7 +481,7 @@ protected:
 	bool m_bValid;
 	bool m_bCityLoad;
 
-	// Arrays
+
 	bool* m_pbCarrierUnitAITypes;
 	int* m_piProductionTraits;
 
@@ -490,9 +490,9 @@ private:
 	CvSpecialUnitInfo& operator=(const CvSpecialUnitInfo&);
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvUnitClassInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvUnitClassInfo :	public CvBaseInfo
 {
 public:
@@ -515,9 +515,9 @@ protected:
 	int m_iDefaultUnitIndex;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvBuildingClassInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvBuildingClassInfo :	public CvBaseInfo
 {
 public:
@@ -535,7 +535,7 @@ public:
 	bool isNoLimit() const;
 	bool isMonument() const;
 
-	// Arrays
+
 	int getVictoryThreshold(int i) const;
 
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
@@ -550,7 +550,7 @@ protected:
 	bool m_bNoLimit;
 	bool m_bMonument;
 
-	// Arrays
+
 	int* m_piVictoryThreshold;
 
 private:
@@ -558,9 +558,9 @@ private:
 	CvBuildingClassInfo& operator=(const CvBuildingClassInfo&);
 };
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Helper Functions to serialize arrays of variable length
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 namespace BuildingClassArrayHelpers
 {
 void Read(FDataStream& kStream, int* paiArray);
@@ -572,9 +572,9 @@ void Read(FDataStream& kStream, int* paiArray);
 void Write(FDataStream& kStream, int* paiArray, int iArraySize);
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvCivilizationBaseInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvCivilizationBaseInfo : public CvBaseInfo
 {
 public:
@@ -607,9 +607,9 @@ private:
 	CvCivilizationBaseInfo& operator=(const CvCivilizationBaseInfo&);
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvCivilizationInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvCivilizationInfo : public CvCivilizationBaseInfo
 {
 public:
@@ -639,7 +639,7 @@ public:
 
 	ReligionTypes GetReligion() const;
 
-	// Arrays
+
 	int getCivilizationBuildings(int i) const;
 	int getCivilizationUnits(int i) const;
 	bool isCivilizationBuildingOverridden(int i) const;
@@ -663,15 +663,15 @@ public:
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
 
 protected:
-	// allocate and initialize the civilization's default buildings
+
 	void InitBuildingDefaults(int*& piDefaults, CvDatabaseUtility& kUtility);
 
-	// allocate and initialize the civilization's default units
+
 	void InitUnitDefaults(int*& piDefaults, CvDatabaseUtility& kUtility);
 
 	int m_iDefaultPlayerColor;
 	int m_iArtStyleType;
-	int m_iNumLeaders;				 // the number of leaders the Civ has, this is needed so that random leaders can be generated easily
+	int m_iNumLeaders;
 
 	CvString m_strArtDefineTag;
 	CvString m_strArtStylePrefix;
@@ -684,7 +684,7 @@ protected:
 
 	CvString m_strSoundtrackKey;
 
-	// Arrays
+
 	int* m_piCivilizationBuildings;
 	int* m_piCivilizationUnits;
 	int* m_piCivilizationFreeUnitsClass;
@@ -709,9 +709,9 @@ private:
 	CvCivilizationInfo& operator=(const CvCivilizationInfo&);
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvVictoryInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvVictoryInfo : public CvBaseInfo
 {
 public:
@@ -738,7 +738,7 @@ public:
 
 	const char* getMovie() const;
 
-	// Accessor Functions (Arrays)
+
 	int GetVictoryPointAward(int i) const;
 
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
@@ -772,9 +772,9 @@ private:
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvSmallAwardInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvSmallAwardInfo : public CvBaseInfo
 {
 public:
@@ -805,9 +805,9 @@ private:
 	CvSmallAwardInfo& operator=(const CvSmallAwardInfo&);
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvHurryInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvHurryInfo :	public CvBaseInfo
 {
 public:
@@ -830,9 +830,9 @@ protected:
 	int m_iGoldPerCulture;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvHandicapInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvHandicapInfo : public CvBaseInfo
 {
 public:
@@ -901,7 +901,7 @@ public:
 	int getAIFreeXPPercent() const;
 	int getNumGoodies() const;
 
-	// Arrays
+
 	int getGoodies(int i) const;
 	int isFreeTechs(int i) const;
 	int isAIFreeTechs(int i) const;
@@ -973,7 +973,7 @@ protected:
 
 	CvString m_strHandicapName;
 
-	// Arrays
+
 	int* m_piGoodies;
 	bool* m_pbFreeTechs;
 	bool* m_pbAIFreeTechs;
@@ -984,9 +984,9 @@ private:
 
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvGameSpeedInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvGameSpeedInfo :	public CvBaseInfo
 {
 public:
@@ -1072,9 +1072,9 @@ private:
 	CvGameSpeedInfo& operator=(const CvGameSpeedInfo&);
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// CvTurnTimerInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvTurnTimerInfo :	public CvBaseInfo
 {
 public:
@@ -1101,9 +1101,9 @@ protected:
 FDataStream& operator<<(FDataStream&, const CvTurnTimerInfo&);
 FDataStream& operator>>(FDataStream&, CvTurnTimerInfo&);
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvBuildInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvBuildInfo : public CvHotKeyInfo
 {
 public:
@@ -1127,18 +1127,18 @@ public:
 	bool IsRemoveWaterCrossing() const;
 #endif
 #ifdef LEKMOD_BUILD_CIV_REQ
-	//EAP Civ req builds
+
 	bool IsSpecificCivRequired() const;
 
 	CivilizationTypes GetRequiredCivilization() const;
 
-	//
+
 #endif
 
 	bool IsWater() const;
 	bool IsCanBeEmbarked() const;
 
-	// Arrays
+
 	int getFeatureTech(int i) const;
 	int getFeatureTime(int i) const;
 	int getFeatureProduction(int i) const;
@@ -1168,17 +1168,17 @@ protected:
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
 	bool m_bRemoveWaterCrossing;
 #endif
-	//EAP civ req builds
+
 	bool m_bSpecificCivRequired;
 
 	CivilizationTypes m_eRequiredCivilization;
 
-	//
+
 
 	bool m_bWater;
 	bool m_bCanBeEmbarked;
 
-	// Arrays
+
 	int* m_paiFeatureTech;
 	int* m_paiFeatureTime;
 	int* m_paiFeatureProduction;
@@ -1194,9 +1194,9 @@ private:
 	CvBuildInfo& operator=(const CvBuildInfo&);
 };
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Helper Functions to serialize arrays of variable length (based on number of builds defined in game)
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 namespace BuildArrayHelpers
 {
 #ifdef AUI_WARNING_FIXES
@@ -1208,9 +1208,9 @@ void Write(FDataStream& kStream, short* paiBuildArray, int iArraySize);
 #endif
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// CvGoodyInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvGoodyInfo :	public CvBaseInfo
 {
 public:
@@ -1313,9 +1313,9 @@ protected:
 	CvString m_strChooseDesc;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvRouteInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvRouteInfo :	public CvBaseInfo
 {
 public:
@@ -1331,7 +1331,7 @@ public:
 
 	bool IsIndustrial() const;
 
-	// Arrays
+
 	int getYieldChange(int i) const;
 	int getTechMovementChange(int i) const;
 	int getResourceQuantityRequirement(int i) const;
@@ -1347,7 +1347,7 @@ protected:
 
 	int m_bIndustrial;
 
-	// Arrays
+
 	int* m_piYieldChange;
 	int* m_piTechMovementChange;
 	int* m_piResourceQuantityRequirements;
@@ -1357,9 +1357,9 @@ private:
 	CvRouteInfo& operator=(const CvRouteInfo&);
 };
 #if defined(TRADE_REFACTOR)
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvTradeConnectionInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvTradeConnectionInfo :	public CvBaseInfo
 {
 	public:
@@ -1382,9 +1382,9 @@ protected:
 };
 #endif
 #if defined(LEKMOD_GREAT_WORK_YIELD_EFFECTS)
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvGreatWorkClassInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvGreatWorkClassInfo : public CvBaseInfo
 {
 public:
@@ -1400,9 +1400,9 @@ protected:
 	int* m_piBaseYield;
 };
 #endif
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvResourceClassInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvResourceClassInfo :	public CvBaseInfo
 {
 public:
@@ -1415,9 +1415,9 @@ protected:
 	int m_iUniqueRange;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvResourceInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvResourceInfo : public CvBaseInfo
 {
 public:
@@ -1479,7 +1479,7 @@ public:
 	const char* getAltArtDefineTagHeavy() const;
 	void setAltArtDefineTagHeavy(const char* szVal);
 
-	// Arrays
+
 	int getYieldChange(int i) const;
 	int* getYieldChangeArray();
 	int getImprovementChange(int i) const;
@@ -1554,7 +1554,7 @@ protected:
 	CvString m_strAltArtDefineTag;
 	CvString m_strAltArtDefineTagHeavy;
 
-	// Arrays
+
 	int* m_piYieldChange;
 #if defined(MOD_RESOURCES_PRODUCTION_COST_MODIFIERS)
 	std::map<int, std::vector<ProductionCostModifiers>> m_piiiUnitCombatProductionCostModifiersLocal;
@@ -1576,9 +1576,9 @@ private:
 	CvResourceInfo& operator=(const CvResourceInfo&);
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvFeatureInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvFeatureInfo : public CvBaseInfo
 {
 public:
@@ -1640,11 +1640,11 @@ public:
 
 	bool isTerrain(int i) const;
 
-	// Set each time the game is started
+
 	bool IsClearable() const;
 	void SetClearable(bool bValue);
 
-	// Other
+
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
 
 protected:
@@ -1683,16 +1683,16 @@ protected:
 	int m_iStackedDomainDefensePenalty;
 #endif
 
-	// Set each time the game is started
+
 	bool m_bClearable;
 
 	int m_iWorldSoundscapeScriptId;
 
 	CvString m_strEffectType;
 	int m_iEffectProbability;
-	CvString m_strEffectTypeTag;		// Effect type for effect macros
+	CvString m_strEffectTypeTag;
 
-	// Arrays
+
 	int* m_piYieldChange;
 	int* m_piRiverYieldChange;
 	int* m_piHillsYieldChange;
@@ -1711,9 +1711,9 @@ private:
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvYieldInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvYieldInfo : public CvBaseInfo
 {
 public:
@@ -1771,9 +1771,9 @@ protected:
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvTerrainInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvTerrainInfo : public CvBaseInfo
 {
 public:
@@ -1800,7 +1800,7 @@ public:
 	int getWorldSoundscapeScriptId() const;
 	const char* getEffectTypeTag() const;
 
-	// Arrays
+
 	int getYield(int i) const;
 	int getRiverYieldChange(int i) const;
 	int getHillsYieldChange(int i) const;
@@ -1809,7 +1809,7 @@ public:
 #endif
 	int get3DAudioScriptFootstepIndex(int i) const;
 
-	// Other
+
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
 
 protected:
@@ -1828,7 +1828,7 @@ protected:
 
 	int m_iWorldSoundscapeScriptId;
 
-	// Arrays
+
 	int* m_piYields;
 	int* m_piRiverYieldChange;
 	int* m_piHillsYieldChange;
@@ -1837,7 +1837,7 @@ protected:
 #endif
 	int* m_pi3DAudioScriptFootstepIndex;
 
-	CvString m_strEffectTypeTag;		// Effect type for effect macros
+	CvString m_strEffectTypeTag;
 
 private:
 	CvString m_strArtDefineTag;
@@ -1848,9 +1848,9 @@ private:
 
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvInterfaceModeInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvInterfaceModeInfo :	public CvHotKeyInfo
 {
 public:
@@ -1876,9 +1876,9 @@ protected:
 	bool m_bSelectAll;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvLeaderHeadInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvLeaderHeadInfo : public CvBaseInfo
 {
 public:
@@ -1905,11 +1905,11 @@ public:
 	const char* getArtDefineTag() const;
 	void setArtDefineTag(const char* szVal);
 
-	// Arrays
+
 	bool hasTrait(int i) const;
 	int getFlavorValue(int i) const;
 
-	// Other
+
 	const char* getLeaderHead() const;
 
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
@@ -1934,7 +1934,7 @@ protected:
 
 	CvString m_strArtDefineTag;
 
-	// Arrays
+
 	bool* m_pbTraits;
 
 	int* m_piFlavorValue;
@@ -1945,9 +1945,9 @@ private:
 
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvWorldInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvWorldInfo :	public CvBaseInfo
 {
 public:
@@ -1976,16 +1976,16 @@ public:
 	static CvWorldInfo CreateCustomWorldSize(const CvWorldInfo& kTemplate, int iWidth, int iHeight);
 	static CvWorldInfo CreateCustomWorldSize(const CvWorldInfo& kTemplate, int iWidth, int iHeight, int iPlayers, int iMinorCivs);
 
-	//Cached result overrides.
+
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
 	virtual void readFrom(FDataStream&);
 	virtual void writeTo(FDataStream&) const;
 	virtual bool operator==(const CvWorldInfo&) const;
 	bool operator != (const CvWorldInfo&) const;
 
-	// Class specific
 
-	// A special method to read the serialized info before there was any versioning
+
+
 	void readFromVersion0(FDataStream&);
 
 
@@ -2015,9 +2015,9 @@ protected:
 FDataStream& operator<<(FDataStream&, const CvWorldInfo&);
 FDataStream& operator>>(FDataStream&, CvWorldInfo&);
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvClimateInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvClimateInfo: public CvBaseInfo
 {
 public:
@@ -2078,7 +2078,7 @@ public:
 		return m_fRandIceLatitude;
 	}
 
-	//Cached result overrides.
+
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
 
 	virtual void readFrom(FDataStream&);
@@ -2102,9 +2102,9 @@ protected:
 FDataStream& operator<<(FDataStream&, const CvClimateInfo&);
 FDataStream& operator>>(FDataStream&, CvClimateInfo&);
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvSeaLevelInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvSeaLevelInfo :	public CvBaseInfo
 {
 public:
@@ -2127,9 +2127,9 @@ private:
 FDataStream& operator<<(FDataStream&, const CvSeaLevelInfo&);
 FDataStream& operator>>(FDataStream&, CvSeaLevelInfo&);
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvProcessInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvProcessInfo : public CvBaseInfo
 {
 public:
@@ -2138,7 +2138,7 @@ public:
 
 	int getTechPrereq() const;
 
-	// Arrays
+
 	int getProductionToYieldModifier(int i) const;
 	int GetFlavorValue(int i) const;
 
@@ -2147,7 +2147,7 @@ public:
 protected:
 	int m_iTechPrereq;
 
-	// Arrays
+
 	int* m_paiProductionToYieldModifier;
 	int* m_paiFlavorValue;
 
@@ -2157,9 +2157,9 @@ private:
 
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvVoteInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvVoteInfo : public CvBaseInfo
 {
 public:
@@ -2205,9 +2205,9 @@ private:
 
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvEntityEventInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvEntityEventInfo : public CvBaseInfo
 {
 public:
@@ -2226,10 +2226,10 @@ private:
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvEraInfo
-//  DESC:   Used to manage different types of Art Styles
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvEraInfo : public CvBaseInfo
 {
 public:
@@ -2285,7 +2285,7 @@ public:
 	bool isNoBarbUnits() const;
 	bool isNoReligion() const;
 
-	// Arrays
+
 
 
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
@@ -2342,10 +2342,10 @@ private:
 	CvEraInfo& operator=(const CvEraInfo&);
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvColorInfo
-//  DESC:   Used to manage different types of Art Styles
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvColorInfo : public CvBaseInfo
 {
 public:
@@ -2357,10 +2357,10 @@ protected:
 	CvColorA m_Color;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvPlayerColorInfo
-//  DESC:   Used to manage different types of Art Styles
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvPlayerColorInfo : public CvBaseInfo
 {
 public:
@@ -2378,9 +2378,9 @@ private:
 	int m_iColorTypeText;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvGameOptionInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvGameOptionInfo : public CvBaseInfo
 {
 public:
@@ -2396,9 +2396,9 @@ private:
 	bool m_bVisible;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvMPOptionInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvMPOptionInfo : public CvBaseInfo
 {
 public:
@@ -2412,9 +2412,9 @@ private:
 	bool m_bDefault;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvPlayerOptionInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvPlayerOptionInfo : public CvBaseInfo
 {
 public:
@@ -2429,9 +2429,9 @@ private:
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvVoteSourceInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvVoteSourceInfo : public CvBaseInfo
 {
 public:
@@ -2459,9 +2459,9 @@ private:
 	CvVoteSourceInfo& operator=(const CvVoteSourceInfo&);
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvDomainInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 typedef CvBaseInfo CvDomainInfo;
 
 #endif

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/6/2015 4:51:27 PM -->
+
 <GameData>
 
-	<!-- Naval Tradition: Now +1 Happiness and +1 Culture from Lighthouse, Harbor, and Seaport. -->
+
 	<Policies>
 		<Update>
 			<Set PortraitIndex="10" />

@@ -9,8 +9,9 @@ import tempfile
 import unittest
 
 from reference import ROOT, extract_lua, original as reference_original
+from source_text import canonical
 
-# Include perf's intentional UI optimizations on both sides of the comparison.
+
 BASELINE = '41a1d154'
 
 
@@ -24,8 +25,13 @@ sys.path.insert(0, str(ROOT / 'tools'))
 from package_lekmod import package
 
 
+def normalized(path):
+    language = 'xml' if '.xml' in path.suffixes else 'lua'
+    return canonical(path.read_bytes().decode('latin1'), language).encode('latin1')
+
+
 def contents(folder):
-    return {p.name: hashlib.sha256(p.read_bytes().replace(b'\r\n', b'\n')).hexdigest()
+    return {p.name: hashlib.sha256(normalized(p)).hexdigest()
             for p in folder.iterdir() if p.is_file()}
 
 
@@ -96,8 +102,8 @@ class UIAssetsTests(unittest.TestCase):
         materialize_release(self.mod)
         for source in self.manifest['aliases']:
             target = self.mod / 'Lua/tmp' / (source + '.ignore')
-            self.assertEqual(target.read_bytes().replace(b'\r\n', b'\n'),
-                             (self.reference / 'LEKMOD/Lua/tmp' / (source + '.ignore')).read_bytes().replace(b'\r\n', b'\n'))
+            self.assertEqual(normalized(target),
+                             normalized(self.reference / 'LEKMOD/Lua/tmp' / (source + '.ignore')))
         before = contents(self.mod / 'Lua/UI')
         materialize_release(self.mod)
         self.assertEqual(before, contents(self.mod / 'Lua/UI'))

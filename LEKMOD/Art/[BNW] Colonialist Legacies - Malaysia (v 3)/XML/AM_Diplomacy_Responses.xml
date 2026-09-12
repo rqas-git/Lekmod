@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GameData>
 	<Diplomacy_Responses>
-		<!--First Greeting messages from AI leaders-->
+
 		<Row LeaderType="LEADER_VERCINGETORIX">
 			<ResponseType>RESPONSE_FIRST_GREETING</ResponseType>
 			<Response>TXT_KEY_LEADER_VERCINGETORIX_FIRSTGREETING%</Response>
@@ -58,7 +58,7 @@
 			<ResponseType>RESPONSE_FIRST_GREETING</ResponseType>
 			<Response>TXT_KEY_LEADER_AEETES_FIRSTGREETING%</Response>
 		</Row>
-		<!--Defeated messages from AI leaders-->
+
 		<Row LeaderType="GENERIC">
 			<ResponseType>RESPONSE_DEFEATED</ResponseType>
 			<Response>TXT_KEY_LEADER_AMC_GENERIC_DEFEATED%</Response>

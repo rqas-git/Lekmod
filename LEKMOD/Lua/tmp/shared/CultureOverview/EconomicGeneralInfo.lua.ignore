@@ -1,6 +1,6 @@
--------------------------------------------------
--- Economic
--------------------------------------------------
+
+
+
 include( "IconSupport" );
 include( "InstanceManager" );
 
@@ -25,8 +25,8 @@ local m_bSortReverse = false;
 local pediaSearchStrings = {};
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnProdClick( cityID, prodName )
 	local popupInfo = {
 			Type = ButtonPopupTypes.BUTTONPOPUP_CHOOSEPRODUCTION,
@@ -37,18 +37,18 @@ function OnProdClick( cityID, prodName )
 			Option2 = false;
 		}
 	Events.SerialEventGameMessagePopup(popupInfo);
-    -- send production popup message
+
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnProdRClick( cityID, void2, button )
 	local searchString = pediaSearchStrings[tostring(button)];
 	Events.SearchForPediaEntry( searchString );		
 end
 	
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function UpdateDisplay()
     UpdateGPT();
     
@@ -112,7 +112,7 @@ function UpdateDisplay()
         sortEntry.Population = pCity:GetPopulation();
         instance.Population:SetText( sortEntry.Population );
         
-	    -- Update Growth Meter
+
 		if (instance.GrowthBar) then
 			
 			local iCurrentFood = pCity:GetFood();
@@ -130,18 +130,18 @@ function UpdateDisplay()
 			instance.GrowthBarShadow:SetPercent( fGrowthProgressPlusThisTurnPercent );
 		end
 		
-		-- Update Growth Time
+
 		if(instance.CityGrowth) then
 			local cityGrowth = pCity:GetFoodTurnsLeft();
 			
 			if (pCity:IsFoodProduction() or pCity:FoodDifferenceTimes100() == 0) then
 				cityGrowth = "-";
-				--instance.CityBannerRightBackground:SetToolTipString(Locale.ConvertTextKey("TXT_KEY_CITY_STOPPED_GROWING_TT", localizedCityName, cityPopulation));
+
 			elseif pCity:FoodDifferenceTimes100() < 0 then
 				cityGrowth = "[COLOR_WARNING_TEXT]-[ENDCOLOR]";
-				--instance.CityBannerRightBackground:SetToolTipString(Locale.ConvertTextKey("TXT_KEY_CITY_STARVING_TT",localizedCityName ));
+
 			else
-				--instance.CityBannerRightBackground:SetToolTipString(Locale.ConvertTextKey("TXT_KEY_CITY_WILL_GROW_TT", localizedCityName, cityPopulation, cityPopulation+1, cityGrowth));
+
 			end
 			
 			instance.CityGrowth:SetText(cityGrowth);
@@ -178,7 +178,7 @@ function UpdateDisplay()
 			instance.Faith:SetText(sortEntry.Faith);
 			instance.FaithBox:SetHide(false);   
         end
-		-- v34 Golden Age Points
+
 		if(Game.IsOption(GameOptionTypes.GAMEOPTION_NO_HAPPINESS)) then
 			instance.GoldenAgeBox:SetHide(true);
 		else
@@ -195,8 +195,8 @@ function UpdateDisplay()
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function UpdateGPT()
 
     local pPlayer = Players[ Game.GetActivePlayer() ];
@@ -219,7 +219,7 @@ function UpdateGPT()
     
     Controls.TotalExpenseValue:SetText( "[COLOR_NEGATIVE_TEXT]" .. Locale.ToNumber( pPlayer:CalculateInflatedCosts(), "#.##" ) .. "[ENDCOLOR]" );
 
-	-- Cities
+
     Controls.CityIncomeValue:SetText( Locale.ToNumber( pPlayer:GetGoldFromCitiesTimes100() / 100, "#.##" ) );
     
     local bFoundCity = false;
@@ -248,7 +248,7 @@ function UpdateGPT()
     Controls.CityStack:CalculateSize();
     Controls.CityStack:ReprocessAnchoring();
     
-    -- Diplomacy
+
     local diploGPT = pPlayer:GetGoldPerTurnFromDiplomacy();
     if( diploGPT > 0 ) then
         Controls.DiploIncomeValue:SetText( Locale.ToNumber( diploGPT, "#.##" ) );
@@ -256,7 +256,7 @@ function UpdateGPT()
         Controls.DiploIncomeValue:SetText( 0 );
     end
     
-    -- Religion
+
     local religionGPT = pPlayer:GetGoldPerTurnFromReligion();
     if( religionGPT > 0 ) then
         Controls.ReligionIncomeValue:SetText( Locale.ToNumber( religionGPT, "#.##" ) );
@@ -266,7 +266,7 @@ function UpdateGPT()
 
     Controls.TradeIncomeValue:SetText( Locale.ToNumber( pPlayer:GetCityConnectionGoldTimes100() / 100, "#.##" ) );
     
-    -- Trade income breakdown tooltip
+
     local iBaseGold = GameDefines.TRADE_ROUTE_BASE_GOLD / 100;
     local iGoldPerPop = GameDefines.TRADE_ROUTE_CITY_POP_GOLD_MULTIPLIER / 100;
     local strTooltip = Locale.ConvertTextKey("TXT_KEY_EO_INCOME_TRADE");
@@ -312,7 +312,7 @@ function UpdateGPT()
     Controls.TradeStack:CalculateSize();
     Controls.TradeStack:ReprocessAnchoring();
 
-	-- Units
+
 	
 	local iTotalUnitMaintenance = pPlayer:CalculateUnitCost();
 	
@@ -334,12 +334,12 @@ function UpdateGPT()
     
     local strUnitTT = Locale.ConvertTextKey("TXT_KEY_EO_EX_UNITS", fCostPer, iPaidUnits);
     
-    -- Maintenance free units
+
     if (iMaintenanceFreeUnits ~= 0) then
 		strUnitTT = strUnitTT .. "[NEWLINE][NEWLINE]" .. Locale.ConvertTextKey("TXT_KEY_EO_EX_UNITS_NO_MAINT", iMaintenanceFreeUnits);
     end
     
-    -- Maintenance mod (handicap)
+
     local iUnitMaintMod = GameInfo.HandicapInfos[iHandicap].UnitCostPercent;
     if (iUnitMaintMod ~= 100) then
 		strUnitTT = strUnitTT .. "[NEWLINE][NEWLINE]" .. Locale.ConvertTextKey("TXT_KEY_HANDICAP_MAINTENANCE_MOD", iUnitMaintMod);
@@ -347,7 +347,7 @@ function UpdateGPT()
     
     Controls.UnitExpense:SetToolTipString( strUnitTT );
     
-    -- Buildings
+
     local iBuildingMaintMod = GameInfo.HandicapInfos[iHandicap].BuildingCostPercent;
     
     local strBuildingsTT = Locale.ConvertTextKey("TXT_KEY_EO_EX_BUILDINGS");
@@ -390,7 +390,7 @@ function UpdateGPT()
     Controls.BuildingsStack:CalculateSize();
     Controls.BuildingsStack:ReprocessAnchoring();
     
-    -- Routes
+
     local strRoutesTT = Locale.ConvertTextKey("TXT_KEY_EO_EX_IMPROVEMENTS");
     
     local iRouteMaintMod = GameInfo.HandicapInfos[iHandicap].RouteCostPercent;
@@ -404,7 +404,7 @@ function UpdateGPT()
     Controls.TileExpense:SetToolTipString(strRoutesTT);
     Controls.TileExpenseValue:SetText( Locale.ToNumber( pPlayer:GetImprovementGoldMaintenance(), "#.##" ) );
     
-    -- Diplo
+
     local diploGPT = pPlayer:GetGoldPerTurnFromDiplomacy();
     if( diploGPT < 0 ) then
         Controls.DiploExpenseValue:SetText( Locale.ToNumber( -diploGPT, "#.##" ) );
@@ -416,13 +416,13 @@ function UpdateGPT()
 end
 
 
--- Start hidden
+
 Controls.CityStack:SetHide( true );
 Controls.TradeStack:SetHide( true );
 Controls.BuildingsStack:SetHide( true );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnCityToggle()
     local bWasHidden = Controls.CityStack:IsHidden();
     Controls.CityStack:SetHide( not bWasHidden );
@@ -437,8 +437,8 @@ function OnCityToggle()
 end
 Controls.CityToggle:RegisterCallback( Mouse.eLClick, OnCityToggle );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnTradeToggle()
     local bWasHidden = Controls.TradeStack:IsHidden();
     Controls.TradeStack:SetHide( not bWasHidden );
@@ -453,8 +453,8 @@ function OnTradeToggle()
 end
 Controls.TradeToggle:RegisterCallback( Mouse.eLClick, OnTradeToggle );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnBuildingsToggle()
     local bWasHidden = Controls.BuildingsStack:IsHidden();
     Controls.BuildingsStack:SetHide( not bWasHidden );
@@ -470,8 +470,8 @@ end
 Controls.BuildingsToggle:RegisterCallback( Mouse.eLClick, OnBuildingsToggle );
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SortFunction( a, b )
     local valueA, valueB;
 
@@ -485,9 +485,9 @@ function SortFunction( a, b )
 			return true;
 		else
 			if( m_bSortReverse ) then
-				return tostring(a) > tostring(b); -- gotta do something deterministic
+				return tostring(a) > tostring(b);
 			else
-				return tostring(a) < tostring(b); -- gotta do something deterministic
+				return tostring(a) < tostring(b);
 			end
         end;
     else
@@ -518,7 +518,7 @@ function SortFunction( a, b )
 		elseif( m_SortMode == eGoldenAge ) then
 			valueA = entryA.GoldenAge;
 			valueB = entryB.GoldenAge;
-		else -- SortProduction
+		else
 			valueA = entryA.Production;
 			valueB = entryB.Production;
 		end
@@ -537,8 +537,8 @@ function SortFunction( a, b )
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnSort( type )
     if( m_SortMode == type ) then
         m_bSortReverse = not m_bSortReverse;
@@ -589,11 +589,11 @@ Controls.SortGoldenAge:RegisterCallback(Mouse.eLClick, OnSort);
 Controls.SortGoldenAge:SetVoid1(eGoldenAge);
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function ProductionDetails( city, instance )
 	
-	-- Update Production Meter
+
 	if (instance.ProductionBar) then
 		
 		local iCurrentProduction = city:GetProduction();
@@ -614,7 +614,7 @@ function ProductionDetails( city, instance )
 		instance.ProductionBarShadow:SetPercent( fProductionProgressPlusThisTurnPercent );	
 	end	
 	
-	-- Update Production Time
+
 	if(instance.BuildGrowth) then
 		local buildGrowth = "-";
 		
@@ -629,7 +629,7 @@ function ProductionDetails( city, instance )
 	end
 	
 
-	-- Update Production Name
+
 	local cityProductionName = city:GetProductionNameKey();
 	if cityProductionName == nil or string.len(cityProductionName) == 0 then
 		cityProductionName = "TXT_KEY_PRODUCTION_NO_PRODUCTION";
@@ -637,7 +637,7 @@ function ProductionDetails( city, instance )
 	instance.ProdImage:SetToolTipString( Locale.ConvertTextKey( cityProductionName ) );
 
 
-	-- Update Production icon
+
 	if instance.ProdImage then
 		local unitProduction = city:GetProductionUnit();
 		local buildingProduction = city:GetProductionBuilding();
@@ -674,12 +674,12 @@ function ProductionDetails( city, instance )
 			else
 				instance.ProdImage:SetHide( true );
 			end
-		else -- really should have an error texture
+		else
 			instance.ProdImage:SetHide(true);
 		end
 	end
 	
-	-- hookup pedia and production popup to production button
+
 	instance.ProdButton:RegisterCallback( Mouse.eLClick, OnProdClick );
 	pediaSearchStrings[tostring(instance.ProdButton)] = Locale.ConvertTextKey(cityProductionName);
 	instance.ProdButton:RegisterCallback( Mouse.eRClick, OnProdRClick );
@@ -688,8 +688,8 @@ function ProductionDetails( city, instance )
 end
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function ShowHideHandler( bIsHide, bInitState )
     if( not bIsHide ) then
     	UpdateDisplay();

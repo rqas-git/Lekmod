@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a complete LEKMOD directory from canonical checkout assets."""
+
 import argparse
 from pathlib import Path
 import shutil

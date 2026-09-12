@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvGrandStrategyAI.h"
 #include "CvEconomicAI.h"
@@ -13,30 +13,30 @@
 #include "CvMinorCivAI.h"
 #include "ICvDLLUserInterface.h"
 
-// must be included after all other headers
+
 #include "LintFree.h"
 
-//------------------------------------------------------------------------------
+
 CvAIGrandStrategyXMLEntry::CvAIGrandStrategyXMLEntry(void):
 	m_piFlavorValue(NULL),
 	m_piSpecializationBoost(NULL),
 	m_piFlavorModValue(NULL)
 {
 }
-//------------------------------------------------------------------------------
+
 CvAIGrandStrategyXMLEntry::~CvAIGrandStrategyXMLEntry(void)
 {
 	SAFE_DELETE_ARRAY(m_piFlavorValue);
 	SAFE_DELETE_ARRAY(m_piSpecializationBoost);
 	SAFE_DELETE_ARRAY(m_piFlavorModValue);
 }
-//------------------------------------------------------------------------------
+
 bool CvAIGrandStrategyXMLEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
 		return false;
 
-	//Arrays
+
 	const char* szType = GetType();
 	kUtility.SetFlavors(m_piFlavorValue, "AIGrandStrategy_Flavors", "AIGrandStrategyType", szType);
 	kUtility.SetYields(m_piSpecializationBoost, "AIGrandStrategy_Yields", "AIGrandStrategyType", szType);
@@ -45,7 +45,7 @@ bool CvAIGrandStrategyXMLEntry::CacheResults(Database::Results& kResults, CvData
 	return true;
 }
 
-/// What Flavors will be added by adopting this Grand Strategy?
+
 #ifdef AUI_WARNING_FIXES
 int CvAIGrandStrategyXMLEntry::GetFlavorValue(uint i) const
 {
@@ -59,7 +59,7 @@ int CvAIGrandStrategyXMLEntry::GetFlavorValue(int i) const
 	return m_piFlavorValue ? m_piFlavorValue[i] : -1;
 }
 
-/// What Flavors will be added by adopting this Grand Strategy?
+
 int CvAIGrandStrategyXMLEntry::GetSpecializationBoost(YieldTypes eYield) const
 {
 	FAssertMsg(eYield < NUM_YIELD_TYPES, "Index out of bounds");
@@ -67,7 +67,7 @@ int CvAIGrandStrategyXMLEntry::GetSpecializationBoost(YieldTypes eYield) const
 	return m_piSpecializationBoost ? m_piSpecializationBoost[(int)eYield] : 0;
 }
 
-/// What Flavors will be added by adopting this Grand Strategy?
+
 #ifdef AUI_WARNING_FIXES
 int CvAIGrandStrategyXMLEntry::GetFlavorModValue(uint i) const
 {
@@ -83,28 +83,28 @@ int CvAIGrandStrategyXMLEntry::GetFlavorModValue(int i) const
 
 
 
-//=====================================
-// CvAIGrandStrategyXMLEntries
-//=====================================
-/// Constructor
+
+
+
+
 CvAIGrandStrategyXMLEntries::CvAIGrandStrategyXMLEntries(void)
 {
 
 }
 
-/// Destructor
+
 CvAIGrandStrategyXMLEntries::~CvAIGrandStrategyXMLEntries(void)
 {
 	DeleteArray();
 }
 
-/// Returns vector of AIStrategy entries
+
 std::vector<CvAIGrandStrategyXMLEntry*>& CvAIGrandStrategyXMLEntries::GetAIGrandStrategyEntries()
 {
 	return m_paAIGrandStrategyEntries;
 }
 
-/// Number of defined AIStrategies
+
 #ifdef AUI_WARNING_FIXES
 uint CvAIGrandStrategyXMLEntries::GetNumAIGrandStrategies() const
 #else
@@ -114,7 +114,7 @@ int CvAIGrandStrategyXMLEntries::GetNumAIGrandStrategies()
 	return m_paAIGrandStrategyEntries.size();
 }
 
-/// Clear AIStrategy entries
+
 void CvAIGrandStrategyXMLEntries::DeleteArray()
 {
 	for(std::vector<CvAIGrandStrategyXMLEntry*>::iterator it = m_paAIGrandStrategyEntries.begin(); it != m_paAIGrandStrategyEntries.end(); ++it)
@@ -125,7 +125,7 @@ void CvAIGrandStrategyXMLEntries::DeleteArray()
 	m_paAIGrandStrategyEntries.clear();
 }
 
-/// Get a specific entry
+
 #ifdef AUI_WARNING_FIXES
 CvAIGrandStrategyXMLEntry* CvAIGrandStrategyXMLEntries::GetEntry(uint index) const
 #else
@@ -137,10 +137,10 @@ CvAIGrandStrategyXMLEntry* CvAIGrandStrategyXMLEntries::GetEntry(int index)
 
 
 
-//=====================================
-// CvGrandStrategyAI
-//=====================================
-/// Constructor
+
+
+
+
 CvGrandStrategyAI::CvGrandStrategyAI():
 #ifdef AUI_WARNING_FIXES
 	m_pPlayer(NULL),
@@ -154,20 +154,20 @@ CvGrandStrategyAI::CvGrandStrategyAI():
 {
 }
 
-/// Destructor
+
 CvGrandStrategyAI::~CvGrandStrategyAI(void)
 {
 }
 
-/// Initialize
+
 void CvGrandStrategyAI::Init(CvAIGrandStrategyXMLEntries* pAIGrandStrategies, CvPlayer* pPlayer)
 {
-	// Store off the pointer to the AIStrategies active for this game
+
 	m_pAIGrandStrategies = pAIGrandStrategies;
 
 	m_pPlayer = pPlayer;
 
-	// Initialize AIGrandStrategy status array
+
 	FAssertMsg(m_paiGrandStrategyPriority==NULL, "about to leak memory, CvGrandStrategyAI::m_paiGrandStrategyPriority");
 	m_paiGrandStrategyPriority = FNEW(int[m_pAIGrandStrategies->GetNumAIGrandStrategies()], c_eCiv5GameplayDLL, 0);
 
@@ -180,7 +180,7 @@ void CvGrandStrategyAI::Init(CvAIGrandStrategyXMLEntries* pAIGrandStrategies, Cv
 	Reset();
 }
 
-/// Deallocate memory created in initialize
+
 void CvGrandStrategyAI::Uninit()
 {
 	SAFE_DELETE_ARRAY(m_paiGrandStrategyPriority);
@@ -188,7 +188,7 @@ void CvGrandStrategyAI::Uninit()
 	SAFE_DELETE_ARRAY(m_eGuessOtherPlayerActiveGrandStrategyConfidence);
 }
 
-/// Reset AIStrategy status array to all false
+
 void CvGrandStrategyAI::Reset()
 {
 #ifdef AUI_WARNING_FIXES
@@ -213,10 +213,10 @@ void CvGrandStrategyAI::Reset()
 	}
 }
 
-/// Serialization read
+
 void CvGrandStrategyAI::Read(FDataStream& kStream)
 {
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion;
 	kStream >> uiVersion;
 
@@ -225,16 +225,16 @@ void CvGrandStrategyAI::Read(FDataStream& kStream)
 
 	FAssertMsg(m_pAIGrandStrategies != NULL && m_pAIGrandStrategies->GetNumAIGrandStrategies() > 0, "Number of AIGrandStrategies to serialize is expected to greater than 0");
 #ifdef _MSC_VER
-// JAR - if m_pAIGrandStrategies can be NULL at this point,
-// the load will fail if the data isn't read. Better to crash
-// here where the problem is than defer it.
+
+
+
 #pragma warning ( push )
 #pragma warning ( disable : 6011 )
-#endif//_MSC_VER
+#endif
 	ArrayWrapper<int> wrapm_paiGrandStrategyPriority(m_pAIGrandStrategies->GetNumAIGrandStrategies(), m_paiGrandStrategyPriority);
 #ifdef _MSC_VER
 #pragma warning ( pop )
-#endif//_MSC_VER
+#endif
 
 	kStream >> wrapm_paiGrandStrategyPriority;
 
@@ -246,10 +246,10 @@ void CvGrandStrategyAI::Read(FDataStream& kStream)
 
 }
 
-/// Serialization write
+
 void CvGrandStrategyAI::Write(FDataStream& kStream)
 {
-	// Current version number
+
 	uint uiVersion = 1;
 	kStream << uiVersion;
 
@@ -263,7 +263,7 @@ void CvGrandStrategyAI::Write(FDataStream& kStream)
 	kStream << ArrayWrapper<int>(MAX_MAJOR_CIVS, m_eGuessOtherPlayerActiveGrandStrategyConfidence);
 }
 
-/// Returns the Player object the Strategies are associated with
+
 #ifdef AUI_CONSTIFY
 CvPlayer* CvGrandStrategyAI::GetPlayer() const
 #else
@@ -273,7 +273,7 @@ CvPlayer* CvGrandStrategyAI::GetPlayer()
 	return m_pPlayer;
 }
 
-/// Returns AIGrandStrategies object stored in this class
+
 #ifdef AUI_CONSTIFY
 CvAIGrandStrategyXMLEntries* CvGrandStrategyAI::GetAIGrandStrategies() const
 #else
@@ -283,7 +283,7 @@ CvAIGrandStrategyXMLEntries* CvGrandStrategyAI::GetAIGrandStrategies()
 	return m_pAIGrandStrategies;
 }
 
-/// Runs every turn to determine what the player's Active Grand Strategy is and to change Priority Levels as necessary
+
 void CvGrandStrategyAI::DoTurn()
 {
 	DoGuessOtherPlayersActiveGrandStrategy();
@@ -302,15 +302,15 @@ void CvGrandStrategyAI::DoTurn()
 	CvAIGrandStrategyXMLEntry* pGrandStrategy;
 	CvString strGrandStrategyName;
 
-	// Loop through all GrandStrategies to set their Priorities
+
 	for(iGrandStrategiesLoop = 0; iGrandStrategiesLoop < GetAIGrandStrategies()->GetNumAIGrandStrategies(); iGrandStrategiesLoop++)
 	{
 		eGrandStrategy = (AIGrandStrategyTypes) iGrandStrategiesLoop;
 		pGrandStrategy = GetAIGrandStrategies()->GetEntry(iGrandStrategiesLoop);
 		strGrandStrategyName = (CvString) pGrandStrategy->GetType();
 
-		// Base Priority looks at Personality Flavors (0 - 10) and multiplies * the Flavors attached to a Grand Strategy (0-10),
-		// so expect a number between 0 and 100 back from this
+
+
 		int iPriority = GetBaseGrandStrategyPriority(eGrandStrategy);
 
 		if(strGrandStrategyName == "AIGRANDSTRATEGY_CONQUEST")
@@ -330,19 +330,19 @@ void CvGrandStrategyAI::DoTurn()
 			iPriority += GetSpaceshipPriority();
 		}
 
-		// Random element
-		iPriority += GC.getGame().getJonRandNum(/*50*/ GC.getAI_GS_RAND_ROLL(), "Grand Strategy AI: GS rand roll.");
 
-		// Give a boost to the current strategy so that small fluctuation doesn't cause a big change
+		iPriority += GC.getGame().getJonRandNum(       GC.getAI_GS_RAND_ROLL(), "Grand Strategy AI: GS rand roll.");
+
+
 		if(GetActiveGrandStrategy() == eGrandStrategy && GetActiveGrandStrategy() != NO_AIGRANDSTRATEGY)
 		{
-			iPriority += /*50*/ GC.getAI_GRAND_STRATEGY_CURRENT_STRATEGY_WEIGHT();
+			iPriority +=        GC.getAI_GRAND_STRATEGY_CURRENT_STRATEGY_WEIGHT();
 		}
 
 		SetGrandStrategyPriority(eGrandStrategy, iPriority);
 	}
 
-	// Now look at what we think the other players in the game are up to - we might have an opportunity to capitalize somewhere
+
 	int iNumPlayersAliveAndMet = 0;
 
 	int iMajorLoop;
@@ -361,12 +361,12 @@ void CvGrandStrategyAI::DoTurn()
 	FStaticVector< int, 5, true, c_eCiv5GameplayDLL > viNumGrandStrategiesAdopted;
 	int iNumPlayers;
 
-	// Init vector
+
 	for(iGrandStrategiesLoop = 0; iGrandStrategiesLoop < GetAIGrandStrategies()->GetNumAIGrandStrategies(); iGrandStrategiesLoop++)
 	{
 		iNumPlayers = 0;
 
-		// Tally up how many players we think are pusuing each Grand Strategy
+
 		for(iMajorLoop = 0; iMajorLoop < MAX_MAJOR_CIVS; iMajorLoop++)
 		{
 			if(GetGuessOtherPlayerActiveGrandStrategy((PlayerTypes) iMajorLoop) == (AIGrandStrategyTypes) iGrandStrategiesLoop)
@@ -382,12 +382,12 @@ void CvGrandStrategyAI::DoTurn()
 
 	int iChange;
 
-	// Now modify our preferences based on how many people are going for stuff
+
 	for(iGrandStrategiesLoop = 0; iGrandStrategiesLoop < GetAIGrandStrategies()->GetNumAIGrandStrategies(); iGrandStrategiesLoop++)
 	{
 		eGrandStrategy = (AIGrandStrategyTypes) iGrandStrategiesLoop;
-		// If EVERYONE else we know is also going for this Grand Strategy, reduce our Priority by 50%
-		iChange = GetGrandStrategyPriority(eGrandStrategy) * /*50*/ GC.getAI_GRAND_STRATEGY_OTHER_PLAYERS_GS_MULTIPLIER();
+
+		iChange = GetGrandStrategyPriority(eGrandStrategy) *        GC.getAI_GRAND_STRATEGY_OTHER_PLAYERS_GS_MULTIPLIER();
 		iChange = iChange * viNumGrandStrategiesAdopted[eGrandStrategy] / iNumPlayersAliveAndMet;
 		iChange /= 100;
 
@@ -398,9 +398,9 @@ void CvGrandStrategyAI::DoTurn()
 
 	ChangeNumTurnsSinceActiveSet(1);
 
-	// Now see which Grand Strategy should be active, based on who has the highest Priority right now
-	// Grand Strategy must be run for at least 10 turns
-	if(GetActiveGrandStrategy() == NO_AIGRANDSTRATEGY || GetNumTurnsSinceActiveSet() >= /*10*/ GC.getAI_GRAND_STRATEGY_NUM_TURNS_STRATEGY_MUST_BE_ACTIVE())
+
+
+	if(GetActiveGrandStrategy() == NO_AIGRANDSTRATEGY || GetNumTurnsSinceActiveSet() >=        GC.getAI_GRAND_STRATEGY_NUM_TURNS_STRATEGY_MUST_BE_ACTIVE())
 	{
 		int iBestPriority = -1;
 		int iPriority;
@@ -430,7 +430,7 @@ void CvGrandStrategyAI::DoTurn()
 	LogGrandStrategies(viGrandStrategyChangeForLogging);
 }
 
-/// Returns Priority for Conquest Grand Strategy
+
 #ifdef AUI_CONSTIFY
 int CvGrandStrategyAI::GetConquestPriority() const
 #else
@@ -439,7 +439,7 @@ int CvGrandStrategyAI::GetConquestPriority()
 {
 	int iPriority = 0;
 
-	// If Conquest Victory isn't even available then don't bother with anything
+
 	VictoryTypes eVictory = (VictoryTypes) GC.getInfoTypeForString("VICTORY_DOMINATION", true);
 	if(eVictory == NO_VICTORY || !GC.getGame().isVictoryValid(eVictory))
 	{
@@ -455,15 +455,15 @@ int CvGrandStrategyAI::GetConquestPriority()
 	int iGeneralFriendliness = GetPlayer()->GetDiplomacyAI()->GetPersonalityMajorCivApproachBias(MAJOR_CIV_APPROACH_FRIENDLY);
 
 	int iGeneralApproachModifier = max(max(iGeneralDeceptiveness, iGeneralHostility),iGeneralWarlikeness) - iGeneralFriendliness;
-	// Boldness gives the base weight for Conquest (no flavors added earlier)
-	iPriority += ((GetPlayer()->GetDiplomacyAI()->GetBoldness() + iGeneralApproachModifier) * (12 - m_pPlayer->GetCurrentEra())); // make a little less likely as time goes on
+
+	iPriority += ((GetPlayer()->GetDiplomacyAI()->GetBoldness() + iGeneralApproachModifier) * (12 - m_pPlayer->GetCurrentEra()));
 
 	CvTeam& pTeam = GET_TEAM(GetPlayer()->getTeam());
 
-	// How many turns must have passed before we test for having met nobody?
-	if(GC.getGame().getElapsedGameTurns() >= /*20*/ GC.getAI_GS_CONQUEST_NOBODY_MET_FIRST_TURN())
+
+	if(GC.getGame().getElapsedGameTurns() >=        GC.getAI_GS_CONQUEST_NOBODY_MET_FIRST_TURN())
 	{
-		// If we haven't met any Major Civs yet, then we probably shouldn't be planning on conquering the world
+
 		bool bHasMetMajor = false;
 
 		for(int iTeamLoop = 0; iTeamLoop < MAX_CIV_TEAMS; iTeamLoop++)
@@ -479,43 +479,43 @@ int CvGrandStrategyAI::GetConquestPriority()
 		}
 		if(!bHasMetMajor)
 		{
-			iPriority += /*-50*/ GC.getAI_GRAND_STRATEGY_CONQUEST_NOBODY_MET_WEIGHT();
+			iPriority +=         GC.getAI_GRAND_STRATEGY_CONQUEST_NOBODY_MET_WEIGHT();
 		}
 	}
 
-	// How many turns must have passed before we test for us having a weak military?
-	if(GC.getGame().getElapsedGameTurns() >= /*60*/ GC.getAI_GS_CONQUEST_MILITARY_STRENGTH_FIRST_TURN())
+
+	if(GC.getGame().getElapsedGameTurns() >=        GC.getAI_GS_CONQUEST_MILITARY_STRENGTH_FIRST_TURN())
 	{
-		// Compare our military strength to the rest of the world
+
 		int iWorldMilitaryStrength = GC.getGame().GetWorldMilitaryStrengthAverage(GetPlayer()->GetID(), true, true);
 
 		if(iWorldMilitaryStrength > 0)
 		{
-			int iMilitaryRatio = (GetPlayer()->GetMilitaryMight() - iWorldMilitaryStrength) * /*100*/ GC.getAI_GRAND_STRATEGY_CONQUEST_POWER_RATIO_MULTIPLIER() / iWorldMilitaryStrength;
+			int iMilitaryRatio = (GetPlayer()->GetMilitaryMight() - iWorldMilitaryStrength) *         GC.getAI_GRAND_STRATEGY_CONQUEST_POWER_RATIO_MULTIPLIER() / iWorldMilitaryStrength;
 
-			// Make the likelihood of BECOMING a warmonger lower than dropping the bad behavior
+
 			if(iMilitaryRatio > 0)
 				iMilitaryRatio /= 2;
 
-			iPriority += iMilitaryRatio;	// This will add between -100 and 100 depending on this player's MilitaryStrength relative the world average. The number will typically be near 0 though, as it's fairly hard to get away from the world average
+			iPriority += iMilitaryRatio;
 		}
 	}
 
-	// If we're at war, then boost the weight a bit
-	if(pTeam.getAtWarCount(/*bIgnoreMinors*/ false) > 0)
+
+	if(pTeam.getAtWarCount(                  false) > 0)
 	{
-		iPriority += /*10*/ GC.getAI_GRAND_STRATEGY_CONQUEST_AT_WAR_WEIGHT();
+		iPriority +=        GC.getAI_GRAND_STRATEGY_CONQUEST_AT_WAR_WEIGHT();
 	}
 
-	// If our neighbors are cramping our style, consider less... scrupulous means of obtaining more land
+
 	if(GetPlayer()->IsCramped())
 	{
 		PlayerTypes ePlayer;
-		int iNumPlayersMet = 1;	// Include 1 for me!
+		int iNumPlayersMet = 1;
 		int iTotalLandMe = 0;
 		int iTotalLandPlayersMet = 0;
 
-		// Count the number of Majors we know
+
 		for(int iMajorLoop = 0; iMajorLoop < MAX_MAJOR_CIVS; iMajorLoop++)
 		{
 			ePlayer = (PlayerTypes) iMajorLoop;
@@ -531,7 +531,7 @@ int CvGrandStrategyAI::GetConquestPriority()
 
 		if(iNumPlayersMet > 0)
 		{
-			// Check every plot for ownership
+
 #ifdef AUI_WARNING_FIXES
 			for (uint iPlotLoop = 0; iPlotLoop < GC.getMap().numPlots(); iPlotLoop++)
 #else
@@ -560,13 +560,13 @@ int CvGrandStrategyAI::GetConquestPriority()
 			{
 				if(iTotalLandPlayersMet / iTotalLandMe > 0)
 				{
-					iPriority += /*20*/ GC.getAI_GRAND_STRATEGY_CONQUEST_CRAMPED_WEIGHT();
+					iPriority +=        GC.getAI_GRAND_STRATEGY_CONQUEST_CRAMPED_WEIGHT();
 				}
 			}
 		}
 	}
 
-	// if we do not have nukes and we know someone else who does...
+
 	if(GetPlayer()->getNumNukeUnits() == 0)
 	{
 		for(int iMajorLoop = 0; iMajorLoop < MAX_MAJOR_CIVS; iMajorLoop++)
@@ -590,7 +590,7 @@ int CvGrandStrategyAI::GetConquestPriority()
 	return iPriority;
 }
 
-/// Returns Priority for Culture Grand Strategy
+
 #ifdef AUI_CONSTIFY
 int CvGrandStrategyAI::GetCulturePriority() const
 #else
@@ -599,18 +599,18 @@ int CvGrandStrategyAI::GetCulturePriority()
 {
 	int iPriority = 0;
 
-	// If Culture Victory isn't even available then don't bother with anything
+
 	VictoryTypes eVictory = (VictoryTypes) GC.getInfoTypeForString("VICTORY_CULTURAL", true);
 	if(eVictory == NO_VICTORY || !GC.getGame().isVictoryValid(eVictory))
 	{
 		return -100;
 	}
 
-	// Before tourism kicks in, add weight based on flavor
+
 	int iFlavorCulture =  m_pPlayer->GetFlavorManager()->GetPersonalityIndividualFlavor((FlavorTypes)GC.getInfoTypeForString("FLAVOR_CULTURE"));
 	iPriority += (10 - m_pPlayer->GetCurrentEra()) * iFlavorCulture * 200 / 100;
 
-	// Loop through Players to see how we are doing on Tourism and Culture
+
 	PlayerTypes eLoopPlayer;
 	int iOurCulture = m_pPlayer->GetTotalJONSCulturePerTurn();
 	int iOurTourism = m_pPlayer->GetCulture()->GetTourism();
@@ -656,14 +656,14 @@ int CvGrandStrategyAI::GetCulturePriority()
 		iPriority += (GC.getAI_GS_CULTURE_TOURISM_AHEAD_WEIGHT() * (iNumCivsAheadTourism - iNumCivsBehindTourism) / iNumCivsAlive);
 	}
 
-	// for every civ we are Influential over increase this
+
 	int iNumInfluential = m_pPlayer->GetCulture()->GetNumCivsInfluentialOn();
 	iPriority += iNumInfluential * GC.getAI_GS_CULTURE_INFLUENTIAL_CIV_MOD();
 
 	return iPriority;
 }
 
-/// Returns Priority for United Nations Grand Strategy
+
 #ifdef AUI_CONSTIFY
 int CvGrandStrategyAI::GetUnitedNationsPriority() const
 #else
@@ -673,7 +673,7 @@ int CvGrandStrategyAI::GetUnitedNationsPriority()
 	int iPriority = 0;
 	PlayerTypes ePlayer = m_pPlayer->GetID();
 
-	// If UN Victory isn't even available then don't bother with anything
+
 	VictoryTypes eVictory = (VictoryTypes) GC.getInfoTypeForString("VICTORY_DIPLOMATIC", true);
 	if(eVictory == NO_VICTORY || !GC.getGame().isVictoryValid(eVictory))
 	{
@@ -681,7 +681,7 @@ int CvGrandStrategyAI::GetUnitedNationsPriority()
 	}
 
 	int iNumMinorsAttacked = GET_TEAM(GetPlayer()->getTeam()).GetNumMinorCivsAttacked();
-	iPriority += (iNumMinorsAttacked* /*-30*/ GC.getAI_GRAND_STRATEGY_UN_EACH_MINOR_ATTACKED_WEIGHT());
+	iPriority += (iNumMinorsAttacked*         GC.getAI_GRAND_STRATEGY_UN_EACH_MINOR_ATTACKED_WEIGHT());
 
 	int iVotesNeededToWin = GC.getGame().GetVotesNeededForDiploVictory();
 
@@ -695,7 +695,7 @@ int CvGrandStrategyAI::GetUnitedNationsPriority()
 	if (GC.getGame().GetGameLeagues()->GetNumActiveLeagues() == 0)
 #endif
 	{
-		// Before leagues kick in, add weight based on flavor
+
 		int iFlavorDiplo =  m_pPlayer->GetFlavorManager()->GetPersonalityIndividualFlavor((FlavorTypes)GC.getInfoTypeForString("FLAVOR_DIPLOMACY"));
 		iPriority += (10 - m_pPlayer->GetCurrentEra()) * iFlavorDiplo * 150 / 100;
 	}
@@ -707,10 +707,10 @@ int CvGrandStrategyAI::GetUnitedNationsPriority()
 		if (pLeague != NULL)
 #endif
 		{
-			// Votes we control
+
 			iVotesControlled += pLeague->CalculateStartingVotesForMember(ePlayer);
 
-			// Votes other players control
+
 			int iHighestOtherPlayerVotes = 0;
 			for (int iPlayerLoop = 0; iPlayerLoop < MAX_CIV_PLAYERS; iPlayerLoop++)
 			{
@@ -736,12 +736,12 @@ int CvGrandStrategyAI::GetUnitedNationsPriority()
 				}
 			}
 
-			// How we compare
+
 			iVotesControlledDelta = iVotesControlled - iHighestOtherPlayerVotes;
 		}
 	}
 
-	// Are we close to winning?
+
 	if (iVotesControlled >= iVotesNeededToWin)
 	{
 		return 1000;
@@ -751,15 +751,15 @@ int CvGrandStrategyAI::GetUnitedNationsPriority()
 		iPriority += 40;
 	}
 
-	// We have the most votes
+
 	if (iVotesControlledDelta > 0)
 	{
 		iPriority += MAX(40, iVotesControlledDelta * 5);
 	}
-	// We are equal or behind in votes
+
 	else
 	{
-		// Could we make up the difference with currently unallied city-states?
+
 		int iPotentialCityStateVotes = iUnalliedCityStates * 2;
 		int iPotentialVotesDelta = iPotentialCityStateVotes + iVotesControlledDelta;
 		if (iPotentialVotesDelta > 0)
@@ -772,7 +772,7 @@ int CvGrandStrategyAI::GetUnitedNationsPriority()
 		}
 	}
 
-	// factor in some traits that could be useful (or harmful)
+
 	iPriority += m_pPlayer->GetPlayerTraits()->GetCityStateFriendshipModifier();
 	iPriority += m_pPlayer->GetPlayerTraits()->GetCityStateBonusModifier();
 	iPriority -= m_pPlayer->GetPlayerTraits()->GetCityStateCombatModifier();
@@ -780,7 +780,7 @@ int CvGrandStrategyAI::GetUnitedNationsPriority()
 	return iPriority;
 }
 
-/// Returns Priority for Spaceship Grand Strategy
+
 #ifdef AUI_CONSTIFY
 int CvGrandStrategyAI::GetSpaceshipPriority() const
 #else
@@ -789,7 +789,7 @@ int CvGrandStrategyAI::GetSpaceshipPriority()
 {
 	int iPriority = 0;
 
-	// If SS Victory isn't even available then don't bother with anything
+
 	VictoryTypes eVictory = (VictoryTypes) GC.getInfoTypeForString("VICTORY_SPACE_RACE", true);
 	if(eVictory == NO_VICTORY || !GC.getGame().isVictoryValid(eVictory))
 	{
@@ -798,23 +798,23 @@ int CvGrandStrategyAI::GetSpaceshipPriority()
 
 	int iFlavorScience =  m_pPlayer->GetFlavorManager()->GetPersonalityIndividualFlavor((FlavorTypes)GC.getInfoTypeForString("FLAVOR_SCIENCE"));
 
-	// the later the game the greater the chance
+
 	iPriority += m_pPlayer->GetCurrentEra() * iFlavorScience * 150 / 100;
 
-	// if I already built the Apollo Program I am very likely to follow through
+
 	ProjectTypes eApolloProgram = (ProjectTypes) GC.getInfoTypeForString("PROJECT_APOLLO_PROGRAM", true);
 	if(eApolloProgram != NO_PROJECT)
 	{
 		if(GET_TEAM(m_pPlayer->getTeam()).getProjectCount(eApolloProgram) > 0)
 		{
-			iPriority += /*150*/ GC.getAI_GS_SS_HAS_APOLLO_PROGRAM();
+			iPriority +=         GC.getAI_GS_SS_HAS_APOLLO_PROGRAM();
 		}
 	}
 
 	return iPriority;
 }
 
-/// Get the base Priority for a Grand Strategy; these are elements common to ALL Grand Strategies
+
 #ifdef AUI_CONSTIFY
 int CvGrandStrategyAI::GetBaseGrandStrategyPriority(AIGrandStrategyTypes eGrandStrategy) const
 #else
@@ -825,7 +825,7 @@ int CvGrandStrategyAI::GetBaseGrandStrategyPriority(AIGrandStrategyTypes eGrandS
 
 	int iPriority = 0;
 
-	// Personality effect on Priority
+
 	for(int iFlavorLoop = 0; iFlavorLoop < GC.getNumFlavorTypes(); iFlavorLoop++)
 	{
 		if(pGrandStrategy->GetFlavorValue(iFlavorLoop) != 0)
@@ -837,7 +837,7 @@ int CvGrandStrategyAI::GetBaseGrandStrategyPriority(AIGrandStrategyTypes eGrandS
 	return iPriority;
 }
 
-/// Get the base Priority for a Grand Strategy; these are elements common to ALL Grand Strategies
+
 #ifdef AUI_CONSTIFY
 int CvGrandStrategyAI::GetPersonalityAndGrandStrategy(FlavorTypes eFlavorType) const
 #else
@@ -854,13 +854,13 @@ int CvGrandStrategyAI::GetPersonalityAndGrandStrategy(FlavorTypes eFlavorType)
 	return m_pPlayer->GetFlavorManager()->GetPersonalityIndividualFlavor(eFlavorType);
 }
 
-/// Returns the Active Grand Strategy for this Player: how am I trying to win right now?
+
 AIGrandStrategyTypes CvGrandStrategyAI::GetActiveGrandStrategy() const
 {
 	return m_eActiveGrandStrategy;
 }
 
-/// Sets the Active Grand Strategy for this Player: how am I trying to win right now?
+
 void CvGrandStrategyAI::SetActiveGrandStrategy(AIGrandStrategyTypes eGrandStrategy)
 {
 	if(eGrandStrategy != NO_AIGRANDSTRATEGY)
@@ -871,20 +871,20 @@ void CvGrandStrategyAI::SetActiveGrandStrategy(AIGrandStrategyTypes eGrandStrate
 	}
 }
 
-/// The number of turns since the Active Strategy was last set
+
 int CvGrandStrategyAI::GetNumTurnsSinceActiveSet() const
 {
 	return m_iNumTurnsSinceActiveSet;
 }
 
-/// Set the number of turns since the Active Strategy was last set
+
 void CvGrandStrategyAI::SetNumTurnsSinceActiveSet(int iValue)
 {
 	m_iNumTurnsSinceActiveSet = iValue;
 	FAssert(m_iNumTurnsSinceActiveSet >= 0);
 }
 
-/// Change the number of turns since the Active Strategy was last set
+
 void CvGrandStrategyAI::ChangeNumTurnsSinceActiveSet(int iChange)
 {
 	if(iChange != 0)
@@ -895,21 +895,21 @@ void CvGrandStrategyAI::ChangeNumTurnsSinceActiveSet(int iChange)
 	FAssert(m_iNumTurnsSinceActiveSet >= 0);
 }
 
-/// Returns the Priority Level the player has for a particular Grand Strategy
+
 int CvGrandStrategyAI::GetGrandStrategyPriority(AIGrandStrategyTypes eGrandStrategy) const
 {
 	FAssert(eGrandStrategy != NO_AIGRANDSTRATEGY);
 	return m_paiGrandStrategyPriority[eGrandStrategy];
 }
 
-/// Sets the Priority Level the player has for a particular Grand Strategy
+
 void CvGrandStrategyAI::SetGrandStrategyPriority(AIGrandStrategyTypes eGrandStrategy, int iValue)
 {
 	FAssert(eGrandStrategy != NO_AIGRANDSTRATEGY);
 	m_paiGrandStrategyPriority[eGrandStrategy] = iValue;
 }
 
-/// Changes the Priority Level the player has for a particular Grand Strategy
+
 void CvGrandStrategyAI::ChangeGrandStrategyPriority(AIGrandStrategyTypes eGrandStrategy, int iChange)
 {
 	FAssert(eGrandStrategy != NO_AIGRANDSTRATEGY);
@@ -922,13 +922,13 @@ void CvGrandStrategyAI::ChangeGrandStrategyPriority(AIGrandStrategyTypes eGrandS
 
 
 
-// **********
-// Stuff relating to guessing what other Players are up to
-// **********
 
 
 
-/// Runs every turn to try and figure out what other known Players' Grand Strategies are
+
+
+
+
 void CvGrandStrategyAI::DoGuessOtherPlayersActiveGrandStrategy()
 {
 	CvWeightedVector<int, 5, true> vGrandStrategyPriorities;
@@ -952,10 +952,10 @@ void CvGrandStrategyAI::DoGuessOtherPlayersActiveGrandStrategy()
 
 	int iPriority = 0;
 
-	// Establish world Military strength average
+
 	int iWorldMilitaryAverage = GC.getGame().GetWorldMilitaryStrengthAverage(GetPlayer()->GetID(), true, true);
 
-	// Establish world culture and tourism averages
+
 	int iNumPlayersAlive = 0;
 	int iWorldCultureAverage = 0;
 	int iWorldTourismAverage = 0;
@@ -973,11 +973,11 @@ void CvGrandStrategyAI::DoGuessOtherPlayersActiveGrandStrategy()
 	iWorldCultureAverage /= iNumPlayersAlive;
 	iWorldTourismAverage /= iNumPlayersAlive;
 
-	// Establish world Tech progress average
+
 	iNumPlayersAlive = 0;
 	int iWorldNumTechsAverage = 0;
 	TeamTypes eTeam;
-	for(int iTeamLoop = 0; iTeamLoop < MAX_MAJOR_CIVS; iTeamLoop++)	// Looping over all MAJOR teams
+	for(int iTeamLoop = 0; iTeamLoop < MAX_MAJOR_CIVS; iTeamLoop++)
 	{
 		eTeam = (TeamTypes) iTeamLoop;
 
@@ -989,7 +989,7 @@ void CvGrandStrategyAI::DoGuessOtherPlayersActiveGrandStrategy()
 	}
 	iWorldNumTechsAverage /= iNumPlayersAlive;
 
-	// Look at every Major we've met
+
 	for(iMajorLoop = 0; iMajorLoop < MAX_MAJOR_CIVS; iMajorLoop++)
 	{
 		eMajor = (PlayerTypes) iMajorLoop;
@@ -1027,8 +1027,8 @@ void CvGrandStrategyAI::DoGuessOtherPlayersActiveGrandStrategy()
 
 				if(vGrandStrategyPriorities.size() > 0)
 				{
-					// Add "No Grand Strategy" in case we just don't have enough info to go on
-					iPriority = /*40*/ GC.getAI_GRAND_STRATEGY_GUESS_NO_CLUE_WEIGHT();
+
+					iPriority =        GC.getAI_GRAND_STRATEGY_GUESS_NO_CLUE_WEIGHT();
 
 					vGrandStrategyPriorities.push_back(NO_AIGRANDSTRATEGY, iPriority);
 					vGrandStrategyPrioritiesForLogging.push_back(iPriority);
@@ -1039,14 +1039,14 @@ void CvGrandStrategyAI::DoGuessOtherPlayersActiveGrandStrategy()
 					iPriority = vGrandStrategyPriorities.GetWeight(0);
 					eGuessConfidence = NO_GUESS_CONFIDENCE_TYPE;
 
-					// How confident are we in our Guess?
+
 					if(eGrandStrategy != NO_AIGRANDSTRATEGY)
 					{
-						if(iPriority >= /*120*/ GC.getAI_GRAND_STRATEGY_GUESS_POSITIVE_THRESHOLD())
+						if(iPriority >=         GC.getAI_GRAND_STRATEGY_GUESS_POSITIVE_THRESHOLD())
 						{
 							eGuessConfidence = GUESS_CONFIDENCE_POSITIVE;
 						}
-						else if(iPriority >= /*70*/ GC.getAI_GRAND_STRATEGY_GUESS_LIKELY_THRESHOLD())
+						else if(iPriority >=        GC.getAI_GRAND_STRATEGY_GUESS_LIKELY_THRESHOLD())
 						{
 							eGuessConfidence = GUESS_CONFIDENCE_LIKELY;
 						}
@@ -1068,21 +1068,21 @@ void CvGrandStrategyAI::DoGuessOtherPlayersActiveGrandStrategy()
 	}
 }
 
-/// What does this AI BELIEVE another player's Active Grand Strategy to be?
+
 AIGrandStrategyTypes CvGrandStrategyAI::GetGuessOtherPlayerActiveGrandStrategy(PlayerTypes ePlayer) const
 {
 	FAssert(ePlayer < MAX_MAJOR_CIVS);
 	return (AIGrandStrategyTypes) m_eGuessOtherPlayerActiveGrandStrategy[ePlayer];
 }
 
-/// How confident is the AI in its guess of what another player's Active Grand Strategy is?
+
 GuessConfidenceTypes CvGrandStrategyAI::GetGuessOtherPlayerActiveGrandStrategyConfidence(PlayerTypes ePlayer) const
 {
 	FAssert(ePlayer < MAX_MAJOR_CIVS);
 	return (GuessConfidenceTypes) m_eGuessOtherPlayerActiveGrandStrategyConfidence[ePlayer];
 }
 
-/// Sets what this AI BELIEVES another player's Active Grand Strategy to be
+
 void CvGrandStrategyAI::SetGuessOtherPlayerActiveGrandStrategy(PlayerTypes ePlayer, AIGrandStrategyTypes eGrandStrategy, GuessConfidenceTypes eGuessConfidence)
 {
 	FAssert(ePlayer < MAX_MAJOR_CIVS);
@@ -1090,38 +1090,38 @@ void CvGrandStrategyAI::SetGuessOtherPlayerActiveGrandStrategy(PlayerTypes ePlay
 	m_eGuessOtherPlayerActiveGrandStrategyConfidence[ePlayer] = eGuessConfidence;
 }
 
-/// Guess as to how much another Player is prioritizing Conquest as his means of winning the game
+
 int CvGrandStrategyAI::GetGuessOtherPlayerConquestPriority(PlayerTypes ePlayer, int iWorldMilitaryAverage)
 {
 	int iConquestPriority = 0;
 
-	// Compare their Military to the world average; Possible range is 100 to -100 (but will typically be around -20 to 20)
+
 	if(iWorldMilitaryAverage > 0)
 	{
-		iConquestPriority += (GET_PLAYER(ePlayer).GetMilitaryMight() - iWorldMilitaryAverage) * /*100*/ GC.getAI_GRAND_STRATEGY_CONQUEST_POWER_RATIO_MULTIPLIER() / iWorldMilitaryAverage;
+		iConquestPriority += (GET_PLAYER(ePlayer).GetMilitaryMight() - iWorldMilitaryAverage) *         GC.getAI_GRAND_STRATEGY_CONQUEST_POWER_RATIO_MULTIPLIER() / iWorldMilitaryAverage;
 	}
 
-	// Minors attacked
-	iConquestPriority += (GetPlayer()->GetDiplomacyAI()->GetOtherPlayerNumMinorsAttacked(ePlayer) * /*5*/ GC.getAI_GRAND_STRATEGY_CONQUEST_WEIGHT_PER_MINOR_ATTACKED());
 
-	// Minors Conquered
-	iConquestPriority += (GetPlayer()->GetDiplomacyAI()->GetOtherPlayerNumMinorsConquered(ePlayer) * /*10*/ GC.getAI_GRAND_STRATEGY_CONQUEST_WEIGHT_PER_MINOR_CONQUERED());
+	iConquestPriority += (GetPlayer()->GetDiplomacyAI()->GetOtherPlayerNumMinorsAttacked(ePlayer) *       GC.getAI_GRAND_STRATEGY_CONQUEST_WEIGHT_PER_MINOR_ATTACKED());
 
-	// Majors attacked
-	iConquestPriority += (GetPlayer()->GetDiplomacyAI()->GetOtherPlayerNumMajorsAttacked(ePlayer) * /*10*/ GC.getAI_GRAND_STRATEGY_CONQUEST_WEIGHT_PER_MAJOR_ATTACKED());
 
-	// Majors Conquered
-	iConquestPriority += (GetPlayer()->GetDiplomacyAI()->GetOtherPlayerNumMajorsConquered(ePlayer) * /*15*/ GC.getAI_GRAND_STRATEGY_CONQUEST_WEIGHT_PER_MAJOR_CONQUERED());
+	iConquestPriority += (GetPlayer()->GetDiplomacyAI()->GetOtherPlayerNumMinorsConquered(ePlayer) *        GC.getAI_GRAND_STRATEGY_CONQUEST_WEIGHT_PER_MINOR_CONQUERED());
+
+
+	iConquestPriority += (GetPlayer()->GetDiplomacyAI()->GetOtherPlayerNumMajorsAttacked(ePlayer) *        GC.getAI_GRAND_STRATEGY_CONQUEST_WEIGHT_PER_MAJOR_ATTACKED());
+
+
+	iConquestPriority += (GetPlayer()->GetDiplomacyAI()->GetOtherPlayerNumMajorsConquered(ePlayer) *        GC.getAI_GRAND_STRATEGY_CONQUEST_WEIGHT_PER_MAJOR_CONQUERED());
 
 	return iConquestPriority;
 }
 
-/// Guess as to how much another Player is prioritizing Culture as his means of winning the game
+
 int CvGrandStrategyAI::GetGuessOtherPlayerCulturePriority(PlayerTypes ePlayer, int iWorldCultureAverage, int iWorldTourismAverage)
 {
 	VictoryTypes eVictory = (VictoryTypes) GC.getInfoTypeForString("VICTORY_CULTURAL", true);
 
-	// If Culture Victory isn't even available then don't bother with anything
+
 	if(eVictory == NO_VICTORY)
 	{
 		return -100;
@@ -1130,10 +1130,10 @@ int CvGrandStrategyAI::GetGuessOtherPlayerCulturePriority(PlayerTypes ePlayer, i
 	int iCulturePriority = 0;
 	int iRatio;
 
-	// Compare their Culture to the world average; Possible range is 75 to -75
+
 	if(iWorldCultureAverage > 0)
 	{
-		iRatio = (GET_PLAYER(ePlayer).GetJONSCultureEverGenerated() - iWorldCultureAverage) * /*75*/ GC.getAI_GS_CULTURE_RATIO_MULTIPLIER() / iWorldCultureAverage;
+		iRatio = (GET_PLAYER(ePlayer).GetJONSCultureEverGenerated() - iWorldCultureAverage) *        GC.getAI_GS_CULTURE_RATIO_MULTIPLIER() / iWorldCultureAverage;
 		if (iRatio > GC.getAI_GS_CULTURE_RATIO_MULTIPLIER())
 		{
 			iCulturePriority += GC.getAI_GS_CULTURE_RATIO_MULTIPLIER();
@@ -1145,10 +1145,10 @@ int CvGrandStrategyAI::GetGuessOtherPlayerCulturePriority(PlayerTypes ePlayer, i
 		iCulturePriority += iRatio;
 	}
 
-	// Compare their Tourism to the world average; Possible range is 75 to -75
+
 	if(iWorldTourismAverage > 0)
 	{
-		iRatio = (GET_PLAYER(ePlayer).GetCulture()->GetTourism() - iWorldTourismAverage) * /*75*/ GC.getAI_GS_TOURISM_RATIO_MULTIPLIER() / iWorldTourismAverage;
+		iRatio = (GET_PLAYER(ePlayer).GetCulture()->GetTourism() - iWorldTourismAverage) *        GC.getAI_GS_TOURISM_RATIO_MULTIPLIER() / iWorldTourismAverage;
 		if (iRatio > GC.getAI_GS_TOURISM_RATIO_MULTIPLIER())
 		{
 			iCulturePriority += GC.getAI_GS_TOURISM_RATIO_MULTIPLIER();
@@ -1162,12 +1162,12 @@ int CvGrandStrategyAI::GetGuessOtherPlayerCulturePriority(PlayerTypes ePlayer, i
 	return iCulturePriority;
 }
 
-/// Guess as to how much another Player is prioritizing the UN as his means of winning the game
+
 int CvGrandStrategyAI::GetGuessOtherPlayerUnitedNationsPriority(PlayerTypes ePlayer)
 {
 	VictoryTypes eVictory = (VictoryTypes) GC.getInfoTypeForString("VICTORY_DIPLOMATIC", true);
 
-	// If UN Victory isn't even available then don't bother with anything
+
 	if(eVictory == NO_VICTORY)
 	{
 		return -100;
@@ -1202,12 +1202,12 @@ int CvGrandStrategyAI::GetGuessOtherPlayerUnitedNationsPriority(PlayerTypes ePla
 	return iPriority;
 }
 
-/// Guess as to how much another Player is prioritizing the SS as his means of winning the game
+
 int CvGrandStrategyAI::GetGuessOtherPlayerSpaceshipPriority(PlayerTypes ePlayer, int iWorldNumTechsAverage)
 {
 	VictoryTypes eVictory = (VictoryTypes) GC.getInfoTypeForString("VICTORY_SPACE_RACE", true);
 
-	// If SS Victory isn't even available then don't bother with anything
+
 	if(eVictory == NO_VICTORY)
 	{
 		return -100;
@@ -1215,31 +1215,31 @@ int CvGrandStrategyAI::GetGuessOtherPlayerSpaceshipPriority(PlayerTypes ePlayer,
 
 	TeamTypes eTeam = GET_PLAYER(ePlayer).getTeam();
 
-	// If the player has the Apollo Program we're pretty sure he's going for the SS
+
 	ProjectTypes eApolloProgram = (ProjectTypes) GC.getInfoTypeForString("PROJECT_APOLLO_PROGRAM", true);
 	if(eApolloProgram != NO_PROJECT)
 	{
 		if(GET_TEAM(eTeam).getProjectCount(eApolloProgram) > 0)
 		{
-			return /*150*/ GC.getAI_GS_SS_HAS_APOLLO_PROGRAM();
+			return         GC.getAI_GS_SS_HAS_APOLLO_PROGRAM();
 		}
 	}
 
 	int iNumTechs = GET_TEAM(eTeam).GetTeamTechs()->GetNumTechsKnown();
 
-	// Don't divide by zero, okay?
+
 	if(iWorldNumTechsAverage == 0)
 		iWorldNumTechsAverage = 1;
 
-	int iSSPriority = (iNumTechs - iWorldNumTechsAverage) * /*300*/ GC.getAI_GS_SS_TECH_PROGRESS_MOD() / iWorldNumTechsAverage;
+	int iSSPriority = (iNumTechs - iWorldNumTechsAverage) *         GC.getAI_GS_SS_TECH_PROGRESS_MOD() / iWorldNumTechsAverage;
 
 	return iSSPriority;
 }
 
 
-// PRIVATE METHODS
 
-/// Log GrandStrategy state: what are the Priorities and who is Active?
+
+
 void CvGrandStrategyAI::LogGrandStrategies(const FStaticVector< int, 5, true, c_eCiv5GameplayDLL >& vModifiedGrandStrategyPriorities)
 {
 	if(GC.getLogging() && GC.getAILogging())
@@ -1251,10 +1251,10 @@ void CvGrandStrategyAI::LogGrandStrategies(const FStaticVector< int, 5, true, c_
 		CvString strDesc;
 		CvString strLogName;
 
-		// Find the name of this civ and city
+
 		playerName = GetPlayer()->getCivilizationShortDescription();
 
-		// Open the log file
+
 		if(GC.getPlayerAndCityAILogSplit())
 		{
 			strLogName = "GrandStrategyAI_Log_" + playerName + ".csv";
@@ -1269,20 +1269,20 @@ void CvGrandStrategyAI::LogGrandStrategies(const FStaticVector< int, 5, true, c_
 
 		AIGrandStrategyTypes eGrandStrategy;
 
-		// Loop through Grand Strategies
+
 #ifdef AUI_WARNING_FIXES
 		for (uint iGrandStrategyLoop = 0; iGrandStrategyLoop < GC.getNumAIGrandStrategyInfos(); iGrandStrategyLoop++)
 #else
 		for(int iGrandStrategyLoop = 0; iGrandStrategyLoop < GC.getNumAIGrandStrategyInfos(); iGrandStrategyLoop++)
 #endif
 		{
-			// Get the leading info for this line
+
 			strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 			strBaseString += playerName + ", ";
 
 			eGrandStrategy = (AIGrandStrategyTypes) iGrandStrategyLoop;
 
-			// GrandStrategy Info
+
 			CvAIGrandStrategyXMLEntry* pEntry = GC.getAIGrandStrategyInfo(eGrandStrategy);
 			const char* szAIGrandStrategyType = (pEntry != NULL)? pEntry->GetType() : "Unknown Type";
 
@@ -1300,7 +1300,7 @@ void CvGrandStrategyAI::LogGrandStrategies(const FStaticVector< int, 5, true, c_
 	}
 }
 
-/// Log our guess as to other Players' Active Grand Strategy
+
 void CvGrandStrategyAI::LogGuessOtherPlayerGrandStrategy(const FStaticVector< int, 5, true, c_eCiv5GameplayDLL >& vGrandStrategyPriorities, PlayerTypes ePlayer)
 {
 	if(GC.getLogging() && GC.getAILogging())
@@ -1313,10 +1313,10 @@ void CvGrandStrategyAI::LogGuessOtherPlayerGrandStrategy(const FStaticVector< in
 		CvString strDesc;
 		CvString strLogName;
 
-		// Find the name of this civ and city
+
 		playerName = GetPlayer()->getCivilizationShortDescription();
 
-		// Open the log file
+
 		if(GC.getPlayerAndCityAILogSplit())
 		{
 			strLogName = "GrandStrategyAI_Guess_Log_" + playerName + ".csv";
@@ -1332,14 +1332,14 @@ void CvGrandStrategyAI::LogGuessOtherPlayerGrandStrategy(const FStaticVector< in
 		AIGrandStrategyTypes eGrandStrategy;
 		int iPriority;
 
-		// Loop through Grand Strategies
+
 #ifdef AUI_WARNING_FIXES
 		for (uint iGrandStrategyLoop = 0; iGrandStrategyLoop < GC.getNumAIGrandStrategyInfos(); iGrandStrategyLoop++)
 #else
 		for(int iGrandStrategyLoop = 0; iGrandStrategyLoop < GC.getNumAIGrandStrategyInfos(); iGrandStrategyLoop++)
 #endif
 		{
-			// Get the leading info for this line
+
 			strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 			strBaseString += playerName + ", ";
 
@@ -1349,7 +1349,7 @@ void CvGrandStrategyAI::LogGuessOtherPlayerGrandStrategy(const FStaticVector< in
 			CvAIGrandStrategyXMLEntry* pEntry = GC.getAIGrandStrategyInfo(eGrandStrategy);
 			const char* szGrandStrategyType = (pEntry != NULL)? pEntry->GetType() : "Unknown Strategy";
 
-			// GrandStrategy Info
+
 			if(GetActiveGrandStrategy() == eGrandStrategy)
 			{
 				strTemp.Format("*** %s, %d", szGrandStrategyType, iPriority);
@@ -1363,7 +1363,7 @@ void CvGrandStrategyAI::LogGuessOtherPlayerGrandStrategy(const FStaticVector< in
 
 			if(GetGuessOtherPlayerActiveGrandStrategy(ePlayer) == eGrandStrategy)
 			{
-				// Confidence in our guess
+
 				switch(GetGuessOtherPlayerActiveGrandStrategyConfidence(ePlayer))
 				{
 				case GUESS_CONFIDENCE_POSITIVE:
@@ -1386,14 +1386,14 @@ void CvGrandStrategyAI::LogGuessOtherPlayerGrandStrategy(const FStaticVector< in
 			pLog->Msg(strOutBuf);
 		}
 
-		// One more entry for NO GRAND STRATEGY
-		// Get the leading info for this line
+
+
 		strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 		strBaseString += playerName + ", ";
 
 		iPriority = vGrandStrategyPriorities[GC.getNumAIGrandStrategyInfos()];
 
-		// GrandStrategy Info
+
 		strTemp.Format("NO_GRAND_STRATEGY, %d", iPriority);
 		otherPlayerName = GET_PLAYER(ePlayer).getCivilizationShortDescription();
 		strOutBuf = strBaseString + otherPlayerName + ", " + strTemp;

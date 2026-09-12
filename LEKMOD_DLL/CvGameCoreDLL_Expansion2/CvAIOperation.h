@@ -1,13 +1,13 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
-// CvAIOperation.h
+
 
 #ifndef CIV5_OPERATION_H
 #define CIV5_OPERATION_H
@@ -17,7 +17,7 @@
 
 class CvArmyAI;
 
-// it is important to add a new entry whenever a new (subclassed) operation is added to the list
+
 enum AIOperationTypes
 {
     INVALID_AI_OPERATION = -1,
@@ -123,22 +123,22 @@ struct OperationSlot
 FDataStream& operator<<(FDataStream&, const OperationSlot&);
 FDataStream& operator>>(FDataStream&, OperationSlot&);
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIOperation
-//!  \brief		Operational maneuvers performed by the AI
-//
-//!  Key Attributes:
-//!  - Based class: behavior is inherited from this class for each individual maneuver
-//!  - AI operations are launched by some player strategies
-//!  - Each operations manages one or more armies (multiple armies in an operation not yet tested)
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvAIOperation
 {
 public:
 	CvAIOperation();
 	virtual ~CvAIOperation();
 
-	// simple factory method to create new subclassed operations - use it instead of the constructor, please (I'm not going to force the issue as this is a very simple facotry)
+
 	static CvAIOperation* CreateOperation(AIOperationTypes eAIOperationType, PlayerTypes ePlayer);
 
 	virtual void Init(int iID, PlayerTypes eOwner, PlayerTypes eEnemy, int iDefaultArea = -1, CvCity* pTarget = NULL, CvCity* pMuster = NULL);
@@ -217,7 +217,7 @@ public:
 	virtual bool CheckOnTarget();
 	virtual bool ArmyInPosition(CvArmyAI* pArmy);
 #ifdef AUI_WARNING_FIXES
-	virtual bool ArmyMoved(CvArmyAI* /*pArmy*/)
+	virtual bool ArmyMoved(CvArmyAI*          )
 #else
 	virtual bool ArmyMoved(CvArmyAI* pArmy)
 #endif
@@ -288,15 +288,15 @@ protected:
 	bool m_bShouldReplaceLossesWithReinforcements;
 	AIOperationMovementType m_eMoveType;
 
-	// Coordinates of start city
+
 	int m_iStartCityX;
 	int m_iStartCityY;
 
-	// Coordinates of muster plot
+
 	int m_iMusterX;
 	int m_iMusterY;
 
-	// Coordinates of target plot
+
 	int m_iTargetX;
 	int m_iTargetY;
 };
@@ -305,10 +305,10 @@ FDataStream& operator<<(FDataStream&, const AIOperationMovementType&);
 FDataStream& operator>>(FDataStream&, AIOperationMovementType&);
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIEnemyTerritoryOperation
-//!  \brief		Base class for operations that involve large collection of forces
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 #define SAFE_ESTIMATE_MAX_PATH_LEN 200
 
 class CvAIEnemyTerritoryOperation : public CvAIOperation
@@ -327,10 +327,10 @@ protected:
 	virtual CvPlot* SelectInitialMusterPoint(CvArmyAI* pThisArmy);
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIOperationBasicCityAttack
-//!  \brief		Attack a city with a small force
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAIOperationBasicCityAttack : public CvAIEnemyTerritoryOperation
 {
 public:
@@ -364,10 +364,10 @@ protected:
 	virtual CvPlot* FindBestTarget();
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIOperationSneakCityAttack
-//!  \brief		Same as Basic City attack except allowed when not at war
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAIOperationSneakCityAttack : public CvAIOperationBasicCityAttack
 {
 public:
@@ -394,10 +394,10 @@ public:
 	}
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIOperationSmallCityAttack
-//!  \brief		Same as Basic City attack except allowed when not at war
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAIOperationSmallCityAttack : public CvAIOperationBasicCityAttack
 {
 public:
@@ -417,10 +417,10 @@ public:
 	}
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIOperationCityStateAttack
-//!  \brief		Same as Basic City attack except a smaller formation
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAIOperationCityStateAttack : public CvAIOperationBasicCityAttack
 {
 public:
@@ -437,10 +437,10 @@ public:
 	virtual MultiunitFormationTypes GetFormation() const;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIOperationDestroyBarbarianCamp
-//!  \brief		Send out a squad of units to take out a barbarian camp
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAIOperationDestroyBarbarianCamp : public CvAIEnemyTerritoryOperation
 {
 public:
@@ -474,10 +474,10 @@ protected:
 	int m_iUnitToRescue;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIOperationPillageEnemy
-//!  \brief		Create a fast strike team to harass the enemy
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAIOperationPillageEnemy : public CvAIEnemyTerritoryOperation
 {
 public:
@@ -513,10 +513,10 @@ protected:
 	virtual CvPlot* FindBestTarget();
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIEscortedOperation
-//!  \brief		Base class for operations that are one military unit and one civilian
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAIEscortedOperation : public CvAIOperation
 {
 public:
@@ -540,10 +540,10 @@ protected:
 	int m_iTargetArea;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIOperationFoundCity
-//!  \brief		Find a place to utilize a new settler
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAIOperationFoundCity : public CvAIEscortedOperation
 {
 public:
@@ -572,10 +572,10 @@ private:
 	virtual CvPlot* FindBestTarget(CvUnit* pUnit, bool bOnlySafePaths);
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIOperationQuickColonize
-//!  \brief		Send a settler alone to a nearby island
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAIOperationQuickColonize : public CvAIOperationFoundCity
 {
 public:
@@ -602,10 +602,10 @@ private:
 	CvPlot* FindBestTarget(CvUnit* pUnit, bool bOnlySafePaths);
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIOperationMerchantDelegation
-//!  \brief		Send a merchant to a city state
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAIOperationMerchantDelegation : public CvAIEscortedOperation
 {
 public:
@@ -631,10 +631,10 @@ private:
 	CvPlot* FindBestTarget(CvUnit* pUnit, bool bOnlySafePaths);
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIOperationConcertTour
-//!  \brief		Send a merchant to a city state
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAIOperationConcertTour : public CvAIEscortedOperation
 {
 public:
@@ -660,10 +660,10 @@ private:
 	CvPlot* FindBestTarget(CvUnit* pUnit, bool bOnlySafePaths);
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAINavalOperation
-//!  \brief		Send out a squadron of naval units to bomb enemy forces on the coast
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAINavalOperation : public CvAIEnemyTerritoryOperation
 {
 public:
@@ -687,7 +687,7 @@ public:
 	};
 
 	virtual bool ArmyInPosition(CvArmyAI* pArmy) = 0;
-	virtual int GetMaximumRecruitTurns() const {return MAX_INT;};   // Let naval units come from afar
+	virtual int GetMaximumRecruitTurns() const {return MAX_INT;};
 
 protected:
 	virtual CvPlot* SelectInitialMusterPoint(CvArmyAI* pThisArmy);
@@ -695,10 +695,10 @@ protected:
 	virtual CvPlot* FindBestTarget() = 0;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIOperationNavalBombardment
-//!  \brief		Send out a squadron of naval units to bomb enemy forces on the coast
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAIOperationNavalBombardment : public CvAINavalOperation
 {
 public:
@@ -729,10 +729,10 @@ protected:
 	virtual CvPlot* FindBestTarget();
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIOperationNavalSuperiority
-//!  \brief		Send out a squadron of naval units to rule the seas
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAIOperationNavalSuperiority : public CvAINavalOperation
 {
 public:
@@ -763,10 +763,10 @@ protected:
 	virtual CvPlot* FindBestTarget();
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIOperationPureNavalCityAttack
-//!  \brief		Try to take out an enemy city from the sea
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAIOperationPureNavalCityAttack : public CvAINavalOperation
 {
 public:
@@ -802,10 +802,10 @@ protected:
 	virtual CvPlot* FindBestTarget();
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIOperationCityCloseDefense
-//!  \brief		Defend a specific city
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAIOperationCityCloseDefense : public CvAIOperation
 {
 public:
@@ -834,10 +834,10 @@ private:
 	CvPlot* FindBestTarget();
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIOperationRapidResponse
-//!  \brief		Mobile force that can defend where threatened
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAIOperationRapidResponse : public CvAIOperation
 {
 public:
@@ -870,10 +870,10 @@ private:
 	CvPlot* FindBestTarget();
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAINavalEscortedOperation
-//!  \brief		Base class for operations that require a naval escort for land units
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAINavalEscortedOperation : public CvAIOperation
 {
 public:
@@ -919,10 +919,10 @@ protected:
 	int m_iInitialAreaID;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIOperationNavalAttack
-//!  \brief		Attack a city from the sea
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAIOperationNavalAttack : public CvAINavalEscortedOperation
 {
 public:
@@ -959,10 +959,10 @@ protected:
 	virtual CvPlot* FindBestTarget();
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIOperationNavalSneakAttack
-//!  \brief		Same as basic naval attack except allowed when not at war
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAIOperationNavalSneakAttack : public CvAIOperationNavalAttack
 {
 public:
@@ -982,10 +982,10 @@ public:
 	}
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIOperationNavalCityStateAttack
-//!  \brief		Same as basic naval attack except allowed when not at war
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAIOperationNavalCityStateAttack : public CvAIOperationNavalAttack
 {
 public:
@@ -1005,10 +1005,10 @@ public:
 	}
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAIOperationNukeAttack
-//!  \brief		When you care enough to send the very best
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvAIOperationNukeAttack : public CvAIOperation
 {
 public:

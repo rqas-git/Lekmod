@@ -3,7 +3,7 @@
 
     <Image Anchor="R,T" Offset="0,0"  Size="630,200" Texture="CivilzationV_Logo.dds" ID="Civ5Logo" Hidden="0" />
 
-    <!-- Menu Panel -->
+
     <Grid Size="820,480" Anchor="C,C" Offset="0.32" Padding="0,0" Style="Grid9Detail140" >
         <Box Color="Black.200" Anchor="C,T" Offset="0.44" Size="652.393" Hidden="0" >
             <Grid Size="48,393" Anchor="L,T" AnchorSide="O.I" Offset="0.0" Padding="0,0" Style="WindowGrid" />

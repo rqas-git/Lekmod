@@ -1,16 +1,16 @@
-/*
 
-Copyright (c) Microsoft Corporation. All rights reserved.
 
-Module Name:
 
-    winpackagefamily.h
 
-Abstract:
 
-    API family partitioning based on packages.
 
-*/
+
+
+
+
+
+
+
 
 #ifndef _INC_WINPACKAGEFAMILY
 #define _INC_WINPACKAGEFAMILY
@@ -18,19 +18,19 @@ Abstract:
 #if defined(_MSC_VER) && !defined(MOFCOMP_PASS)
 #if _MSC_VER >= 1200
 #pragma warning(push)
-#pragma warning(disable:4001) /* nonstandard extension 'single line comment' was used */
+#pragma warning(disable:4001)
 #endif
 #pragma once
-#endif // defined(_MSC_VER) && !defined(MOFCOMP_PASS)
+#endif
 
 #ifndef WINAPI_PARTITION_SERVER
 #define WINAPI_PARTITION_SERVER (WINAPI_FAMILY == WINAPI_FAMILY_SERVER)
 #endif
 
-/*
- * PARTITIONS based on packages are each #undef'ed below, and then will be #define-ed
- * to be either 1 or 0 or depending on the active WINAPI_FAMILY.
- */
+
+
+
+
 #undef WINAPI_PARTITION_PKG_WINTRUST
 #undef WINAPI_PARTITION_PKG_WEBSERVICES
 #undef WINAPI_PARTITION_PKG_EVENTLOGSERVICE
@@ -55,9 +55,9 @@ Abstract:
 #undef WINAPI_PARTITION_PKG_APPXDEPLOYMENT
 #undef WINAPI_PARTITION_PKG_WER
 
-/* 
- * PARTITIONS for feature packages. Each package might be active for one or more editions
- */
+
+
+
 #define WINAPI_PARTITION_PKG_WINTRUST         (WINAPI_PARTITION_SERVER == 1)
 #define WINAPI_PARTITION_PKG_WEBSERVICES      (WINAPI_PARTITION_SERVER == 1)
 #define WINAPI_PARTITION_PKG_EVENTLOGSERVICE  (WINAPI_PARTITION_SERVER == 1)
@@ -88,4 +88,4 @@ Abstract:
 #endif
 #endif
 
-#endif  /* !_INC_WINPACKAGEFAMILY */
+#endif

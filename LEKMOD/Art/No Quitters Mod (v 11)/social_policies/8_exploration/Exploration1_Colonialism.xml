@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/6/2015 4:51:27 PM -->
+
 <GameData>
 
-	<!-- Colonialism (previously called Merchant Navy) -->
+
 	<Policies>
 		<Update>
 			<Set PortraitIndex="8" ExtraTerritoryClaim="6" />
@@ -67,7 +67,7 @@
 	</Language_RU_RU>
 	
 
-	<!-- Remove old bonuses -->
+
 	<Policy_BuildingClassCultureChanges>
 		<Delete PolicyType="POLICY_MERCHANT_NAVY" BuildingClassType="BUILDINGCLASS_NATIONAL_TREASURY" />
 	</Policy_BuildingClassCultureChanges>
@@ -78,7 +78,7 @@
 		<Delete PolicyType="POLICY_MERCHANT_NAVY" BuildingClassType="BUILDINGCLASS_NATIONAL_TREASURY" YieldType="YIELD_PRODUCTION" />
 	</Policy_BuildingClassYieldChanges>
 	
-	<!-- Add new bonuses with Governor's Mansion -->
+
 	<Policies>
 		<Update>
 			<Set NewCityExtraPopulation="2" />

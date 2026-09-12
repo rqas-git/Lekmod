@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 5/4/2016 8:39:17 AM -->
+
 <GameData>
 
-	<!-- Museums now need Amphitheaters instead of Opera Houses. They also now provide +2 Culture and +15% Culture. -->
+
 	<Buildings>
 		<Update>
 			<Set CultureRateModifier="10" Help="TXT_KEY_BUILDING_MUSEUM_HELP" />
@@ -22,7 +22,7 @@
 		</Update>
 	</Building_YieldChanges>
 
-	<!-- localization -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_BUILDING_MUSEUM_HELP" />
 		<Row Tag="TXT_KEY_BUILDING_MUSEUM_HELP">

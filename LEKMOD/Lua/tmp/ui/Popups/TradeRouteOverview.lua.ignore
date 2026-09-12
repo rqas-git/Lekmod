@@ -1,21 +1,21 @@
--------------------------------------------------
--- Religion Overview Popup
--------------------------------------------------
+
+
+
 include( "IconSupport" );
 include( "InstanceManager" );
 include( "TradeRouteHelpers" );
 
 local g_PopupInfo = nil;
 
--------------------------------------------------
--- Global Variables
--------------------------------------------------
-g_CurrentTab = nil;		-- The currently selected Tab.
+
+
+
+g_CurrentTab = nil;
 g_iSelectedPlayerID = Game.GetActivePlayer();
 
--------------------------------------------------
--- Global Constants
--------------------------------------------------
+
+
+
 g_Tabs = {
 	["YourTR"] = {
 		SelectHighlight = Controls.YourTRSelectHighlight,
@@ -132,9 +132,9 @@ g_SortOptions = {
 
 g_SortFunction = nil;
 
--------------------------------------------------------------------------------
--- Sorting Support
--------------------------------------------------------------------------------
+
+
+
 function AlphabeticalSortFunction(field, direction, secondarySort)
 	if(direction == "asc") then
 		return function(a,b)
@@ -187,7 +187,7 @@ function NumericSortFunction(field, direction, secondarySort)
 	end
 end
 
--- Registers the sort option controls click events
+
 function RegisterSortOptions()
 	
 	for i,v in ipairs(g_SortOptions) do
@@ -223,12 +223,12 @@ function GetSortFunction(sortOptions)
 	return nil;
 end
 
--- Updates the sort option structure
+
 function UpdateSortOptionState(sortOptions, selectedOption)
-	-- Current behavior is to only have 1 sort option enabled at a time 
-	-- though the rest of the structure is built to support multiple in the future.
-	-- If a sort option was selected that wasn't already selected, use the default 
-	-- direction.  Otherwise, toggle to the other direction.
+
+
+
+
 	for i,v in ipairs(sortOptions) do
 		if(v == selectedOption) then
 			if(v.CurrentDirection == nil) then			
@@ -246,7 +246,7 @@ function UpdateSortOptionState(sortOptions, selectedOption)
 	end
 end
 
--- Callback for when sort options are selected.
+
 function SortOptionSelected(option)
 	local sortOptions = g_SortOptions;
 	UpdateSortOptionState(sortOptions, option);
@@ -256,8 +256,8 @@ function SortOptionSelected(option)
 	DisplayData();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnPopupMessage(popupInfo)
 
 	local popupType = popupInfo.Type;
@@ -267,7 +267,7 @@ function OnPopupMessage(popupInfo)
 	
 	g_PopupInfo = popupInfo;
 	
-	-- Data 2 parameter holds desired tab to open on
+
 	if (g_PopupInfo.Data2 == 1) then
 		g_CurrentTab = "YourTR";
 	elseif (g_PopupInfo.Data2 == 2) then
@@ -288,42 +288,42 @@ function OnPopupMessage(popupInfo)
 end
 Events.SerialEventGameMessagePopup.Add( OnPopupMessage );
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function IgnoreLeftClick( Id )
-	-- just swallow it
+
 end
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function InputHandler( uiMsg, wParam, lParam )
-    ----------------------------------------------------------------        
-    -- Key Down Processing
-    ----------------------------------------------------------------        
+
+
+
     if(uiMsg == KeyEvents.KeyDown) then
         if (wParam == Keys.VK_ESCAPE) then
 			OnClose();
 			return true;
         end
         
-        -- Do Nothing.
+
         if(wParam == Keys.VK_RETURN) then
 			return true;
         end
     end
 end
 ContextPtr:SetInputHandler( InputHandler );
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function OnClose()
 	UIManager:DequeuePopup(ContextPtr);
 end
 Controls.CloseButton:RegisterCallback(Mouse.eLClick, OnClose);
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
+
+
 function TabSelect(tab)
 	for i,v in pairs(g_Tabs) do
 		local bHide = i ~= tab;
@@ -339,7 +339,7 @@ Controls.TabButtonTRWithYou:RegisterCallback( Mouse.eLClick, function() TabSelec
 function RefreshYourTR()
 	local pPlayer = Players[ Game.GetActivePlayer() ];
     
-    --print("RefreshYourTR");
+
 	SetData(pPlayer:GetTradeRoutes());
 	SortData();
 	DisplayData();
@@ -432,7 +432,7 @@ function DisplayData()
 		
 		CivIconHookup(v.FromID, 32, instance.FromCivIcon, instance.FromCivIconBG, instance.FromCivIconShadow, false, true, instance.FromCivIconHighlight);
 		
-		--Since I don't know which icon to use, use em all!
+
 		instance.FromCivIcon:SetToolTipString(v.FromCiv);
 		instance.FromCivIconBG:SetToolTipString(v.FromCiv);
 		instance.FromCivIconShadow:SetToolTipString(v.FromCiv);
@@ -525,11 +525,11 @@ function DisplayData()
 
 end
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function ShowHideHandler( bIsHide, bInitState )
 
-	-- Set Civ Icon
+
 	CivIconHookup( Game.GetActivePlayer(), 64, Controls.CivIcon, Controls.CivIconBG, Controls.CivIconShadow, false, true );
 
     if( not bInitState ) then

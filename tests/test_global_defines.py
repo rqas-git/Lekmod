@@ -46,8 +46,8 @@ class GlobalDefinesTests(unittest.TestCase):
                            if re.match(r'#define GD_(INT|FLOAT)_(DECL|DEF|INIT|CACHE)\(', line))
 
         def facade(name, blocks):
-            # The facade keeps only the actual affected declarations and functions.
-            # Distinct lookup results expose type/ordering mistakes without a game host.
+
+
             return f'''struct {name} {{
 {blocks['DECL']}
     int sentinel;
@@ -65,7 +65,7 @@ class GlobalDefinesTests(unittest.TestCase):
 '''
 
         compare = '\n'.join(f'assert(before.get{name}() == after.get{name}());' for _, _, name in fields)
-        # Compare addresses instead of offsetof, since the lookup vector is not POD.
+
         layout = '\n'.join(f'assert((char*)&before.m_{prefix}{name} - (char*)&before == '
                            f'(char*)&after.m_{prefix}{name} - (char*)&after);' for _, prefix, name in fields)
         source = ('#include <cassert>\n#include <string>\n#include <vector>\n' + macros + '\n' +

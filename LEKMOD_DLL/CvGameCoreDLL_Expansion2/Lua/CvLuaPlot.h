@@ -1,17 +1,17 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//!	 \file		CvLuaPlot.h
-//!  \brief     Public interface to CvLuaPlot.
-//!
-//!		This file includes the interface for a Lua Plot object.
-//!
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #pragma once
 #ifndef CVLUAPLOT_H
 #define CVLUAPLOT_H
@@ -21,44 +21,44 @@
 class CvLuaPlot : public CvLuaScopedInstance<CvLuaPlot, CvPlot>
 {
 public:
-	//! Push CvPlot methods into table t
+
 	static void PushMethods(lua_State* L, int t);
 
-	//! Required by CvLuaScopedInstance.
+
 	static void HandleMissingInstance(lua_State* L);
 
-	//! Required by CvLuaScopedInstance.
+
 	static const char* GetTypeName();
 
 protected:
 
-	//! (LUA) CvPlot::CanHaveFeature.
+
 	static int lCanHaveFeature(lua_State* L);
 
-	//! (LUA) CvPlot::GetFeatureType.
+
 	static int lGetFeatureType(lua_State* L);
 
-	//! (LUA) CvPlot::GetTerrainType.
+
 	static int lGetTerrainType(lua_State* L);
 
-	//! (LUA) CvPlot::IsRiver.
+
 	static int lIsRiver(lua_State* L);
 
-	//! (LUA) CvPlot::IsWater.
+
 	static int lIsWater(lua_State* L);
 
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
-	//! (LUA) CvPlot::IsAllowsWalkWater.
+
 	static int lIsAllowsWalkWater(lua_State* L);
 #endif
 
-	//! (LUA) CvPlot::SetFeatureType.
+
 	static int lSetFeatureType(lua_State* L);
 
-	//! (LUA) CvPlot::SetTerrainType.
+
 	static int lSetTerrainType(lua_State* L);
 
-	//The following is a dump from CyPlot
+
 	static int lIsNone(lua_State* L);
 	static int lErase(lua_State* L);
 	static int lGetTeam(lua_State* L);

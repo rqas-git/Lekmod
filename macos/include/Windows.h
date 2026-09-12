@@ -20,8 +20,8 @@ using LPVOID=void*; using LPCVOID=const void*; using LPSTR=char*; using LPCSTR=c
 using LPWSTR=wchar_t*; using LPCWSTR=const wchar_t*; using LPDWORD=DWORD*;
 using HRESULT=int32_t;
 using uint=unsigned int;
-// The SDK only exposes this member when embedding Windows critical sections;
-// Mac-specific users will be adapted before linking against engine objects.
+
+
 struct CRITICAL_SECTION { void* opaque[5]; };
 struct GUID { uint32_t Data1; uint16_t Data2,Data3; uint8_t Data4[8]; };
 using REFGUID=const GUID&;

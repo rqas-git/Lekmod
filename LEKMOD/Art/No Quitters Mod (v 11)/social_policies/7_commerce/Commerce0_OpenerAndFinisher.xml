@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/12/2015 3:04:23 AM -->
+
 <GameData>
 
-	<!-- Commerce Opener -->
+
 	<Policies>
 		<Update>
 			<Set GreatMerchantRateModifier="25" />
@@ -38,8 +38,8 @@
 	</Language_RU_RU>
 
 
-	<!-- Commerce Finisher -->
-	<!-- NOTE: tooltip is updated in opener -->
+
+
 	<Policies>
 		<Update>
 			<Set TradeMissionGoldModifier="100" IncludesOneShotFreeUnits="true" />

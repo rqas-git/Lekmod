@@ -1,78 +1,78 @@
 #pragma once
 
-// This file should be included by CvDLLInterfaces.h
 
-/*
-	Some guidelines...
 
-	Design Guidelines:
-	* Must derive from ICvUnknown either directly or indirectly.
-	* Must have a GUID defined in the global scope.
-	* Must contain an inline function GetInterfaceId() that returns the GUID.
-	* Must not change after being defined.
-	* All functions must be declared with DLLCALL as their calling convention.
-	* Functions that return interface instances must be of type ICvUnknown* or version 1 of the interface type.
 
-	Naming Conventions:
-	* Interfaces must be prefixed with ICv
-	* Interfaces other than ICvUnknown must be post-fixed with a version number starting at 1.
-	* Globally scoped GUIDs that relate to specific interfaces must be named guid<InterfaceName>.
 
-	Usage Guidelines
-	* Interface instances must be explicitly deleted in order to be correctly released by the DLL.
-	* It's safe and encouraged to use interface instances inside of auto_ptr and shared_ptr types.
 
-	Implementation Guidelines:
-	* QueryInterface must support all interfaces that the implementation derives from (including ICvUnknown).
-	* New instances may be returned as a result of a QueryInterface call.
-	* NULL must be returned if QueryInterface does not support the interface.
-	* A single implementation may implement multiple interfaces.
-	* It's the implementer's responsibility that interface instances are cleaned up properly via Destroy().
-*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #include "ICvDLLUserInterface.h"
 
-// {9B606E9A-670C-46fb-BEC9-E66A2E8E726B}
+
 static const GUID guidICvNetMessageHandler3 = 
 { 0x9b606e9a, 0x670c, 0x46fb, { 0xbe, 0xc9, 0xe6, 0x6a, 0x2e, 0x8e, 0x72, 0x6b } };
 
-// {19EE7781-C484-414e-97C9-B74EBF046E7E}
+
 static const GUID guidICvGame2 = 
 { 0x19ee7781, 0xc484, 0x414e, { 0x97, 0xc9, 0xb7, 0x4e, 0xbf, 0x4, 0x6e, 0x7e } };
 
-// {75075151-0EF9-4b8b-ADFB-0860C1BA2FDF}
+
 static const GUID guidICvPlayer2 = 
 { 0x75075151, 0xef9, 0x4b8b, { 0xad, 0xfb, 0x8, 0x60, 0xc1, 0xba, 0x2f, 0xdf } };
 
-// {F5016D0D-684E-497f-A64D-4651AE713285}
+
 static const GUID guidICvPlayer3 = 
 { 0xf5016d0d, 0x684e, 0x497f, { 0xa6, 0x4d, 0x46, 0x51, 0xae, 0x71, 0x32, 0x85 } };
 
-// {9671D0AE-F2D1-4d17-8A8D-C211BB05D391}
+
 static const GUID guidICvPreGame2 = 
 { 0x9671d0ae, 0xf2d1, 0x4d17, { 0x8a, 0x8d, 0xc2, 0x11, 0xbb, 0x5, 0xd3, 0x91 } };
 
-// {CF7820CD-E960-41ef-9C5A-9D030C3BC30B}
+
 static const GUID guidICvGameContext2 = 
 { 0xcf7820cd, 0xe960, 0x41ef, { 0x9c, 0x5a, 0x9d, 0x3, 0xc, 0x3b, 0xc3, 0xb } };
 
-// {8921E7A6-A1FD-4301-94B9-D583CC102A11}
+
 static const GUID guidICvGameContext3 = 
 { 0x8921e7a6, 0xa1fd, 0x4301, { 0x94, 0xb9, 0xd5, 0x83, 0xcc, 0x10, 0x2a, 0x11 } };
 
-// {03C93CEC-650A-43de-9E1B-FE15D75EBA92}
+
 static const GUID guidICvUnit2 = 
 { 0x3c93cec, 0x650a, 0x43de, { 0x9e, 0x1b, 0xfe, 0x15, 0xd7, 0x5e, 0xba, 0x92 } };
 
-// {6F009D2A-247E-4818-AC1C-5197A8A79559}
+
 static const GUID guidICvWorldBuilderMapLoader2 = 
 { 0x6f009d2a, 0x247e, 0x4818, { 0xac, 0x1c, 0x51, 0x97, 0xa8, 0xa7, 0x95, 0x59 } };
 
 
 
-//------------------------------------------------------------------------------
-// Game Interfaces
-//------------------------------------------------------------------------------
+
+
+
 class ICvGame2 : public ICvGame1
 {
 public:

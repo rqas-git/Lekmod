@@ -1,7 +1,7 @@
 import AppKit
 import SwiftUI
 
-// Render the launcher's own vector mark while building the app bundle.
+
 func writeIcons(to directory: String) {
     for pixels in [16, 32, 64, 128, 256, 512, 1024] {
         guard let bitmap = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: pixels, pixelsHigh: pixels,
@@ -41,8 +41,8 @@ func writeIcons(to directory: String) {
     }
 }
 
-// Downsample the full-resolution originals once per display scale. This avoids
-// thin wordmark strokes aliasing when SwiftUI repeatedly shrinks a large texture.
+
+
 func refinedLogo(_ original: NSImage, width: CGFloat) -> NSImage {
     let target = NSSize(width: width, height: 20)
     let image = NSImage(size: target)
@@ -226,7 +226,7 @@ final class LauncherModel: ObservableObject {
         task.standardOutput = pipe
         task.standardError = pipe
         process = task
-        // One reader preserves stdout ordering, drains the pipe, and keeps the UI responsive.
+
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 try task.run()
@@ -254,8 +254,8 @@ final class LauncherModel: ObservableObject {
         }
     }
 
-    // Return whether a closed game needs fresh validation before playing again.
-    // Process startup only updates controls, avoiding a full scan while Civ loads.
+
+
     func observeGame(_ running: Bool, at now: Date = Date()) -> Bool {
         guard !busy, var current = report else { return false }
         if running {
@@ -269,13 +269,13 @@ final class LauncherModel: ObservableObject {
             }
             return false
         }
-        // Give Steam time to create its process after accepting the URL.
+
         if current.launched == true, let requested = launchRequestedAt,
            now.timeIntervalSince(requested) < 15 { return false }
         return gameActive
     }
 
-    // Only process discovery runs periodically; rescan files after the game exits.
+
     func refreshGameLifecycle() {
         guard !busy, !probingGame, report != nil, !app.isEmpty,
               let repository = Bundle.main.object(forInfoDictionaryKey: "LekmodRepository") as? String,
@@ -297,7 +297,7 @@ final class LauncherModel: ObservableObject {
                    let event = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
                     running = event["running"] as? Bool
                 }
-            } catch { /* A failed probe must not claim that the game has closed. */ }
+            } catch {                                                               }
             let observed = running
             DispatchQueue.main.async {
                 self.probingGame = false
@@ -453,7 +453,7 @@ struct StatusBadge: View {
     }
 }
 
-// Compact vector brand silhouettes share the same Civ gold stroke as the controls.
+
 struct BrandMark: Shape {
     let name: String
     func path(in rect: CGRect) -> Path {

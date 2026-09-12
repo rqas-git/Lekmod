@@ -1,24 +1,24 @@
-----------------------------------------------------------------
--- edit: Victory Screen button for EUI & vanilla UI
-----------------------------------------------------------------       
-----------------------------------------------------------------        
+
+
+
+
 include( "InstanceManager" );
 
 local g_LegendIM = InstanceManager:new( "LegendKey", "Item", Controls.LegendStack );
 local g_Overlays = GetStrategicViewOverlays();
 local g_IconModes = GetStrategicViewIconSettings();
 
-----------------------------------------------------------------
-----------------------------------------------------------------
 
---add lekmoddata for remembering stratview and streamer panel
+
+
+
 
 if LekmodData == nil then
 	LekmodData = Modding.OpenUserData("LekmodData", 1);
 end
 
-----------------------------------------------------------------        
-----------------------------------------------------------------
+
+
 
 function OnMinimapInfo( uiHandle, width, height, paddingX )
     Controls.Minimap:SetTextureHandle( uiHandle );
@@ -27,22 +27,22 @@ end
 Events.MinimapTextureBroadcastEvent.Add( OnMinimapInfo );
 UI:RequestMinimapBroadcast();
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnMinimapClick( _, _, _, x, y )
     Events.MinimapClickedEvent( x, y );
 end
 Controls.Minimap:RegisterCallback( Mouse.eLClick, OnMinimapClick );
 
-----------------------------------------------------------------        
-----------------------------------------------------------------
--- save strat view defaults
+
+
+
 local bEnabledStratView = LekmodData.GetValue("bEnabledStratView") or 0;  
 
 function OnStrategicView()
 	local bIsObserver = PreGame.GetSlotStatus( Game.GetActivePlayer() ) == SlotStatus.SS_OBSERVER;
 	if (bIsObserver) then
-		-- Observer gets to toggle the world view completely off.
+
 		local eViewType = GetGameViewRenderType();
 		if (eViewType == GameViewTypes.GAMEVIEW_NONE) then
 			SetGameViewRenderType(GameViewTypes.GAMEVIEW_STANDARD);			
@@ -65,8 +65,8 @@ end
 Events.SequenceGameInitComplete.Add(EnableStratViewOnLoad);
 Controls.StrategicViewButton:RegisterCallback( Mouse.eLClick, OnStrategicView );
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnResetTurnTimer()
 	local bIsObserver = PreGame.GetSlotStatus( Game.GetActivePlayer() ) == SlotStatus.SS_OBSERVER;
 	if (not bIsObserver) then
@@ -87,9 +87,9 @@ if(not Game.IsOption("GAMEOPTION_END_TURN_TIMER_ENABLED")) then
 	Controls.ResetTurnTimerButton:SetHide(true);
 end
 
-----------------------------------------------------------------  
--- NEW: show victory screen button when game is over      
-----------------------------------------------------------------    	
+
+
+
 
 function OnVictoryScreenOpen()
 	local victory = Game.GetVictory();
@@ -118,8 +118,8 @@ else
 end
 Events.EndGameShow.Add( function() Controls.VictoryScreenButton:SetHide(false) end);
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnStrategicViewStateChanged(bStrategicView)
 	
 	if bStrategicView then
@@ -145,8 +145,8 @@ end
 Events.StrategicViewStateChanged.Add( OnStrategicViewStateChanged );
 
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnMapOptions()	
 	Controls.OptionsPanel:SetHide( not Controls.OptionsPanel:IsHidden() );
 	Controls.SideStack:CalculateSize();
@@ -158,16 +158,16 @@ end
 Controls.MapOptionsButton:RegisterCallback( Mouse.eLClick, OnMapOptions );
 
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 g_MapOptionDefaults = nil;
 local g_PerPlayerMapOptions = {};
-----------------------------------------------------------------    
--- Get the map option defaults from the options manager    
-----------------------------------------------------------------        
+
+
+
 function GetMapOptionDefaults()
 	if (g_MapOptionDefaults == nil) then
-		-- Pull in the current setting the first time through
+
 		g_MapOptionDefaults = {};
 		g_MapOptionDefaults.ShowTrade = OptionsManager.GetShowTradeOn();
 		g_MapOptionDefaults.ShowGrid = OptionsManager.GetGridOn();
@@ -187,9 +187,9 @@ function GetMapOptionDefaults()
 	return mapOptions;
 end
 
-----------------------------------------------------------------    
--- Take the current options and apply them to the game
-----------------------------------------------------------------        
+
+
+
 function ApplyMapOptions(mapOptions)
 
 	UI.SetGridVisibleMode( mapOptions.ShowGrid );
@@ -199,7 +199,7 @@ function ApplyMapOptions(mapOptions)
 	
 	LuaEvents.OnRecommendationCheckChanged(mapOptions.HideTileRecommendations);
 	
-	-- Because outside contexted will also want to access the settings, we have to push them back to the OptionsManager	
+
 	if (PreGame.IsHotSeatGame()) then
 		local bChanged = false;
 		
@@ -223,7 +223,7 @@ function ApplyMapOptions(mapOptions)
 			OptionsManager.SetNoTileRecommendations_Cached(mapOptions.HideTileRecommendations );
 			bChanged = true;
 		end
-		-- We will tell the manager to not write them out
+
 		if (bChanged) then 
 			OptionsManager.CommitGameOptions(true);
 		end
@@ -235,22 +235,22 @@ function ApplyMapOptions(mapOptions)
 	SetStrategicViewOverlay( mapOptions.SVOverlayMode ); 
 end
 
-----------------------------------------------------------------    
--- Store the current options to the specified player's slot
-----------------------------------------------------------------        
+
+
+
 function StoreMapOptions(iPlayer, mapOptions)
 	g_PerPlayerMapOptions[iPlayer] = mapOptions;
 end
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function GetMapOptions(iPlayer)
 
 	local mapOptions;
 	
-	-- Get the options from the local player cache
+
 	if (g_PerPlayerMapOptions[iPlayer] == nil) then
-		-- Initialize with the defaults
+
 		mapOptions = GetMapOptionDefaults();			
 		StoreMapOptions(iPlayer, mapOptions);
 	else
@@ -260,8 +260,8 @@ function GetMapOptions(iPlayer)
 	return mapOptions;
 end		
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function UpdateOptionsPanel()
 	
 	local mapOptions = GetMapOptions(Game.GetActivePlayer());
@@ -290,8 +290,8 @@ function UpdateOptionsPanel()
 end
 Events.GameOptionsChanged.Add(UpdateOptionsPanel);
 	
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function PopulateOverlayPulldown( pullDown )
 
 	for i, text in pairs( g_Overlays ) do
@@ -309,8 +309,8 @@ function PopulateOverlayPulldown( pullDown )
 end
 
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnOverlaySelected( index )
 	SetStrategicViewOverlay(index); 
 	
@@ -321,8 +321,8 @@ function OnOverlaySelected( index )
 	SetLegend(index);
 end
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function SetLegend(index)
 	g_LegendIM:ResetInstances();
 	
@@ -356,8 +356,8 @@ function SetLegend(index)
 	
 end
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function PopulateIconPulldown( pullDown )
 	
 	for i, text in pairs(g_IconModes) do
@@ -375,8 +375,8 @@ function PopulateIconPulldown( pullDown )
 end
 
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnIconModeSelected( index )
 	SetStrategicViewIconSetting(index); 
 	
@@ -387,8 +387,8 @@ function OnIconModeSelected( index )
 end
 
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnShowFeaturesChecked( bIsChecked )
 	StrategicViewShowFeatures( bIsChecked );
 	local mapOptions = GetMapOptions(Game.GetActivePlayer());
@@ -397,8 +397,8 @@ end
 Controls.ShowFeatures:RegisterCheckHandler( OnShowFeaturesChecked );
 
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnShowFOWChecked( bIsChecked )
 	StrategicViewShowFogOfWar( bIsChecked );
 	local mapOptions = GetMapOptions(Game.GetActivePlayer());
@@ -407,8 +407,8 @@ end
 Controls.ShowFogOfWar:RegisterCheckHandler( OnShowFOWChecked );
 
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnShowGridChecked( bIsChecked )
 	
 	UI.SetGridVisibleMode(bIsChecked);
@@ -422,8 +422,8 @@ end
 Controls.ShowGrid:RegisterCheckHandler( OnShowGridChecked );
 
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnGridOn()
     Controls.ShowGrid:SetCheck( true );
     
@@ -434,8 +434,8 @@ end
 Events.SerialEventHexGridOn.Add( OnGridOn )
 
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnGridOff()
     Controls.ShowGrid:SetCheck( false );
     
@@ -445,8 +445,8 @@ function OnGridOff()
 end
 Events.SerialEventHexGridOff.Add( OnGridOff )
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnShowTradeToggled( bIsChecked )
 	Controls.ShowTrade:SetCheck(bIsChecked);
 	
@@ -455,8 +455,8 @@ function OnShowTradeToggled( bIsChecked )
 end
 Events.Event_ToggleTradeRouteDisplay.Add( OnShowTradeToggled )
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnShowTradeChecked( bIsChecked )
 	Events.Event_ToggleTradeRouteDisplay(bIsChecked);
 	
@@ -468,8 +468,8 @@ function OnShowTradeChecked( bIsChecked )
 end
 Controls.ShowTrade:RegisterCheckHandler( OnShowTradeChecked );
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnYieldChecked( bIsChecked )
     UI.SetYieldVisibleMode(bIsChecked);
     local mapOptions = GetMapOptions(Game.GetActivePlayer());
@@ -481,8 +481,8 @@ end
 Controls.ShowYield:RegisterCheckHandler( OnYieldChecked );
 
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnResourcesChecked( bIsChecked )
     UI.SetResourceVisibleMode(bIsChecked);
     local mapOptions = GetMapOptions(Game.GetActivePlayer());
@@ -495,8 +495,8 @@ end
 Controls.ShowResources:RegisterCheckHandler( OnResourcesChecked );
 
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnYieldDisplay( type )
 
 	local mapOptions = GetMapOptions(Game.GetActivePlayer());
@@ -522,8 +522,8 @@ end
 Events.RequestYieldDisplay.Add( OnYieldDisplay );
 
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function OnRecommendationChecked( bIsChecked )
 
 	local mapOptions = GetMapOptions(Game.GetActivePlayer());
@@ -535,8 +535,8 @@ function OnRecommendationChecked( bIsChecked )
 end
 Controls.HideRecommendation:RegisterCheckHandler( OnRecommendationChecked );
 
-----------------------------------------------------------------        
-----------------------------------------------------------------   
+
+
 function UpdateStrategicViewToggleTT()
 	local controlInfo = GameInfo.Controls.CONTROL_TOGGLE_STRATEGIC_VIEW;
 	if( controlInfo ~= nil and type(controlInfo) == "table" ) then
@@ -551,9 +551,9 @@ function UpdateStrategicViewToggleTT()
 	end
 end
 
-----------------------------------------------------------------
--- 'Active' (local human) player has changed
-----------------------------------------------------------------
+
+
+
 function OnActivePlayerChanged(iActivePlayer, iPrevActivePlayer)
 
 	local mapOptions = GetMapOptions(iActivePlayer);
@@ -571,14 +571,14 @@ PopulateIconPulldown( Controls.IconDropDown );
 UpdateOptionsPanel();
 UpdateStrategicViewToggleTT();
 
--------------------------
---- STREAMER PANEL UI ---
--------------------------
+
+
+
 
 function UpdateStreamerView()
 	local pActivePlayer = Players[ Game.GetActivePlayer() ];
 
-	-- Policies
+
 	local strPoliciesTextFull = "";
 	local strPoliciesTextAbbreviated = "";
 	for pPolicyBranch in GameInfo.PolicyBranchTypes() do
@@ -604,7 +604,7 @@ function UpdateStreamerView()
 			end
 
 			local strBranchName = Locale.ConvertTextKey(pPolicyBranch.Description);
-			--local strBranchNameAbbrev = string.upper(string.sub(strBranchName, 1, 2));
+
 			local strBranchNameAbbrev = string.sub(strBranchName, 1, 3);
 
 			strPoliciesTextFull = strPoliciesTextFull .. strBranchName .. " " .. iCount;
@@ -612,18 +612,18 @@ function UpdateStreamerView()
 		end
 	end
 
-	-- if it's empty, make it look right and grey it out
+
 	if (strPoliciesTextFull == "") then
 		strPoliciesText = "[COLOR_GREY]" .. Locale.ConvertTextKey("TXT_KEY_VP_POLICIES") .. ": " .. Locale.ConvertTextKey("TXT_KEY_RO_BELIEFS_NONE") .. "[ENDCOLOR]";
-	-- otherwise, if it's too long, use the abbrivated version
+
 	elseif (string.len(strPoliciesTextFull) > 75) then
 		strPoliciesText = strPoliciesTextAbbreviated;
-	-- otherwise, use the full version
+
 	else
 		strPoliciesText = strPoliciesTextFull;
 	end
 
-	-- religion strings
+
 	local strReligion1Text = "";
 	local strReligion2Text = "";
 	if (pActivePlayer:HasCreatedReligion()) then
@@ -633,13 +633,13 @@ function UpdateStreamerView()
 			local belief = GameInfo.Beliefs[v];
 			if (belief ~= nil) then
 				if (beliefCount < 3) then
-					-- first religion line
+
 					if (strReligion1Text ~= "") then
 						strReligion1Text = strReligion1Text .. ", ";
 					end
 					strReligion1Text = strReligion1Text .. Locale.ConvertTextKey(belief.ShortDescription);
 				else
-					-- second religion line
+
 					if (strReligion2Text == "") then
 						strReligion1Text = strReligion1Text .. ", ";
 					else
@@ -671,7 +671,7 @@ end
 local bEnabledStreamerPanel = LekmodData.GetValue("bEnabledStreamerPanel") or 0;
 
 function OnStreamerViewShow()
-	--set the value in the database
+
 	LekmodData.SetValue("bEnabledStreamerPanel", 1);
 
 	

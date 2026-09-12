@@ -6,9 +6,9 @@
 
 #ifdef WIN32
 
-//====================================================================================================
-/// \brief Simple utility class for comparing Win32 file times
-//====================================================================================================
+
+
+
 class FFileTimestamp
 {
 public:
@@ -37,18 +37,18 @@ private:
 
 #else
 
-typedef unsigned int FFileTimestamp; // stopgap solution for non-windows platforms...
+typedef unsigned int FFileTimestamp;
 
 #endif
 
 class FFileErrorHandler;
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  CLASS:  FIFile
-//
-//  DESC:   Interface class for basic file functions
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 class FIFile
 {
 public:
@@ -85,9 +85,9 @@ public:
 	virtual uint Read(        void* pData, uint size ) = 0;
 	virtual uint Write( const void* pData, uint size ) = 0;
 
-	//--
-	//  Class read/write templates, e.g. myFile.Read( varFloat );
-	//    
+
+
+
 	template <class T> uint Read(        T& kData )
 	{
 		return ( Read( &kData, sizeof( T ) ) );
@@ -112,17 +112,17 @@ protected:
 
 	FIFile() { };
 
-	// Copy constructor protection
+
 	FIFile( const FIFile& obj );
 
-	// Assignment operator protection
+
 	FIFile& operator=( const FIFile& obj );
 };
 
-/*	An encapsulation of an FIFile class that allows for auto creation and destruction.
-	Use this where you used to use the FFile class.  This allows the file system implementation code
-	to be hidden which is helpful when using with a DLL. 
-	Use the -> or * operator to dereference the internal FIFile object. */
+
+
+
+
 class FFileInstance
 {
 	FIFile* m_pkFile;
@@ -131,48 +131,48 @@ public:
 	FFileInstance( const  char*  szFileName = NULL, FIFile::OpenMode eOpenMode = FIFile::modeRead, dword dwFlags = FFILE_FLAG_DEFAULT, uint uiBufferSize = FFILE_DEFAULT_BUFFER_SIZE );
 	FFileInstance( const wchar* wszFileName       , FIFile::OpenMode eOpenMode = FIFile::modeRead, dword dwFlags = FFILE_FLAG_DEFAULT, uint uiBufferSize = FFILE_DEFAULT_BUFFER_SIZE );
 
-	// Access the FIFile object
+
 	FIFile& operator*() { return *m_pkFile; }
 	FIFile* operator->() { return m_pkFile; }
 };
 
-/*	Interface class for file system operations, including the creation of a file access object */
+
 class FIFileSystem
 {
 public:
-	// Create a file access object.
+
 	virtual FIFile*		Create( const  char*  szFileName = NULL, FIFile::OpenMode eOpenMode = FIFile::modeRead, dword dwFlags = FFILE_FLAG_DEFAULT, uint uiBufferSize = FFILE_DEFAULT_BUFFER_SIZE ) = 0;
 	virtual FIFile*		Create( const wchar* wszFileName       , FIFile::OpenMode eOpenMode = FIFile::modeRead, dword dwFlags = FFILE_FLAG_DEFAULT, uint uiBufferSize = FFILE_DEFAULT_BUFFER_SIZE ) = 0;
 	
-	// Delete the file at the supplied path
+
 	virtual FileErr		Delete( const  char*  szFileName ) = 0;
 	virtual FileErr		Delete( const wchar* wszFileName ) = 0;
 
-	// Read the entire file into a buffer.  It is the caller's responsibility to delete the returned buffer
+
 	virtual FileErr		ReadAll( const  char*  szFileName, byte** pucBufferOut, size_t *puiBufferSizeOut, dword dwFlags = FFILE_FLAG_DEFAULT) = 0;
 	virtual FileErr		ReadAll( const  wchar*  wszFileName, byte** pucBufferOut, size_t *puiBufferSizeOut, dword dwFlags = FFILE_FLAG_DEFAULT) = 0;
 
-	// Read the entire file into a buffer (that was retrieved from the allocator).  It is the caller's responsibility
-	// to delete the returned buffer using the allocator
+
+
 	virtual FileErr		ReadAll( const  char*  szFileName, byte** pucBufferOut, size_t *puiBufferSizeOut, dword dwFlags, FIFile::Allocator& alloc) = 0;
 	virtual FileErr		ReadAll( const  wchar*  wszFileName, byte** pucBufferOut, size_t *puiBufferSizeOut, dword dwFlags, FIFile::Allocator& alloc) = 0;
 
-	// File existence
+
 	virtual bool		Exist( const char* pszFileName ) = 0;
 	virtual bool		Exist( const wchar* pwszFileName ) = 0;
 
-	// File size
+
 	virtual uint		GetLength( const  char*  szFileName ) = 0;
 	virtual uint		GetLength( const wchar* wszFileName ) = 0;
 
-	// Timestamp query
+
 	virtual FFileTimestamp GetLastWriteTime( const char* pFileName ) = 0;
 
-	// Returns true if the primary file catalog system is enabled.  If so, you can pass in "naked" file names 
-	// to the Open/Create methods of the file system and they will be found in either PAK files or in a pre-scanned directory hierarchy.
+
+
 	virtual bool		IsFileCatalogEnabled() = 0;
 
-	// Get the active error handler.
+
 	virtual	FFileErrorHandler* GetErrorHandler() = 0;
 
 	static FIFileSystem& GetInstance();
@@ -185,11 +185,11 @@ protected:
 #if defined(FXS_IS_DLL)
 #define FFILESYSTEM FIFileSystem::GetInstance()
 #else
-// If not in a DLL, access the implementation of the file system.  Not strictly necessary but
-// this will allow any old code to not crash if there haven't been any calls to initalize FFileSystem.
-// Remove at a later data and always call FIFileSystem::GetInstance()
+
+
+
 #include "FFileSystem.h"
 #define FFILESYSTEM FFileSystem::GetInstance()
 #endif
 
-#endif // _FIFILE_H_
+#endif
