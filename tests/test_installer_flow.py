@@ -16,6 +16,8 @@ except ImportError:
 sys.path.insert(0, str(ROOT / 'LekmodInstaller'))
 from installer import LekmodInstaller
 from ui_manager import UIManager
+sys.path.insert(0, str(ROOT / 'LekmodInstaller/tests'))
+from payload_fixture import payload_files
 
 
 class InstallerFlowTests(unittest.TestCase):
@@ -68,7 +70,8 @@ class InstallerFlowTests(unittest.TestCase):
             else:
                 with zipfile.ZipFile(archive, 'w') as out:
                     out.writestr('LEKMOD/payload.txt', 'new release')
-                    out.writestr('LEKMOD/Lua/tmp/fixture.lua.ignore', '-- fixture')
+                    for name, data in payload_files().items():
+                        out.writestr('LEKMOD/' + name, data)
             return str(archive)
         app.downloader = SimpleNamespace(download_version_with_info=Mock(side_effect=download))
         return app, callbacks, temporary_paths

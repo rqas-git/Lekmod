@@ -5,6 +5,7 @@ import re
 import shutil
 import tempfile
 import zipfile
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from ui_assets import configure_ui, stamp_ui
 
@@ -205,7 +206,32 @@ class UIManager:
             raise RuntimeError("LEKMOD folder not found in extracted files")
         want_eui = "Enhanced UI" in ui_type
         eui_folder = self._find_eui_folder(civ5_path) if want_eui else None
-        configure_ui(lekmod_path, want_eui, eui_folder, log=log_callback, strict=False)
+        configure_ui(lekmod_path, want_eui, eui_folder, log=log_callback,
+                     strict=(Path(lekmod_path) / 'ui_manifest.json').is_file())
+
+    def validate_mod_payload(self, folder):
+        folder = Path(folder)
+        required = ('CvGameCore_Expansion2.dll', 'MPModsPack.Civ5Pkg',
+                    'Override/CIV5Units.xml', 'Lua/UI/FrontEnd.lua', 'Lua/UI/InGame.lua')
+        for name in required:
+            path = folder / name
+            if not path.is_file() or path.stat().st_size == 0:
+                raise RuntimeError(f'Incomplete Lekmod package: missing or empty {name}')
+        with (folder / 'CvGameCore_Expansion2.dll').open('rb') as stream:
+            header = stream.read(64)
+            if len(header) != 64 or header[:2] != b'MZ':
+                raise RuntimeError('Invalid Lekmod gameplay DLL')
+            stream.seek(int.from_bytes(header[60:64], 'little'))
+            if stream.read(4) != b'PE\0\0':
+                raise RuntimeError('Invalid Lekmod gameplay DLL')
+        for name, tag in (('MPModsPack.Civ5Pkg', 'Civ5Package'),
+                          ('Override/CIV5Units.xml', 'GameData')):
+            try:
+                root = ET.parse(folder / name).getroot()
+                if root.tag != tag or len(root) == 0:
+                    raise ValueError(f'Expected nonempty {tag}')
+            except (ET.ParseError, ValueError) as error:
+                raise RuntimeError(f'Invalid Lekmod package data: {name}: {error}') from error
 
     def find_existing_lekmod_folders(self, civ5_path):
 
@@ -269,6 +295,7 @@ class UIManager:
             log_callback(f"Preparing files for {dlc_dest}...")
             shutil.copytree(lekmod_source, replacement)
             stamp_ui(replacement)
+            self.validate_mod_payload(replacement)
             ui_check = replacement / "ui_check.bat"
             if ui_check.exists():
                 ui_check.unlink()
@@ -593,4 +620,3 @@ class UIManager:
 
         log_callback(f"✓ Installed folder {folder_name}")
         return dest
-

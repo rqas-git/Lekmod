@@ -10,6 +10,7 @@ from unittest.mock import MagicMock, patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import installer_updater
 from ui_manager import UIManager
+from payload_fixture import payload_files
 
 
 class InstallTests(unittest.TestCase):
@@ -25,6 +26,10 @@ class InstallTests(unittest.TestCase):
         self.source = self.root / 'source'
         self.source.mkdir()
         (self.source / 'new.txt').write_text('replacement')
+        for name, data in payload_files().items():
+            path = self.source / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(data)
         self.manager = UIManager()
         self.manager._find_lekmod_folder = lambda _: str(self.source)
 
@@ -95,6 +100,44 @@ class InstallTests(unittest.TestCase):
                 self.install(version)
         self.assertTrue((self.old / 'old.txt').exists())
         self.assertEqual(list(self.dlc.iterdir()), [self.old])
+
+    def test_missing_empty_and_invalid_payloads_preserve_working_installation(self):
+        for name in payload_files():
+            if name.startswith('Lua/tmp'):
+                continue
+            path = self.source / name
+            original = path.read_bytes()
+            for contents in (None, b'', b'invalid'):
+                if contents == b'invalid' and name.endswith('.lua'):
+                    continue
+                with self.subTest(name=name, contents=contents):
+                    if contents is None:
+                        path.unlink()
+                    else:
+                        path.write_bytes(contents)
+                    with self.assertRaises(RuntimeError):
+                        self.install()
+                    self.assertEqual((self.old / 'old.txt').read_text(), 'working')
+                    self.assertFalse((self.dlc / 'LEKMOD_v2').exists())
+                    self.assertFalse(list(self.dlc.parent.glob('.lekmod-install-*')))
+                    path.write_bytes(original)
+
+    def test_empty_legacy_package_is_rejected_after_ui_configuration(self):
+        import shutil
+        shutil.rmtree(self.source)
+        (self.source / 'Lua/tmp').mkdir(parents=True)
+        self.manager.configure_ui_files(str(self.source), 'Standard UI', lambda _: None)
+        with self.assertRaisesRegex(RuntimeError, 'Incomplete Lekmod package'):
+            self.install()
+        self.assertEqual((self.old / 'old.txt').read_text(), 'working')
+
+    def test_modern_package_rejects_missing_selected_ui_source(self):
+        import json
+        (self.source / 'ui_manifest.json').write_text(json.dumps({
+            'format': 1, 'preserve': [], 'rules': [{'files': ['ui/missing.lua']}]}))
+        with self.assertRaisesRegex(RuntimeError, 'Missing UI source'):
+            self.manager.configure_ui_files(str(self.source), 'Standard UI', lambda _: None)
+        self.assertEqual((self.old / 'old.txt').read_text(), 'working')
 
 
 class MapInstallTests(unittest.TestCase):

@@ -26,7 +26,7 @@ function lekmod_new_zealand_ua_award_bonus(player, other_player)
    if rewards[random].method == "ChangeResearchProgress" then
 
       if player:GetCurrentResearch() == -1 then
-         Teams[player:GetTeam()]:GetTeamTechs():ChangeResearchProgress(player:GetOverflowResearch(), rewards[random].reward, player:GetID())
+         player:ChangeOverflowResearch(rewards[random].reward)
       else
          Teams[player:GetTeam()]:GetTeamTechs():ChangeResearchProgress(player:GetCurrentResearch(), rewards[random].reward, player:GetID())
       end
@@ -111,9 +111,9 @@ function lekmod_new_zealand_uu_defender(player_id)
 			else
 				for loop_player_id = 0, GameDefines.MAX_MAJOR_CIVS-1, 1 do
 					local loop_player = Players[loop_player_id]
-					if not loop_player:IsAlive() or loop_player == player_id then
-               elseif loop_player:IsDoF(player:GetTeam()) then
-                  if plot:IsPlayerCityRadius(loop_player) then
+					if not loop_player:IsAlive() or loop_player_id == player_id then
+               elseif loop_player:IsDoF(player_id) then
+                  if plot:IsPlayerCityRadius(loop_player_id) then
                      is_promotion_valid = true
                      break
                   end

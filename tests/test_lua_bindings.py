@@ -27,9 +27,19 @@ class LuaBindingTests(unittest.TestCase):
         header = (core / 'Lua/CvLuaPlayer.h').read_bytes().decode('latin1')
         start = header.index('#if defined(LEKMOD_MACOS)')
         adapter = header[start:header.index('#endif', start) + len('#endif')]
+        player = (core / 'Lua/CvLuaPlayer.cpp').read_bytes().decode('latin1')
+        team = (core / 'Lua/CvLuaTeamTech.cpp').read_bytes().decode('latin1')
+        self.assertIn('Method(ChangeOverflowResearch);', player)
+        self.assertIn('static int lChangeOverflowResearch(lua_State* L);', header)
+        methods = []
+        for text, signature in ((player, 'int CvLuaPlayer::lChangeOverflowResearch('),
+                                (team, 'int CvLuaTeamTech::lChangeResearchProgress(')):
+            start = text.index(signature)
+            methods.append(text[start:text.index('\n}', start) + 2])
         with tempfile.TemporaryDirectory() as directory:
             directory = Path(directory)
             (directory / 'player_adapter.h').write_text(adapter)
+            (directory / 'research_bindings.h').write_text('\n'.join(methods))
             executable = directory / 'lua-bindings'
             command = [compiler, '-std=c++14', '-DLEKMOD_MACOS', '-I' + str(directory),
                        '-I' + str(core / 'CvGameCoreDLLUtil/include'), str(ROOT / 'tests/lua_bindings.cpp'),

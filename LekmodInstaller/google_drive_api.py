@@ -1,7 +1,7 @@
 
 
 import requests
-import os
+from contextlib import ExitStack
 from pathlib import Path
 
 class GoogleDriveDownloader:
@@ -41,125 +41,136 @@ class GoogleDriveDownloader:
         log_callback(f"File ID: {file_id}")
 
 
-        session = requests.Session()
+        with ExitStack() as resources:
+            session = resources.enter_context(requests.Session())
+
+            def get(url, **kwargs):
+                response = resources.enter_context(session.get(url, timeout=(10, 60), **kwargs))
+                response.raise_for_status()
+                return response
 
 
-        response = session.get(self.base_url, params={'id': file_id}, stream=True)
+            response = get(self.base_url, params={'id': file_id}, stream=True)
 
 
 
-        token = None
-        for key, value in response.cookies.items():
-            if key.startswith('download_warning'):
-                token = value
-                break
-
-
-        if not token:
+            token = None
             for key, value in response.cookies.items():
-                if 'confirm' in key.lower():
+                if key.startswith('download_warning'):
                     token = value
                     break
 
-        if token:
-            log_callback(f"Large file detected, confirming download...")
-            params = {'id': file_id, 'confirm': token}
-            response = session.get(self.base_url, params=params, stream=True)
+
+            if not token:
+                for key, value in response.cookies.items():
+                    if 'confirm' in key.lower():
+                        token = value
+                        break
+
+            if token:
+                log_callback(f"Large file detected, confirming download...")
+                params = {'id': file_id, 'confirm': token}
+                response.close()
+                response = get(self.base_url, params=params, stream=True)
 
 
-        if not token and 'text/html' in response.headers.get('content-type', ''):
-            log_callback(f"Large file detected (>100MB), bypassing virus scan warning...")
+            if not token and 'text/html' in response.headers.get('content-type', ''):
+                log_callback(f"Large file detected (>100MB), bypassing virus scan warning...")
 
 
-            confirmation_attempts = ['t', '1', 'true', 'yes']
+                confirmation_attempts = ['t', '1', 'true', 'yes']
 
-            for confirm_value in confirmation_attempts:
-                params = {'id': file_id, 'confirm': confirm_value, 'export': 'download'}
-                test_response = session.get(self.base_url, params=params, stream=True)
-
-
-                if 'text/html' not in test_response.headers.get('content-type', ''):
-                    log_callback(f"✓ Bypassed virus scan warning")
-                    response = test_response
-                    break
+                for confirm_value in confirmation_attempts:
+                    params = {'id': file_id, 'confirm': confirm_value, 'export': 'download'}
+                    test_response = get(self.base_url, params=params, stream=True)
 
 
-            if 'text/html' in response.headers.get('content-type', ''):
-                log_callback(f"Trying direct download URL...")
-                direct_url = f"https://drive.usercontent.google.com/download?id={file_id}&export=download&confirm=t"
-                response = session.get(direct_url, stream=True)
+                    if 'text/html' not in test_response.headers.get('content-type', ''):
+                        log_callback(f"✓ Bypassed virus scan warning")
+                        response.close()
+                        response = test_response
+                        break
+                    test_response.close()
+
+                if 'text/html' in response.headers.get('content-type', ''):
+                    log_callback(f"Trying direct download URL...")
+                    direct_url = f"https://drive.usercontent.google.com/download?id={file_id}&export=download&confirm=t"
+                    response.close()
+                    response = get(direct_url, stream=True)
 
 
-        content_type = response.headers.get('content-type', '')
-        if 'text/html' in content_type and response.status_code == 200:
+            content_type = response.headers.get('content-type', '')
+            if 'text/html' in content_type and response.status_code == 200:
 
-            peek = response.content[:500].decode('utf-8', errors='ignore')
-            if 'quota' in peek.lower():
-                raise Exception(
-                    "Google Drive download quota exceeded.\n"
-                    "Please try again later."
-                )
-            else:
-                raise Exception(
-                    f"Failed to download from Google Drive.\n"
-                    f"Response type: {content_type}\n"
-                    f"Status code: {response.status_code}\n\n"
-                    f"The file might be:\n"
-                    f"- Not shared publicly (verify in incognito mode)\n"
-                    f"- The file ID is incorrect\n"
-                    f"- Google Drive link restrictions\n"
-                    f"- Download quota exceeded"
-                )
-
-
-        total_size = int(response.headers.get('content-length', 0))
+                peek = response.content[:500].decode('utf-8', errors='ignore')
+                if 'quota' in peek.lower():
+                    raise Exception(
+                        "Google Drive download quota exceeded.\n"
+                        "Please try again later."
+                    )
+                else:
+                    raise Exception(
+                        f"Failed to download from Google Drive.\n"
+                        f"Response type: {content_type}\n"
+                        f"Status code: {response.status_code}\n\n"
+                        f"The file might be:\n"
+                        f"- Not shared publicly (verify in incognito mode)\n"
+                        f"- The file ID is incorrect\n"
+                        f"- Google Drive link restrictions\n"
+                        f"- Download quota exceeded"
+                    )
 
 
-        download_dir = Path(download_dir) if download_dir is not None else Path.cwd() / "downloads"
-        download_dir.mkdir(exist_ok=True)
+            total_size = int(response.headers.get('content-length', 0))
 
 
-        safe_version = "".join(ch if ch.isalnum() or ch in "._-" else "_" for ch in str(version))
-        download_path = download_dir / f"{filename_prefix}_{safe_version}.zip"
+            download_dir = Path(download_dir) if download_dir is not None else Path.cwd() / "downloads"
+            download_dir.mkdir(exist_ok=True)
 
 
-        log_callback(f"Downloading to {download_path}...")
-
-        if total_size > 0:
-            log_callback(f"File size: {self._format_size(total_size)}")
-
-        downloaded = 0
-        chunk_size = 32768
-        last_update = 0
-        update_interval = 512 * 1024
-
-        with open(download_path, 'wb') as f:
-            for chunk in response.iter_content(chunk_size=chunk_size):
-                if chunk:
-                    f.write(chunk)
-                    downloaded += len(chunk)
+            safe_version = "".join(ch if ch.isalnum() or ch in "._-" else "_" for ch in str(version))
+            download_path = download_dir / f"{filename_prefix}_{safe_version}.zip"
 
 
-                    if (downloaded - last_update) >= update_interval or downloaded == total_size:
-                        if total_size > 0:
-                            progress = (downloaded / total_size) * 100
+            log_callback(f"Downloading to {download_path}...")
+
+            if total_size > 0:
+                log_callback(f"File size: {self._format_size(total_size)}")
+
+            downloaded = 0
+            chunk_size = 32768
+            last_update = 0
+            update_interval = 512 * 1024
+
+            with open(download_path, 'wb') as f:
+                for chunk in response.iter_content(chunk_size=chunk_size):
+                    if chunk:
+                        f.write(chunk)
+                        downloaded += len(chunk)
 
 
-                            if progress_callback:
-                                progress_callback(progress,
+                        if (downloaded - last_update) >= update_interval or downloaded == total_size:
+                            if total_size > 0:
+                                progress = (downloaded / total_size) * 100
+
+
+                                if progress_callback:
+                                    progress_callback(progress,
+                                        f"Downloading... {self._format_size(downloaded)} / "
+                                        f"{self._format_size(total_size)}")
+
+                                log_callback(
                                     f"Downloading... {self._format_size(downloaded)} / "
-                                    f"{self._format_size(total_size)}")
+                                    f"{self._format_size(total_size)} ({progress:.1f}%)"
+                                )
+                            else:
+                                log_callback(f"Downloading... {self._format_size(downloaded)}")
+                            last_update = downloaded
 
-                            log_callback(
-                                f"Downloading... {self._format_size(downloaded)} / "
-                                f"{self._format_size(total_size)} ({progress:.1f}%)"
-                            )
-                        else:
-                            log_callback(f"Downloading... {self._format_size(downloaded)}")
-                        last_update = downloaded
-
-        log_callback(f"✓ Downloaded successfully!")
-        return str(download_path)
+            if total_size and downloaded != total_size:
+                raise RuntimeError('Incomplete Google Drive download')
+            log_callback(f"✓ Downloaded successfully!")
+            return str(download_path)
 
     def _format_size(self, bytes_size):
 
@@ -178,4 +189,3 @@ class GoogleDriveDownloader:
             'size': 'Unknown',
             'modified': 'Unknown'
         }
-

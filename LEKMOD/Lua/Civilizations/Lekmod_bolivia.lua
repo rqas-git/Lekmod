@@ -28,27 +28,16 @@ end
 
 
 
-function lekmod_bolivia_is_person_expended(player_id, unit_id, arg3, arg4, new_player_id)
+function lekmod_bolivia_is_person_expended(player_id, unit_id)
 
    local artist_unit_id = GameInfoTypes["UNIT_ARTIST"]
    local writer_unit_id = GameInfoTypes["UNIT_WRITER"]
 
 
    local player = Players[player_id]
-   local new_player
-   if new_player_id ~= nil then
-	   new_player = Players[new_player_id]
-   end
-
-	local capital = player:GetCapitalCity()
-   if (not player:IsAlive()) or player:GetCivilizationType() ~= this_civ then
-      if new_player ~= nil and new_player:IsAlive() and new_player:GetCivilizationType() == this_civ then
-         capital = new_player:GetCapitalCity()
-         player_id = new_player_id
-      else
-         return
-      end
-   end
+   if not player or not player:IsAlive() or player:GetCivilizationType() ~= this_civ then return end
+   local capital = player:GetCapitalCity()
+   if not capital then return end
 
 
    if (unit_id == artist_unit_id or unit_id == writer_unit_id) then
@@ -74,12 +63,18 @@ function lekmod_bolivia_is_person_expended(player_id, unit_id, arg3, arg4, new_p
    end
 
 
-   if new_player ~= nil then
-      lekmod_bolivia_retain_building_capture(new_player_id)
-   else
-      lekmod_bolivia_retain_building_capture(player_id)
-   end
+   lekmod_bolivia_retain_building_capture(player_id)
 
+end
+
+function lekmod_bolivia_city_founded(player_id)
+   lekmod_bolivia_is_person_expended(player_id)
+end
+
+function lekmod_bolivia_city_captured(old_owner_id, was_capital, x, y, new_owner_id)
+   lekmod_bolivia_is_person_expended(old_owner_id)
+   lekmod_bolivia_is_person_expended(new_owner_id)
+   lekmod_bolivia_retain_building_capture(new_owner_id)
 end
 
 function lekmod_bolivia_retain_building_capture(player_id)
@@ -103,9 +98,11 @@ function lekmod_bolivia_uu_combat_strength(player_id, unit_id)
 
 
    local colorado_unit_id = GameInfoTypes["UNIT_COLORADO"]
-   if unit_id ~= nil and unit_id ~= colorado_unit_id then return end
-
 	local player = Players[player_id]
+   if unit_id ~= nil then
+      local created_unit = player:GetUnitByID(unit_id)
+      if not created_unit or created_unit:GetUnitType() ~= colorado_unit_id then return end
+   end
 	local colorado_base_strength = GameInfo.Units[colorado_unit_id].Combat
 	local happiness_number = player:GetExcessHappiness()
 	local bonus_combat_strength = math.min(LekmodUtilities:get_round(happiness_number/5))
@@ -125,8 +122,8 @@ if is_active then
 
 
 	GameEvents.GreatPersonExpended.Add(lekmod_bolivia_is_person_expended)
-   GameEvents.CityCaptureComplete.Add(lekmod_bolivia_is_person_expended)
-   GameEvents.PlayerCityFounded.Add(lekmod_bolivia_is_person_expended)
+   GameEvents.CityCaptureComplete.Add(lekmod_bolivia_city_captured)
+   GameEvents.PlayerCityFounded.Add(lekmod_bolivia_city_founded)
 end
 GameEvents.PlayerHappinessChanged.Add(lekmod_bolivia_uu_combat_strength)
 GameEvents.UnitCreated.Add(lekmod_bolivia_uu_combat_strength)
