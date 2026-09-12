@@ -56,6 +56,12 @@ Database::Results* CvDatabaseUtility::GetResults(const std::string& strKey)
 	return NULL;
 }
 //------------------------------------------------------------------------------
+Database::Results* CvDatabaseUtility::GetOrPrepareResults(const std::string& strKey, const char* szStmt)
+{
+	Database::Results* pResults = GetResults(strKey);
+	return pResults ? pResults : PrepareResults(strKey, szStmt);
+}
+//------------------------------------------------------------------------------
 Database::Results* CvDatabaseUtility::PrepareResults(const std::string& strKey, const char* szStmt)
 {
 	Database::Results* pResults = new Database::Results();
@@ -320,6 +326,21 @@ bool CvDatabaseUtility::SetYields(int*& pYieldsArray,
 {
 	return PopulateArrayByValue(pYieldsArray, "Yields", szTableName,
 	                            "YieldType", szFilterColumn, szFilterValue, "Yield");
+}
+//------------------------------------------------------------------------------
+void CvDatabaseUtility::SetYieldMatrix(int**& pYieldsArray, const char* szDimensionTable,
+                                      const char* szKey, const char* szQuery, const char* szFilterValue)
+{
+	Initialize2DArray(pYieldsArray, szDimensionTable, "Yields");
+	Database::Results* pResults = GetOrPrepareResults(szKey, szQuery);
+	pResults->Bind(1, szFilterValue);
+	while(pResults->Step())
+	{
+		const int row = pResults->GetInt(0);
+		const int yield = pResults->GetInt(1);
+		pYieldsArray[row][yield] = pResults->GetInt(2);
+	}
+	pResults->Reset();
 }
 //------------------------------------------------------------------------------
 int CvDatabaseUtility::MaxRows(const char* szTableName)

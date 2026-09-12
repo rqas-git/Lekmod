@@ -2062,11 +2062,8 @@ void CvCivilizationInfo::InitBuildingDefaults(int*& piDefaults, CvDatabaseUtilit
 	kUtility.InitializeArray(piDefaults, "BuildingClasses", -1);
 
 	std::string strKey("InitBuildingDefaults");
-	Database::Results* pResults = kUtility.GetResults(strKey);
-	if(pResults == NULL)
-	{
-		pResults = kUtility.PrepareResults(strKey, "select BuildingClasses.ID, Buildings.ID as BuildingID from BuildingClasses inner join Buildings on Buildings.Type = DefaultBuilding");
-	}
+	Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+		"select BuildingClasses.ID, Buildings.ID as BuildingID from BuildingClasses inner join Buildings on Buildings.Type = DefaultBuilding");
 
 	while(pResults->Step())
 	{
@@ -2089,11 +2086,8 @@ void CvCivilizationInfo::InitUnitDefaults(int*& piDefaults, CvDatabaseUtility& k
 	kUtility.InitializeArray(piDefaults, "UnitClasses", -1);
 
 	std::string strKey("InitUnitDefaults");
-	Database::Results* pResults = kUtility.GetResults(strKey);
-	if(pResults == NULL)
-	{
-		pResults = kUtility.PrepareResults(strKey, "select UnitClasses.ID, Units.ID as UnitID from UnitClasses inner join Units on Units.Type = DefaultUnit");
-	}
+	Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+		"select UnitClasses.ID, Units.ID as UnitID from UnitClasses inner join Units on Units.Type = DefaultUnit");
 
 	while(pResults->Step())
 	{
@@ -2343,11 +2337,8 @@ bool CvCivilizationInfo::CacheResults(Database::Results& kResults, CvDatabaseUti
 		m_bCoastalCiv = false;
 
 		std::string strKey = "Civilization_Start_Along_Ocean";
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select StartAlongOcean from Civilization_Start_Along_Ocean where CivilizationType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select StartAlongOcean from Civilization_Start_Along_Ocean where CivilizationType = ?");
 
 		pResults->Bind(1, szType, -1, false);
 
@@ -2364,11 +2355,8 @@ bool CvCivilizationInfo::CacheResults(Database::Results& kResults, CvDatabaseUti
 		m_bPlaceFirst = false;
 
 		std::string strKey = "Civilization_Start_Place_First";
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select PlaceFirst from Civilization_Start_Place_First_Along_Ocean where CivilizationType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select PlaceFirst from Civilization_Start_Place_First_Along_Ocean where CivilizationType = ?");
 
 		pResults->Bind(1, szType, -1, false);
 
@@ -2387,11 +2375,8 @@ bool CvCivilizationInfo::CacheResults(Database::Results& kResults, CvDatabaseUti
 		m_vCityNames.clear();
 
 		std::string strKey = "Civilization - CityNames";
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select CityName from Civilization_CityNames where CivilizationType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select CityName from Civilization_CityNames where CivilizationType = ?");
 
 		pResults->Bind(1, szType, -1, false);
 
@@ -2413,12 +2398,8 @@ bool CvCivilizationInfo::CacheResults(Database::Results& kResults, CvDatabaseUti
 		m_CivilizationBuildingOverridden.resize(maxBuildingClasses, false);
 
 		std::string key = "Civilization_BuildingClassOverrides";
-		Database::Results* pResults = kUtility.GetResults(key);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(key, "select BuildingClasses.ID, coalesce(Buildings.ID, -1) from Civilization_BuildingClassOverrides inner join BuildingClasses on BuildingClassType = BuildingClasses.Type left outer join Buildings on BuildingType = Buildings.Type where CivilizationType = ?");
-
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(key,
+			"select BuildingClasses.ID, coalesce(Buildings.ID, -1) from Civilization_BuildingClassOverrides inner join BuildingClasses on BuildingClassType = BuildingClasses.Type left outer join Buildings on BuildingType = Buildings.Type where CivilizationType = ?");
 
 		pResults->Bind(1, szType);
 
@@ -2444,11 +2425,8 @@ bool CvCivilizationInfo::CacheResults(Database::Results& kResults, CvDatabaseUti
 		m_CivilizationUnitOverridden.resize(maxUnitClasses,false);
 
 		std::string key = "Civilization_UnitClassOverrides";
-		Database::Results* pResults = kUtility.GetResults(key);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(key, "select UnitClasses.ID, coalesce(Units.ID, -1) from Civilization_UnitClassOverrides inner join UnitClasses on UnitClassType = UnitClasses.Type left outer join Units on UnitType = Units.Type where CivilizationType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(key,
+			"select UnitClasses.ID, coalesce(Units.ID, -1) from Civilization_UnitClassOverrides inner join UnitClasses on UnitClassType = UnitClasses.Type left outer join Units on UnitType = Units.Type where CivilizationType = ?");
 
 		pResults->Bind(1, szType);
 
@@ -2471,11 +2449,8 @@ bool CvCivilizationInfo::CacheResults(Database::Results& kResults, CvDatabaseUti
 		kUtility.InitializeArray(m_piCivilizationFreeUnitsDefaultUnitAI, maxUnitClasses, -1);
 
 		std::string strKey = "Civilizations - FreeUnits";
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select UnitClasses.ID as UnitClassID, UnitAIInfos.ID as UnitAITypeID, Count from Civilization_FreeUnits inner join UnitClasses on UnitClassType = UnitClasses.Type inner join UnitAIInfos on UnitAIType = UnitAIInfos.Type where CivilizationType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select UnitClasses.ID as UnitClassID, UnitAIInfos.ID as UnitAITypeID, Count from Civilization_FreeUnits inner join UnitClasses on UnitClassType = UnitClasses.Type inner join UnitAIInfos on UnitAIType = UnitAIInfos.Type where CivilizationType = ?");
 
 		pResults->Bind(1, szType, -1, false);
 
@@ -2518,11 +2493,8 @@ bool CvCivilizationInfo::CacheResults(Database::Results& kResults, CvDatabaseUti
 		m_vSpyNames.clear();
 
 		std::string strKey = "Civilization - SpyNames";
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select SpyName from Civilization_SpyNames where CivilizationType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select SpyName from Civilization_SpyNames where CivilizationType = ?");
 
 		pResults->Bind(1, szType, -1, false);
 
@@ -2692,11 +2664,8 @@ bool CvVictoryInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 		kUtility.InitializeArray(m_piVictoryPointAwards, iNumVictoryPoints);
 
 		std::string strKey = "CvVictoryInfo_VictoryPointAwards";
-		Database::Results* pVictoryPointResults = kUtility.GetResults(strKey);
-		if(pVictoryPointResults == NULL)
-		{
-			pVictoryPointResults = kUtility.PrepareResults(strKey, "select VictoryPoints from VictoryPointAwards where VictoryType == ? order by VictoryPoints desc;");
-		}
+		Database::Results* pVictoryPointResults = kUtility.GetOrPrepareResults(strKey,
+			"select VictoryPoints from VictoryPointAwards where VictoryType == ? order by VictoryPoints desc;");
 
 		pVictoryPointResults->Bind(1, szVictoryType);
 
@@ -4473,16 +4442,11 @@ bool CvTradeConnectionInfo::CacheResults(Database::Results& kResults, CvDatabase
 		kUtility.InitializeArray(m_piBaseDestinationValue, "Yields");
 		kUtility.InitializeArray(m_piBaseOriginValue, "Yields");
 		std::string key = "TradeConnections_Yields";
-		Database::Results* pResults = kUtility.GetResults(key);
-		if (pResults == NULL)
-		{
-			const char* query = 
-				"SELECT Yields.ID as YieldID, OriginBaseValue, DestinationBaseValue "
-				"FROM TradeConnections_Yields "
-				"INNER JOIN Yields ON Yields.Type = TradeConnections_Yields.YieldType "
-				"WHERE TradeConnectionType = ? ";
-			pResults = kUtility.PrepareResults(key, query);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(key,
+			"SELECT Yields.ID as YieldID, OriginBaseValue, DestinationBaseValue "
+			"FROM TradeConnections_Yields "
+			"INNER JOIN Yields ON Yields.Type = TradeConnections_Yields.YieldType "
+			"WHERE TradeConnectionType = ? ");
 		pResults->Bind(1, szTradeConnectionType);
 		while (pResults->Step())
 		{
@@ -4496,17 +4460,12 @@ bool CvTradeConnectionInfo::CacheResults(Database::Results& kResults, CvDatabase
 		kUtility.Initialize2DArray(m_ppiiEraOriginBonus, "Eras", "Yields");
 		kUtility.Initialize2DArray(m_ppiiEraDestinationBonus, "Eras", "Yields");
 		std::string key = "TradeConnections_BaseYieldEraBonus";
-		Database::Results* pResults = kUtility.GetResults(key);
-		if (pResults == NULL)
-		{
-			const char* query = 
+		Database::Results* pResults = kUtility.GetOrPrepareResults(key,
 			"SELECT Eras.ID as EraID, Yields.ID as YieldID, OriginBonus, DestinationBonus "
 			"FROM TradeConnections_BaseYieldEraBonus "
 			"INNER JOIN Eras ON Eras.Type = TradeConnections_BaseYieldEraBonus.EraType "
 			"INNER JOIN Yields ON Yields.Type = TradeConnections_BaseYieldEraBonus.YieldType "
-			"WHERE TradeConnectionType = ? ";
-			pResults = kUtility.PrepareResults(key, query);
-		}
+			"WHERE TradeConnectionType = ? ");
 		pResults->Bind(1, szTradeConnectionType);
 		while (pResults->Step())
 		{
@@ -4520,17 +4479,12 @@ bool CvTradeConnectionInfo::CacheResults(Database::Results& kResults, CvDatabase
 	{
 		kUtility.Initialize2DArray(m_ppiiDomainYieldModifier, "Domains", "Yields");
 		std::string key = "TradeConnections_DomainYieldModifiers";
-		Database::Results* pResults = kUtility.GetResults(key);
-		if (pResults == NULL)
-		{
-			const char* query = 
+		Database::Results* pResults = kUtility.GetOrPrepareResults(key,
 			"SELECT Domains.ID as DomainID, Yields.ID as YieldID, Modifier "
 			"FROM TradeConnections_DomainYieldModifiers "
 			"INNER JOIN Domains ON Domains.Type = TradeConnections_DomainYieldModifiers.DomainType "
 			"INNER JOIN Yields ON Yields.Type = TradeConnections_DomainYieldModifiers.YieldType "
-			"WHERE TradeConnectionType = ? ";
-			pResults = kUtility.PrepareResults(key, query);
-		}
+			"WHERE TradeConnectionType = ? ");
 		pResults->Bind(1, szTradeConnectionType);
 		while (pResults->Step())
 		{
@@ -5198,18 +5152,13 @@ bool CvResourceInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility
 		kUtility.Initialize2DArray(m_paiTradeConnectionResourceLandYieldBonus, "TradeConnections", "Yields");
 		kUtility.Initialize2DArray(m_paiTradeConnectionResourceSeaYieldBonus, "TradeConnections", "Yields");
 		std::string sqlKey = "Resource_TradeConnectionYieldBonus";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if (pResults == NULL)
-		{
-			const char* szSQL = 
-				"SELECT TradeConnections.ID as TradeConnectionID, Domains.ID as DomainID, Yields.ID AS YieldID, YieldTimes100 "
-				"FROM Resource_TradeConnectionYieldBonus "
-				"INNER JOIN TradeConnections ON TradeConnections.Type = TradeConnectionType "
-				"INNER JOIN Yields ON Yields.Type = YieldType "
-				"INNER JOIN Domains ON Domains.Type = DomainType "
-				"WHERE ResourceType = ?";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"SELECT TradeConnections.ID as TradeConnectionID, Domains.ID as DomainID, Yields.ID AS YieldID, YieldTimes100 "
+			"FROM Resource_TradeConnectionYieldBonus "
+			"INNER JOIN TradeConnections ON TradeConnections.Type = TradeConnectionType "
+			"INNER JOIN Yields ON Yields.Type = YieldType "
+			"INNER JOIN Domains ON Domains.Type = DomainType "
+			"WHERE ResourceType = ?");
 		pResults->Bind(1, szResourceType);
 		while (pResults->Step())
 		{
@@ -5255,12 +5204,8 @@ bool CvResourceInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility
 	{
 
 		std::string sqlKey = "Resource_UnitCombatProductionCostModifiersLocal";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if (pResults == NULL)
-		{
-			const char* szSQL = "select UnitCombatInfos.ID as UnitCombatInfosID, RequiredEra, ObsoleteEra, CostModifier from Resource_UnitCombatProductionCostModifiersLocal inner join UnitCombatInfos on UnitCombatType = UnitCombatInfos.Type where ResourceType = ?";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"select UnitCombatInfos.ID as UnitCombatInfosID, RequiredEra, ObsoleteEra, CostModifier from Resource_UnitCombatProductionCostModifiersLocal inner join UnitCombatInfos on UnitCombatType = UnitCombatInfos.Type where ResourceType = ?");
 
 		pResults->Bind(1, szResourceType);
 
@@ -5289,12 +5234,8 @@ bool CvResourceInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility
 		{
 
 			std::string sqlKey = "Resource_BuildingProductionCostModifiersLocal";
-			Database::Results* pResults = kUtility.GetResults(sqlKey);
-			if (pResults == NULL)
-			{
-				const char* szSQL = "select RequiredEra, ObsoleteEra, CostModifier from Resource_BuildingProductionCostModifiersLocal where ResourceType = ?";
-				pResults = kUtility.PrepareResults(sqlKey, szSQL);
-			}
+			Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+				"select RequiredEra, ObsoleteEra, CostModifier from Resource_BuildingProductionCostModifiersLocal where ResourceType = ?");
 
 			pResults->Bind(1, szResourceType);
 
@@ -6943,11 +6884,8 @@ bool CvEntityEventInfo::CacheResults(Database::Results& kResults, CvDatabaseUtil
 	//EntityEvent_AnimationPaths
 	{
 		std::string strKey = "EntityEventInfo - AnimationPaths";
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select AnimationPaths.ID from EntityEvent_AnimationPaths inner join AnimationPaths on AnimationPathType = AnimationPaths.Type where EntityEventType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select AnimationPaths.ID from EntityEvent_AnimationPaths inner join AnimationPaths on AnimationPathType = AnimationPaths.Type where EntityEventType = ?");
 
 		pResults->Bind(1, szEntityEventType, -1, false);
 
@@ -7301,11 +7239,8 @@ bool CvEraInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUt
 		m_vEraVOs.clear();
 
 		std::string strKey = "Era - NewEraVOs";
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select VOScript from Era_NewEraVOs where EraType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select VOScript from Era_NewEraVOs where EraType = ?");
 
 		pResults->Bind(1, GetType(), -1, false);
 

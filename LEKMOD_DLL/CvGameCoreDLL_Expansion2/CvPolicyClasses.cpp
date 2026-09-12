@@ -785,16 +785,11 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 		kUtility.InitializeArray(m_paiYieldFromKills, "Yields", 0);
 		kUtility.InitializeArray(m_paiYieldFromKillsMax, "Yields", 0);
 		std::string sqlKey = "Policy_YieldFromKills";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if (pResults == NULL)
-		{
-			const char* szSQL =
-				"SELECT Yields.ID, Yield, COALESCE(Max, 0) "
-				"FROM Policy_YieldFromKills "
-				"INNER JOIN Yields ON Yields.Type = YieldType "
-				"WHERE PolicyType = ?";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"SELECT Yields.ID, Yield, COALESCE(Max, 0) "
+			"FROM Policy_YieldFromKills "
+			"INNER JOIN Yields ON Yields.Type = YieldType "
+			"WHERE PolicyType = ?");
 
 		pResults->Bind(1, szPolicyType);
 
@@ -813,18 +808,13 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 		kUtility.Initialize2DArray(m_ppiTradeConnectionLandYieldChanges, "TradeConnections", "Yields");
 		kUtility.Initialize2DArray(m_ppiTradeConnectionSeaYieldChanges, "TradeConnections", "Yields");
 		std::string strKey("Policy_TradeRouteYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if (pResults == NULL)
-		{
-			const char* szSQL =
-				"SELECT TradeConnections.ID as TradeConnectionID, Domains.ID as DomainID, Yields.ID as YieldID, YieldTimes100, CityStateOnly  "
-				"FROM Policy_TradeRouteYieldChanges "
-				"INNER JOIN TradeConnections ON TradeConnections.Type = TradeConnectionType "
-				"INNER JOIN Domains ON Domains.Type = DomainType "
-				"INNER JOIN Yields ON Yields.Type = YieldType "
-				"WHERE PolicyType = ?";
-			pResults = kUtility.PrepareResults(strKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"SELECT TradeConnections.ID as TradeConnectionID, Domains.ID as DomainID, Yields.ID as YieldID, YieldTimes100, CityStateOnly  "
+			"FROM Policy_TradeRouteYieldChanges "
+			"INNER JOIN TradeConnections ON TradeConnections.Type = TradeConnectionType "
+			"INNER JOIN Domains ON Domains.Type = DomainType "
+			"INNER JOIN Yields ON Yields.Type = YieldType "
+			"WHERE PolicyType = ?");
 		pResults->Bind(1, szPolicyType);
 		while (pResults->Step())
 		{
@@ -851,18 +841,13 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 		kUtility.Initialize2DArray(m_ppiTradeConnectionLandYieldModifiers, "TradeConnections", "Yields");
 		kUtility.Initialize2DArray(m_ppiTradeConnectionSeaYieldModifiers, "TradeConnections", "Yields");
 		std::string strKey("Policy_TradeRouteYieldModifiers");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if (pResults == NULL)
-		{
-			const char* szSQL =
-				"SELECT TradeConnections.ID as TradeConnectionID, Domains.ID as DomainID, Yields.ID as YieldID, YieldModifier  "
-				"FROM Policy_TradeRouteYieldModifiers "
-				"INNER JOIN TradeConnections ON TradeConnections.Type = TradeConnectionType "
-				"INNER JOIN Domains ON Domains.Type = DomainType "
-				"INNER JOIN Yields ON Yields.Type = YieldType "
-				"WHERE PolicyType = ?";
-			pResults = kUtility.PrepareResults(strKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"SELECT TradeConnections.ID as TradeConnectionID, Domains.ID as DomainID, Yields.ID as YieldID, YieldModifier  "
+			"FROM Policy_TradeRouteYieldModifiers "
+			"INNER JOIN TradeConnections ON TradeConnections.Type = TradeConnectionType "
+			"INNER JOIN Domains ON Domains.Type = DomainType "
+			"INNER JOIN Yields ON Yields.Type = YieldType "
+			"WHERE PolicyType = ?");
 		pResults->Bind(1, szPolicyType);
 		while (pResults->Step())
 		{
@@ -880,62 +865,20 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 #endif
 #if defined(LEKMOD_v34) // Resource quantity array
 	kUtility.PopulateArrayByValue(m_piPolicyResourceQuantity, "Resources", "Policy_ResourceQuantity", "ResourceType", "PolicyType", szPolicyType, "Quantity");
-	{ // Policy_ResourceClassYieldChanges
-		kUtility.Initialize2DArray(m_ppiPolicyResourceClassYieldChanges, "ResourceClasses", "Yields");
-
-		std::string strKey("Policy_ResourceClassYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if (pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey,
-				"SELECT ResourceClasses.ID as ResourceClassID, Yields.ID as YieldID, YieldChange "
-				"FROM Policy_ResourceClassYieldChanges "
-				"INNER JOIN ResourceClasses ON ResourceClasses.Type = Policy_ResourceClassYieldChanges.ResourceClassType "
-				"INNER JOIN Yields ON Yields.Type = Policy_ResourceClassYieldChanges.YieldType "
-				"WHERE Policy_ResourceClassYieldChanges.PolicyType = ?");
-		}
-
-		pResults->Bind(1, szPolicyType);
-
-		while (pResults->Step())
-		{
-			const int ResourceClassID = pResults->GetInt(0);
-			const int iYieldID = pResults->GetInt(1);
-			const int iYieldChange = pResults->GetInt(2);
-
-			m_ppiPolicyResourceClassYieldChanges[ResourceClassID][iYieldID] = iYieldChange;
-		}
-
-		pResults->Reset();
-	}
-	{ // Policy_ResourceYieldChanges
-		kUtility.Initialize2DArray(m_ppiPolicyResourceYieldChanges, "Resources", "Yields");
-
-		std::string strKey("Policy_ResourceYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if (pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey,
-				"SELECT Resources.ID as ResourceID, Yields.ID as YieldID, YieldChange "
-				"FROM Policy_ResourceYieldChanges "
-				"INNER JOIN Resources ON Resources.Type = Policy_ResourceYieldChanges.ResourceType "
-				"INNER JOIN Yields ON Yields.Type = Policy_ResourceYieldChanges.YieldType "
-				"WHERE Policy_ResourceYieldChanges.PolicyType = ?");
-		}
-
-		pResults->Bind(1, szPolicyType);
-
-		while (pResults->Step())
-		{
-			const int iResourceID = pResults->GetInt(0);
-			const int iYieldID = pResults->GetInt(1);
-			const int iYieldChange = pResults->GetInt(2);
-
-			m_ppiPolicyResourceYieldChanges[iResourceID][iYieldID] = iYieldChange;
-		}
-
-		pResults->Reset();
-	}
+	kUtility.SetYieldMatrix(m_ppiPolicyResourceClassYieldChanges, "ResourceClasses", "Policy_ResourceClassYieldChanges",
+		"SELECT ResourceClasses.ID as ResourceClassID, Yields.ID as YieldID, YieldChange "
+		"FROM Policy_ResourceClassYieldChanges "
+		"INNER JOIN ResourceClasses ON ResourceClasses.Type = Policy_ResourceClassYieldChanges.ResourceClassType "
+		"INNER JOIN Yields ON Yields.Type = Policy_ResourceClassYieldChanges.YieldType "
+		"WHERE Policy_ResourceClassYieldChanges.PolicyType = ?",
+		szPolicyType);
+	kUtility.SetYieldMatrix(m_ppiPolicyResourceYieldChanges, "Resources", "Policy_ResourceYieldChanges",
+		"SELECT Resources.ID as ResourceID, Yields.ID as YieldID, YieldChange "
+		"FROM Policy_ResourceYieldChanges "
+		"INNER JOIN Resources ON Resources.Type = Policy_ResourceYieldChanges.ResourceType "
+		"INNER JOIN Yields ON Yields.Type = Policy_ResourceYieldChanges.YieldType "
+		"WHERE Policy_ResourceYieldChanges.PolicyType = ?",
+		szPolicyType);
 #endif
 #if defined(LEKMOD_FIX_SCHOLASTICISM)
 	{
@@ -943,16 +886,12 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 		kUtility.Initialize2DArray(m_paiMinorAllyYieldBonus, "Eras", "Yields");
 		
 		std::string strKey("Policy_CityStateRelationshipYieldBonus");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if (pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey,
-				"SELECT Eras.ID as EraID, Yields.ID as YieldID, FriendYieldBonusTimes100, AllyYieldBonusTimes100 "
-				"FROM Policy_CityStateRelationshipYieldBonus "
-				"INNER JOIN Eras ON Eras.Type = Policy_CityStateRelationshipYieldBonus.EraType "
-				"INNER JOIN Yields ON Yields.Type = Policy_CityStateRelationshipYieldBonus.YieldType "
-				"WHERE Policy_CityStateRelationshipYieldBonus.PolicyType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"SELECT Eras.ID as EraID, Yields.ID as YieldID, FriendYieldBonusTimes100, AllyYieldBonusTimes100 "
+			"FROM Policy_CityStateRelationshipYieldBonus "
+			"INNER JOIN Eras ON Eras.Type = Policy_CityStateRelationshipYieldBonus.EraType "
+			"INNER JOIN Yields ON Yields.Type = Policy_CityStateRelationshipYieldBonus.YieldType "
+			"WHERE Policy_CityStateRelationshipYieldBonus.PolicyType = ?");
 		pResults->Bind(1, szPolicyType);
 		while (pResults->Step())
 		{
@@ -977,16 +916,11 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 	{
 		kUtility.InitializeArray(m_piWorldWonderYieldChanges, "Yields", 0);
 		std::string key("WorldWonderYieldChanges"); // Table is generic
-		Database::Results* result = kUtility.GetResults(key);
-		if(result == NULL)
-		{
-			const char* query = 
-				"SELECT Yields.ID as YieldID, Yield "
-				"FROM WorldWonderYieldChanges "
-				"INNER JOIN Yields ON Yields.Type = WorldWonderYieldChanges.YieldType "
-				"WHERE PolicyType = ?";
-			result = kUtility.PrepareResults(key, query);
-		}
+		Database::Results* result = kUtility.GetOrPrepareResults(key,
+			"SELECT Yields.ID as YieldID, Yield "
+			"FROM WorldWonderYieldChanges "
+			"INNER JOIN Yields ON Yields.Type = WorldWonderYieldChanges.YieldType "
+			"WHERE PolicyType = ?");
 		result->Bind(1, szPolicyType);
 		while(result->Step())
 		{
@@ -1008,20 +942,14 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 	}
 #endif
 	//BuildingYieldModifiers
-	{
 #ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
+	{
 		kUtility.Initialize2DArray(m_ppiBuildingClassYieldModifiers.first, "BuildingClasses", "Yields");
 		m_ppiBuildingClassYieldModifiers.second = kUtility.MaxRows("BuildingClasses");
-#else
-		kUtility.Initialize2DArray(m_ppiBuildingClassYieldModifiers, "BuildingClasses", "Yields");
-#endif
 
 		std::string strKey("Policy_BuildingClassYieldModifiers");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select BuildingClasses.ID as BuildingClassID, Yields.ID as YieldID, YieldMod from Policy_BuildingClassYieldModifiers inner join BuildingClasses on BuildingClasses.Type = BuildingClassType inner join Yields on Yields.Type = YieldType where PolicyType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select BuildingClasses.ID as BuildingClassID, Yields.ID as YieldID, YieldMod from Policy_BuildingClassYieldModifiers inner join BuildingClasses on BuildingClasses.Type = BuildingClassType inner join Yields on Yields.Type = YieldType where PolicyType = ?");
 
 		pResults->Bind(1, szPolicyType);
 
@@ -1031,29 +959,24 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 			const int iYieldID = pResults->GetInt(1);
 			const int iYieldMod = pResults->GetInt(2);
 
-#ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
 			m_ppiBuildingClassYieldModifiers.first[BuildingClassID][iYieldID] = iYieldMod;
-#else
-			m_ppiBuildingClassYieldModifiers[BuildingClassID][iYieldID] = iYieldMod;
-#endif
 		}
 	}
-
-	//BuildingYieldChanges
-	{
-#ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
-		kUtility.Initialize2DArray(m_ppiBuildingClassYieldChanges.first, "BuildingClasses", "Yields");
-		m_ppiBuildingClassYieldChanges.second = kUtility.MaxRows("BuildingClasses");
 #else
-		kUtility.Initialize2DArray(m_ppiBuildingClassYieldChanges, "BuildingClasses", "Yields");
+	kUtility.SetYieldMatrix(m_ppiBuildingClassYieldModifiers, "BuildingClasses", "Policy_BuildingClassYieldModifiers",
+		"select BuildingClasses.ID as BuildingClassID, Yields.ID as YieldID, YieldMod from Policy_BuildingClassYieldModifiers inner join BuildingClasses on BuildingClasses.Type = BuildingClassType inner join Yields on Yields.Type = YieldType where PolicyType = ?",
+		szPolicyType);
 #endif
 
+	//BuildingYieldChanges
+#ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
+	{
+		kUtility.Initialize2DArray(m_ppiBuildingClassYieldChanges.first, "BuildingClasses", "Yields");
+		m_ppiBuildingClassYieldChanges.second = kUtility.MaxRows("BuildingClasses");
+
 		std::string strKey("Policy_BuildingClassYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select BuildingClasses.ID as BuildingClassID, Yields.ID as YieldID, YieldChange from Policy_BuildingClassYieldChanges inner join BuildingClasses on BuildingClasses.Type = BuildingClassType inner join Yields on Yields.Type = YieldType where PolicyType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select BuildingClasses.ID as BuildingClassID, Yields.ID as YieldID, YieldChange from Policy_BuildingClassYieldChanges inner join BuildingClasses on BuildingClasses.Type = BuildingClassType inner join Yields on Yields.Type = YieldType where PolicyType = ?");
 
 		pResults->Bind(1, szPolicyType);
 
@@ -1063,13 +986,14 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 			const int iYieldID = pResults->GetInt(1);
 			const int iYieldChange = pResults->GetInt(2);
 
-#ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
 			m_ppiBuildingClassYieldChanges.first[BuildingClassID][iYieldID] = iYieldChange;
-#else
-			m_ppiBuildingClassYieldChanges[BuildingClassID][iYieldID] = iYieldChange;
-#endif
 		}
 	}
+#else
+	kUtility.SetYieldMatrix(m_ppiBuildingClassYieldChanges, "BuildingClasses", "Policy_BuildingClassYieldChanges",
+		"select BuildingClasses.ID as BuildingClassID, Yields.ID as YieldID, YieldChange from Policy_BuildingClassYieldChanges inner join BuildingClasses on BuildingClasses.Type = BuildingClassType inner join Yields on Yields.Type = YieldType where PolicyType = ?",
+		szPolicyType);
+#endif
 
 #if defined(LEKMOD_POLICY_TERRAIN_FEATURE_YIELDS)
 	//Policy_TerrainYieldChanges
@@ -1102,11 +1026,8 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 		kUtility.Initialize2DArray(m_ppiPolicyTerrainYieldChangeUnimprovedNoResourceExcludingLakes, "Terrains", "Yields");
 #endif
 		std::string strKeyTerrain("Policy_TerrainYieldChanges_ExcludeLakes");
-		Database::Results* pResultsTerrain = kUtility.GetResults(strKeyTerrain);
-		if (pResultsTerrain == NULL)
-		{
-			pResultsTerrain = kUtility.PrepareResults(strKeyTerrain, "select Terrains.ID as TerrainID, Yields.ID as YieldID, YieldChange, Unimproved, NoResource, ExcludeLakes from Policy_TerrainYieldChanges inner join Terrains on Terrains.Type = TerrainType inner join Yields on Yields.Type = YieldType where PolicyType = ?");
-		}
+		Database::Results* pResultsTerrain = kUtility.GetOrPrepareResults(strKeyTerrain,
+			"select Terrains.ID as TerrainID, Yields.ID as YieldID, YieldChange, Unimproved, NoResource, ExcludeLakes from Policy_TerrainYieldChanges inner join Terrains on Terrains.Type = TerrainType inner join Yields on Yields.Type = YieldType where PolicyType = ?");
 		pResultsTerrain->Bind(1, szPolicyType);
 		while (pResultsTerrain->Step())
 		{
@@ -1183,11 +1104,8 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 		kUtility.Initialize2DArray(m_ppiPolicyFeatureYieldChangeUnimprovedNoResource, "Features", "Yields");
 #endif
 		std::string strKeyFeature("Policy_FeatureYieldChanges");
-		Database::Results* pResultsFeature = kUtility.GetResults(strKeyFeature);
-		if (pResultsFeature == NULL)
-		{
-			pResultsFeature = kUtility.PrepareResults(strKeyFeature, "select Features.ID as FeatureID, Yields.ID as YieldID, YieldChange, Unimproved, NoResource from Policy_FeatureYieldChanges inner join Features on Features.Type = FeatureType inner join Yields on Yields.Type = YieldType where PolicyType = ?");
-		}
+		Database::Results* pResultsFeature = kUtility.GetOrPrepareResults(strKeyFeature,
+			"select Features.ID as FeatureID, Yields.ID as YieldID, YieldChange, Unimproved, NoResource from Policy_FeatureYieldChanges inner join Features on Features.Type = FeatureType inner join Yields on Yields.Type = YieldType where PolicyType = ?");
 		pResultsFeature->Bind(1, szPolicyType);
 		while (pResultsFeature->Step())
 		{
@@ -1230,11 +1148,8 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 #endif
 
 		std::string strKey("Policy_BuildingClassFlavorChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if (pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select BuildingClasses.ID as BuildingClassID, Flavors.ID as FlavorID, FlavorChange from Policy_BuildingClassFlavorChanges inner join BuildingClasses on BuildingClasses.Type = BuildingClassType inner join Flavors on Flavors.Type = FlavorType where PolicyType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select BuildingClasses.ID as BuildingClassID, Flavors.ID as FlavorID, FlavorChange from Policy_BuildingClassFlavorChanges inner join BuildingClasses on BuildingClasses.Type = BuildingClassType inner join Flavors on Flavors.Type = FlavorType where PolicyType = ?");
 
 		pResults->Bind(1, szPolicyType);
 
@@ -1254,20 +1169,14 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 #endif
 
 	//ImprovementYieldChanges
-	{
 #ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
+	{
 		kUtility.Initialize2DArray(m_ppiImprovementYieldChanges.first, "Improvements", "Yields");
 		m_ppiImprovementYieldChanges.second = kUtility.MaxRows("Improvements");
-#else
-		kUtility.Initialize2DArray(m_ppiImprovementYieldChanges, "Improvements", "Yields");
-#endif
 
 		std::string strKey("Policy_ImprovementYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Improvements.ID as ImprovementID, Yields.ID as YieldID, Yield from Policy_ImprovementYieldChanges inner join Improvements on Improvements.Type = ImprovementType inner join Yields on Yields.Type = YieldType where PolicyType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Improvements.ID as ImprovementID, Yields.ID as YieldID, Yield from Policy_ImprovementYieldChanges inner join Improvements on Improvements.Type = ImprovementType inner join Yields on Yields.Type = YieldType where PolicyType = ?");
 
 		pResults->Bind(1, szPolicyType);
 
@@ -1277,13 +1186,14 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 			const int YieldID = pResults->GetInt(1);
 			const int yield = pResults->GetInt(2);
 
-#ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
 			m_ppiImprovementYieldChanges.first[ImprovementID][YieldID] = yield;
-#else
-			m_ppiImprovementYieldChanges[ImprovementID][YieldID] = yield;
-#endif
 		}
 	}
+#else
+	kUtility.SetYieldMatrix(m_ppiImprovementYieldChanges, "Improvements", "Policy_ImprovementYieldChanges",
+		"select Improvements.ID as ImprovementID, Yields.ID as YieldID, Yield from Policy_ImprovementYieldChanges inner join Improvements on Improvements.Type = ImprovementType inner join Yields on Yields.Type = YieldType where PolicyType = ?",
+		szPolicyType);
+#endif
 
 #if defined(LEKMOD_POLICY_GREATPERSON_IMPROVEMENT_ADJACENCY_YIELD)
 	// Policy_GreatPersonImprovement_Adjacency_YieldBonus (yield bonus per adjacent improvement with CreatedByGreatPerson)
@@ -1295,11 +1205,8 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 		kUtility.Initialize2DArray(m_ppiPolicyGreatPersonImprovementAdjacencyYieldBonus, "Improvements", "Yields");
 #endif
 		std::string strKeyGPAdj("Policy_GreatPersonImprovement_Adjacency_YieldBonus");
-		Database::Results* pResultsGPAdj = kUtility.GetResults(strKeyGPAdj);
-		if (pResultsGPAdj == NULL)
-		{
-			pResultsGPAdj = kUtility.PrepareResults(strKeyGPAdj, "select Improvements.ID as ImprovementID, Yields.ID as YieldID, Yield from Policy_GreatPersonImprovement_Adjacency_YieldBonus inner join Improvements on Improvements.Type = ImprovementType inner join Yields on Yields.Type = YieldType where PolicyType = ?");
-		}
+		Database::Results* pResultsGPAdj = kUtility.GetOrPrepareResults(strKeyGPAdj,
+			"select Improvements.ID as ImprovementID, Yields.ID as YieldID, Yield from Policy_GreatPersonImprovement_Adjacency_YieldBonus inner join Improvements on Improvements.Type = ImprovementType inner join Yields on Yields.Type = YieldType where PolicyType = ?");
 		pResultsGPAdj->Bind(1, szPolicyType);
 		while (pResultsGPAdj->Step())
 		{
@@ -1323,12 +1230,8 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 		kUtility.InitializeArray(m_piPrereqOrPolicies, "Policies", (int)NO_POLICY);
 
 		std::string sqlKey = "m_piPrereqOrPolicies";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if(pResults == NULL)
-		{
-			const char* szSQL = "select Policies.ID from Policy_PrereqORPolicies inner join Policies on Policies.Type = PrereqPolicy where PolicyType = ?";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"select Policies.ID from Policy_PrereqORPolicies inner join Policies on Policies.Type = PrereqPolicy where PolicyType = ?");
 
 		pResults->Bind(1, szPolicyType, false);
 
@@ -1346,12 +1249,8 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 		kUtility.InitializeArray(m_piPrereqAndPolicies, "Policies", (int)NO_POLICY);
 		std::string sqlKey = "m_piPrereqAndPolicies";
 
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if(pResults == NULL)
-		{
-			const char* szSQL = "select Policies.ID from Policy_PrereqPolicies inner join Policies on Policies.Type = PrereqPolicy where PolicyType = ?";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"select Policies.ID from Policy_PrereqPolicies inner join Policies on Policies.Type = PrereqPolicy where PolicyType = ?");
 
 		pResults->Bind(1, szPolicyType, false);
 
@@ -1369,12 +1268,8 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 		kUtility.InitializeArray(m_piPolicyDisables, "Policies", (int)NO_POLICY);
 
 		std::string sqlKey = "m_piPolicyDisables";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if(pResults == NULL)
-		{
-			const char* szSQL = "select Policies.ID from Policy_Disables inner join Policies on Policies.Type = PolicyDisable where PolicyType = ?";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"select Policies.ID from Policy_Disables inner join Policies on Policies.Type = PolicyDisable where PolicyType = ?");
 
 		pResults->Bind(1, szPolicyType, false);
 
@@ -1394,12 +1289,8 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 		kUtility.Initialize2DArray(m_FreePromotionUnitCombats, "UnitPromotions", "UnitCombatInfos");
 
 		std::string sqlKey = "Policy_FreePromotionUnitCombats";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if (pResults == NULL)
-		{
-			const char* szSQL = "select UnitPromotions.ID as UnitPromotionID, UnitCombatInfos.ID as UnitCombatInfoID from Policy_FreePromotionUnitCombats inner join UnitPromotions on UnitPromotions.Type = PromotionType inner join UnitCombatInfos on UnitCombatInfos.Type = UnitCombatType where PolicyType = ?";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"select UnitPromotions.ID as UnitPromotionID, UnitCombatInfos.ID as UnitCombatInfoID from Policy_FreePromotionUnitCombats inner join UnitPromotions on UnitPromotions.Type = PromotionType inner join UnitCombatInfos on UnitCombatInfos.Type = UnitCombatType where PolicyType = ?");
 
 		pResults->Bind(1, szPolicyType);
 
@@ -1421,12 +1312,8 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 
 
 		std::string sqlKey = "m_FreePromotionsUnitCombats";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if(pResults == NULL)
-		{
-			const char* szSQL = "select UnitPromotions.ID, UnitCombatInfos.ID  from Policy_FreePromotionUnitCombats, UnitPromotions, UnitCombatInfos where PolicyType = ? and PromotionType = UnitPromotions.ID and UnitCombatType = UnitCombatInfos.ID";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"select UnitPromotions.ID, UnitCombatInfos.ID  from Policy_FreePromotionUnitCombats, UnitPromotions, UnitCombatInfos where PolicyType = ? and PromotionType = UnitPromotions.ID and UnitCombatType = UnitCombatInfos.ID");
 
 		pResults->Bind(1, szPolicyType, false);
 
@@ -3215,12 +3102,8 @@ bool CvPolicyBranchEntry::CacheResults(Database::Results& kResults, CvDatabaseUt
 		kUtility.InitializeArray(m_piPolicyBranchDisables, "PolicyBranchTypes", (int)NO_POLICY_BRANCH_TYPE);
 
 		std::string sqlKey = "m_piPolicyBranchDisables";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if(pResults == NULL)
-		{
-			const char* szSQL = "select PolicyBranchTypes.ID from PolicyBranch_Disables inner join PolicyBranchTypes on PolicyBranchTypes.Type = PolicyBranchDisable where PolicyBranchType = ?";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"select PolicyBranchTypes.ID from PolicyBranch_Disables inner join PolicyBranchTypes on PolicyBranchTypes.Type = PolicyBranchDisable where PolicyBranchType = ?");
 
 		pResults->Bind(1, szPolicyBranchType, false);
 

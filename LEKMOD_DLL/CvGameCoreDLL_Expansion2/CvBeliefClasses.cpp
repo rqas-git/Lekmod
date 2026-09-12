@@ -974,17 +974,13 @@ bool CvBeliefEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 		kUtility.Initialize2DArray(m_ppiTradeConnectionOriginLandYieldChange, "TradeConnections", "Yields");
 		kUtility.Initialize2DArray(m_ppiTradeConnectionOriginSeaYieldChange, "TradeConnections", "Yields");
 		std::string strKey("Belief_TradeConnectionOriginYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if (pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, 
-				"SELECT TradeConnections.ID as TradeConnectionsID, Domains.ID as DomainID, Yields.ID as YieldID, YieldTimes100 "
-				"FROM Belief_TradeConnectionOriginYieldChanges "
-				"INNER JOIN TradeConnections on TradeConnections.Type = TradeConnectionType "
-				"INNER JOIN Domains on Domains.Type = DomainType "
-				"INNER JOIN Yields on Yields.Type = YieldType "
-				"WHERE BeliefType = ? ");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"SELECT TradeConnections.ID as TradeConnectionsID, Domains.ID as DomainID, Yields.ID as YieldID, YieldTimes100 "
+			"FROM Belief_TradeConnectionOriginYieldChanges "
+			"INNER JOIN TradeConnections on TradeConnections.Type = TradeConnectionType "
+			"INNER JOIN Domains on Domains.Type = DomainType "
+			"INNER JOIN Yields on Yields.Type = YieldType "
+			"WHERE BeliefType = ? ");
 		pResults->Bind(1, szBeliefType);
 		while (pResults->Step())
 		{
@@ -1003,17 +999,13 @@ bool CvBeliefEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 		kUtility.Initialize2DArray(m_ppiIncomingTradeConnectionLandYieldChange, "TradeConnections", "Yields");
 		kUtility.Initialize2DArray(m_ppiIncomingTradeConnectionSeaYieldChange, "TradeConnections", "Yields");
 		std::string strKey("Belief_IncomingTradeConnectionYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if (pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey,
-				"SELECT TradeConnections.ID as TradeConnectionsID, Domains.ID as DomainID, Yields.ID as YieldID, YieldTimes100 "
-				"FROM Belief_IncomingTradeConnectionYieldChanges "
-				"INNER JOIN TradeConnections on TradeConnections.Type = TradeConnectionType "
-				"INNER JOIN Domains on Domains.Type = DomainType "
-				"INNER JOIN Yields on Yields.Type = YieldType "
-				"WHERE BeliefType = ? ");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"SELECT TradeConnections.ID as TradeConnectionsID, Domains.ID as DomainID, Yields.ID as YieldID, YieldTimes100 "
+			"FROM Belief_IncomingTradeConnectionYieldChanges "
+			"INNER JOIN TradeConnections on TradeConnections.Type = TradeConnectionType "
+			"INNER JOIN Domains on Domains.Type = DomainType "
+			"INNER JOIN Yields on Yields.Type = YieldType "
+			"WHERE BeliefType = ? ");
 		pResults->Bind(1, szBeliefType);
 		while (pResults->Step())
 		{
@@ -1039,16 +1031,11 @@ bool CvBeliefEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 		kUtility.InitializeArray(m_paiYieldChangePerXForeignFollowers, "Yields");
 		kUtility.InitializeArray(m_paiYieldChangePerXFollowers, "Yields");
 		std::string key("Belief_YieldChangePerXFollowers");
-		Database::Results* results = kUtility.GetResults(key);
-		if(results == NULL)
-		{
-			const char* query =
-				"SELECT Yields.ID as YieldID, YieldPerXFollowers, YieldPerXForeignFollowers "
-				"FROM Belief_YieldChangePerXFollowers "
-				"INNER JOIN Yields ON Yields.Type = YieldType "
-				"WHERE BeliefType = ?";
-			results = kUtility.PrepareResults(key, query);
-		}
+		Database::Results* results = kUtility.GetOrPrepareResults(key,
+			"SELECT Yields.ID as YieldID, YieldPerXFollowers, YieldPerXForeignFollowers "
+			"FROM Belief_YieldChangePerXFollowers "
+			"INNER JOIN Yields ON Yields.Type = YieldType "
+			"WHERE BeliefType = ?");
 		results->Bind(1, szBeliefType);
 		while (results->Step())
 		{
@@ -1073,16 +1060,11 @@ bool CvBeliefEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 		kUtility.InitializeArray(m_paiYieldChangePerFollowingCity, "Yields");
 		kUtility.InitializeArray(m_paiYieldChangePerForeignCity, "Yields");
 		std::string key("Belief_YieldChangePerFollowingCity");
-		Database::Results* results = kUtility.GetResults(key);
-		if(results == NULL)
-		{
-			const char* query =
-				"SELECT Yields.ID as YieldID, YieldPerFollowingCity, YieldPerForeignCity "
-				"FROM Belief_YieldChangePerFollowingCity "
-				"INNER JOIN Yields ON Yields.Type = YieldType "
-				"WHERE BeliefType = ?";
-			results = kUtility.PrepareResults(key, query);
-		}
+		Database::Results* results = kUtility.GetOrPrepareResults(key,
+			"SELECT Yields.ID as YieldID, YieldPerFollowingCity, YieldPerForeignCity "
+			"FROM Belief_YieldChangePerFollowingCity "
+			"INNER JOIN Yields ON Yields.Type = YieldType "
+			"WHERE BeliefType = ?");
 		results->Bind(1, szBeliefType);
 		while (results->Step())
 		{
@@ -1102,16 +1084,11 @@ bool CvBeliefEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 	{
 		kUtility.InitializeArray(m_paiPlayerYieldModifier, "Yields");
 		std::string key("Belief_PlayerYieldModifier");
-		Database::Results* results = kUtility.GetResults(key);
-		if(results == NULL)
-		{
-			const char* query =
-				"SELECT Yields.ID as YieldID, PlayerYieldModifier "
-				"FROM Belief_PlayerYieldModifier "
-				"INNER JOIN Yields ON Yields.Type = YieldType "
-				"WHERE BeliefType = ?";
-			results = kUtility.PrepareResults(key, query);
-		}
+		Database::Results* results = kUtility.GetOrPrepareResults(key,
+			"SELECT Yields.ID as YieldID, PlayerYieldModifier "
+			"FROM Belief_PlayerYieldModifier "
+			"INNER JOIN Yields ON Yields.Type = YieldType "
+			"WHERE BeliefType = ?");
 		results->Bind(1, szBeliefType);
 		while (results->Step())
 		{
@@ -1134,20 +1111,14 @@ bool CvBeliefEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 	kUtility.SetYields(m_piYieldChangeWorldWonder, "WorldWonderYieldChanges", "BeliefType", szBeliefType);
 #endif
 	//ImprovementYieldChanges
-	{
 #ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
+	{
 		kUtility.Initialize2DArray(m_ppiImprovementYieldChanges.first, "Improvements", "Yields");
 		m_ppiImprovementYieldChanges.second = kUtility.MaxRows("Improvements");
-#else
-		kUtility.Initialize2DArray(m_ppiImprovementYieldChanges, "Improvements", "Yields");
-#endif
 
 		std::string strKey("Belief_ImprovementYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Improvements.ID as ImprovementID, Yields.ID as YieldID, Yield from Belief_ImprovementYieldChanges inner join Improvements on Improvements.Type = ImprovementType inner join Yields on Yields.Type = YieldType where BeliefType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Improvements.ID as ImprovementID, Yields.ID as YieldID, Yield from Belief_ImprovementYieldChanges inner join Improvements on Improvements.Type = ImprovementType inner join Yields on Yields.Type = YieldType where BeliefType = ?");
 
 		pResults->Bind(1, szBeliefType);
 
@@ -1157,29 +1128,24 @@ bool CvBeliefEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 			const int YieldID = pResults->GetInt(1);
 			const int yield = pResults->GetInt(2);
 
-#ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
 			m_ppiImprovementYieldChanges.first[ImprovementID][YieldID] = yield;
-#else
-			m_ppiImprovementYieldChanges[ImprovementID][YieldID] = yield;
-#endif
 		}
 	}
-
-	//BuildingClassYieldChanges
-	{
-#ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
-		kUtility.Initialize2DArray(m_ppiBuildingClassYieldChanges.first, "BuildingClasses", "Yields");
-		m_ppiBuildingClassYieldChanges.second = kUtility.MaxRows("BuildingClasses");
 #else
-		kUtility.Initialize2DArray(m_ppiBuildingClassYieldChanges, "BuildingClasses", "Yields");
+	kUtility.SetYieldMatrix(m_ppiImprovementYieldChanges, "Improvements", "Belief_ImprovementYieldChanges",
+		"select Improvements.ID as ImprovementID, Yields.ID as YieldID, Yield from Belief_ImprovementYieldChanges inner join Improvements on Improvements.Type = ImprovementType inner join Yields on Yields.Type = YieldType where BeliefType = ?",
+		szBeliefType);
 #endif
 
+	//BuildingClassYieldChanges
+#ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
+	{
+		kUtility.Initialize2DArray(m_ppiBuildingClassYieldChanges.first, "BuildingClasses", "Yields");
+		m_ppiBuildingClassYieldChanges.second = kUtility.MaxRows("BuildingClasses");
+
 		std::string strKey("Belief_BuildingClassYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select BuildingClasses.ID as BuildingClassID, Yields.ID as YieldID, YieldChange from Belief_BuildingClassYieldChanges inner join BuildingClasses on BuildingClasses.Type = BuildingClassType inner join Yields on Yields.Type = YieldType where BeliefType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select BuildingClasses.ID as BuildingClassID, Yields.ID as YieldID, YieldChange from Belief_BuildingClassYieldChanges inner join BuildingClasses on BuildingClasses.Type = BuildingClassType inner join Yields on Yields.Type = YieldType where BeliefType = ?");
 
 		pResults->Bind(1, szBeliefType);
 
@@ -1189,13 +1155,14 @@ bool CvBeliefEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 			const int iYieldID = pResults->GetInt(1);
 			const int iYieldChange = pResults->GetInt(2);
 
-#ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
 			m_ppiBuildingClassYieldChanges.first[BuildingClassID][iYieldID] = iYieldChange;
-#else
-			m_ppiBuildingClassYieldChanges[BuildingClassID][iYieldID] = iYieldChange;
-#endif
 		}
 	}
+#else
+	kUtility.SetYieldMatrix(m_ppiBuildingClassYieldChanges, "BuildingClasses", "Belief_BuildingClassYieldChanges",
+		"select BuildingClasses.ID as BuildingClassID, Yields.ID as YieldID, YieldChange from Belief_BuildingClassYieldChanges inner join BuildingClasses on BuildingClasses.Type = BuildingClassType inner join Yields on Yields.Type = YieldType where BeliefType = ?",
+		szBeliefType);
+#endif
 
 #ifdef AUI_BELIEF_BUILDING_CLASS_FLAVOR_MODIFIERS
 	//BuildingClassFlavorChanges
@@ -1208,11 +1175,8 @@ bool CvBeliefEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 #endif
 
 		std::string strKey("Belief_BuildingClassFlavorChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if (pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select BuildingClasses.ID as BuildingClassID, Flavors.ID as FlavorID, FlavorChange from Belief_BuildingClassFlavorChanges inner join BuildingClasses on BuildingClasses.Type = BuildingClassType inner join Flavors on Flavors.Type = FlavorType where BeliefType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select BuildingClasses.ID as BuildingClassID, Flavors.ID as FlavorID, FlavorChange from Belief_BuildingClassFlavorChanges inner join BuildingClasses on BuildingClasses.Type = BuildingClassType inner join Flavors on Flavors.Type = FlavorType where BeliefType = ?");
 
 		pResults->Bind(1, szBeliefType);
 
@@ -1232,20 +1196,14 @@ bool CvBeliefEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 #endif
 
 	//FeatureYieldChanges
-	{
 #ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
+	{
 		kUtility.Initialize2DArray(m_ppaiFeatureYieldChange.first, "Features", "Yields");
 		m_ppaiFeatureYieldChange.second = kUtility.MaxRows("Features");
-#else
-		kUtility.Initialize2DArray(m_ppaiFeatureYieldChange, "Features", "Yields");
-#endif
 
 		std::string strKey("Belief_FeatureYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Features.ID as FeatureID, Yields.ID as YieldID, Yield from Belief_FeatureYieldChanges inner join Features on Features.Type = FeatureType inner join Yields on Yields.Type = YieldType where BeliefType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Features.ID as FeatureID, Yields.ID as YieldID, Yield from Belief_FeatureYieldChanges inner join Features on Features.Type = FeatureType inner join Yields on Yields.Type = YieldType where BeliefType = ?");
 
 		pResults->Bind(1, szBeliefType);
 
@@ -1255,29 +1213,24 @@ bool CvBeliefEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 			const int YieldID = pResults->GetInt(1);
 			const int yield = pResults->GetInt(2);
 
-#ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
 			m_ppaiFeatureYieldChange.first[FeatureID][YieldID] = yield;
-#else
-			m_ppaiFeatureYieldChange[FeatureID][YieldID] = yield;
-#endif
 		}
 	}
-
-	//ResourceYieldChanges
-	{
-#ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
-		kUtility.Initialize2DArray(m_ppaiResourceYieldChange.first, "Resources", "Yields");
-		m_ppaiResourceYieldChange.second = kUtility.MaxRows("Resources");
 #else
-		kUtility.Initialize2DArray(m_ppaiResourceYieldChange, "Resources", "Yields");
+	kUtility.SetYieldMatrix(m_ppaiFeatureYieldChange, "Features", "Belief_FeatureYieldChanges",
+		"select Features.ID as FeatureID, Yields.ID as YieldID, Yield from Belief_FeatureYieldChanges inner join Features on Features.Type = FeatureType inner join Yields on Yields.Type = YieldType where BeliefType = ?",
+		szBeliefType);
 #endif
 
+	//ResourceYieldChanges
+#ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
+	{
+		kUtility.Initialize2DArray(m_ppaiResourceYieldChange.first, "Resources", "Yields");
+		m_ppaiResourceYieldChange.second = kUtility.MaxRows("Resources");
+
 		std::string strKey("Belief_ResourceYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Resources.ID as ResourceID, Yields.ID as YieldID, Yield from Belief_ResourceYieldChanges inner join Resources on Resources.Type = ResourceType inner join Yields on Yields.Type = YieldType where BeliefType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Resources.ID as ResourceID, Yields.ID as YieldID, Yield from Belief_ResourceYieldChanges inner join Resources on Resources.Type = ResourceType inner join Yields on Yields.Type = YieldType where BeliefType = ?");
 
 		pResults->Bind(1, szBeliefType);
 
@@ -1287,29 +1240,24 @@ bool CvBeliefEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 			const int YieldID = pResults->GetInt(1);
 			const int yield = pResults->GetInt(2);
 
-#ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
 			m_ppaiResourceYieldChange.first[ResourceID][YieldID] = yield;
-#else
-			m_ppaiResourceYieldChange[ResourceID][YieldID] = yield;
-#endif
 		}
 	}
-
-	//TerrainYieldChanges
-	{
-#ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
-		kUtility.Initialize2DArray(m_ppaiTerrainYieldChange.first, "Terrains", "Yields");
-		m_ppaiTerrainYieldChange.second = kUtility.MaxRows("Terrains");
 #else
-		kUtility.Initialize2DArray(m_ppaiTerrainYieldChange, "Terrains", "Yields");
+	kUtility.SetYieldMatrix(m_ppaiResourceYieldChange, "Resources", "Belief_ResourceYieldChanges",
+		"select Resources.ID as ResourceID, Yields.ID as YieldID, Yield from Belief_ResourceYieldChanges inner join Resources on Resources.Type = ResourceType inner join Yields on Yields.Type = YieldType where BeliefType = ?",
+		szBeliefType);
 #endif
 
+	//TerrainYieldChanges
+#ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
+	{
+		kUtility.Initialize2DArray(m_ppaiTerrainYieldChange.first, "Terrains", "Yields");
+		m_ppaiTerrainYieldChange.second = kUtility.MaxRows("Terrains");
+
 		std::string strKey("Belief_TerrainYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Terrains.ID as TerrainID, Yields.ID as YieldID, Yield from Belief_TerrainYieldChanges inner join Terrains on Terrains.Type = TerrainType inner join Yields on Yields.Type = YieldType where BeliefType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Terrains.ID as TerrainID, Yields.ID as YieldID, Yield from Belief_TerrainYieldChanges inner join Terrains on Terrains.Type = TerrainType inner join Yields on Yields.Type = YieldType where BeliefType = ?");
 
 		pResults->Bind(1, szBeliefType);
 
@@ -1319,13 +1267,14 @@ bool CvBeliefEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 			const int YieldID = pResults->GetInt(1);
 			const int yield = pResults->GetInt(2);
 
-#ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
 			m_ppaiTerrainYieldChange.first[TerrainID][YieldID] = yield;
-#else
-			m_ppaiTerrainYieldChange[TerrainID][YieldID] = yield;
-#endif
 		}
 	}
+#else
+	kUtility.SetYieldMatrix(m_ppaiTerrainYieldChange, "Terrains", "Belief_TerrainYieldChanges",
+		"select Terrains.ID as TerrainID, Yields.ID as YieldID, Yield from Belief_TerrainYieldChanges inner join Terrains on Terrains.Type = TerrainType inner join Yields on Yields.Type = YieldType where BeliefType = ?",
+		szBeliefType);
+#endif
 
 	return true;
 }

@@ -11849,11 +11849,8 @@ bool CvMinorCivPersonalityInfo::CacheResults(Database::Results& kResults, CvData
 	const char* szType = GetType();
 	{
 		std::string strKey = "Minor_Civ_Personality - QuestWeights";
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select QuestType, WeightMultiplier from Minor_Civ_Personality_QuestWeights where PersonalityType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select QuestType, WeightMultiplier from Minor_Civ_Personality_QuestWeights where PersonalityType = ?");
 
 		pResults->Bind(1, szType, -1, false);
 
@@ -11872,11 +11869,8 @@ bool CvMinorCivPersonalityInfo::CacheResults(Database::Results& kResults, CvData
 	m_vFlavorChanges.clear();
 	{
 		std::string strKey = "Minor_Civ_Personality - Flavors";
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select FlavorType, Flavor from Minor_Civ_Personality_Flavors where PersonalityType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select FlavorType, Flavor from Minor_Civ_Personality_Flavors where PersonalityType = ?");
 
 		pResults->Bind(1, szType, -1, false);
 
@@ -12070,11 +12064,8 @@ bool CvMinorCivInfo::CacheResults(Database::Results& kResults, CvDatabaseUtility
 		m_vCityNames.clear();
 
 		std::string strKey = "MinorCiv - CityName";
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select CityName from MinorCivilization_CityNames where MinorCivType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select CityName from MinorCivilization_CityNames where MinorCivType = ?");
 
 		pResults->Bind(1, szType, -1, false);
 

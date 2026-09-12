@@ -533,16 +533,11 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 	{
 		kUtility.InitializeArray(m_pabKillYieldValidEra, "Eras", false);
 		std::string sqlKey = "UnitPromotions_KillYieldValidEras";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if (pResults == NULL)
-		{
-			const char* szSQL =
-				"SELECT Eras.ID "
-				"FROM UnitPromotions_KillYieldValidEras "
-				"INNER JOIN Eras ON Eras.Type = EraType "
-				"WHERE PromotionType = ?";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"SELECT Eras.ID "
+			"FROM UnitPromotions_KillYieldValidEras "
+			"INNER JOIN Eras ON Eras.Type = EraType "
+			"WHERE PromotionType = ?");
 		pResults->Bind(1, szPromotionType);
 		while (pResults->Step())
 		{
@@ -555,16 +550,11 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 		kUtility.InitializeArray(m_paiYieldFromKills, "Yields", 0);
 		kUtility.InitializeArray(m_paiKillYieldCap, "Yields", 0);
 		std::string sqlKey = "UnitPromotions_YieldFromKills";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if (pResults == NULL)
-		{
-			const char* szSQL =
-				"SELECT Yields.ID, Yield, COALESCE(Max, 0) "
-				"FROM UnitPromotions_YieldFromKills "
-				"INNER JOIN Yields ON Yields.Type = YieldType "
-				"WHERE PromotionType = ?";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"SELECT Yields.ID, Yield, COALESCE(Max, 0) "
+			"FROM UnitPromotions_YieldFromKills "
+			"INNER JOIN Yields ON Yields.Type = YieldType "
+			"WHERE PromotionType = ?");
 
 		pResults->Bind(1, szPromotionType);
 
@@ -634,17 +624,12 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 	{
 		kUtility.InitializeArray(m_paiConvertPromotionUpgrades, iNumUnitCombatClasses, NO_PROMOTION);
 		std::string sqlKey = "UnitPromotions_UnitCombatPromotionConversion";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if (pResults == NULL)
-		{
-			const char* szSQL =
-				"SELECT UnitCombatInfos.ID , UnitPromotions.ID  "
-				"FROM UnitPromotions_UnitCombatPromotionConversion "
-				"INNER JOIN UnitCombatInfos ON UnitCombatInfos.Type = UnitCombatType "
-				"INNER JOIN UnitPromotions ON UnitPromotions.Type = ToPromotion "
-				"WHERE PromotionType = ?";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"SELECT UnitCombatInfos.ID , UnitPromotions.ID  "
+			"FROM UnitPromotions_UnitCombatPromotionConversion "
+			"INNER JOIN UnitCombatInfos ON UnitCombatInfos.Type = UnitCombatType "
+			"INNER JOIN UnitPromotions ON UnitPromotions.Type = ToPromotion "
+			"WHERE PromotionType = ?");
 		pResults->Bind(1, szPromotionType);
 
 		while (pResults->Step())
@@ -663,15 +648,10 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 		m_vPromotionPrereqOrs.clear();
 		
 		std::string sqlKey = "UnitPromotions_PromotionPrereqOrs";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if (pResults == NULL)
-		{
-			const char* szSQL =
-				"SELECT UnitPromotions.ID FROM UnitPromotions_PromotionPrereqOrs "
-				"INNER JOIN UnitPromotions ON UnitPromotions.Type = PrerequisitePromotion "
-				"WHERE PromotionType = ?";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"SELECT UnitPromotions.ID FROM UnitPromotions_PromotionPrereqOrs "
+			"INNER JOIN UnitPromotions ON UnitPromotions.Type = PrerequisitePromotion "
+			"WHERE PromotionType = ?");
 
 		pResults->Bind(1, szPromotionType);
 
@@ -693,16 +673,11 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 		kUtility.InitializeArray(m_pbTerrainImpassable, iNumTerrains, false);
 
 		std::string sqlKey = "UnitPromotions_Terrains";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if(pResults == NULL)
-		{
-			const char* szSQL = 
-				"select Terrains.ID as TerrainID, coalesce(Technologies.ID, -1) as PassableTechID, UnitPromotions_Terrains.* from UnitPromotions_Terrains "
-				"inner join Terrains on TerrainType = Terrains.Type "
-				"left join Technologies on PassableTech = Technologies.Type "
-				"where PromotionType = ?";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"select Terrains.ID as TerrainID, coalesce(Technologies.ID, -1) as PassableTechID, UnitPromotions_Terrains.* from UnitPromotions_Terrains "
+			"inner join Terrains on TerrainType = Terrains.Type "
+			"left join Technologies on PassableTech = Technologies.Type "
+			"where PromotionType = ?");
 
 		CvAssert(pResults);
 		if(!pResults) return false;
@@ -740,12 +715,8 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 		kUtility.InitializeArray(m_pbFeatureImpassable, iNumFeatures, false);
 
 		std::string sqlKey = "UnitPromotions_Features";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if(pResults == NULL)
-		{
-			const char* szSQL = "select Features.ID as FeatureID, coalesce(Technologies.ID, -1) as PassableTechID, UnitPromotions_Features.* from UnitPromotions_Features inner join Features on FeatureType = Features.Type left join Technologies on PassableTech = Technologies.Type where PromotionType = ?";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"select Features.ID as FeatureID, coalesce(Technologies.ID, -1) as PassableTechID, UnitPromotions_Features.* from UnitPromotions_Features inner join Features on FeatureType = Features.Type left join Technologies on PassableTech = Technologies.Type where PromotionType = ?");
 
 		CvAssert(pResults);
 		if(!pResults) return false;
@@ -781,12 +752,8 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 		kUtility.InitializeArray(m_piUnitClassDefenseModifier, iNumUnitClasses, 0);
 
 		std::string sqlKey = "UnitPromotions_UnitClasses";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if(pResults == NULL)
-		{
-			const char* szSQL = "select UnitClasses.ID, Modifier, Attack, Defense from UnitPromotions_UnitClasses inner join UnitClasses on UnitClassType = UnitClasses.Type where PromotionType = ?";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"select UnitClasses.ID, Modifier, Attack, Defense from UnitPromotions_UnitClasses inner join UnitClasses on UnitClassType = UnitClasses.Type where PromotionType = ?");
 
 		CvAssert(pResults);
 		if(!pResults) return false;
@@ -819,12 +786,8 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 		kUtility.InitializeArray(m_piDomainDefensePercent, NUM_DOMAIN_TYPES, 0);
 
 		std::string sqlKey = "UnitPromotions_Domains_AttackDefense";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if(pResults == NULL)
-		{
-			const char* szSQL = "select Domains.ID, Modifier, Attack, Defense from UnitPromotions_Domains inner join Domains on DomainType = Domains.Type where PromotionType = ?;";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"select Domains.ID, Modifier, Attack, Defense from UnitPromotions_Domains inner join Domains on DomainType = Domains.Type where PromotionType = ?;");
 
 		CvAssert(pResults);
 		if(!pResults) return false;
@@ -847,12 +810,8 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 		pResults->Reset();
 #else
 		std::string sqlKey = "m_piDomainModifierPercent";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if(pResults == NULL)
-		{
-			const char* szSQL = "select Domains.ID, Modifier from UnitPromotions_Domains inner join Domains on DomainType = Domains.Type where PromotionType = ?;";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"select Domains.ID, Modifier from UnitPromotions_Domains inner join Domains on DomainType = Domains.Type where PromotionType = ?;");
 
 		CvAssert(pResults);
 		if(!pResults) return false;
@@ -878,12 +837,8 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 		kUtility.InitializeArray(m_piUnitCombatModifierPercent, iNumUnitCombatClasses, 0);
 
 		std::string sqlKey = "m_piUnitCombatModifierPercent";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if(pResults == NULL)
-		{
-			const char* szSQL = "select UnitCombatInfos.ID, Modifier from UnitPromotions_UnitCombatMods inner join UnitCombatInfos on UnitCombatInfos.Type = UnitCombatType where PromotionType = ?;";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"select UnitCombatInfos.ID, Modifier from UnitPromotions_UnitCombatMods inner join UnitCombatInfos on UnitCombatInfos.Type = UnitCombatType where PromotionType = ?;");
 
 		CvAssert(pResults);
 		if(!pResults) return false;
@@ -907,12 +862,8 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 		kUtility.InitializeArray(m_pbUnitCombat, iNumUnitCombatClasses, false);
 
 		std::string sqlKey = "m_pbUnitCombat";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if(pResults == NULL)
-		{
-			const char* szSQL = "select UnitCombatInfos.ID from UnitPromotions_UnitCombats inner join UnitCombatInfos On UnitCombatInfos.Type = UnitCombatType where PromotionType = ?";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"select UnitCombatInfos.ID from UnitPromotions_UnitCombats inner join UnitCombatInfos On UnitCombatInfos.Type = UnitCombatType where PromotionType = ?");
 
 		CvAssert(pResults);
 		if(!pResults) return false;
@@ -935,12 +886,8 @@ bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtili
 		kUtility.InitializeArray(m_pbCivilianUnitType, iNumUnitTypes, false);
 
 		std::string sqlKey = "m_pbCivilianUnitType";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if(pResults == NULL)
-		{
-			const char* szSQL = "select Units.ID from UnitPromotions_CivilianUnitType inner join Units On Units.Type = UnitType where PromotionType = ?";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"select Units.ID from UnitPromotions_CivilianUnitType inner join Units On Units.Type = UnitType where PromotionType = ?");
 
 		CvAssert(pResults);
 		if(!pResults) return false;

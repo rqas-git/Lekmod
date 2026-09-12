@@ -404,18 +404,12 @@ bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUti
 
 
 		std::string strResourceTypesKey = "Improvements - ResourceTypes";
-		Database::Results* pResourceTypes = kUtility.GetResults(strResourceTypesKey);
-		if(pResourceTypes == NULL)
-		{
-			pResourceTypes = kUtility.PrepareResults(strResourceTypesKey, "select Resources.ID, ResourceType, ResourceMakesValid, ResourceTrade, DiscoveryRand from Improvement_ResourceTypes inner join Resources on ResourceType = Resources.Type where ImprovementType = ?");
-		}
+		Database::Results* pResourceTypes = kUtility.GetOrPrepareResults(strResourceTypesKey,
+			"select Resources.ID, ResourceType, ResourceMakesValid, ResourceTrade, DiscoveryRand from Improvement_ResourceTypes inner join Resources on ResourceType = Resources.Type where ImprovementType = ?");
 
 		std::string strYieldResultsKey = "Improvements - YieldResults";
-		Database::Results* pYieldResults = kUtility.GetResults(strYieldResultsKey);
-		if(pYieldResults == NULL)
-		{
-			pYieldResults = kUtility.PrepareResults(strYieldResultsKey, "select Yields.ID, Yield from Improvement_ResourceType_Yields inner join Yields on YieldType = Yields.Type where ImprovementType = ? and ResourceType = ?");
-		}
+		Database::Results* pYieldResults = kUtility.GetOrPrepareResults(strYieldResultsKey,
+			"select Yields.ID, Yield from Improvement_ResourceType_Yields inner join Yields on YieldType = Yields.Type where ImprovementType = ? and ResourceType = ?");
 
 		pResourceTypes->Bind(1, szImprovementType, lenImprovementType, false);
 
@@ -457,11 +451,8 @@ bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUti
 	{
 		kUtility.Initialize2DArray(m_ppiEraYieldChanges, iNumEras, iNumYields);
 		std::string strKey = "Improvements_EraYieldChanges";
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if (pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Eras.ID as EraID, Yields.ID as YieldID, Yield from Improvement_EraYieldChanges inner join Yields on YieldType = Yields.Type inner join Eras on EraType = Eras.Type where ImprovementType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Eras.ID as EraID, Yields.ID as YieldID, Yield from Improvement_EraYieldChanges inner join Yields on YieldType = Yields.Type inner join Eras on EraType = Eras.Type where ImprovementType = ?");
 		pResults->Bind(1, szImprovementType, lenImprovementType, false);
 		while (pResults->Step())
 		{
@@ -485,11 +476,8 @@ bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUti
 #endif
 
 		std::string strKey = "Improvements - TechYieldChanges";
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Yields.ID as YieldID, Technologies.ID as TechID, Yield from Improvement_TechYieldChanges inner join Yields on YieldType = Yields.Type inner join Technologies on TechType = Technologies.Type where ImprovementType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Yields.ID as YieldID, Technologies.ID as TechID, Yield from Improvement_TechYieldChanges inner join Yields on YieldType = Yields.Type inner join Technologies on TechType = Technologies.Type where ImprovementType = ?");
 
 		pResults->Bind(1, szImprovementType, lenImprovementType, false);
 
@@ -524,11 +512,8 @@ bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUti
 		kUtility.Initialize2DArray(m_ppiImprovementAdjacentBonusCivilizationNoAmount, iImprovementTypes, iNumYields);
 
 		std::string strKey = "Improvement_AdjacencyYieldCivilization";
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if (pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select OtherImprovementType, Civilizations.ID, Amount, Yields.ID, Yield from Improvement_AdjacencyYieldCivilization inner join Yields on YieldType = Yields.Type inner join Civilizations on CivilizationType = Civilizations.Type where ImprovementType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select OtherImprovementType, Civilizations.ID, Amount, Yields.ID, Yield from Improvement_AdjacencyYieldCivilization inner join Yields on YieldType = Yields.Type inner join Civilizations on CivilizationType = Civilizations.Type where ImprovementType = ?");
 
 		pResults->Bind(1, szImprovementType, lenImprovementType, false);
 
@@ -569,11 +554,8 @@ bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUti
 		kUtility.Initialize2DArray(m_ppiImprovementAdjacentAmount, iImprovementTypes, iNumMaxAmount);
 
 		std::string strKey = "Improvement_AdjacencyYield";
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if (pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select OtherImprovementType, Amount, Yields.ID, Yield from Improvement_AdjacencyYield inner join Yields on YieldType = Yields.Type where ImprovementType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select OtherImprovementType, Amount, Yields.ID, Yield from Improvement_AdjacencyYield inner join Yields on YieldType = Yields.Type where ImprovementType = ?");
 
 		pResults->Bind(1, szImprovementType, lenImprovementType, false);
 
@@ -614,11 +596,8 @@ bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUti
 #endif
 
 		std::string strKey = "Improvements - TechNoFreshWaterYieldChanges";
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Yields.ID as YieldID, Technologies.ID as TechID, Yield from Improvement_TechNoFreshWaterYieldChanges inner join Yields on YieldType = Yields.Type inner join Technologies on TechType = Technologies.Type where ImprovementType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Yields.ID as YieldID, Technologies.ID as TechID, Yield from Improvement_TechNoFreshWaterYieldChanges inner join Yields on YieldType = Yields.Type inner join Technologies on TechType = Technologies.Type where ImprovementType = ?");
 
 		pResults->Bind(1, szImprovementType, lenImprovementType, false);
 
@@ -653,11 +632,8 @@ bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUti
 #endif
 
 		std::string strKey = "Improvements - TechFreshWaterYieldChanges";
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Yields.ID as YieldID, Technologies.ID as TechID, Yield from Improvement_TechFreshWaterYieldChanges inner join Yields on YieldType = Yields.Type inner join Technologies on TechType = Technologies.Type where ImprovementType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Yields.ID as YieldID, Technologies.ID as TechID, Yield from Improvement_TechFreshWaterYieldChanges inner join Yields on YieldType = Yields.Type inner join Technologies on TechType = Technologies.Type where ImprovementType = ?");
 
 		pResults->Bind(1, szImprovementType, lenImprovementType, false);
 
@@ -693,11 +669,8 @@ bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUti
 #endif
 
 		std::string strKey = "Improvements - RouteYieldChanges";
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Yields.ID as YieldID, Routes.ID as RouteID, Yield from Improvement_RouteYieldChanges inner join Yields on YieldType = Yields.Type inner join Routes on RouteType = Routes.Type where ImprovementType = ?;");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Yields.ID as YieldID, Routes.ID as RouteID, Yield from Improvement_RouteYieldChanges inner join Yields on YieldType = Yields.Type inner join Routes on RouteType = Routes.Type where ImprovementType = ?;");
 
 		pResults->Bind(1, szImprovementType, lenImprovementType, false);
 

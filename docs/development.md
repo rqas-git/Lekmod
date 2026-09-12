@@ -25,3 +25,21 @@ LUA51=/path/to/lua5.1 python3 -B -m unittest discover -s tests -p test_maps.py -
 ```
 
 Tests read their original fixtures from Git history. Use a full checkout in CI.
+
+## Database loaders
+
+`GetOrPrepareResults` resets an existing cached statement or prepares one on a
+miss. Keep cache keys, SQL, and bind order intact. Dynamic SQL is still built only
+on a miss. `SetYieldMatrix` shares 20 single-matrix assignment loaders; accumulation
+and multi-matrix loaders remain explicit. Alternative allocation configurations
+retain their original row-count bookkeeping.
+
+`MaxRows` continues to cache statements rather than results. The SQLite fixture
+executes the production helper and sizing methods against sparse IDs, duplicate
+rows, changed bindings, changed table contents, schema recreation, failed query
+preparation, and cache clearing. Run it with a C++98-capable compiler and SQLite
+development files:
+
+```sh
+python3 -B -m unittest discover -s tests -p test_yield_matrix.py -v
+```

@@ -338,16 +338,11 @@ bool CvUnitEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility& k
 		kUtility.InitializeArray(m_piYieldFromKills, "Yields", 0);
 		kUtility.InitializeArray(m_piYieldFromKillsMax, "Yields", 0);
 		std::string sqlKey = "Unit_YieldFromKills";
-		Database::Results* pResults = kUtility.GetResults(sqlKey);
-		if (pResults == NULL)
-		{
-			const char* szSQL =
-				"SELECT Yields.ID, Yield, COALESCE(Max, 0) "
-				"FROM Unit_YieldFromKills "
-				"INNER JOIN Yields ON Yields.Type = YieldType "
-				"WHERE UnitType = ?";
-			pResults = kUtility.PrepareResults(sqlKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(sqlKey,
+			"SELECT Yields.ID, Yield, COALESCE(Max, 0) "
+			"FROM Unit_YieldFromKills "
+			"INNER JOIN Yields ON Yields.Type = YieldType "
+			"WHERE UnitType = ?");
 
 		pResults->Bind(1, szUnitType);
 
@@ -377,15 +372,10 @@ bool CvUnitEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility& k
 		kUtility.InitializeArray(m_piEraMovesChanges, "Eras", 0);
 		kUtility.InitializeArray(m_piEraStartingExperienceChanges, "Eras", 0);
 		std::string key = "Unit_EraStrengthChanges";
-		Database::Results* results = kUtility.GetResults(key);
-		if (results == NULL)
-		{
-			const char* szSQL =
-				"SELECT Eras.ID, StrengthChange, RangedStrengthChange, MovesChange, StartingExperienceChange FROM Unit_EraStrengthChanges "
-				"INNER JOIN Eras ON EraType = Eras.Type "
-				"WHERE UnitType = ?";
-			results = kUtility.PrepareResults(key, szSQL);
-		}
+		Database::Results* results = kUtility.GetOrPrepareResults(key,
+			"SELECT Eras.ID, StrengthChange, RangedStrengthChange, MovesChange, StartingExperienceChange FROM Unit_EraStrengthChanges "
+			"INNER JOIN Eras ON EraType = Eras.Type "
+			"WHERE UnitType = ?");
 		results->Bind(1, szUnitType);
 		while (results->Step())
 		{
@@ -404,16 +394,11 @@ bool CvUnitEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility& k
 	}
 	{
 		std::string key = "Unit_FreePromotionEras";
-		Database::Results* results = kUtility.GetResults(key);
-		if (results == NULL)
-		{
-			const char* query = 
-				"SELECT UnitPromotions.ID, Eras.ID FROM Unit_FreePromotionEras "
-				"INNER JOIN UnitPromotions ON PromotionType = UnitPromotions.Type "
-				"INNER JOIN Eras ON EraType = Eras.Type "
-				"WHERE UnitType = ?";
-			results = kUtility.PrepareResults(key, query);
-		}
+		Database::Results* results = kUtility.GetOrPrepareResults(key,
+			"SELECT UnitPromotions.ID, Eras.ID FROM Unit_FreePromotionEras "
+			"INNER JOIN UnitPromotions ON PromotionType = UnitPromotions.Type "
+			"INNER JOIN Eras ON EraType = Eras.Type "
+			"WHERE UnitType = ?");
 			
 		results->Bind(1, szUnitType);
 
@@ -437,11 +422,8 @@ bool CvUnitEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility& k
 		kUtility.InitializeArray(m_piPrereqAndTechs, "Technologies", (int)NO_TECH);
 
 		std::string strKey = "Units - TechTypes";
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Technologies.ID from Unit_TechTypes inner join Technologies on TechType = Technologies.Type where UnitType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Technologies.ID from Unit_TechTypes inner join Technologies on TechType = Technologies.Type where UnitType = ?");
 
 		pResults->Bind(1, szUnitType, -1, false);
 
@@ -457,11 +439,8 @@ bool CvUnitEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility& k
 	//Unit Unique Names Count
 	{
 		std::string strKey = "Units - UniqueNameCount";
-		Database::Results* pUnitNameCount = kUtility.GetResults(strKey);
-		if(pUnitNameCount == NULL)
-		{
-			pUnitNameCount = kUtility.PrepareResults(strKey, "select count(*) from Unit_UniqueNames where UnitType = ?");
-		}
+		Database::Results* pUnitNameCount = kUtility.GetOrPrepareResults(strKey,
+			"select count(*) from Unit_UniqueNames where UnitType = ?");
 
 		pUnitNameCount->Bind(1, szUnitType, -1, false);
 
@@ -483,11 +462,8 @@ bool CvUnitEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility& k
 			m_paeGreatWorks = FNEW(GreatWorkType[m_iNumUnitNames], c_eCiv5GameplayDLL, 0);
 
 			std::string strKey = "Units - UniqueNames";
-			Database::Results* pResults = kUtility.GetResults(strKey);
-			if(pResults == NULL)
-			{
-				pResults = kUtility.PrepareResults(strKey, "select UniqueName, GreatWorkType from Unit_UniqueNames where UnitType = ? ORDER BY rowid");
-			}
+			Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+				"select UniqueName, GreatWorkType from Unit_UniqueNames where UnitType = ? ORDER BY rowid");
 
 			pResults->Bind(1, szUnitType, -1, false);
 
@@ -516,11 +492,8 @@ bool CvUnitEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility& k
 	//MovementRates
 	{
 		std::string strKey = "Units - MovementRates";
-		Database::Results* pMovementRates = kUtility.GetResults(strKey);
-		if(pMovementRates == NULL)
-		{
-			pMovementRates = kUtility.PrepareResults(strKey, "SELECT * FROM MovementRates where Type = ? ORDER BY NumHexes");
-		}
+		Database::Results* pMovementRates = kUtility.GetOrPrepareResults(strKey,
+			"SELECT * FROM MovementRates where Type = ? ORDER BY NumHexes");
 
 		const char* szMovementRate = kResults.GetText("MoveRate");
 		pMovementRates->Bind(1, szMovementRate, -1, false);

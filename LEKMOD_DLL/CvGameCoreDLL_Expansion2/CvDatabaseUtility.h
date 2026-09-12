@@ -28,6 +28,9 @@ public:
 	//! Retrieves a cached result given an arbitrary string key
 	Database::Results* GetResults(const std::string& strKey);
 
+	//! Resets an existing cached result, or prepares and caches it on a miss.
+	Database::Results* GetOrPrepareResults(const std::string& strKey, const char* szStmt);
+
 	//! Prepares a cached result given an arbitrary string key
 	Database::Results* PrepareResults(const std::string& strKey, const char* szStmt);
 
@@ -110,6 +113,10 @@ void InitializeArray(T*& pArray, const char* szTableName, T default = (T)0);
 	// RETURNS:
 	//	True on success.
 	bool SetYields(int*& pYieldsArray, const char* szTableName, const char* szFilterColumn, const char* szFilterValue);
+
+	// Assign a dimension-by-yield matrix; preserve SQL, cache keys, and last-row-wins semantics.
+	void SetYieldMatrix(int**& pYieldsArray, const char* szDimensionTable, const char* szKey,
+	                    const char* szQuery, const char* szFilterValue);
 
 	//! Retrieves the maximum number of a given column for a given table.
 	int MaxRows(const char* szTableName);

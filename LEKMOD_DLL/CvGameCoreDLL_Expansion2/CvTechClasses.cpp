@@ -185,11 +185,8 @@ bool CvTechEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility& k
 		kUtility.InitializeArray(m_piPrereqOrTechs, TechnologiesCount, NO_TECH);
 
 		std::string strKey = "Technologies - Technology_ORPrereqTechs";
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Technologies.ID from Technology_ORPrereqTechs inner join Technologies on Technologies.Type = PrereqTech where TechType = ?;");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Technologies.ID from Technology_ORPrereqTechs inner join Technologies on Technologies.Type = PrereqTech where TechType = ?;");
 
 		pResults->Bind(1, szTechType, -1, false);
 
@@ -208,11 +205,8 @@ bool CvTechEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility& k
 		kUtility.InitializeArray(m_piPrereqAndTechs, TechnologiesCount, NO_TECH);
 
 		std::string strKey = "Technologies - Technology_PrereqTechs";
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Technologies.ID from Technology_PrereqTechs inner join Technologies on Technologies.Type = PrereqTech where TechType = ?;");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Technologies.ID from Technology_PrereqTechs inner join Technologies on Technologies.Type = PrereqTech where TechType = ?;");
 
 		pResults->Bind(1, szTechType, -1, false);
 

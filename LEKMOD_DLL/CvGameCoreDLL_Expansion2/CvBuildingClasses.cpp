@@ -649,28 +649,12 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 	kUtility.SetYields(m_piDifferentLandMassYieldChange, "Building_DifferentLandMassYieldChanges", "BuildingType", szBuildingType);
 #endif
 #if defined(LEKMOD_ERA_ENHANCED_YIELDS)
-	{
-		kUtility.Initialize2DArray(m_ppiEraEnhancedYieldChange, "Eras", "Yields");
-		std::string strKey("Building_EraEnhancedYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, 
-				"SELECT Eras.ID as EraID, Yields.ID as YieldID, Yield from Building_EraEnhancedYieldChanges "
-				"INNER JOIN Eras on Eras.Type = EraType "
-				"INNER JOIN Yields on Yields.Type = YieldType "
-				"WHERE BuildingType = ?");
-		}
-		pResults->Bind(1, szBuildingType);
-		while(pResults->Step())
-		{
-			const int EraID = pResults->GetInt(0);
-			const int YieldID = pResults->GetInt(1);
-			const int yield = pResults->GetInt(2);
-			m_ppiEraEnhancedYieldChange[EraID][YieldID] = yield;
-		}
-		pResults->Reset();
-	}
+	kUtility.SetYieldMatrix(m_ppiEraEnhancedYieldChange, "Eras", "Building_EraEnhancedYieldChanges",
+		"SELECT Eras.ID as EraID, Yields.ID as YieldID, Yield from Building_EraEnhancedYieldChanges "
+		"INNER JOIN Eras on Eras.Type = EraType "
+		"INNER JOIN Yields on Yields.Type = YieldType "
+		"WHERE BuildingType = ?",
+		szBuildingType);
 #endif
 	kUtility.PopulateArrayByValue(m_piResourceQuantityRequirements, "Resources", "Building_ResourceQuantityRequirements", "ResourceType", "BuildingType", szBuildingType, "Cost");
 	kUtility.PopulateArrayByValue(m_piResourceQuantity, "Resources", "Building_ResourceQuantity", "ResourceType", "BuildingType", szBuildingType, "Quantity");
@@ -678,28 +662,12 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 	kUtility.PopulateArrayByValue(m_piResourceCultureChanges, "Resources", "Building_ResourceCultureChanges", "ResourceType", "BuildingType", szBuildingType, "CultureChange");
 	kUtility.PopulateArrayByValue(m_piResourceFaithChanges, "Resources", "Building_ResourceFaithChanges", "ResourceType", "BuildingType", szBuildingType, "FaithChange");
 #else
-	{
-		kUtility.Initialize2DArray(m_paiBuildingLocalResourceYieldChanges, "Resources", "Yields");
-		std::string strKey("Building_LocalResourceYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, 
-				"SELECT Resources.ID as ResourceID, Yields.ID as YieldID, Yield from Building_LocalResourceYieldChanges "
-				"INNER JOIN Resources on Resources.Type = ResourceType "
-				"INNER JOIN Yields on Yields.Type = YieldType "
-				"WHERE BuildingType = ?");
-		}
-		pResults->Bind(1, szBuildingType);
-		while(pResults->Step())
-		{
-			const int ResourceID = pResults->GetInt(0);
-			const int YieldID = pResults->GetInt(1);
-			const int yield = pResults->GetInt(2);
-			m_paiBuildingLocalResourceYieldChanges[ResourceID][YieldID] = yield;
-		}
-		pResults->Reset();
-	}
+	kUtility.SetYieldMatrix(m_paiBuildingLocalResourceYieldChanges, "Resources", "Building_LocalResourceYieldChanges",
+		"SELECT Resources.ID as ResourceID, Yields.ID as YieldID, Yield from Building_LocalResourceYieldChanges "
+		"INNER JOIN Resources on Resources.Type = ResourceType "
+		"INNER JOIN Yields on Yields.Type = YieldType "
+		"WHERE BuildingType = ?",
+		szBuildingType);
 #endif
 	kUtility.PopulateArrayByValue(m_paiHurryModifier, "HurryInfos", "Building_HurryModifiers", "HurryType", "BuildingType", szBuildingType, "HurryCostModifier");
 
@@ -732,17 +700,12 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 		kUtility.InitializeArray(m_piCityGreatWorkYieldChange, "Yields");
 		kUtility.Initialize2DArray(m_ppiCityGreatWorkClassYieldChange, "GreatWorkClasses", "Yields");
 		std::string strKey("Building_GreatWorkYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if (pResults == NULL)
-		{
-			const char* szSQL =
-				"SELECT Yields.ID as YieldID, COALESCE(GreatWorkClasses.ID, -1) as GreatWorkClassID, YieldChange, HoldingYield "
-				"FROM Building_GreatWorkYieldChanges "
-				"INNER JOIN Yields on Yields.Type = YieldType "
-				"INNER JOIN GreatWorkClasses on GreatWorkClasses.Type = GreatWorkClassType "
-				"WHERE BuildingType = ?";
-			pResults = kUtility.PrepareResults(strKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"SELECT Yields.ID as YieldID, COALESCE(GreatWorkClasses.ID, -1) as GreatWorkClassID, YieldChange, HoldingYield "
+			"FROM Building_GreatWorkYieldChanges "
+			"INNER JOIN Yields on Yields.Type = YieldType "
+			"INNER JOIN GreatWorkClasses on GreatWorkClasses.Type = GreatWorkClassType "
+			"WHERE BuildingType = ?");
 		pResults->Bind(1, szBuildingType);
 		while (pResults->Step())
 		{
@@ -769,11 +732,8 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 #endif
 
 		std::string strKey("Building_ResourceYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Resources.ID as ResourceID, Yields.ID as YieldID, Yield from Building_ResourceYieldChanges inner join Resources on Resources.Type = ResourceType inner join Yields on Yields.Type = YieldType where BuildingType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Resources.ID as ResourceID, Yields.ID as YieldID, Yield from Building_ResourceYieldChanges inner join Resources on Resources.Type = ResourceType inner join Yields on Yields.Type = YieldType where BuildingType = ?");
 
 		pResults->Bind(1, szBuildingType);
 
@@ -793,11 +753,8 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 	//Building_ResourceYieldChangesGlobal
 	{
 		std::string strKey("Building_ResourceYieldChangesGlobal");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if (pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Resources.ID as ResourceID, Yields.ID as YieldID, Yield from Building_ResourceYieldChangesGlobal inner join Resources on Resources.Type = ResourceType inner join Yields on Yields.Type = YieldType where BuildingType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Resources.ID as ResourceID, Yields.ID as YieldID, Yield from Building_ResourceYieldChangesGlobal inner join Resources on Resources.Type = ResourceType inner join Yields on Yields.Type = YieldType where BuildingType = ?");
 
 		pResults->Bind(1, szBuildingType);
 
@@ -821,18 +778,13 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 		kUtility.Initialize2DArray(m_ppaiTradeConnectionOriginLandYieldChange, "TradeConnections", "Yields");
 		kUtility.Initialize2DArray(m_ppaiTradeConnectionOriginSeaYieldChange, "TradeConnections", "Yields");
 		std::string strKey("Building_TradeConnectionOriginYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if (pResults == NULL)
-		{
-			const char* szSQL = 
-				"SELECT TradeConnections.ID as TradeConnectionID, Domains.ID as DomainID, Yields.ID AS YieldID, YieldTimes100 "
-				"FROM Building_TradeConnectionOriginYieldChanges "
-				"INNER JOIN TradeConnections ON TradeConnections.Type = TradeConnectionType "
-				"INNER JOIN Domains ON Domains.Type = DomainType "
-				"INNER JOIN Yields ON Yields.Type = YieldType "
-				"WHERE BuildingType = ?";
-			pResults = kUtility.PrepareResults(strKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"SELECT TradeConnections.ID as TradeConnectionID, Domains.ID as DomainID, Yields.ID AS YieldID, YieldTimes100 "
+			"FROM Building_TradeConnectionOriginYieldChanges "
+			"INNER JOIN TradeConnections ON TradeConnections.Type = TradeConnectionType "
+			"INNER JOIN Domains ON Domains.Type = DomainType "
+			"INNER JOIN Yields ON Yields.Type = YieldType "
+			"WHERE BuildingType = ?");
 		pResults->Bind(1, szBuildingType);
 		while (pResults->Step())
 		{
@@ -852,18 +804,13 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 		kUtility.Initialize2DArray(m_ppaiTradeConnectionDestinationLandYieldChange, "TradeConnections", "Yields");
 		kUtility.Initialize2DArray(m_ppaiTradeConnectionDestinationSeaYieldChange, "TradeConnections", "Yields");
 		std::string strKey("Building_TradeConnectionDestinationYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if (pResults == NULL)
-		{
-			const char* szSQL = 
-				"SELECT TradeConnections.ID as TradeConnectionID, Domains.ID as DomainID, Yields.ID AS YieldID, YieldTimes100 "
-				"FROM Building_TradeConnectionDestinationYieldChanges "
-				"INNER JOIN TradeConnections ON TradeConnections.Type = TradeConnectionType "
-				"INNER JOIN Domains ON Domains.Type = DomainType "
-				"INNER JOIN Yields ON Yields.Type = YieldType "
-				"WHERE BuildingType = ?";
-			pResults = kUtility.PrepareResults(strKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"SELECT TradeConnections.ID as TradeConnectionID, Domains.ID as DomainID, Yields.ID AS YieldID, YieldTimes100 "
+			"FROM Building_TradeConnectionDestinationYieldChanges "
+			"INNER JOIN TradeConnections ON TradeConnections.Type = TradeConnectionType "
+			"INNER JOIN Domains ON Domains.Type = DomainType "
+			"INNER JOIN Yields ON Yields.Type = YieldType "
+			"WHERE BuildingType = ?");
 		pResults->Bind(1, szBuildingType);
 		while (pResults->Step())
 		{
@@ -883,18 +830,13 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 		kUtility.Initialize2DArray(m_ppaiIncomingTradeConnectionLandYieldChange, "TradeConnections", "Yields");
 		kUtility.Initialize2DArray(m_ppaiIncomingTradeConnectionSeaYieldChange, "TradeConnections", "Yields");
 		std::string strKey("Building_IncomingTradeConnectionYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if (pResults == NULL)
-		{
-			const char* szSQL = 
-				"SELECT TradeConnections.ID as TradeConnectionID, Domains.ID as DomainID, Yields.ID AS YieldID, YieldTimes100 "
-				"FROM Building_IncomingTradeConnectionYieldChanges "
-				"INNER JOIN TradeConnections ON TradeConnections.Type = TradeConnectionType "
-				"INNER JOIN Domains ON Domains.Type = DomainType "
-				"INNER JOIN Yields ON Yields.Type = YieldType "
-				"WHERE BuildingType = ?";
-			pResults = kUtility.PrepareResults(strKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"SELECT TradeConnections.ID as TradeConnectionID, Domains.ID as DomainID, Yields.ID AS YieldID, YieldTimes100 "
+			"FROM Building_IncomingTradeConnectionYieldChanges "
+			"INNER JOIN TradeConnections ON TradeConnections.Type = TradeConnectionType "
+			"INNER JOIN Domains ON Domains.Type = DomainType "
+			"INNER JOIN Yields ON Yields.Type = YieldType "
+			"WHERE BuildingType = ?");
 		pResults->Bind(1, szBuildingType);
 		while (pResults->Step())
 		{
@@ -914,17 +856,12 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 	{
 		kUtility.Initialize2DArray(m_ppaiResourceClassYieldChange, "ResourceClasses", "Yields");
 		std::string strKey("Building_ResourceClassYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if (pResults == NULL)
-		{
-			const char* szSQL = 
-				"SELECT ResourceClasses.ID AS ResourceClassID, Yields.ID AS YieldID, Building_ResourceClassYieldChanges.Yield "
-				"FROM Building_ResourceClassYieldChanges "
-				"INNER JOIN ResourceClasses ON ResourceClasses.Type = ResourceClassType "
-				"INNER JOIN Yields ON Yields.Type = YieldType "
-				"WHERE BuildingType = ?";
-			pResults = kUtility.PrepareResults(strKey, szSQL);
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"SELECT ResourceClasses.ID AS ResourceClassID, Yields.ID AS YieldID, Building_ResourceClassYieldChanges.Yield "
+			"FROM Building_ResourceClassYieldChanges "
+			"INNER JOIN ResourceClasses ON ResourceClasses.Type = ResourceClassType "
+			"INNER JOIN Yields ON Yields.Type = YieldType "
+			"WHERE BuildingType = ?");
 		pResults->Bind(1, szBuildingType);
 		while (pResults->Step())
 		{
@@ -946,11 +883,8 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 #endif
 
 		std::string strKey("Building_FeatureYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Features.ID as FeatureID, Yields.ID as YieldID, Yield from Building_FeatureYieldChanges inner join Features on Features.Type = FeatureType inner join Yields on Yields.Type = YieldType where BuildingType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Features.ID as FeatureID, Yields.ID as YieldID, Yield from Building_FeatureYieldChanges inner join Features on Features.Type = FeatureType inner join Yields on Yields.Type = YieldType where BuildingType = ?");
 
 		pResults->Bind(1, szBuildingType);
 
@@ -968,49 +902,13 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 		}
 	}
 	//ImprovementYieldChanges
-	{
-		kUtility.Initialize2DArray(m_ppaiImprovementYieldChange, "Improvements", "Yields");
-
-		std::string strKey("Building_ImprovementYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Improvements.ID as ImprovementID, Yields.ID as YieldID, Yield from Building_ImprovementYieldChanges inner join Improvements on Improvements.Type = ImprovementType inner join Yields on Yields.Type = YieldType where BuildingType = ?");
-		}
-
-		pResults->Bind(1, szBuildingType);
-
-		while(pResults->Step())
-		{
-			const int ImprovementID = pResults->GetInt(0);
-			const int YieldID = pResults->GetInt(1);
-			const int yield = pResults->GetInt(2);
-
-			m_ppaiImprovementYieldChange[ImprovementID][YieldID] = yield;
-		}
-	}
+	kUtility.SetYieldMatrix(m_ppaiImprovementYieldChange, "Improvements", "Building_ImprovementYieldChanges",
+		"select Improvements.ID as ImprovementID, Yields.ID as YieldID, Yield from Building_ImprovementYieldChanges inner join Improvements on Improvements.Type = ImprovementType inner join Yields on Yields.Type = YieldType where BuildingType = ?",
+		szBuildingType);
 	//ImprovementYieldChangesGlobal
-	{
-		kUtility.Initialize2DArray(m_ppaiImprovementYieldChangeGlobal, "Improvements", "Yields");
-
-		std::string strKey("Building_ImprovementYieldChangesGlobal");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Improvements.ID as ImprovementID, Yields.ID as YieldID, Yield from Building_ImprovementYieldChangesGlobal inner join Improvements on Improvements.Type = ImprovementType inner join Yields on Yields.Type = YieldType where BuildingType = ?");
-		}
-
-		pResults->Bind(1, szBuildingType);
-
-		while(pResults->Step())
-		{
-			const int ImprovementID = pResults->GetInt(0);
-			const int YieldID = pResults->GetInt(1);
-			const int yield = pResults->GetInt(2);
-
-			m_ppaiImprovementYieldChangeGlobal[ImprovementID][YieldID] = yield;
-		}
-	}
+	kUtility.SetYieldMatrix(m_ppaiImprovementYieldChangeGlobal, "Improvements", "Building_ImprovementYieldChangesGlobal",
+		"select Improvements.ID as ImprovementID, Yields.ID as YieldID, Yield from Building_ImprovementYieldChangesGlobal inner join Improvements on Improvements.Type = ImprovementType inner join Yields on Yields.Type = YieldType where BuildingType = ?",
+		szBuildingType);
 
 	//TerrainYieldChanges
 	{
@@ -1022,11 +920,8 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 #endif
 
 		std::string strKey("Building_TerrainYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Terrains.ID as TerrainID, Yields.ID as YieldID, Yield from Building_TerrainYieldChanges inner join Terrains on Terrains.Type = TerrainType inner join Yields on Yields.Type = YieldType where BuildingType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Terrains.ID as TerrainID, Yields.ID as YieldID, Yield from Building_TerrainYieldChanges inner join Terrains on Terrains.Type = TerrainType inner join Yields on Yields.Type = YieldType where BuildingType = ?");
 
 		pResults->Bind(1, szBuildingType);
 
@@ -1049,16 +944,12 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 		m_aFreeTerrainYields.clear();
 
 		std::string strKey("Building_NearbyTerrainFreeYields");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, 
-				"select Terrains.ID as TerrainID, Yields.ID as YieldID, Radius, MinTerrainRequired, RequiresOwner, Yield "
-				"from Building_NearbyTerrainFreeYields "
-				"inner join Terrains on Terrains.Type = TerrainType "
-				"inner join Yields on Yields.Type = YieldType "
-				"where BuildingType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Terrains.ID as TerrainID, Yields.ID as YieldID, Radius, MinTerrainRequired, RequiresOwner, Yield "
+			"from Building_NearbyTerrainFreeYields "
+			"inner join Terrains on Terrains.Type = TerrainType "
+			"inner join Yields on Yields.Type = YieldType "
+			"where BuildingType = ?");
 
 		pResults->Bind(1, szBuildingType);
 
@@ -1086,11 +977,8 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 #endif
 
 		std::string strKey("Building_SpecialistYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Specialists.ID as SpecialistID, Yields.ID as YieldID, Yield from Building_SpecialistYieldChanges inner join Specialists on Specialists.Type = SpecialistType inner join Yields on Yields.Type = YieldType where BuildingType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Specialists.ID as SpecialistID, Yields.ID as YieldID, Yield from Building_SpecialistYieldChanges inner join Specialists on Specialists.Type = SpecialistType inner join Yields on Yields.Type = YieldType where BuildingType = ?");
 
 		pResults->Bind(1, szBuildingType);
 
@@ -1118,11 +1006,8 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 #endif
 
 		std::string strKey("Building_ResourceYieldModifiers");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Resources.ID as ResourceID, Yields.ID as YieldID, Yield from Building_ResourceYieldModifiers inner join Resources on Resources.Type = ResourceType inner join Yields on Yields.Type = YieldType where BuildingType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Resources.ID as ResourceID, Yields.ID as YieldID, Yield from Building_ResourceYieldModifiers inner join Resources on Resources.Type = ResourceType inner join Yields on Yields.Type = YieldType where BuildingType = ?");
 
 		pResults->Bind(1, szBuildingType);
 
@@ -1150,11 +1035,8 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 #endif
 
 		std::string strKey("Building_BuildingClassYieldChanges");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if(pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select BuildingClasses.ID as BuildingClassID, Yields.ID as YieldID, YieldChange from Building_BuildingClassYieldChanges inner join BuildingClasses on BuildingClasses.Type = BuildingClassType inner join Yields on Yields.Type = YieldType where BuildingType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select BuildingClasses.ID as BuildingClassID, Yields.ID as YieldID, YieldChange from Building_BuildingClassYieldChanges inner join BuildingClasses on BuildingClasses.Type = BuildingClassType inner join Yields on Yields.Type = YieldType where BuildingType = ?");
 
 		pResults->Bind(1, szBuildingType);
 
@@ -1179,11 +1061,8 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 		kUtility.InitializeArray(m_piGreatPersonExpendYield, "Yields");
 
 		std::string strKey("Building_GreatPersonExpendedYields");
-		Database::Results* pResults = kUtility.GetResults(strKey);
-		if (pResults == NULL)
-		{
-			pResults = kUtility.PrepareResults(strKey, "select Yields.ID as YieldID, Yield from Building_GreatPersonExpendedYields inner join Yields on Yields.Type = YieldType where BuildingType = ?");
-		}
+		Database::Results* pResults = kUtility.GetOrPrepareResults(strKey,
+			"select Yields.ID as YieldID, Yield from Building_GreatPersonExpendedYields inner join Yields on Yields.Type = YieldType where BuildingType = ?");
 
 		pResults->Bind(1, szBuildingType);
 
@@ -1207,11 +1086,8 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 		int idx = 0;
 
 		std::string strResourceTypesKey = "Building_ThemingBonuses";
-		Database::Results* pResourceTypes = kUtility.GetResults(strResourceTypesKey);
-		if(pResourceTypes == NULL)
-		{
-			pResourceTypes = kUtility.PrepareResults(strResourceTypesKey, "select Bonus, Description, SameEra, UniqueEras, MustBeArt, MustBeArtifact, MustBeEqualArtArtifact, RequiresOwner, RequiresAnyButOwner, RequiresSamePlayer, RequiresUniquePlayers, AIPriority from Building_ThemingBonuses where BuildingType = ?");
-		}
+		Database::Results* pResourceTypes = kUtility.GetOrPrepareResults(strResourceTypesKey,
+			"select Bonus, Description, SameEra, UniqueEras, MustBeArt, MustBeArtifact, MustBeEqualArtArtifact, RequiresOwner, RequiresAnyButOwner, RequiresSamePlayer, RequiresUniquePlayers, AIPriority from Building_ThemingBonuses where BuildingType = ?");
 
 		const size_t lenBuildingType = strlen(szBuildingType);
 		pResourceTypes->Bind(1, szBuildingType, lenBuildingType, false);
