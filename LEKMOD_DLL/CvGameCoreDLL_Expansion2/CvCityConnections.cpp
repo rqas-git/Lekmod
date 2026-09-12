@@ -272,9 +272,10 @@ void CvCityConnections::UpdateRouteInfo(void)
 		}
 	}
 
-	if(vpCities.size() > m_uiRouteInfosDimension)
+	if(m_aiCityPlotIDs.size() > m_uiRouteInfosDimension)
 	{
-		ResizeRouteInfo((uint)((float)m_uiRouteInfosDimension * 1.5f));
+		ResizeRouteInfo(std::max<uint>((uint)m_aiCityPlotIDs.size(),
+		                              m_uiRouteInfosDimension + m_uiRouteInfosDimension / 2));
 	}
 	ResetRouteInfo();
 
@@ -282,6 +283,28 @@ void CvCityConnections::UpdateRouteInfo(void)
 	if(eBestRouteType == NO_ROUTE && !bAllowWaterRoutes)
 	{
 		return;
+	}
+
+	// These inputs stay fixed during this update; resolve them once per city.
+	// vpCities also has a different membership/order from m_aiCityPlotIDs.
+	std::vector<uint> aiCityRouteIndices(vpCities.size());
+	std::vector<unsigned char> abCityCanUseWaterRoutes(vpCities.size(), 0);
+	for(uint uiCityIndex = 0; uiCityIndex < vpCities.size(); uiCityIndex++)
+	{
+		CvCity* pCity = vpCities[uiCityIndex];
+		aiCityRouteIndices[uiCityIndex] = GetIndexFromCity(pCity);
+
+		if(bAllowWaterRoutes)
+		{
+			for(uint uiBuildingIndex = 0; uiBuildingIndex < m_aBuildingsAllowWaterRoutes.size(); uiBuildingIndex++)
+			{
+				if(pCity->GetCityBuildings()->GetNumActiveBuilding(m_aBuildingsAllowWaterRoutes[uiBuildingIndex]) > 0)
+				{
+					abCityCanUseWaterRoutes[uiCityIndex] = !pCity->IsBlockaded();
+					break;
+				}
+			}
+		}
 	}
 
 	// pass 0 = can cities connect via water routes
@@ -310,7 +333,7 @@ void CvCityConnections::UpdateRouteInfo(void)
 		for(uint uiFirstCityIndex = 0; uiFirstCityIndex < vpCities.size(); uiFirstCityIndex++)
 		{
 			pFirstCity = vpCities[uiFirstCityIndex];
-			int iFirstCityArrayIndex = GetIndexFromCity(pFirstCity);
+			int iFirstCityArrayIndex = aiCityRouteIndices[uiFirstCityIndex];
 
 			for(uint uiSecondCityIndex = 0; uiSecondCityIndex < vpCities.size(); uiSecondCityIndex++)
 			{
@@ -320,7 +343,7 @@ void CvCityConnections::UpdateRouteInfo(void)
 					continue;
 				}
 				pSecondCity = vpCities[uiSecondCityIndex];
-				int iSecondCityArrayIndex = GetIndexFromCity(pSecondCity);
+				int iSecondCityArrayIndex = aiCityRouteIndices[uiSecondCityIndex];
 
 				RouteInfo* pRouteInfo = GetRouteInfo(iFirstCityArrayIndex, iSecondCityArrayIndex);
 				RouteInfo* pInverseRouteInfo = GetRouteInfo(iSecondCityArrayIndex, iFirstCityArrayIndex);
@@ -349,35 +372,15 @@ void CvCityConnections::UpdateRouteInfo(void)
 
 				if(iPass == 0)  // check water route
 				{
-					// if either city is blockaded, don't consider a water connection
-					if(pFirstCity->IsBlockaded() || pSecondCity->IsBlockaded())
+					// Both cities need an active harbor and must be free of a blockade.
+					if(!abCityCanUseWaterRoutes[uiFirstCityIndex] || !abCityCanUseWaterRoutes[uiSecondCityIndex])
 					{
 						continue;
 					}
 
-					bool bFirstCityHasHarbor = false;
-					bool bSecondCityHasHarbor = false;
-
-					// Loop through adding the available buildings
-					for(int i = 0; i < (int)m_aBuildingsAllowWaterRoutes.size(); i++)
+					if(GC.GetWaterRouteFinder().GeneratePath(pFirstCity->getX(), pFirstCity->getY(), pSecondCity->getX(), pSecondCity->getY(), m_pPlayer->GetID(), true))
 					{
-						if(pFirstCity->GetCityBuildings()->GetNumActiveBuilding(m_aBuildingsAllowWaterRoutes[i]) > 0)
-						{
-							bFirstCityHasHarbor = true;
-						}
-
-						if(pSecondCity->GetCityBuildings()->GetNumActiveBuilding(m_aBuildingsAllowWaterRoutes[i]) > 0)
-						{
-							bSecondCityHasHarbor = true;
-						}
-					}
-
-					if(bFirstCityHasHarbor && bSecondCityHasHarbor)
-					{
-						if(GC.GetWaterRouteFinder().GeneratePath(pFirstCity->getX(), pFirstCity->getY(), pSecondCity->getX(), pSecondCity->getY(), m_pPlayer->GetID(), true))
-						{
-							pRouteInfo->m_cRouteState |= HAS_ANY_ROUTE | HAS_WATER_ROUTE;
-						}
+						pRouteInfo->m_cRouteState |= HAS_ANY_ROUTE | HAS_WATER_ROUTE;
 					}
 				}
 				else if(iPass == 1)  // check land route

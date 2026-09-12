@@ -49,33 +49,46 @@ class InstallerUpdater:
     def download_and_update(self, update_info, log_callback):
         """Download new installer and replace current one"""
         download_url = update_info.get('download_url')
-        if not download_url:
-            raise Exception("No download URL in update info")
+        if not isinstance(download_url, str) or not download_url.startswith('https://'):
+            raise ValueError("Installer downloads require an HTTPS URL")
+        if not getattr(sys, 'frozen', False):
+            raise RuntimeError("Self-update requires the packaged Windows installer")
         
         log_callback("Downloading new installer version...")
         
-        # Download to temp file
-        temp_dir = tempfile.gettempdir()
+        # Keep the download and backup on the installer's volume for renames.
+        temp_dir = tempfile.mkdtemp(prefix="LekmodInstaller-update-", dir=Path(sys.executable).parent)
         temp_installer = os.path.join(temp_dir, "LekmodInstaller_new.exe")
-        
-        response = requests.get(download_url, stream=True)
-        total_size = int(response.headers.get('content-length', 0))
-        downloaded = 0
-        
-        with open(temp_installer, 'wb') as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                if chunk:
-                    f.write(chunk)
-                    downloaded += len(chunk)
-                    if total_size > 0:
-                        progress = (downloaded / total_size) * 100
-                        log_callback(f"Downloading... {progress:.1f}%")
-        
+        try:
+            with requests.get(download_url, stream=True, timeout=(10, 60)) as response:
+                response.raise_for_status()
+                if not response.url.startswith('https://'):
+                    raise ValueError("Installer download redirected away from HTTPS")
+                total_size = int(response.headers.get('content-length', 0))
+                downloaded = 0
+                with open(temp_installer, 'wb') as f:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        if chunk:
+                            f.write(chunk)
+                            downloaded += len(chunk)
+                            if total_size > 0:
+                                log_callback(f"Downloading... {downloaded / total_size * 100:.1f}%")
+                if total_size and downloaded != total_size:
+                    raise ValueError("Incomplete installer download")
+
+            # Reject HTML/error pages and files missing DOS/PE signatures.
+            with open(temp_installer, 'rb') as f:
+                header = f.read(64)
+                if len(header) != 64 or header[:2] != b'MZ':
+                    raise ValueError("Download is not a Windows executable")
+                f.seek(int.from_bytes(header[60:64], 'little'))
+                if f.read(4) != b'PE\0\0':
+                    raise ValueError("Download is not a Windows executable")
+            update_script = self._create_update_script(sys.executable, temp_installer)
+        except Exception:
+            shutil.rmtree(temp_dir, ignore_errors=True)
+            raise
         log_callback("✓ Download complete!")
-        
-        # Create update script
-        current_exe = sys.executable if getattr(sys, 'frozen', False) else __file__
-        update_script = self._create_update_script(current_exe, temp_installer)
         
         log_callback("Preparing to update installer...")
         log_callback("The installer will restart after update.")
@@ -84,26 +97,41 @@ class InstallerUpdater:
     
     def _create_update_script(self, current_exe, new_exe):
         """Create a batch script to replace the installer and restart it"""
-        script_path = os.path.join(tempfile.gettempdir(), "update_installer.bat")
+        script_path = os.path.join(os.path.dirname(new_exe), "update_installer.bat")
+        backup = os.path.join(os.path.dirname(new_exe), "previous.exe")
+        # Percent signs expand even inside cmd.exe quotes; disable ! expansion too.
+        current_exe, new_exe, backup = (str(path).replace('%', '%%')
+                                      for path in (current_exe, new_exe, backup))
         
         script_content = f"""@echo off
+setlocal DisableDelayedExpansion
 echo Updating Lekmod Installer...
 timeout /t 2 /nobreak >nul
+set attempts=0
 
 :retry
-del /f /q "{current_exe}"
-if exist "{current_exe}" (
-    timeout /t 1 /nobreak >nul
-    goto retry
+move /y "{current_exe}" "{backup}" >nul 2>&1
+if not errorlevel 1 goto install
+set /a attempts+=1
+if %attempts% geq 30 goto failed
+timeout /t 1 /nobreak >nul
+goto retry
+
+:install
+move /y "{new_exe}" "{current_exe}"
+if errorlevel 1 (
+    move /y "{backup}" "{current_exe}"
+    goto failed
 )
 
-move /y "{new_exe}" "{current_exe}"
-
 echo Update complete! Restarting installer...
-timeout /t 1 /nobreak >nul
-
 start "" "{current_exe}"
 del "%~f0"
+exit /b 0
+
+:failed
+echo Update failed. Previous installer retained at "{current_exe}" or "{backup}".
+exit /b 1
 """
         
         with open(script_path, 'w') as f:
@@ -113,6 +141,6 @@ del "%~f0"
     
     def apply_update(self, update_script):
         """Execute update script and exit current installer"""
-        subprocess.Popen([update_script], shell=True)
+        subprocess.Popen(f'"{update_script}"', shell=True)
         sys.exit(0)
 

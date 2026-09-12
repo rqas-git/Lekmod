@@ -589,7 +589,7 @@ class LekmodInstaller:
             time.sleep(1)
             
             # Apply update (this will exit the app)
-            self.installer_updater.apply_update(update_script)
+            self.root.after(0, self.installer_updater.apply_update, update_script)
             
         except Exception as e:
             self.log(f"❌ Installer update failed: {e}")
@@ -808,8 +808,8 @@ class LekmodInstaller:
                 response = messagebox.askyesnocancel(
                     "Existing LEKMOD Installation Found",
                     f"Found existing LEKMOD installation(s):\n\n  - {folder_list}\n\n"
-                    f"These must be removed before installing {version}.\n\n"
-                    f"Remove and continue?\n\n"
+                    f"These will be replaced after {version} is ready to install.\n\n"
+                    f"Replace and continue?\n\n"
                     f"(Click 'No' to cancel installation)",
                     icon='warning'
                 )
@@ -819,11 +819,6 @@ class LekmodInstaller:
                     self.log("Installation cancelled by user")
                     return
                 
-                # User clicked Yes - remove existing installations
-                self.log(f"Found {len(existing_folders)} existing LEKMOD folder(s)")
-                self.ui_manager.remove_lekmod_folders(civ5_path, existing_folders, self.log)
-                self.log("✓ Existing installations removed")
-            
             # 1. Download from Google Drive
             self.log(f"📥 Downloading Lekmod {version} from Google Drive...")
             

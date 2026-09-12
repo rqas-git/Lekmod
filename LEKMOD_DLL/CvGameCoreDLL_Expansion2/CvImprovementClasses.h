@@ -172,6 +172,7 @@ public:
 	int GetImprovementAdjacentBonusCivilizationNoAmount(int i, int j) const;
 	int GetImprovementAdjacentBonusCivilization(int i, int j) const;
 	int GetImprovementAdjacentAmount(int i, int j) const;
+	void CacheAdjacencyYieldBonus();
 	bool HasAnyAdjacencyYieldBonus() const;
 #endif
 	int GetTechNoFreshWaterYieldChanges(int i, int j) const;
@@ -306,8 +307,14 @@ protected:
 	int** m_ppiImprovementAdjacentBonusCivilizationNoAmount;
 	int** m_piImprovementAdjacentBonusCivilization;
 	int** m_ppiImprovementAdjacentAmount;
+	bool m_bHasAnyAdjacencyYieldBonus;
 #endif
 	CvImprovementResourceInfo* m_paImprovementResource;
+
+private:
+#ifdef LEKMOD_ADJACENT_IMPROVEMENT_YIELD
+	bool ComputeHasAnyAdjacencyYieldBonus() const;
+#endif
 };
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

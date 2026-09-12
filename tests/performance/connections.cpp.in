@@ -1,0 +1,149 @@
+// Compile the actual baseline/current UpdateRouteInfo bodies against deterministic doubles.
+#include <algorithm>
+#include <array>
+#include <cassert>
+#include <climits>
+#include <iostream>
+#include <numeric>
+#include <random>
+#include <vector>
+typedef unsigned int uint;
+typedef int PlayerTypes;
+typedef int RouteTypes;
+enum { MAX_CIV_PLAYERS=4, NO_ROUTE=-1, MOVE_ANY_ROUTE=1<<16,
+       SAFE_ESTIMATE_NUM_CITIES=512, c_eCiv5GameplayDLL=0 };
+template<class T,int N,bool B,int C,int D> using FStaticVector=std::vector<T>;
+struct Counts { long indices=0, harbor=0, blockade=0; } counts;
+struct CvCity;
+struct CvPlot { int id; CvCity* city=nullptr; CvCity* getPlotCity(){return city;} };
+struct Buildings {
+    std::array<int,3> active{{0,0,0}};
+    int GetNumActiveBuilding(int i) { ++counts.harbor; return active.at(i); }
+};
+struct CvCity {
+    int id, owner; bool capital=false, blocked=false, connected=false;
+    Buildings buildings;
+    Buildings* GetCityBuildings(){return &buildings;}
+    bool IsBlockaded(){++counts.blockade; return blocked;}
+    void SetRouteToCapitalConnected(bool b){connected=b;}
+    bool isCapital(){return capital;}
+    int getX(){return id;} int getY(){return 0;}
+};
+struct CvPlayer {
+    int id=0, route=0; bool barbarian=false; std::vector<CvCity*> cities;
+    bool isBarbarian(){return barbarian;}
+    int GetID(){return id;} int getBestRoute(){return route;}
+    CvCity* firstCity(int* i){*i=0;return cities.empty()?nullptr:cities[0];}
+    CvCity* nextCity(int* i){++*i;return *i<int(cities.size())?cities[*i]:nullptr;}
+    CvCity* getCapitalCity(){return cities.empty()?nullptr:cities[0];}
+};
+CvPlayer players[4];
+#define GET_PLAYER(id) players[id]
+#define CvAssertMsg(a,b) ((void)0)
+struct CvAStarNode { int m_iX=0,m_iY=0; CvAStarNode* m_pParent=nullptr; };
+struct CvAStar {
+    int kind=0,seed=0; CvAStarNode nodes[2]; std::vector<std::array<int,4>> calls;
+    bool GeneratePath(int a,int,int b,int,int flags,bool) {
+        calls.push_back({{kind,a,b,flags}});
+        nodes[0].m_iX=b; nodes[0].m_pParent=&nodes[1];
+        nodes[1].m_iX=a; nodes[1].m_pParent=nullptr;
+        return (std::min(a,b)*13+std::max(a,b)*7+flags+kind+seed)%5!=0;
+    }
+    CvAStarNode* GetLastNode(){return &nodes[0];}
+};
+struct Map {
+    std::vector<CvPlot> plots;
+    CvPlot* plot(int x,int){return &plots.at(x);}
+    CvPlot* plotByIndex(int i){return &plots.at(i);}
+};
+struct Globals {
+    Map map; CvAStar land,water;
+    CvAStar& getRouteFinder(){return land;}
+    CvAStar& GetWaterRouteFinder(){return water;}
+    Map& getMap(){return map;}
+} GC;
+class CvCityConnections {
+public:
+    enum {HAS_ANY_ROUTE=1,HAS_WATER_ROUTE=2,HAS_BEST_ROUTE=4};
+    struct RouteInfo { int m_cRouteState=0,m_cPassEval=-1; };
+    CvPlayer* m_pPlayer=&players[1]; uint m_uiRouteInfosDimension=64;
+    std::vector<int> m_aiCityPlotIDs,m_aBuildingsAllowWaterRoutes{0,1,2},plots;
+    std::vector<RouteInfo> records=std::vector<RouteInfo>(64*64);
+    bool ShouldConnectToOtherPlayer(int p){return p==2;}
+    void ResizeRouteInfo(uint n){m_uiRouteInfosDimension=n;records.resize(n*n);}
+    void ResetRouteInfo(){for(auto& r:records)r=RouteInfo();plots.clear();}
+    RouteInfo* GetRouteInfo(uint a,uint b){
+        if(a>=m_uiRouteInfosDimension||b>=m_uiRouteInfosDimension)return nullptr;
+        return &records[a*m_uiRouteInfosDimension+b];
+    }
+    uint GetIndexFromCity(CvCity* city);
+    void ConnectPlotRoute(CvPlot* p){plots.push_back(p->id);}
+    void UpdateRouteInfo(); void UpdateRouteInfoBaseline();
+};
+@INDEX@
+@BASELINE@
+@CURRENT@
+
+struct Result {
+    std::vector<int> state, connected, plots;
+    std::vector<std::array<int,4>> paths;
+    Counts work;
+    bool operator==(const Result& b)const {
+        return state==b.state&&connected==b.connected&&plots==b.plots&&paths==b.paths;
+    }
+};
+
+int main(){
+    std::mt19937 random(73021);
+    long beforeIndices=0,afterIndices=0,beforeHarbor=0,afterHarbor=0;
+    long beforeBlockade=0,afterBlockade=0;
+    int cases=0;
+    for(int scenario=0;scenario<240;++scenario){
+        const int own=scenario==239?100:scenario%13;
+        const int teammate=scenario==239?70:scenario%5;
+        std::vector<CvCity> cities(own+teammate+1);
+        GC.map.plots.resize(cities.size());
+        for(int i=0;i<4;++i){players[i]=CvPlayer();players[i].id=i;}
+        players[1].route=scenario%3-1; players[3].barbarian=true;
+        for(int i=0;i<int(cities.size());++i){
+            auto& c=cities[i];c.id=i;c.owner=i<teammate?0:(i<teammate+own?1:2);
+            c.capital=players[c.owner].cities.empty();
+            c.blocked=random()%2;
+            for(auto& building:c.buildings.active)building=(random()%4==0)?1:0;
+            players[c.owner].cities.push_back(&c); GC.map.plots[i]={i,&c};
+        }
+        CvCityConnections current,baseline;
+        current.m_aiCityPlotIDs.resize(cities.size());
+        std::iota(current.m_aiCityPlotIDs.begin(),current.m_aiCityPlotIDs.end(),0);
+        std::shuffle(current.m_aiCityPlotIDs.begin(),current.m_aiCityPlotIDs.end(),random);
+        if(scenario%11==0&&!current.m_aiCityPlotIDs.empty())current.m_aiCityPlotIDs.pop_back();
+        baseline.m_aiCityPlotIDs=current.m_aiCityPlotIDs;
+        if(scenario%9==0){current.m_aBuildingsAllowWaterRoutes.clear();baseline.m_aBuildingsAllowWaterRoutes.clear();}
+        auto run=[&](CvCityConnections& object,bool optimized){
+            counts=Counts();GC.land.calls.clear();GC.water.calls.clear();
+            GC.land.seed=GC.water.seed=scenario; GC.water.kind=1;
+            for(auto& c:cities)c.connected=false;
+            if(optimized)object.UpdateRouteInfo();else object.UpdateRouteInfoBaseline();
+            Result result;
+            for(const auto& r:object.records){result.state.push_back(r.m_cRouteState);result.state.push_back(r.m_cPassEval);}
+            for(const auto& c:cities)result.connected.push_back(c.connected);
+            result.plots=object.plots;result.paths=GC.water.calls;
+            result.paths.insert(result.paths.end(),GC.land.calls.begin(),GC.land.calls.end());
+            result.work=counts;return result;
+        };
+        // Reuse the same objects after blockades/harbors change to test invalidation.
+        for(int update=0;update<3;++update){
+            Result old=run(baseline,false),now=run(current,true);
+            if(!(old==now)){std::cerr<<"connection mismatch "<<scenario<<":"<<update<<"\n";return 1;}
+            beforeIndices+=old.work.indices;afterIndices+=now.work.indices;
+            beforeHarbor+=old.work.harbor;afterHarbor+=now.work.harbor;
+            beforeBlockade+=old.work.blockade;afterBlockade+=now.work.blockade;
+            for(auto& c:cities){c.blocked=!c.blocked;c.buildings.active[update%3]^=1;}
+            ++cases;
+        }
+    }
+    assert(afterIndices<beforeIndices&&afterHarbor<beforeHarbor&&afterBlockade<beforeBlockade);
+    std::cout<<"{\"cases\":"<<cases<<",\"index_calls\":["<<beforeIndices<<","<<afterIndices
+             <<"],\"harbor_calls\":["<<beforeHarbor<<","<<afterHarbor
+             <<"],\"blockade_calls\":["<<beforeBlockade<<","<<afterBlockade<<"]}\n";
+}

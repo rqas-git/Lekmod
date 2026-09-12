@@ -1,0 +1,72 @@
+{
+  "baseline": "1bc2ff423a51a0b5740acf77c7b6c31d1d245c8b",
+  "connections": {
+    "cases": 720,
+    "index_calls": [
+      130111,
+      4694
+    ],
+    "harbor_calls": [
+      53721,
+      10029
+    ],
+    "blockade_calls": [
+      49190,
+      3713
+    ]
+  },
+  "metadata_and_coast": {
+    "metadata_comparisons": 40000,
+    "metadata_getter_calls": [
+      69373000,
+      0
+    ],
+    "cache_initialization_getter_calls": 693730,
+    "coastal_cases": 2200,
+    "coast_calls": [
+      2200,
+      2000
+    ],
+    "neighbor_visits": [
+      6842,
+      6220
+    ]
+  },
+  "lua": {
+    "runtime": "Lua 5.1",
+    "dummy": {
+      "cases": 352,
+      "building_setter_calls": [
+        828840,
+        48456
+      ]
+    },
+    "uae": {
+      "cases": 144,
+      "tooltip_calls": [
+        4104,
+        2736
+      ]
+    },
+    "policies": {
+      "contexts": 20,
+      "rule_table_reads": [
+        1008,
+        16
+      ]
+    }
+  },
+  "source_sha256": {
+    "LEKMOD/Lua/Civilizations/Lekmod_uae.lua": "f8b3dc75c22b048ce66549905ecaaa71cb8e8f625473749267a387ada4928bff",
+    "LEKMOD/Lua/Lekmod_global_dummies.lua": "a7613a75ce42394f8db0b653d63ef078df6cf491086c9af38e3d669d7532a431",
+    "LEKMOD/Lua/Lekmod_policies.lua": "fe297f30b70f961394486e258f8f9750f8a153cf63b11ad2c2ed44df10b7d091",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvCityConnections.cpp": "f34380a8c1e54e651b50f7ebb47a4f59880d676e7299b2a59c5615d89f886072",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvDllDatabaseUtility.cpp": "e5c4d10de6d5bfe7474cb7ca98293ff13e6b953d3f5318b5773129d5ce6b820f",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvImprovementClasses.cpp": "6864e0ffd858268510eda777e3a7c705b05b3479e06583addaa47736d3879ec7",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvImprovementClasses.h": "fb9a8426e9533d39dcad248a1c1c996a6463e6c1e3e66ad5017cbc39e16dae24",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvPlot.cpp": "bff3fb8709fef472999fbcda4c25331e502231e0eb8207d90e396b628a8a4641",
+    "LekmodInstaller/installer.py": "b683326bf9bdf123626412d69c86ede88c79dc0ba1850e6f9339d06fe586e887",
+    "LekmodInstaller/installer_updater.py": "db58b719fb6250dc5ffb3a4063d5a63c0ce18f45f87a80284b48f42ea6c3c130",
+    "LekmodInstaller/ui_manager.py": "5f7250c27ba92fe10feef11920ebda1905ea247649e9d34686c2f19ca684b7b1"
+  }
+}

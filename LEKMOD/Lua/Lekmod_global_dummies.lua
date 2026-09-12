@@ -5,7 +5,7 @@
 -- Global dummy buildings. Adds a permanent dummy building to every city (or just the capital),
 -- Supports various checks. Data set in the xml (XML Overrides/civ5Units.xml)
 ------------------------------------------------------------------------------------------------------------------------
-function lekmod_add_global_dummy_buildings(player_or_team_id)
+function lekmod_add_global_dummy_buildings(player_id)
 
    local valid_buildings = {}
 
@@ -21,10 +21,11 @@ function lekmod_add_global_dummy_buildings(player_or_team_id)
       local policy_branch_finished = dummy_data.PolicyBranchFinished
       local policy_branch_chosen = dummy_data.PolicyBranchChosen
 
-      for _, player in ipairs(Players) do
+      for loop_player_id = 0, GameDefines.MAX_MAJOR_CIVS - 1 do
+         local player = Players[loop_player_id]
 
          if player:IsAlive() and not player:IsBarbarian() and not player:IsMinorCiv() and
-         (player == player_or_team_id or player:GetTeam() == player_or_team_id) then
+         player:GetID() == player_id then
 
             -- first delete all instances of the building, then check if we can re-add it anywhere
             for city in player:Cities() do
@@ -52,6 +53,7 @@ function lekmod_add_global_dummy_buildings(player_or_team_id)
                         -- This is to avoid potential conflicts with multiple building entries of the same type.
                         print("Adding building: " .. building_type .. " to player: " .. player:GetID())
                         table.insert(valid_buildings[player:GetID()], {building_type, is_capital_only})
+                        break -- The application loop below already visits every eligible city.
                      end
                   end
                end
@@ -84,6 +86,13 @@ function lekmod_add_global_dummy_buildings(player_or_team_id)
    end
 
 end
+function lekmod_add_global_dummy_buildings_on_tech(team_id)
+   for player_id = 0, GameDefines.MAX_MAJOR_CIVS - 1 do
+      if Players[player_id]:GetTeam() == team_id then
+         lekmod_add_global_dummy_buildings(player_id)
+      end
+   end
+end
 function lekmod_add_global_dummy_buildings_on_capture(old_owner_id, _,_,_, new_owner_id)
 
    lekmod_add_global_dummy_buildings(old_owner_id)
@@ -92,7 +101,7 @@ function lekmod_add_global_dummy_buildings_on_capture(old_owner_id, _,_,_, new_o
 end
 GameEvents.PlayerCityFounded.Add(lekmod_add_global_dummy_buildings)
 GameEvents.CityCaptureComplete.Add(lekmod_add_global_dummy_buildings_on_capture)
-GameEvents.TeamSetHasTech.Add(lekmod_add_global_dummy_buildings)
+GameEvents.TeamSetHasTech.Add(lekmod_add_global_dummy_buildings_on_tech)
 GameEvents.PlayerAdoptPolicy.Add(lekmod_add_global_dummy_buildings)
 -- Note: PlayerPolicyBranchFinished is a Lekmod Event! Not available in the base game
 GameEvents.PlayerPolicyBranchUnlocked.Add(lekmod_add_global_dummy_buildings)
@@ -109,7 +118,8 @@ function lekmod_add_dummy_policies()
       local civilization_type = dummy_data.Type
       local policy_type = dummy_data.PolicyType
 
-      for _, player in ipairs(Players) do
+      for player_id = 0, GameDefines.MAX_MAJOR_CIVS - 1 do
+         local player = Players[player_id]
          if player:IsEverAlive() and player:GetCivilizationType() == GameInfoTypes[civilization_type] then
             if not player:HasPolicy(GameInfoTypes[policy_type]) then
                player:SetNumFreePolicies(1)

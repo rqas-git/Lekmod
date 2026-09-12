@@ -161,6 +161,7 @@ CvImprovementEntry::CvImprovementEntry(void):
 	m_ppiImprovementAdjacentBonusCivilizationNoAmount(NULL),
 	m_ppiImprovementAdjacentBonus(NULL),
 	m_ppiImprovementAdjacentAmount(NULL),
+	m_bHasAnyAdjacencyYieldBonus(false),
 
 #endif
 
@@ -254,6 +255,10 @@ CvImprovementEntry::~CvImprovementEntry(void)
 /// Read from XML file
 bool CvImprovementEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
+#ifdef LEKMOD_ADJACENT_IMPROVEMENT_YIELD
+	// Recomputed by the database loader after the full improvement list is ready.
+	m_bHasAnyAdjacencyYieldBonus = false;
+#endif
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
 		return false;
 
@@ -1325,8 +1330,19 @@ int CvImprovementEntry::GetImprovementAdjacentAmount(int i, int j) const
 	CvAssertMsg(j > -1, "Index out of bounds");
 	return m_ppiImprovementAdjacentAmount[i][j];
 }
+// Cache only after all improvement IDs and adjacency arrays have been loaded.
+void CvImprovementEntry::CacheAdjacencyYieldBonus()
+{
+	m_bHasAnyAdjacencyYieldBonus = ComputeHasAnyAdjacencyYieldBonus();
+}
+
 // New method to trigger the visual changes when nessesary
 bool CvImprovementEntry::HasAnyAdjacencyYieldBonus() const
+{
+	return m_bHasAnyAdjacencyYieldBonus;
+}
+
+bool CvImprovementEntry::ComputeHasAnyAdjacencyYieldBonus() const
 {
 	for (int i = 0; i < GC.getNumImprovementInfos(); ++i)
 	{

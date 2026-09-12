@@ -420,6 +420,18 @@ bool CvDllDatabaseUtility::PrefetchGameData()
 		}
 	}
 
+#ifdef LEKMOD_ADJACENT_IMPROVEMENT_YIELD
+	// CacheResults runs before each entry is appended, so wait for the full list.
+	for(int iImprovement = 0; iImprovement < GC.getNumImprovementInfos(); iImprovement++)
+	{
+		CvImprovementEntry* pImprovement = GC.getImprovementInfo(static_cast<ImprovementTypes>(iImprovement));
+		if(pImprovement)
+		{
+			pImprovement->CacheAdjacencyYieldBonus();
+		}
+	}
+#endif
+
 	ValidatePrefetchProcess();
 
 	return true;

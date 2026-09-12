@@ -8550,9 +8550,10 @@ int CvPlot::calculateImprovementYieldChange(ImprovementTypes eImprovement, Yield
 		iYield += pImprovement->GetRiverSideYieldChange(eYield);
 	}
 
-	if(isCoastalLand())
+	const int iCoastalYield = pImprovement->GetCoastalLandYieldChange(eYield);
+	if(iCoastalYield != 0 && isCoastalLand())
 	{
-		iYield += pImprovement->GetCoastalLandYieldChange(eYield);
+		iYield += iCoastalYield;
 	}
 
 	if(isHills())

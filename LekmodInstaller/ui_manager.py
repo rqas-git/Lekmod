@@ -4,6 +4,7 @@ UI Manager - Handles UI detection and file configuration
 import os
 import re
 import shutil
+import tempfile
 import zipfile
 from pathlib import Path
 
@@ -620,6 +621,8 @@ class UIManager:
     
     def install_mod(self, mod_source, civ5_path, version, log_callback):
         """Install mod to Civ 5 Assets/DLC (for multiplayer compatibility)"""
+        if not isinstance(version, str) or not re.fullmatch(r"v?[0-9]+(?:\.[0-9]+)*", version):
+            raise ValueError("Invalid Lekmod version label")
         # Install to Assets/DLC instead of MODS
         dlc_path = os.path.join(civ5_path, "Assets", "DLC")
         
@@ -631,6 +634,8 @@ class UIManager:
         # Destination is Assets/DLC/LEKMOD_v34.10 (uses version number)
         folder_name = f"LEKMOD_{version}"
         dlc_dest = os.path.join(dlc_path, folder_name)
+        if Path(dlc_dest).resolve().parent != Path(dlc_path).resolve():
+            raise ValueError("Lekmod destination must stay inside the DLC directory")
             
         lekmod_source = self._find_lekmod_folder(mod_source)
         if lekmod_source:
@@ -639,23 +644,39 @@ class UIManager:
         if not lekmod_source or not os.path.exists(lekmod_source):
             raise Exception("LEKMOD source folder not found in downloaded archive!")
         
-        # Copy to DLC folder
-        log_callback(f"Copying files to {dlc_dest}...")
-        shutil.copytree(lekmod_source, dlc_dest)
-        log_callback(f"✓ Files copied successfully!")
+        staging = Path(tempfile.mkdtemp(prefix=".lekmod-install-", dir=Path(dlc_path).resolve().parent))
+        backups = []
+        installed = False
+        try:
+            replacement = staging / "replacement"
+            log_callback(f"Preparing files for {dlc_dest}...")
+            shutil.copytree(lekmod_source, replacement)
+            self._write_ui_check_stamp(str(replacement), log_callback=log_callback)
+            ui_check = replacement / "ui_check.bat"
+            if ui_check.exists():
+                ui_check.unlink()
 
-        # Stamp the installed DLC copy. Configure runs on the extract folder;
-        # Civ5 only loads Assets/DLC/LEKMOD_*.
-        self._write_ui_check_stamp(dlc_dest, log_callback=log_callback)
-        
-        # Delete ui_check.bat as it's only needed for manual installation
-        ui_check_path = os.path.join(dlc_dest, "ui_check.bat")
-        if os.path.exists(ui_check_path):
-            try:
-                os.remove(ui_check_path)
-                log_callback(f"✓ Removed ui_check.bat (not needed for installer-based installation)")
-            except Exception as e:
-                log_callback(f"⚠ Could not remove ui_check.bat: {e}")
+            # Move the old packages only after the new copy is complete.
+            for name in self.find_existing_lekmod_folders(civ5_path):
+                original, backup = Path(dlc_path) / name, staging / name
+                original.rename(backup)
+                backups.append((original, backup))
+            replacement.rename(dlc_dest)
+            installed = True
+        except Exception as error:
+            restore_failed = False
+            for original, backup in reversed(backups):
+                try:
+                    backup.rename(original)
+                except OSError:
+                    restore_failed = True
+            if restore_failed:
+                raise RuntimeError(f"Installation failed. Previous files are saved at {staging}") from error
+            raise
+        finally:
+            if installed or not any(backup.exists() for _, backup in backups):
+                shutil.rmtree(staging, ignore_errors=True)
+        log_callback("✓ Files installed successfully!")
 
     # Distinctive Lekmap v6 names (manual zip, GitHub folder, or installer copy).
     _LEKMAP_V6_NAMES = {

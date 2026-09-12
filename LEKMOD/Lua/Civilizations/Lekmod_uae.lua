@@ -39,19 +39,21 @@ function lekmod_uae_trade_route_gold(player_id)
 
    for loop_unit in player:Units() do
 
-      local unit_plot = loop_unit:GetPlot()
-      local trade_route_plot_info = player:GetInternationalTradeRoutePlotToolTip(unit_plot)
+      if loop_unit:IsCombatUnit() then
+         local unit_plot = loop_unit:GetPlot()
+         local trade_route_plot_info = player:GetInternationalTradeRoutePlotToolTip(unit_plot)
 
-      if #trade_route_plot_info > 0 and loop_unit:IsCombatUnit() then
-         player:ChangeGold(3)
-         loop_unit:ChangeExperience(1)
+         if #trade_route_plot_info > 0 then
+            player:ChangeGold(3)
+            loop_unit:ChangeExperience(1)
 
-         -- show popup text on the unit plot
-         if player_id == Game.GetActivePlayer() then
-            print("popup text")
-            local hex_position = ToHexFromGrid{x = unit_plot:GetX(), y = unit_plot:GetY()}
-            local world_position = HexToWorld(hex_position)
-            Events.AddPopupTextEvent(world_position, "[COLOR_YIELD_GOLD]+3 [ICON_GOLD][ENDCOLOR]")
+            -- show popup text on the unit plot
+            if player_id == Game.GetActivePlayer() then
+               print("popup text")
+               local hex_position = ToHexFromGrid{x = unit_plot:GetX(), y = unit_plot:GetY()}
+               local world_position = HexToWorld(hex_position)
+               Events.AddPopupTextEvent(world_position, "[COLOR_YIELD_GOLD]+3 [ICON_GOLD][ENDCOLOR]")
+            end
          end
       end
 
