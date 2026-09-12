@@ -21,6 +21,9 @@
 
 namespace
 {
+	std::map<int, BuildTypes> s_buildTypes;
+	bool s_bBuildTypesCached = false;
+
 	struct BuilderDirectiveHeapEntry
 	{
 		int m_iWeight;
@@ -3163,6 +3166,11 @@ BuildTypes CvBuilderTaskingAI::GetBuildTypeFromImprovement(ImprovementTypes eImp
 BuildTypes CvBuilderTaskingAI::GetBuildTypeFromImprovement(ImprovementTypes eImprovement)
 #endif
 {
+	if (s_bBuildTypesCached)
+	{
+		std::map<int, BuildTypes>::const_iterator it = s_buildTypes.find(eImprovement);
+		return it == s_buildTypes.end() ? NO_BUILD : it->second;
+	}
 #ifdef AUI_WARNING_FIXES
 	for (uint iBuildIndex = 0; iBuildIndex < GC.getNumBuildInfos(); iBuildIndex++)
 #else
@@ -3179,6 +3187,25 @@ BuildTypes CvBuilderTaskingAI::GetBuildTypeFromImprovement(ImprovementTypes eImp
 	}
 
 	return NO_BUILD;
+}
+
+void CvBuilderTaskingAI::ClearBuildTypeCache()
+{
+	s_buildTypes.clear();
+	s_bBuildTypesCached = false;
+}
+
+void CvBuilderTaskingAI::CacheBuildTypes()
+{
+	ClearBuildTypeCache();
+	for (int i = 0; i < (int)GC.getNumBuildInfos(); ++i)
+	{
+		CvBuildInfo* pBuild = GC.getBuildInfo((BuildTypes)i);
+		if (pBuild)
+			// insert retains the first matching ID, including NO_IMPROVEMENT.
+			s_buildTypes.insert(std::make_pair(pBuild->getImprovement(), (BuildTypes)i));
+	}
+	s_bBuildTypesCached = true;
 }
 
 #ifdef AUI_CONSTIFY

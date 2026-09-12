@@ -1056,6 +1056,7 @@ void CvLuaPlayer::PushMethods(lua_State* L, int t)
 	Method(GetTradeYourRoutesTTString);
 	Method(GetTradeToYouRoutesTTString);
 	Method(GetTradeRoutes);
+	Method(GetNumInternationalTradeRoutesFromCity);
 	Method(GetTradeRoutesAvailable);
 	Method(GetTradeRoutesToYou);
 	Method(GetNumTechDifference);
@@ -5159,6 +5160,15 @@ int CvLuaPlayer::lGetTradeToYouRoutesTTString(lua_State* L)
 
 	lua_pushstring(L, strResult);
 
+	return 1;
+}
+
+//------------------------------------------------------------------------------
+int CvLuaPlayer::lGetNumInternationalTradeRoutesFromCity(lua_State* L)
+{
+	CvPlayerAI* pkPlayer = GetInstance(L);
+	CvCity* pCity = CvLuaCity::GetInstance(L, 2);
+	lua_pushinteger(L, pkPlayer->GetTrade()->GetNumInternationalTradeRoutesFromCity(pCity));
 	return 1;
 }
 

@@ -198,6 +198,7 @@ def lua_checks(lua_path):
                 cases+=1; before_calls+=before; after_calls+=after
     result['policies'] = {'contexts': cases, 'rule_table_reads': [before_calls,after_calls]}
     result['shuffle'] = shuffle_checks(lua)
+    result['additional'] = additional_checks.lua_checks(lua, source)
     return result
 
 

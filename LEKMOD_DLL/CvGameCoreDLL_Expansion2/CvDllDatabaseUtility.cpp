@@ -288,6 +288,7 @@ bool CvDllDatabaseUtility::PerformDatabasePostProcessing()
 bool CvDllDatabaseUtility::PrefetchGameData()
 {
 	cvStopWatch kTest("PrefetchGameData", "xml-perf.log");
+	CvBuilderTaskingAI::ClearBuildTypeCache();
 
 	//Because Colors and PlayerColors are used everywhere during load
 	//(by the translator) we load interface infos first.
@@ -433,6 +434,7 @@ bool CvDllDatabaseUtility::PrefetchGameData()
 	}
 #endif
 
+	CvBuilderTaskingAI::CacheBuildTypes();
 	ValidatePrefetchProcess();
 
 	return true;

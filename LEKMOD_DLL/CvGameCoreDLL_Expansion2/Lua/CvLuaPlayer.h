@@ -1059,6 +1059,7 @@ protected:
 	static int lGetTradeYourRoutesTTString(lua_State* L);
 	static int lGetTradeToYouRoutesTTString(lua_State* L);
 	static int lGetTradeRoutes(lua_State* L);
+	static int lGetNumInternationalTradeRoutesFromCity(lua_State* L);
 	static int lGetTradeRoutesAvailable(lua_State* L);
 	static int lGetTradeRoutesToYou(lua_State* L);
 	static int lGetNumTechDifference(lua_State* L);

@@ -86,6 +86,8 @@ public:
 
 	void Update(void);
 	void UpdateRoutePlots(void);
+	static void ClearBuildTypeCache();
+	static void CacheBuildTypes();
 
 	bool EvaluateBuilder(CvUnit* pUnit, BuilderDirective* paDirectives, UINT uaDirectives, bool bKeepOnlyBest = false, bool bOnlyEvaluateWorkersPlot = false);
 

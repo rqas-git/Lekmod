@@ -4,10 +4,12 @@
 -- Blocked units
 ------------------------------------------------------------------------------------------------------------------------
 
+local workboat_unit = GameInfoTypes["UNIT_WORKBOAT"]
+
 function lekmod_block_unit_construction(player_id, _, unit_type)
 
+   if unit_type ~= workboat_unit then return true end
    local player = Players[player_id]
-   if unit_type ~= GameInfoTypes["UNIT_WORKBOAT"] then return true end
 
    if not player:IsHuman() then return true
    else return false end
@@ -36,4 +38,3 @@ end
 -- Note: UnitCreated is a Lekmod Event! Not available in the base game
 GameEvents.UnitCreated.Add(lekmod_embark_fix)
 GameEvents.PlayerDoTurn.Add(lekmod_embark_fix)
-

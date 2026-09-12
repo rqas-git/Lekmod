@@ -1401,8 +1401,9 @@ local function UpdateCivListNow()
 			instanceL.Button:SetColor( color )
 
 			-- Set Score
-			instance.Score:SetText( player:GetScore() )
-			instanceL.Score:SetText( player:GetScore() )
+			local score = player:GetScore()
+			instance.Score:SetText( score )
+			instanceL.Score:SetText( score )
 
 			local theirTradeItems, ourTradeItems = {}, {}
 
@@ -1491,16 +1492,18 @@ local function UpdateCivListNow()
 					end
 				end
 			end
-			instance.TheirTradeItems:SetText( table_concat( theirTradeItems ) )
-			instanceL.TheirTradeItems:SetText( table_concat( theirTradeItems ) )
+			local theirTradeText = table_concat( theirTradeItems )
+			instance.TheirTradeItems:SetText( theirTradeText )
+			instanceL.TheirTradeItems:SetText( theirTradeText )
+			local ourTradeText
 			if #ourTradeItems < 4 then
-				instance.OurTradeItems:SetText( table_concat( ourTradeItems ) )
-				instanceL.OurTradeItems:SetText( table_concat( ourTradeItems ) )
+				ourTradeText = table_concat( ourTradeItems )
 			else
 				ourTradeItems[4] = "..." --"[ICON_PLUS]"
-				instance.OurTradeItems:SetText( table_concat( ourTradeItems, nil, 1, 4 ) )
-				instanceL.OurTradeItems:SetText( table_concat( ourTradeItems, nil, 1, 4 ) )
+				ourTradeText = table_concat( ourTradeItems, nil, 1, 4 )
 			end
+			instance.OurTradeItems:SetText( ourTradeText )
+			instanceL.OurTradeItems:SetText( ourTradeText )
 
 			-- disable the button if we have a pending deal with this player
 			instance.Button:SetDisabled( playerID == UI.HasMadeProposal( g_activePlayerID ) )

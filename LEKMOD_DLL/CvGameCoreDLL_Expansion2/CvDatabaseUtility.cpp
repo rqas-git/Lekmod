@@ -326,15 +326,21 @@ int CvDatabaseUtility::MaxRows(const char* szTableName)
 {
 	char szSQL[256] = {0};
 	sprintf_s(szSQL, "SELECT max(rowid) from %s", szTableName);
-	Database::Results kResults;
-	int maxValue = 0;
-	if(DB.Execute(kResults, szSQL))
+	// Cache the statement, not its value: tables may change between calls.
+	Database::Results* pResults = GetResults(szSQL);
+	if(!pResults)
 	{
-		if(kResults.Step())
+		pResults = PrepareResults(szSQL, szSQL);
+	}
+	int maxValue = 0;
+	if(pResults)
+	{
+		if(pResults->Step())
 		{
 			//Since some rowid's start at 0 in Civ, let's increase this # by 1.
-			maxValue = kResults.GetInt(0) + 1;
+			maxValue = pResults->GetInt(0) + 1;
 		}
+		pResults->Reset();
 	}
 
 	return maxValue;

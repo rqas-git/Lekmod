@@ -404,6 +404,7 @@ public:
 #endif
 
 	bool HasPlotToolTips(CvPlot* pPlot) const;
+	int GetNumInternationalTradeRoutesFromCity(CvCity* pCity) const;
 
 	TradeConnectionList m_aRecentlyExpiredConnections;
 	TradeConnectionWasPlunderedList m_aTradeConnectionWasPlundered;

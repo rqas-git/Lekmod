@@ -5177,6 +5177,30 @@ UnitTypes CvPlayerTrade::GetTradeUnit (DomainTypes eDomain)
 	return eUnitType;
 }
 
+// Count outgoing international routes without building the rich Lua UI table.
+int CvPlayerTrade::GetNumInternationalTradeRoutesFromCity(CvCity* pCity) const
+{
+	if (!pCity)
+		return 0;
+
+	int iCount = 0;
+	CvGameTrade* pTrade = GC.getGame().GetGameTrade();
+	for (uint ui = 0; ui < pTrade->m_aTradeConnections.size(); ++ui)
+	{
+		if (pTrade->IsTradeRouteIndexEmpty(ui))
+			continue;
+		const TradeConnection& kConnection = pTrade->m_aTradeConnections[ui];
+		if (kConnection.m_eOriginOwner != m_pPlayer->GetID())
+			continue;
+		CvCity* pFromCity = CvGameTrade::GetOriginCity(kConnection);
+		CvCity* pToCity = CvGameTrade::GetDestCity(kConnection);
+		// Match GetTradeRoutes' city objects and the Lua helper's current owner check.
+		if (pFromCity == pCity && pToCity && pToCity->getOwner() != m_pPlayer->GetID())
+			++iCount;
+	}
+	return iCount;
+}
+
 // Same eligibility as a nonempty GetPlotToolTips result, without formatting strings.
 bool CvPlayerTrade::HasPlotToolTips(CvPlot* pPlot) const
 {
