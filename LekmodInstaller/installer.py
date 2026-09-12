@@ -743,9 +743,9 @@ class LekmodInstaller:
 
         except Exception as e:
             self.log(f"✗ Error checking updates: {e}")
-            self.root.after(0, lambda: messagebox.showerror(
+            self.root.after(0, lambda error=str(e): messagebox.showerror(
                 "Update Check Failed",
-                f"Failed to check for updates:\n{str(e)}\n\n"
+                f"Failed to check for updates:\n{error}\n\n"
                 f"Please check your internet connection."
             ))
         finally:
@@ -836,7 +836,11 @@ class LekmodInstaller:
         if not maps_dir:
             messagebox.showerror('Invalid Path', 'Please verify the Civilization V installation path first.')
             return
-        destination, _ = self.ui_manager._lekmap_dest_folder(maps_dir, version)
+        try:
+            destination, _ = self.ui_manager._lekmap_dest_folder(maps_dir, version)
+        except ValueError as error:
+            messagebox.showerror('Invalid Map Installation', str(error))
+            return
         if not messagebox.askyesno('Confirm Installation',
                 f'Install {version}\n\nThe map folder will be copied to:\n{destination}\n\n'
                 'An existing folder with that name will be replaced.\nContinue?'):

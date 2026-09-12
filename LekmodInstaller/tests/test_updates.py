@@ -97,6 +97,90 @@ class InstallTests(unittest.TestCase):
         self.assertEqual(list(self.dlc.iterdir()), [self.old])
 
 
+class MapInstallTests(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        self.game = self.root / 'game'
+        self.maps = self.game / 'Assets/Maps'
+        self.old = self.maps / 'Lekmap v6.2'
+        self.old.mkdir(parents=True)
+        (self.old / 'old.lua').write_text('working')
+        self.source = self.root / 'download'
+        self.source.mkdir()
+        (self.source / 'LekmapPangaea.lua').write_text('new')
+        self.manager = UIManager()
+
+    def install(self, version='Lekmap v6.2'):
+        return self.manager.install_lekmap(str(self.source), version, lambda _: None, str(self.game))
+
+    def test_unsafe_versions_do_not_modify_any_files(self):
+        dlc = self.game / 'Assets/DLC'
+        dlc.mkdir()
+        (dlc / 'expansion').write_text('keep')
+        for version in ('Lekmap v6.2/../../DLC', r'v6.2\..\..\DLC', 'v2:stream', 'v2.', '', None):
+            with self.subTest(version=version), self.assertRaises(ValueError):
+                self.install(version)
+        self.assertEqual((self.old / 'old.lua').read_text(), 'working')
+        self.assertEqual((dlc / 'expansion').read_text(), 'keep')
+        self.assertEqual(list(self.maps.iterdir()), [self.old])
+
+    def test_copy_and_stamp_failures_preserve_old_files(self):
+        for target in ('ui_manager.shutil.copytree', 'pathlib.Path.write_text'):
+            with self.subTest(target=target), patch(target, side_effect=OSError('disk full')):
+                with self.assertRaises(OSError):
+                    self.install()
+            self.assertEqual((self.old / 'old.lua').read_text(), 'working')
+            self.assertFalse(list(self.maps.parent.glob('.lekmap-install-*')))
+
+    def test_failed_commit_restores_old_files(self):
+        rename = Path.rename
+        def fail(path, target):
+            if path.name == 'replacement':
+                raise OSError('commit failed')
+            return rename(path, target)
+        with patch.object(Path, 'rename', fail), self.assertRaises(OSError):
+            self.install()
+        self.assertEqual((self.old / 'old.lua').read_text(), 'working')
+        self.assertFalse(list(self.maps.parent.glob('.lekmap-install-*')))
+
+    def test_failed_rollback_keeps_backup(self):
+        rename = Path.rename
+        def fail(path, target):
+            if path.name in ('replacement', 'previous'):
+                raise OSError('rename failed')
+            return rename(path, target)
+        with patch.object(Path, 'rename', fail), self.assertRaisesRegex(RuntimeError, 'Previous files are saved'):
+            self.install()
+        backups = list(self.maps.parent.glob('.lekmap-install-*/previous/old.lua'))
+        self.assertEqual(len(backups), 1)
+        self.assertEqual(backups[0].read_text(), 'working')
+
+    def test_success_replaces_same_version_and_preserves_other_maps(self):
+        (self.maps / 'other.lua').write_text('keep')
+        for version in ('6.2', 'v6.2', 'Lekmap_v6.2'):
+            self.assertEqual(Path(self.install(version)), self.old)
+            self.assertEqual((self.old / 'LekmapPangaea.lua').read_text(), 'new')
+            self.assertEqual((self.old / 'Lekmap VERSION.txt').read_text(), 'Lekmap v6.2\n')
+        self.assertFalse((self.old / 'old.lua').exists())
+        self.assertEqual((self.maps / 'other.lua').read_text(), 'keep')
+        self.assertFalse(list(self.maps.parent.glob('.lekmap-install-*')))
+
+    def test_linked_destination_is_rejected(self):
+        target = self.root / 'outside'
+        target.mkdir()
+        link = self.maps / 'Lekmap v7'
+        try:
+            link.symlink_to(target, target_is_directory=True)
+        except OSError:
+            self.skipTest('Symbolic links are unavailable')
+        with self.assertRaises(ValueError):
+            self.install('v7')
+        self.assertTrue(link.is_symlink())
+        self.assertEqual(list(target.iterdir()), [])
+
+
 class SelfUpdateTests(unittest.TestCase):
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()

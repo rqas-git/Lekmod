@@ -15,7 +15,7 @@ def _fingerprint(files):
     return digest.hexdigest()
 
 
-def tree_digest(root):
+def tree_digest(root, allow_empty=False):
     root = Path(root)
     if not root.is_dir() or root.is_symlink():
         raise RuntimeError(f'Missing or linked content directory: {root}')
@@ -25,7 +25,7 @@ def tree_digest(root):
             raise RuntimeError(f'Unexpected symbolic link: {path}')
         if path.is_file() and not any(part.startswith('.') for part in path.relative_to(root).parts):
             files.append((path.relative_to(root).as_posix(), path))
-    if not files:
+    if not files and not allow_empty:
         raise RuntimeError(f'Empty content directory: {root}')
     return _fingerprint(files)
 

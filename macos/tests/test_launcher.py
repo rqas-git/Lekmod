@@ -25,6 +25,18 @@ def write(path, value):
 
 
 class LauncherTests(unittest.TestCase):
+    def test_empty_managed_eui_is_repairable(self):
+        import eui
+        (self.app / eui.PACKAGE).mkdir()
+        state = game.installed_state(self.app)
+        state['eui'] = dict(version=eui.VERSION, archive_sha256=eui.ARCHIVE_SHA256,
+                            sha256=eui.TREE_SHA256)
+        write(self.app / game.MANIFEST, json.dumps(state))
+        report = launcher.inspect(self.app, True, desired_eui=True)
+        self.assertTrue(report['repairable'])
+        self.assertFalse(report['ready'])
+        self.assertEqual(next(c['state'] for c in report['checks'] if c['id'] == 'eui'), 'repair')
+
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)

@@ -102,7 +102,7 @@ def guard(app, state):
     if (folders != [app / PACKAGE] or folders[0].is_symlink()
             or not folders[0].is_dir()):
         raise RuntimeError('Move the existing UI_bc1/UI_bc1_xits installation out of DLC before installing EUI 1.28g.')
-    digest = tree_digest(folders[0])
+    digest = tree_digest(folders[0], allow_empty=True)
     if record.get('archive_sha256') != ARCHIVE_SHA256 and digest != TREE_SHA256:
         raise RuntimeError('An unmanaged or unsupported EUI version is installed. Move it out of DLC, then use Install EUI.')
 

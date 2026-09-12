@@ -474,8 +474,14 @@ class UIManager:
         return None
 
     def _lekmap_dest_folder(self, maps_dir, version):
+        if not isinstance(version, str) or not re.fullmatch(
+                r"(?:Lekmap[ _]+)?v?[0-9]+(?:\.[0-9]+)*", version, re.IGNORECASE):
+            raise ValueError("Invalid Lekmap version label")
         folder_name = self._normalize_lekmap_version_label(version) or "Lekmap"
-        return os.path.join(maps_dir, folder_name), folder_name
+        destination = Path(maps_dir) / folder_name
+        if destination.is_symlink() or destination.resolve().parent != Path(maps_dir).resolve():
+            raise ValueError("Lekmap destination must stay inside the Maps directory")
+        return str(destination), folder_name
 
     def _read_lekmap_stamp(self, maps_dir):
         candidates = [maps_dir]
@@ -523,20 +529,15 @@ class UIManager:
         maps_dir = self.find_civ5_maps_folder(civ5_path)
         if not maps_dir:
             raise Exception("Civilization V path is not set; cannot find Assets/Maps.")
-        os.makedirs(maps_dir, exist_ok=True)
+        dest, folder_name = self._lekmap_dest_folder(maps_dir, version)
 
         source = self._find_lekmap_folder(extract_path)
         if not source or not os.path.isdir(source):
             raise Exception("Lekmap folder not found in downloaded archive!")
 
-        dest, folder_name = self._lekmap_dest_folder(maps_dir, version)
+        os.makedirs(maps_dir, exist_ok=True)
         log_callback(f"Found map folder: {os.path.basename(source)}")
         log_callback(f"Copying folder to {dest}...")
-
-        if os.path.isdir(dest):
-            shutil.rmtree(dest)
-        elif os.path.exists(dest):
-            os.remove(dest)
 
         skip_names = set(self._MAPS_SKIP_DIRS)
         skip_names.update(("lekmap version.txt", "lekmap_version.txt"))
@@ -549,12 +550,28 @@ class UIManager:
                     ignored.append(name)
             return ignored
 
-        shutil.copytree(source, dest, ignore=ignore)
-
-        version_label = self._normalize_lekmap_version_label(version) or str(version).strip()
-        version_path = os.path.join(dest, "Lekmap VERSION.txt")
-        with open(version_path, "w", encoding="utf-8") as handle:
-            handle.write(version_label + "\n")
+        staging = Path(tempfile.mkdtemp(prefix=".lekmap-install-", dir=Path(maps_dir).resolve().parent))
+        replacement, backup = staging / "replacement", staging / "previous"
+        destination = Path(dest)
+        installed = False
+        try:
+            shutil.copytree(source, replacement, ignore=ignore)
+            (replacement / "Lekmap VERSION.txt").write_text(folder_name + "\n", encoding="utf-8")
+            self._lekmap_dest_folder(maps_dir, version)
+            if destination.exists():
+                destination.rename(backup)
+            replacement.rename(destination)
+            installed = True
+        except BaseException as error:
+            if backup.exists():
+                try:
+                    backup.rename(destination)
+                except OSError:
+                    raise RuntimeError(f"Installation failed. Previous files are saved at {backup}") from error
+            raise
+        finally:
+            if installed or not backup.exists():
+                shutil.rmtree(staging, ignore_errors=True)
 
 
         try:

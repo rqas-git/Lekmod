@@ -19,6 +19,28 @@ from ui_manager import UIManager
 
 
 class InstallerFlowTests(unittest.TestCase):
+    def test_invalid_map_label_shows_error_without_starting_worker(self):
+        app, _, _ = self.make_installer()
+        app.lekmap_version_var = SimpleNamespace(get=lambda: 'Lekmap v6.2/../../DLC')
+        app.install_path_var = SimpleNamespace(get=lambda: 'game')
+        app._start_install = Mock()
+        with patch('installer.messagebox') as dialogs:
+            app.install_lekmap_update()
+            dialogs.showerror.assert_called_once()
+            dialogs.askyesno.assert_not_called()
+        app._start_install.assert_not_called()
+
+    def test_version_error_callback_keeps_message_after_worker_returns(self):
+        app, callbacks, _ = self.make_installer()
+        app.refresh_btn = Mock()
+        app.updater.get_available_versions = Mock(side_effect=RuntimeError('offline'))
+        with patch('installer.tk', NORMAL='normal'), patch('installer.messagebox') as dialogs:
+            app._check_updates_thread()
+            self.assertEqual(len(callbacks), 1)
+            callbacks[0]()
+            dialogs.showerror.assert_called_once()
+            self.assertIn('offline', dialogs.showerror.call_args.args[1])
+
     def make_installer(self, failure=None):
         app = LekmodInstaller.__new__(LekmodInstaller)
         callbacks = []

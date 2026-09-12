@@ -85,6 +85,33 @@ class EUITests(unittest.TestCase):
         self.switch(True)
         eui.check(self.app, game.installed_state(self.app), True)
 
+    def test_empty_managed_package_can_be_repaired_and_removed(self):
+        self.install()
+        self.switch(True)
+        for enabled in (True, False):
+            (self.app / eui.PACKAGE / 'readme.txt').unlink()
+            state = game.installed_state(self.app)
+            eui.guard(self.app, state)
+            with self.assertRaises(RuntimeError):
+                eui.check(self.app, state, True)
+            self.switch(enabled)
+            eui.check(self.app, game.installed_state(self.app), enabled)
+
+    def test_empty_unmanaged_package_still_blocks_install(self):
+        (self.app / eui.PACKAGE).mkdir(parents=True)
+        with self.assertRaisesRegex(RuntimeError, 'unmanaged or unsupported'):
+            self.switch(True)
+
+    def test_managed_package_with_external_link_still_blocks_install(self):
+        self.install()
+        self.switch(True)
+        target = self.root / 'unrelated'
+        target.write_text('keep')
+        (self.app / eui.PACKAGE / 'link').symlink_to(target)
+        with self.assertRaisesRegex(RuntimeError, 'symbolic link'):
+            self.switch(True)
+        self.assertEqual(target.read_text(), 'keep')
+
     def test_failed_signing_and_wrong_archive_do_not_change_game(self):
         self.install()
         original = (self.app / game.MANIFEST).read_bytes()
