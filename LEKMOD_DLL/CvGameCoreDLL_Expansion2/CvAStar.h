@@ -393,7 +393,7 @@ protected:
 	CvAStarNode*	GetBest();
 
 #ifdef AUI_ASTAR_PRECALCULATE_NEIGHBORS_ON_INITIALIZE
-	void PrecalcNeighbors(CvAStarNode* node) const;
+	void PrecalcNeighbors(CvAStarNode* node);
 #endif
 	void CreateChildren(CvAStarNode* node);
 	void LinkChild(CvAStarNode* node, CvAStarNode* check);

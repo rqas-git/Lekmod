@@ -487,7 +487,7 @@ CvAStarNode* CvAStar::GetBest()
 #ifdef AUI_ASTAR_PRECALCULATE_NEIGHBORS_ON_INITIALIZE
 // --------------------
 /// precompute neighbors for a node
-void CvAStar::PrecalcNeighbors(CvAStarNode* node) const
+void CvAStar::PrecalcNeighbors(CvAStarNode* node)
 {
 	int x, y;
 

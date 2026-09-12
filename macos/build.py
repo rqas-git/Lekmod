@@ -21,13 +21,19 @@ INCLUDES = [HERE / "include", CORE, CORE / "CvGameCoreDLLUtil/include",
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--release", action="store_true", help="Build optimized gameplay code")
+    parser.add_argument("--lto", action="store_true", help="Experiment with ThinLTO in a separate output directory")
+    parser.add_argument("--precompute-neighbors", action="store_true",
+                        help="Experiment with cached A* neighbors in a separate output directory")
     parser.add_argument("--check", action="store_true", help="Check the common headers only")
     parser.add_argument("--source", help="Compile one source relative to the core directory")
     parser.add_argument("--jobs", type=int, default=4)
     parser.add_argument("--app", type=Path, default=DEFAULT_APP,
                         help="Civilization V.app to audit against")
     args = parser.parse_args()
-    BUILD.mkdir(exist_ok=True)
+    experiments = [name for name, enabled in (("lto", args.lto), ("neighbors", args.precompute_neighbors)) if enabled]
+    build = BUILD / ("experimental-" + "-".join(experiments)) if experiments else BUILD
+    build.mkdir(parents=True, exist_ok=True)
+    link_flags = ["-flto=thin"] if args.lto else []
     flags = ["clang++", "-arch", "x86_64", "-mmacosx-version-min=10.13",
              "-std=c++14", "-stdlib=libc++", "-fms-extensions", "-fdeclspec", "-fdelayed-template-parsing",
              "-fno-strict-aliasing", "-fwrapv", "-ffp-contract=off", "-O2" if args.release else "-O0", "-g",
@@ -37,6 +43,9 @@ def main():
              "-Wno-microsoft-template", "-Wno-microsoft-cast", "-Wno-macro-redefined", "-ferror-limit=30",
              "-include", str(HERE / "include/native.hpp")]
     flags += ["-I" + str(p) for p in INCLUDES]
+    flags += link_flags
+    if args.precompute_neighbors:
+        flags += ["-DAUI_ASTAR_PRECALCULATE_NEIGHBORS_ON_INITIALIZE"]
     if args.check:
         return subprocess.run(flags + ["-fsyntax-only", "-x", "c++", "-"],
                               input='#include "CvGameCoreDLLPCH.h"\n', text=True).returncode
@@ -49,7 +58,7 @@ def main():
     header_time = max(header_time, Path(__file__).stat().st_mtime)
     def compile_source(name):
         src = CORE / name.replace("\\", "/")
-        obj = BUILD / (src.stem + ".o")
+        obj = build / (src.stem + ".o")
         command = flags + ["-c", str(src), "-o", str(obj)]
         stamp = obj.with_suffix(".command.json")
         if (obj.exists() and stamp.exists() and json.loads(stamp.read_text()) == command
@@ -58,7 +67,7 @@ def main():
         result = subprocess.run(command, capture_output=True, text=True)
         if result.returncode == 0:
             stamp.write_text(json.dumps(command))
-        (BUILD / (src.stem + ".log")).write_text(result.stdout + result.stderr)
+        (build / (src.stem + ".log")).write_text(result.stdout + result.stderr)
         return name, result.returncode
     failed = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=args.jobs) as pool:
@@ -67,19 +76,19 @@ def main():
             if rc:
                 failed.append(name)
     if failed:
-        print(f"{len(failed)}/{len(sources)} sources failed; diagnostics in {BUILD}")
+        print(f"{len(failed)}/{len(sources)} sources failed; diagnostics in {build}")
         return 1
     if args.source:
         return 0
-    candidate = BUILD / "candidate.dylib"
-    objects = [BUILD / (Path(name.replace("\\", "/")).stem + ".o") for name in sources]
+    candidate = build / "candidate.dylib"
+    objects = [build / (Path(name.replace("\\", "/")).stem + ".o") for name in sources]
     # Engine imports resolve from the game executable; audit them before replacing the output.
     link = subprocess.run(["clang++", "-arch", "x86_64", "-mmacosx-version-min=10.13",
                            "-dynamiclib", "-stdlib=libc++", "-Wl,-undefined,dynamic_lookup",
                            "-Wl,-exported_symbol,_DllGetGameContext",
                            "-Wl,-install_name,@executable_path/libCvGameCoreDLL_Expansion2_DLL.dylib",
-                           *map(str, objects), "-o", str(candidate)], capture_output=True, text=True)
-    (BUILD / "link.log").write_text(link.stdout + link.stderr)
+                           *link_flags, *map(str, objects), "-o", str(candidate)], capture_output=True, text=True)
+    (build / "link.log").write_text(link.stdout + link.stderr)
     if link.returncode:
         print(link.stderr)
         return link.returncode
@@ -88,7 +97,7 @@ def main():
     except RuntimeError as error:
         print(error)
         return 1
-    output = BUILD / "libCvGameCoreDLL_Expansion2_DLL.dylib"
+    output = build / "libCvGameCoreDLL_Expansion2_DLL.dylib"
     candidate.replace(output)
     print(f"Linked and audited {output}")
     return 0

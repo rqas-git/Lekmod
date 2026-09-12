@@ -13,6 +13,7 @@ import subprocess
 import sys
 import tempfile
 from next_checks import cpp_checks, shuffle_checks, normalize_trade_section
+import additional_checks
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
@@ -213,6 +214,7 @@ def main():
         result['metadata_and_coast'] = metadata(Path(temp))
         result['trade'] = trade_checks(Path(temp), args.address_sanitizer)
         result['next_batch'] = cpp_checks(Path(temp), source, extract, compile_run)
+        result['additional'] = additional_checks.cpp_checks(Path(temp), source, extract, compile_run)
     result['lua'] = lua_checks(args.lua_python_path)
     # Include committed validated sources too, rather than only current dirty files.
     paths = [

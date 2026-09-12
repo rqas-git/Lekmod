@@ -1,0 +1,70 @@
+// Compare actual cached/uncached neighbor visitation and callback order.
+#include <cassert>
+#include <iostream>
+#include <tuple>
+#include <vector>
+enum { NUM_DIRECTION_TYPES=6 };
+#define PREFETCH_FASTAR_NODE(value) ((void)0)
+struct CvAStarNode {
+    int m_iX=0,m_iY=0;
+    CvAStarNode* m_apNeighbors[NUM_DIRECTION_TYPES]={};
+};
+class CvAStar;
+int extras(CvAStarNode*,CvAStar*);
+void extra(CvAStarNode*,int,int&,int&,CvAStar*);
+class CvAStar {
+public:
+    int m_iColumns,m_iRows,mode=0;
+    bool m_bWrapX,m_bWrapY;
+    CvAStarNode** m_ppaaNodes;
+    void* m_pData=NULL;
+    int udValid=0;
+    int (*udNumExtraChildrenFunc)(CvAStarNode*,CvAStar*)=NULL;
+    void (*udGetExtraChildFunc)(CvAStarNode*,int,int&,int&,CvAStar*)=NULL;
+    std::vector<std::tuple<int,int,int> > trace;
+    CvAStar(int w,int h,bool wx,bool wy):m_iColumns(w),m_iRows(h),m_bWrapX(wx),m_bWrapY(wy){
+        m_ppaaNodes=new CvAStarNode*[w];
+        for(int x=0;x<w;++x){m_ppaaNodes[x]=new CvAStarNode[h];for(int y=0;y<h;++y){m_ppaaNodes[x][y].m_iX=x;m_ppaaNodes[x][y].m_iY=y;}}
+        for(int x=0;x<w;++x)for(int y=0;y<h;++y)PrecalcNeighbors(&m_ppaaNodes[x][y]);
+    }
+    ~CvAStar(){for(int x=0;x<m_iColumns;++x)delete[] m_ppaaNodes[x];delete[] m_ppaaNodes;}
+    int xRange(int);int yRange(int);bool isValid(int,int);
+    void PrecalcNeighbors(CvAStarNode*);
+    void CreateChildren(CvAStarNode*);
+    void CreateChildrenBaseline(CvAStarNode*);
+    bool udFunc(int,CvAStarNode*,CvAStarNode* n,int,void*){
+        trace.push_back(std::make_tuple(0,n->m_iX,n->m_iY));
+        return (n->m_iX+n->m_iY+mode)%3!=0;
+    }
+    void LinkChild(CvAStarNode*,CvAStarNode* n){trace.push_back(std::make_tuple(1,n->m_iX,n->m_iY));}
+};
+int extras(CvAStarNode*,CvAStar*){return 3;}
+void extra(CvAStarNode* n,int i,int& x,int& y,CvAStar* path){
+    path->trace.push_back(std::make_tuple(2,i,0));
+    x=i==0?n->m_iX:(i==1?path->m_iColumns-1:-1);y=n->m_iY;
+}
+@X_RANGE@
+@Y_RANGE@
+@IS_VALID@
+@PRECOMPUTE@
+@CACHED@
+@BASELINE@
+int main(){
+    long cases=0;
+    for(int w=1;w<=12;++w)for(int h=1;h<=12;++h)
+    for(int wrap=0;wrap<4;++wrap){
+        CvAStar path(w,h,wrap&1,wrap&2);
+        for(int mode=0;mode<6;++mode){
+            path.mode=mode;
+            path.udNumExtraChildrenFunc=mode%2?extras:NULL;
+            path.udGetExtraChildFunc=mode%2?extra:NULL;
+            for(int x=0;x<w;++x)for(int y=0;y<h;++y){
+                auto* node=&path.m_ppaaNodes[x][y];
+                path.trace.clear();path.CreateChildrenBaseline(node);auto expected=path.trace;
+                path.trace.clear();path.CreateChildren(node);
+                assert(path.trace==expected);++cases;
+            }
+        }
+    }
+    std::cout<<"{\"neighbor_callback_comparisons\":"<<cases<<"}";
+}
