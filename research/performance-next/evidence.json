@@ -1,0 +1,59 @@
+{
+  "source_sha256": {
+    "Lekmap/HBMapmakerUtilities.lua": "ef5d926579986b2a5a336ec4e8322796ede28a76b574d96d29f581093be7b6ea",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvGameCoreUtils.h": "b1d2e13002ecf44d0a7af114d64a580ce5d0ffd26bd7c86c8b25e67ea4d7b4fb",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvBuilderTaskingAI.cpp": "cd8163e4b9e64d2054ab4b97e11143a2dc985d8651fe060dc3acef388e91eb8d",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvTradeClasses.cpp": "e24283383d762bf19ebe50a26caf040b630f287b3d0b2d4d3d325adcfdd0b808"
+  },
+  "hex_order": {
+    "radii_checked": 65,
+    "radius_8_square": 289,
+    "radius_8_bounded": 217
+  },
+  "worker_order_model_cases": 1200,
+  "shuffle_equivalence_cases": 6014,
+  "shuffle_benchmark": [
+    {
+      "length": 32,
+      "repeats": 1024,
+      "original_seconds": 4.853515624999921e-06,
+      "tree_seconds": 8.59863281250017e-06,
+      "original_over_tree": 0.5644520159000365
+    },
+    {
+      "length": 128,
+      "repeats": 256,
+      "original_seconds": 2.717968749999921e-05,
+      "tree_seconds": 3.810156250000016e-05,
+      "original_over_tree": 0.7133483698995047
+    },
+    {
+      "length": 512,
+      "repeats": 64,
+      "original_seconds": 0.00024600000000000316,
+      "tree_seconds": 0.00016248437500000074,
+      "original_over_tree": 1.5139917299740486
+    },
+    {
+      "length": 2048,
+      "repeats": 16,
+      "original_seconds": 0.003210499999999991,
+      "tree_seconds": 0.0007414375000000112,
+      "original_over_tree": 4.330101997808234
+    },
+    {
+      "length": 8192,
+      "repeats": 4,
+      "original_seconds": 0.04956149999999998,
+      "tree_seconds": 0.003193749999999995,
+      "original_over_tree": 15.518277886497081
+    },
+    {
+      "length": 32768,
+      "repeats": 3,
+      "original_seconds": 0.7745046666666666,
+      "tree_seconds": 0.015071999999999974,
+      "original_over_tree": 51.38698690728954
+    }
+  ]
+}
