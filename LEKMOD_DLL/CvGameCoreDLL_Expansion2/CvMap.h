@@ -1,24 +1,24 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_MAP_H
 #define CIV5_MAP_H
 
-//
-//	FILE:	 CvMap.h
-//	AUTHOR:  Soren Johnson
-//  MODDED:  The Civ 5 team
-//	PURPOSE: Game map class
-//-----------------------------------------------------------------------------
-//	Copyright (c) 2010 Firaxis Games, Inc. All rights reserved.
-//-----------------------------------------------------------------------------
-//
+
+
+
+
+
+
+
+
+
 
 
 #include "CvArea.h"
@@ -26,8 +26,8 @@
 #include "CvInfos.h"
 #include "CvPlotManager.h"
 
-// a simplified version of CvArea for use primarily with the continent generation system
-// one huge difference is that impassible terrain doesn't split a landmass like it would a CvArea
+
+
 class CvLandmass
 {
 public:
@@ -57,7 +57,7 @@ public:
 	int GetCentroidX();
 	int GetCentroidY();
 
-	// for serialization
+
 	virtual void read(FDataStream& kStream);
 	virtual void write(FDataStream& kStream) const;
 
@@ -102,9 +102,9 @@ inline int coordRange(int iCoord, int iRange, bool bWrap)
 
 class CvPlotManager;
 
-//
-// CvMap
-//
+
+
+
 class CvMap
 {
 public:
@@ -241,7 +241,7 @@ public:
 	const CvClimateInfo& getClimateInfo() const;
 	const CvSeaLevelInfo& getSeaLevelInfo() const;
 
-	// Resources
+
 	int getRandomResourceQuantity(ResourceTypes eIndex);
 
 	int getNumResources(ResourceTypes eIndex);
@@ -250,7 +250,7 @@ public:
 	int getNumResourcesOnLand(ResourceTypes eIndex);
 	void changeNumResourcesOnLand(ResourceTypes eIndex, int iChange);
 
-	/// Plot accessors
+
 #ifdef AUI_WARNING_FIXES
 	__forceinline CvPlot* plotByIndex(uint iIndex) const
 	{
@@ -294,7 +294,7 @@ public:
 
 	CvPlotManager& plotManager() { return m_kPlotManager; }
 
-	/// Areas
+
 	int getIndexAfterLastArea();
 	int getNumAreas();
 	int getNumLandAreas();
@@ -307,7 +307,7 @@ public:
 	void recalculateAreas();
 	void calculateAreas();
 
-	// Landmass
+
 	int getIndexAfterLastLandmass();
 	int getNumLandmasses();
 	int getNumLandLandmasses();
@@ -320,10 +320,10 @@ public:
 	void calculateLandmasses();
 
 	int calculateInfluenceDistance(CvPlot* pSource, CvPlot* pDest, int iMaxRange, bool bCorrectButSlower=true);
-	/// this is the default "continent stamper" a given lua map script can use it or not
+
 	void DefaultContinentStamper();
 
-	// Serialization:
+
 	void Read(FDataStream& kStream);
 	void Write(FDataStream& kStream) const;
 	GUID GetGUID() const
@@ -335,7 +335,7 @@ public:
 
 	void rebuild(int iGridW, int iGridH, int iTopLatitude, int iBottomLatitude, bool bWrapX, bool bWrapY, WorldSizeTypes eWorldSize, ClimateTypes eClimate, SeaLevelTypes eSeaLevel);
 
-	// Natural Wonders stuff
+
 	int GetNumNaturalWonders() const;
 	void ChangeNumNaturalWonders(int iChange);
 
@@ -343,23 +343,23 @@ public:
 
 	void ChangeAIMapHint(int iMapHint);
 	int GetAIMapHint();
-	// End Natural Wonders stuff
+
 
 	typedef FStaticVector<CvPlot*, 1000, true, c_eCiv5GameplayDLL, 1> DeferredPlotArray;
-	DeferredPlotArray m_vDeferredFogPlots; // don't serialize me
+	DeferredPlotArray m_vDeferredFogPlots;
 
 protected:
 
 #ifdef AUI_WARNING_FIXES
 	uint m_iGridWidth;
 	uint m_iGridHeight;
-	uint m_iGridSize; // not serialized as it is always w*h
+	uint m_iGridSize;
 	uint m_iLandPlots;
 	uint m_iOwnedPlots;
 #else
 	int m_iGridWidth;
 	int m_iGridHeight;
-	int m_iGridSize; // not serialized as it is always w*h
+	int m_iGridSize;
 	int m_iLandPlots;
 	int m_iOwnedPlots;
 #endif
@@ -367,11 +367,11 @@ protected:
 	int m_iBottomLatitude;
 	int m_iNumNaturalWonders;
 
-	int m_iAIMapHints;	// currently only:
-						// 0 for normal, 
-						// 1 for primarily naval (this does NOT do offshore expansion), 
-						// 2 for raze cities whenever possible,
-						// 4 for expand offshore (previously 1 was naval and expansion, but I am splitting the behaviors, to get the old behavior use 4+1)
+	int m_iAIMapHints;
+
+
+
+
 
 	bool m_bWrapX;
 	bool m_bWrapY;

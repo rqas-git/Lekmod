@@ -1,29 +1,29 @@
-//---------------------------------------------------------------------------------------
-//
-//  *****************   FIRAXIS GAME ENGINE   ********************
-//
-//  FILE:		FAutoArchiveClassContainer.h
-//
-//  AUTHOR:		Justin Randall	--  07/20/2009
-//
-//  PURPOSE:	Specializes the AutoArchive to track class instances for use with 
-//              FAutoVariable<> members. Useful for debugging and implementing member
-//              function callbacks.
-//
-//---------------------------------------------------------------------------------------
-//  Copyright (c) 2009 Firaxis Games, Inc. All rights reserved.
-//---------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #ifndef _INCLUDED_FAutoArchiveClassContainer_H
 #define _INCLUDED_FAutoArchiveClassContainer_H
 
-//---------------------------------------------------------------------------------------
+
 
 #include "FAutoArchive.h"
 
-//---------------------------------------------------------------------------------------
 
-// Because some FAutoVariable's need to know about their
-// owner container AND the AutoArchive they belong to
+
+
+
 template<class ClassType>
 class FAutoArchiveClassContainer : public FAutoArchive
 {
@@ -88,11 +88,11 @@ private:
 	ClassType & m_classInstance;
 };
 
-//---------------------------------------------------------------------------------------
 
-// rather than storing a duplicate string for each autovariable, wasting memory
-// let's put these in a map. Names are used mostly for slow serialization and
-// debugging.
+
+
+
+
 template<class ClassType>
 std::map<size_t, std::string> & FAutoArchiveClassContainer<ClassType>::getNames() const
 {
@@ -100,7 +100,7 @@ std::map<size_t, std::string> & FAutoArchiveClassContainer<ClassType>::getNames(
 	return names;
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<class ClassType>
 FDataStream & operator<<(FDataStream & saveTo, const FAutoArchiveClassContainer<ClassType> & readFrom)
@@ -109,7 +109,7 @@ FDataStream & operator<<(FDataStream & saveTo, const FAutoArchiveClassContainer<
 	return saveTo;
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<class ClassType>
 FDataStream & operator>>(FDataStream & loadFrom, FAutoArchiveClassContainer<ClassType> & writeTo)
@@ -118,6 +118,6 @@ FDataStream & operator>>(FDataStream & loadFrom, FAutoArchiveClassContainer<Clas
 	return loadFrom;
 }
 
-//---------------------------------------------------------------------------------------
 
-#endif//_INCLUDED_FAutoArchiveClassContainer_H
+
+#endif

@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 
 #include "CvGameCoreDLLPCH.h"
 #include "CvRandom.h"
@@ -16,10 +16,10 @@
 #else
 #ifdef WIN32
 #	include "Win32/FDebugHelper.h"
-#endif//_WINPC
+#endif
 #endif
 
-// include this after all other headers!
+
 #include "LintFree.h"
 
 #ifndef AUI_USE_SFMT_RNG
@@ -47,7 +47,7 @@ CvRandom::CvRandom() :
 	, m_kCallStacks()
 	, m_seedHistory()
 	, m_resolvedCallStacks()
-#endif//_debug
+#endif
 {
 	reset();
 }
@@ -62,7 +62,7 @@ CvRandom::CvRandom(bool extendedCallStackDebugging) :
 	, m_kCallStacks()
 	, m_seedHistory()
 	, m_resolvedCallStacks()
-#endif//_debug
+#endif
 {
 	extendedCallStackDebugging;
 }
@@ -77,7 +77,7 @@ CvRandom::CvRandom(const CvRandom& source) :
 	, m_kCallStacks(source.m_kCallStacks)
 	, m_seedHistory(source.m_seedHistory)
 	, m_resolvedCallStacks(source.m_resolvedCallStacks)
-#endif//_debug
+#endif
 {
 #ifdef AUI_USE_SFMT_RNG
 	m_MersenneTwister = source.m_MersenneTwister;
@@ -121,12 +121,12 @@ void CvRandom::init(uint32_t ulSeed)
 void CvRandom::init(unsigned long ulSeed)
 #endif
 {
-	//--------------------------------
-	// Init saved data
+
+
 	reset(ulSeed);
 
-	//--------------------------------
-	// Init non-saved data
+
+
 }
 
 
@@ -135,16 +135,16 @@ void CvRandom::uninit()
 }
 
 
-// FUNCTION: reset()
-// Initializes data members that are serialized.
+
+
 #ifdef AUI_USE_SFMT_RNG
 void CvRandom::reset(uint32_t uiSeed)
 #else
 void CvRandom::reset(unsigned long ulSeed)
 #endif
 {
-	//--------------------------------
-	// Uninit class
+
+
 	uninit();
 
 	recordCallStack();
@@ -221,7 +221,7 @@ unsigned short CvRandom::get(unsigned short usNum, const char* pszLog)
 #ifdef _DEBUG
 						if(m_bExtendedCallStackDebugging)
 						{
-							// Use the callstack from the extended callstack debugging system
+
 							const FCallStack& callStack = m_kCallStacks.back();
 							std::string stackTrace = callStack.toString(true, 6);
 							pLog->Msg(stackTrace.c_str());
@@ -232,7 +232,7 @@ unsigned short CvRandom::get(unsigned short usNum, const char* pszLog)
 #if defined(LEKMOD_MACOS)
 #else
 #ifdef WIN32
-							// Get callstack directly
+
 							FCallStack callStack;
 							FDebugHelper::GetInstance().GetCallStack(&callStack, 0, 8);
 							std::string stackTrace = callStack.toString(true, 6);
@@ -268,7 +268,7 @@ unsigned int CvRandom::getBinom(unsigned int uiNum, const char* pszLog)
 	{
 		recordCallStack();
 		m_ulCallCount += uiNum;
-		for (unsigned int uiI = 1; uiI < uiNum; uiI++)  // starts at 1 because the generation is not inclusive (so we need one less cycle than normal)
+		for (unsigned int uiI = 1; uiI < uiNum; uiI++)
 		{
 			uiRtnValue += m_MersenneTwister.sfmt_genrand_uint32() & 1;
 		}
@@ -280,11 +280,11 @@ unsigned int CvRandom::getBinom(unsigned int uiNum, const char* pszLog)
 	{
 		recordCallStack();
 		m_ulCallCount += uiNum;
-		for (unsigned int uiI = 1; uiI < uiNum; uiI++) // starts at 1 because the generation is not inclusive (so we need one less cycle than normal)
+		for (unsigned int uiI = 1; uiI < uiNum; uiI++)
 		{
-			// no need to worry about masking with MAX_UNSIGNED_SHORT, max cycle number takes care of it
+
 			ulNewSeed = (RANDOM_A * ulNewSeed) + RANDOM_C;
-			uiRet += (ulNewSeed >> BINOM_SHIFT) & 1; // need the shift so results only repeat after 2^BINOM_SHIFT iterations
+			uiRet += (ulNewSeed >> BINOM_SHIFT) & 1;
 		}
 	}
 #endif
@@ -324,7 +324,7 @@ unsigned int CvRandom::getBinom(unsigned int uiNum, const char* pszLog)
 #ifdef _DEBUG
 						if (m_bExtendedCallStackDebugging)
 						{
-							// Use the callstack from the extended callstack debugging system
+
 							const FCallStack& callStack = m_kCallStacks.back();
 							std::string stackTrace = callStack.toString(true, 6);
 							pLog->Msg(stackTrace.c_str());
@@ -335,7 +335,7 @@ unsigned int CvRandom::getBinom(unsigned int uiNum, const char* pszLog)
 #if defined(LEKMOD_MACOS)
 #else
 #ifdef WIN32
-							// Get callstack directly
+
 							FCallStack callStack;
 							FDebugHelper::GetInstance().GetCallStack(&callStack, 0, 8);
 							std::string stackTrace = callStack.toString(true, 6);
@@ -414,7 +414,7 @@ void CvRandom::read(FDataStream& kStream)
 {
 	reset();
 
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion;
 	kStream >> uiVersion;
 
@@ -434,13 +434,13 @@ void CvRandom::read(FDataStream& kStream)
 #else
 	bool b;
 	kStream >> b;
-#endif//_DEBUG
+#endif
 }
 
 
 void CvRandom::write(FDataStream& kStream) const
 {
-	// Current version number
+
 	uint uiVersion = 1;
 	kStream << uiVersion;
 
@@ -474,7 +474,7 @@ void CvRandom::recordCallStack()
 		m_kCallStacks.push_back(callStack);
 		m_seedHistory.push_back(m_ulRandomSeed);
 	}
-#endif//_DEBUG
+#endif
 }
 
 void CvRandom::resolveCallStacks() const
@@ -487,7 +487,7 @@ void CvRandom::resolveCallStacks() const
 		std::string stackTrace = callStack.toString(true);
 		m_resolvedCallStacks.push_back(stackTrace);
 	}
-#endif//_DEBUG
+#endif
 }
 
 const std::vector<std::string>& CvRandom::getResolvedCallStacks() const
@@ -497,7 +497,7 @@ const std::vector<std::string>& CvRandom::getResolvedCallStacks() const
 #else
 	static std::vector<std::string> empty;
 	return empty;
-#endif//_debug
+#endif
 }
 
 const std::vector<unsigned long>& CvRandom::getSeedHistory() const
@@ -507,7 +507,7 @@ const std::vector<unsigned long>& CvRandom::getSeedHistory() const
 #else
 	static std::vector<unsigned long> empty;
 	return empty;
-#endif//_DEBUG
+#endif
 }
 
 bool CvRandom::callStackDebuggingEnabled() const
@@ -516,14 +516,14 @@ bool CvRandom::callStackDebuggingEnabled() const
 	return m_bExtendedCallStackDebugging;
 #else
 	return false;
-#endif//_DEBUG
+#endif
 }
 
 void CvRandom::setCallStackDebuggingEnabled(bool enabled)
 {
 #ifdef _DEBUG
 	m_bExtendedCallStackDebugging = enabled;
-#endif//_DEBUG
+#endif
 	enabled;
 }
 
@@ -533,7 +533,7 @@ void CvRandom::clearCallstacks()
 	m_kCallStacks.clear();
 	m_seedHistory.clear();
 	m_resolvedCallStacks.clear();
-#endif//_DEBUG
+#endif
 }
 FDataStream& operator<<(FDataStream& saveTo, const CvRandom& readFrom)
 {

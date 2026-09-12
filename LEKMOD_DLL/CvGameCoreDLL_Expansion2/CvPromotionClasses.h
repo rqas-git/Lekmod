@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_PROMOTION_CLASSES_H
@@ -12,14 +12,14 @@
 
 #include "CvBitfield.h"
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvPromotionEntry
-//!  \brief		A single promotion available in the game
-//
-//!  Key Attributes:
-//!  - Used to be called CvPromotionInfo
-//!  - Populated from XML\Units\CIV5UnitPromotions.xml
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvPromotionEntry: public CvHotKeyInfo
 {
 public:
@@ -34,6 +34,10 @@ public:
 	~CvPromotionEntry(void);
 
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
+
+
+	static int GetTotalVisibilityChange();
+	static void InvalidateVisibilityChangeCache();
 
 	int	GetLayerAnimationPath() const;
 #if !defined(LEKMOD_RELOCATE_PROMOTION_PREREQ_ORS)
@@ -58,7 +62,7 @@ public:
 	int	GetPrereqOrPromotion9() const;
 	void	SetPrereqOrPromotion9(int i);
 
-	//EAP: adding an additional promotion thing
+
 	int	GetPrereqOrPromotion10() const;
 	void	SetPrereqOrPromotion10(int i);
 #endif
@@ -108,7 +112,7 @@ public:
 	bool IsGreatAdmiral() const;
 	int  GetGreatGeneralModifier() const;
 	bool IsGreatGeneralReceivesMovement() const;
-	bool IsEmbarkedUnitReceivesMovement() const; // NQMP GJS - Danish Longship
+	bool IsEmbarkedUnitReceivesMovement() const;
 #ifdef LEKMOD_LONGSHIP_ALL_PROMO
 	bool IsLandUnitReceivesMovement() const;
 #endif
@@ -211,11 +215,11 @@ public:
 	bool IsIgnoreZOC() const;
 	bool IsSapper() const;
 
-	// CMP
+
 	int GetConvertDomainUnit() const;
 	int GetConvertDomain() const;
 	int GetGiveDomain() const;
-	//
+
 
 	bool IsCanHeavyCharge() const;
 #ifdef NQ_HEAVY_CHARGE_DOWNHILL
@@ -227,7 +231,7 @@ public:
 	const char* GetSound() const;
 	void SetSound(const char* szVal);
 
-	// Arrays
+
 #ifdef AUI_WARNING_FIXES
 	int GetTerrainAttackPercent(uint i) const;
 	int GetTerrainDefensePercent(uint i) const;
@@ -360,7 +364,7 @@ protected:
 	bool m_bGreatAdmiral;
 	int m_iGreatGeneralModifier;
 	bool m_bGreatGeneralReceivesMovement;
-	bool m_bEmbarkedUnitReceivesMovement; // NQMP GJS - Danish Longship
+	bool m_bEmbarkedUnitReceivesMovement;
 #ifdef LEKMOD_LONGSHIP_ALL_PROMO
 	bool m_bLandUnitReceivesMovement;
 #endif
@@ -474,7 +478,7 @@ protected:
 
 	CvString m_strSound;
 
-	// Arrays
+
 #if defined(LEKMOD_RELOCATE_PROMOTION_PREREQ_ORS)
 	std::vector<int> m_vPromotionPrereqOrs;
 #endif
@@ -513,24 +517,24 @@ protected:
 	bool* m_pbPostCombatRandomPromotion;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvPromotionXMLEntries
-//!  \brief		Game-wide information about promotions
-//
-//! Key Attributes:
-//! - Plan is it will be contained in CvGameRules object within CvGame class
-//! - Populated from XML\GameInfo\CIV5PromotionInfo.xml
-//! - Contains an array of CvPromotionEntry from the above XML file
-//! - One instance for the entire game
-//! - Accessed heavily by the [what stores info on projects built?] class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
 class CvPromotionXMLEntries
 {
 public:
 	CvPromotionXMLEntries(void);
 	~CvPromotionXMLEntries(void);
 
-	// Accessor functions
+
 	std::vector<CvPromotionEntry*>& GetPromotionEntries();
 #ifdef AUI_WARNING_FIXES
 	uint GetNumPromotions() const;
@@ -540,22 +544,22 @@ public:
 	_Ret_maybenull_ CvPromotionEntry* GetEntry(int index);
 #endif
 
-	// Binary cache functions
+
 	void DeleteArray();
 
 private:
 	std::vector<CvPromotionEntry*> m_paPromotionEntries;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvUnitPromotions
-//!  \brief		Information about the promotions of a single unit
-//
-//!  Key Attributes:
-//!  - Plan is it will be contained in CvPlayerState object within CvUnit class
-//!  - One instance for each unit
-//!  - Accessed by any class that needs to check promotions
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvUnitPromotions
 {
 public:
@@ -593,9 +597,9 @@ private:
 	CvUnit* m_pUnit;
 };
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Helper Functions to serialize arrays of variable length (based on number of promotions defined in game)
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 namespace PromotionArrayHelpers
 {
 void ReadV3(FDataStream& kStream, CvBitfield& kPromotions);
@@ -603,4 +607,4 @@ void Read(FDataStream& kStream, CvBitfield& kPromotions);
 void Write(FDataStream& kStream, const CvBitfield& kPromotions, int iArraySize);
 }
 
-#endif //CIV5_PROMOTION_CLASSES_H
+#endif

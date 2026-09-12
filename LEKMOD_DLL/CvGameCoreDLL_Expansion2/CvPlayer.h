@@ -1,13 +1,13 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
-// player.h
+
 
 #ifndef CIV5_PLAYER_H
 #define CIV5_PLAYER_H
@@ -60,7 +60,7 @@ typedef std::list<CvPopupInfo*> CvPopupQueue;
 typedef std::vector< std::pair<UnitCombatTypes, PromotionTypes> > UnitCombatPromotionArray;
 typedef std::vector< std::pair<UnitClassTypes, PromotionTypes> > UnitClassPromotionArray;
 typedef std::vector< std::pair<CivilizationTypes, LeaderHeadTypes> > CivLeaderArray;
-typedef FStaticVector<int, 152* 96, true, c_eCiv5GameplayDLL, 0> CvPlotsVector; // allocate the size of HUGE Terra world just in case (this is max that we ship with)
+typedef FStaticVector<int, 152* 96, true, c_eCiv5GameplayDLL, 0> CvPlotsVector;
 
 class CvPlayer
 {
@@ -209,7 +209,7 @@ public:
 	const CvCity* getBusyCity() const;
 	void chooseTech(int iDiscover = 0, const char* strTxt=0, TechTypes iTechJustDiscovered=NO_TECH);
 
-	// Civ 5 Score
+
 	int GetScore(bool bFinal = false, bool bVictory = false) const;
 
 	int GetScoreFromCities() const;
@@ -230,11 +230,11 @@ public:
 	void ChangeScoreFromScenario3(int iChange);
 	int GetScoreFromScenario4() const;
 	void ChangeScoreFromScenario4(int iChange);
-	// End Civ 5 Score
+
 
 	int countCityFeatures(FeatureTypes eFeature) const;
 	int countNumBuildings(BuildingTypes eBuilding) const;
-	//int countNumCitiesConnectedToCapital() const;
+
 
 	int countCitiesFeatureSurrounded() const;
 
@@ -258,7 +258,7 @@ public:
 	bool canGoodyImprovePlot(CvPlot* pPlot, BuildTypes eBuild) const;
 #endif
 
-	void AwardFreeBuildings(CvCity* pCity); // slewis - broken out so that Venice can get free buildings when they purchase something
+	void AwardFreeBuildings(CvCity* pCity);
 	bool canFound(int iX, int iY, bool bTestVisible = false) const;
 #if !defined(LEKMOD_TRACK_CITY_SETTLER_UNITTYPE)
 	void found(int iX, int iY);
@@ -445,9 +445,9 @@ public:
 
 	int GetHappinessFromTradeRoutes() const;
 	void DoUpdateCityConnectionHappiness();
-#if !defined(STANDARDIZE_YIELDS) // Off for now while I plot and Scheme.
-	// Create Player level yield collecting functions to retire the yield specific ones.
-	int GetTotalYieldPerTurnTimes100(YieldTypes eYield, bool bExcludeReligion = false) const; // bExcludeReligion is to prevent recursive calls.
+#if !defined(STANDARDIZE_YIELDS)
+
+	int GetTotalYieldPerTurnTimes100(YieldTypes eYield, bool bExcludeReligion = false) const;
 	int GetYieldPerTurnFromCitiesTimes100(YieldTypes eYield) const;
 	int GetYieldPerTurnFromMinorCivsTimes100(YieldTypes eYield) const;
 	int GetYieldPerTurnFromReligionTimes100(YieldTypes eYield) const;
@@ -456,7 +456,7 @@ public:
 	int GetYieldPerTurnForFreeTimes100(YieldTypes eYield) const;
 	int GetYieldPerTurnFromBonusTurnsTimes100(YieldTypes eYield) const;
 #endif
-	// Culture
+
 
 #ifdef AUI_PLAYER_FIX_JONS_CULTURE_IS_T100
 	int GetTotalJONSCulturePerTurnTimes100() const;
@@ -473,8 +473,8 @@ public:
 	int GetJONSCulturePerTurnForFree() const;
 	void ChangeJONSCulturePerTurnForFree(int iChange);
 
-	int GetJONSCulturePerTurnFromMinorCivs() const; // DEPRECATED, use GetCulturePerTurnFromMinorCivs() instead
-	void ChangeJONSCulturePerTurnFromMinorCivs(int iChange); // DEPRECATED, does nothing
+	int GetJONSCulturePerTurnFromMinorCivs() const;
+	void ChangeJONSCulturePerTurnFromMinorCivs(int iChange);
 	int GetCulturePerTurnFromMinorCivs() const;
 	int GetCulturePerTurnFromMinor(PlayerTypes eMinor) const;
 
@@ -529,18 +529,18 @@ public:
 	int GetYieldPerTurnFromMisc(YieldTypes eYield) const;
 	void ChangeYieldPerTurnFromMisc(YieldTypes eYield, int iChange);
 #endif
-	int GetNumCitiesFreeAestheticsSchools() const; // NQMP GJS - add support for NumCitiesFreeAestheticsSchools
-	void ChangeNumCitiesFreeAestheticsSchools(int iChange); // NQMP GJS - add support for NumCitiesFreeAestheticsSchools
+	int GetNumCitiesFreeAestheticsSchools() const;
+	void ChangeNumCitiesFreeAestheticsSchools(int iChange);
 	int GetNumCitiesFreePietyGardens() const;
-	void ChangeNumCitiesFreePietyGardens(int iChange); // LEKMOD - add support for Free Piety Gardens on Finisher
-	int GetNumCitiesFreeWalls() const; // NQMP GJS - New Oligarchy add support for NumCitiesFreeWalls
-	void ChangeNumCitiesFreeWalls(int iChange); // NQMP GJS - New Oligarchy add support for NumCitiesFreeWalls
+	void ChangeNumCitiesFreePietyGardens(int iChange);
+	int GetNumCitiesFreeWalls() const;
+	void ChangeNumCitiesFreeWalls(int iChange);
 	int GetNumCitiesFreeCultureBuilding() const;
 	void ChangeNumCitiesFreeCultureBuilding(int iChange);
 	int GetNumCitiesFreeFoodBuilding() const;
 	void ChangeNumCitiesFreeFoodBuilding(int iChange);
 
-	// CMP DLL -- Might not be needing most but I already spent 10 hours on this, COPY PASTE WE GO ~EAP
+
 	int GetNumCitiesFreeChosenBuilding(BuildingClassTypes eBuildingClass) const;
 	void ChangeNumCitiesFreeChosenBuilding(BuildingClassTypes eBuildingClass, int iChange);
 
@@ -561,7 +561,7 @@ public:
 
 	int GetReformationFollowerReduction() const;
 	void ChangeReformationFollowerReduction(int iValue);
-#if !defined(FULL_YIELD_FROM_KILLS) // Change functions to Pass Unit Pointers.
+#if !defined(FULL_YIELD_FROM_KILLS)
 	void DoYieldsFromKill(UnitTypes eAttackingUnitType, UnitTypes eKilledUnitType, int iX, int iY, bool bWasBarbarian, int iExistingDelay);
 	void DoYieldBonusFromKill(YieldTypes eYield, UnitTypes eAttackingUnitType, UnitTypes eKilledUnitType, int iX, int iY, bool bWasBarbarian, int &iNumBonuses);
 #else
@@ -589,7 +589,7 @@ public:
 #endif
 	void DoTechFromCityConquer(CvCity* pConqueredCity);
 
-	// Faith
+
 	int GetTotalFaithPerTurn() const;
 	int GetFaithPerTurnFromCities() const;
 	int GetFaithPerTurnFromMinorCivs() const;
@@ -602,7 +602,7 @@ public:
 	void SetFaithEverGenerated(int iNewValue);
 	void ChangeFaithEverGenerated(int iChange);
 
-	// Happiness
+
 
 	void DoUpdateHappiness();
 	int GetHappiness() const;
@@ -710,9 +710,9 @@ public:
 	void SetHappinessFromLeagues(int iValue);
 	void ChangeHappinessFromLeagues(int iChange);
 
-	// END Happiness
 
-	// Espionage
+
+
 	int GetEspionageModifier() const;
 	void ChangeEspionageModifier(int iChange);
 	int GetStartingSpyRank() const;
@@ -721,15 +721,15 @@ public:
 	int GetNumStolenScience() const;
 	void ChangeNumStolenScience(int iChange);
 #endif
-	// END Espionage
+
 
 	int GetExtraLeagueVotes() const;
 	void ChangeExtraLeagueVotes(int iChange);
-#if defined(TRAITIFY) // Handle Extra League Votes from Traits
+#if defined(TRAITIFY)
 	int GetTraitExtraLeagueVotes() const;
 	void ChangeTraitExtraLeagueVotes(int iChange);
 #endif
-#if defined(MISC_CHANGES) // Handle Extra League Votes from Techs and Policies
+#if defined(MISC_CHANGES)
 	int GetTechExtraLeagueVotes() const;
 	void ChangeTechExtraLeagueVotes(int iChange);
 
@@ -739,7 +739,7 @@ public:
 	int GetNumMiscTradeRoutes() const;
 	void ChangeNumMiscTradeRoutes(int iChange);
 #endif
-#if defined(LEKMOD_v34) // New bool and setter to allow a non policy to activate Reformation Beliefs
+#if defined(LEKMOD_v34)
 	bool CanChooseReformationBelief() const;
 	void SetCanChooseReformationBelief(int iValue);
 #endif
@@ -791,7 +791,7 @@ public:
 	int getAdvancedStartTechCost(TechTypes eTech, bool bAdd);
 	int getAdvancedStartVisibilityCost(bool bAdd, CvPlot* pPlot = NULL);
 
-	// Temporary Bonuses
+
 	int GetAttackBonusTurns() const;
 	void ChangeAttackBonusTurns(int iChange);
 	int GetCultureBonusTurns() const;
@@ -799,12 +799,12 @@ public:
 	int GetTourismBonusTurns() const;
 	void ChangeTourismBonusTurns(int iChange);
 
-#if defined(LEKMOD_v34) // Some Support for Golden Age Points being handled like yields. Some.
+#if defined(LEKMOD_v34)
 	int GetGoldenAgePointsFromCities();
 	int GetTotalGoldenAgePointsInEmpire();
 #endif
 
-	// Golden Age Stuff
+
 
 	void DoProcessGoldenAge();
 
@@ -836,7 +836,7 @@ public:
 	int getGoldenAgeModifier() const;
 	void changeGoldenAgeModifier(int iChange);
 
-	// Great People Stuff
+
 	void createGreatGeneral(UnitTypes eGreatPersonUnit, int iX, int iY);
 	void createGreatAdmiral(UnitTypes eGreatPersonUnit, int iX, int iY);
 
@@ -853,7 +853,7 @@ public:
 	void incrementGreatArtistsCreated();
 	int getGreatMusiciansCreated() const;
 	void incrementGreatMusiciansCreated();
-	// GJS: begin separation of great people
+
 	int getGreatScientistsCreated() const;
 	void incrementGreatScientistsCreated();
 	int getGreatEngineersCreated() const;
@@ -862,7 +862,7 @@ public:
 	void incrementGreatMerchantsCreated();
 	int getGreatProphetsCreated() const;
 	void incrementGreatProphetsCreated();
-	// GJS: end separation of great people
+
 
 	int getMerchantsFromFaith() const;
 	void incrementMerchantsFromFaith();
@@ -916,15 +916,15 @@ public:
 #if defined(LEKMOD_COMBAT_PREDICTOR_IMPROVEMENTS)
 	void ChangeGreatGeneralCombatBonus(int iChange);
 #endif
-	// Unit Killed in Combat
+
 	void DoUnitKilledCombat(PlayerTypes eKilledPlayer, UnitTypes eUnit);
 
-	// Great People Expenditure
+
 	void DoGreatPersonExpended(UnitTypes eGreatPersonUnit);
 	int GetGreatPersonExpendGold() const;
 	void ChangeGreatPersonExpendGold(int iChange);
 
-	// Great People Spawning
+
 	void DoSeedGreatPeopleSpawnCounter();
 	void DoApplyNewAllyGPBonus();
 	int GetGreatPeopleSpawnCounter();
@@ -935,7 +935,7 @@ public:
 	void DoGreatPeopleSpawnTurn();
 	CvCity* GetGreatPersonSpawnCity(UnitTypes eUnit);
 
-	// End Great People Stuff
+
 
 	int getMaxGlobalBuildingProductionModifier() const;
 	void changeMaxGlobalBuildingProductionModifier(int iChange);
@@ -1300,8 +1300,8 @@ public:
 	int GetNumCitiesFounded() const;
 	void ChangeNumCitiesFounded(int iValue);
 
-	// slewis - centralizing code where a player gets whacked by another player
-	void CheckForMurder(PlayerTypes ePossibleVictimPlayer); // check to see if we defeated this other player
+
+	void CheckForMurder(PlayerTypes ePossibleVictimPlayer);
 
 	bool isStrike() const;
 	void setStrike(bool bNewValue);
@@ -1369,7 +1369,7 @@ public:
 	int getYieldFromTraitsTimes100(YieldTypes eYield) const;
 	int getYieldFromReligionTimes100(YieldTypes eYield, int iTotal) const;
 #endif
-	// Science
+
 
 	int GetScience() const;
 	int GetScienceTimes100() const;
@@ -1395,7 +1395,7 @@ public:
 	bool IsGetsScienceFromPlayer(PlayerTypes ePlayer) const;
 	void SetGetsScienceFromPlayer(PlayerTypes ePlayer, bool bValue);
 
-	// END Science
+
 
 	void DoDeficit();
 
@@ -1413,7 +1413,7 @@ public:
 
 	void DoCivilianReturnLogic(bool bReturn, PlayerTypes eToPlayer, int iUnitID);
 
-	// Incoming Units
+
 	void DoIncomingUnits();
 
 	void DoDistanceGift(PlayerTypes eFromPlayer, CvUnit* pUnit);
@@ -1437,7 +1437,7 @@ public:
 	int getNumResourceTotal(ResourceTypes eIndex, bool bIncludeImport = true) const;
 #ifdef LEKMOD_CS_BUILDING_STRATEGIC_NO_ALLY_SHARE
 	void changeNumResourceTotal(ResourceTypes eIndex, int iChange, bool bIgnoreResourceWarning = false, bool bMinorStrategicFromBuilding = false);
-	/// Strategic copies granted by buildings (Caravansary, Recycling Center, etc.) on a city-state; not shared with ally majors.
+
 	int getNumMinorStrategicResourceFromBuildings(ResourceTypes eIndex) const;
 #else
 	void changeNumResourceTotal(ResourceTypes eIndex, int iChange, bool bIgnoreResourceWarning = false);
@@ -1574,7 +1574,7 @@ public:
 	CLLNode<CvString>* headCityNameNode();
 	const CLLNode<CvString>* headCityNameNode() const;
 
-	// city iteration
+
 	const CvCity* firstCity(int* pIterIdx, bool bRev=false) const;
 	CvCity* firstCity(int* pIterIdx, bool bRev=false);
 	const CvCity* nextCity(int* pIterIdx, bool bRev=false) const;
@@ -1589,7 +1589,7 @@ public:
 	void deleteCity(int iID);
 	CvCity* GetFirstCityWithBuildingClass(BuildingClassTypes eBuildingClass);
 
-	// unit iteration
+
 	int getNumUnits() const;
 	const CvUnit* firstUnit(int* pIterIdx, bool bRev=false) const;
 	const CvUnit* nextUnit(int* pIterIdx, bool bRev=false) const;
@@ -1600,7 +1600,7 @@ public:
 	CvUnit* addUnit();
 	void deleteUnit(int iID);
 
-	// army iteration
+
 	const CvArmyAI* firstArmyAI(int* pIterIdx, bool bRev=false) const;
 	const CvArmyAI* nextArmyAI(int* pIterIdx, bool bRev=false) const;
 	CvArmyAI* firstArmyAI(int* pIterIdx, bool bRev=false);
@@ -1611,7 +1611,7 @@ public:
 	CvArmyAI* addArmyAI();
 	void deleteArmyAI(int iID);
 
-	// operations
+
 	CvAIOperation* getFirstAIOperation();
 	CvAIOperation* getNextAIOperation();
 	CvAIOperation* getAIOperation(int iID);
@@ -1630,7 +1630,7 @@ public:
 	void setReplayDataValue(unsigned int uiDataSet, unsigned int uiTurn, int iValue);
 	TurnData getReplayDataHistory(unsigned int uiDataSet) const;
 
-	// Arbitrary Script Data
+
 	std::string getScriptData() const;
 #ifdef AUI_WARNING_FIXES
 	void setScriptData(const std::string& szNewValue);
@@ -1667,10 +1667,10 @@ public:
 	void SetCapitalGrowthMod(int iValue);
 	void ChangeCapitalGrowthMod(int iChange);
 
-	void InitPlots();  // this needs to be called after the map is inited. It makes the list of how many plots the player controls
-	void UpdatePlots();  // Modifies the list of plots and sets which ones the player owns
-	void AddAPlot(CvPlot* pPlot); // adds a plot at the end of the list
-	CvPlotsVector& GetPlots();  // gets the list of plots the player owns
+	void InitPlots();
+	void UpdatePlots();
+	void AddAPlot(CvPlot* pPlot);
+	CvPlotsVector& GetPlots();
 #if defined(AUI_WARNING_FIXES) || defined(AUI_CONSTIFY)
 	const CvPlotsVector& GetPlots() const;
 #endif
@@ -1693,8 +1693,8 @@ public:
 	int GetNumCitiesPolicyCostDiscount() const;
 	void ChangeNumCitiesPolicyCostDiscount(int iChange);
 
-	int GetNumCitiesResearchCostDiscount() const; // NQMP GJS - new Dictatorship of the Proletariat i.e. Communism
-	void ChangeNumCitiesResearchCostDiscount(int iChange); // NQMP GJS - new Dictatorship of the Proletariat i.e. Communism
+	int GetNumCitiesResearchCostDiscount() const;
+	void ChangeNumCitiesResearchCostDiscount(int iChange);
 
 	int GetGarrisonedCityRangeStrikeModifier() const;
 	void ChangeGarrisonedCityRangeStrikeModifier(int iChange);
@@ -1728,20 +1728,20 @@ public:
 	int GetBestSettleAreas(int iMinScore, int& iFirstArea, int& iSecondArea);
 	CvPlot* GetBestSettlePlot(CvUnit* pUnit, bool bEscorted, int iArea = -1) const;
 
-	// New Victory Stuff
+
 	int GetNumWonders() const;
 	void ChangeNumWonders(int iValue);
 	int GetNumPolicies() const;
 	void ChangeNumPolicies(int iValue);
 	int GetNumGreatPeople() const;
 	void ChangeNumGreatPeople(int iValue);
-	// End New Victory Stuff
+
 
 	void DoAdoptedGreatPersonCityStatePolicy();
 	bool IsAlliesGreatPersonBiasApplied() const;
 	void SetAlliesGreatPersonBiasApplied(bool bValue);
 
-	// New Religion Stuff
+
 	bool IsHasAdoptedStateReligion() const;
 	void SetHasAdoptedStateReligion(bool bValue);
 
@@ -1753,7 +1753,7 @@ public:
 	PromotionTypes GetEmbarkationPromotion() const;
 
 	void DoAnnounceReligionAdoption();
-	// End New Religion Stuff
+
 
 	int GetNumFreeTechs() const;
 	void SetNumFreeTechs(int iValue);
@@ -1799,17 +1799,17 @@ public:
 	void SetEverConqueredBy(PlayerTypes ePlayer, bool bValue);
 	bool IsEverConqueredBy(PlayerTypes ePlayer);
 
-	// slewis Tutorial functions
-	bool GetEverPoppedGoody(void);  // has this player ever popped a goody hut
-	CvPlot* GetClosestGoodyPlot(bool bStopAfterFindingFirst = false);  // find the goody plot that has the closest unit that can reach it, null means none could be found
-	bool GetPlotHasOrder(CvPlot* Plot);  // are any of the player's units directed to this plot?
+
+	bool GetEverPoppedGoody(void);
+	CvPlot* GetClosestGoodyPlot(bool bStopAfterFindingFirst = false);
+	bool GetPlotHasOrder(CvPlot* Plot);
 	bool GetAnyUnitHasOrderToGoody(void);
 	bool GetEverTrainedBuilder(void);
-	// end Tutorial functions
 
-	// International Trade
+
+
 	bool IsAllowedToTradeWith(PlayerTypes eOtherPlayer);
-	// end International Trade
+
 
 #ifdef CS_ALLYING_WAR_RESCTRICTION
 	int getTurnCSWarAllowing(PlayerTypes ePlayer);
@@ -1878,7 +1878,7 @@ public:
 
 	bool HasBuildingClass(BuildingClassTypes iBuildingClassType);
 
-	// for serialization
+
 	virtual void Read(FDataStream& kStream);
 	virtual void Write(FDataStream& kStream) const;
 
@@ -2030,7 +2030,7 @@ protected:
 #endif
 	int m_iHappinessPerXPopulation;
 	int m_iHappinessFromLeagues;
-	FAutoVariable<int, CvPlayer> m_iSpecialPolicyBuildingHappiness;  //unused
+	FAutoVariable<int, CvPlayer> m_iSpecialPolicyBuildingHappiness;
 	FAutoVariable<int, CvPlayer> m_iWoundedUnitDamageMod;
 	FAutoVariable<int, CvPlayer> m_iUnitUpgradeCostMod;
 	FAutoVariable<int, CvPlayer> m_iBarbarianCombatBonus;
@@ -2073,15 +2073,15 @@ protected:
 	int m_bMayaBoostMusicians;
 #endif
 	int m_iExtraLeagueVotes;
-#if defined(TRAITIFY) // create variables
+#if defined(TRAITIFY)
 	int m_iTraitExtraLeagueVotes;
 #endif
-#if defined(MISC_CHANGES) // create variables
+#if defined(MISC_CHANGES)
 	int m_iTechExtraLeagueVotes;
 	int m_iPolicyExtraLeagueVotes;
 	int m_iMiscTradeRoutes;
 #endif
-#if defined(LEKMOD_v34) // create variables
+#if defined(LEKMOD_v34)
 	bool m_bCanChooseReformationBelief;
 #endif
 	FAutoVariable<int, CvPlayer> m_iAdvancedStartPoints;
@@ -2110,10 +2110,10 @@ protected:
 #ifdef NQ_GOLDEN_AGE_TURNS_FROM_BELIEF
 	bool m_bHasUsedDharma;
 #endif
-	int m_iGreatScientistsCreated; // GJS
-	int m_iGreatEngineersCreated; // GJS
-	int m_iGreatMerchantsCreated; // GJS
-	int m_iGreatProphetsCreated; // GJS
+	int m_iGreatScientistsCreated;
+	int m_iGreatEngineersCreated;
+	int m_iGreatMerchantsCreated;
+	int m_iGreatProphetsCreated;
 	int m_iMerchantsFromFaith;
 	int m_iScientistsFromFaith;
 	int m_iWritersFromFaith;
@@ -2265,12 +2265,12 @@ protected:
 	FAutoVariable<int, CvPlayer> m_iPlotCultureCostModifier;
 	int m_iPlotCultureExponentModifier;
 	int m_iNumCitiesPolicyCostDiscount;
-	int m_iNumCitiesResearchCostDiscount; // NQMP GJS - new Dictatorship of the Proletariat i.e. Communism
+	int m_iNumCitiesResearchCostDiscount;
 	int m_iGarrisonedCityRangeStrikeModifier;
 	int m_iGarrisonFreeMaintenanceCount;
-	int m_iNumCitiesFreeAestheticsSchools; // NQMP GJS - add support for NumCitiesFreeAestheticsSchools
+	int m_iNumCitiesFreeAestheticsSchools;
 	int m_iNumCitiesFreePietyGardens;
-	int m_iNumCitiesFreeWalls; // NQMP GJS - New Oligarchy add support for NumCitiesFreeWalls
+	int m_iNumCitiesFreeWalls;
 	int m_iNumCitiesFreeCultureBuilding;
 	int m_iNumCitiesFreeFoodBuilding;
 #if defined(LEKMOD_FIX_PATRO_FOOD)
@@ -2278,7 +2278,7 @@ protected:
 #endif
 	FAutoVariable<int, CvPlayer> m_iUnitPurchaseCostModifier;
 	FAutoVariable<int, CvPlayer> m_iAllFeatureProduction;
-	FAutoVariable<int, CvPlayer> m_iCityDistanceHighwaterMark; // this is used to determine camera zoom
+	FAutoVariable<int, CvPlayer> m_iCityDistanceHighwaterMark;
 	FAutoVariable<int, CvPlayer> m_iOriginalCapitalX;
 	FAutoVariable<int, CvPlayer> m_iOriginalCapitalY;
 	FAutoVariable<int, CvPlayer> m_iNumWonders;
@@ -2301,7 +2301,7 @@ protected:
 
 	int m_iLastSliceMoved;
 
-	FAutoVariable<uint, CvPlayer> m_uiStartTime;  // XXX save these?
+	FAutoVariable<uint, CvPlayer> m_uiStartTime;
 
 #ifdef NQ_CHEAT_FIRST_ROYAL_LIBRARY_COMES_WITH_GREAT_WORK
 	FAutoVariable<bool, CvPlayer> m_bHasEverBuiltRoyalLibrary;
@@ -2311,9 +2311,9 @@ protected:
 	FAutoVariable<bool, CvPlayer> m_bEverAlive;
 	bool m_bBeingResurrected;
 	FAutoVariable<bool, CvPlayer> m_bTurnActive;
-	FAutoVariable<bool, CvPlayer> m_bAutoMoves;					// Signal that we can process the auto moves when ready.
-	bool						  m_bProcessedAutoMoves;		// Signal that we have processed the auto moves
-	FAutoVariable<bool, CvPlayer> m_bEndTurn;					// Signal that the player has completed their turn.  The turn will still be active until the auto-moves have been processed.
+	FAutoVariable<bool, CvPlayer> m_bAutoMoves;
+	bool						  m_bProcessedAutoMoves;
+	FAutoVariable<bool, CvPlayer> m_bEndTurn;
 #ifdef AUI_GAME_BETTER_HYBRID_MODE
 	int							  m_iTurnOrder;
 #else
@@ -2336,7 +2336,7 @@ protected:
 #if defined(LEKMOD_EXPERIMENTAL_CHANGES)
 	FAutoVariable<std::vector<int>, CvPlayer> m_aiWorldWonderYieldChanges;
 #endif
-#if defined(STANDARDIZE_YIELDS) // YieldEverGenerated Array, instead of an int per yield type
+#if defined(STANDARDIZE_YIELDS)
 	FAutoVariable<std::vector<int>, CvPlayer> m_aiYieldEverGeneratedTimes100;
 	FAutoVariable<std::vector<int>, CvPlayer> m_aiYieldPerTurnFromMisc;
 #endif
@@ -2353,7 +2353,7 @@ protected:
 	FAutoVariable<std::vector<int>, CvPlayer> m_aiResearchAgreementCounter;
 	FAutoVariable<std::vector<int>, CvPlayer> m_aiIncomingUnitTypes;
 	FAutoVariable<std::vector<int>, CvPlayer> m_aiIncomingUnitCountdowns;
-	FAutoVariable<std::vector<int>, CvPlayer> m_aiMinorFriendshipAnchors; // DEPRECATED
+	FAutoVariable<std::vector<int>, CvPlayer> m_aiMinorFriendshipAnchors;
 	std::vector<int> m_aiSiphonLuxuryCount;
 	std::vector<int> m_aiGreatWorkYieldChange;
 #if defined(LEKMOD_CITY_YIELDS_TRAITS) && defined(LEKMOD_TRACK_CITY_SETTLER_UNITTYPE) && defined(LEKMOD_YIELD_SETTLE_UNIT_NON_CAP_MAX) && (LEKMOD_YIELD_SETTLE_UNIT_NON_CAP_MAX > 0)
@@ -2386,7 +2386,7 @@ protected:
 	FAutoVariable<std::vector<int>, CvPlayer> m_paiFreeBuildingCount;
 	FAutoVariable<std::vector<int>, CvPlayer> m_paiFreePromotionCount;
 #ifdef LEKMOD_UNITCOMBAT_FREE_PROMOTION
-	//can we make a 2d array of 2 ints
+
 	FAutoVariable<std::vector<int>, CvPlayer> m_paiUnitCombatFreePromotionCount;
 #endif
 	FAutoVariable<std::vector<int>, CvPlayer> m_paiUnitCombatProductionModifiers;
@@ -2399,7 +2399,7 @@ protected:
 	FAutoVariable<std::vector<int>, CvPlayer> m_paiHurryCount;
 	FAutoVariable<std::vector<int>, CvPlayer> m_paiHurryModifier;
 
-	/// CMP
+
 
 	FAutoVariable<std::vector<int>, CvPlayer> m_paiNumCitiesFreeChosenBuilding;
 	FAutoVariable<std::vector<int>, CvPlayer> m_pabFreeChosenBuildingNewCity;
@@ -2407,7 +2407,7 @@ protected:
 	FAutoVariable<std::vector<int>, CvPlayer> m_pabNewFoundCityFreeUnit;
 	FAutoVariable<std::vector<int>, CvPlayer> m_pabNewFoundCityFreeBuilding;
 
-	///
+
 
 	FAutoVariable<std::vector<bool>, CvPlayer> m_pabLoyalMember;
 
@@ -2423,15 +2423,15 @@ protected:
 
 	std::vector< Firaxis::Array<int, NUM_YIELD_TYPES > > m_ppiImprovementYieldChange;
 	std::vector< Firaxis::Array<int, NUM_YIELD_TYPES > > m_ppiResourceYieldChange;
-	// Obsolete: only used to read old saves
+
 	FAutoVariable< std::vector< Firaxis::Array< int, NUM_YIELD_TYPES > >, CvPlayer> m_ppaaiBuildingClassYieldMod;
 
 	CvUnitCycler	m_UnitCycle;	
 
-	// slewis's tutorial variables!
+
 	FAutoVariable<bool, CvPlayer> m_bEverPoppedGoody;
 	FAutoVariable<bool, CvPlayer> m_bEverTrainedBuilder;
-	// end slewis's tutorial variables
+
 
 	EndTurnBlockingTypes  m_eEndTurnBlockingType;
 	int  m_iEndTurnBlockingNotificationIndex;
@@ -2458,63 +2458,63 @@ protected:
 	void doResearch();
 	void doWarnings();
 
-	// Danger plots!
+
 	CvDangerPlots* m_pDangerPlots;
 
-	// Policies
+
 	CvPlayerPolicies* m_pPlayerPolicies;
 	void processPolicies(PolicyTypes ePolicy, int iChange);
 
-	// AI Strategies
+
 	CvEconomicAI* m_pEconomicAI;
 	CvMilitaryAI* m_pMilitaryAI;
 	CvCitySpecializationAI* m_pCitySpecializationAI;
 	CvWonderProductionAI* m_pWonderProductionAI;
 
-	// AI Grand Strategies
+
 	CvGrandStrategyAI* m_pGrandStrategyAI;
 
-	// Diplomacy AI
+
 	CvDiplomacyAI* m_pDiplomacyAI;
 
-	// Religion AI
+
 	CvPlayerReligions* m_pReligions;
 	CvReligionAI* m_pReligionAI;
 
-	// AI Tactics
+
 	CvTacticalAI* m_pTacticalAI;
 	CvHomelandAI* m_pHomelandAI;
 
-	// Techs
+
 	CvPlayerTechs* m_pPlayerTechs;
 
-	// Flavor Manager
+
 	CvFlavorManager* m_pFlavorManager;
 
-	// Minor Civ AI
+
 	CvMinorCivAI* m_pMinorCivAI;
 
-	// Deal AI
+
 	CvDealAI* m_pDealAI;
 
-	// Builder Tasking AI
+
 	CvBuilderTaskingAI* m_pBuilderTaskingAI;
 
-	// City Connections
+
 	CvCityConnections* m_pCityConnections;
 
-	// Espionage
+
 	CvPlayerEspionage* m_pEspionage;
 	CvEspionageAI* m_pEspionageAI;
 
-	// Trade
+
 	CvPlayerTrade* m_pTrade;
 	CvTradeAI* m_pTradeAI;
 
-	// League AI
+
 	CvLeagueAI* m_pLeagueAI;
 
-	// Culture
+
 	CvPlayerCulture* m_pCulture;
 
 	CvNotifications* m_pNotifications;
@@ -2522,13 +2522,13 @@ protected:
 
 	CvPlotsVector m_aiPlots;
 
-	// Treasury
+
 	CvTreasury* m_pTreasury;
 
 	CvPlayerTraits* m_pTraits;
 
-	// human player wanted to end turn processing but hasn't received
-	// the net turn complete message
+
+
 	bool m_activeWaitingForEndTurnMessage;
 	int  m_endTurnBusyUnitUpdatesLeft;
 

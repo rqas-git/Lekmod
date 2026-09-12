@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/12/2015 3:23:05 AM -->
+
 <GameData>
 
-	<!-- Silk Road (old Wagon Trains) -->
+
 	<Policies>
 		<Update>
 			<Set LandTradeRouteGoldChange="300" SeaTradeRouteGoldChange="150" InternalTradeRouteGoldChange="300" RouteGoldMaintenanceMod="0" />

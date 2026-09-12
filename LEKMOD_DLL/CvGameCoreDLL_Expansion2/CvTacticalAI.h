@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_TACTICAL_AI_H
@@ -12,13 +12,13 @@
 
 class FDataStream;
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvTacticalMoveXMLEntry
-//!  \brief		A single entry in the tactical move XML file
-//
-//!  Key Attributes:
-//!  - Populated from XML\AI\CIV5TacticalMoves.xml
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 class CvTacticalMoveXMLEntry: public CvBaseInfo
 {
 public:
@@ -27,7 +27,7 @@ public:
 
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
 
-	// Accessor Functions
+
 	int GetPriority() const
 	{
 		return m_iPriority;
@@ -78,23 +78,23 @@ private:
 	bool m_bDominanceZoneMove;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvTacticalMoveXMLEntries
-//!  \brief		Game-wide information about tactical move priorities
-//
-//! Key Attributes:
-//! - Populated from XML\AI\Civ5TacticalMoves.xml
-//! - Contains an array of CvTacticalMoveXMLEntry from the above XML file
-//! - One instance for the entire game
-//! - Accessed heavily by CvTacticalAI class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
 class CvTacticalMoveXMLEntries
 {
 public:
 	CvTacticalMoveXMLEntries(void);
 	~CvTacticalMoveXMLEntries(void);
 
-	// Accessor functions
+
 	std::vector<CvTacticalMoveXMLEntry*>& GetTacticalMoveEntries();
 	int GetNumTacticalMoves();
 	CvTacticalMoveXMLEntry* GetEntry(int index);
@@ -110,12 +110,12 @@ enum AITacticalMission
     AI_TACTICAL_MISSION_NONE = -1,
     AI_TACTICAL_MISSION_ATTACK_STATIONARY_TARGET,
     AI_TACTICAL_MISSION_PILLAGE_ENEMY_IMPROVEMENTS,
-    // Phasing this out so other types deleted (as unused)
+
 };
 FDataStream& operator<<(FDataStream&, const AITacticalMission&);
 FDataStream& operator>>(FDataStream&, AITacticalMission&);
 
-// STL "find_if" predicate
+
 class UnitIDMatch
 {
 public:
@@ -132,7 +132,7 @@ private:
 	int m_iMatchingUnitID;
 };
 
-// Object stored in the list of move priorities (m_MovePriorityList)
+
 class CvTacticalMove
 {
 public:
@@ -151,7 +151,7 @@ public:
 	int m_iPriority;
 };
 
-// Object stored in the list of current move units (m_CurrentMoveUnits)
+
 class CvTacticalUnit
 {
 public:
@@ -162,7 +162,7 @@ public:
 		return (GetAttackPriority() > unit.GetAttackPriority());
 	}
 
-	// Accessors
+
 	void SetID(int iID)
 	{
 		m_iID = iID;
@@ -213,7 +213,7 @@ public:
 		return m_iMovesToTarget;
 	};
 
-	// Derived
+
 	int GetAttackPriority() const
 	{
 		return m_iAttackStrength * m_iHealthPercent;
@@ -228,7 +228,7 @@ private:
 	int m_iExpectedSelfDamage;
 };
 
-// Object stored in the list of current move cities (m_CurrentMoveCities)
+
 class CvTacticalCity
 {
 public:
@@ -244,7 +244,7 @@ public:
 		return (GetAttackPriority() > city.GetAttackPriority());
 	}
 
-	// Accessors
+
 	void SetID(int iID)
 	{
 		m_iID = iID;
@@ -262,7 +262,7 @@ public:
 		return m_iExpectedTargetDamage;
 	};
 
-	// Derived
+
 	int GetAttackPriority() const
 	{
 		return m_iAttackStrength;
@@ -274,14 +274,14 @@ private:
 	int m_iExpectedTargetDamage;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvTacticalTarget
-//!  \brief		A target of opportunity for the tactical AI this turn
-//
-//!  Key Attributes:
-//!  - Arises during processing of CvTacticalAI::FindTacticalTargets()
-//!  - Targets are reexamined each turn (so shouldn't need to be serialized)
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvTacticalTarget
 {
 public:
@@ -362,8 +362,8 @@ public:
 	bool IsTargetStillAlive(PlayerTypes m_eAttackingPlayer);
 	bool IsTargetValidInThisDomain(DomainTypes eDomain);
 
-	// AuxData is used for a pointer to the actual target object (CvUnit, CvCity, etc.)
-	//    (for improvements & barbarian camps this is set to the plot).
+
+
 #ifdef AUI_CONSTIFY
 	inline void* GetAuxData() const
 #else
@@ -377,10 +377,10 @@ public:
 		m_pAuxData = pAuxData;
 	}
 
-	// Stores required damage for offensive targets
-	// For defensive items used to SORT targets in priority order
-	//    Set to the weight for defensive bastions
-	//    Set to the danger for cities to be garrisoned
+
+
+
+
 #ifdef AUI_CONSTIFY
 	inline int GetAuxIntData() const
 #else
@@ -404,16 +404,16 @@ private:
 	int m_iDominanceZoneID;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvQueuedAttack
-//!  \brief		A planned attack waiting to execute
-//
-//!  Key Attributes:
-//!  - Arises during processing of CvTacticalAI::ExecuteAttacks() or ProcessUnit()
-//!  - Created by calling QueueFirstAttack() or QueueSubsequentAttack()
-//!  - Combat animation system calls back into tactical AI when animation completes with call CombatResolved()
-//!  - This callback signals it is time to execute the next attack
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
 class CvQueuedAttack
 {
 public:
@@ -468,20 +468,20 @@ public:
 
 private:
 	void* m_pAttacker;
-	CvTacticalTarget m_kTarget;  // Needs to be a copy since original CvTacticalTarget is gone before a follow-on attack is made
+	CvTacticalTarget m_kTarget;
 	int m_iSeriesID;
 	bool m_bRanged;
 	bool m_bCityAttack;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvTacticalPosture
-//!  \brief		The posture an AI has adopted for fighting in a specific dominance zone
-//
-//!  Key Attributes:
-//!  - Used to keep consistency in approach from turn-to-turn
-//!  - Reevaluated by tactical AI each turn before units are moved for this zone
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 enum AITacticalPosture
 {
     AI_TACTICAL_POSTURE_NONE = -1,
@@ -531,13 +531,13 @@ private:
 
 #define SAFE_ESTIMATE_NUM_TEMP_ZONES 10
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvTemporaryZone
-//!  \brief		Location of a temporary dominance zone (like around a barbarian camp)
-//
-//!  Key Attributes:
-//!  - Used to add dominance zones for short duration tactical strikes
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 class CvTemporaryZone
 {
 public:
@@ -610,13 +610,13 @@ FDataStream& operator>>(FDataStream&, CvTemporaryZone&);
 
 #define SAFE_ESTIMATE_NUM_BLOCKING_UNITS 25
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvBlockingUnit
-//!  \brief		Potential move of a unit to a hex to form a block keeping enemy away
-//
-//!  Key Attributes:
-//!  - Used by CanCoverFromEnemy() to track moves we may want to make to block enemy
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 class CvBlockingUnit
 {
 public:
@@ -671,10 +671,10 @@ private:
 	int m_iDistanceToTarget;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvOperationUnit
-//!  \brief		One unit moving with operational army currently being processed
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 class CvOperationUnit
 {
 public:
@@ -767,14 +767,14 @@ enum TacticalAIInfoTypes
 
 typedef FStaticVector<CvTacticalTarget, 256, false, c_eCiv5GameplayDLL > TacticalList;
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvTacticalAI
-//!  \brief		A player's AI to control units as they fight out battles
-//
-//!  Key Attributes:
-//!  - Handed units to control by the operational AI
-//!  - Handles moves for these units until dead or objective completed
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvTacticalAI
 {
 public:
@@ -784,16 +784,16 @@ public:
 	void Uninit();
 	void Reset();
 
-	// Serialization routines
+
 	void Read(FDataStream& kStream);
 	void Write(FDataStream& kStream);
 
-	// Public turn update routines
+
 	void CommandeerUnits();
 	void DoTurn();
 	void Update();
 
-	// Temporary dominance zones
+
 	CvTemporaryZone* GetFirstTemporaryZone();
 	CvTemporaryZone* GetNextTemporaryZone();
 	void AddTemporaryZone(CvTemporaryZone zone);
@@ -801,7 +801,7 @@ public:
 	void DropObsoleteZones();
 	bool IsTemporaryZoneCity(CvCity* pCity);
 
-	// Public routines to handle multiple unit attacks
+
 	void InitializeQueuedAttacks();
 	bool QueueAttack(void* pAttacker, CvTacticalTarget* pTarget, bool bRanged, bool bCityAttack);
 	void LaunchAttack(void* pAttacker, CvTacticalTarget* pTarget, bool bFirstAttack, bool bRanged, bool bCityAttack);
@@ -811,12 +811,12 @@ public:
 	bool IsCityInQueuedAttack(const CvCity* pAttackCity);
 	int NearXQueuedAttacks(const CvPlot* pPlot, const int iRange);
 
-	// Public logging
+
 	void LogTacticalMessage(CvString& strMsg, bool bSkipLogDominanceZone = true);
 
 private:
 
-	// Internal turn update routines - commandeered unit processing
+
 	void UpdatePostures();
 	AITacticalPosture SelectPosture(CvTacticalDominanceZone* pZone, AITacticalPosture eLastPosture);
 	AITacticalPosture FindPosture(CvTacticalDominanceZone* pZone);
@@ -827,7 +827,7 @@ private:
 	void AssignTacticalMove(CvTacticalMove move);
 	void AssignBarbarianMoves();
 
-	// Routines to manage identifying and implementing tactical moves
+
 	bool PlotCaptureCityMoves();
 	bool PlotDamageCityMoves();
 	void PlotBarbarianCampMoves();
@@ -838,7 +838,7 @@ private:
 	void PlotPillageMoves(AITacticalTargetType eTarget, bool bFirstPass);
 	void PlotCitadelMoves();
 	void PlotPlunderTradeUnitMoves(DomainTypes eDomain);
-	void PlotPlunderTradePlotMoves(DomainTypes eDomain); // squat on trade plots to try to scoop up trade units
+	void PlotPlunderTradePlotMoves(DomainTypes eDomain);
 	void PlotBlockadeImprovementMoves();
 	void PlotCivilianAttackMoves(AITacticalTargetType eTargetType);
 	void PlotSafeBombardMoves();
@@ -868,7 +868,7 @@ private:
 	void PlotEscortEmbarkedMoves();
 	void ReviewUnassignedUnits();
 
-	// Operational AI support functions
+
 	void PlotSingleHexOperationMoves(CvAIEscortedOperation* pOperation);
 	void PlotEnemyTerritoryOperationMoves(CvAIEnemyTerritoryOperation* pOperation);
 	void PlotNavalEscortOperationMoves(CvAINavalEscortedOperation* pOperation);
@@ -883,18 +883,18 @@ private:
 	bool PlotEscortNavalOperationMoves(CvArmyAI* pArmy);
 	void ExecuteFleetMoveToTarget(CvArmyAI* pArmy, CvPlot* pTarget);
 
-	// Routines to process and sort targets
+
 	void IdentifyPriorityTargets();
 	void IdentifyPriorityBarbarianTargets();
 	void IdentifyPriorityTargetsByType();
 	void EliminateNearbyBlockadePoints();
-	void ExtractTargetsForZone(CvTacticalDominanceZone* pZone /* Pass in NULL for all zones */);
+	void ExtractTargetsForZone(CvTacticalDominanceZone* pZone                                 );
 	CvTacticalTarget* GetFirstZoneTarget(AITacticalTargetType eType);
 	CvTacticalTarget* GetNextZoneTarget();
 	CvTacticalTarget* GetFirstUnitTarget();
 	CvTacticalTarget* GetNextUnitTarget();
 
-	// Routines to execute a mission
+
 	void ExecuteBarbarianCampMove(CvPlot* pTargetPlot);
 	void ExecuteCivilianCapture(CvPlot* pTargetPlot);
 	void ExecutePillage(CvPlot* pTargetPlot);
@@ -923,7 +923,7 @@ private:
 	void ExecuteWithdrawMoves();
 	void ExecuteEscortEmbarkedMoves();
 
-	// Internal low-level utility routines
+
 	void TurnOffMove(TacticalAIMoveTypes eType);
 	bool FindUnitsForThisMove(TacticalAIMoveTypes eMove, CvPlot* pTargetPlot, int iNumTurnsAway=0, bool bRangedOnly=false);
 	bool FindUnitsWithinStrikingDistance(CvPlot *pTargetPlot, int iNumTurnsAway, int iPreferredDamageLevel, bool bNoRangedUnits=false, bool bNavalOnly=false, bool bMustMoveThrough=false, bool bIncludeBlockedUnits=false, bool bWillPillage=false, bool bTargetUndefended=false);
@@ -955,7 +955,7 @@ private:
 	bool IsHighPriorityCivilianTarget(CvTacticalTarget* pTarget);
 	bool IsMediumPriorityCivilianTarget(CvTacticalTarget* pTarget);
 
-	// Blocking position functions
+
 	bool CanCoverFromEnemy(CvPlot* pPlot, int& iNumUnitsRequiredToCover, int iAttackingUnitID);
 	bool AssignCoveringUnits(int iNumUnitsRequiredToCover);
 	bool AssignFlankingUnits(int iNumUnitsRequiredToFlank);
@@ -972,11 +972,11 @@ private:
 	void ScoreHedgehogPlots(CvPlot* pTarget);
 	int ScoreGreatGeneralPlot(UnitHandle pGeneral, CvPlot* pTarget, CvArmyAI* pArmyAI);
 
-	// Logging functions
+
 	CvString GetLogFileName(CvString& playerName) const;
 	CvString GetTacticalMissionName(AITacticalMission eMission) const;
 
-	// Class data
+
 	CvPlayer* m_pPlayer;
 	CvTacticalAnalysisMap* m_pMap;
 	list<int> m_CurrentTurnUnits;
@@ -986,17 +986,17 @@ private:
 	FStaticVector<CvTacticalMove, 256, true, c_eCiv5GameplayDLL > m_MovePriorityList;
 	int m_MovePriorityTurn;
 
-	// Data for multi-unit attacks - not serialized, cleared out for each turn
+
 	std::list<CvQueuedAttack> m_QueuedAttacks;
 	int m_iCurrentSeriesID;
 
-	// Lists of targets for the turn
+
 	TacticalList m_AllTargets;
 	TacticalList m_ZoneTargets;
 	TacticalList m_NavalResourceBlockadePoints;
 	FStaticVector<CvTacticalTarget, NUM_CITY_PLOTS, true, c_eCiv5GameplayDLL, 0> m_TempTargets;
 
-	// Targeting ranges (pulled in from GlobalAIDefines.XML)
+
 	int m_iRecruitRange;
 	int m_iLandBarbarianRange;
 	int m_iSeaBarbarianRange;
@@ -1005,7 +1005,7 @@ private:
 	int m_iRandomRange;
 	double m_fFlavorDampening;
 
-	// Dominance zone info
+
 	int m_iCurrentZoneIndex;
 	int m_eCurrentTargetType;
 	int m_iCurrentTargetIndex;
@@ -1015,13 +1015,13 @@ private:
 	int m_iCurrentTempZoneIndex;
 	FStaticVector<CvTemporaryZone, SAFE_ESTIMATE_NUM_TEMP_ZONES, true, c_eCiv5GameplayDLL, 0> m_TempZones;
 
-	// Blocking (and flanking) position data
+
 	FStaticVector<CvBlockingUnit, SAFE_ESTIMATE_NUM_BLOCKING_UNITS, true, c_eCiv5GameplayDLL, 0> m_PotentialBlocks;
 	FStaticVector<CvBlockingUnit, SAFE_ESTIMATE_NUM_BLOCKING_UNITS, true, c_eCiv5GameplayDLL, 0> m_TemporaryBlocks;
 	FStaticVector<CvBlockingUnit, NUM_CITY_PLOTS, true, c_eCiv5GameplayDLL, 0> m_ChosenBlocks;
 	FStaticVector<CvBlockingUnit, NUM_CITY_PLOTS, true, c_eCiv5GameplayDLL, 0> m_NewlyChosen;
 
-	// Operational AI support data
+
 	FStaticVector<CvOperationUnit, SAFE_ESTIMATE_NUM_MULTIUNITFORMATION_ENTRIES, true, c_eCiv5GameplayDLL, 0> m_OperationUnits;
 	FStaticVector<CvOperationUnit, SAFE_ESTIMATE_NUM_MULTIUNITFORMATION_ENTRIES, true, c_eCiv5GameplayDLL, 0> m_GeneralsToMove;
 	FStaticVector<CvOperationUnit, SAFE_ESTIMATE_NUM_MULTIUNITFORMATION_ENTRIES, true, c_eCiv5GameplayDLL, 0> m_ParatroopersToMove;
@@ -1034,4 +1034,4 @@ namespace TacticalAIHelpers
 bool CvBlockingUnitDistanceSort(CvBlockingUnit obj1, CvBlockingUnit obj2);
 }
 
-#endif //CIV5_TACTICAL_AI_H
+#endif

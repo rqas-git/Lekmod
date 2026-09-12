@@ -1,14 +1,14 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvPopupReturn.h"
 
-// Include this after all other headers.
+
 #include "LintFree.h"
 
 #define CvPopup_SetAtGrow(kArray, iIdx, kValue)\
@@ -60,7 +60,7 @@ PopupReturn::PopupReturn(const PopupReturn& popupReturn)
 	}
 }
 
-// Assignment operator
+
 PopupReturn& PopupReturn::operator=(const PopupReturn& source)
 {
 	int iI;
@@ -108,12 +108,12 @@ PopupReturn& PopupReturn::operator=(const PopupReturn& source)
 	return (*this);
 }
 
-//
-// read object from a stream
-//
+
+
+
 void PopupReturn::read(FDataStream& kStream)
 {
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion;
 	kStream >> uiVersion;
 
@@ -179,17 +179,17 @@ void PopupReturn::read(FDataStream& kStream)
 	}
 }
 
-//
-// write object to a stream
-//
+
+
+
 void PopupReturn::write(FDataStream& kStream) const
 {
-	// Current version number
+
 	uint uiVersion = 1;
 	kStream << uiVersion;
 
 	unsigned int iI;
-	//char szString[1024];
+
 
 	kStream <<  m_aiSelectedRadioButton.size() ;
 	for(iI = 0; iI < m_aiSelectedRadioButton.size(); iI++)
@@ -239,4 +239,3 @@ void PopupReturn::write(FDataStream& kStream) const
 		kStream <<  m_aiButtonID[iI] ;
 	}
 }
-

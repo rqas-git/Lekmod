@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvAdvisorRecommender.h"
 #include "CvGameCoreUtils.h"
@@ -61,7 +61,7 @@ void CvAdvisorRecommender::UpdateCityRecommendations(CvCity* pCity)
 	CvCityBuildable buildable;
 	int iWeight;
 
-	// buildings
+
 #ifdef AUI_WARNING_FIXES
 	for (uint iBuildingLoop = 0; iBuildingLoop < GC.GetGameBuildings()->GetNumBuildings(); iBuildingLoop++)
 #else
@@ -82,7 +82,7 @@ void CvAdvisorRecommender::UpdateCityRecommendations(CvCity* pCity)
 		m_aCityBuildables.push_back(buildable, iWeight);
 	}
 
-	// units
+
 #ifdef AUI_WARNING_FIXES
 	for (uint iUnitLoop = 0; iUnitLoop < GC.GetGameUnits()->GetNumUnits(); iUnitLoop++)
 #else
@@ -102,7 +102,7 @@ void CvAdvisorRecommender::UpdateCityRecommendations(CvCity* pCity)
 		m_aCityBuildables.push_back(buildable, iWeight);
 	}
 
-	// projects
+
 #ifdef AUI_WARNING_FIXES
 	for (uint iProjectLoop = 0; iProjectLoop < GC.GetGameProjects()->GetNumProjects(); iProjectLoop++)
 #else
@@ -122,22 +122,22 @@ void CvAdvisorRecommender::UpdateCityRecommendations(CvCity* pCity)
 		m_aCityBuildables.push_back(buildable, iWeight);
 	}
 
-	// reweigh by cost
+
 	for(int iI = 0; iI < m_aCityBuildables.size(); iI++)
 	{
 		buildable = m_aCityBuildables.GetElement(iI);
 
-		// Compute the new weight and change it
+
 		int iNewWeight = CityStrategyAIHelpers::ReweightByTurnsLeft(m_aCityBuildables.GetWeight(iI), buildable.m_iTurnsToConstruct);
 		m_aCityBuildables.SetWeight(iI, iNewWeight);
 	}
 
 	m_aCityBuildables.SortItems();
 
-	// move top buildables into final round!
+
 	for(int i = 0; i < NUM_ADVISOR_TYPES; i++)
 	{
-		// if index is out of bounds
+
 		if(i >= m_aCityBuildables.size())
 		{
 			break;
@@ -227,12 +227,12 @@ void CvAdvisorRecommender::UpdateTechRecommendations(PlayerTypes ePlayer)
 	int iTechLoop;
 #endif
 
-	// Use the synchronous random number generate
-	// Asynchronous one would be:
-	fcn = MakeDelegate(&GC.getGame(), &CvGame::getAsyncRandNum);
-	//fcn = MakeDelegate (&GC.getGame(), &CvGame::getJonRandNum);
 
-	// Loop through adding the researchable techs
+
+	fcn = MakeDelegate(&GC.getGame(), &CvGame::getAsyncRandNum);
+
+
+
 	for(iTechLoop = 0; iTechLoop < pPlayerTechs->GetTechs()->GetNumTechs(); iTechLoop++)
 	{
 		TechTypes eTech = (TechTypes)iTechLoop;
@@ -242,7 +242,7 @@ void CvAdvisorRecommender::UpdateTechRecommendations(PlayerTypes ePlayer)
 		}
 	}
 
-	// weigh by cost
+
 	for(int iI = 0; iI < m_aResearchableTechs.size(); iI++)
 	{
 		TechTypes eTech = (TechTypes) m_aResearchableTechs.GetElement(iI);
@@ -252,13 +252,13 @@ void CvAdvisorRecommender::UpdateTechRecommendations(PlayerTypes ePlayer)
 
 		double fWeightDivisor;
 
-		// 10 turns will add 0.02; 80 turns will add 0.16
-		double fAdditionalTurnCostFactor = GC.getAI_RESEARCH_WEIGHT_MOD_PER_TURN_LEFT() * iTurnsLeft;	// 0.015
-		double fTotalCostFactor = GC.getAI_RESEARCH_WEIGHT_BASE_MOD() + fAdditionalTurnCostFactor;	// 0.15
+
+		double fAdditionalTurnCostFactor = GC.getAI_RESEARCH_WEIGHT_MOD_PER_TURN_LEFT() * iTurnsLeft;
+		double fTotalCostFactor = GC.getAI_RESEARCH_WEIGHT_BASE_MOD() + fAdditionalTurnCostFactor;
 
 		fWeightDivisor = pow((double) iTurnsLeft, fTotalCostFactor);
 
-		// if the tech is free, then we don't want inverse the weighting. More expensive techs = better.
+
 		int iNewWeight = 0;
 		if(GET_PLAYER(ePlayer).GetNumFreeTechs() == 0)
 		{
@@ -269,16 +269,16 @@ void CvAdvisorRecommender::UpdateTechRecommendations(PlayerTypes ePlayer)
 			iNewWeight = m_aResearchableTechs.GetWeight(iI) * max(iTurnsLeft / 2, 1);
 		}
 
-		// Now actually change the weight
+
 		m_aResearchableTechs.SetWeight(iI, iNewWeight);
 	}
 
 	m_aResearchableTechs.SortItems();
 
-	// move techs into final round!
+
 	for(int i = 0; i < NUM_ADVISOR_TYPES; i++)
 	{
-		// if index is out of bounds
+
 		if(i >= m_aResearchableTechs.size())
 		{
 			break;
@@ -512,7 +512,7 @@ AdvisorTypes CvAdvisorRecommender::FindUnassignedAdvisorForTech(PlayerTypes ePla
 	CvTechEntry* pTechEntry = GET_PLAYER(ePlayer).GetPlayerTechs()->GetTechs()->GetEntry(eTech);
 	if(pTechEntry == NULL)
 	{
-		//Should never happen.
+
 		return NO_ADVISOR_TYPE;
 	}
 
@@ -536,7 +536,7 @@ AdvisorTypes CvAdvisorRecommender::FindUnassignedAdvisorForTech(PlayerTypes ePla
 	int iHighestValue = 0;
 	for(uint ui = 0; ui < NUM_ADVISOR_TYPES; ui++)
 	{
-		// skip this advisor if already assigned
+
 		if(m_aRecommendedTechs[ui] != NO_TECH)
 		{
 			continue;
@@ -555,7 +555,7 @@ AdvisorTypes CvAdvisorRecommender::FindUnassignedAdvisorForTech(PlayerTypes ePla
 #if defined(AUI_POLICY_BUILDING_CLASS_FLAVOR_MODIFIERS) || defined(AUI_BELIEF_BUILDING_CLASS_FLAVOR_MODIFIERS)
 AdvisorTypes CvAdvisorRecommender::FindUnassignedAdvisorForBuildable(const CvCity* pCity, CvCityBuildable& buildable)
 #else
-AdvisorTypes CvAdvisorRecommender::FindUnassignedAdvisorForBuildable(PlayerTypes /*ePlayer*/, CvCityBuildable& buildable)
+AdvisorTypes CvAdvisorRecommender::FindUnassignedAdvisorForBuildable(PlayerTypes            , CvCityBuildable& buildable)
 #endif
 {
 	int aiAdvisorValues[NUM_ADVISOR_TYPES];
@@ -638,7 +638,7 @@ AdvisorTypes CvAdvisorRecommender::FindUnassignedAdvisorForBuildable(PlayerTypes
 	int iHighestValue = 0;
 	for(uint ui = 0; ui < NUM_ADVISOR_TYPES; ui++)
 	{
-		// skip this advisor if already assigned
+
 		if(m_aRecommendedBuilds[ui].m_eBuildableType != NOT_A_CITY_BUILDABLE)
 		{
 			continue;

@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvDllScriptSystemUtility.h"
 #include "CvDllContext.h"
@@ -23,15 +23,15 @@
 
 #include "CvReplayInfo.h"
 #include "CvReplayMessage.h"
-//////////////////////////////////////////////////////////////////////////
+
 CvDllScriptSystemUtility::CvDllScriptSystemUtility()
 {
 }
-//------------------------------------------------------------------------------
+
 CvDllScriptSystemUtility::~CvDllScriptSystemUtility()
 {
 }
-//------------------------------------------------------------------------------
+
 void* CvDllScriptSystemUtility::QueryInterface(GUID guidInterface)
 {
 	if(guidInterface == ICvUnknown::GetInterfaceId() ||
@@ -42,27 +42,27 @@ void* CvDllScriptSystemUtility::QueryInterface(GUID guidInterface)
 
 	return NULL;
 }
-//------------------------------------------------------------------------------
+
 void CvDllScriptSystemUtility::Destroy()
 {
-	//Do Nothing, object is managed externally.
+
 }
-//------------------------------------------------------------------------------
+
 void CvDllScriptSystemUtility::operator delete(void* p)
 {
 	CvDllGameContext::Free(p);
 }
-//------------------------------------------------------------------------------
+
 void* CvDllScriptSystemUtility::operator new(size_t bytes)
 {
 	return CvDllGameContext::Allocate(bytes);
 }
-//------------------------------------------------------------------------------
+
 void CvDllScriptSystemUtility::RegisterScriptLibraries(lua_State* L)
 {
 	LuaSupport::RegisterScriptData(L);
 }
-//------------------------------------------------------------------------------
+
 void CvDllScriptSystemUtility::PushCvCityInstance(lua_State* L, ICvCity1* pkCity)
 {
 	if(NULL != L && NULL != pkCity)
@@ -75,13 +75,13 @@ void CvDllScriptSystemUtility::PushCvCityInstance(lua_State* L, ICvCity1* pkCity
 		lua_pushnil(L);
 	}
 }
-//------------------------------------------------------------------------------
+
 ICvCity1* CvDllScriptSystemUtility::GetCvCityInstance(lua_State* L, int index, bool bErrorOnFail)
 {
 	CvCity* pkCity = CvLuaCity::GetInstance(L, index, bErrorOnFail);
 	return (NULL != pkCity)? new CvDllCity(pkCity) : NULL;
 }
-//------------------------------------------------------------------------------
+
 void CvDllScriptSystemUtility::PushCvDealInstance(lua_State* L, ICvDeal1* pkDeal)
 {
 	if(NULL != L && NULL != pkDeal)
@@ -94,13 +94,13 @@ void CvDllScriptSystemUtility::PushCvDealInstance(lua_State* L, ICvDeal1* pkDeal
 		lua_pushnil(L);
 	}
 }
-//------------------------------------------------------------------------------
+
 ICvDeal1* CvDllScriptSystemUtility::GetCvDealInstance(lua_State* L, int index, bool bErrorOnFail)
 {
 	CvDeal* pkDeal = CvLuaDeal::GetInstance(L, index, bErrorOnFail);
 	return (NULL != pkDeal)? new CvDllDeal(pkDeal) : NULL;
 }
-//------------------------------------------------------------------------------
+
 void CvDllScriptSystemUtility::PushCvPlotInstance(lua_State* L, ICvPlot1* pkPlot)
 {
 	if(NULL != L && NULL != pkPlot)
@@ -113,13 +113,13 @@ void CvDllScriptSystemUtility::PushCvPlotInstance(lua_State* L, ICvPlot1* pkPlot
 		lua_pushnil(L);
 	}
 }
-//------------------------------------------------------------------------------
+
 ICvPlot1* CvDllScriptSystemUtility::GetCvPlotInstance(lua_State* L, int index, bool bErrorOnFail)
 {
 	CvPlot* pkPlot = CvLuaPlot::GetInstance(L, index, bErrorOnFail);
 	return (NULL != pkPlot)? new CvDllPlot(pkPlot) : NULL;
 }
-//------------------------------------------------------------------------------
+
 void CvDllScriptSystemUtility::PushCvUnitInstance(lua_State* L, ICvUnit1* pkUnit)
 {
 	if(NULL != L && NULL != pkUnit)
@@ -132,13 +132,13 @@ void CvDllScriptSystemUtility::PushCvUnitInstance(lua_State* L, ICvUnit1* pkUnit
 		lua_pushnil(L);
 	}
 }
-//------------------------------------------------------------------------------
+
 ICvUnit1* CvDllScriptSystemUtility::GetCvUnitInstance(lua_State* L, int index, bool bErrorOnFail)
 {
 	CvUnit* pkUnit = CvLuaUnit::GetInstance(L, index, bErrorOnFail);
 	return (NULL != pkUnit)? new CvDllUnit(pkUnit) : NULL;
 }
-//------------------------------------------------------------------------------
+
 void CvDllScriptSystemUtility::PushReplayFromStream(lua_State* L, FDataStream& stream)
 {
 	CvReplayInfo* pkReplay = FNEW(CvReplayInfo(), c_eMPoolTypeGame, 0);
@@ -264,7 +264,7 @@ void CvDllScriptSystemUtility::PushReplayFromStream(lua_State* L, FDataStream& s
 			}
 			lua_setfield(L, playerIdx, "Scores");
 
-			lua_rawseti(L, -2, iPlayer + 1);	//Adjust iPlayer to be 1-based instead of 0-based.
+			lua_rawseti(L, -2, iPlayer + 1);
 		}
 		lua_setfield(L, t, "PlayerInfo");
 
@@ -282,7 +282,7 @@ void CvDllScriptSystemUtility::PushReplayFromStream(lua_State* L, FDataStream& s
 			lua_setfield(L, -2, "Type");
 
 			int iPlayer = pkMessage->getPlayer();
-			lua_pushinteger(L, (iPlayer > -1)? iPlayer + 1 : iPlayer);	//Adjust iPlayer to match the 1-based index scheme.
+			lua_pushinteger(L, (iPlayer > -1)? iPlayer + 1 : iPlayer);
 			lua_setfield(L, -2, "Player");
 
 			lua_pushstring(L, pkMessage->getText());

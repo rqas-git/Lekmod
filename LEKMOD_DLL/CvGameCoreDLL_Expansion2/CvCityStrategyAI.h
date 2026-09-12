@@ -1,23 +1,23 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_CITY_STRATEGY_AI_H
 #define CIV5_CITY_STRATEGY_AI_H
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAICityStrategyEntry
-//!  \brief		A single entry in the AI strategy XML file
-//
-//!  Key Attributes:
-//!  - Populated from XML\???? (not sure what path/name you want)
-//!  - Array of these contained in CvAICityStrategies class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvAICityStrategyEntry: public CvBaseInfo
 {
 public:
@@ -26,7 +26,7 @@ public:
 
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
 
-	// Accessor functions
+
 	int GetFlavorValue(int i) const;
 
 	int GetWeightThreshold() const;
@@ -63,24 +63,24 @@ private:
 	int m_iAdvisorCounselImportance;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvAICityStrategies
-//!  \brief		Game-wide information about possible AI strategies
-//
-//! Key Attributes:
-//! - Plan is it will be contained in CvGameRules object within CvGame class
-//! - Populated from XML\???? (not sure what path/name you want)
-//! - Contains an array of CvAICityStrategyEntry from the above XML file
-//! - One instance for the entire game
-//! - Accessed heavily by CvCityStrategyAI class (which stores the AI strategy state for 1 player)
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
 class CvAICityStrategies
 {
 public:
 	CvAICityStrategies(void);
 	~CvAICityStrategies(void);
 
-	// Accessor functions
+
 	std::vector<CvAICityStrategyEntry*>& GetAICityStrategyEntries();
 	int GetNumAICityStrategies();
 	CvAICityStrategyEntry* GetEntry(int index);
@@ -106,10 +106,10 @@ enum CityBuildableType
     CITY_BUILDABLE_UNIT_FOR_ARMY,
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  STRUCT:     CvCityBuildable
-//!  \brief		One item a city can build
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 struct CvCityBuildable
 {
 	CvCityBuildable() :
@@ -120,20 +120,20 @@ struct CvCityBuildable
 	}
 
 	CityBuildableType m_eBuildableType;
-	int m_iIndex;							// index in building or unit array
+	int m_iIndex;
 	int m_iTurnsToConstruct;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvCityStrategyAI
-//!  \brief		Manages operations for a single city in the game world
-//
-//!  Key Attributes:
-//!  - One instance for each city
-//!  - Receives instructions from other AI components (usually as flavor changes) to
-//!    specialize, switch production, etc.
-//!  - Oversees both the city governor AI and the AI managing what the city is building
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
 class CvCityStrategyAI: public CvFlavorRecipient
 {
 public:
@@ -150,13 +150,13 @@ public:
 	void Read(FDataStream& kStream);
 	void Write(FDataStream& kStream);
 
-	// Flavor recipient required function
+
 	void FlavorUpdate();
 
-	// Must be called when a new City is founded
+
 	void UpdateFlavorsForNewCity();
 
-	// City specialization functions
+
 	CitySpecializationTypes GetSpecialization() const
 	{
 		return m_eSpecialization;
@@ -169,7 +169,7 @@ public:
 	bool SetDefaultSpecialization(CitySpecializationTypes eDefaultSpecialization);
 	void SpecializationFlavorChange(bool bTurnOn, CitySpecializationTypes eSpecialization);
 
-	// City strategy accessor functions
+
 	CvCity* GetCity();
 	CvAICityStrategies* GetAICityStrategies();
 	bool IsUsingCityStrategy(AICityStrategyTypes eStrategy);
@@ -183,15 +183,15 @@ public:
 	CvString GetLogFileName(CvString& playerName, CvString& cityName) const;
 
 	bool IsYieldDeficient(YieldTypes yieldType);
-	YieldTypes GetDeficientYield(void);  // returns if any yield is deficient, starting with food, then production. Returns NO_YIELD if the city is fine
+	YieldTypes GetDeficientYield(void);
 	double GetYieldAverage(YieldTypes eYieldType);
 	double GetDeficientYieldValue(YieldTypes eYieldType);
 
-	// City AI methods
+
 	void ChooseProduction(bool bUseAsyncRandom, BuildingTypes eIgnoreBldg = NO_BUILDING, UnitTypes eIgnoreUnit = NO_UNIT);
 	void DoTurn();
 
-	// these functions must be called together. Reset clears the internal arrays, update evalutes the city, and GetBestYieldAverage... returns the value that the builder AI uses.
+
 	void ResetBestYields();
 	void UpdateBestYields();
 #ifdef AUI_WARNING_FIXES
@@ -203,7 +203,7 @@ public:
 #endif
 	YieldTypes GetFocusYield();
 
-	// Public logging functions
+
 	void LogHurry(HurryTypes iHurryType, int iHurryAmount, int iHurryAmountAvailable, int iTurnsSaved);
 #ifdef AUI_WARNING_FIXES
 	void LogCityProduction(const CvCityBuildable& Buildable, bool bRush);
@@ -215,7 +215,7 @@ private:
 
 	void ReweightByCost();
 
-	// Logging functions
+
 	void LogFlavors(FlavorTypes eFlavor = NO_FLAVOR);
 	void LogStrategy(AICityStrategyTypes eStrategy, bool bValue);
 	void LogPossibleBuilds();
@@ -231,7 +231,7 @@ private:
 	int* m_paiTurnCityStrategyAdopted;
 	int* m_aiTempFlavors;
 
-	// AI sub objects
+
 	CvBuildingProductionAI* m_pBuildingProductionAI;
 	CvUnitProductionAI* m_pUnitProductionAI;
 	CvProjectProductionAI* m_pProjectProductionAI;
@@ -253,11 +253,11 @@ private:
 
 namespace CityStrategyAIHelpers
 {
-// CvCityStrategy namespace - non-member functions
+
 int ReweightByTurnsLeft(int iOriginalWeight, int iTurnsLeft);
 int GetWeightThresholdModifier(AICityStrategyTypes eStrategy, CvCity* pCity);
 
-// The following functions check triggers to see if a particular CityStrategy should be adopted/continued
+
 bool IsTestCityStrategy_TinyCity(CvCity* pCity);
 bool IsTestCityStrategy_SmallCity(CvCity* pCity);
 bool IsTestCityStrategy_MediumCity(CvCity* pCity);
@@ -301,4 +301,4 @@ bool IsTestCityStrategy_NeedTourismBuilding(CvCity *pCity);
 bool IsTestCityStrategy_GoodAirliftCity(CvCity *pCity);
 }
 
-#endif // CIV5_CITY_STRATEGY_AI_H
+#endif

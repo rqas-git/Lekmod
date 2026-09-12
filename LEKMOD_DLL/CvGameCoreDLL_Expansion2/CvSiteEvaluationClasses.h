@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_SITE_EVALUATION_CLASSES_H
@@ -20,14 +20,14 @@ enum SiteEvaluationFactors
     NUM_SITE_EVALUATION_FACTORS
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvCitySiteEvaluator
-//!  \brief		Base class that contains the default routines to pick city sites
-//
-//!  Key Attributes:
-//!  - Derived class CvSiteEvaluatorForSettler overrides defaults for founding new cities
-//!  - Derived class CvSiteEvaluatorForStart overrides defaults for start location placement
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvCitySiteEvaluator
 {
 public:
@@ -42,7 +42,7 @@ public:
 	virtual int BestFoundValueForSpecificYield(CvPlayer* pPlayer, YieldTypes eYield);
 
 protected:
-	// Each of these routines computes a number from 0 (no value) to 100 (best possible value)
+
 	virtual int ComputeFoodValue(CvPlot* pPlot, CvPlayer* pPlayer);
 	virtual int ComputeHappinessValue(CvPlot* pPlot, CvPlayer* pPlayer);
 	virtual int ComputeProductionValue(CvPlot* pPlot, CvPlayer* pPlayer);
@@ -52,7 +52,7 @@ protected:
 	virtual int ComputeTradeableResourceValue(CvPlot* pPlot, CvPlayer* pPlayer);
 	virtual int ComputeStrategicValue(CvPlot* pPlot, CvPlayer* pPlayer, int iPlotsFromCity);
 
-	int m_iFlavorMultiplier[NUM_SITE_EVALUATION_FACTORS];  // Extra for tradeable resources and strategic value
+	int m_iFlavorMultiplier[NUM_SITE_EVALUATION_FACTORS];
 	int m_iRingModifier[NUM_CITY_RINGS+NUM_CITY_RINGS+2];
 
 	int m_iExpansionIndex;
@@ -66,14 +66,14 @@ protected:
 	int m_iIncaMultiplier;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvSiteEvaluatorForSettler
-//!  \brief		Calculates a plot's value as a place to build a new city
-//
-//! Key Attributes:
-//! - Derived from CvCitySiteEvaluator
-//! - Only overrides routines from the base class where city settling is a special case
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvSiteEvaluatorForSettler: public CvCitySiteEvaluator
 {
 public:
@@ -83,14 +83,14 @@ public:
 	int PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldTypes eYield = NO_YIELD, bool bCoastOnly=true);
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvSiteEvaluatorForStart
-//!  \brief		Calculates a plot's value as a place to start a civilization
-//
-//! Key Attributes:
-//! - Derived from CvCitySiteEvaluator
-//! - Only overrides routines from the base class where civ start location is a special case
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvSiteEvaluatorForStart: public CvCitySiteEvaluator
 {
 public:
@@ -101,4 +101,4 @@ public:
 	int PlotFoundValue(CvPlot* pPlot, CvPlayer* pPlayer, YieldTypes eYield = NO_YIELD, bool bCoastOnly=true);
 };
 
-#endif //CIV5_SITE_EVALUATION_CLASSES_H
+#endif

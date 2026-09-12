@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 
 #include "CvGameCoreDLLPCH.h"
 #include "CvGameCoreUtils.h"
@@ -40,7 +40,7 @@
 #include "CvDLLUtilDefines.h"
 #include "CvAchievementUnlocker.h"
 
-// interface uses
+
 #include "ICvDLLUserInterface.h"
 #include "CvEnumSerialization.h"
 #include "FStlContainerSerialization.h"
@@ -65,22 +65,22 @@
 # pragma comment(lib, "winsqlite3.lib")
 #endif
 
-// Public Functions...
-// must be included after all other headers
+
+
 #include "LintFree.h"
 
-//------------------------------------------------------------------------------
-// CvGame Version History
-// Version 1 
-//	 * CvGame save version reset for expansion pack 2.
-//------------------------------------------------------------------------------
+
+
+
+
+
 const int g_CurrentCvGameVersion = 1;
 
 
 CvGameInitialItemsOverrides::CvGameInitialItemsOverrides()
 {
-	//By default, all players and teams are granted all
-	//free items.
+
+
 	GrantInitialFreeTechsPerTeam.resize(MAX_TEAMS, true);
 	GrantInitialGoldPerPlayer.resize(MAX_PLAYERS, true);
 	GrantInitialCulturePerPlayer.resize(MAX_PLAYERS, true);
@@ -88,7 +88,7 @@ CvGameInitialItemsOverrides::CvGameInitialItemsOverrides()
 	GrantInitialUnitsPerPlayer.resize(MAX_PLAYERS, true);
 }
 
-//------------------------------------------------------------------------------
+
 CvGame::CvGame() :
 	m_jonRand(false)
 	, m_endTurnTimer()
@@ -109,12 +109,12 @@ CvGame::CvGame() :
 	, m_lastTurnAICivsProcessed(-1)
 {
 	m_aiEndTurnMessagesReceived = FNEW(int[MAX_PLAYERS], c_eCiv5GameplayDLL, 0);
-	m_aiRankPlayer = FNEW(int[MAX_PLAYERS], c_eCiv5GameplayDLL, 0);        // Ordered by rank...
-	m_aiPlayerRank = FNEW(int[MAX_PLAYERS], c_eCiv5GameplayDLL, 0);        // Ordered by player ID...
-	m_aiPlayerScore = FNEW(int[MAX_PLAYERS], c_eCiv5GameplayDLL, 0);       // Ordered by player ID...
-	m_aiRankTeam = FNEW(int[MAX_TEAMS], c_eCiv5GameplayDLL, 0);						// Ordered by rank...
-	m_aiTeamRank = FNEW(int[MAX_TEAMS], c_eCiv5GameplayDLL, 0);						// Ordered by team ID...
-	m_aiTeamScore = FNEW(int[MAX_TEAMS], c_eCiv5GameplayDLL, 0);						// Ordered by team ID...
+	m_aiRankPlayer = FNEW(int[MAX_PLAYERS], c_eCiv5GameplayDLL, 0);
+	m_aiPlayerRank = FNEW(int[MAX_PLAYERS], c_eCiv5GameplayDLL, 0);
+	m_aiPlayerScore = FNEW(int[MAX_PLAYERS], c_eCiv5GameplayDLL, 0);
+	m_aiRankTeam = FNEW(int[MAX_TEAMS], c_eCiv5GameplayDLL, 0);
+	m_aiTeamRank = FNEW(int[MAX_TEAMS], c_eCiv5GameplayDLL, 0);
+	m_aiTeamScore = FNEW(int[MAX_TEAMS], c_eCiv5GameplayDLL, 0);
 
 	m_paiUnitCreatedCount = NULL;
 	m_paiUnitClassCreatedCount = NULL;
@@ -154,7 +154,7 @@ CvGame::CvGame() :
 }
 
 
-//	--------------------------------------------------------------------------------
+
 CvGame::~CvGame()
 {
 	uninit();
@@ -168,7 +168,7 @@ CvGame::~CvGame()
 	SAFE_DELETE_ARRAY(m_aiTeamScore);
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::init(HandicapTypes eHandicap)
 {
 	bool bValid;
@@ -180,12 +180,12 @@ void CvGame::init(HandicapTypes eHandicap)
 	int iI;
 #endif
 
-	//--------------------------------
-	// Init saved data
+
+
 	reset(eHandicap);
 
-	//--------------------------------
-	// Init containers
+
+
 	m_voteSelections.Init();
 	m_votesTriggered.Init();
 
@@ -197,10 +197,10 @@ void CvGame::init(HandicapTypes eHandicap)
 	m_mapRand.init(CvPreGame::mapRandomSeed() % 73637381);
 	m_jonRand.init(CvPreGame::syncRandomSeed() % 52319761);
 
-	//--------------------------------
-	// Verify pregame data
 
-	//Validate game era. If we lack the era info for the current era, work backwards until we find a valid one.
+
+
+
 	if(!GC.getEraInfo(getStartEra())){
 		for(int eraIdx = ((int)CvPreGame::era())-1; eraIdx >= 0; --eraIdx){
 			CvEraInfo* curEraInfo = GC.getEraInfo((EraTypes)eraIdx);
@@ -211,13 +211,13 @@ void CvGame::init(HandicapTypes eHandicap)
 		}
 	}
 
-	//--------------------------------
-	// Init non-saved data
 
-	//--------------------------------
-	// Init other game data
 
-	// Turn off all MP options if it's a single player game
+
+
+
+
+
 	GameTypes g = CvPreGame::gameType();
 	if(g == GAME_SINGLE_PLAYER)
 	{
@@ -231,7 +231,7 @@ void CvGame::init(HandicapTypes eHandicap)
 		setOption(GAMEOPTION_PITBOSS, false);
 	}
 
-	// If this is a hot seat game, simultaneous turns is always off
+
 	if(isHotSeat() || isPbem())
 	{
 		setOption(GAMEOPTION_SIMULTANEOUS_TURNS, false);
@@ -429,7 +429,7 @@ void CvGame::init(HandicapTypes eHandicap)
 	doUpdateCacheOnTurn();
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::init2()
 {
 	InitPlayers();
@@ -456,25 +456,25 @@ bool CvGame::init2()
 	return true;
 }
 
-//------------------------------------------------------------------------------
-// Lua Hooks
-// These are static functions to hook into Lua and relay information to the DLL.
-//------------------------------------------------------------------------------
+
+
+
+
 int WorldBuilderMapLoaderAddRandomItems(lua_State* L)
 {
 	return CvWorldBuilderMapLoader::AddRandomItems(L);
 }
-//------------------------------------------------------------------------------
+
 int WorldBuilderMapLoaderLoadModData(lua_State* L)
 {
 	return CvWorldBuilderMapLoader::LoadModData(L);
 }
-//------------------------------------------------------------------------------
+
 int WorldBuilderMapLoaderRunPostProcessScript(lua_State* L)
 {
 	return CvWorldBuilderMapLoader::RunPostProcessScript(L);
 }
-//------------------------------------------------------------------------------
+
 bool CvGame::InitMap(CvGameInitialItemsOverrides& kGameInitialItemsOverrides)
 {
 	CvMap& kMap = GC.getMap();
@@ -514,10 +514,10 @@ bool CvGame::InitMap(CvGameInitialItemsOverrides& kGameInitialItemsOverrides)
 		}
 		else
 		{
-			// Empty map...
+
 			FAssertMsg(0, "Empty World Builder Map!");
 
-			// Make the map at least 1 x 1 to avoid crashes
+
 			CvMapInitData kMapInitData;
 			kMapInitData.m_bWrapX = false;
 			kMapInitData.m_bWrapY = false;
@@ -556,11 +556,11 @@ bool CvGame::InitMap(CvGameInitialItemsOverrides& kGameInitialItemsOverrides)
 	CvBarbarians::MapInit(GC.getMap().numPlots());
 #endif
 
-	// Run this for all maps because a map should never crash the game on
-	// load regardless of where that map came from.  (The map scripts are mod-able after all!!!)
+
+
 	CvWorldBuilderMapLoader::ValidateCoast();
 
-	// Update some cached values
+
 #ifdef AUI_WARNING_FIXES
 	kMap.updateAdjacency();
 #else
@@ -568,7 +568,7 @@ bool CvGame::InitMap(CvGameInitialItemsOverrides& kGameInitialItemsOverrides)
 #endif
 
 #ifndef AUI_PLOT_OBSERVER_SEE_ALL_PLOTS
-	// Set all the observer teams to be able to see all the plots
+
 	for(int iI = 0; iI < MAX_PLAYERS; iI++)
 	{
 		if (CvPreGame::slotStatus((PlayerTypes)iI) == SS_OBSERVER)
@@ -618,7 +618,7 @@ bool CvGame::InitMap(CvGameInitialItemsOverrides& kGameInitialItemsOverrides)
 
 	return true;
 }
-//------------------------------------------------------------------------------
+
 void CvGame::InitPlayers()
 {
 	PlayerColorTypes aePlayerColors[REALLY_MAX_PLAYERS];
@@ -702,7 +702,7 @@ void CvGame::InitPlayers()
 
 	int iNumMinors = CvPreGame::numMinorCivs();
 
-	// TODO: this is needed till we have a screen to push this data
+
 	if(iNumMinors < 0)
 	{
 		const CvWorldInfo& kWorldInfo = CvPreGame::worldInfo();
@@ -711,10 +711,10 @@ void CvGame::InitPlayers()
 
 	PlayerTypes eMinorPlayer;
 
-	// Players
+
 	for(iI = 0; iI < MAX_PLAYERS; iI++)
 	{
-		// init Barbarian slot
+
 		if(iI == BARBARIAN_PLAYER)
 		{
 			CvPreGame::setTeamType(BARBARIAN_PLAYER, BARBARIAN_TEAM);
@@ -726,21 +726,21 @@ void CvGame::InitPlayers()
 			CvPreGame::setPlayerColor(BARBARIAN_PLAYER, ((PlayerColorTypes)barbarianPlayerColor));
 			CvPreGame::setMinorCiv(BARBARIAN_PLAYER, false);
 		}
-		// Major Civs
+
 		else if(iI < MAX_MAJOR_CIVS)
 		{
 			CvPreGame::setPlayerColor((PlayerTypes)iI, aePlayerColors[iI]);
-			// Make sure the AI has the proper handicap.
+
 			if(CvPreGame::slotStatus((PlayerTypes)iI) == SS_COMPUTER)
 			{
 				CvPreGame::setHandicap((PlayerTypes)iI, (HandicapTypes)GC.getAI_HANDICAP());
 			}
 			else if(CvPreGame::slotStatus((PlayerTypes)iI) == SS_OBSERVER)
-			{//make all observers be on the observer team.
+			{
 				CvPreGame::setTeamType((PlayerTypes)iI, OBSERVER_TEAM);
 			}
 		}
-		// Minor civs
+
 		else if(iI < MAX_CIV_PLAYERS)
 		{
 			eMinorPlayer = (PlayerTypes) iI;
@@ -769,10 +769,10 @@ void CvGame::InitPlayers()
 	}
 }
 
-//	--------------------------------------------------------------------------------
-//
-// Set initial items (units, techs, etc...)
-//
+
+
+
+
 void CvGame::setInitialItems(CvGameInitialItemsOverrides& kInitialItemOverrides)
 {
 	initFreeState(kInitialItemOverrides);
@@ -780,7 +780,7 @@ void CvGame::setInitialItems(CvGameInitialItemsOverrides& kInitialItemOverrides)
 	if(CvPreGame::isWBMapScript())
 		assignStartingPlots();
 
-	// Adjust FLAVOR_GROWTH and FLAVOR_EXPANSION based on map size
+
 	for(int iPlayerLoop = 0; iPlayerLoop < MAX_CIV_PLAYERS; iPlayerLoop++)
 	{
 		CvPlayer& kPlayer = GET_PLAYER((PlayerTypes) iPlayerLoop);
@@ -795,12 +795,12 @@ void CvGame::setInitialItems(CvGameInitialItemsOverrides& kInitialItemOverrides)
 
 	m_iEarliestBarbarianReleaseTurn = getHandicapInfo().getEarliestBarbarianReleaseTurn() + GC.getGame().getJonRandNum(GC.getAI_TACTICAL_BARBARIAN_RELEASE_VARIATION(), "Barbarian Release Turn") + 1;
 
-	// What route type forms an industrial connection
+
 	DoUpdateIndustrialRoute();
 
 	bool bCanWorkWater = GC.getCAN_WORK_WATER_FROM_GAME_START();
 
-	// Team Stuff
+
 	TeamTypes eTeam;
 	for(int iTeamLoop = 0; iTeamLoop < MAX_CIV_TEAMS; iTeamLoop++)
 	{
@@ -814,7 +814,7 @@ void CvGame::setInitialItems(CvGameInitialItemsOverrides& kInitialItemOverrides)
 		GET_TEAM(eTeam).DoUpdateBestRoute();
 	}
 
-	// Player Stuff
+
 	PlayerTypes ePlayer;
 	for(int iPlayerLoop = 0; iPlayerLoop < MAX_CIV_PLAYERS; iPlayerLoop++)
 	{
@@ -822,23 +822,23 @@ void CvGame::setInitialItems(CvGameInitialItemsOverrides& kInitialItemOverrides)
 
 		if(GET_PLAYER(ePlayer).isAlive())
 		{
-			// Major Civ init
+
 			if(!GET_PLAYER(ePlayer).isMinorCiv())
 			{
 				GET_PLAYER(ePlayer).GetDiplomacyAI()->DoInitializePersonality();
 			}
-			// Minor Civ init
+
 			else
 			{
 				GET_PLAYER(ePlayer).GetMinorCivAI()->DoPickInitialItems();
 			}
 
-			// Set Policy Costs before game starts, or else it'll be 0 on the first turn and Players can get something with any amount!
+
 			GET_PLAYER(ePlayer).DoUpdateNextPolicyCost();
 		}
 	}
 
-	// Which Tech unlocks the Religion Race? (based on a CvBuildingEntry)
+
 #ifdef AUI_WARNING_FIXES
 	for (uint iBuildingLoop = 0; iBuildingLoop < GC.getNumBuildingInfos(); iBuildingLoop++)
 #else
@@ -861,7 +861,7 @@ void CvGame::setInitialItems(CvGameInitialItemsOverrides& kInitialItemOverrides)
 	DoUpdateTotalReligionTechCost();
 	DoCacheMapScoreMod();
 
-	// Diplomacy Victory
+
 	DoInitDiploVictory();
 
 	LogGameState();
@@ -871,7 +871,7 @@ void CvGame::CheckGenerateArchaeology()
 {
 	bool bTriggered = false;
 
-	// See if archaeological data should be triggered
+
 	for(int iTeamLoop = 0; iTeamLoop < MAX_CIV_TEAMS && !bTriggered; iTeamLoop++)
 	{
 		const TeamTypes eTeam1 = (TeamTypes)iTeamLoop;
@@ -892,7 +892,7 @@ void CvGame::CheckGenerateArchaeology()
 					{
 						if (pkTech->IsTriggersArchaeologicalSites())
 						{
-							GC.getGame().TriggerArchaeologySiteCreation(false /*bCheckInitialized*/);
+							GC.getGame().TriggerArchaeologySiteCreation(false                      );
 							bTriggered = true;
 						}
 					}
@@ -902,7 +902,7 @@ void CvGame::CheckGenerateArchaeology()
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::regenerateMap()
 {
 	int iI;
@@ -958,10 +958,10 @@ void CvGame::regenerateMap()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::DoGameStarted()
 {
-	// Are features clearable?
+
 	BuildTypes eBuild;
 #ifdef AUI_WARNING_FIXES
 	uint iBuildLoop;
@@ -982,13 +982,13 @@ void CvGame::DoGameStarted()
 
 		bTempClearable = false;
 
-		// Check unit build actions to see if any of them clear this feature
+
 		for(iBuildLoop = 0; iBuildLoop < GC.getNumBuildInfos(); iBuildLoop++)
 		{
 			eBuild = (BuildTypes) iBuildLoop;
 			CvBuildInfo* pBuildInfo = GC.getBuildInfo(eBuild);
 
-			// Feature can be removed by this build
+
 			if(NULL != pBuildInfo && pBuildInfo->isFeatureRemove(eFeature))
 			{
 				GC.getFeatureInfo(eFeature)->SetClearable(true);
@@ -1007,7 +1007,7 @@ void CvGame::DoGameStarted()
 
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::uninit()
 {
 	CvGoodyHuts::Uninit();
@@ -1187,9 +1187,9 @@ void CvGame::uninit()
 	CvCityManager::Shutdown();
 }
 
-//	--------------------------------------------------------------------------------
-// FUNCTION: reset()
-// Initializes data members that are serialized.
+
+
+
 void CvGame::reset(HandicapTypes eHandicap, bool bConstructorCall)
 {
 #ifdef AUI_WARNING_FIXES
@@ -1198,8 +1198,8 @@ void CvGame::reset(HandicapTypes eHandicap, bool bConstructorCall)
 	int iI;
 #endif
 
-	//--------------------------------
-	// Uninit class
+
+
 	uninit();
 
 	m_fCurrentTurnTimerPauseDelta = 0.f;
@@ -1276,7 +1276,7 @@ void CvGame::reset(HandicapTypes eHandicap, bool bConstructorCall)
 			m_paiProjectCreatedCount[iI] = 0;
 		}
 
-		//antonjs: todo: remove unused UN and voting variables and allocations
+
 		CvAssertMsg(0 < GC.getNumVoteInfos(), "GC.getNumVoteInfos() is not greater than zero in CvGame::reset");
 		CvAssertMsg(m_paiVoteOutcome==NULL, "about to leak memory, CvGame::m_paiVoteOutcome");
 		m_paiVoteOutcome = FNEW(PlayerVoteTypes[GC.getNumVoteInfos()], c_eCiv5GameplayDLL, 0);
@@ -1409,8 +1409,8 @@ void CvGame::reset(HandicapTypes eHandicap, bool bConstructorCall)
 	CvCityManager::Reset();
 }
 
-//	--------------------------------------------------------------------------------
-/// Initial diplomacy State: right now this just has all teams meet themselves and sets them at war with the Barbs
+
+
 void CvGame::initDiplomacy()
 {
 	for(int iI = 0; iI < MAX_TEAMS; iI++)
@@ -1434,7 +1434,7 @@ void CvGame::initDiplomacy()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::initFreeState(CvGameInitialItemsOverrides& kOverrides)
 {
 #ifdef AUI_WARNING_FIXES
@@ -1457,7 +1457,7 @@ void CvGame::initFreeState(CvGameInitialItemsOverrides& kOverrides)
 					CvTeam& kTeam = GET_TEAM(eTeam);
 					if(kTeam.isAlive())
 					{
-						// Skip if we already have it
+
 						if (kTeam.GetTeamTechs()->HasTech(eTech))
 						{
 							continue;
@@ -1465,7 +1465,7 @@ void CvGame::initFreeState(CvGameInitialItemsOverrides& kOverrides)
 
 						bool bValid = false;
 
-					#ifdef NQ_AI_HANDICAP_START // From bing - Higher level AIs don't start with tech's and units which the player doesn't get.
+					#ifdef NQ_AI_HANDICAP_START
 						if(!GC.getGame().isOption("GAMEOPTION_AI_HANDICAP_START"))
 						{
 							if(!bValid)
@@ -1546,7 +1546,7 @@ void CvGame::initFreeState(CvGameInitialItemsOverrides& kOverrides)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::initFreeUnits(CvGameInitialItemsOverrides& kOverrides)
 {
 	for(int iI = 0; iI < MAX_PLAYERS; iI++)
@@ -1567,24 +1567,24 @@ void CvGame::initFreeUnits(CvGameInitialItemsOverrides& kOverrides)
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::assignStartingPlots()
 {
-	// Set up the start positioner
+
 	CvStartPositioner* pPositioner = GetStartPositioner();
 
-	// Divide the map into equal fertility plots
+
 	pPositioner->DivideMapIntoRegions(countMajorCivsAlive());
 
-	// Compute the value of a city in each plot
+
 	pPositioner->ComputeFoundValues();
 
-	// Position the players
+
 	pPositioner->RankPlayerStartOrder();
 	pPositioner->AssignStartingLocations();
 }
 
-//	---------------------------------------------------------------------------
+
 void CvGame::update()
 {
 	if(IsWaitingForBlockingInput())
@@ -1600,7 +1600,7 @@ void CvGame::update()
 		}
 	}
 
-	// Send a Lua event at the start of the update
+
 	{
 		ICvEngineScriptSystem1* pkScriptSystem = gDLL->GetScriptSystem();
 		if(pkScriptSystem)
@@ -1611,19 +1611,19 @@ void CvGame::update()
 		}
 	}
 
-	// if the game is single player, it's ok to block all processing until
-	// the user selects an extended match or quits.
+
+
 	if(getGameState() == GAMESTATE_OVER && !CvPreGame::isNetworkMultiplayerGame())
 	{
 		testExtendedGame();
 	}
 	else
 	{
-		// allow extended games in MP without blocking processing. The game
-		// may be "over" for 1 player in a match with more than 2 players,
-		// when the player is defeated, for example, but not over for the
-		// rest of the players. It may also be over for everyone in the match
-		// but they may still have units/cities (science/cultural victories)
+
+
+
+
+
 		if(getGameState() == GAMESTATE_OVER && CvPreGame::isNetworkMultiplayerGame())
 		{
 			testExtendedGame();
@@ -1637,7 +1637,7 @@ void CvGame::update()
 				gDLL->AutoSave(true);
 			}
 
-			// If there are no active players, move on to the AI
+
 #ifdef AUI_GAME_BETTER_HYBRID_MODE
 			if (isNoPlayerActive())
 			{
@@ -1647,8 +1647,8 @@ void CvGame::update()
 					while (m_iCurrentTurnOrderActive < m_iLastTurnOrderID)
 					{
 						m_iCurrentTurnOrderActive++;
-						// If there's a human player who still needs to go, breaking out of the loop and reseting the turn timer is enough
-						// The code in updateMoves() that activates simultaneous mode players will catch the occurence and activate the human(s)
+
+
 						for (int iI = 0; iI < MAX_PLAYERS; iI++)
 						{
 							CvPlayer& player = GET_PLAYER((PlayerTypes)iI);
@@ -1679,7 +1679,7 @@ void CvGame::update()
 #endif
 			}
 
-			if(!isPaused())	// Check for paused again, the doTurn call might have called something that paused the game and we don't want an update to sneak through
+			if(!isPaused())
 			{
 				updateScore();
 
@@ -1687,11 +1687,11 @@ void CvGame::update()
 
 				updateMoves();
 
-				if(!isPaused())	// And again, the player can change after the automoves and that can pause the game
+				if(!isPaused())
 				{
 					updateTimers();
 
-					UpdatePlayers(); // slewis added!
+					UpdatePlayers();
 
 					testAlive();
 
@@ -1720,7 +1720,7 @@ void CvGame::update()
 		}
 	}
 
-	// Send a Lua event at the end of the update
+
 	{
 		ICvEngineScriptSystem1* pkScriptSystem = gDLL->GetScriptSystem();
 		if(pkScriptSystem)
@@ -1732,10 +1732,10 @@ void CvGame::update()
 	}
 }
 
-//	---------------------------------------------------------------------------------------------------------
-//	Check to see if the player's turn should be deactivated.
-//	This occurs when the player has set its EndTurn and its AutoMoves to true
-//	and all activity has been completed.
+
+
+
+
 void CvGame::CheckPlayerTurnDeactivate()
 {
 	for(int iI = 0; iI < MAX_PLAYERS; iI++)
@@ -1744,7 +1744,7 @@ void CvGame::CheckPlayerTurnDeactivate()
 
 		if(kPlayer.isAlive() && kPlayer.isTurnActive())
 		{
-			if(kPlayer.isEndTurn() || (!kPlayer.isHuman() && !kPlayer.HasActiveDiplomacyRequests()))		// For some reason, AI players don't set EndTurn, why not?
+			if(kPlayer.isEndTurn() || (!kPlayer.isHuman() && !kPlayer.HasActiveDiplomacyRequests()))
 			{
 				if(kPlayer.hasProcessedAutoMoves())
 				{
@@ -1764,7 +1764,7 @@ void CvGame::CheckPlayerTurnDeactivate()
 					{
 #ifdef AUTOSAVE_END_OF_TURN
 						int iFirstAlivePlayer = -1;
-						for (int iJ = 0; iJ < MAX_PLAYERS; iJ++)  // find first alive player index (assume there is atleast one)
+						for (int iJ = 0; iJ < MAX_PLAYERS; iJ++)
 						{
 							CvPlayer& kItPlayer = GET_PLAYER((PlayerTypes)iJ);
 							if (kItPlayer.isAlive() && kItPlayer.isHuman())
@@ -1773,18 +1773,18 @@ void CvGame::CheckPlayerTurnDeactivate()
 								break;
 							}
 						}
-						if (iI == iFirstAlivePlayer)  // save just before first player deactivation
+						if (iI == iFirstAlivePlayer)
 						{
 							gDLL->AutoSave(false, true);
 						}
 #endif
 						kPlayer.setTurnActive(false);
 
-						// Activate the next player
-						// This is not done if simultaneous turns is enabled (Networked MP).
-						// In that case, the local human is (should be) the player we just deactivated the turn for
-						// and the AI players will be activated all at once in CvGame::doTurn, once we have received
-						// all the moves from the other human players
+
+
+
+
+
 #ifdef AUI_GAME_BETTER_HYBRID_MODE
 						if (!isAnySimultaneousTurns() || !kPlayer.isHuman())
 #else
@@ -1805,7 +1805,7 @@ void CvGame::CheckPlayerTurnDeactivate()
 									{
 										CvTeam& kTeam = GET_TEAM((TeamTypes)iJ);
 										if(kTeam.isAlive() && !kTeam.isSimultaneousTurns())
-										{//this team is alive and also running sequential turns.  They're up next!
+										{
 											kTeam.setTurnActive(true);
 											resetTurnTimer(false);
 											break;
@@ -1824,7 +1824,7 @@ void CvGame::CheckPlayerTurnDeactivate()
 							{
 								if(!GC.GetEngineUserInterface()->isDiploActive())
 								{
-									if(!isHotSeat() || kPlayer.isAlive() || !kPlayer.isHuman())		// If it is a hotseat game and the player is human and is dead, don't advance the player, we want them to get the defeat screen
+									if(!isHotSeat() || kPlayer.isAlive() || !kPlayer.isHuman())
 									{
 										for(int iJ = (kPlayer.GetID() + 1); iJ < MAX_PLAYERS; iJ++)
 										{
@@ -1834,7 +1834,7 @@ void CvGame::CheckPlayerTurnDeactivate()
 #else
 											if(kNextPlayer.isAlive() && !kNextPlayer.isSimultaneousTurns())
 #endif
-											{//the player is alive and also running sequential turns.  they're up!
+											{
 												if(isPbem() && kNextPlayer.isHuman())
 												{
 													if(!getPbemTurnSent())
@@ -1854,7 +1854,7 @@ void CvGame::CheckPlayerTurnDeactivate()
 								}
 								else
 								{
-									// KWG: This doesn't actually do anything other than print to the debug log
+
 									changeNumGameTurnActive(1, std::string("Because the diplo screen is blocking I am bumping this up for player ") + getName());
 								}
 							}
@@ -1866,7 +1866,7 @@ void CvGame::CheckPlayerTurnDeactivate()
 	}
 }
 
-//	---------------------------------------------------------------------------------------------------------
+
 void CvGame::updateScore(bool bForce)
 {
 	if(!isScoreDirty() && !bForce)
@@ -1958,20 +1958,20 @@ void CvGame::updateScore(bool bForce)
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// How does the size of the map affect how some of the score components are weighted?
+
+
 int CvGame::GetMapScoreMod() const
 {
 	return m_iMapScoreMod;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::DoCacheMapScoreMod()
 {
-	// Seed with a default value in case someone's removed the Standard worldsize (shame on you!)
+
 	int iBaseNumTiles = 4160;
 
-	// Calculate "base" num tiles for the average map
+
 	WorldSizeTypes eStandardWorld = (WorldSizeTypes) GC.getInfoTypeForString("WORLDSIZE_STANDARD", true);
 	if(eStandardWorld == NO_WORLDSIZE)
 	{
@@ -1990,7 +1990,7 @@ void CvGame::DoCacheMapScoreMod()
 
 	int iScoreMod = 100 * iBaseNumTiles / iNumTilesOnThisMap;
 
-	// If we're giving a bonus to score, reduce the value, so that one pop isn't worth 30 points or something crazy on really small maps
+
 	if(iScoreMod > 100)
 	{
 		iScoreMod -= 100;
@@ -2002,7 +2002,7 @@ void CvGame::DoCacheMapScoreMod()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::updateCitySight(bool bIncrement)
 {
 	int iI;
@@ -2017,7 +2017,7 @@ void CvGame::updateCitySight(bool bIncrement)
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::updateSelectionList()
 {
 #ifdef AUI_WARNING_FIXES
@@ -2041,7 +2041,7 @@ void CvGame::updateSelectionList()
 	{
 		if(getGameTurn() == 0)
 		{
-			SelectSettler();	// Auto select the settler on turn 0, helps with multiple humans in the same game (Hot Seat)
+			SelectSettler();
 		}
 	}
 
@@ -2097,14 +2097,14 @@ void CvGame::updateSelectionList()
 	}
 }
 
-//	-----------------------------------------------------------------------------------------------
+
 int s_unitMoveTurnSlice = 0;
 
 bool CvGame::hasTurnTimerExpired(PlayerTypes playerID)
-{//gameLoopUpdate - Indicates that we're updating the turn timer for the game loop update.  
- //					This forces the active player's turn to finish if her turn time has elapsed.
- //					We also reset the turn timer when ai processing is occurring.
- //					If false, we're simply querying the game for a player's turn timer status.
+{
+
+
+
 	bool gameTurnTimerExpired = false;
 	bool isLocalPlayer = getActivePlayer() == playerID;
 	if(isOption(GAMEOPTION_END_TURN_TIMER_ENABLED) && !isPaused() && GC.getGame().getGameState() == GAMESTATE_ON)
@@ -2123,7 +2123,7 @@ bool CvGame::hasTurnTimerExpired(PlayerTypes playerID)
 				CvPlayer& kPlayer = GET_PLAYER((PlayerTypes)iI);
 				if (kPlayer.isAlive() && kPlayer.isHuman() && !kPlayer.isConnected())
 				{
-					// ePausePlayer = kPlayer.GetID();
+
 					break;
 				}
 		}
@@ -2133,32 +2133,32 @@ bool CvGame::hasTurnTimerExpired(PlayerTypes playerID)
 #else
 			if(isLocalPlayer && (!gDLL->allAICivsProcessedThisTurn() || !allUnitAIProcessed()))
 #endif
-			{//the turn timer doesn't doesn't start until all ai processing has been completed for this game turn.
+			{
 				resetTurnTimer(true);
 
-				//hold the turn timer at 0 seconds with 0% completion
+
 				CvPreGame::setEndTurnTimerLength(0.0f);
 				iface->updateEndTurnTimer(0.0f);
 			}
 			else
-			{//turn timer is actively ticking.
+			{
 				if(playerID == NO_PLAYER)
-				{//can't do a turn timer check for an invalid player.
+				{
 					return false;
 				}
 				CvPlayer& curPlayer = GET_PLAYER(playerID);
 
-				// Has the turn expired?
+
 #ifdef GAME_UPDATE_TURN_TIMER_ONCE_PER_TURN
 				float gameTurnEnd = getPreviousTurnLen();
 #else
 				float gameTurnEnd = static_cast<float>(getMaxTurnLen());
 #endif
 
-				//NOTE:  These times exclude the time used for AI processing.
-				//Time since the current player's turn started.  Used for measuring time for players in sequential turn mode.
+
+
 				float timeSinceCurrentTurnStart = m_curTurnTimer.Peek() + m_fCurrentTurnTimerPauseDelta; 
-				//Time since the game (year) turn started.  Used for measuring time for players in simultaneous turn mode.
+
 				float timeSinceGameTurnStart = m_timeSinceGameTurnStart.Peek() + m_fCurrentTurnTimerPauseDelta;
 				
 #ifdef AUI_GAME_PLAYER_BASED_TURN_LENGTH
@@ -2174,7 +2174,7 @@ bool CvGame::hasTurnTimerExpired(PlayerTypes playerID)
 #endif
 #endif
 				if(curPlayer.isTurnActive())
-				{//The timer is ticking for our turn
+				{
 #ifdef AUI_GAME_PLAYER_BASED_TURN_LENGTH
 					if (fTimeElapsed > fGameTurnEnd)
 #else
@@ -2196,43 +2196,43 @@ bool CvGame::hasTurnTimerExpired(PlayerTypes playerID)
 					}
 				}
 
-#ifndef AUI_GAME_PLAYER_BASED_TURN_LENGTH // This section is superfluous, so it was cut
-				if((!curPlayer.isTurnActive() || gDLL->HasReceivedTurnComplete(playerID)) //Active player has finished their turn.
-					&& getNumSequentialHumans() > 1)	//or sequential turn mode
-				{//It's not our turn and there are sequential turn human players in the game.
+#ifndef AUI_GAME_PLAYER_BASED_TURN_LENGTH
+				if((!curPlayer.isTurnActive() || gDLL->HasReceivedTurnComplete(playerID))
+					&& getNumSequentialHumans() > 1)
+				{
 
-					//In this case, the turn timer shows progress in terms of the max possible time until our next turn.
-					//As such, timeElapsed has to be adjusted to be a value in terms of the max possible time.
 
-					//determine number of players in the sequential turn sequence, not counting the active player.
+
+
+
 					int playersInSeq = getNumSequentialHumans(playerID);
 
-					//The max turn length is multiplied by the number of other human players in the sequential turn sequence.
+
 					gameTurnEnd *= playersInSeq;
 
-					float timePerPlayer = gameTurnEnd / playersInSeq; //time limit per human
-					//count how many human players are left until us in the sequence.
+					float timePerPlayer = gameTurnEnd / playersInSeq;
+
 					int humanTurnsUntilMe = countSeqHumanTurnsUntilPlayerTurn(playerID);
 					int humanTurnsCompleted = playersInSeq - humanTurnsUntilMe;
 
 					if(humanTurnsUntilMe)
-					{//We're waiting on other sequential players
+					{
 						timeElapsed =  timeSinceCurrentTurnStart + humanTurnsCompleted*timePerPlayer;
 					}
 					else
-					{//All the other sequential players have finished.
-					 //Either we're waiting on turn processing or on players who are playing simultaneous turns.
+					{
 
-						//scale time to be that of the remaining possible time for the simultaneous players.
-						//From the player's perspective, the timer will simply creep down for the remaining simultaneous turn time
-						//rather than skipping straight to zero like it would by just tracking the sequential players' turn time.
+
+
+
+
 						timeElapsed = timeSinceGameTurnStart + (humanTurnsCompleted-1)*timePerPlayer;
 					}
 				}
 #endif
 
 				if(isLocalPlayer)
-				{//update the local end turn timer.
+				{
 #ifdef AUI_GAME_PLAYER_BASED_TURN_LENGTH
 					CvPreGame::setEndTurnTimerLength(fGameTurnEnd);
 					iface->updateEndTurnTimer(fTimeElapsed / fGameTurnEnd);
@@ -2249,7 +2249,7 @@ bool CvGame::hasTurnTimerExpired(PlayerTypes playerID)
 			if (!(isLocalPlayer && (!gDLL->allAICivsProcessedThisTurn() || !allUnitAIProcessed())))
 			{
 
-				// Has the turn expired?
+
 #ifdef GAME_UPDATE_TURN_TIMER_ONCE_PER_TURN
 				float gameTurnEnd = getPreviousTurnLen();
 #else
@@ -2260,7 +2260,7 @@ bool CvGame::hasTurnTimerExpired(PlayerTypes playerID)
 				float timeElapsed = getTimeElapsed();
 
 				if (isLocalPlayer)
-				{//update the local end turn timer.
+				{
 					CvPreGame::setEndTurnTimerLength(gameTurnEnd);
 					iface->updateEndTurnTimer(timeElapsed / gameTurnEnd);
 				}
@@ -2268,7 +2268,7 @@ bool CvGame::hasTurnTimerExpired(PlayerTypes playerID)
 		}
 #endif
 		else if(isLocalPlayer){
-			//hold the turn timer at 0 seconds with 0% completion
+
 			CvPreGame::setEndTurnTimerLength(0.0f);
 			iface->updateEndTurnTimer(0.0f);
 		}
@@ -2277,9 +2277,9 @@ bool CvGame::hasTurnTimerExpired(PlayerTypes playerID)
 	return gameTurnTimerExpired;
 }
 
-//	-----------------------------------------------------------------------------------------------
+
 #ifdef AUI_GAME_PLAYER_BASED_TURN_LENGTH
-void CvGame::TurnTimerSync(float fCurTurnTime, float /*fTurnStartTime*/)
+void CvGame::TurnTimerSync(float fCurTurnTime, float                   )
 #else
 void CvGame::TurnTimerSync(float fCurTurnTime, float fTurnStartTime)
 #endif
@@ -2290,9 +2290,9 @@ void CvGame::TurnTimerSync(float fCurTurnTime, float fTurnStartTime)
 #endif
 }
 
-//	-----------------------------------------------------------------------------------------------
+
 #ifdef AUI_GAME_PLAYER_BASED_TURN_LENGTH
-void CvGame::GetTurnTimerData(float& fCurTurnTime, float& /*fTurnStartTime*/)
+void CvGame::GetTurnTimerData(float& fCurTurnTime, float&                   )
 #else
 void CvGame::GetTurnTimerData(float& fCurTurnTime, float& fTurnStartTime)
 #endif
@@ -2303,7 +2303,7 @@ void CvGame::GetTurnTimerData(float& fCurTurnTime, float& fTurnStartTime)
 #endif
 }
 
-//	-----------------------------------------------------------------------------------------------
+
 void CvGame::updateTestEndTurn()
 {
 	PlayerTypes activePlayerID = getActivePlayer();
@@ -2348,14 +2348,14 @@ void CvGame::updateTestEndTurn()
 
 	if(activePlayer.isTurnActive())
 	{
-		// check notifications
+
 		EndTurnBlockingTypes eEndTurnBlockingType = NO_ENDTURN_BLOCKING_TYPE;
 		int iNotificationIndex = -1;
 		activePlayer.GetNotifications()->GetEndTurnBlockedType(eEndTurnBlockingType, iNotificationIndex);
 
 		if(eEndTurnBlockingType == NO_ENDTURN_BLOCKING_TYPE)
 		{
-			// No notifications are blocking, check units/cities
+
 			if(activePlayer.hasPromotableUnit() && !GC.getGame().isOption(GAMEOPTION_PROMOTION_SAVING))
 			{
 				eEndTurnBlockingType = ENDTURN_BLOCKING_UNIT_PROMOTION;
@@ -2382,9 +2382,9 @@ void CvGame::updateTestEndTurn()
 		{
 			if(!(activePlayer.hasBusyUnitOrCity()) && !(activePlayer.hasReadyUnit()))
 			{
-				// JAR  - Looks like popups are pretty much disabled at this point, this check will break
-				// multiplayer games. Look at revision #27 to resurrect the old popup check code if/when
-				// they are implemented again.
+
+
+
 				if(!isGameMultiPlayer())
 				{
 					if((activePlayer.isOption(PLAYEROPTION_WAIT_END_TURN) && !isGameMultiPlayer()) || !(GC.GetEngineUserInterface()->isHasMovedUnit()) || isHotSeat() || isPbem())
@@ -2423,7 +2423,7 @@ void CvGame::updateTestEndTurn()
 									CvAchievementUnlocker::EndTurn();
 								}
 
-								GC.GetEngineUserInterface()->setEndTurnCounter(3); // XXX
+								GC.GetEngineUserInterface()->setEndTurnCounter(3);
 								if(isGameMultiPlayer())
 								{
 									GC.GetEngineUserInterface()->setCanEndTurn(true);
@@ -2440,7 +2440,7 @@ void CvGame::updateTestEndTurn()
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::testExtendedGame()
 {
 	int iI;
@@ -2467,7 +2467,7 @@ void CvGame::testExtendedGame()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 CvUnit* CvGame::getPlotUnit(CvPlot* pPlot, int iIndex)
 {
 	IDInfo* pUnitNode1;
@@ -2538,7 +2538,7 @@ CvUnit* CvGame::getPlotUnit(CvPlot* pPlot, int iIndex)
 	return NULL;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::getPlotUnits(CvPlot* pPlot, std::vector<CvUnit*>& plotUnits)
 {
 	plotUnits.erase(plotUnits.begin(), plotUnits.end());
@@ -2596,7 +2596,7 @@ void CvGame::getPlotUnits(CvPlot* pPlot, std::vector<CvUnit*>& plotUnits)
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::cycleCities(bool bForward, bool bAdd)
 {
 	CvCity* pSelectCity;
@@ -2624,7 +2624,7 @@ void CvGame::cycleCities(bool bForward, bool bAdd)
 				pLoopCity = GET_PLAYER(pkHeadSelectedCity->getOwner()).firstCity(&iLoop, !bForward);
 			}
 
-			if((pLoopCity != NULL) && (pLoopCity != pkHeadSelectedCity) && !pLoopCity->IsPuppet())  // we don't want the player to be able to cycle to puppeted cities - it kind of defeats teh whole purpose
+			if((pLoopCity != NULL) && (pLoopCity != pkHeadSelectedCity) && !pLoopCity->IsPuppet())
 			{
 				pSelectCity = pLoopCity;
 			}
@@ -2653,7 +2653,7 @@ void CvGame::cycleCities(bool bForward, bool bAdd)
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::cycleUnits(bool bClear, bool bForward, bool bWorkers)
 {
 	CvUnit* pNextUnit;
@@ -2699,9 +2699,9 @@ void CvGame::cycleUnits(bool bClear, bool bForward, bool bWorkers)
 	}
 
 #ifdef AUI_WARNING_FIXES
-	if (pNextUnit != NULL /*&& bWrap && !pCycleCity */ && !bProcessed)
+	if (pNextUnit != NULL                              && !bProcessed)
 #else
-	if(pNextUnit != NULL /*&& bWrap */&& !pCycleCity && !bProcessed)
+	if(pNextUnit != NULL              && !pCycleCity && !bProcessed)
 #endif
 	{
 		CvAssert(pNextUnit->getOwner() == eActivePlayer);
@@ -2717,7 +2717,7 @@ void CvGame::cycleUnits(bool bClear, bool bForward, bool bWorkers)
 	pDllSelectedUnit.reset(pUI->GetHeadSelectedUnit());
 	CvUnit* pCurrentSelectedUnit = GC.UnwrapUnitPointer(pDllSelectedUnit.get());
 #ifdef AUI_WARNING_FIXES
-	if ((pCycleUnit != pCurrentSelectedUnit) || ((pCycleUnit != NULL) && pCycleUnit->ReadyToSelect()) /*|| pCycleCity*/)
+	if ((pCycleUnit != pCurrentSelectedUnit) || ((pCycleUnit != NULL) && pCycleUnit->ReadyToSelect())                  )
 #else
 	if((pCycleUnit != pCurrentSelectedUnit) || ((pCycleUnit != NULL) && pCycleUnit->ReadyToSelect()) || pCycleCity)
 #endif
@@ -2726,8 +2726,8 @@ void CvGame::cycleUnits(bool bClear, bool bForward, bool bWorkers)
 	}
 }
 
-//	--------------------------------------------------------------------------------
-// Returns true if unit was cycled...
+
+
 bool CvGame::cyclePlotUnits(CvPlot* pPlot, bool bForward, bool bAuto, int iCount)
 {
 	IDInfo* pUnitNode;
@@ -2823,7 +2823,7 @@ bool CvGame::cyclePlotUnits(CvPlot* pPlot, bool bForward, bool bAuto, int iCount
 				{
 					if(pLoopUnit->ReadyToSelect())
 					{
-						/*GC.GetEngineUserInterface()->*/selectUnit(pLoopUnit, true);
+						                                 selectUnit(pLoopUnit, true);
 						return true;
 					}
 				}
@@ -2846,7 +2846,7 @@ bool CvGame::cyclePlotUnits(CvPlot* pPlot, bool bForward, bool bAuto, int iCount
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::selectionListMove(CvPlot* pPlot, bool bShift)
 {
 	if(pPlot == NULL)
@@ -2876,7 +2876,7 @@ void CvGame::selectionListMove(CvPlot* pPlot, bool bShift)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::selectionListGameNetMessage(int eMessage, int iData2, int iData3, int iData4, int iFlags, bool bAlt, bool bShift)
 {
 	auto_ptr<ICvUnit1> pSelectedUnit(GC.GetEngineUserInterface()->GetHeadSelectedUnit());
@@ -2895,7 +2895,7 @@ void CvGame::selectionListGameNetMessage(int eMessage, int iData2, int iData3, i
 					float t2;
 					GetTurnTimerData(t1, t2);
 
-					bool bAllComplete = true;  // replace gDLL->HasReceivedTurnAllComplete as it breaks after hj
+					bool bAllComplete = true;
 					for (uint i = 0; i < MAX_CIV_PLAYERS; i++)
 					{
 						CvPlayerAI& kPlayer = GET_PLAYER((PlayerTypes)i);
@@ -2905,22 +2905,22 @@ void CvGame::selectionListGameNetMessage(int eMessage, int iData2, int iData3, i
 						}
 					}
 
-					// both is true means turn is about to end
-					// both is false means turn just started
+
+
 					if (bAllComplete == getHasReceivedFirstMission()) {
 						if (isMPOrderedMoveOnTurnLoading()) {
-							//SLOG("--- subsequent move order REJECTED %f %f", t1, t2);
-							//SLOG("HasReceivedTurnAllComplete %d bAllComplete %d getHasReceivedFirstMission %d", gDLL->HasReceivedTurnAllComplete(getActivePlayer()) ? 1 : 0, bAllComplete ? 1 : 0, getHasReceivedFirstMission() ? 1 : 0);
+
+
 							return;
 						}
 						else {
-							//SLOG("--- first move order");
+
 							setMPOrderedMoveOnTurnLoading(true);
 						}
 					}
 
-					//SLOG("%f %f selectionListGameNetMessage player: %d eMessage: %d", t1, t2, (int)getActivePlayer(), eMessage);
-					//SLOG("HasReceivedTurnAllComplete: %d bAllComplete: %d", gDLL->HasReceivedTurnAllComplete(getActivePlayer()) ? 1 : 0, bAllComplete ? 1 : 0);
+
+
 				}
 			}
 #endif
@@ -2961,7 +2961,7 @@ void CvGame::selectionListGameNetMessage(int eMessage, int iData2, int iData3, i
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::selectedCitiesGameNetMessage(int eMessage, int iData2, int iData3, int iData4, bool bOption, bool bAlt, bool bShift, bool bCtrl)
 {
 	const IDInfo* pSelectedCityNode;
@@ -2990,7 +2990,7 @@ void CvGame::selectedCitiesGameNetMessage(int eMessage, int iData2, int iData3, 
 							float t2;
 							GetTurnTimerData(t1, t2);
 
-							bool bAllComplete = true;  // replace gDLL->HasReceivedTurnAllComplete as it breaks after hj
+							bool bAllComplete = true;
 							for (uint i = 0; i < MAX_CIV_PLAYERS; i++)
 							{
 								CvPlayerAI& kPlayer = GET_PLAYER((PlayerTypes)i);
@@ -3000,22 +3000,22 @@ void CvGame::selectedCitiesGameNetMessage(int eMessage, int iData2, int iData3, 
 								}
 							}
 
-							// both is true means turn is about to end
-							// both is false means turn just started
+
+
 							if (bAllComplete == getHasReceivedFirstMission()) {
 								if (isMPOrderedMoveOnTurnLoading()) {
-									//SLOG("--- subsequent move order REJECTED %f %f", t1, t2);
-									//SLOG("HasReceivedTurnAllComplete %d bAllComplete %d getHasReceivedFirstMission %d", gDLL->HasReceivedTurnAllComplete(getActivePlayer()) ? 1 : 0, bAllComplete ? 1 : 0, getHasReceivedFirstMission() ? 1 : 0);
+
+
 									return;
 								}
 								else {
-									//SLOG("--- first move order");
+
 									setMPOrderedMoveOnTurnLoading(true);
 								}
 							}
 
-							//SLOG("%f %f selectionListGameNetMessage player: %d eMessage: %d", t1, t2, (int)getActivePlayer(), eMessage);
-							//SLOG("HasReceivedTurnAllComplete: %d bAllComplete: %d", gDLL->HasReceivedTurnAllComplete(getActivePlayer()) ? 1 : 0, bAllComplete ? 1 : 0);
+
+
 						}
 					}
 				}
@@ -3054,7 +3054,7 @@ void CvGame::selectedCitiesGameNetMessage(int eMessage, int iData2, int iData3, 
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::cityPushOrder(CvCity* pCity, OrderTypes eOrder, int iData, bool bAlt, bool bShift, bool bCtrl)
 {
 	CvAssert(pCity);
@@ -3062,16 +3062,16 @@ void CvGame::cityPushOrder(CvCity* pCity, OrderTypes eOrder, int iData, bool bAl
 	gDLL->sendPushOrder(pCity->GetID(), eOrder, iData, bAlt, bShift, bCtrl);
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::CityPurchase(CvCity* pCity, UnitTypes eUnitType, BuildingTypes eBuildingType, ProjectTypes eProjectType, YieldTypes ePurchaseYield)
 {
 	CvAssert(pCity);
 	if(!pCity) return;
 
-	// we're trying to buy a unit
+
 	if(eUnitType >= 0)
 	{
-		// if there's a unit of the same type in the tile, BAIL!
+
 		if(!pCity->CanPlaceUnitHere(eUnitType))
 		{
 			return;
@@ -3081,7 +3081,7 @@ void CvGame::CityPurchase(CvCity* pCity, UnitTypes eUnitType, BuildingTypes eBui
 	gDLL->sendPurchase(pCity->GetID(), eUnitType, eBuildingType, eProjectType, ePurchaseYield);
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::selectUnit(CvUnit* pUnit, bool bClear, bool bToggle, bool bSound)
 {
 	auto_ptr<ICvUnit1> pOldSelectedUnit(GC.GetEngineUserInterface()->GetHeadSelectedUnit());
@@ -3130,7 +3130,7 @@ void CvGame::selectUnit(CvUnit* pUnit, bool bClear, bool bToggle, bool bSound)
 	else
 		gDLL->TradeVisuals_DeactivatePopupRoute();
 }
-//	--------------------------------------------------------------------------------
+
 static void IfTradeUnit_DisplayPopupTradeRoute(CvUnit *pUnit)
 {
 	int iRouteIndex;
@@ -3157,7 +3157,7 @@ void CvGame::mouseoverUnit(CvUnit *pUnit, bool bEnter)
 			if (pUnit->GetID() == m_iLastMouseoverUnitID) {
 				gDLL->TradeVisuals_DeactivatePopupRoute();
 
-				//reactivate selected unit's popup route
+
 				auto_ptr<ICvUnit1> pSelectedUnit(GC.GetEngineUserInterface()->GetHeadSelectedUnit());
 				pkSelectedUnit = GC.UnwrapUnitPointer(pSelectedUnit.get());
 				IfTradeUnit_DisplayPopupTradeRoute(pkSelectedUnit);
@@ -3166,7 +3166,7 @@ void CvGame::mouseoverUnit(CvUnit *pUnit, bool bEnter)
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::selectGroup(CvUnit* pUnit, bool bShift, bool bCtrl, bool bAlt)
 {
 	IDInfo* pUnitNode;
@@ -3229,7 +3229,7 @@ void CvGame::selectGroup(CvUnit* pUnit, bool bShift, bool bCtrl, bool bAlt)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::selectAll(CvPlot* pPlot)
 {
 	CvUnit* pSelectUnit = NULL;
@@ -3251,7 +3251,7 @@ void CvGame::selectAll(CvPlot* pPlot)
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::SelectSettler(void)
 {
 	CvUnit* pSettlerUnit = NULL;
@@ -3275,7 +3275,7 @@ void CvGame::SelectSettler(void)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::selectionListIgnoreBuildingDefense()
 {
 	bool bIgnoreBuilding = false;
@@ -3313,7 +3313,7 @@ bool CvGame::selectionListIgnoreBuildingDefense()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::canHandleAction(int iAction, CvPlot* pPlot, bool bTestVisible)
 {
 	CvPlot* pMissionPlot;
@@ -3333,7 +3333,7 @@ bool CvGame::canHandleAction(int iAction, CvPlot* pPlot, bool bTestVisible)
 
 	if(GC.GetEngineUserInterface()->isCitySelection())
 	{
-		return false; // XXX hack!
+		return false;
 	}
 
 	auto_ptr<ICvUnit1> pHeadSelectedUnit(GC.GetEngineUserInterface()->GetHeadSelectedUnit());
@@ -3394,8 +3394,8 @@ bool CvGame::canHandleAction(int iAction, CvPlot* pPlot, bool bTestVisible)
 	return false;
 }
 
-//	--------------------------------------------------------------------------------
-//	Handle an action initiated by the local human player
+
+
 void CvGame::handleAction(int iAction)
 {
 	bool bAlt;
@@ -3403,7 +3403,7 @@ void CvGame::handleAction(int iAction)
 	bool bSkip;
 
 	bAlt = gDLL->altKey();
-	bShift = false;//gDLL->shiftKey();
+	bShift = false;
 
 	auto_ptr<ICvUnit1> pHeadSelectedUnit(GC.GetEngineUserInterface()->GetHeadSelectedUnit());
 
@@ -3412,14 +3412,14 @@ void CvGame::handleAction(int iAction)
 		return;
 	}
 
-	// Control
+
 	CvActionInfo* pkActionInfo = GC.getActionInfo(iAction);
 	if(pkActionInfo->getControlType() != NO_CONTROL)
 	{
 		doControl((ControlTypes)(pkActionInfo->getControlType()));
 	}
 
-	// Interface Mode
+
 	if(GC.GetEngineUserInterface()->CanDoInterfaceMode((InterfaceModeTypes)pkActionInfo->getInterfaceModeType()))
 	{
 		if(pHeadSelectedUnit.get() != NULL)
@@ -3437,7 +3437,7 @@ void CvGame::handleAction(int iAction)
 		GC.GetEngineUserInterface()->setInterfaceMode((InterfaceModeTypes)pkActionInfo->getInterfaceModeType());
 	}
 
-	// Mission
+
 	int iMissionType = pkActionInfo->getMissionType();
 	if(iMissionType != NO_MISSION)
 	{
@@ -3446,19 +3446,19 @@ void CvGame::handleAction(int iAction)
 		if(iMissionType == CvTypes::getMISSION_BUILD() || iMissionType == CvTypes::getMISSION_FOUND())
 		{
 			bool bShowConfirmPopup = false;
-			// If we're going to build over an existing Improvement/Route, ask the player to confirm
+
 			if(iMissionType == CvTypes::getMISSION_BUILD())
 			{
 				int iBuild = pkActionInfo->getMissionData();
 				CvBuildInfo* pBuildInfo = GC.getBuildInfo((BuildTypes)iBuild);
 
-				// Let them Repair, it's fine
+
 				if(!pBuildInfo->isRepair())
 				{
-					// Let them build a Route, it's fine
+
 					if(pBuildInfo->getRoute() == NO_ROUTE)
 					{
-						// Let them build over an improvement if the new improvement REQUIRES the old one
+
 						CvImprovementEntry *pImprovementInfo = GC.getImprovementInfo((ImprovementTypes)pBuildInfo->getImprovement());
 						if (!pImprovementInfo || !pImprovementInfo->IsRequiresImprovement())
 						{
@@ -3503,7 +3503,7 @@ void CvGame::handleAction(int iAction)
 				CvPopupInfo kPopupInfo(BUTTONPOPUP_CONFIRM_IMPROVEMENT_REBUILD, iAction, iBuild);
 				kPopupInfo.bOption1 = bAlt;
 				GC.GetEngineUserInterface()->AddPopup(kPopupInfo);
-				bSkipMissionAdd = true;		// Skip the mission add, the popup will do it
+				bSkipMissionAdd = true;
 			}
 		}
 		else
@@ -3519,7 +3519,7 @@ void CvGame::handleAction(int iAction)
 					GC.GetEngineUserInterface()->AddPopup(kPopup);
 				}
 			}
-			bSkipMissionAdd = true;	// Skip no matter what, if there is no unit, there is no mission
+			bSkipMissionAdd = true;
 		}
 		else
 		if (iMissionType == CvTypes::getMISSION_CHANGE_TRADE_UNIT_HOME_CITY())
@@ -3534,7 +3534,7 @@ void CvGame::handleAction(int iAction)
 					GC.GetEngineUserInterface()->AddPopup(kPopup);
 				}
 			}
-			bSkipMissionAdd = true;	// Skip no matter what, if there is no unit, there is no mission
+			bSkipMissionAdd = true;
 		}
 		if (iMissionType == CvTypes::getMISSION_CHANGE_ADMIRAL_PORT())
 		{
@@ -3548,7 +3548,7 @@ void CvGame::handleAction(int iAction)
 					GC.GetEngineUserInterface()->AddPopup(kPopup);
 				}
 			}
-			bSkipMissionAdd = true;	// Skip no matter what, if there is no unit, there is no mission
+			bSkipMissionAdd = true;
 		}
 
 		if (!bSkipMissionAdd)
@@ -3558,7 +3558,7 @@ void CvGame::handleAction(int iAction)
 		}
 	}
 
-	// Command
+
 	if(pkActionInfo->getCommandType() != NO_COMMAND)
 	{
 		bSkip = false;
@@ -3580,7 +3580,7 @@ void CvGame::handleAction(int iAction)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::canDoControl(ControlTypes eControl)
 {
 	switch(eControl)
@@ -3719,7 +3719,7 @@ bool CvGame::canDoControl(ControlTypes eControl)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::doControl(ControlTypes eControl)
 {
 	if(!canDoControl(eControl))
@@ -3940,8 +3940,8 @@ void CvGame::doControl(ControlTypes eControl)
         {
             if ((getElapsedGameTurns() > 0) && GET_PLAYER(getActivePlayer()).isTurnActive())
             {
-                // as there is no netcode for timer reset,
-                // this function will act as one, if called with special agreed upon arguments
+
+
                 resetTurnTimer(true);
                 gDLL->sendGiftUnit(NO_PLAYER, -1);
             }
@@ -3957,9 +3957,9 @@ void CvGame::doControl(ControlTypes eControl)
 		{
 			if ((getElapsedGameTurns() > 0) && GET_PLAYER(getActivePlayer()).isTurnActive())
 			{
-				// as there is no netcode for timer pause,
-				// this function will act as one, if called with special agreed upon arguments
-				// resetTurnTimer(true);
+
+
+
 				gDLL->sendGiftUnit(NO_PLAYER, -7);
 			}
 		}
@@ -3999,14 +3999,14 @@ void CvGame::doControl(ControlTypes eControl)
 		break;
 
 	case CONTROL_QUICK_SAVE:
-		if(!(isNetworkMultiPlayer()))	// SP only!
+		if(!(isNetworkMultiPlayer()))
 		{
 			gDLL->QuickSave();
 		}
 		break;
 
 	case CONTROL_QUICK_LOAD:
-		if(!(isNetworkMultiPlayer()))	// SP only!
+		if(!(isNetworkMultiPlayer()))
 		{
 			gDLL->QuickLoad();
 		}
@@ -4044,7 +4044,7 @@ void CvGame::doControl(ControlTypes eControl)
 	{
 		CvPopupInfo kPopup(BUTTONPOPUP_TECH_TREE, getActivePlayer());
 
-		// If the popup queue is empty, just show the tech tree, don't queue it up - otherwise, if we, say, go into the Pedia from here, it'll end up BEHIND the tech tree
+
 		if(!GC.GetEngineUserInterface()->IsPopupQueueEmpty())
 			kPopup.iData1 = 1;
 
@@ -4120,19 +4120,19 @@ void CvGame::doControl(ControlTypes eControl)
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::IsForceEndingTurn() const
 {
 	return m_bForceEndingTurn;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::SetForceEndingTurn(bool bValue)
 {
 	m_bForceEndingTurn = bValue;
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getAdjustedPopulationPercent(VictoryTypes eVictory) const
 {
 	int iPopulation;
@@ -4181,7 +4181,7 @@ int CvGame::getAdjustedPopulationPercent(VictoryTypes eVictory) const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getProductionPerPopulation(HurryTypes eHurry)
 {
 	if(NO_HURRY == eHurry)
@@ -4195,7 +4195,7 @@ int CvGame::getProductionPerPopulation(HurryTypes eHurry)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getAdjustedLandPercent(VictoryTypes eVictory) const
 {
 	CvVictoryInfo* pkVictoryInfo = GC.getVictoryInfo(eVictory);
@@ -4214,7 +4214,7 @@ int CvGame::getAdjustedLandPercent(VictoryTypes eVictory) const
 	return std::max(iPercent, pkVictoryInfo->getMinLandPercent());
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::countCivPlayersAlive() const
 {
 	int iCount;
@@ -4234,7 +4234,7 @@ int CvGame::countCivPlayersAlive() const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::countCivPlayersEverAlive() const
 {
 	int iCount;
@@ -4254,7 +4254,7 @@ int CvGame::countCivPlayersEverAlive() const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::countCivTeamsAlive() const
 {
 	int iCount;
@@ -4274,7 +4274,7 @@ int CvGame::countCivTeamsAlive() const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::countCivTeamsEverAlive() const
 {
 	int iCount;
@@ -4294,7 +4294,7 @@ int CvGame::countCivTeamsEverAlive() const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::countHumanPlayersAlive() const
 {
 	int iCount;
@@ -4317,7 +4317,7 @@ int CvGame::countHumanPlayersAlive() const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::countHumanPlayersEverAlive() const
 {
 	int iCount;
@@ -4340,9 +4340,9 @@ int CvGame::countHumanPlayersEverAlive() const
 }
 
 #ifndef AUI_GAME_PLAYER_BASED_TURN_LENGTH
-//	--------------------------------------------------------------------------------
+
 int CvGame::countSeqHumanTurnsUntilPlayerTurn( PlayerTypes playerID ) const
-{//This function counts the number of sequential human player turns that remain before this player's turn.
+{
 	int humanTurnsUntilMe = 0;
 #ifdef AUI_GAME_BETTER_HYBRID_MODE
 	const CvPlayer& kTargetPlayer = GET_PLAYER(playerID);
@@ -4360,53 +4360,53 @@ int CvGame::countSeqHumanTurnsUntilPlayerTurn( PlayerTypes playerID ) const
 	bool startCountingPlayers = false;
 	CvPlayer& targetPlayer = GET_PLAYER(playerID);
 	if(targetPlayer.isSimultaneousTurns())
-	{//target player is playing simultaneous turns and is not actually in the sequential turn sequence.
-		//Count every human player in sequential turn mode who is taking or hasn't taken their turn.
+	{
+
 		for(int i = 0; i < MAX_PLAYERS; ++i)
 		{
 			CvPlayer& kCurrentPlayer = GET_PLAYER((PlayerTypes)i);
 			if(kCurrentPlayer.isHuman() 
 				&& kCurrentPlayer.isAlive() 
 				&& !kCurrentPlayer.isSimultaneousTurns())
-			{//another human player who is playing sequential turns.
+			{
 				if(kCurrentPlayer.isTurnActive())
-				{//This player is currently playing their turn. Start counting human players after this point.
+				{
 					startCountingPlayers = true;
 					humanTurnsUntilMe++;
 				}
 				else if(startCountingPlayers)
-				{//This is a human player who's before us in line.
+				{
 					humanTurnsUntilMe++;
 				}
 			}
 		}	
 	}
 	else
-	{//target player is playing sequential turns.  
-		//Our next turn will begin after every sequential player has finished this turn 
-		//AND everyone ahead of us in the sequence has finished their turn for the NEXT turn.
+	{
 
-		//Starting after us, count every player who's playing sequential turns.
+
+
+
 		startCountingPlayers = false;
 		int curPlayerIdx = (targetPlayer.GetID()+1)%MAX_PLAYERS;
 		for(int i = 0; i < MAX_PLAYERS; curPlayerIdx = ++curPlayerIdx%MAX_PLAYERS, ++i)
 		{
 			CvPlayer& kCurrentPlayer = GET_PLAYER((PlayerTypes)curPlayerIdx);
 			if(kCurrentPlayer.GetID() == targetPlayer.GetID())
-			{//This is us.  We've looped back to ourself.  We're done.
+			{
 				break;
 			}
 			else if(kCurrentPlayer.isHuman() 
 				&& kCurrentPlayer.isAlive() 
 				&& !kCurrentPlayer.isSimultaneousTurns())
-			{//another human player who is playing sequential turns.
+			{
 				if(kCurrentPlayer.isTurnActive())
-				{//This player is currently playing their turn. Start counting human players after this point.
+				{
 					startCountingPlayers = true;
 					humanTurnsUntilMe++;
 				}
 				else if(startCountingPlayers)
-				{//This is a human player who's before us in line.
+				{
 					humanTurnsUntilMe++;
 				}
 			}
@@ -4418,7 +4418,7 @@ int CvGame::countSeqHumanTurnsUntilPlayerTurn( PlayerTypes playerID ) const
 }
 #endif
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::countMajorCivsAlive() const
 {
 	int iCount;
@@ -4440,7 +4440,7 @@ int CvGame::countMajorCivsAlive() const
 	return iCount;
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::countMajorCivsEverAlive() const
 {
 	int iCount;
@@ -4462,7 +4462,7 @@ int CvGame::countMajorCivsEverAlive() const
 	return iCount;
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::countTotalCivPower()
 {
 	int iCount;
@@ -4482,7 +4482,7 @@ int CvGame::countTotalCivPower()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::countTotalNukeUnits()
 {
 	int iCount;
@@ -4502,7 +4502,7 @@ int CvGame::countTotalNukeUnits()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::countKnownTechNumTeams(TechTypes eTech)
 {
 	int iCount;
@@ -4524,12 +4524,12 @@ int CvGame::countKnownTechNumTeams(TechTypes eTech)
 	return iCount;
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::goldenAgeLength() const
 {
 	int iLength;
 
-	iLength = /*10*/ GC.getGOLDEN_AGE_LENGTH();
+	iLength =        GC.getGOLDEN_AGE_LENGTH();
 
 	iLength *= getGameSpeedInfo().getGoldenAgePercent();
 	iLength /= 100;
@@ -4537,7 +4537,7 @@ int CvGame::goldenAgeLength() const
 	return iLength;
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::victoryDelay(VictoryTypes eVictory) const
 {
 	CvAssert(eVictory >= 0 && eVictory < GC.getNumVictoryInfos());
@@ -4557,7 +4557,7 @@ int CvGame::victoryDelay(VictoryTypes eVictory) const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getImprovementUpgradeTimeMod(ImprovementTypes eImprovement, const CvPlot* pPlot) const
 {
 	int iTime = 100;
@@ -4596,7 +4596,7 @@ int CvGame::getImprovementUpgradeTimeMod(ImprovementTypes eImprovement, const Cv
 	return iTime;
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getImprovementUpgradeTime(ImprovementTypes eImprovement, const CvPlot* pPlot) const
 {
 	CvImprovementEntry* pkImprovementInfo = GC.getImprovementInfo(eImprovement);
@@ -4621,7 +4621,7 @@ int CvGame::getImprovementUpgradeTime(ImprovementTypes eImprovement, const CvPlo
 
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::canTrainNukes() const
 {
 	for(int iI = 0; iI < MAX_PLAYERS; iI++)
@@ -4655,7 +4655,7 @@ bool CvGame::canTrainNukes() const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 EraTypes CvGame::getCurrentEra() const
 {
 	int iEra;
@@ -4683,7 +4683,7 @@ EraTypes CvGame::getCurrentEra() const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 TeamTypes CvGame::getActiveTeam()
 {
 	PlayerTypes eActivePlayer = getActivePlayer();
@@ -4698,7 +4698,7 @@ TeamTypes CvGame::getActiveTeam()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 CivilizationTypes CvGame::getActiveCivilizationType()
 {
 	PlayerTypes eActivePlayer = getActivePlayer();
@@ -4713,64 +4713,64 @@ CivilizationTypes CvGame::getActiveCivilizationType()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isNetworkMultiPlayer() const
 {
 	return CvPreGame::isNetworkMultiplayerGame();
 }
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isGameMultiPlayer() const
 {
 	return (isNetworkMultiPlayer() || isPbem() || isHotSeat());
 }
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isTeamGame() const
 {
 	CvAssert(countCivPlayersAlive() >= countCivTeamsAlive());
 	return (countCivPlayersAlive() > countCivTeamsAlive());
 }
 
-//	--------------------------------------------------------------------------------
-/// Return control to the user after an autoplay
+
+
 void CvGame::ReviveActivePlayer()
 {
 	if(!(GET_PLAYER(getActivePlayer()).isAlive()))
 	{
 		setAIAutoPlay(0, m_eAIAutoPlayReturnPlayer);
 
-		// If no player specified, returning as an observer
+
 		if(m_eAIAutoPlayReturnPlayer == NO_PLAYER)
 		{
 			CvPreGame::setSlotClaim(getActivePlayer(), SLOTCLAIM_ASSIGNED);
 			CvPreGame::setSlotStatus(getActivePlayer(), SS_OBSERVER);
 		}
 
-		// Want to return as a specific player
+
 		else
 		{
-			// Reset observer slot
+
 			CvPreGame::setSlotClaim(getActivePlayer(), SLOTCLAIM_UNASSIGNED);
 			CvPreGame::setSlotStatus(getActivePlayer(), SS_OBSERVER);
 
-			// Move the active player to the desired slot
+
 			CvPreGame::setSlotStatus(m_eAIAutoPlayReturnPlayer, SS_TAKEN);
-			setActivePlayer(m_eAIAutoPlayReturnPlayer, false /*bForceHotSeat*/, true /*bAutoplaySwitch*/);
+			setActivePlayer(m_eAIAutoPlayReturnPlayer, false                  , true                    );
 		}
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// Is there an open observer slot that the active player can be assigned to?
+
+
 bool CvGame::CanMoveActivePlayerToObserver()
 {
 	int iObserver = -1;
 	PlayerTypes activePlayer = CvPreGame::activePlayer();
 
-	// Is active player already in an observer slot?
+
 	if(CvPreGame::slotStatus(activePlayer) == SS_OBSERVER)
 	{
 		return false;
@@ -4778,7 +4778,7 @@ bool CvGame::CanMoveActivePlayerToObserver()
 
 	for(int iI = 0; iI < MAX_MAJOR_CIVS; iI++)
 	{
-		// Found an observer slot
+
 		if(CvPreGame::slotStatus((PlayerTypes)iI) == SS_OBSERVER && (CvPreGame::slotClaim((PlayerTypes)iI) == SLOTCLAIM_UNASSIGNED || CvPreGame::slotClaim((PlayerTypes)iI) == SLOTCLAIM_RESERVED))
 		{
 			iObserver = iI;
@@ -4786,39 +4786,39 @@ bool CvGame::CanMoveActivePlayerToObserver()
 		}
 	}
 
-	// Did we find an observer somewhere besides the active player slot?
+
 	return iObserver != -1 && activePlayer != iObserver;
 }
 
-//	--------------------------------------------------------------------------------
-/// Turn on the observer slot (for use by the human to watch autoplays)
+
+
 void CvGame::ActivateObserverSlot()
 {
 	for(int iI = 0; iI < MAX_MAJOR_CIVS; iI++)
 	{
 		if(CvPreGame::slotStatus((PlayerTypes)iI) == SS_OBSERVER && (CvPreGame::slotClaim((PlayerTypes)iI) == SLOTCLAIM_UNASSIGNED || CvPreGame::slotClaim((PlayerTypes)iI) == SLOTCLAIM_RESERVED))
 		{
-			// Set current active player to a computer player
+
 			CvPreGame::setSlotStatus(CvPreGame::activePlayer(), SS_COMPUTER);
 
-			// Move the active player to the observer slot
+
 			CvPreGame::setSlotClaim((PlayerTypes)iI, SLOTCLAIM_ASSIGNED);
-//			CvPreGame::setActivePlayer((PlayerTypes)iI);
-			setActivePlayer((PlayerTypes)iI, false /*bForceHotSeat*/, true /*bAutoplaySwitch*/);
+
+			setActivePlayer((PlayerTypes)iI, false                  , true                    );
 
 			break;
 		}
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getNumHumanPlayers()
 {
 	return CvPreGame::numHumans();
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::GetNumMinorCivsEver()
 {
 	int iNumCivs = 0;
@@ -4834,7 +4834,7 @@ int CvGame::GetNumMinorCivsEver()
 	return iNumCivs;
 }
 
-//	--------------------------------------------------------------------------------
+
 #ifdef AUI_GAME_BETTER_HYBRID_MODE
 int CvGame::getCurrentTurnOrderActive() const
 {
@@ -4842,14 +4842,14 @@ int CvGame::getCurrentTurnOrderActive() const
 }
 #else
 int CvGame::getNumHumansInHumanWars(PlayerTypes ignorePlayer)
-{//returns the number of human players who are currently at war with other human players.
+{
 	int humansWarringHumans = 0;
 	for(int i = 0; i < MAX_CIV_PLAYERS; ++i)
 	{
 		const CvPlayer& curPlayer = GET_PLAYER((PlayerTypes)i);
 		if(curPlayer.isAlive() 
 			&& curPlayer.isHuman() 
-			&& (ignorePlayer == NO_PLAYER || curPlayer.GetID() != ignorePlayer)  //ignore the ignore player
+			&& (ignorePlayer == NO_PLAYER || curPlayer.GetID() != ignorePlayer)
 			&& GET_TEAM(curPlayer.getTeam()).isAtWarWithHumans())
 		{
 			++humansWarringHumans;
@@ -4859,9 +4859,9 @@ int CvGame::getNumHumansInHumanWars(PlayerTypes ignorePlayer)
 }
 #endif
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getNumSequentialHumans(PlayerTypes ignorePlayer)
-{//returns the number of human players who are playing sequential turns.
+{
 	int seqHumans = 0;
 #ifdef AUI_GAME_BETTER_HYBRID_MODE
 	if (isAnySimultaneousTurns())
@@ -4873,7 +4873,7 @@ int CvGame::getNumSequentialHumans(PlayerTypes ignorePlayer)
 			for (int i = 0; i < MAX_CIV_PLAYERS; ++i)
 			{
 				const CvPlayer& curPlayer = GET_PLAYER((PlayerTypes)i);
-				if (curPlayer.isAlive() && curPlayer.isHuman() && (ignorePlayer == NO_PLAYER || curPlayer.GetID() != ignorePlayer) //ignore the ignore player
+				if (curPlayer.isAlive() && curPlayer.isHuman() && (ignorePlayer == NO_PLAYER || curPlayer.GetID() != ignorePlayer)
 					&& curPlayer.getTurnOrder() == iJ)
 				{
 					bHasHuman = true;
@@ -4893,7 +4893,7 @@ int CvGame::getNumSequentialHumans(PlayerTypes ignorePlayer)
 		if(curPlayer.isAlive() 
 			&& curPlayer.isHuman() 
 			&& !curPlayer.isSimultaneousTurns()
-			&& (ignorePlayer == NO_PLAYER || curPlayer.GetID() != ignorePlayer))  //ignore the ignore player
+			&& (ignorePlayer == NO_PLAYER || curPlayer.GetID() != ignorePlayer))
 		{
 			++seqHumans;
 		}
@@ -4902,7 +4902,7 @@ int CvGame::getNumSequentialHumans(PlayerTypes ignorePlayer)
 	return seqHumans;
 }
 
-//	------------------------------------------------------------------------------------------------
+
 #if defined(AUI_WARNING_FIXES) || defined(AUI_CONSTIFY)
 int CvGame::getGameTurn() const
 #else
@@ -4912,7 +4912,7 @@ int CvGame::getGameTurn()
 	return CvPreGame::gameTurn();
 }
 
-//	------------------------------------------------------------------------------------------------
+
 void CvGame::setGameTurn(int iNewValue)
 {
 	if(getGameTurn() != iNewValue)
@@ -4933,50 +4933,50 @@ void CvGame::setGameTurn(int iNewValue)
 	}
 }
 
-//	------------------------------------------------------------------------------------------------
+
 void CvGame::incrementGameTurn()
 {
 	setGameTurn(getGameTurn() + 1);
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getTurnYear(int iGameTurn)
 {
-	// moved the body of this method to Game Core Utils so we have access for other games than the current one (replay screen in HOF)
+
 	return getTurnYearForGame(iGameTurn, getStartYear(), getCalendar(), getGameSpeedType());
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getGameTurnYear()
 {
 	return getTurnYear(getGameTurn());
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getElapsedGameTurns() const
 {
 	return m_iElapsedGameTurns;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::incrementElapsedGameTurns()
 {
 	m_iElapsedGameTurns++;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getMaxTurns() const
 {
 	return CvPreGame::maxTurns();
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setMaxTurns(int iNewValue)
 {
 	CvPreGame::setMaxTurns(iNewValue);
@@ -4984,137 +4984,137 @@ void CvGame::setMaxTurns(int iNewValue)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::changeMaxTurns(int iChange)
 {
 	setMaxTurns(getMaxTurns() + iChange);
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getMaxCityElimination() const
 {
 	return CvPreGame::maxCityElimination();
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setMaxCityElimination(int iNewValue)
 {
 	CvPreGame::setMaxCityElimination(iNewValue);
 	CvAssert(getMaxCityElimination() >= 0);
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getNumAdvancedStartPoints() const
 {
 	return CvPreGame::advancedStartPoints();
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setNumAdvancedStartPoints(int iNewValue)
 {
 	CvPreGame::setAdvancedStartPoints(iNewValue);
 	CvAssert(getNumAdvancedStartPoints() >= 0);
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getStartTurn() const
 {
 	return m_iStartTurn;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setStartTurn(int iNewValue)
 {
 	m_iStartTurn = iNewValue;
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::GetWinningTurn() const
 {
 	return m_iWinningTurn;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::SetWinningTurn(int iNewValue)
 {
 	m_iWinningTurn = iNewValue;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getStartYear() const
 {
 	return m_iStartYear;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setStartYear(int iNewValue)
 {
 	m_iStartYear = iNewValue;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getEstimateEndTurn() const
 {
 	return m_iEstimateEndTurn;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setEstimateEndTurn(int iNewValue)
 {
 	m_iEstimateEndTurn = iNewValue;
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getDefaultEstimateEndTurn() const
 {
 	return m_iDefaultEstimateEndTurn;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setDefaultEstimateEndTurn(int iNewValue)
 {
 	m_iDefaultEstimateEndTurn = iNewValue;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getTurnSlice() const
 {
 	return m_iTurnSlice;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getMinutesPlayed() const
 {
 	return (getTurnSlice() / gDLL->getTurnsPerMinute());
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setTurnSlice(int iNewValue)
 {
 	m_iTurnSlice = iNewValue;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::changeTurnSlice(int iChange)
 {
 	setTurnSlice(getTurnSlice() + iChange);
 }
 
-//	--------------------------------------------------------------------------------
+
 #ifdef AUI_GAME_PLAYER_BASED_TURN_LENGTH
-void CvGame::resetTurnTimer(bool /*resetGameTurnStart*/)
+void CvGame::resetTurnTimer(bool                       )
 #else
 void CvGame::resetTurnTimer(bool resetGameTurnStart)
 #endif
@@ -5133,17 +5133,17 @@ void CvGame::resetTurnTimer(bool resetGameTurnStart)
 }
 
 #ifndef AUI_GAME_PLAYER_BASED_TURN_LENGTH
-//	--------------------------------------------------------------------------------
+
 int CvGame::getMaxTurnLen()
-{//returns the amount of time players are being given for this turn.
+{
 #ifdef AUI_GAME_RELATIVE_TURN_TIMERS
 	if (getPitbossTurnTime() != 0 && !isOption("GAMEOPTION_RELATIVE_TURN_TIMER"))
 #else
 	if(getPitbossTurnTime() != 0)
 #endif
-	{//manually set turn time.
+	{
 		if(isPitboss())
-		{// Turn time is in hours
+		{
 			return (getPitbossTurnTime() * 3600);
 		}
 		else
@@ -5156,8 +5156,8 @@ int CvGame::getMaxTurnLen()
 		int iMaxUnits = 0;
 		int iMaxCities = 0;
 
-		// Find out who has the most units and who has the most cities
-		// Calculate the max turn time based on the max number of units and cities
+
+
 		for(int i = 0; i < MAX_CIV_PLAYERS; ++i)
 		{
 			if(GET_PLAYER((PlayerTypes)i).isAlive())
@@ -5184,7 +5184,7 @@ int CvGame::getMaxTurnLen()
 			}
 		}
 
-		// Now return turn len based on base len and unit and city resources
+
 		const CvTurnTimerInfo& kTurnTimer = CvPreGame::turnTimerInfo();
 #ifdef AUI_GAME_RELATIVE_TURN_TIMERS
 		int baseTurnTime = kTurnTimer.getBaseTime();
@@ -5206,19 +5206,19 @@ int CvGame::getMaxTurnLen()
 }
 #endif
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::IsStaticTutorialActive() const
 {
 	return m_bStaticTutorialActive;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::SetStaticTutorialActive(bool bStaticTutorialActive)
 {
 	m_bStaticTutorialActive = bStaticTutorialActive;
 }
 
-//	--------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 bool CvGame::HasAdvisorMessageBeenSeen(_In_z_ const char* szAdvisorMessageName)
 #else
@@ -5230,7 +5230,7 @@ bool CvGame::HasAdvisorMessageBeenSeen(const char* szAdvisorMessageName)
 	return it != m_AdvisorMessagesViewed.end();
 }
 
-//	--------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 void CvGame::SetAdvisorMessageHasBeenSeen(_In_z_ const char* szAdvisorMessageName, bool bSeen)
 #else
@@ -5248,13 +5248,13 @@ void CvGame::SetAdvisorMessageHasBeenSeen(const char* szAdvisorMessageName, bool
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::IsCityScreenBlocked()
 {
 	return CvPreGame::IsCityScreenBlocked();
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::CanOpenCityScreen(PlayerTypes eOpener, CvCity* pCity)
 {
 	if(eOpener == pCity->getOwner())
@@ -5275,14 +5275,14 @@ bool CvGame::CanOpenCityScreen(PlayerTypes eOpener, CvCity* pCity)
 	return false;
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getTargetScore() const
 {
 	return CvPreGame::targetScore();
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setTargetScore(int iNewValue)
 {
 	CvPreGame::setTargetScore(iNewValue);
@@ -5290,7 +5290,7 @@ void CvGame::setTargetScore(int iNewValue)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 #ifdef AUI_CONSTIFY
 int CvGame::getNumGameTurnActive() const
 #else
@@ -5309,7 +5309,7 @@ int CvGame::getNumGameTurnActive()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 #ifdef AUI_CONSTIFY
 int CvGame::countNumHumanGameTurnActive() const
 #else
@@ -5349,7 +5349,7 @@ bool CvGame::isNoPlayerActive() const
 }
 #endif
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::changeNumGameTurnActive(int iChange, const std::string& why)
 {
 	char changeBuf[8] = {0};
@@ -5366,21 +5366,21 @@ void CvGame::changeNumGameTurnActive(int iChange, const std::string& why)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getNumCities() const
 {
 	return m_iNumCities;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getNumCivCities() const
 {
 	return (getNumCities() - GET_PLAYER(BARBARIAN_PLAYER).getNumCities());
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::changeNumCities(int iChange)
 {
 	m_iNumCities = (m_iNumCities + iChange);
@@ -5388,94 +5388,94 @@ void CvGame::changeNumCities(int iChange)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getTotalPopulation() const
 {
 	return m_iTotalPopulation;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::changeTotalPopulation(int iChange)
 {
 	m_iTotalPopulation = (m_iTotalPopulation + iChange);
 	CvAssert(getTotalPopulation() >= 0);
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getNoNukesCount() const
 {
 	return m_iNoNukesCount;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isNoNukes() const
 {
 	return (getNoNukesCount() > 0);
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::changeNoNukesCount(int iChange)
 {
 	m_iNoNukesCount = (m_iNoNukesCount + iChange);
 	CvAssert(getNoNukesCount() >= 0);
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getNukesExploded() const
 {
 	return m_iNukesExploded;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::changeNukesExploded(int iChange)
 {
 	m_iNukesExploded = (m_iNukesExploded + iChange);
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getMaxPopulation() const
 {
 	return m_iMaxPopulation;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getInitPopulation() const
 {
 	return m_iInitPopulation;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getInitLand() const
 {
 	return m_iInitLand;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getInitTech() const
 {
 	return m_iInitTech;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getInitWonders() const
 {
 	return m_iInitWonders;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::initScoreCalculation()
 {
-	// initialize score calculation
+
 	int iMaxFood = 0;
 #ifdef AUI_WARNING_FIXES
 	for (uint i = 0; i < GC.getMap().numPlots(); i++)
@@ -5520,7 +5520,7 @@ void CvGame::initScoreCalculation()
 			}
 			else
 			{
-				// count all possible free techs as initial to lower the score from immediate retirement
+
 #ifdef AUI_WARNING_FIXES
 				for (uint iCiv = 0; iCiv < GC.getNumCivilizationInfos(); iCiv++)
 #else
@@ -5548,14 +5548,14 @@ void CvGame::initScoreCalculation()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getAIAutoPlay()
 {
 	return m_iAIAutoPlay;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setAIAutoPlay(int iNewValue, PlayerTypes eReturnAsPlayer)
 {
 	int iOldValue;
@@ -5585,21 +5585,21 @@ void CvGame::setAIAutoPlay(int iNewValue, PlayerTypes eReturnAsPlayer)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::changeAIAutoPlay(int iChange)
 {
 	setAIAutoPlay(getAIAutoPlay() + iChange, m_eAIAutoPlayReturnPlayer);
 }
 
 
-//	--------------------------------------------------------------------------------
+
 unsigned int CvGame::getInitialTime()
 {
 	return m_uiInitialTime;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setInitialTime(unsigned int uiNewValue)
 {
 	m_uiInitialTime = uiNewValue;
@@ -5607,14 +5607,14 @@ void CvGame::setInitialTime(unsigned int uiNewValue)
 
 
 #ifdef GAME_UPDATE_TURN_TIMER_ONCE_PER_TURN
-//	--------------------------------------------------------------------------------
+
 float CvGame::getPreviousTurnLen()
 {
 	return m_fPreviousTurnLen;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setPreviousTurnLen(float fNewValue)
 {
 	m_fPreviousTurnLen = fNewValue;
@@ -5623,42 +5623,42 @@ void CvGame::setPreviousTurnLen(float fNewValue)
 
 #endif
 #ifdef TURN_TIMER_PAUSE_BUTTON
-//	--------------------------------------------------------------------------------
+
 float CvGame::getTimeElapsed()
 {
 	return m_fTimeElapsed;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setTimeElapsed(float fNewValue)
 {
 	m_fTimeElapsed = fNewValue;
 }
 #endif
 #ifdef GAME_ALLOW_ONLY_ONE_UNIT_MOVE_ON_TURN_LOADING
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isMPOrderedMoveOnTurnLoading() const
 {
 	return m_bMPOrderedMoveOnTurnLoading;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setMPOrderedMoveOnTurnLoading(bool bNewValue)
 {
 	m_bMPOrderedMoveOnTurnLoading = bNewValue;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::getHasReceivedFirstMission()
 {
 	return m_bReceivedFirstMission;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setHasReceivedFirstMission(bool bNewValue)
 {
 	m_bReceivedFirstMission = bNewValue;
@@ -5666,34 +5666,34 @@ void CvGame::setHasReceivedFirstMission(bool bNewValue)
 
 
 #endif
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isScoreDirty() const
 {
 	return m_bScoreDirty;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setScoreDirty(bool bNewValue)
 {
 	m_bScoreDirty = bNewValue;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isCircumnavigated() const
 {
 	return m_bCircumnavigated;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::makeCircumnavigated()
 {
 	m_bCircumnavigated = true;
 }
 
-//	---------------------------------------------------------------------------
+
 bool CvGame::circumnavigationAvailable() const
 {
 	if(isCircumnavigated())
@@ -5716,8 +5716,8 @@ bool CvGame::circumnavigationAvailable() const
 	return true;
 }
 
-//	---------------------------------------------------------------------------
-/// Message from UI to gameplay about something that should happen with regards to diplomacy
+
+
 void CvGame::DoFromUIDiploEvent(FromUIDiploEventTypes eEvent, PlayerTypes eAIPlayer, int iArg1, int iArg2)
 {
 	ICvEngineScriptSystem1* pkScriptSystem = gDLL->GetScriptSystem();
@@ -5737,15 +5737,15 @@ void CvGame::DoFromUIDiploEvent(FromUIDiploEventTypes eEvent, PlayerTypes eAIPla
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Set up diplo victory parameters
+
+
 void CvGame::DoInitDiploVictory()
 {
 	DoUpdateDiploVictory();
 }
 
-//	--------------------------------------------------------------------------------
-/// Update diplo victory parameters, such as how many votes are needed to win
+
+
 void CvGame::DoUpdateDiploVictory()
 {
 	int iVotesForHost = 1;
@@ -5779,10 +5779,10 @@ void CvGame::DoUpdateDiploVictory()
 		CvPlayer* pPlayer = &GET_PLAYER(e);
 		if (pPlayer != NULL && pPlayer->isEverAlive())
 		{
-			// Minor civ
+
 			if (pPlayer->isMinorCiv())
 			{
-				// Bought out does not count (they are no longer in the pool of teams, cannot be liberated, etc.)
+
 				if (!pPlayer->GetMinorCivAI()->IsBoughtOut())
 				{
 					if (pPlayer->isAlive())
@@ -5795,7 +5795,7 @@ void CvGame::DoUpdateDiploVictory()
 					}
 				}
 			}
-			// Major civ
+
 			else
 			{
 				if (pPlayer->isAlive())
@@ -5810,9 +5810,9 @@ void CvGame::DoUpdateDiploVictory()
 		}
 	}
 
-	// Number of delegates needed to win increases the more civs and city-states there are in the game,
-	// but these two scale differently since civs' delegates are harder to secure. These functions 
-	// are based on a logarithmic regression.
+
+
+
 	float fCivVotesPortion = (GC.getDIPLO_VICTORY_CIV_DELEGATES_COEFFICIENT() * (float)log(fCivsToCount)) + GC.getDIPLO_VICTORY_CIV_DELEGATES_CONSTANT();
 	if (fCivVotesPortion < 0.0f)
 	{
@@ -5832,15 +5832,15 @@ void CvGame::DoUpdateDiploVictory()
 	GC.GetEngineUserInterface()->setDirty(LeagueScreen_DIRTY_BIT, true);
 }
 
-//	--------------------------------------------------------------------------------
-/// How many votes are needed to win?
+
+
 int CvGame::GetVotesNeededForDiploVictory() const
 {
 	return m_iVotesNeededForDiploVictory;
 }
 
-//	--------------------------------------------------------------------------------
-/// How many votes are needed to win?
+
+
 void CvGame::SetVotesNeededForDiploVictory(int iValue)
 {
 	if(iValue != GetVotesNeededForDiploVictory())
@@ -5849,8 +5849,8 @@ void CvGame::SetVotesNeededForDiploVictory(int iValue)
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// Is the UN active? (Diplo Victory)
+
+
 bool CvGame::IsUnitedNationsActive()
 {
 	if (!GC.getGame().isOption(GAMEOPTION_NO_LEAGUES))
@@ -5873,15 +5873,15 @@ bool CvGame::IsUnitedNationsActive()
 	return false;
 }
 
-//	--------------------------------------------------------------------------------
-/// United Nations diplo victory countdown
+
+
 int CvGame::GetUnitedNationsCountdown() const
 {
 	return m_iUnitedNationsCountdown;
 }
 
-//	--------------------------------------------------------------------------------
-/// United Nations diplo victory countdown
+
+
 void CvGame::SetUnitedNationsCountdown(int iValue)
 {
 	if(iValue != GetUnitedNationsCountdown())
@@ -5890,8 +5890,8 @@ void CvGame::SetUnitedNationsCountdown(int iValue)
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// United Nations diplo victory countdown
+
+
 void CvGame::ChangeUnitedNationsCountdown(int iChange)
 {
 	if(iChange != 0)
@@ -5900,21 +5900,21 @@ void CvGame::ChangeUnitedNationsCountdown(int iChange)
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// How many diplo votes tallied
+
+
 int CvGame::GetNumVictoryVotesTallied() const
 {
 	return m_iNumVictoryVotesTallied;
 }
 
-//	--------------------------------------------------------------------------------
-/// How many diplo votes tallied
-/// Preliminary votes will be counted, but will not trigger victory
-void CvGame::SetNumVictoryVotesTallied(int iValue, bool /*bPreliminaryVote*/)
+
+
+
+void CvGame::SetNumVictoryVotesTallied(int iValue, bool                     )
 {
 	m_iNumVictoryVotesTallied = iValue;
 
-	// Vote completed?
+
 	if(iValue > 0)
 	{
 		if(iValue == GetNumVictoryVotesExpected())
@@ -5923,29 +5923,29 @@ void CvGame::SetNumVictoryVotesTallied(int iValue, bool /*bPreliminaryVote*/)
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// How many diplo votes tallied
-/// Preliminary votes will be counted, but will not trigger victory
+
+
+
 void CvGame::ChangeNumVictoryVotesTallied(int iChange, bool bPreliminaryVote)
 {
 	SetNumVictoryVotesTallied(GetNumVictoryVotesTallied() + iChange, bPreliminaryVote);
 }
 
-//	--------------------------------------------------------------------------------
-/// How many diplo votes Expected
+
+
 int CvGame::GetNumVictoryVotesExpected() const
 {
 	return m_iNumVictoryVotesExpected;
 }
 
-//	--------------------------------------------------------------------------------
-/// How many diplo votes Expected
+
+
 void CvGame::SetNumVictoryVotesExpected(int iValue)
 {
 	m_iNumVictoryVotesExpected = iValue;
 }
 
-//	--------------------------------------------------------------------------------
+
 TeamTypes CvGame::GetVoteCast(TeamTypes eVotingTeam) const
 {
 	CvAssertMsg(eVotingTeam >= 0, "eMajor is expected to be non-negative (invalid Index)");
@@ -5954,9 +5954,9 @@ TeamTypes CvGame::GetVoteCast(TeamTypes eVotingTeam) const
 	return (TeamTypes) m_aiVotesCast[eVotingTeam];
 }
 
-//	--------------------------------------------------------------------------------
-/// Have eVotingTeam cast its UN vote for eVote
-/// Preliminary votes will be counted, but will not trigger victory
+
+
+
 void CvGame::SetVoteCast(TeamTypes eVotingTeam, TeamTypes eVote, bool bPreliminaryVote)
 {
 	CvAssertMsg(eVotingTeam >= 0, "eMajor is expected to be non-negative (invalid Index)");
@@ -5966,21 +5966,21 @@ void CvGame::SetVoteCast(TeamTypes eVotingTeam, TeamTypes eVote, bool bPrelimina
 	{
 		m_aiVotesCast[eVotingTeam] = eVote;
 
-		// Increment counts (unless we're resetting)
+
 		if(eVote != NO_TEAM)
 		{
 			int iNumVotes = 1;
 
 			ChangeNumVotesForTeam(eVote, iNumVotes);
 
-			// Must call this last, as when enough votes are tallied the election ends immediately
+
 			ChangeNumVictoryVotesTallied(1, bPreliminaryVote);
 		}
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// Get the last vote this team made, for record keeping
+
+
 TeamTypes CvGame::GetPreviousVoteCast(TeamTypes eVotingTeam) const
 {
 	CvAssertMsg(eVotingTeam >= 0, "eVotingTeam is expected to be non-negative (invalid Index)");
@@ -5990,8 +5990,8 @@ TeamTypes CvGame::GetPreviousVoteCast(TeamTypes eVotingTeam) const
 	return (TeamTypes) m_aiPreviousVotesCast[eVotingTeam];
 }
 
-//	--------------------------------------------------------------------------------
-/// Set the last vote this team made, for record keeping
+
+
 void CvGame::SetPreviousVoteCast(TeamTypes eVotingTeam, TeamTypes eVotingTarget)
 {
 	CvAssertMsg(eVotingTeam >= 0, "eVotingTeam is expected to be non-negative (invalid Index)");
@@ -6004,7 +6004,7 @@ void CvGame::SetPreviousVoteCast(TeamTypes eVotingTeam, TeamTypes eVotingTarget)
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::GetNumVotesForTeam(TeamTypes eTeam) const
 {
 	CvAssertMsg(eTeam >= 0, "eMajor is expected to be non-negative (invalid Index)");
@@ -6013,7 +6013,7 @@ int CvGame::GetNumVotesForTeam(TeamTypes eTeam) const
 	return m_aiNumVotesForTeam[eTeam];
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::SetNumVotesForTeam(TeamTypes eTeam, int iValue)
 {
 	CvAssertMsg(eTeam >= 0, "eMajor is expected to be non-negative (invalid Index)");
@@ -6025,24 +6025,24 @@ void CvGame::SetNumVotesForTeam(TeamTypes eTeam, int iValue)
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::ChangeNumVotesForTeam(TeamTypes eTeam, int iChange)
 {
 	SetNumVotesForTeam(eTeam, GetNumVotesForTeam(eTeam) + iChange);
 }
 
 
-//	--------------------------------------------------------------------------------
+
 Localization::String CvGame::GetDiploResponse(const char* szLeader, const char* szResponse, const Localization::String& strOptionalKey1, const Localization::String& strOptionalKey2)
 {
-	//cvStopWatch stopWatch("GetDiploResponse");
+
 
 	Localization::String response;
 
 	if(m_pDiploResponseQuery == NULL)
 	{
-		//Directly reference Language_en_US is safe here since we're just looking for the tag
-		//and not the actual text.
+
+
 		const char* szSQL = "select Tag, Bias from Diplomacy_Responses, Language_en_US where (LeaderType = ? or LeaderType = 'GENERIC') and ResponseType = ? and Tag like Response";
 		m_pDiploResponseQuery = new Database::Results();
 		if(!GC.GetGameDatabase()->Execute(*m_pDiploResponseQuery, szSQL, strlen(szSQL)))
@@ -6051,16 +6051,16 @@ Localization::String CvGame::GetDiploResponse(const char* szLeader, const char* 
 		}
 	}
 
-	//This is not the fastest thing out there...
-	//The original design was to select a random text key (of uniform probability) from the set generated by the above SQL statement
-	//(with the random selection actually part of the SQL statement)
-	//
-	//Jon had later decided that he wanted to specify a bias for each diplomacy response such that certain ones would
-	//appear more frequently than others.
-	//To implement this quickly, I convert the discrete distribution into a uniform distribution and select from that.
-	//This implementation generates a ton of strings to store the text keys though and would benefit greatly from a "stack_string"
-	//implementation.  For now though, it works, and the code is called so infrequently that it shouldn't be noticeable.
-	//NOTE: Profiled on my machine to take 0.006965 seconds on average to complete.
+
+
+
+
+
+
+
+
+
+
 	std::vector<string> probabilities;
 	probabilities.reserve(512);
 
@@ -6096,32 +6096,32 @@ Localization::String CvGame::GetDiploResponse(const char* szLeader, const char* 
 }
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isDebugMode() const
 {
 	return m_bDebugModeCache;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setFOW(bool bMode)
 {
 	m_bFOW = bMode;
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::getFOW()
 {
 	return m_bFOW;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setDebugMode(bool bDebugMode)
 {
 	if(m_bDebugMode != bDebugMode)
 		toggleDebugMode();
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::toggleDebugMode()
 {
 #ifdef AUI_WARNING_FIXES
@@ -6149,44 +6149,44 @@ void CvGame::toggleDebugMode()
 #endif
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::updateDebugModeCache()
 {
 	m_bDebugModeCache = m_bDebugMode;
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getPitbossTurnTime() const
 {
 	return CvPreGame::pitBossTurnTime();
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setPitbossTurnTime(int iHours)
 {
 	CvPreGame::setPitBossTurnTime(iHours);
 }
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isHotSeat() const
 {
 	return CvPreGame::isHotSeat();
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isPbem() const
 {
 	return CvPreGame::isPlayByEmail();
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isPitboss() const
 {
 	return CvPreGame::isPitBoss();
 }
 
-//	--------------------------------------------------------------------------------
+
 #ifdef AUI_GAME_BETTER_HYBRID_MODE
 bool CvGame::isAnySimultaneousTurns() const
 {
@@ -6211,16 +6211,16 @@ bool CvGame::isAllActivePlayersTurnAllComplete() const
 }
 #else
 bool CvGame::isSimultaneousTeamTurns() const
-{//When players are taking sequential turns, do they take them simultaneous with every member of their team?
- //WARNING:  This function doesn't indicate if a player is taking sequential turns or not.
-	//		 Use CvPlayer::isSimultaneousTurns() to determine that.
+{
+
+
 	if(!isNetworkMultiPlayer())
 	{
 		return false;
 	}
 
 	if(!isOption(GAMEOPTION_DYNAMIC_TURNS) && isOption(GAMEOPTION_SIMULTANEOUS_TURNS))
-	{//truely simultaneous turn mode doesn't do this.
+	{
 		return false;
 	}
 
@@ -6228,14 +6228,14 @@ bool CvGame::isSimultaneousTeamTurns() const
 }
 #endif
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isFinalInitialized() const
 {
 	return m_bFinalInitialized;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setFinalInitialized(bool bNewValue)
 {
 	if(isFinalInitialized() != bNewValue)
@@ -6245,42 +6245,42 @@ void CvGame::setFinalInitialized(bool bNewValue)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::getPbemTurnSent() const
 {
 	return m_bPbemTurnSent;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setPbemTurnSent(bool bNewValue)
 {
 	m_bPbemTurnSent = bNewValue;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::getHotPbemBetweenTurns() const
 {
 	return m_bHotPbemBetweenTurns;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setHotPbemBetweenTurns(bool bNewValue)
 {
 	m_bHotPbemBetweenTurns = bNewValue;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isPlayerOptionsSent() const
 {
 	return m_bPlayerOptionsSent;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::sendPlayerOptions(bool bForce)
 {
 	if(getActivePlayer() == NO_PLAYER)
@@ -6309,14 +6309,14 @@ void CvGame::sendPlayerOptions(bool bForce)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 PlayerTypes CvGame::getActivePlayer() const
 {
 	return CvPreGame::activePlayer();
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setActivePlayer(PlayerTypes eNewValue, bool bForceHotSeat, bool bAutoplaySwitch)
 {
 	PlayerTypes eOldActivePlayer = getActivePlayer();
@@ -6349,7 +6349,7 @@ void CvGame::setActivePlayer(PlayerTypes eNewValue, bool bForceHotSeat, bool bAu
 
 			if(countHumanPlayersAlive() == 1 && isPbem())
 			{
-				// Nobody else left alive
+
 				CvPreGame::setGameType(GAME_HOTSEAT_MULTIPLAYER);
 			}
 		}
@@ -6361,9 +6361,9 @@ void CvGame::setActivePlayer(PlayerTypes eNewValue, bool bForceHotSeat, bool bAu
 
 		if(GC.IsGraphicsInitialized())
 		{
-			// Publish the player change first
-			// Messages will be sent out by the updating of the fog and they do not indicate
-			// the player the update is for, so listeners will want to get the player change message first
+
+
+
 			gDLL->PublishActivePlayer(eNewValue, eOldActivePlayer);
 
 			CvMap& theMap = GC.getMap();
@@ -6383,13 +6383,13 @@ void CvGame::setActivePlayer(PlayerTypes eNewValue, bool bForceHotSeat, bool bAu
 			theUI->setDirty(CityInfo_DIRTY_BIT, true);
 			theUI->setDirty(UnitInfo_DIRTY_BIT, true);
 
-			//theUI->setDirty(NationalBorders_DIRTY_BIT, true);
+
 			theUI->setDirty(BlockadedPlots_DIRTY_BIT, true);
 		}
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 CvHandicapInfo& CvGame::getHandicapInfo() const
 {
 	CvHandicapInfo* pkHandicapInfo = GC.getHandicapInfo(getHandicapType());
@@ -6401,7 +6401,7 @@ CvHandicapInfo& CvGame::getHandicapInfo() const
 	}
 
 #pragma warning ( push )
-#pragma warning ( disable : 6011 ) // Dereferencing NULL pointer
+#pragma warning ( disable : 6011 )
 	return *pkHandicapInfo;
 #pragma warning ( pop )
 }
@@ -6416,26 +6416,26 @@ void CvGame::setHandicapType(HandicapTypes eHandicap)
 	m_eHandicap = eHandicap;
 }
 
-//	-----------------------------------------------------------------------------------------------
+
 PlayerTypes CvGame::getPausePlayer()
 {
 	return m_ePausePlayer;
 }
 
-//	-----------------------------------------------------------------------------------------------
+
 bool CvGame::isPaused()
 {
 	return (getPausePlayer() != NO_PLAYER);
 }
 
-//	-----------------------------------------------------------------------------------------------
+
 void CvGame::setPausePlayer(PlayerTypes eNewValue)
 {
 #ifndef AUI_GAME_SET_PAUSED_TURN_TIMERS_PAUSE_ON_RECONNECT
 	if(!isNetworkMultiPlayer())
 #endif
 	{
-		// If we're not in Network MP, if the game is paused the turn timer is too.
+
 		if(isOption(GAMEOPTION_END_TURN_TIMER_ENABLED))
 		{
 			if(eNewValue != NO_PLAYER && m_ePausePlayer == NO_PLAYER)
@@ -6458,13 +6458,13 @@ void CvGame::setPausePlayer(PlayerTypes eNewValue)
 	m_ePausePlayer = eNewValue;
 }
 
-//	-----------------------------------------------------------------------------------------------
+
 UnitTypes CvGame::getBestLandUnit()
 {
 	return m_eBestLandUnit;
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getBestLandUnitCombat()
 {
 	const UnitTypes eBestLandUnit = getBestLandUnit();
@@ -6478,7 +6478,7 @@ int CvGame::getBestLandUnitCombat()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setBestLandUnit(UnitTypes eNewValue)
 {
 	if(getBestLandUnit() != eNewValue)
@@ -6490,32 +6490,32 @@ void CvGame::setBestLandUnit(UnitTypes eNewValue)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::GetFaithCost(CvUnitEntry *pkUnit) const
 {
 	int iRtnValue = pkUnit->GetFaithCost();
 	iRtnValue *= getGameSpeedInfo().getTrainPercent();
-	iRtnValue /= 1000;   // Normalize costs like purchase system does
+	iRtnValue /= 1000;
 	iRtnValue *= 10;
 
 	return iRtnValue;
 }
 
-//	--------------------------------------------------------------------------------
+
 TeamTypes CvGame::getWinner() const
 {
 	return m_eWinner;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 VictoryTypes CvGame::getVictory() const
 {
 	return m_eVictory;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 {
 	if((getWinner() != eNewWinner) || (getVictory() != eNewVictory))
@@ -6524,7 +6524,7 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 		m_eVictory = eNewVictory;
 		SetWinningTurn(getElapsedGameTurns());
 
-		// Reset UN countdown if necessary
+
 		SetUnitedNationsCountdown(0);
 
 		if(getVictory() != NO_VICTORY && !IsStaticTutorialActive())
@@ -6552,7 +6552,7 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 #endif
 				addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, winningTeamLeaderID, localizedText.toUTF8(), -1, -1);
 
-				//Notify everyone of the victory
+
 				localizedText = Localization::Lookup("TXT_KEY_NOTIFICATION_VICTORY_WINNER");
 				localizedText << szWinningTeamLeaderNameKey << szVictoryTextKey;
 
@@ -6575,8 +6575,8 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 					}
 				}
 
-				//--Start Achievements
-				//--Don't allow most in multiplayer so friends can't achieve-whore it up together
+
+
 				if(!GC.getGame().isGameMultiPlayer() && kWinningTeamLeader.isHuman() && kWinningTeamLeader.isLocalPlayer())
 				{
 					const bool bUsingDLC1Scenario = gDLL->IsModActivated(CIV5_DLC_01_SCENARIO_MODID);
@@ -6604,10 +6604,10 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 
 					const HandicapTypes eHandicapDeity = static_cast<HandicapTypes>(7);
 
-					//Games Won Stat
+
 					gDLL->IncrementSteamStat(ESTEAMSTAT_TOTAL_WINS);
 
-					//Victory on Map Sizes
+
 					WorldSizeTypes	winnerMapSize = GC.getMap().getWorldSize();
 					switch(winnerMapSize)
 					{
@@ -6636,10 +6636,10 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 						OutputDebugString("Playing on some other kind of world size.");
 					}
 
-					//Victory on Map Types
+
 					CvString winnerMapName = CvPreGame::mapScriptName();
-					//OutputDebugString(winnerMapName);
-					//OutputDebugString("\n");
+
+
 
 					if(winnerMapName == "Assets\\Maps\\Continents.lua")
 						gDLL->UnlockAchievement(ACHIEVEMENT_MAPTYPE_CONTINENTS);
@@ -6655,7 +6655,7 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 						OutputDebugString("\n Playing some other map. \n\n");
 
 
-					//Victory on Difficulty Levels
+
 					HandicapTypes winnerHandicapType = getHandicapType();
 					if(!bUsingXP2Scenario1 && !bUsingXP2Scenario2) 
 					{
@@ -6694,7 +6694,7 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 						}
 					}
 
-					//Different Victory Win Types
+
 					if(!bUsingXP2Scenario1 && !bUsingXP2Scenario2)
 					{
 #ifdef AUI_WARNING_FIXES
@@ -6729,7 +6729,7 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 					}
 
 
-					//Victory with Specific Leaders
+
 					CvString pLeader =  kWinningTeamLeader.getLeaderTypeKey();
 
 					if(!bUsingDLC6Scenario && pLeader == "LEADER_ALEXANDER")
@@ -6764,7 +6764,7 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 					else if(!bUsingDLC3Scenario && pLeader == "LEADER_GANDHI")
 					{
 						gDLL->UnlockAchievement(ACHIEVEMENT_WIN_GANDHI);
-						if(eNewVictory == 3 && kWinningTeamLeader.getNumCities() <= 3) //Bollywood
+						if(eNewVictory == 3 && kWinningTeamLeader.getNumCities() <= 3)
 							gDLL->UnlockAchievement(ACHIEVEMENT_SPECIAL_BOLLYWOOD);
 					}
 					else if(pLeader == "LEADER_RAMKHAMHAENG")
@@ -6826,7 +6826,7 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 					{
 						gDLL->UnlockAchievement(ACHIEVEMENT_XP2_02);
 
-						//Diplomatic Victory
+
 						if(eNewVictory == eVictoryDiplomatic)
 						{
 							gDLL->UnlockAchievement(ACHIEVEMENT_XP2_20);
@@ -6840,7 +6840,7 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 					{
 						gDLL->UnlockAchievement(ACHIEVEMENT_XP2_05);
 
-						//Space Victory
+
 						if(eNewVictory == eVictorySpaceRace)
 						{
 							gDLL->UnlockAchievement(ACHIEVEMENT_XP2_23);
@@ -6857,13 +6857,13 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 					else
 						OutputDebugString("\nPlaying with a non-standard leader.\n");
 
-					//One City
+
 					if(kWinningTeamLeader.getNumCities() == 1)
 					{
 						gDLL->UnlockAchievement(ACHIEVEMENT_ONECITY);
 					}
 
-					//Uber Achievements for unlocking other achievements
+
 					if(gDLL->IsAchievementUnlocked(ACHIEVEMENT_MAPSIZE_DUEL) &&  gDLL->IsAchievementUnlocked(ACHIEVEMENT_MAPSIZE_TINY) &&  gDLL->IsAchievementUnlocked(ACHIEVEMENT_MAPSIZE_SMALL) &&  gDLL->IsAchievementUnlocked(ACHIEVEMENT_MAPSIZE_STANDARD) &&  gDLL->IsAchievementUnlocked(ACHIEVEMENT_MAPSIZE_LARGE) &&  gDLL->IsAchievementUnlocked(ACHIEVEMENT_MAPSIZE_HUGE) &&  gDLL->IsAchievementUnlocked(ACHIEVEMENT_MAPTYPE_ARCHIPELAGO) &&  gDLL->IsAchievementUnlocked(ACHIEVEMENT_MAPTYPE_CONTINENTS) &&  gDLL->IsAchievementUnlocked(ACHIEVEMENT_MAPTYPE_EARTH) &&  gDLL->IsAchievementUnlocked(ACHIEVEMENT_MAPTYPE_PANGAEA))
 					{
 						gDLL->UnlockAchievement(ACHIEVEMENT_MAPS_ALL);
@@ -6877,7 +6877,7 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 						gDLL->UnlockAchievement(ACHIEVEMENT_WIN_ALLBASELEADERS);
 					}
 
-					//Victory/Ideology Achievements
+
 					const PolicyBranchTypes eBranch =kWinningTeamLeader.GetPlayerPolicies()->GetLateGamePolicyTree();
 					if(eBranch != NO_POLICY_BRANCH_TYPE)
 					{
@@ -6931,7 +6931,7 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 						}
 					}
 
-					// World Congress related Achievements
+
 #ifndef AUI_LEAGUES_FIX_POSSIBLE_DEALLOCATION_CRASH
 					if (GetGameLeagues()->GetNumActiveLeagues() > 0)
 #endif
@@ -6939,7 +6939,7 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 						CvLeague* pLeague = GetGameLeagues()->GetActiveLeague();
 						if (pLeague)
 						{
-							// Diplomatic Victory without ever being host
+
 							if (eNewVictory == eVictoryDiplomatic)
 							{
 								if (!pLeague->HasMemberEverBeenHost(kWinningTeamLeader.GetID()))
@@ -6950,17 +6950,17 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 						}
 					}
 
-					//Check for PSG
+
 					CvAchievementUnlocker::Check_PSG();
 
-					//DLC1 Scenario Win Achievements
+
 					if(bUsingDLC1Scenario)
 					{
-						if(eNewVictory == 2)	//Only win by domination victory
+						if(eNewVictory == 2)
 						{
 							CvString strHandicapType = this->getHandicapInfo().GetType();
 
-							//All easier difficulty level achievements are unlocked when you beat it on a harder difficulty level.
+
 							bool bBeatOnHarderDifficulty = false;
 
 							if(strHandicapType == "HANDICAP_DEITY")
@@ -6987,12 +6987,12 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 								bBeatOnHarderDifficulty = true;
 							}
 
-							//Despite it's name, this achievement is for any difficulty.
+
 							gDLL->UnlockAchievement(ACHIEVEMENT_WIN_SCENARIO_01_PRINCE_OR_BELOW);
 						}
 					}
 
-					//DLC2 Scenario Win Achievements
+
 					if(bUsingDLC2Scenario)
 					{
 						CvString strCivType = kWinningTeamLeader.getCivilizationInfo().GetType();
@@ -7010,7 +7010,7 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 							gDLL->UnlockAchievement(ACHIEVEMENT_SCENARIO_02_WIN_IROQUOIS);
 					}
 
-					//DLC3 Scenario Win Achievements
+
 					if(bUsingDLC3Scenario)
 					{
 						CvString strCivType = kWinningTeamLeader.getCivilizationInfo().GetType();
@@ -7024,7 +7024,7 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 							gDLL->UnlockAchievement(ACHIEVEMENT_SCENARIO_03_WIN_TONGA);
 					}
 
-					//DLC4 Scenario Win Achievements
+
 					if(bUsingDLC4Scenario)
 					{
 						CvString strCivType = kWinningTeamLeader.getCivilizationInfo().GetType();
@@ -7043,22 +7043,22 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 						switch(winnerHandicapType)
 #endif
 						{
-						case 5:	//	Win scenario on Emperor (any civ)  YOU! The Conqueror
+						case 5:
 							gDLL->UnlockAchievement(ACHIEVEMENT_SCENARIO_04_WIN_EMPEROR);
 							break;
-						case 6:	//	Win scenario on Immortal (any civ)  Surviving Domesday
+						case 6:
 							gDLL->UnlockAchievement(ACHIEVEMENT_SCENARIO_04_WIN_IMMORTAL);
 							break;
-						case 7:	//	Win scenario on Deity (any civ)  Surviving Ragnarok
+						case 7:
 							gDLL->UnlockAchievement(ACHIEVEMENT_SCENARIO_04_WIN_DEITY);
 							break;
 						}
 					}
 
-					//DLC5 Scenario Win Achievements
+
 					if(bUsingDLC5Scenario)
 					{
-						// Civilization
+
 						CvString strCivType = kWinningTeamLeader.getCivilizationInfo().GetType();
 						if(strCivType == "CIVILIZATION_JAPAN")
 							gDLL->UnlockAchievement(ACHIEVEMENT_SCENARIO_05_WIN_JAPAN);
@@ -7069,25 +7069,25 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 						else if(strCivType == "CIVILIZATION_MONGOL")
 							gDLL->UnlockAchievement(ACHIEVEMENT_SCENARIO_05_WIN_MANCHU);
 
-						// Difficulty
+
 #ifdef AUI_WARNING_FIXES
 						switch (static_cast<int>(winnerHandicapType))
 #else
 						switch(winnerHandicapType)
 #endif
 						{
-						case 5: // Emperor
+						case 5:
 							gDLL->UnlockAchievement(ACHIEVEMENT_SCENARIO_05_WIN_EMPEROR);
 							break;
-						case 6: // Immortal
+						case 6:
 							gDLL->UnlockAchievement(ACHIEVEMENT_SCENARIO_05_WIN_IMMORTAL);
 							break;
-						case 7: // Deity
+						case 7:
 							gDLL->UnlockAchievement(ACHIEVEMENT_SCENARIO_05_WIN_DEITY);
 							break;
 						}
 
-						// Win in less than 100 turns
+
 						if(getGameTurn() >= 0 && getGameTurn() < 100)
 						{
 							gDLL->UnlockAchievement(ACHIEVEMENT_SCENARIO_05_WIN_100TURNS);
@@ -7095,10 +7095,10 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 
 					}
 
-					//DLC6 Scenario Win Achievements
+
 					if(bUsingDLC6Scenario)
 					{
-						// Civilization
+
 						CvString strCivType = kWinningTeamLeader.getCivilizationInfo().GetType();
 						if(strCivType == "CIVILIZATION_OTTOMAN")
 							gDLL->UnlockAchievement(ACHIEVEMENT_SCENARIO_06_WIN_HITTITES);
@@ -7111,26 +7111,26 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 						else if(strCivType == "CIVILIZATION_PERSIA")
 							gDLL->UnlockAchievement(ACHIEVEMENT_SCENARIO_06_WIN_PERSIA);
 
-						// Difficulty
+
 #ifdef AUI_WARNING_FIXES
 						switch (static_cast<int>(winnerHandicapType))
 #else
 						switch(winnerHandicapType)
 #endif
 						{
-						case 3: // Prince
+						case 3:
 							gDLL->UnlockAchievement(ACHIEVEMENT_SCENARIO_06_WIN_PRINCE);
 							break;
-						case 4: // King
+						case 4:
 							gDLL->UnlockAchievement(ACHIEVEMENT_SCENARIO_06_WIN_KING);
 							break;
-						case 5:	// Emperor
+						case 5:
 							gDLL->UnlockAchievement(ACHIEVEMENT_SCENARIO_06_WIN_EMPEROR);
 							break;
-						case 6:	// Immortal
+						case 6:
 							gDLL->UnlockAchievement(ACHIEVEMENT_SCENARIO_06_WIN_IMMORTAL);
 							break;
-						case 7:	// Deity
+						case 7:
 							gDLL->UnlockAchievement(ACHIEVEMENT_SCENARIO_06_WIN_DEITY);
 							break;
 						}
@@ -7151,40 +7151,40 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 					{
 						gDLL->UnlockAchievement(ACHIEVEMENT_XP1_22);
 
-						if(winnerHandicapType >= 7) //Deity or higher
+						if(winnerHandicapType >= 7)
 						{
 							if(pLeader == "LEADER_THEODORA")
 							{
 								typedef std::pair<int,int> Location;
 								typedef std::tr1::array<Location, 27> OriginalCitiesArray;
 								OriginalCitiesArray OriginalCities = {
-									Location(65,6), // Alexandria
-									Location(48,7), // Cyrene
-									Location(71,9),  // Caesarea
-									Location(79,13), // Palmyra
-									Location(74,14), // Damascus
-									Location(49,18), // Mistra
-									Location(68,20), // Seleucia
-									Location(73,20), // Antioch
-									Location(63,21), // Attalia
-									Location(76,21), // Edessa
-									Location(51,22), // Athens
-									Location(47,23), // Nicopolis
-									Location(57,23), // Ephesus
-									Location(67,24), // Iconium
-									Location(75,26), // Melitene
-									Location(63,27), // Dorylaeum
-									Location(50,28), // Thessalonica
-									Location(58,29), // Constantinople
-									Location(45,30), // Dyrrachium
-									Location(71,30), // Amasia
-									Location(54,31), // Adrianople
-									Location(64,32), // Amastris
-									Location(78,32), // Theodosiopolis
-									Location(49,34), // Naissus
-									Location(69,34), // Sinope
-									Location(75,34), // Trebizond
-									Location(45,35), // Sirmium	
+									Location(65,6),
+									Location(48,7),
+									Location(71,9),
+									Location(79,13),
+									Location(74,14),
+									Location(49,18),
+									Location(68,20),
+									Location(73,20),
+									Location(63,21),
+									Location(76,21),
+									Location(51,22),
+									Location(47,23),
+									Location(57,23),
+									Location(67,24),
+									Location(75,26),
+									Location(63,27),
+									Location(50,28),
+									Location(58,29),
+									Location(45,30),
+									Location(71,30),
+									Location(54,31),
+									Location(64,32),
+									Location(78,32),
+									Location(49,34),
+									Location(69,34),
+									Location(75,34),
+									Location(45,35),
 
 								};					
 
@@ -7192,7 +7192,7 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 								const PlayerTypes eActivePlayer = GC.getGame().getActivePlayer();
 								bool bHasAllCities = true;
 
-								//Test if we still own each city.
+
 								for(OriginalCitiesArray::iterator it = OriginalCities.begin(); it != OriginalCities.end(); ++it)
 								{
 									CvPlot* pkPlot = kMap.plot(it->first, it->second);
@@ -7221,42 +7221,42 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 								typedef std::pair<int,int> Location;
 								typedef std::tr1::array<Location, 29> OriginalCitiesArray;
 								OriginalCitiesArray OriginalCities = {
-									Location(10,16), // Russadir
-									Location(15,18), // Iol Caesarea
-									Location(30,18), // Carthage
-									Location(37,19), // Syracuse
-									Location(4,23),  // Gades
-									Location(13,25), // Carthago Nova
-									Location(37,27), // Neapoli
-									Location(41,27), // Brundisium
-									Location(1,29),  // Olisipo
-									Location(6,29),  // Emerita Augusta
-									Location(15,30), // Tarraco
-									Location(33,31), // Rome
-									Location(14,34), // Caesaraugusta
-									Location(20,36), // Narbo
-									Location(24,36), // Massilia
-									Location(40,36), // Salonae
-									Location(28,37), // Genua
-									Location(34,37), // Ravenna
-									Location(3,39),  // Brigantium
-									Location(30,40), // Milan
-									Location(16,42), // Mediolanum
-									Location(22,42), // Lundunum
-									Location(32,45), // Casta Regina
-									Location(41,45), // Carnutum
-									Location(14,47), // Portus Namnetum
-									Location(21,48), // Lutetia
-									Location(26,49), // Trier
-									Location(17,52), // Coriallum
-									Location(22,53)  // Gesoriacum
+									Location(10,16),
+									Location(15,18),
+									Location(30,18),
+									Location(37,19),
+									Location(4,23),
+									Location(13,25),
+									Location(37,27),
+									Location(41,27),
+									Location(1,29),
+									Location(6,29),
+									Location(15,30),
+									Location(33,31),
+									Location(14,34),
+									Location(20,36),
+									Location(24,36),
+									Location(40,36),
+									Location(28,37),
+									Location(34,37),
+									Location(3,39),
+									Location(30,40),
+									Location(16,42),
+									Location(22,42),
+									Location(32,45),
+									Location(41,45),
+									Location(14,47),
+									Location(21,48),
+									Location(26,49),
+									Location(17,52),
+									Location(22,53)
 								};
 
 								CvMap& kMap = GC.getMap();
 								const PlayerTypes eActivePlayer = GC.getGame().getActivePlayer();
 								bool bHasAllCities = true;
 
-								//Test if we still own each city.
+
 								for(OriginalCitiesArray::iterator it = OriginalCities.begin(); it != OriginalCities.end(); ++it)
 								{
 									CvPlot* pkPlot = kMap.plot(it->first, it->second);
@@ -7301,7 +7301,7 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 							gDLL->UnlockAchievement(ACHIEVEMENT_XP2_57);
 						}
 
-						// Difficulty
+
 						if (winnerHandicapType == eHandicapDeity)
 						{
 							gDLL->UnlockAchievement(ACHIEVEMENT_XP2_58);
@@ -7312,7 +7312,7 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 					{
 						gDLL->UnlockAchievement(ACHIEVEMENT_XP2_49);
 
-						// Difficulty
+
 						if (winnerHandicapType == eHandicapDeity)
 						{
 							CvString strCivType = kWinningTeamLeader.getCivilizationInfo().GetType();
@@ -7327,7 +7327,7 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 						}
 					}
 				}
-				//Win any multiplayer game
+
 				if(GC.getGame().isGameMultiPlayer() && kWinningTeamLeader.isHuman() && (GET_PLAYER(GC.getGame().getActivePlayer()).GetID() == kWinningTeamLeader.GetID()))
 				{
 					gDLL->UnlockAchievement(ACHIEVEMENT_WIN_MULTIPLAYER);
@@ -7351,8 +7351,8 @@ void CvGame::setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory)
 	}
 }
 
-//	--------------------------------------------------------------------------------
-// Check last slot to see if there is still a Victory slot open
+
+
 bool CvGame::isVictoryAvailable(VictoryTypes eVictory) const
 {
 	if(getTeamVictoryRank(eVictory, GC.getNUM_VICTORY_POINT_AWARDS() - 1) == NO_TEAM)
@@ -7363,8 +7363,8 @@ bool CvGame::isVictoryAvailable(VictoryTypes eVictory) const
 	return false;
 }
 
-//	--------------------------------------------------------------------------------
-/// What's the next victory slot available to be won?
+
+
 int CvGame::GetNextAvailableVictoryCompetitionRank(VictoryTypes eVictory) const
 {
 	for(int iRankLoop = 0; iRankLoop < GC.getNUM_VICTORY_POINT_AWARDS(); iRankLoop++)
@@ -7379,19 +7379,19 @@ int CvGame::GetNextAvailableVictoryCompetitionRank(VictoryTypes eVictory) const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::DoPlaceTeamInVictoryCompetition(VictoryTypes eNewVictory, TeamTypes eTeam)
 {
 	CvVictoryInfo* pkVictoryInfo = GC.getVictoryInfo(eNewVictory);
 	if(pkVictoryInfo == NULL)
 		return;
 
-	// Is there a slot open for this new Team?
+
 	if(isVictoryAvailable(eNewVictory))
 	{
 		CvTeam& kTeam = GET_TEAM(eTeam);
 
-		// Loop through and find first available slot
+
 		for(int iSlotLoop = 0; iSlotLoop < GC.getNUM_VICTORY_POINT_AWARDS(); iSlotLoop++)
 		{
 			if(getTeamVictoryRank(eNewVictory, iSlotLoop) == NO_TEAM)
@@ -7418,7 +7418,7 @@ void CvGame::DoPlaceTeamInVictoryCompetition(VictoryTypes eNewVictory, TeamTypes
 						Localization::String localizedSummary;
 
 						const char* szVictoryTextKey = pkVictoryInfo->GetTextKey();
-						// Active Team
+
 						if(eTeam == kCurNotifyPlayer.getTeam())
 						{
 							localizedText = youWonInfo;
@@ -7426,7 +7426,7 @@ void CvGame::DoPlaceTeamInVictoryCompetition(VictoryTypes eNewVictory, TeamTypes
 							localizedSummary = youWonSummary;
 							localizedSummary << iSlotLoop+1 << szVictoryTextKey;
 						}
-						// Met Team
+
 						else if(GET_TEAM(kCurNotifyPlayer.getTeam()).isHasMet(eTeam))
 						{
 							const char* szTeamLeaderNameKey = GET_PLAYER(kTeam.getLeaderID()).getNameKey();
@@ -7436,7 +7436,7 @@ void CvGame::DoPlaceTeamInVictoryCompetition(VictoryTypes eNewVictory, TeamTypes
 							localizedSummary = someoneWonSummary;
 							localizedSummary << szTeamLeaderNameKey << iSlotLoop+1 << szVictoryTextKey;
 						}
-						// Unmet Team
+
 						else
 						{
 							localizedText = unmetWonInfo;
@@ -7454,7 +7454,7 @@ void CvGame::DoPlaceTeamInVictoryCompetition(VictoryTypes eNewVictory, TeamTypes
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 TeamTypes CvGame::getTeamVictoryRank(VictoryTypes eNewVictory, int iRank) const
 {
 	CvAssert(iRank >= 0);
@@ -7464,7 +7464,7 @@ TeamTypes CvGame::getTeamVictoryRank(VictoryTypes eNewVictory, int iRank) const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setTeamVictoryRank(VictoryTypes eNewVictory, int iRank, TeamTypes eTeam)
 {
 	CvAssert(iRank >= 0);
@@ -7473,14 +7473,14 @@ void CvGame::setTeamVictoryRank(VictoryTypes eNewVictory, int iRank, TeamTypes e
 	m_ppaaiTeamVictoryRank[eNewVictory][iRank] = eTeam;
 }
 
-//	--------------------------------------------------------------------------------
-/// Returns the Average Military Might of all Players in the game
+
+
 int CvGame::GetWorldMilitaryStrengthAverage(PlayerTypes ePlayer, bool bIncludeMe, bool bIncludeOnlyKnown)
 {
 	int iWorldMilitaryStrength = 0;
 	int iNumAlivePlayers = 0;
 
-	// Look at our military strength relative to everyone else in the world
+
 	for(int iMajorLoop = 0; iMajorLoop < MAX_MAJOR_CIVS; iMajorLoop++)
 	{
 		if(GET_PLAYER((PlayerTypes) iMajorLoop).isAlive())
@@ -7504,20 +7504,20 @@ int CvGame::GetWorldMilitaryStrengthAverage(PlayerTypes ePlayer, bool bIncludeMe
 	return iWorldMilitaryStrength;
 }
 
-//	--------------------------------------------------------------------------------
-/// Returns the cached Total Research cost for the Religion Victory Competition
+
+
 int CvGame::GetTotalReligionTechCost() const
 {
 	return m_iTotalReligionTechCost;
 }
 
-//	--------------------------------------------------------------------------------
-/// Updates the cached Total Research cost for the Religion Victory Competition
+
+
 void CvGame::DoUpdateTotalReligionTechCost()
 {
 	TechTypes ePrereqTech = GetReligionTech();
 
-	// If it's been removed, then we're done here
+
 	if(ePrereqTech == NO_TECH)
 	{
 		m_iTotalReligionTechCost = -1;
@@ -7530,20 +7530,20 @@ void CvGame::DoUpdateTotalReligionTechCost()
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// Returns the cached World Average Tech Progress towards the Religion Victory Competition
+
+
 int CvGame::GetCachedWorldReligionTechProgress() const
 {
 	return m_iCachedWorldReligionTechProgress;
 }
 
-//	--------------------------------------------------------------------------------
-/// Updates the cached World Average Tech Progress towards the Religion Victory Competition
+
+
 void CvGame::DoUpdateCachedWorldReligionTechProgress()
 {
 	TechTypes ePrereqTech = GetReligionTech();
 
-	// If it's been removed, then we're done here
+
 	if(ePrereqTech == NO_TECH)
 	{
 		m_iCachedWorldReligionTechProgress = -1;
@@ -7555,7 +7555,7 @@ void CvGame::DoUpdateCachedWorldReligionTechProgress()
 
 	int iResearchLeftToReligionTech = 0;
 
-	// Look at every Team's progress
+
 	for(int iTeamLoop = 0; iTeamLoop < MAX_CIV_TEAMS; iTeamLoop++)
 	{
 		eTeam = (TeamTypes) iTeamLoop;
@@ -7571,30 +7571,30 @@ void CvGame::DoUpdateCachedWorldReligionTechProgress()
 	m_iCachedWorldReligionTechProgress = iResearchLeftToReligionTech / iNumTeams;
 }
 
-//	--------------------------------------------------------------------------------
-/// What Tech unlocks the Religion Race?
+
+
 TechTypes CvGame::GetReligionTech() const
 {
 	return m_eReligionTech;
 }
 
-//	--------------------------------------------------------------------------------
-/// Sets what Tech unlocks the Religion Race
+
+
 void CvGame::SetReligionTech(TechTypes eTech)
 {
-	// This function should only be called once under normal circumstances
+
 	CvAssert(m_eReligionTech == NO_TECH);
 
 	m_eReligionTech = eTech;
 }
 
-//	--------------------------------------------------------------------------------
-/// How much Research is left to get to the Tech which unlocks the Religious Race
+
+
 int CvGame::GetResearchLeftToReligionTech(TeamTypes eTeam)
 {
 	TechTypes eReligionTech = GetReligionTech();
 
-	// Didn't find anything
+
 	if(eReligionTech == NO_TECH)
 	{
 		return -1;
@@ -7606,23 +7606,23 @@ int CvGame::GetResearchLeftToReligionTech(TeamTypes eTeam)
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Recursive function to see how much Research is left to get to a Tech
+
+
 int CvGame::GetResearchLeftToTech(TeamTypes eTeam, TechTypes eTech)
 {
 	CvTechEntry* pkTechInfo = GC.getTechInfo(eTech);
 
-	//THIS SHOULD NEVER HAPPEN!
+
 	if(pkTechInfo == NULL)
 		return 0;
 
-	// Base Case - first Prereq AND Tech does not exist
+
 	if(pkTechInfo->GetPrereqAndTechs(0) == NO_TECH)
 	{
 		return pkTechInfo->GetResearchCost();
 	}
 
-	// Another base case! - Team already has tech
+
 	if(eTeam != NO_TEAM && GET_TEAM(eTeam).GetTeamTechs()->HasTech(eTech))
 	{
 		return 0;
@@ -7644,14 +7644,14 @@ int CvGame::GetResearchLeftToTech(TeamTypes eTeam, TechTypes eTech)
 	return pkTechInfo->GetResearchCost() + iPrereqTechCost;
 }
 
-//	--------------------------------------------------------------------------------
+
 GameStateTypes CvGame::getGameState()
 {
 	return m_eGameState;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setGameState(GameStateTypes eNewValue)
 {
 	if(getGameState() != eNewValue)
@@ -7694,18 +7694,18 @@ void CvGame::setGameState(GameStateTypes eNewValue)
 				}
 				if(bLocalPlayerLost)
 				{
-					//Handle any local losing achievements here.
 
-					//Are we playing DLC_01 - Mongol Scenario??
+
+
 					bool bUsingDLC1MongolScenario = gDLL->IsModActivated(CIV5_DLC_01_SCENARIO_MODID);
 					if(bUsingDLC1MongolScenario && getGameTurn() == 100)
 					{
 						gDLL->UnlockAchievement(ACHIEVEMENT_LOSE_SCENARIO_01);
 					}
 
-					//DLC_05 - Achievement for losing Invasion of Korea Scenario as Korea
+
 					bool bUsingDLC5Scenario = gDLL->IsModActivated(CIV5_DLC_05_SCENARIO_MODID);
-					if(bUsingDLC5Scenario) // && getGameTurn() == 100)
+					if(bUsingDLC5Scenario)
 					{
 						CvPlayerAI& kLocalPlayer = GET_PLAYER(getActivePlayer());
 						CvString strCivType = kLocalPlayer.getCivilizationInfo().GetType();
@@ -7717,7 +7717,7 @@ void CvGame::setGameState(GameStateTypes eNewValue)
 				}
 			}
 
-			//Write out time spent playing.
+
 			long iHours = getMinutesPlayed() / 60;
 			long iMinutes = getMinutesPlayed() % 60;
 
@@ -7740,7 +7740,7 @@ void CvGame::setGameState(GameStateTypes eNewValue)
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 CvGameSpeedInfo& CvGame::getGameSpeedInfo() const
 {
 	CvGameSpeedInfo* pkGameSpeedInfo = GC.getGameSpeedInfo(getGameSpeedType());
@@ -7752,18 +7752,18 @@ CvGameSpeedInfo& CvGame::getGameSpeedInfo() const
 	}
 
 #pragma warning ( push )
-#pragma warning ( disable : 6011 ) // Dereferencing NULL pointer
+#pragma warning ( disable : 6011 )
 	return *pkGameSpeedInfo;
 #pragma warning ( pop )
 }
 
-//	--------------------------------------------------------------------------------
+
 GameSpeedTypes CvGame::getGameSpeedType() const
 {
 	return CvPreGame::gameSpeed();
 }
 
-//	--------------------------------------------------------------------------------
+
 CvEraInfo& CvGame::getStartEraInfo() const
 {
 	CvEraInfo* pkStartEraInfo = GC.getEraInfo(getStartEra());
@@ -7775,25 +7775,25 @@ CvEraInfo& CvGame::getStartEraInfo() const
 	}
 
 #pragma warning ( push )
-#pragma warning ( disable : 6011 ) // Dereferencing NULL pointer
+#pragma warning ( disable : 6011 )
 	return *pkStartEraInfo;
 #pragma warning ( pop )
 }
 
-//	--------------------------------------------------------------------------------
+
 EraTypes CvGame::getStartEra() const
 {
 	return CvPreGame::era();
 }
 
-//	--------------------------------------------------------------------------------
+
 CalendarTypes CvGame::getCalendar() const
 {
 	return CvPreGame::calendar();
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getEndTurnMessagesReceived(int iIndex)
 {
 	CvAssertMsg(iIndex >= 0, "iIndex is expected to be non-negative (invalid Index)");
@@ -7802,7 +7802,7 @@ int CvGame::getEndTurnMessagesReceived(int iIndex)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::incrementEndTurnMessagesReceived(int iIndex)
 {
 	CvAssertMsg(iIndex >= 0, "iIndex is expected to be non-negative (invalid Index)");
@@ -7811,7 +7811,7 @@ void CvGame::incrementEndTurnMessagesReceived(int iIndex)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 PlayerTypes CvGame::getRankPlayer(int iRank)
 {
 	CvAssertMsg(iRank >= 0, "iRank is expected to be non-negative (invalid Rank)");
@@ -7820,7 +7820,7 @@ PlayerTypes CvGame::getRankPlayer(int iRank)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setRankPlayer(int iRank, PlayerTypes ePlayer)
 {
 	CvAssertMsg(iRank >= 0, "iRank is expected to be non-negative (invalid Rank)");
@@ -7833,7 +7833,7 @@ void CvGame::setRankPlayer(int iRank, PlayerTypes ePlayer)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getPlayerRank(PlayerTypes ePlayer)
 {
 	CvAssertMsg(ePlayer >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -7842,7 +7842,7 @@ int CvGame::getPlayerRank(PlayerTypes ePlayer)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setPlayerRank(PlayerTypes ePlayer, int iRank)
 {
 	CvAssertMsg(ePlayer >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -7852,7 +7852,7 @@ void CvGame::setPlayerRank(PlayerTypes ePlayer, int iRank)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getPlayerScore(PlayerTypes ePlayer)
 {
 	CvAssertMsg(ePlayer >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -7861,7 +7861,7 @@ int CvGame::getPlayerScore(PlayerTypes ePlayer)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setPlayerScore(PlayerTypes ePlayer, int iScore)
 {
 	CvAssertMsg(ePlayer >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -7877,7 +7877,7 @@ void CvGame::setPlayerScore(PlayerTypes ePlayer, int iScore)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 TeamTypes CvGame::getRankTeam(int iRank)
 {
 	CvAssertMsg(iRank >= 0, "iRank is expected to be non-negative (invalid Rank)");
@@ -7886,7 +7886,7 @@ TeamTypes CvGame::getRankTeam(int iRank)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setRankTeam(int iRank, TeamTypes eTeam)
 {
 	CvAssertMsg(iRank >= 0, "iRank is expected to be non-negative (invalid Rank)");
@@ -7899,7 +7899,7 @@ void CvGame::setRankTeam(int iRank, TeamTypes eTeam)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getTeamRank(TeamTypes eTeam)
 {
 	CvAssertMsg(eTeam >= 0, "eTeam is expected to be non-negative (invalid Index)");
@@ -7908,7 +7908,7 @@ int CvGame::getTeamRank(TeamTypes eTeam)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setTeamRank(TeamTypes eTeam, int iRank)
 {
 	CvAssertMsg(eTeam >= 0, "eTeam is expected to be non-negative (invalid Index)");
@@ -7918,7 +7918,7 @@ void CvGame::setTeamRank(TeamTypes eTeam, int iRank)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getTeamScore(TeamTypes eTeam) const
 {
 	CvAssertMsg(eTeam >= 0, "eTeam is expected to be non-negative (invalid Index)");
@@ -7927,7 +7927,7 @@ int CvGame::getTeamScore(TeamTypes eTeam) const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setTeamScore(TeamTypes eTeam, int iScore)
 {
 	CvAssertMsg(eTeam >= 0, "eTeam is expected to be non-negative (invalid Index)");
@@ -7937,7 +7937,7 @@ void CvGame::setTeamScore(TeamTypes eTeam, int iScore)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isOption(GameOptionTypes eIndex) const
 {
 	int i = 0;
@@ -7946,7 +7946,7 @@ bool CvGame::isOption(GameOptionTypes eIndex) const
 	return (i == 1);
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isOption(const char* pszOption) const
 {
 	int i = 0;
@@ -7955,20 +7955,20 @@ bool CvGame::isOption(const char* pszOption) const
 	return (i == 1);
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setOption(GameOptionTypes eIndex, bool bEnabled)
 {
 	CvPreGame::SetGameOption(eIndex, (int)bEnabled);
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setOption(const char* pszOption, bool bEnabled)
 {
 	CvPreGame::SetGameOption(pszOption, (int)bEnabled);
 }
 
 #if defined(LEKMOD_WC_RESPECT_ACTIVATION_ORDER)
-//	--------------------------------------------------------------------------------
+
 void CvGame::StoreTurnActivationOrder(const int* aiShuffle)
 {
 	if (aiShuffle == NULL)
@@ -7981,7 +7981,7 @@ void CvGame::StoreTurnActivationOrder(const int* aiShuffle)
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::GetTurnActivationOrderIndex(PlayerTypes ePlayer) const
 {
 	if (ePlayer < 0 || ePlayer >= MAX_PLAYERS)
@@ -7998,13 +7998,13 @@ int CvGame::GetTurnActivationOrderIndex(PlayerTypes ePlayer) const
 	return (int)ePlayer;
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::IsRandomizedTurnActivationOrderEnabled() const
 {
 	return isOption("GAMEOPTION_SIMULTANEOUS_PLAYER_TURN_ACTIVATION_ORDER_RANDOMIZED");
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::IsPreferredByTurnActivationOrder(PlayerTypes eA, PlayerTypes eB) const
 {
 	if (eB == NO_PLAYER)
@@ -8024,20 +8024,20 @@ bool CvGame::IsPreferredByTurnActivationOrder(PlayerTypes eA, PlayerTypes eB) co
 #endif
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isMPOption(MultiplayerOptionTypes eIndex) const
 {
 	return CvPreGame::multiplayerOptionEnabled(eIndex);
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setMPOption(MultiplayerOptionTypes eIndex, bool bEnabled)
 {
 	CvPreGame::setMultiplayerOption(eIndex, bEnabled);
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getUnitCreatedCount(UnitTypes eIndex)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -8046,7 +8046,7 @@ int CvGame::getUnitCreatedCount(UnitTypes eIndex)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::incrementUnitCreatedCount(UnitTypes eIndex)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -8055,7 +8055,7 @@ void CvGame::incrementUnitCreatedCount(UnitTypes eIndex)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getUnitClassCreatedCount(UnitClassTypes eIndex)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -8064,7 +8064,7 @@ int CvGame::getUnitClassCreatedCount(UnitClassTypes eIndex)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isUnitClassMaxedOut(UnitClassTypes eIndex, int iExtra)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -8087,7 +8087,7 @@ bool CvGame::isUnitClassMaxedOut(UnitClassTypes eIndex, int iExtra)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::incrementUnitClassCreatedCount(UnitClassTypes eIndex)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -8096,7 +8096,7 @@ void CvGame::incrementUnitClassCreatedCount(UnitClassTypes eIndex)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getBuildingClassCreatedCount(BuildingClassTypes eIndex)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -8105,7 +8105,7 @@ int CvGame::getBuildingClassCreatedCount(BuildingClassTypes eIndex)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isBuildingClassMaxedOut(BuildingClassTypes eIndex, int iExtra)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -8130,7 +8130,7 @@ bool CvGame::isBuildingClassMaxedOut(BuildingClassTypes eIndex, int iExtra)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::incrementBuildingClassCreatedCount(BuildingClassTypes eIndex)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -8139,7 +8139,7 @@ void CvGame::incrementBuildingClassCreatedCount(BuildingClassTypes eIndex)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getProjectCreatedCount(ProjectTypes eIndex)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -8148,7 +8148,7 @@ int CvGame::getProjectCreatedCount(ProjectTypes eIndex)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isProjectMaxedOut(ProjectTypes eIndex, int iExtra)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -8165,7 +8165,7 @@ bool CvGame::isProjectMaxedOut(ProjectTypes eIndex, int iExtra)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::incrementProjectCreatedCount(ProjectTypes eIndex, int iExtra)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -8173,7 +8173,7 @@ void CvGame::incrementProjectCreatedCount(ProjectTypes eIndex, int iExtra)
 	m_paiProjectCreatedCount[eIndex] += iExtra;
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isVictoryValid(VictoryTypes eIndex) const
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -8181,7 +8181,7 @@ bool CvGame::isVictoryValid(VictoryTypes eIndex) const
 	return CvPreGame::isVictory(eIndex);
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setVictoryValid(VictoryTypes eIndex, bool bValid)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -8189,7 +8189,7 @@ void CvGame::setVictoryValid(VictoryTypes eIndex, bool bValid)
 	CvPreGame::setVictory(eIndex, bValid);
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::areNoVictoriesValid() const
 {
 	bool bRtnValue = true;
@@ -8215,7 +8215,7 @@ bool CvGame::areNoVictoriesValid() const
 	return bRtnValue;
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isSpecialUnitValid(SpecialUnitTypes eIndex)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -8224,7 +8224,7 @@ bool CvGame::isSpecialUnitValid(SpecialUnitTypes eIndex)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::makeSpecialUnitValid(SpecialUnitTypes eIndex)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
@@ -8233,20 +8233,20 @@ void CvGame::makeSpecialUnitValid(SpecialUnitTypes eIndex)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isNukesValid() const
 {
 	return m_bNukesValid;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::makeNukesValid(bool bValid)
 {
 	m_bNukesValid = bValid;
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isInAdvancedStart() const
 {
 	for(int iPlayer = 0; iPlayer < MAX_PLAYERS; ++iPlayer)
@@ -8260,20 +8260,20 @@ bool CvGame::isInAdvancedStart() const
 	return false;
 }
 
-//	--------------------------------------------------------------------------------
+
 const CvString& CvGame::getName()
 {
 	return CvPreGame::gameName();
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setName(const char* szName)
 {
 	CvPreGame::setGameName(szName);
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isDestroyedCityName(CvString& szName) const
 {
 	std::vector<CvString>::const_iterator it;
@@ -8288,13 +8288,13 @@ bool CvGame::isDestroyedCityName(CvString& szName) const
 	return false;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::addDestroyedCityName(const CvString& szName)
 {
 	m_aszDestroyedCities.push_back(szName);
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isGreatPersonBorn(CvString& szName) const
 {
 	std::vector<CvString>::const_iterator it;
@@ -8309,16 +8309,16 @@ bool CvGame::isGreatPersonBorn(CvString& szName) const
 	return false;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::addGreatPersonBornName(const CvString& szName)
 {
 	m_aszGreatPeopleBorn.push_back(szName);
 }
 
 
-// Protected Functions...
 
-//	--------------------------------------------------------------------------------
+
+
 void CvGame::doTurn()
 {
 #ifndef FINAL_RELEASE
@@ -8336,7 +8336,7 @@ void CvGame::doTurn()
 		gDLL->AutoSave(false);
 	}
 
-	// END OF TURN
+
 
 #ifdef GAME_UPDATE_TURN_TIMER_ONCE_PER_TURN
 	setPreviousTurnLen(static_cast<float>(getMaxTurnLen()));
@@ -8381,11 +8381,11 @@ void CvGame::doTurn()
 		}
 	}
 #endif
-	//We reset the turn timer now so that we know that the turn timer has been reset at least once for
-	//this turn.  CvGameController::Update() will continue to reset the timer if there is prolonged ai processing.
+
+
 	resetTurnTimer(true);
 
-	// If player unit cycling has been canceled for this turn, set it back to normal for the next
+
 #ifdef AUI_WARNING_FIXES
 	ICvUserInterface2& kEngineUserInterface = *GC.GetEngineUserInterface();
 	kEngineUserInterface.setNoSelectionListCycle(false);
@@ -8404,7 +8404,7 @@ void CvGame::doTurn()
 	updateScore();
 
 #ifndef AUI_YIELDS_APPLIED_AFTER_TURN_NOT_BEFORE
-#ifndef LEKMOD_v34 // Process deals after happiness is applied.
+#ifndef LEKMOD_v34
 	m_kGameDeals.DoTurn();
 #endif
 #endif
@@ -8513,8 +8513,8 @@ void CvGame::doTurn()
 								{
 									if (!(pLoopUnit->isInCombat()))
 									{
-										// Unit not allowed to be here
-										if (GC.getMap().plotByIndexUnchecked(iI)->getNumFriendlyUnitsOfType(pLoopUnit) > /*1*/ GC.getPLOT_UNIT_LIMIT())
+
+										if (GC.getMap().plotByIndexUnchecked(iI)->getNumFriendlyUnitsOfType(pLoopUnit) >       GC.getPLOT_UNIT_LIMIT())
 										{
 											if (!pLoopUnit->jumpToNearestValidPlot())
 											{
@@ -8535,7 +8535,7 @@ void CvGame::doTurn()
 
 
 #ifdef AUI_YIELDS_APPLIED_AFTER_TURN_NOT_BEFORE
-	// Victory stuff
+
 	testVictory();
 #endif
 
@@ -8543,7 +8543,7 @@ void CvGame::doTurn()
 	constructTurnOrders();
 #else
 	if(isOption(GAMEOPTION_DYNAMIC_TURNS))
-	{// update turn mode for dynamic turn mode.
+	{
 		for(int teamIdx = 0; teamIdx < MAX_TEAMS; ++teamIdx)
 		{
 			CvTeam& curTeam = GET_TEAM((TeamTypes)teamIdx);
@@ -8552,23 +8552,23 @@ void CvGame::doTurn()
 	}
 #endif
 
-	// Configure turn active status for the beginning of the new turn.
+
 #ifdef AUI_GAME_BETTER_HYBRID_MODE
 	if (isAnySimultaneousTurns())
 #else
 	if(isOption(GAMEOPTION_DYNAMIC_TURNS) || isOption(GAMEOPTION_SIMULTANEOUS_TURNS))
 #endif
-	{// In multi-player with simultaneous turns, we activate all of the AI players
-	 // at the same time.  The human players who are playing simultaneous turns will be activated in updateMoves after all
-	 // the AI players are processed.
+	{
+
+
 		shuffleArray(aiShuffle, MAX_PLAYERS, getJonRand());
 
 		for(iI = 0; iI < MAX_PLAYERS; iI++)
 		{
 			iLoopPlayer = aiShuffle[iI];
 			CvPlayer& player = GET_PLAYER((PlayerTypes)iLoopPlayer);
-			// activate AI here, when they are done, activate human players in
-			// updateMoves
+
+
 			if(player.isAlive() && !player.isHuman())
 			{
 				player.setTurnActive(true);
@@ -8580,7 +8580,7 @@ void CvGame::doTurn()
 	else
 #else
 	if(isSimultaneousTeamTurns())
-	{//We're doing simultaneous team turns, activate the first team in sequence.
+	{
 		for(iI = 0; iI < MAX_TEAMS; iI++)
 		{
 			CvTeam& kTeam = GET_TEAM((TeamTypes)iI);
@@ -8593,22 +8593,22 @@ void CvGame::doTurn()
 	}
 	else if(!isOption(GAMEOPTION_SIMULTANEOUS_TURNS))
 #endif
-	{// player sequential turns.
-		// Sequential turns.  Activate the first player we find from the start, human or AI, who wants a sequential turn.
+	{
+
 		for(iI = 0; iI < MAX_PLAYERS; iI++)
 		{
 			if(GET_PLAYER((PlayerTypes)iI).isAlive() 
 #ifdef AUI_GAME_BETTER_HYBRID_MODE
 				)
 #else
-				&& !GET_PLAYER((PlayerTypes)iI).isSimultaneousTurns()) //we don't want to be a person who's doing a simultaneous turn for dynamic turn mode.
+				&& !GET_PLAYER((PlayerTypes)iI).isSimultaneousTurns())
 #endif
 			{
 				if(isPbem() && GET_PLAYER((PlayerTypes)iI).isHuman())
 				{
 					if(iI == getActivePlayer())
 					{
-						// Nobody else left alive
+
 						CvPreGame::setGameType(GAME_HOTSEAT_MULTIPLAYER);
 						GET_PLAYER((PlayerTypes)iI).setTurnActive(true);
 					}
@@ -8629,25 +8629,25 @@ void CvGame::doTurn()
 	}
 
 #ifndef AUI_YIELDS_APPLIED_AFTER_TURN_NOT_BEFORE
-	// Victory stuff
+
 	testVictory();
 #endif
 
-	// Who's Winning
+
 	if(GET_PLAYER(getActivePlayer()).isAlive() && !IsStaticTutorialActive())
 	{
-		// Don't show this stuff in MP
+
 		if(!isGameMultiPlayer())
 		{
-			int iTurnFrequency = /*25*/ GC.getPROGRESS_POPUP_TURN_FREQUENCY();
+			int iTurnFrequency =        GC.getPROGRESS_POPUP_TURN_FREQUENCY();
 
-			// This isn't exactly appropriate, but it'll do
+
 			iTurnFrequency *= getGameSpeedInfo().getTrainPercent();
 			iTurnFrequency /= 100;
 
 			if(getElapsedGameTurns() % iTurnFrequency == 0)
 			{
-				// This popup his the sync rand, so beware
+
 				CvPopupInfo kPopupInfo(BUTTONPOPUP_WHOS_WINNING);
 #ifdef AUI_WARNING_FIXES
 				kEngineUserInterface.AddPopup(kPopupInfo);
@@ -8657,8 +8657,8 @@ void CvGame::doTurn()
 			}
 		}
 	}
-#ifdef LEKMOD_v34 // Process deals after happiness is applied.
-	// Do hotseat here, since its turn based and not network based, so we don't want to do it in updateMoves();
+#ifdef LEKMOD_v34
+
 	if (isHotSeat() || !isGameMultiPlayer())
 	{
 		m_kGameDeals.DoTurn();
@@ -8667,7 +8667,7 @@ void CvGame::doTurn()
 	LogGameState();
 #ifndef AUTOSAVE_END_OF_TURN
 	if(isNetworkMultiPlayer())
-	{//autosave after doing a turn
+	{
 		gDLL->AutoSave(false);
 	}
 #endif
@@ -8683,14 +8683,14 @@ void CvGame::constructTurnOrders()
 
 	if (isOption(GAMEOPTION_DYNAMIC_TURNS) || isOption(GAMEOPTION_SIMULTANEOUS_TURNS))
 	{
-		// Simultaneous mode, every team set to turn order 0
+
 		for (iTeamIdx = 0; iTeamIdx < MAX_TEAMS; ++iTeamIdx)
 		{
 			CvTeam& kCurTeam = GET_TEAM((TeamTypes)iTeamIdx);
 			if (kCurTeam.isAlive())
 				kCurTeam.setTurnOrder(0);
 		}
-		// Hybrid mode, all teams that are at war are set to different turn orders
+
 		if (isOption(GAMEOPTION_DYNAMIC_TURNS))
 		{
 			bool abIsAliveHumanTeam[MAX_TEAMS] = {};
@@ -8726,7 +8726,7 @@ void CvGame::constructTurnOrders()
 			}
 		}
 	}
-	// Sequential mode, all teams are set to different turn orders
+
 	else
 	{
 		m_iLastTurnOrderID = MAX_TEAMS - 1;
@@ -8751,9 +8751,9 @@ void CvGame::calculateMaxTurnLengths()
 #else
 	if (getPitbossTurnTime() != 0)
 #endif
-	{//manually set turn time.
+	{
 		if (isPitboss())
-		{// Turn time is in hours
+		{
 			for (int iI = 0; iI <= m_iLastTurnOrderID; ++iI)
 			{
 				m_aiMaxTurnLengths.push_back(getPitbossTurnTime() * 3600);
@@ -8775,8 +8775,8 @@ void CvGame::calculateMaxTurnLengths()
 			int iMaxUnits = 0;
 			int iMaxCities = 0;
 
-			// Find out who has the most units and who has the most cities
-			// Calculate the max turn time based on the max number of units and cities
+
+
 			for (int iI = 0; iI < MAX_CIV_PLAYERS; ++iI)
 			{
 				const CvPlayer& kCurPlayer = GET_PLAYER((PlayerTypes)iI);
@@ -8793,7 +8793,7 @@ void CvGame::calculateMaxTurnLengths()
 				}
 			}
 
-			// Now set turn length based on base length and unit and city resources
+
 #ifdef AUI_GAME_RELATIVE_TURN_TIMERS
 			int iBaseTurnTime = kTurnTimer.getBaseTime();
 			int iExtraTurnTime = (kTurnTimer.getCityResource() * iMaxCities) + (kTurnTimer.getUnitResource() * iMaxUnits);
@@ -8814,22 +8814,22 @@ void CvGame::calculateMaxTurnLengths()
 #endif
 #endif
 
-//	--------------------------------------------------------------------------------
+
 ImprovementTypes CvGame::GetBarbarianCampImprovementType()
 {
 	return (ImprovementTypes)GC.getBARBARIAN_CAMP_IMPROVEMENT();
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::SetBarbarianReleaseTurn(int iValue)
 {
 	m_iEarliestBarbarianReleaseTurn = iValue;
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Determine a random Unit type
+
+
 UnitTypes CvGame::GetRandomSpawnUnitType(PlayerTypes ePlayer, bool bIncludeUUs, bool bIncludeRanged)
 {
 	UnitTypes eBestUnit = NO_UNIT;
@@ -8837,7 +8837,7 @@ UnitTypes CvGame::GetRandomSpawnUnitType(PlayerTypes ePlayer, bool bIncludeUUs, 
 	int iValue = 0;
 	int iBonusValue;
 
-	// Loop through all Unit Classes
+
 #ifdef AUI_WARNING_FIXES
 	for (uint iUnitLoop = 0; iUnitLoop < GC.getNumUnitInfos(); iUnitLoop++)
 #else
@@ -8855,7 +8855,7 @@ UnitTypes CvGame::GetRandomSpawnUnitType(PlayerTypes ePlayer, bool bIncludeUUs, 
 			CvUnitClassInfo* pkUnitClassInfo = GC.getUnitClassInfo((UnitClassTypes)pkUnitInfo->GetUnitClassType());
 			if(pkUnitClassInfo)
 			{
-				// If this is NOT a UU, add extra value so that the default unit is more likely to get picked
+
 				if(eLoopUnit == pkUnitClassInfo->getDefaultUnitIndex())
 					iBonusValue += 700;
 				else if(!bIncludeUUs)
@@ -8865,7 +8865,7 @@ UnitTypes CvGame::GetRandomSpawnUnitType(PlayerTypes ePlayer, bool bIncludeUUs, 
 			bValid = (pkUnitInfo->GetCombat() > 0);
 			if(bValid)
 			{
-				// Unit has combat strength, make sure it isn't only defensive (and with no ranged combat ability)
+
 				if(pkUnitInfo->GetRange() == 0)
 				{
 #ifdef AUI_WARNING_FIXES
@@ -8894,23 +8894,23 @@ UnitTypes CvGame::GetRandomSpawnUnitType(PlayerTypes ePlayer, bool bIncludeUUs, 
 			if(!bValid)
 				continue;
 
-			// Avoid Recon units
+
 			if(pkUnitInfo->GetDefaultUnitAIType() == UNITAI_EXPLORE)
 				continue;
 
-			// No Ranged units?
+
 			if(!bIncludeRanged && pkUnitInfo->GetRangedCombat() > 0)
 				continue;
 
-			// Must be land Unit
+
 			if(pkUnitInfo->GetDomainType() != DOMAIN_LAND)
 				continue;
 
-			// Must be able to train this thing
-			if(!GET_PLAYER(ePlayer).canTrain(eLoopUnit, false, false, false, /*bIgnoreUniqueUnitStatus*/ true))
+
+			if(!GET_PLAYER(ePlayer).canTrain(eLoopUnit, false, false, false,                             true))
 				continue;
 
-			// Random weighting
+
 			iValue = (1 + GC.getGame().getJonRandNum(1000, "Minor Civ Unit spawn Selection"));
 			iValue += iBonusValue;
 
@@ -8925,8 +8925,8 @@ UnitTypes CvGame::GetRandomSpawnUnitType(PlayerTypes ePlayer, bool bIncludeUUs, 
 	return eBestUnit;
 }
 
-//	--------------------------------------------------------------------------------
-/// Pick a random a Unit type that is ranked by unit power and restricted to units available to ePlayer's technology
+
+
 UnitTypes CvGame::GetCompetitiveSpawnUnitType(PlayerTypes ePlayer, bool bIncludeUUs, bool bIncludeRanged)
 {
 	CvAssertMsg(ePlayer >= 0, "ePlayer is expected to be non-negative (invalid Index)");
@@ -8934,7 +8934,7 @@ UnitTypes CvGame::GetCompetitiveSpawnUnitType(PlayerTypes ePlayer, bool bInclude
 
 	CvWeightedVector<UnitTypes, SAFE_ESTIMATE_NUM_UNITS, true> veUnitRankings;
 
-	// Loop through all Unit Classes
+
 #ifdef AUI_WARNING_FIXES
 	for (uint iUnitLoop = 0; iUnitLoop < GC.getNumUnitInfos(); iUnitLoop++)
 #else
@@ -8950,7 +8950,7 @@ UnitTypes CvGame::GetCompetitiveSpawnUnitType(PlayerTypes ePlayer, bool bInclude
 
 		bool bValid = (pkUnitInfo->GetCombat() > 0);
 
-		// Unit has combat strength, make sure it isn't only defensive (and with no ranged combat ability)
+
 		if(bValid && pkUnitInfo->GetRange() == 0)
 		{
 #ifdef AUI_WARNING_FIXES
@@ -8986,12 +8986,12 @@ UnitTypes CvGame::GetCompetitiveSpawnUnitType(PlayerTypes ePlayer, bool bInclude
 			continue;
 		}
 
-		// Default unit
+
 		if(eLoopUnit == pkUnitClassInfo->getDefaultUnitIndex())
 		{
-			// Allowed, do nothing
+
 		}
-		// Unique unit
+
 		else
 		{
 			if(!bIncludeUUs)
@@ -9000,8 +9000,8 @@ UnitTypes CvGame::GetCompetitiveSpawnUnitType(PlayerTypes ePlayer, bool bInclude
 			}
 			else
 			{
-				// Cannot be a UU from a civ that is in our game
-				for(int iMajorLoop = 0; iMajorLoop < MAX_PLAYERS; iMajorLoop++)  // MAX_PLAYERS so that we look at Barbarian UUs (ie. Brute) as well
+
+				for(int iMajorLoop = 0; iMajorLoop < MAX_PLAYERS; iMajorLoop++)
 				{
 					PlayerTypes eMajorLoop = (PlayerTypes) iMajorLoop;
 					if(GET_PLAYER(eMajorLoop).isAlive())
@@ -9019,26 +9019,26 @@ UnitTypes CvGame::GetCompetitiveSpawnUnitType(PlayerTypes ePlayer, bool bInclude
 			}
 		}
 
-		// Avoid Recon units
+
 		if(pkUnitInfo->GetDefaultUnitAIType() == UNITAI_EXPLORE)
 			continue;
 
-		// No Ranged units?
+
 		if(!bIncludeRanged && pkUnitInfo->GetRangedCombat() > 0)
 			continue;
 
-		// Must be land Unit
+
 		if(pkUnitInfo->GetDomainType() != DOMAIN_LAND)
 			continue;
 
-		// Must be able to train this thing
-		if(!GET_PLAYER(ePlayer).canTrain(eLoopUnit, false, false, false, /*bIgnoreUniqueUnitStatus*/ true))
+
+		if(!GET_PLAYER(ePlayer).canTrain(eLoopUnit, false, false, false,                             true))
 			continue;
 
 		veUnitRankings.push_back(eLoopUnit, pkUnitInfo->GetPower());
 	}
 
-	// Choose from weighted unit types
+
 	veUnitRankings.SortItems();
 	int iNumChoices = GC.getUNIT_SPAWN_NUM_CHOICES();
 	RandomNumberDelegate randFn = MakeDelegate(&GC.getGame(), &CvGame::getJonRandNum);
@@ -9047,10 +9047,10 @@ UnitTypes CvGame::GetCompetitiveSpawnUnitType(PlayerTypes ePlayer, bool bInclude
 	return eChosenUnit;
 }
 
-//	--------------------------------------------------------------------------------
+
 UnitTypes CvGame::GetRandomUniqueUnitType(bool bIncludeCivsInGame, bool bIncludeStartEra, bool bIncludeOldEras, bool bIncludeRanged)
 {
-	// Find the unique units that have already been assigned
+
 	std::set<UnitTypes> setUniquesAlreadyAssigned;
 	for(int iMinorLoop = MAX_MAJOR_CIVS; iMinorLoop < MAX_CIV_PLAYERS; iMinorLoop++)
 	{
@@ -9068,7 +9068,7 @@ UnitTypes CvGame::GetRandomUniqueUnitType(bool bIncludeCivsInGame, bool bInclude
 	
 	CvWeightedVector<UnitTypes, SAFE_ESTIMATE_NUM_UNITS, true> veUnitRankings;
 
-	// Loop through all Unit Classes
+
 #ifdef AUI_WARNING_FIXES
 	for (uint iUnitLoop = 0; iUnitLoop < GC.getNumUnitInfos(); iUnitLoop++)
 #else
@@ -9084,7 +9084,7 @@ UnitTypes CvGame::GetRandomUniqueUnitType(bool bIncludeCivsInGame, bool bInclude
 
 		bool bValid = (pkUnitInfo->GetCombat() > 0);
 
-		// Unit has combat strength, make sure it isn't only defensive (and with no ranged combat ability)
+
 		if(bValid && pkUnitInfo->GetRange() == 0)
 		{
 #ifdef AUI_WARNING_FIXES
@@ -9120,14 +9120,14 @@ UnitTypes CvGame::GetRandomUniqueUnitType(bool bIncludeCivsInGame, bool bInclude
 			continue;
 		}
 
-		// We only want unique units
+
 		if(eLoopUnit == pkUnitClassInfo->getDefaultUnitIndex())
 			continue;
 
-		// Is it a unique unit from a civ that is in our game?
+
 		if (!bIncludeCivsInGame)
 		{
-			for(int iMajorLoop = 0; iMajorLoop < MAX_PLAYERS; iMajorLoop++)  // MAX_PLAYERS so that we look at Barbarian UUs (ie. Brute) as well
+			for(int iMajorLoop = 0; iMajorLoop < MAX_PLAYERS; iMajorLoop++)
 			{
 				PlayerTypes eMajorLoop = (PlayerTypes) iMajorLoop;
 				if(GET_PLAYER(eMajorLoop).isAlive())
@@ -9144,19 +9144,19 @@ UnitTypes CvGame::GetRandomUniqueUnitType(bool bIncludeCivsInGame, bool bInclude
 		if(!bValid)
 			continue;
 
-		// Avoid Recon units
+
 		if(pkUnitInfo->GetDefaultUnitAIType() == UNITAI_EXPLORE)
 			continue;
 
-		// No Ranged units?
+
 		if(!bIncludeRanged && pkUnitInfo->GetRangedCombat() > 0)
 			continue;
 
-		// Must be land Unit
+
 		if(pkUnitInfo->GetDomainType() != DOMAIN_LAND)
 			continue;
 
-		// Technology level
+
 		TechTypes ePrereqTech = (TechTypes) pkUnitInfo->GetPrereqAndTech();
 		EraTypes ePrereqEra = NO_ERA;
 		if (ePrereqTech != NO_TECH)
@@ -9174,13 +9174,13 @@ UnitTypes CvGame::GetRandomUniqueUnitType(bool bIncludeCivsInGame, bool bInclude
 			if (!bIncludeStartEra)
 				continue;
 		}
-		else if (ePrereqEra < getStartEra()) // Assumption: NO_ERA < 0
+		else if (ePrereqEra < getStartEra())
 		{
 			if (!bIncludeOldEras)
 				continue;
 		}
 
-		// Is this Unit already assigned to another minor civ?
+
 		if (setUniquesAlreadyAssigned.count(eLoopUnit) > 0)
 			continue;
 
@@ -9199,7 +9199,7 @@ UnitTypes CvGame::GetRandomUniqueUnitType(bool bIncludeCivsInGame, bool bInclude
 	return eChosenUnit;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::updateWar()
 {
 	int iI, iJ;
@@ -9239,21 +9239,21 @@ void CvGame::updateWar()
 	}
 }
 
-//	-----------------------------------------------------------------------------------------------
+
 void CvGame::updateMoves()
 {
 	UnitHandle pLoopUnit;
-	pLoopUnit.ignoreDestruction(true); // It's acceptable for the unit to become invalid during AutoMoves()
+	pLoopUnit.ignoreDestruction(true);
 
 	int iLoop;
 	int iI;
 
 	static bool processPlayerAutoMoves = false;
 
-	// Process all AI first, then process players.
-	// Processing of the AI 'first' only occurs when the AI are activated first
-	// in doTurn, when MPSIMULTANEOUS_TURNS is set.  If the turns are sequential,
-	// only one human or AI is active at one time and this will process them in order.
+
+
+
+
 	FStaticVector<PlayerTypes, MAX_PLAYERS, true, c_eCiv5GameplayDLL, 0> playersToProcess;
 
 	for(iI = 0; iI < MAX_PLAYERS; iI++)
@@ -9263,7 +9263,7 @@ void CvGame::updateMoves()
 		{
 			playersToProcess.push_back(static_cast<PlayerTypes>(iI));
 			processPlayerAutoMoves = false;
-			// Notice the break.  Even if there is more than one AI with an active turn, we do them sequentially.
+
 			break;
 		}
 	}
@@ -9273,17 +9273,17 @@ void CvGame::updateMoves()
 	int currentTurn = getGameTurn();
 	bool activatePlayers = playersToProcess.empty() && m_lastTurnAICivsProcessed != currentTurn;
 #endif
-	// If no AI with an active turn, check humans.
+
 	if(playersToProcess.empty())
 	{
 		SetLastTurnAICivsProcessed();
 		if(gDLL->allAICivsProcessedThisTurn())
-		{//everyone is finished processing the AI civs.
+		{
 			PlayerTypes eActivePlayer = getActivePlayer();
 			if(eActivePlayer != NO_PLAYER && CvPreGame::slotStatus(eActivePlayer) == SS_OBSERVER)
-			{//if the active player is an observer, send a turn complete so we don't hold up the game.
-				//We wait until allAICivsProcessedThisTurn to prevent a race condition where an observer could send turn complete,
-				//before all clients have cleared the netbarrier locally.
+			{
+
+
 				CvPlayer& kActivePlayer = GET_PLAYER(eActivePlayer);
 				kActivePlayer.GetPlayerAchievements().EndTurn();
 				gDLL->sendTurnComplete();
@@ -9294,8 +9294,8 @@ void CvGame::updateMoves()
 			{
 #ifdef AUI_GAME_BETTER_HYBRID_MODE
 				if (isAnySimultaneousTurns())
-				{//fully simultaneous turns.
-					// All humans must be ready for auto moves
+				{
+
 					bool readyForAutoMoves = true;
 					for (iI = 0; iI < MAX_PLAYERS; iI++)
 					{
@@ -9303,8 +9303,8 @@ void CvGame::updateMoves()
 						if (player.isHuman() && player.getTurnOrder() == m_iCurrentTurnOrderActive && !player.isObserver() && !player.isAutoMoves())
 #else
 				if(!GC.getGame().isOption(GAMEOPTION_DYNAMIC_TURNS) && GC.getGame().isOption(GAMEOPTION_SIMULTANEOUS_TURNS))
-				{//fully simultaneous turns.
-					// All humans must be ready for auto moves
+				{
+
 					bool readyForAutoMoves = true;
 					for(iI = 0; iI < MAX_PLAYERS; iI++)
 					{
@@ -9333,7 +9333,7 @@ void CvGame::updateMoves()
 	}
 
 #ifdef AUI_GAME_BETTER_HYBRID_MODE
-	// This needed to be moved so that simultaneous mode players would not be activated if there are any active human players
+
 	bool activatePlayers = playersToProcess.empty() && m_lastTurnAICivsProcessed != getGameTurn();
 #endif
 
@@ -9361,7 +9361,7 @@ void CvGame::updateMoves()
 
 					int iReadyUnitsNow = player.GetCountReadyUnits();
 
-					// Was a move completed, if so save off which turn slice this was
+
 					if(iReadyUnitsNow < iReadyUnitsBeforeMoves)
 					{
 						player.SetLastSliceMoved(m_iTurnSlice);
@@ -9409,7 +9409,7 @@ void CvGame::updateMoves()
 				if(player.isAutoMoves() && (!player.isHuman() || processPlayerAutoMoves))
 				{
 					bool bRepeatAutomoves = false;
-					int iRepeatPassCount = 2;	// Prevent getting stuck in a loop
+					int iRepeatPassCount = 2;
 					do
 					{
 						for(pLoopUnit = player.firstUnit(&iLoop); pLoopUnit; pLoopUnit = player.nextUnit(&iLoop))
@@ -9422,12 +9422,12 @@ void CvGame::updateMoves()
 
 							pLoopUnit->AutoMission();
 
-							// Does the unit still have movement points left over?
+
 							if(player.isHuman() && CvUnitMission::HasCompletedMoveMission(pLoopUnit) && pLoopUnit->canMove() && !pLoopUnit->IsDoingPartialMove() && !pLoopUnit->IsAutomated())
 							{
 								if(player.isEndTurn())
 								{
-									bRepeatAutomoves = true;	// Do another pass.
+									bRepeatAutomoves = true;
 									NET_MESSAGE_DEBUG_OSTR_ALWAYS("UpdateMoves() : player " << player.GetID() << " " << player.getName()
 																									<< " AutoMission did not use up all movement points for " 
 																									<< pLoopUnit->getName() << " id=" << pLoopUnit->GetID());
@@ -9437,21 +9437,21 @@ void CvGame::updateMoves()
 								}
 							}
 
-							// slewis sez:
 
-							// This is a short-term solution to a problem where a unit with an auto-mission (a queued, multi-turn) move order cannot reach its destination, but
-							//  does not re-enter the "need order" list because this code is processed at the end of turns. The result is that the player could easily "miss" moving
-							//  the unit this turn because it displays "next turn" rather than "skip unit turn" and the unit is not added to the "needs orders" list.
-							// To correctly fix this problem, we would need some way to determine if any of the auto-missions are invalid before the player can end the turn and
-							//  activate the units that have a problem.
-							// The problem with evaluating this is that, with one unit per tile, we don't know what is a valid move until other units have moved.
-							// (For example, if one unit was to follow another, we would want the unit in the lead to move first and then have the following unit move, in order
-							//  to prevent the following unit from constantly waking up because it can't move into the next tile. This is currently not supported.)
 
-							// This short-term solution will reactivate a unit after the player clicks "next turn". It will appear strange, because the player will be asked to move
-							// a unit after they clicked "next turn", but it is to give the player a chance to move all of their units.
 
-							// jrandall sez: In MP matches, let's not OOS or stall the game.
+
+
+
+
+
+
+
+
+
+
+
+
 							if(!isNetworkMultiPlayer() && !isOption(GAMEOPTION_END_TURN_TIMER_ENABLED))
 							{
 								if(pLoopUnit && player.isEndTurn() && pLoopUnit->GetLengthMissionQueue() == 0 && pLoopUnit->GetActivityType() == ACTIVITY_AWAKE && pLoopUnit->canMove() && !pLoopUnit->IsDoingPartialMove() && !pLoopUnit->IsAutomated())
@@ -9472,9 +9472,9 @@ void CvGame::updateMoves()
 					}
 					while(bRepeatAutomoves && iRepeatPassCount--);
 
-					// check if the (for now human) player is overstacked and move the units
-					//if (player.isHuman())
-					// slewis - I changed this to only be the AI because human players should have the tools to deal with this now
+
+
+
 					if(!player.isHuman())
 					{
 						for(pLoopUnit = player.firstUnit(&iLoop); pLoopUnit; pLoopUnit = player.nextUnit(&iLoop))
@@ -9490,7 +9490,7 @@ void CvGame::updateMoves()
 									CvUnit* pLoopUnitInner = ::getUnit(*pUnitNodeInner);
 									if(pLoopUnitInner && pLoopUnit != pLoopUnitInner)
 									{
-										if(pLoopUnit->getOwner() == pLoopUnitInner->getOwner())	// Could be a dying Unit from another player here
+										if(pLoopUnit->getOwner() == pLoopUnitInner->getOwner())
 										{
 											if(pLoopUnit->AreUnitsOfSameType(*pLoopUnitInner) && pLoopUnit->plot()->getNumFriendlyUnitsOfType(pLoopUnit.pointer()) > GC.getPLOT_UNIT_LIMIT())
 											{
@@ -9514,25 +9514,25 @@ void CvGame::updateMoves()
 						}
 					}
 
-					// If we completed the processing of the auto-moves, flag it.
+
 					if(player.isEndTurn() || !player.isHuman())
 					{
 						player.setProcessedAutoMoves(true);
 					}
 				}
 
-				// KWG: This code should go into CheckPlayerTurnDeactivate
+
 #ifdef AUI_YIELDS_APPLIED_AFTER_TURN_NOT_BEFORE
 				if (!player.isEndTurn() && (!player.isHuman() || gDLL->HasReceivedTurnComplete(player.GetID())))
 #else
-				if(!player.isEndTurn() && gDLL->HasReceivedTurnComplete(player.GetID()) && player.isHuman() /* && (isNetworkMultiPlayer() || (!isNetworkMultiPlayer() && player.GetID() != getActivePlayer())) */)
+				if(!player.isEndTurn() && gDLL->HasReceivedTurnComplete(player.GetID()) && player.isHuman()                                                                                                      )
 #endif
 				{
 					if(!player.hasBusyUnitOrCity())
 					{
 						player.setEndTurn(true);
 						if(player.isEndTurn())
-						{//If the player's turn ended, indicate it in the log.  We only do so when the end turn state has changed to prevent useless log spamming in multiplayer. 
+						{
 							NET_MESSAGE_DEBUG_OSTR_ALWAYS("UpdateMoves() : player.setEndTurn(true) called for player " << player.GetID() << " " << player.getName());
 						}
 					}
@@ -9556,16 +9556,16 @@ void CvGame::updateMoves()
 #else
 		if (isOption(GAMEOPTION_DYNAMIC_TURNS) || isOption(GAMEOPTION_SIMULTANEOUS_TURNS))
 #endif
-		{//Activate human players who are playing simultaneous turns now that we've finished moves for the AI.
+		{
 #ifdef AUI_GAME_FIX_MULTIPLAYER_BARBARIANS_SPAWN_AFTER_MOVING
-			// Only spawn barbarians now, otherwise the barbarian player gets a turn to move/attack after its units spawn before the human players do
+
 			if (GC.getGame().getElapsedGameTurns() > 0)
 			{
 			CvBarbarians::DoCamps();
 			CvBarbarians::DoUnits();
 			}
 #endif
-			// KWG: This code should go into CheckPlayerTurnDeactivate
+
 #ifdef NQM_GAME_RANDOMIZE_TURN_ACTIVATION_ORDER_IN_SIMULTANEOUS
 			int aiShuffle[MAX_PLAYERS];
 			if (GC.getGame().isOption("GAMEOPTION_SIMULTANEOUS_PLAYER_TURN_ACTIVATION_ORDER_RANDOMIZED"))
@@ -9601,7 +9601,7 @@ void CvGame::updateMoves()
 				}
 			}
 #ifndef AUI_YIELDS_APPLIED_AFTER_TURN_NOT_BEFORE
-#ifdef LEKMOD_v34 // Process deals after the player's turns are activated
+#ifdef LEKMOD_v34
 			m_kGameDeals.DoTurn();
 #endif
 #endif
@@ -9609,7 +9609,7 @@ void CvGame::updateMoves()
 	}
 }
 
-//	-----------------------------------------------------------------------------------------------
+
 void CvGame::updateTimers()
 {
 	int iI;
@@ -9625,7 +9625,7 @@ void CvGame::updateTimers()
 
 	if(isHotSeat())
 	{
-		// For Hot Seat, all the AIs will get a chance to do diplomacy with the active human player
+
 		PlayerTypes eActivePlayer = getActivePlayer();
 		if(eActivePlayer != NO_PLAYER)
 		{
@@ -9636,14 +9636,14 @@ void CvGame::updateTimers()
 	}
 }
 
-//	-----------------------------------------------------------------------------------------------
+
 void CvGame::UpdatePlayers()
 {
 	int numActive = 0;
 	for(int i = 0; i < MAX_PLAYERS; i++)
 	{
 		CvPlayer& kPlayer = GET_PLAYER((PlayerTypes)i);
-		// slewis - should it check for active turn?
+
 		if(kPlayer.isAlive() && kPlayer.isTurnActive())
 		{
 			kPlayer.UpdateNotifications();
@@ -9653,7 +9653,7 @@ void CvGame::UpdatePlayers()
 	CvAssert(numActive == getNumGameTurnActive());
 }
 
-//	-----------------------------------------------------------------------------------------------
+
 void CvGame::testAlive()
 {
 	int iI;
@@ -9676,7 +9676,7 @@ bool CvGame::testVictory(VictoryTypes eVictory, TeamTypes eTeam, bool* pbEndScor
 		return false;
 	}
 
-	// Has the player already achieved this victory?
+
 	if(GET_TEAM(eTeam).isVictoryAchieved(eVictory))
 	{
 		return false;
@@ -9688,13 +9688,13 @@ bool CvGame::testVictory(VictoryTypes eVictory, TeamTypes eTeam, bool* pbEndScor
 		*pbEndScore = false;
 	}
 
-	// Can't end the game unless a certain number of turns has already passed (ignore this on Debug Micro Map because it's only for testing)
-	if(getElapsedGameTurns() <= /*10*/ GC.getMIN_GAME_TURNS_ELAPSED_TO_TEST_VICTORY() && (GC.getMap().getWorldSize() != WORLDSIZE_DEBUG))
+
+	if(getElapsedGameTurns() <=        GC.getMIN_GAME_TURNS_ELAPSED_TO_TEST_VICTORY() && (GC.getMap().getWorldSize() != WORLDSIZE_DEBUG))
 	{
 		return false;
 	}
 
-	// End Score
+
 	if(bValid)
 	{
 		if(pkVictoryInfo->isEndScore())
@@ -9739,7 +9739,7 @@ bool CvGame::testVictory(VictoryTypes eVictory, TeamTypes eTeam, bool* pbEndScor
 		}
 	}
 
-	// Target Score
+
 	if(bValid)
 	{
 		if(pkVictoryInfo->isTargetScore())
@@ -9779,7 +9779,7 @@ bool CvGame::testVictory(VictoryTypes eVictory, TeamTypes eTeam, bool* pbEndScor
 		}
 	}
 
-	// Conquest
+
 	if(bValid)
 	{
 		if(pkVictoryInfo->isConquest())
@@ -9815,7 +9815,7 @@ bool CvGame::testVictory(VictoryTypes eVictory, TeamTypes eTeam, bool* pbEndScor
 		}
 	}
 
-	// Diplomacy Victory
+
 	if(bValid)
 	{
 		if(pkVictoryInfo->isDiploVote())
@@ -9835,12 +9835,12 @@ bool CvGame::testVictory(VictoryTypes eVictory, TeamTypes eTeam, bool* pbEndScor
 		}
 	}
 
-	// Culture victory
+
 	if(bValid)
 	{
 		if(pkVictoryInfo->isInfluential())
 		{
-			// See if all players on this team have influential culture with all other players (still alive)
+
 			bValid = false;
 			for(int iPlayerLoop = 0; iPlayerLoop < MAX_PLAYERS; iPlayerLoop++)
 			{
@@ -9851,7 +9851,7 @@ bool CvGame::testVictory(VictoryTypes eVictory, TeamTypes eTeam, bool* pbEndScor
 					{
 						if (kPlayer.GetCulture()->GetNumCivsInfluentialOn() >= m_pGameCulture->GetNumCivsInfluentialForWin())
 						{
-							// Not enough civs for a win
+
 							bValid = true;
 							break;
 						}
@@ -9861,7 +9861,7 @@ bool CvGame::testVictory(VictoryTypes eVictory, TeamTypes eTeam, bool* pbEndScor
 		}
 	}
 
-	// Religion in all Cities
+
 	if(bValid)
 	{
 		if(pkVictoryInfo->IsReligionInAllCities())
@@ -9873,7 +9873,7 @@ bool CvGame::testVictory(VictoryTypes eVictory, TeamTypes eTeam, bool* pbEndScor
 
 			PlayerTypes eLoopPlayer;
 
-			// See if all players on this team have their State Religion in their Cities
+
 			for(int iPlayerLoop = 0; iPlayerLoop < MAX_PLAYERS; iPlayerLoop++)
 			{
 				eLoopPlayer = (PlayerTypes) iPlayerLoop;
@@ -9884,7 +9884,7 @@ bool CvGame::testVictory(VictoryTypes eVictory, TeamTypes eTeam, bool* pbEndScor
 					{
 						for(pLoopCity = GET_PLAYER(eLoopPlayer).firstCity(&iLoop); pLoopCity != NULL; pLoopCity = GET_PLAYER(eLoopPlayer).nextCity(&iLoop))
 						{
-							// Any Cities WITHOUT State Religion?
+
 							if(pLoopCity->GetPlayersReligion() != eLoopPlayer)
 							{
 								bReligionInAllCities = false;
@@ -9907,7 +9907,7 @@ bool CvGame::testVictory(VictoryTypes eVictory, TeamTypes eTeam, bool* pbEndScor
 		}
 	}
 
-	// FindAllNaturalWonders
+
 	if(bValid)
 	{
 		if(pkVictoryInfo->IsFindAllNaturalWonders())
@@ -9921,7 +9921,7 @@ bool CvGame::testVictory(VictoryTypes eVictory, TeamTypes eTeam, bool* pbEndScor
 		}
 	}
 
-	// Population Percent
+
 	if(bValid)
 	{
 		if(getAdjustedPopulationPercent(eVictory) > 0)
@@ -9933,7 +9933,7 @@ bool CvGame::testVictory(VictoryTypes eVictory, TeamTypes eTeam, bool* pbEndScor
 		}
 	}
 
-	// Land Percent
+
 	if(bValid)
 	{
 		if(getAdjustedLandPercent(eVictory) > 0)
@@ -9949,7 +9949,7 @@ bool CvGame::testVictory(VictoryTypes eVictory, TeamTypes eTeam, bool* pbEndScor
 		}
 	}
 
-	// Buildings
+
 	if(bValid)
 	{
 #ifdef AUI_WARNING_FIXES
@@ -9972,7 +9972,7 @@ bool CvGame::testVictory(VictoryTypes eVictory, TeamTypes eTeam, bool* pbEndScor
 		}
 	}
 
-	// Projects
+
 	if(bValid)
 	{
 #ifdef AUI_WARNING_FIXES
@@ -9997,12 +9997,12 @@ bool CvGame::testVictory(VictoryTypes eVictory, TeamTypes eTeam, bool* pbEndScor
 	return bValid;
 }
 
-//	---------------------------------------------------------------------------
+
 void CvGame::testVictory()
 {
 	bool bEndScore = false;
 
-	// Send a game event to allow a Lua script to set the victory state
+
 	ICvEngineScriptSystem1* pkScriptSystem = gDLL->GetScriptSystem();
 	if(pkScriptSystem)
 	{
@@ -10039,7 +10039,7 @@ void CvGame::testVictory()
 		m_aiTeamCompetitionWinnersScratchPad[iTeamLoop] = 0;
 	}
 
-	// Look at each Victory Competition
+
 	for(iVictoryLoop = 0; iVictoryLoop < GC.getNumVictoryInfos(); iVictoryLoop++)
 	{
 		const VictoryTypes eVictory = static_cast<VictoryTypes>(iVictoryLoop);
@@ -10056,7 +10056,7 @@ void CvGame::testVictory()
 				{
 					if(testVictory(eVictory, (TeamTypes)iTeamLoop, &bEndScore))
 					{
-						// Some Victories win the game for the player who accomplishes it.  If this happens for multiple teams in the same turn we have to break the tie
+
 						if(pkVictoryInfo->IsWinsGame())
 						{
 							std::vector<int> aWinner;
@@ -10066,7 +10066,7 @@ void CvGame::testVictory()
 
 							bEndGame = true;
 						}
-						// Non game-ending Competition winner placement
+
 						else
 						{
 							m_aiTeamCompetitionWinnersScratchPad[iNumCompetitionWinners] = iTeamLoop;
@@ -10077,7 +10077,7 @@ void CvGame::testVictory()
 			}
 		}
 
-		// Any (non game-ending) Competition placers?
+
 		if(iNumCompetitionWinners > 0)
 		{
 			int iRand;
@@ -10102,7 +10102,7 @@ void CvGame::testVictory()
 		}
 	}
 
-	// Game could have been set to ending already by an insta-win victory, or we might have hit the end of time manually
+
 	if(!bEndGame)
 	{
 		bEndGame = IsEndGameTechResearched();
@@ -10126,7 +10126,7 @@ void CvGame::testVictory()
 
 			aaiGameWinners.clear();
 
-			// Find out who is in the lead with VPs
+
 			int iBestVPNum = 0;
 			int iVPs;
 			for(iTeamLoop = 0; iTeamLoop < MAX_CIV_TEAMS; iTeamLoop++)
@@ -10139,7 +10139,7 @@ void CvGame::testVictory()
 				}
 			}
 
-			// Now that we know what the highest is, see if any players are tied
+
 			for(iTeamLoop = 0; iTeamLoop < MAX_CIV_TEAMS; iTeamLoop++)
 			{
 				iVPs = GET_TEAM((TeamTypes) iTeamLoop).getVictoryPoints();
@@ -10178,7 +10178,7 @@ void CvGame::testVictory()
 
 			aaiGameWinners.clear();
 
-			// Find out who is in the lead with VPs
+
 			int iBestVPNum = 0;
 			int iVPs;
 			for(iTeamLoop = 0; iTeamLoop < MAX_CIV_TEAMS; iTeamLoop++)
@@ -10191,7 +10191,7 @@ void CvGame::testVictory()
 				}
 			}
 
-			// Now that we know what the highest is, see if any players are tied
+
 			for(iTeamLoop = 0; iTeamLoop < MAX_CIV_TEAMS; iTeamLoop++)
 			{
 				iVPs = GET_TEAM((TeamTypes) iTeamLoop).GetScore();
@@ -10208,7 +10208,7 @@ void CvGame::testVictory()
 	}
 
 
-	// Two things can set this to true: either someone has finished an insta-win victory, or the game-ending tech has been researched and we're now tallying VPs
+
 	if(bEndGame && !aaiGameWinners.empty())
 	{
 		int iWinner = getJonRandNum(aaiGameWinners.size(), "Victory tie breaker");
@@ -10237,50 +10237,50 @@ void CvGame::testVictory()
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 CvRandom& CvGame::getMapRand()
 {
 	return m_mapRand;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getMapRandNum(int iNum, const char* pszLog)
 {
 	return m_mapRand.get(iNum, pszLog);
 }
 
 
-//	--------------------------------------------------------------------------------
+
 CvRandom& CvGame::getJonRand()
 {
 	return m_jonRand;
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Get a synchronous random number in the range of 0...iNum-1
-/// Allows for logging.
+
+
+
 int CvGame::getJonRandNum(int iNum, const char* pszLog)
 {
 	return m_jonRand.get(iNum, pszLog);
 }
 
 #ifdef AUI_BINOM_RNG
-//	--------------------------------------------------------------------------------
-/// Get a synchronous random number in the range of 0...iNum-1 with binomial distribution
-/// Allows for logging.
+
+
+
 int CvGame::getJonRandNumBinom(int iNum, const char* pszLog)
 {
 	return m_jonRand.getBinom(iNum, pszLog);
 }
 #endif
 
-//	--------------------------------------------------------------------------------
-/// Get a synchronous random number in the range of 0...iNum-1
-/// Allows for logging.
-// Unfortunately we need to name the method differently so that the non-va one can still exist without
-// causing ambiguous call errors.  The non VA one is needed for use as a delegate
+
+
+
+
+
 int CvGame::getJonRandNumVA(int iNum, const char* pszLog, ...)
 {
 	if (pszLog)
@@ -10299,15 +10299,15 @@ int CvGame::getJonRandNumVA(int iNum, const char* pszLog, ...)
 		return m_jonRand.get(iNum);
 }
 
-//	--------------------------------------------------------------------------------
-/// Get an asynchronous random number in the range of 0...iNum-1
-/// This should only be called by operations that will not effect gameplay!
+
+
+
 int CvGame::getAsyncRandNum(int iNum, const char* pszLog)
 {
 	return GC.getASyncRand().get(iNum, pszLog);
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::calculateSyncChecksum()
 {
 	CvUnit* pLoopUnit;
@@ -10507,7 +10507,7 @@ int CvGame::calculateSyncChecksum()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::calculateOptionsChecksum()
 {
 	int iValue;
@@ -10538,12 +10538,12 @@ int CvGame::calculateOptionsChecksum()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::addReplayMessage(ReplayMessageTypes eType, PlayerTypes ePlayer, const CvString& pszText, int iPlotX, int iPlotY)
 {
 	int iGameTurn = getGameTurn();
 
-	//If this is a plot-related message, search for any previously created messages that match this one and just add the plot.
+
 	if(iPlotX != -1 || iPlotY != -1)
 	{
 		for(ReplayMessageList::iterator it = m_listReplayMessages.begin(); it != m_listReplayMessages.end(); ++it)
@@ -10564,12 +10564,12 @@ void CvGame::addReplayMessage(ReplayMessageTypes eType, PlayerTypes ePlayer, con
 }
 
 #ifdef REPLAY_MESSAGE_EXTENDED
-// overload with iData1 and iData2
+
 void CvGame::addReplayMessage(ReplayMessageTypes eType, PlayerTypes ePlayer, const CvString& pszText, int iData1, int iData2, int iPlotX, int iPlotY)
 {
 	int iGameTurn = getGameTurn();
 
-	//If this is a plot-related message, search for any previously created messages that match this one and just add the plot.
+
 	if (iPlotX != -1 || iPlotY != -1)
 	{
 		for (ReplayMessageList::iterator it = m_listReplayMessages.begin(); it != m_listReplayMessages.end(); ++it)
@@ -10590,19 +10590,19 @@ void CvGame::addReplayMessage(ReplayMessageTypes eType, PlayerTypes ePlayer, con
 }
 #endif
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::clearReplayMessageMap()
 {
 	m_listReplayMessages.clear();
 }
 
-//	--------------------------------------------------------------------------------
+
 uint CvGame::getNumReplayMessages() const
 {
 	return m_listReplayMessages.size();
 }
 
-//	--------------------------------------------------------------------------------
+
 const CvReplayMessage* CvGame::getReplayMessage(uint i) const
 {
 	if(i < m_listReplayMessages.size())
@@ -10614,32 +10614,32 @@ const CvReplayMessage* CvGame::getReplayMessage(uint i) const
 }
 #ifdef REPLAY_EVENTS
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::clearReplayEventMap()
 {
 	m_listReplayEvents.clear();
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::addReplayEvent(int eType, std::vector<int> vNumArgs, CvString strArg)
 {
 	CvReplayEvent event(eType, vNumArgs, strArg);
 	m_listReplayEvents.push_back(event);
 }
-//	--------------------------------------------------------------------------------
+
 void CvGame::addReplayEvent(int eType, PlayerTypes ePlayer, std::vector<int> vNumArgs, CvString strArg)
 {
 	CvReplayEvent event(eType, ePlayer, vNumArgs, strArg);
 	m_listReplayEvents.push_back(event);
 }
 
-//	--------------------------------------------------------------------------------
+
 uint CvGame::getNumReplayEvents() const
 {
 	return m_listReplayEvents.size();
 }
 
-//	--------------------------------------------------------------------------------
+
 const CvReplayEvent* CvGame::getReplayEvent(uint i) const
 {
 	if (i < m_listReplayEvents.size())
@@ -10651,16 +10651,16 @@ const CvReplayEvent* CvGame::getReplayEvent(uint i) const
 }
 #endif
 
-// Private Functions...
 
-//	--------------------------------------------------------------------------------
+
+
 void CvGame::Read(FDataStream& kStream)
 {
 	int iI;
 
 	reset(NO_HANDICAP);
 
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion;
 	kStream >> uiVersion;
 	{
@@ -10710,7 +10710,7 @@ void CvGame::Read(FDataStream& kStream)
 	kStream >> m_iNumVictoryVotesExpected;
 	kStream >> m_iVotesNeededForDiploVictory;
 	kStream >> m_iMapScoreMod;
-	// m_uiInitialTime not saved
+
 #ifdef GAME_UPDATE_TURN_TIMER_ONCE_PER_TURN
 	kStream >> m_fPreviousTurnLen;
 #endif
@@ -10721,11 +10721,11 @@ void CvGame::Read(FDataStream& kStream)
 
 	kStream >> m_bScoreDirty;
 	kStream >> m_bCircumnavigated;
-	// m_bDebugMode not saved
+
 	kStream >> m_bFinalInitialized;
-	// m_bPbemTurnSent not saved
+
 	kStream >> m_bHotPbemBetweenTurns;
-	// m_bPlayerOptionsSent not saved
+
 	kStream >> m_bNukesValid;
 	kStream >> m_bEndGameTechResearched;
 	kStream >> m_bTunerEverConnected;
@@ -10851,7 +10851,7 @@ void CvGame::Read(FDataStream& kStream)
 	kStream >> m_aPlotExtraCosts;
 
 
-	// Get the active player information from the initialization structure
+
 	if(!isGameMultiPlayer())
 	{
 		for(iI = 0; iI < MAX_CIV_PLAYERS; iI++)
@@ -10893,11 +10893,11 @@ void CvGame::Read(FDataStream& kStream)
 	kStream >> lSize;
 	if(lSize > 0)
 	{
-		//Deserialize the embedded SQLite database file.
+
 		CvString strUTF8DatabasePath = gDLL->GetCacheFolderPath();
 		strUTF8DatabasePath += "Civ5SavedGameDatabase.db";
 
-		// Need to Convert the UTF-8 string into a wide character string.
+
 		std::wstring wstrDatabasePath = CvStringUtils::FromUTF8ToUTF16(strUTF8DatabasePath);
 
 		FIFile* pkFile = FFILESYSTEM.Create(wstrDatabasePath.c_str(), FIFile::modeWrite);
@@ -10928,15 +10928,15 @@ void CvGame::Read(FDataStream& kStream)
 #endif
 #endif
 
-	//when loading from file, we need to reset m_lastTurnAICivsProcessed 
-	//so that updateMoves() can turn active players after loading an autosave in simultaneous turns multiplayer.
+
+
 	m_lastTurnAICivsProcessed = -1;
 }
 
-//	---------------------------------------------------------------------------
+
 void CvGame::ReadSupportingClassData(FDataStream& kStream)
 {
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion;
 	kStream >> uiVersion;	
 
@@ -10944,10 +10944,10 @@ void CvGame::ReadSupportingClassData(FDataStream& kStream)
 	CvGoodyHuts::Read(kStream, uiVersion);
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::Write(FDataStream& kStream) const
 {
-	// Current version number
+
 	kStream << g_CurrentCvGameVersion;
 #if defined(LEKMOD_COMBAT_PREDICTOR_IMPROVEMENTS)
 	kStream << m_iCombatModListLength;
@@ -10982,7 +10982,7 @@ void CvGame::Write(FDataStream& kStream) const
 	kStream << m_iVotesNeededForDiploVictory;
 	kStream << m_iMapScoreMod;
 
-	// m_uiInitialTime not saved
+
 #ifdef GAME_UPDATE_TURN_TIMER_ONCE_PER_TURN
 	kStream << m_fPreviousTurnLen;
 #endif
@@ -10993,11 +10993,11 @@ void CvGame::Write(FDataStream& kStream) const
 
 	kStream << m_bScoreDirty;
 	kStream << m_bCircumnavigated;
-	// m_bDebugMode not saved
+
 	kStream << m_bFinalInitialized;
-	// m_bPbemTurnSent not saved
+
 	kStream << m_bHotPbemBetweenTurns;
-	// m_bPlayerOptionsSent not saved
+
 	kStream << m_bNukesValid;
 	kStream << m_bEndGameTechResearched;
 	kStream << TunerEverConnected();
@@ -11098,11 +11098,11 @@ void CvGame::Write(FDataStream& kStream) const
 	kStream << *m_pMPVotingSystem;
 #endif
 
-	//In Version 8, Serialize Saved Game database
+
 	CvString strPath = gDLL->GetCacheFolderPath();
 	strPath += "Civ5SavedGameDatabase.db";
 
-	//Need to Convert the UTF-8 string into a wide character string so windows can open this file.
+
 	wchar_t savePath[MAX_PATH] = {0};
 	MultiByteToWideChar(CP_UTF8, 0, strPath.c_str(), -1, savePath, MAX_PATH);
 
@@ -11122,7 +11122,7 @@ void CvGame::Write(FDataStream& kStream) const
 			if(ReadFile(hFile, szBuffer, dwSize, &dwBytesRead, NULL) == TRUE)
 #endif
 			{
-				//Serialize out the file size first.
+
 				kStream << dwBytesRead;
 				kStream.WriteIt(dwBytesRead, szBuffer);
 			}
@@ -11148,7 +11148,7 @@ void CvGame::Write(FDataStream& kStream) const
 		}
 
 #if defined(LEKMOD_MACOS)
-		// The saved database size is 32 bits; long is 64 bits on macOS.
+
 		int nilSize = 0;
 #else
 		long nilSize = 0;
@@ -11165,10 +11165,10 @@ void CvGame::Write(FDataStream& kStream) const
 #endif
 }
 
-//	---------------------------------------------------------------------------
+
 void CvGame::WriteSupportingClassData(FDataStream& kStream)
 {
-	// Current version number
+
 	uint uiVersion = 1;
 	kStream << uiVersion;
 
@@ -11176,7 +11176,7 @@ void CvGame::WriteSupportingClassData(FDataStream& kStream)
 	CvGoodyHuts::Write(kStream);
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::writeReplay(FDataStream& kStream)
 {
 	CvReplayInfo replayInfo;
@@ -11184,7 +11184,7 @@ void CvGame::writeReplay(FDataStream& kStream)
 	replayInfo.write(kStream);
 }
 
-//	-----------------------------------------------------------------------------------------------
+
 void CvGame::saveReplay()
 {
 	gDLL->saveReplay();
@@ -11200,7 +11200,7 @@ void CvGame::saveReplay()
 		gDLL->RecordLeaderboardScore(score);
 	}
 }
-//	-----------------------------------------------------------------------------------------------
+
 
 void CvGame::showEndGameSequence()
 {
@@ -11208,7 +11208,7 @@ void CvGame::showEndGameSequence()
 	GC.GetEngineUserInterface()->OpenEndGameMenu();
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::addPlayer(PlayerTypes eNewPlayer, LeaderHeadTypes eLeader, CivilizationTypes eCiv)
 {
 	CvCivilizationInfo* pkCivilizationInfo = GC.getCivilizationInfo(eCiv);
@@ -11216,7 +11216,7 @@ void CvGame::addPlayer(PlayerTypes eNewPlayer, LeaderHeadTypes eLeader, Civiliza
 
 	if(pkCivilizationInfo == NULL || pkBarbarianCivInfo == NULL)
 	{
-		//Should never happen.
+
 		CvAssert(false);
 		return;
 	}
@@ -11273,7 +11273,7 @@ void CvGame::addPlayer(PlayerTypes eNewPlayer, LeaderHeadTypes eLeader, Civiliza
 	GET_PLAYER(eNewPlayer).init(eNewPlayer);
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getPlotExtraYield(int iX, int iY, YieldTypes eYield) const
 {
 	for(std::vector<PlotExtraYield>::const_iterator it = m_aPlotExtraYields.begin(); it != m_aPlotExtraYields.end(); ++it)
@@ -11287,7 +11287,7 @@ int CvGame::getPlotExtraYield(int iX, int iY, YieldTypes eYield) const
 	return 0;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::setPlotExtraYield(int iX, int iY, YieldTypes eYield, int iExtraYield)
 {
 	bool bFound = false;
@@ -11328,7 +11328,7 @@ void CvGame::setPlotExtraYield(int iX, int iY, YieldTypes eYield, int iExtraYiel
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::removePlotExtraYield(int iX, int iY)
 {
 	for(std::vector<PlotExtraYield>::iterator it = m_aPlotExtraYields.begin(); it != m_aPlotExtraYields.end(); ++it)
@@ -11347,7 +11347,7 @@ void CvGame::removePlotExtraYield(int iX, int iY)
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::getPlotExtraCost(int iX, int iY) const
 {
 	for(std::vector<PlotExtraCost>::const_iterator it = m_aPlotExtraCosts.begin(); it != m_aPlotExtraCosts.end(); ++it)
@@ -11361,7 +11361,7 @@ int CvGame::getPlotExtraCost(int iX, int iY) const
 	return 0;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::changePlotExtraCost(int iX, int iY, int iCost)
 {
 	bool bFound = false;
@@ -11386,7 +11386,7 @@ void CvGame::changePlotExtraCost(int iX, int iY, int iCost)
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::removePlotExtraCost(int iX, int iY)
 {
 	for(std::vector<PlotExtraCost>::iterator it = m_aPlotExtraCosts.begin(); it != m_aPlotExtraCosts.end(); ++it)
@@ -11400,16 +11400,16 @@ void CvGame::removePlotExtraCost(int iX, int iY)
 }
 
 
-// CACHE: cache frequently used values
-///////////////////////////////////////
 
-//	--------------------------------------------------------------------------------
+
+
+
 void CvGame::doUpdateCacheOnTurn()
 {
 
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isCivEverActive(CivilizationTypes eCivilization) const
 {
 	for(int iPlayer = 0; iPlayer < MAX_PLAYERS; ++iPlayer)
@@ -11427,7 +11427,7 @@ bool CvGame::isCivEverActive(CivilizationTypes eCivilization) const
 	return false;
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isLeaderEverActive(LeaderHeadTypes eLeader) const
 {
 	for(int iPlayer = 0; iPlayer < MAX_PLAYERS; ++iPlayer)
@@ -11445,7 +11445,7 @@ bool CvGame::isLeaderEverActive(LeaderHeadTypes eLeader) const
 	return false;
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isUnitEverActive(UnitTypes eUnit) const
 {
 	CvUnitEntry* pkUnitInfo = GC.getUnitInfo(eUnit);
@@ -11475,7 +11475,7 @@ bool CvGame::isUnitEverActive(UnitTypes eUnit) const
 	return false;
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::isBuildingEverActive(BuildingTypes eBuilding) const
 {
 	CvBuildingEntry* pkBuildingInfo = GC.getBuildingInfo(eBuilding);
@@ -11505,15 +11505,15 @@ bool CvGame::isBuildingEverActive(BuildingTypes eBuilding) const
 	return false;
 }
 
-//	--------------------------------------------------------------------------------
-/// What route type forms an industrial connection?
+
+
 RouteTypes CvGame::GetIndustrialRoute() const
 {
 	return m_eIndustrialRoute;
 }
 
-//	--------------------------------------------------------------------------------
-/// What route type forms an industrial connection?
+
+
 void CvGame::DoUpdateIndustrialRoute()
 {
 	RouteTypes eIndustrialRoute = NO_ROUTE;
@@ -11539,81 +11539,81 @@ void CvGame::DoUpdateIndustrialRoute()
 	m_eIndustrialRoute = eIndustrialRoute;
 }
 
-//	--------------------------------------------------------------------------------
+
 CvSiteEvaluatorForSettler* CvGame::GetSettlerSiteEvaluator()
 {
 	return m_pSettlerSiteEvaluator;
 }
 
-//	--------------------------------------------------------------------------------
+
 CvSiteEvaluatorForStart* CvGame::GetStartSiteEvaluator()
 {
 	return m_pStartSiteEvaluator;
 }
 
-//	--------------------------------------------------------------------------------
+
 CvStartPositioner* CvGame::GetStartPositioner()
 {
 	return m_pStartPositioner;
 }
 
-//	--------------------------------------------------------------------------------
+
 CvGameDeals* CvGame::GetGameDeals()
 {
 	return &m_kGameDeals;
 }
 
-//	--------------------------------------------------------------------------------
+
 CvGameReligions* CvGame::GetGameReligions()
 {
 	return m_pGameReligions;
 }
 
-//	--------------------------------------------------------------------------------
+
 CvGameCulture* CvGame::GetGameCulture()
 {
 	return m_pGameCulture;
 }
 
-//	--------------------------------------------------------------------------------
+
 CvGameLeagues* CvGame::GetGameLeagues()
 {
 	return m_pGameLeagues;
 }
 
-//	--------------------------------------------------------------------------------
+
 CvGameTrade* CvGame::GetGameTrade()
 {
 	return m_pGameTrade;
 }
 
-//	--------------------------------------------------------------------------------
+
 CvTacticalAnalysisMap* CvGame::GetTacticalAnalysisMap()
 {
 	return m_pTacticalMap;
 }
 
 #ifdef MP_PLAYERS_VOTING_SYSTEM
-//	--------------------------------------------------------------------------------
+
 CvMPVotingSystem* CvGame::GetMPVotingSystem()
 {
 	return m_pMPVotingSystem;
 }
 
 #endif
-//	--------------------------------------------------------------------------------
+
 CvAdvisorCounsel* CvGame::GetAdvisorCounsel()
 {
 	return m_pAdvisorCounsel;
 }
 
-//	--------------------------------------------------------------------------------
+
 CvAdvisorRecommender* CvGame::GetAdvisorRecommender()
 {
 	return m_pAdvisorRecommender;
 }
 
-//	--------------------------------------------------------------------------------
+
 #if defined(AUI_WARNING_FIXES) || defined(AUI_CONSTIFY)
 int CvGame::GetTurnsBetweenMinorCivElections() const
 #else
@@ -11626,7 +11626,7 @@ int CvGame::GetTurnsBetweenMinorCivElections()
 	return iTurnsBetweenCityStateElections;
 }
 
-//	--------------------------------------------------------------------------------
+
 #if defined(AUI_WARNING_FIXES) || defined(AUI_CONSTIFY)
 int CvGame::GetTurnsUntilMinorCivElection() const
 #else
@@ -11650,10 +11650,10 @@ int CvGame::GetTurnsUntilMinorCivElection()
 	}
 }
 
-//------------------------------------------------------------------------------
-/// Get the action associated with the supplied key.
-/// This will also test to see if the action can actually be done.
-/// Returns: the action info index or -1.
+
+
+
+
 int CvGame::GetAction(int iKeyStroke, bool bAlt, bool bShift, bool bCtrl)
 {
 #ifdef AUI_WARNING_FIXES
@@ -11694,10 +11694,10 @@ int CvGame::GetAction(int iKeyStroke, bool bAlt, bool bShift, bool bCtrl)
 	return iActionIndex;
 }
 
-//------------------------------------------------------------------------------
-/// Get the action associated with the supplied key.
-/// This will NOT test to see if the action can actually be done.
-/// Returns: the action info index or -1.
+
+
+
+
 int CvGame::IsAction(int iKeyStroke, bool bAlt, bool bShift, bool bCtrl)
 {
 #ifdef AUI_WARNING_FIXES
@@ -11736,13 +11736,13 @@ int CvGame::IsAction(int iKeyStroke, bool bAlt, bool bShift, bool bCtrl)
 	return iActionIndex;
 }
 
-//------------------------------------------------------------------------------
+
 void CvGame::endTurnTimerSemaphoreIncrement()
 {
 	++m_endTurnTimerSemaphore;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::endTurnTimerSemaphoreDecrement()
 {
 	--m_endTurnTimerSemaphore;
@@ -11753,15 +11753,15 @@ void CvGame::endTurnTimerSemaphoreDecrement()
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::endTurnTimerReset()
 {
 	m_endTurnTimerSemaphore = 0;
 	m_endTurnTimer.Start();
 }
 
-//	--------------------------------------------------------------------------------
-/// Called when a major changes its protection status towards a minor
+
+
 void CvGame::DoMinorPledgeProtection(PlayerTypes eMajor, PlayerTypes eMinor, bool bProtect, bool bPledgeNowBroken)
 {
 	CvAssertMsg(eMajor >= 0, "eMajor is expected to be non-negative (invalid Index)");
@@ -11777,8 +11777,8 @@ void CvGame::DoMinorPledgeProtection(PlayerTypes eMajor, PlayerTypes eMinor, boo
 	gDLL->sendMinorPledgeProtection(eMajor, eMinor, bProtect, bPledgeNowBroken);
 }
 
-//	--------------------------------------------------------------------------------
-/// Amount of Gold being gifted to the Minor by the active player
+
+
 void CvGame::DoMinorGiftGold(PlayerTypes eMinor, int iNumGold)
 {
 	CvAssertMsg(eMinor >= MAX_MAJOR_CIVS, "eMinor is not in expected range (invalid Index)");
@@ -11787,8 +11787,8 @@ void CvGame::DoMinorGiftGold(PlayerTypes eMinor, int iNumGold)
 	gDLL->sendMinorGiftGold(eMinor, iNumGold);
 }
 
-//	--------------------------------------------------------------------------------
-/// Do the action of a major gifting a tile improvement to a minor's plot, to improve its resource
+
+
 void CvGame::DoMinorGiftTileImprovement(PlayerTypes eMajor, PlayerTypes eMinor, int iPlotX, int iPlotY)
 {
 	CvAssertMsg(eMajor >= 0, "eMajor is expected to be non-negative (invalid Index)");
@@ -11799,9 +11799,9 @@ void CvGame::DoMinorGiftTileImprovement(PlayerTypes eMajor, PlayerTypes eMinor, 
 	gDLL->sendMinorGiftTileImprovement(eMajor, eMinor, iPlotX, iPlotY);
 }
 
-//	--------------------------------------------------------------------------------
-/// Do the action of a major bullying gold from a minor
-/// Demanded gold and a calculated bully metric are not provided (ex. from Lua, Player UI), so calculate them here
+
+
+
 void CvGame::DoMinorBullyGold(PlayerTypes eBully, PlayerTypes eMinor)
 {
 	CvAssertMsg(eBully >= 0, "eBully is expected to be non-negative (invalid Index)");
@@ -11814,8 +11814,8 @@ void CvGame::DoMinorBullyGold(PlayerTypes eBully, PlayerTypes eMinor)
 	gDLL->sendMinorBullyGold(eBully, eMinor, iGold);
 }
 
-//	--------------------------------------------------------------------------------
-/// Do the action of a major bullying a unit from a minor
+
+
 void CvGame::DoMinorBullyUnit(PlayerTypes eBully, PlayerTypes eMinor)
 {
 	CvAssertMsg(eBully >= 0, "eBully is expected to be non-negative (invalid Index)");
@@ -11828,8 +11828,8 @@ void CvGame::DoMinorBullyUnit(PlayerTypes eBully, PlayerTypes eMinor)
 	gDLL->sendMinorBullyUnit(eBully, eMinor, eUnitType);
 }
 
-//	--------------------------------------------------------------------------------
-/// Do the action of a major buying out a minor and acquiring it
+
+
 void CvGame::DoMinorBuyout(PlayerTypes eMajor, PlayerTypes eMinor)
 {
 	CvAssertMsg(eMajor >= 0, "eMajor is expected to be non-negative (invalid Index)");
@@ -11842,17 +11842,17 @@ void CvGame::DoMinorBuyout(PlayerTypes eMajor, PlayerTypes eMinor)
 
 
 
-//	--------------------------------------------------------------------------------
-/// Notification letting all non-party players know that two teams made a Research Agreement.  This is in CvGame because we only want it called once, and if it were in CvDealClasses it would be called twice, or have to be special-cased, so we'll special-case it here instead
+
+
 void CvGame::DoResearchAgreementNotification(TeamTypes eTeam1, TeamTypes eTeam2)
 {
-	// Notify all non-parties that these civs made a research agreement.
+
 	for(int iNotifyLoop = 0; iNotifyLoop < MAX_MAJOR_CIVS; ++iNotifyLoop){
 		PlayerTypes eNotifyPlayer = (PlayerTypes) iNotifyLoop;
 		CvPlayerAI& kCurNotifyPlayer = GET_PLAYER(eNotifyPlayer);
 		TeamTypes eCurNotifyTeam = kCurNotifyPlayer.getTeam();
 
-		// Don't show notification if WE'RE the ones in the deal
+
 		if(eCurNotifyTeam != eTeam1 && eCurNotifyTeam != eTeam2)
 		{
 			CvTeam* pCurTeam = &GET_TEAM(eCurNotifyTeam);
@@ -11879,7 +11879,7 @@ void CvGame::DoResearchAgreementNotification(TeamTypes eTeam1, TeamTypes eTeam2)
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::GetResearchAgreementCost(PlayerTypes ePlayer1, PlayerTypes ePlayer2)
 {
 	CvAssertMsg(ePlayer1 > NO_PLAYER, "Invalid player. Please show Jon this.");
@@ -11900,16 +11900,16 @@ int CvGame::GetResearchAgreementCost(PlayerTypes ePlayer1, PlayerTypes ePlayer2)
 }
 
 
-//	--------------------------------------------------------------------------------
-/// See if someone has won a conquest Victory
-/// slewis, 10.1.12 - changing conquest so that a player has to hold all capitals
+
+
+
 void CvGame::DoTestConquestVictory()
 {
 	TeamTypes eTeamWhoWon = NO_TEAM;
 
 	PlayerTypes eLoopPlayer;
 
-	// find out how many original capitals there are
+
 	int iNumOriginalCapitals = 0;
 
 	for(int iPlayerLoop = 0; iPlayerLoop < MAX_MAJOR_CIVS; iPlayerLoop++)
@@ -11931,7 +11931,7 @@ void CvGame::DoTestConquestVictory()
 
 	CvAssertMsg(iNumOriginalCapitals > 0, "No one controls an original capital. This is wrong.");
 
-	// find out if any team controls all the capitals
+
 	for(int iTeamLoop = 0; iTeamLoop < MAX_CIV_TEAMS; iTeamLoop++)
 	{
 		int iNumCapitalsControlled = 0;
@@ -11963,7 +11963,7 @@ void CvGame::DoTestConquestVictory()
 		}
 	}
 
-	// If we got here then only one player remains alive!
+
 	if (eTeamWhoWon != NO_TEAM)
 	{
 #ifdef AUI_WARNING_FIXES
@@ -11985,20 +11985,20 @@ void CvGame::DoTestConquestVictory()
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// Player leading with Wonders
+
+
 PlayerTypes CvGame::GetBestWondersPlayer()
 {
 	return m_eBestWondersPlayer;
 }
 
-//	--------------------------------------------------------------------------------
-/// Set Player leading with Wonders
+
+
 void CvGame::SetBestWondersPlayer(PlayerTypes ePlayer, int iWonderCount)
 {
-	int iVictoryPointChange = /*5*/ GC.getZERO_SUM_COMPETITION_WONDERS_VICTORY_POINTS();
+	int iVictoryPointChange =       GC.getZERO_SUM_COMPETITION_WONDERS_VICTORY_POINTS();
 
-	// Remove VPs from old player's team
+
 	if(GetBestWondersPlayer() != NO_PLAYER)
 	{
 		GET_TEAM(GET_PLAYER(GetBestWondersPlayer()).getTeam()).changeVictoryPoints(-iVictoryPointChange);
@@ -12010,7 +12010,7 @@ void CvGame::SetBestWondersPlayer(PlayerTypes ePlayer, int iWonderCount)
 	{
 		GET_TEAM(GET_PLAYER(ePlayer).getTeam()).changeVictoryPoints(iVictoryPointChange);
 
-		// Notify everyone of this change.
+
 		for(int iNotifyLoop = 0; iNotifyLoop < MAX_MAJOR_CIVS; ++iNotifyLoop){
 			PlayerTypes eNotifyPlayer = (PlayerTypes) iNotifyLoop;
 			CvPlayerAI& kCurNotifyPlayer = GET_PLAYER(eNotifyPlayer);
@@ -12022,19 +12022,19 @@ void CvGame::SetBestWondersPlayer(PlayerTypes ePlayer, int iWonderCount)
 				CvString strBuffer;
 				CvString strSummary;
 
-				// current player now has the most Wonders
+
 				if(kCurNotifyPlayer.GetID() == ePlayer)
 				{
 					strBuffer = GetLocalizedText("TXT_KEY_NOTIFICATION_BEST_IN_WONDERS_YOU", iVictoryPointChange, iWonderCount+1);
 					strSummary = GetLocalizedText("TXT_KEY_NOTIFICATION_SUMMARY_BEST_IN_WONDERS_YOU", iVictoryPointChange, iWonderCount+1);
 				}
-				// Unmet player
+
 				else if(!GET_TEAM(eCurNotifyTeam).isHasMet(GET_PLAYER(ePlayer).getTeam()))
 				{
 					strBuffer = GetLocalizedText("TXT_KEY_NOTIFICATION_BEST_IN_WONDERS_UNMET", iVictoryPointChange, iWonderCount+1);
 					strSummary = GetLocalizedText("TXT_KEY_NOTIFICATION_SUMMARY_BEST_IN_WONDERS_UNMET", iVictoryPointChange, iWonderCount+1);
 				}
-				// Player we've met
+
 				else
 				{
 					strBuffer = GetLocalizedText("TXT_KEY_NOTIFICATION_BEST_IN_WONDERS_ANOTHER", GET_PLAYER(ePlayer).getCivilizationShortDescriptionKey(), iVictoryPointChange, iWonderCount+1);
@@ -12047,20 +12047,20 @@ void CvGame::SetBestWondersPlayer(PlayerTypes ePlayer, int iWonderCount)
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// Player leading with Policies
+
+
 PlayerTypes CvGame::GetBestPoliciesPlayer()
 {
 	return m_eBestPoliciesPlayer;
 }
 
-//	--------------------------------------------------------------------------------
-/// Set Player leading with Policies
+
+
 void CvGame::SetBestPoliciesPlayer(PlayerTypes ePlayer, int iPolicyCount)
 {
-	int iVictoryPointChange = /*5*/ GC.getZERO_SUM_COMPETITION_POLICIES_VICTORY_POINTS();
+	int iVictoryPointChange =       GC.getZERO_SUM_COMPETITION_POLICIES_VICTORY_POINTS();
 
-	// Remove VPs from old player's team
+
 	if(GetBestPoliciesPlayer() != NO_PLAYER)
 	{
 		GET_TEAM(GET_PLAYER(GetBestPoliciesPlayer()).getTeam()).changeVictoryPoints(-iVictoryPointChange);
@@ -12075,25 +12075,25 @@ void CvGame::SetBestPoliciesPlayer(PlayerTypes ePlayer, int iPolicyCount)
 
 		GET_TEAM(GET_PLAYER(ePlayer).getTeam()).changeVictoryPoints(iVictoryPointChange);
 
-		//Notify everyone
+
 		for(int iNotifyLoop = 0; iNotifyLoop < MAX_MAJOR_CIVS; ++iNotifyLoop){
 			PlayerTypes eNotifyPlayer = (PlayerTypes) iNotifyLoop;
 			CvPlayerAI& kCurNotifyPlayer = GET_PLAYER(eNotifyPlayer);
 			TeamTypes eCurNotifyTeam = kCurNotifyPlayer.getTeam();
 
-			// This player has the most Policies
+
 			if(eNotifyPlayer == ePlayer)
 			{
 				strBuffer = GetLocalizedText("TXT_KEY_NOTIFICATION_BEST_IN_POLICIES_YOU", iVictoryPointChange, iPolicyCount+1);
 				strSummary = GetLocalizedText("TXT_KEY_NOTIFICATION_SUMMARY_BEST_IN_POLICIES_YOU", iVictoryPointChange, iPolicyCount+1);
 			}
-			// Unmet player
+
 			else if(!GET_TEAM(eCurNotifyTeam).isHasMet(GET_PLAYER(ePlayer).getTeam()))
 			{
 				strBuffer = GetLocalizedText("TXT_KEY_NOTIFICATION_BEST_IN_POLICIES_UNMET", iVictoryPointChange, iPolicyCount+1);
 				strSummary = GetLocalizedText("TXT_KEY_NOTIFICATION_SUMMARY_BEST_IN_POLICIES_UNMET", iVictoryPointChange, iPolicyCount+1);
 			}
-			// player met
+
 			else
 			{
 				strBuffer = GetLocalizedText("TXT_KEY_NOTIFICATION_BEST_IN_POLICIES_ANOTHER", GET_PLAYER(ePlayer).getCivilizationShortDescriptionKey(), iVictoryPointChange, iPolicyCount+1);
@@ -12109,20 +12109,20 @@ void CvGame::SetBestPoliciesPlayer(PlayerTypes ePlayer, int iPolicyCount)
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// Player leading with GreatPeople
+
+
 PlayerTypes CvGame::GetBestGreatPeoplePlayer()
 {
 	return m_eBestGreatPeoplePlayer;
 }
 
-//	--------------------------------------------------------------------------------
-/// Set Player leading with GreatPeople
+
+
 void CvGame::SetBestGreatPeoplePlayer(PlayerTypes ePlayer, int iGreatPeopleCount)
 {
-	int iVictoryPointChange = /*5*/ GC.getZERO_SUM_COMPETITION_GREAT_PEOPLE_VICTORY_POINTS();
+	int iVictoryPointChange =       GC.getZERO_SUM_COMPETITION_GREAT_PEOPLE_VICTORY_POINTS();
 
-	// Remove VPs from old player's team
+
 	if(GetBestGreatPeoplePlayer() != NO_PLAYER)
 	{
 		GET_TEAM(GET_PLAYER(GetBestGreatPeoplePlayer()).getTeam()).changeVictoryPoints(-iVictoryPointChange);
@@ -12145,19 +12145,19 @@ void CvGame::SetBestGreatPeoplePlayer(PlayerTypes ePlayer, int iGreatPeopleCount
 				CvString strBuffer;
 				CvString strSummary;
 
-				// Active Player now has the most GreatPeople
+
 				if(eNotifyPlayer == ePlayer)
 				{
 					strBuffer = GetLocalizedText("TXT_KEY_NOTIFICATION_BEST_IN_GREAT_PEOPLE_YOU", iVictoryPointChange, iGreatPeopleCount+1);
 					strSummary = GetLocalizedText("TXT_KEY_NOTIFICATION_SUMMARY_BEST_IN_GREAT_PEOPLE_YOU", iVictoryPointChange, iGreatPeopleCount+1);
 				}
-				// Unmet player
+
 				else if(!GET_TEAM(eCurNotifyTeam).isHasMet(GET_PLAYER(ePlayer).getTeam()))
 				{
 					strBuffer = GetLocalizedText("TXT_KEY_NOTIFICATION_BEST_IN_GREAT_PEOPLE_UNMET", iVictoryPointChange, iGreatPeopleCount+1);
 					strSummary = GetLocalizedText("TXT_KEY_NOTIFICATION_SUMMARY_BEST_IN_GREAT_PEOPLE_UNMET", iVictoryPointChange, iGreatPeopleCount+1);
 				}
-				// Player we've met
+
 				else
 				{
 					strBuffer = GetLocalizedText("TXT_KEY_NOTIFICATION_BEST_IN_GREAT_PEOPLE_ANOTHER", GET_PLAYER(ePlayer).getCivilizationShortDescriptionKey(), iVictoryPointChange, iGreatPeopleCount+1);
@@ -12170,64 +12170,64 @@ void CvGame::SetBestGreatPeoplePlayer(PlayerTypes ePlayer, int iGreatPeopleCount
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// Has a player researched a Tech which ends the game?
+
+
 bool CvGame::IsEndGameTechResearched() const
 {
 	return m_bEndGameTechResearched;
 }
 
-//	--------------------------------------------------------------------------------
-/// Sets whether or not a player has researched a Tech which ends the game
+
+
 void CvGame::SetEndGameTechResearched(bool bValue)
 {
 	m_bEndGameTechResearched = bValue;
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::TunerEverConnected() const
 {
 	return m_bTunerEverConnected || gDLL->TunerEverConnected();
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::IsEverAttackedTutorial() const
 {
 	return m_bTutorialEverAttacked;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::SetEverAttackedTutorial(bool bValue)
 {
 	m_bTutorialEverAttacked = bValue;
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::IsEverRightClickMoved() const
 {
 	return m_bEverRightClickMoved;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::SetEverRightClickMoved(bool bValue)
 {
 	m_bEverRightClickMoved = bValue;
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::IsCombatWarned() const
 {
 	return m_bCombatWarned;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::SetCombatWarned(bool bValue)
 {
 	m_bCombatWarned = bValue;
 }
 
-//	--------------------------------------------------------------------------------
-/// Shortcut for generating production mod tool tip help
+
+
 void CvGame::BuildProdModHelpText(CvString* toolTipSink, const char* strTextKey, int iMod, const char* strExtraKey) const
 {
 	if(iMod != 0 && toolTipSink != NULL)
@@ -12248,8 +12248,8 @@ void CvGame::BuildProdModHelpText(CvString* toolTipSink, const char* strTextKey,
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// Shortcut for generating production mod tool tip help
+
+
 void CvGame::BuildCannotPerformActionHelpText(CvString* toolTipSink, const char* strTextKey, const char* strExtraKey1, const char* strExtraKey2, int iValue) const
 {
 	if(toolTipSink != NULL)
@@ -12279,7 +12279,7 @@ void CvGame::BuildCannotPerformActionHelpText(CvString* toolTipSink, const char*
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::LogGameState(bool bLogHeaders)
 {
 	if(GC.getLogging() && GC.getAILogging())
@@ -12298,7 +12298,7 @@ void CvGame::LogGameState(bool bLogHeaders)
 		FILogFile* pLog;
 		pLog = LOGFILEMGR.GetLog(strLogName, FILogFile::kDontTimeStamp);
 
-		// Get the leading info for this line
+
 		strOutput.Format("%03d", GC.getGame().getElapsedGameTurns());
 
 		AIGrandStrategyTypes eGrandStrategy;
@@ -12332,7 +12332,7 @@ void CvGame::LogGameState(bool bLogHeaders)
 		int iPlayerLoop2;
 		PlayerTypes eLoopPlayer2;
 
-		// Loop through all Players
+
 		PlayerTypes eLoopPlayer;
 		CvPlayer* pPlayer;
 		for(int iPlayerLoop = 0; iPlayerLoop < MAX_CIV_PLAYERS; iPlayerLoop++)
@@ -12361,14 +12361,14 @@ void CvGame::LogGameState(bool bLogHeaders)
 					iGSCulture++;
 				}
 
-				// Loop through all players
+
 				for(iPlayerLoop2 = 0; iPlayerLoop2 < MAX_CIV_PLAYERS; iPlayerLoop2++)
 				{
 					eLoopPlayer2 = (PlayerTypes) iPlayerLoop2;
 
 					if(GET_PLAYER(eLoopPlayer2).isAlive())
 					{
-						// Major
+
 						if(eLoopPlayer2 < MAX_MAJOR_CIVS)
 						{
 							switch(pPlayer->GetDiplomacyAI()->GetMajorCivOpinion(eLoopPlayer2))
@@ -12421,7 +12421,7 @@ void CvGame::LogGameState(bool bLogHeaders)
 								break;
 							}
 						}
-						// Minor
+
 						else
 						{
 							switch(pPlayer->GetDiplomacyAI()->GetMinorCivApproach(eLoopPlayer2))
@@ -12450,7 +12450,7 @@ void CvGame::LogGameState(bool bLogHeaders)
 
 		bool bFirstTurn = bLogHeaders || getElapsedGameTurns() == 0;
 
-		// Grand Strategies
+
 		if(bFirstTurn)
 		{
 			strOutput += ", Conquest";
@@ -12472,7 +12472,7 @@ void CvGame::LogGameState(bool bLogHeaders)
 
 		strOutput += ", ";
 
-		// Major Approaches
+
 		if(bFirstTurn)
 		{
 			strOutput += ", Ally";
@@ -12503,7 +12503,7 @@ void CvGame::LogGameState(bool bLogHeaders)
 
 		strOutput += ", ";
 
-		// Major Approaches
+
 		if(bFirstTurn)
 		{
 			strOutput += ", War";
@@ -12534,7 +12534,7 @@ void CvGame::LogGameState(bool bLogHeaders)
 
 		strOutput += ", ";
 
-		// Minor Approaches
+
 		if(bFirstTurn)
 		{
 			strOutput += ", Ignore";
@@ -12561,13 +12561,13 @@ void CvGame::LogGameState(bool bLogHeaders)
 	}
 }
 
-//	------------------------------------------------------------------------------------------------
+
 void CvGame::unitIsMoving()
 {
 	s_unitMoveTurnSlice = getTurnSlice();
 }
 
-//	------------------------------------------------------------------------------------------------
+
 bool CvGame::allUnitAIProcessed() const
 {
 	int i = 0;
@@ -12580,26 +12580,26 @@ bool CvGame::allUnitAIProcessed() const
 	return true;
 }
 
-//	--------------------------------------------------------------------------------
-/// How long are deals in this game (based on game speed)
+
+
 int CvGame::GetDealDuration()
 {
 	return getGameSpeedInfo().GetDealDuration();
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::GetPeaceDuration()
 {
 	return getGameSpeedInfo().getPeaceDealDuration();
 }
 
-//	--------------------------------------------------------------------------------
+
 bool CvGame::IsArchaeologyTriggered() const
 {
 	return m_bArchaeologyTriggered;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::TriggerArchaeologySiteCreation(bool bCheckInitialized)
 {
 	if (!m_bArchaeologyTriggered)
@@ -12613,13 +12613,13 @@ void CvGame::TriggerArchaeologySiteCreation(bool bCheckInitialized)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CalculateDigSiteWeight(int iIndex, FFastVector<CvArchaeologyData, true, c_eCiv5GameplayDLL, 0>& inputData, FFastVector<CvArchaeologyData, true, c_eCiv5GameplayDLL, 0>& chosenDigSites)
 {
 	CvMap& theMap = GC.getMap();
 	int iGridWidth = theMap.getGridWidth();
 	int iBaseWeight = 0;
-	if (chosenDigSites[iIndex].m_eArtifactType == NO_GREAT_WORK_ARTIFACT_CLASS) // if we have not already chosen this spot for a dig site
+	if (chosenDigSites[iIndex].m_eArtifactType == NO_GREAT_WORK_ARTIFACT_CLASS)
 	{
 		iBaseWeight = inputData[iIndex].m_eArtifactType + 1;
 		iBaseWeight *= (10 - inputData[iIndex].m_eEra);
@@ -12629,11 +12629,11 @@ int CalculateDigSiteWeight(int iIndex, FFastVector<CvArchaeologyData, true, c_eC
 
 		CvPlot* pPlot = theMap.plotByIndexUnchecked(iIndex);
 
-		// zero this value if this plot has a resource, water, ice, mountain, or natural wonder
+
 		if (pPlot->getResourceType() != NO_RESOURCE || pPlot->isWater() || pPlot->getFeatureType() == FEATURE_ICE || pPlot->isMountain() || pPlot->IsNaturalWonder())
 			iBaseWeight = 0;
 
-		// if this tile cannot be improved, zero it out
+
 		if (iBaseWeight && pPlot->getFeatureType() != NO_FEATURE)
 		{
 			if (GC.getFeatureInfo(pPlot->getFeatureType())->isNoImprovement())
@@ -12642,7 +12642,7 @@ int CalculateDigSiteWeight(int iIndex, FFastVector<CvArchaeologyData, true, c_eC
 			}
 		}
 
-		// if this tile has a GP improvement, zero it out
+
 		if (iBaseWeight && pPlot->getImprovementType() != NO_IMPROVEMENT)
 		{
 			if (GC.getImprovementInfo(pPlot->getImprovementType())->IsCreatedByGreatPerson())
@@ -12653,34 +12653,34 @@ int CalculateDigSiteWeight(int iIndex, FFastVector<CvArchaeologyData, true, c_eC
 
 		if (iBaseWeight > 0)
 		{
-			// add a small random factor
+
 			iBaseWeight += 10 + GC.getGame().getJonRandNum(10, "random factor on dig sites");
 
-			// increase the value if unowned
+
 			iBaseWeight *= (pPlot->getOwner() == NO_PLAYER) ? 9 : 8;
 			iBaseWeight /= 8;
 
-			// lower the value if owned by a major
+
 			iBaseWeight *= (pPlot->getOwner() > NO_PLAYER && pPlot->getOwner() < MAX_MAJOR_CIVS) ? 11 : 12;
 			iBaseWeight /= 12;
 
-			// lower the value if tile has been improved
+
 			iBaseWeight *= (pPlot->getImprovementType() != NO_IMPROVEMENT || pPlot->getRouteType() != NO_ROUTE) ? 7 : 8;
 			iBaseWeight /= 8;
 
-			// lower the value if tile has a city
+
 			iBaseWeight *= (pPlot->isCity()) ? 1 : 5;
 			iBaseWeight /= 5;
 
-			// increase the value if in thematic terrain (desert, jungle, or small island)
+
 			iBaseWeight *= (pPlot->getTerrainType() == TERRAIN_DESERT) ? 3 : 2;
 			iBaseWeight *= (pPlot->getFeatureType() == FEATURE_JUNGLE) ? 3 : 2;
 			CvArea* pArea = theMap.getArea(pPlot->getArea());
 			iBaseWeight *= (pArea->getNumTiles() <= 4) ? 3 : 2;
 
-			// lower the value by number of neighbors
+
 			int iDivisor = 1;
-			// lower the value if there is at least one nearby site (say, 3 tiles distance)
+
 			int iRange = 3;
 #ifdef AUI_HEXSPACE_DX_LOOPS
 			int iMaxDX, iDX;
@@ -12688,11 +12688,11 @@ int CalculateDigSiteWeight(int iIndex, FFastVector<CvArchaeologyData, true, c_eC
 			for (int iDY = -iRange; iDY <= iRange; iDY++)
 			{
 				iMaxDX = iRange - MAX(0, iDY);
-				for (iDX = -iRange - MIN(0, iDY); iDX <= iMaxDX; iDX++) // MIN() and MAX() stuff is to reduce loops (hexspace!)
+				for (iDX = -iRange - MIN(0, iDY); iDX <= iMaxDX; iDX++)
 				{
-					// No need for range check because loops are set up properly
+
 					pLoopPlot = plotXY(iPlotX, iPlotY, iDX, iDY);
-					// Condensing 3 loops into 1
+
 					if (pLoopPlot)
 					{
 						if (chosenDigSites[pLoopPlot->GetPlotIndex()].m_eArtifactType != NO_GREAT_WORK_ARTIFACT_CLASS)
@@ -12762,7 +12762,7 @@ int CalculateDigSiteWeight(int iIndex, FFastVector<CvArchaeologyData, true, c_eC
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CalculateDigSiteWeights(int iGridSize, FFastVector<CvArchaeologyData, true, c_eCiv5GameplayDLL, 0>& inputData, FFastVector<CvArchaeologyData, true, c_eCiv5GameplayDLL, 0>& chosenDigSites, FFastVector<int, true, c_eCiv5GameplayDLL, 0>& currentWeights)
 {
 	CvAssertMsg(NO_GREAT_WORK_ARTIFACT_CLASS == 0, "Value of NO_ARTIFACT has changed");
@@ -12772,7 +12772,7 @@ void CalculateDigSiteWeights(int iGridSize, FFastVector<CvArchaeologyData, true,
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvGame::GetNumArchaeologySites() const
 {
 	if (!IsArchaeologyTriggered())
@@ -12797,7 +12797,7 @@ int CvGame::GetNumArchaeologySites() const
 	}
 	return iRtnValue;
 }
-//	--------------------------------------------------------------------------------
+
 int CvGame::GetNumHiddenArchaeologySites() const
 {
 	if (!IsArchaeologyTriggered())
@@ -12822,25 +12822,25 @@ int CvGame::GetNumHiddenArchaeologySites() const
 	}
 	return iRtnValue;
 }
-#if defined(LEKMOD_COMBAT_PREDICTOR_IMPROVEMENTS) // Relocate to CvGame, as this is Game-wide logic. not a lot of sense to keep on CvUnit or CvCity
+#if defined(LEKMOD_COMBAT_PREDICTOR_IMPROVEMENTS)
 void CvGame::getCombatDamage(CvCombatInfo& kInfo)
 {
 	int iMaxHP = GC.getMAX_HIT_POINTS();
-	/*CvCombatInfo should have :
-	BATTLE_UNIT_ATTACKER, can be city or unit
-	BATTLE_UNIT_DEFENDER, can be city or unit
-	BATTLE_UNIT_INTERCEPTOR, can be unit or null
-	*/
-	if (kInfo.getUnit(BATTLE_UNIT_ATTACKER) != NULL) // Attacker is Unit
+
+
+
+
+
+	if (kInfo.getUnit(BATTLE_UNIT_ATTACKER) != NULL)
 	{
 		CvUnit& attacker = *kInfo.getUnit(BATTLE_UNIT_ATTACKER);
 		int iAttackerStrength = attacker.GetMaxAttackStrength(kInfo);
 		int iDefenderStrength = 0, iDamage = 0, iWoundedRatio = 0;
-		// Intercepting attacker?
-		if (kInfo.getUnit(BATTLE_UNIT_INTERCEPTOR) != NULL) // Interceptor is Unit.
+
+		if (kInfo.getUnit(BATTLE_UNIT_INTERCEPTOR) != NULL)
 		{
 			const CvUnit& interceptor = *kInfo.getUnit(BATTLE_UNIT_INTERCEPTOR);
-			int iInterceptorStrength = interceptor.GetMaxDefenseStrength(kInfo); // const once below is gone.
+			int iInterceptorStrength = interceptor.GetMaxDefenseStrength(kInfo);
 			iWoundedRatio = interceptor.getWoundedRatio(kInfo.getExtraDamageTaken(BATTLE_UNIT_INTERCEPTOR));
 			iDamage = GC.getINTERCEPTION_SAME_STRENGTH_MIN_DAMAGE() * iWoundedRatio / iMaxHP;
 
@@ -12850,21 +12850,21 @@ void CvGame::getCombatDamage(CvCombatInfo& kInfo)
 			double fStrengthRatio = kInfo.doStrengthRatio(iInterceptorStrength, iAttackerStrength);
 			iDamage = static_cast<int>(iDamage * fStrengthRatio);
 
-			// Interception Damage can be reduced by victim's promotions
-			iDamage *= (100 + attacker.GetInterceptionDefenseDamageModifier());
-			iDamage /= 10000; // 100 for the modifier, 100 for the damage being a percentage of max HP
 
-			// Interceptions Deal at least 1 damage, but no more than iMaxHP - 1
+			iDamage *= (100 + attacker.GetInterceptionDefenseDamageModifier());
+			iDamage /= 10000;
+
+
 			iDamage = range(iDamage, 1, iMaxHP - 1);
 			kInfo.setDamageInflicted(BATTLE_UNIT_INTERCEPTOR, iDamage);
-			//kInfo.setFinalDamage(BATTLE_UNIT_INTERCEPTOR, interceptor.getDamage()); as of this moment, the interceptor doesn't take any damage.
+
 		}
-		else if (kInfo.getCity(BATTLE_UNIT_INTERCEPTOR) != NULL) // Interceptor is City.
+		else if (kInfo.getCity(BATTLE_UNIT_INTERCEPTOR) != NULL)
 		{
 			const CvCity& interceptor = *kInfo.getCity(BATTLE_UNIT_INTERCEPTOR);
 			const int iInterceptorStrength = interceptor.getStrengthValue();
 			iDamage = GC.getINTERCEPTION_SAME_STRENGTH_MIN_DAMAGE();
-			iWoundedRatio = iMaxHP; // Cities don't have wounded ratio, so we just use 100% (iMaxHP)
+			iWoundedRatio = iMaxHP;
 
 			kInfo.doRandomness(BATTLE_UNIT_INTERCEPTOR, iWoundedRatio);
 			iDamage += kInfo.getCombatSeed(BATTLE_UNIT_INTERCEPTOR);
@@ -12872,37 +12872,37 @@ void CvGame::getCombatDamage(CvCombatInfo& kInfo)
 			double fStrengthRatio = kInfo.doStrengthRatio(iInterceptorStrength, iAttackerStrength);
 			iDamage = static_cast<int>(iDamage * fStrengthRatio);
 			iDamage /= 100;
-			// Interceptions Deal at least 1 damage, but no more than iMaxHP - 1
+
 			iDamage = range(iDamage, GC.getMIN_CITY_STRIKE_DAMAGE(), iMaxHP - 1);
 			kInfo.setDamageInflicted(BATTLE_UNIT_INTERCEPTOR, iDamage);
 		}
 		int iExtraDamage = kInfo.getExtraDamageTaken(BATTLE_UNIT_ATTACKER) + kInfo.getDamageInflicted(BATTLE_UNIT_INTERCEPTOR);
-		if (kInfo.getUnit(BATTLE_UNIT_DEFENDER) != NULL) // Defender is Unit
+		if (kInfo.getUnit(BATTLE_UNIT_DEFENDER) != NULL)
 		{
 			CvUnit& defender = *kInfo.getUnit(BATTLE_UNIT_DEFENDER);
 			iDefenderStrength = defender.GetMaxDefenseStrength(kInfo);
 			int iDamage = 0;
-			std::pair<int, int> damagePair(-1, -1); // Attacker / Defender
+			std::pair<int, int> damagePair(-1, -1);
 			if (kInfo.getAttackIsRanged() && !defender.IsCanDefend())
 			{
-				damagePair.first = GC.getNONCOMBAT_UNIT_RANGED_DAMAGE(); // Non-combat units take a set amount of damage from ranged attacks
+				damagePair.first = GC.getNONCOMBAT_UNIT_RANGED_DAMAGE();
 			}
 			const bool bRangedAttack = kInfo.getAttackIsRanged() || kInfo.getAttackIsBombingMission();
-			damagePair.second = kInfo.getDefenderRetaliates() ? -1 : 0; // if defender retaliates, we need to calculate damage for both units, otherwise we only need to calculate damage dealt to the defender
+			damagePair.second = kInfo.getDefenderRetaliates() ? -1 : 0;
 			do
 			{
 				if (damagePair.first != -1 && damagePair.second != -1)
-					break; // if we have both damages, we can break out of the loop
+					break;
 				const bool bAttacker = (damagePair.first == -1);
 				
 				CvUnit& unit		= bAttacker ? attacker : defender;
-				// CvUnit& opponent	= bAttacker ? defender : attacker; 
+
 
 				const int iUnitStrength		= bAttacker ? iAttackerStrength : iDefenderStrength;
 				const int iOpponentStrength = bAttacker ? iDefenderStrength : iAttackerStrength;
 
 				const int iWoundedRatio = unit.getWoundedRatio(bAttacker ? iExtraDamage : kInfo.getExtraDamageTaken(BATTLE_UNIT_DEFENDER));
-				const int iAttackSameStrengthMinDamage = bRangedAttack ? /*400*/ GC.getRANGE_ATTACK_SAME_STRENGTH_MIN_DAMAGE() : /*400*/ GC.getATTACK_SAME_STRENGTH_MIN_DAMAGE();
+				const int iAttackSameStrengthMinDamage = bRangedAttack ?         GC.getRANGE_ATTACK_SAME_STRENGTH_MIN_DAMAGE() :         GC.getATTACK_SAME_STRENGTH_MIN_DAMAGE();
 
 				iDamage = iAttackSameStrengthMinDamage * iWoundedRatio / iMaxHP;
 				kInfo.doRandomness(bAttacker ? BATTLE_UNIT_ATTACKER : BATTLE_UNIT_DEFENDER, iWoundedRatio);
@@ -12911,34 +12911,34 @@ void CvGame::getCombatDamage(CvCombatInfo& kInfo)
 				iDamage = static_cast<int>(iDamage * fStrengthRatio);
 				iDamage /= 100;
 				
-				iDamage = std::max(1, iDamage); // Damage is at least 1
+				iDamage = std::max(1, iDamage);
 
 				bAttacker ? damagePair.first = iDamage : damagePair.second = iDamage;
 			} while (damagePair.first == -1 || damagePair.second == -1);
 			int iAttackerDamageDealt = damagePair.first;
 			int iDefenderDamageDealt = damagePair.second;
-			// We don't retaliate per the info, so set the defender damage to 0
+
 			if (iDefenderDamageDealt < 0)
 			{
 				iDefenderDamageDealt = 0;
 			}
-			// If this is an air sweep, and the defender is not an air unit, then reduce the damage dealt to both units by the air sweep modifier
+
 			if (kInfo.getAttackIsAirSweep() && defender.getDomainType() != DOMAIN_AIR)
 			{
-				iAttackerDamageDealt *= /*0*/ GC.getAIR_SWEEP_INTERCEPTION_DAMAGE_MOD();
+				iAttackerDamageDealt *=       GC.getAIR_SWEEP_INTERCEPTION_DAMAGE_MOD();
 				iAttackerDamageDealt /= 100;
 				iAttackerDamageDealt = std::max(0, iAttackerDamageDealt);
-				iDefenderDamageDealt *= /*0*/ GC.getAIR_SWEEP_INTERCEPTION_DAMAGE_MOD();
+				iDefenderDamageDealt *=       GC.getAIR_SWEEP_INTERCEPTION_DAMAGE_MOD();
 				iDefenderDamageDealt /= 100;
 				iDefenderDamageDealt = std::max(0, iDefenderDamageDealt);
 			}
 			
 			int iDefenderFinalDamage = iAttackerDamageDealt + defender.getDamage();
 			int iAttackerFinalDamage = iDefenderDamageDealt + attacker.getDamage() + kInfo.getDamageInflicted(BATTLE_UNIT_INTERCEPTOR);
-			// Will both units be killed by this? :o If so, take drastic corrective measures
+
 			if (kInfo.getDefenderRetaliates() && iDefenderFinalDamage >= iMaxHP && iAttackerFinalDamage >= iMaxHP)
 			{
-				// Did the Attacker die from Interception? if so no need to check if the attacker can survive, as it already didn't.
+
 				const bool bAttackerCanStillSurvive = attacker.getDamage() + kInfo.getDamageInflicted(BATTLE_UNIT_INTERCEPTOR) < iMaxHP;
 				if (iDefenderFinalDamage > iAttackerFinalDamage && bAttackerCanStillSurvive)
 				{
@@ -12946,14 +12946,14 @@ void CvGame::getCombatDamage(CvCombatInfo& kInfo)
 					iAttackerFinalDamage = iMaxHP - 1;
 					iDefenderFinalDamage = iMaxHP;
 				}
-				else // Defender wins ties. Or Interception has already killed the attacker. In either case, the defender survives with 1 HP.
+				else
 				{
 					iAttackerDamageDealt = iMaxHP - defender.getDamage() - 1;
 					iDefenderFinalDamage = iMaxHP - 1;
 					iAttackerFinalDamage = iMaxHP;
 				}
 			}
-			// If the defender is a ranged unit, and the attacker is a melee unit, and the defender will be killed by this
+
 			if (bRangedAttack && iDefenderFinalDamage >= iMaxHP)
 			{
 				iAttackerDamageDealt = defender.GetMaxHitPoints() - defender.getDamage();
@@ -12969,18 +12969,18 @@ void CvGame::getCombatDamage(CvCombatInfo& kInfo)
 				iDefenderDamageDealt = iMaxHP - attacker.getDamage() - kInfo.getDamageInflicted(BATTLE_UNIT_INTERCEPTOR);
 				iAttackerFinalDamage = iMaxHP;
 			}
-			// set Damages
-			kInfo.setFinalDamage(BATTLE_UNIT_ATTACKER, iAttackerFinalDamage); // Final HP - Attacker
-			kInfo.setDamageInflicted(BATTLE_UNIT_ATTACKER, iAttackerDamageDealt); // Damage inflicted by Attacker
-			kInfo.setFinalDamage(BATTLE_UNIT_DEFENDER, iDefenderFinalDamage); // Final HP - Defender
-			kInfo.setDamageInflicted(BATTLE_UNIT_DEFENDER, iDefenderDamageDealt); // Damage inflicted by Defender
+
+			kInfo.setFinalDamage(BATTLE_UNIT_ATTACKER, iAttackerFinalDamage);
+			kInfo.setDamageInflicted(BATTLE_UNIT_ATTACKER, iAttackerDamageDealt);
+			kInfo.setFinalDamage(BATTLE_UNIT_DEFENDER, iDefenderFinalDamage);
+			kInfo.setDamageInflicted(BATTLE_UNIT_DEFENDER, iDefenderDamageDealt);
 			kInfo.doExperience();
 
-			// Fear Damage exists? idk
-			// kInfo.setFearDamageInflicted(BATTLE_UNIT_ATTACKER, iAttackerDamageDealt);
-			// kInfo.setFearDamageInflicted(BATTLE_UNIT_DEFENDER, iDefenderDamage);
+
+
+
 		}
-		else if (kInfo.getCity(BATTLE_UNIT_DEFENDER) != NULL) // Defender is City
+		else if (kInfo.getCity(BATTLE_UNIT_DEFENDER) != NULL)
 		{
 			CvCity& defender = *kInfo.getCity(BATTLE_UNIT_DEFENDER);
 			iDefenderStrength = defender.getStrengthValue();
@@ -12990,35 +12990,35 @@ void CvGame::getCombatDamage(CvCombatInfo& kInfo)
 			if (kInfo.getDefenderRetaliates())
 			{
 				if (iDefenderStrength <= 0)
-					damagePair.second = 0; // Defender has no strength, so it cannot retaliate, so we don't need to calculate damage for the defender
+					damagePair.second = 0;
 			}
 			else
 			{
-				damagePair.second = 0; // if defender retaliates, we need to calculate damage for both units, otherwise we only need to calculate damage dealt to the defender
+				damagePair.second = 0;
 			}
 			do
 			{
 				const bool bAttacker = (damagePair.first == -1);
-				iWoundedRatio = bAttacker ? attacker.getWoundedRatio(iExtraDamage) : iMaxHP; // Cities are always at full health
+				iWoundedRatio = bAttacker ? attacker.getWoundedRatio(iExtraDamage) : iMaxHP;
 
 				const int iStrength = bAttacker ? iAttackerStrength : iDefenderStrength;
 				const int iOpponentStrength = bAttacker ? iDefenderStrength : iAttackerStrength;
 
-				const int iAttackSameStrengthMinDamage = bRangedAttack ? /*400*/ GC.getRANGE_ATTACK_SAME_STRENGTH_MIN_DAMAGE() : /*400*/ GC.getATTACK_SAME_STRENGTH_MIN_DAMAGE();
+				const int iAttackSameStrengthMinDamage = bRangedAttack ?         GC.getRANGE_ATTACK_SAME_STRENGTH_MIN_DAMAGE() :         GC.getATTACK_SAME_STRENGTH_MIN_DAMAGE();
 				iDamage = iAttackSameStrengthMinDamage * iWoundedRatio / iMaxHP;
 				kInfo.doRandomness(bAttacker ? BATTLE_UNIT_ATTACKER : BATTLE_UNIT_DEFENDER, iWoundedRatio);
 				iDamage += kInfo.getCombatSeed(bAttacker ? BATTLE_UNIT_ATTACKER : BATTLE_UNIT_DEFENDER);
 				double fStrengthRatio = kInfo.doStrengthRatio(iStrength, iOpponentStrength);
 				iDamage = static_cast<int>(iDamage * fStrengthRatio);
-				// Theoretical modifier for when a unit attacks a city. Not currently used (v35)
+
 				if (bAttacker && !bRangedAttack)
 				{
-					iDamage *= /*100*/ GC.getATTACKING_CITY_MELEE_DAMAGE_MOD();
+					iDamage *=         GC.getATTACKING_CITY_MELEE_DAMAGE_MOD();
 					iDamage /= 100;
 				}
 				if (!bAttacker && !bRangedAttack)
 				{
-					iDamage *= /*100*/ GC.getCITY_ATTACKING_DAMAGE_MOD();
+					iDamage *=         GC.getCITY_ATTACKING_DAMAGE_MOD();
 					iDamage /= 100;
 				}
 				iDamage /= 100;
@@ -13030,19 +13030,19 @@ void CvGame::getCombatDamage(CvCombatInfo& kInfo)
 			int iDefenderDamageDealt = damagePair.second;
 			if (!kInfo.getDefenderRetaliates() || iDefenderStrength <= 0)
 			{
-				iDefenderDamageDealt = 0; // no retaliation, so no damage to the attacker
+				iDefenderDamageDealt = 0;
 			}
 			else if (iDefenderDamageDealt < GC.getMIN_CITY_STRIKE_DAMAGE())
 			{
-				// Cities always deal at least a minimum amount of damage to the attacker, even if the attacker is stronger than the city.
+
 				iDefenderDamageDealt = GC.getMIN_CITY_STRIKE_DAMAGE();
 			}
 
 			int iDefenderFinalDamage = iAttackerDamageDealt + defender.getDamage();
 			int iAttackerFinalDamage = iDefenderDamageDealt + attacker.getDamage() + kInfo.getDamageInflicted(BATTLE_UNIT_INTERCEPTOR);
-			if (!bRangedAttack) // Melee Strike at a City
+			if (!bRangedAttack)
 			{
-				// Will both the attacker die and the city fall? if so the unit wins
+
 				if (iDefenderFinalDamage >= defender.GetMaxHitPoints() && iAttackerFinalDamage >= iMaxHP)
 				{
 					iDefenderDamageDealt = iMaxHP - attacker.getDamage() - 1;
@@ -13050,9 +13050,9 @@ void CvGame::getCombatDamage(CvCombatInfo& kInfo)
 					iDefenderFinalDamage = iMaxHP;
 				}
 			}
-			else // Ranged Strike at a City
+			else
 			{
-				// Cities cannot fall below 1 HP from a ranged attack, so if the attacker would kill, we need to adjust the damage to the city so that it survives with 1 HP
+
 				if (iDefenderFinalDamage >= defender.GetMaxHitPoints())
 				{
 					iAttackerDamageDealt = defender.GetMaxHitPoints() - defender.getDamage() - 1;
@@ -13070,11 +13070,11 @@ void CvGame::getCombatDamage(CvCombatInfo& kInfo)
 				iAttackerFinalDamage = iMaxHP;
 			}
 
-			// set Damages
-			kInfo.setFinalDamage(BATTLE_UNIT_ATTACKER, iAttackerFinalDamage ); // Final HP - Attacker
-			kInfo.setDamageInflicted(BATTLE_UNIT_ATTACKER, iAttackerDamageDealt); // Damage inflicted by Attacker
-			kInfo.setFinalDamage(BATTLE_UNIT_DEFENDER, iDefenderFinalDamage); // Final HP - Defender
-			kInfo.setDamageInflicted(BATTLE_UNIT_DEFENDER, iDefenderDamageDealt); // Damage inflicted by Defender
+
+			kInfo.setFinalDamage(BATTLE_UNIT_ATTACKER, iAttackerFinalDamage );
+			kInfo.setDamageInflicted(BATTLE_UNIT_ATTACKER, iAttackerDamageDealt);
+			kInfo.setFinalDamage(BATTLE_UNIT_DEFENDER, iDefenderFinalDamage);
+			kInfo.setDamageInflicted(BATTLE_UNIT_DEFENDER, iDefenderDamageDealt);
 			kInfo.doExperience();
 		}
 		else
@@ -13083,12 +13083,12 @@ void CvGame::getCombatDamage(CvCombatInfo& kInfo)
 		}
 		
 	}
-	else if (kInfo.getCity(BATTLE_UNIT_ATTACKER) != NULL) // Attacker is City
+	else if (kInfo.getCity(BATTLE_UNIT_ATTACKER) != NULL)
 	{
 		CvCity& attacker = *kInfo.getCity(BATTLE_UNIT_ATTACKER);
 		int iAttackerStrength = attacker.getStrengthValue(true);
 		int iDefenderStrength = 0;
-		if (kInfo.getUnit(BATTLE_UNIT_DEFENDER) != NULL) // Defender is Unit
+		if (kInfo.getUnit(BATTLE_UNIT_DEFENDER) != NULL)
 		{
 			CvUnit& defender = *kInfo.getUnit(BATTLE_UNIT_DEFENDER);
 			iDefenderStrength = defender.GetMaxDefenseStrength(kInfo);
@@ -13096,33 +13096,33 @@ void CvGame::getCombatDamage(CvCombatInfo& kInfo)
 			std::pair<int, int> damagePair(-1, -1);
 			if (kInfo.getAttackIsRanged() && !defender.IsCanDefend())
 			{
-				damagePair.first = GC.getNONCOMBAT_UNIT_RANGED_DAMAGE(); // Non-combat units take a set amount of damage from ranged attacks
+				damagePair.first = GC.getNONCOMBAT_UNIT_RANGED_DAMAGE();
 			}
-			damagePair.second = kInfo.getDefenderRetaliates() ? -1 : 0; // if defender retaliates, we need to calculate damage for both units, otherwise we only need to calculate damage dealt to the defender
+			damagePair.second = kInfo.getDefenderRetaliates() ? -1 : 0;
 			do
 			{
 				if (damagePair.first != -1 && damagePair.second != -1)
-					break; // if we have both damages, we can break out of the loop
+					break;
 				const bool bAttacker = (damagePair.first == -1);
 				const bool bRangedAttack = kInfo.getAttackIsRanged();
-				iWoundedRatio = bAttacker ? iMaxHP : defender.getWoundedRatio(kInfo.getExtraDamageTaken(BATTLE_UNIT_DEFENDER)); // Cities are always at full health
+				iWoundedRatio = bAttacker ? iMaxHP : defender.getWoundedRatio(kInfo.getExtraDamageTaken(BATTLE_UNIT_DEFENDER));
 				const int iStrength = bAttacker ? iAttackerStrength : iDefenderStrength;
 				const int iOpponentStrength = bAttacker ? iDefenderStrength : iAttackerStrength;
-				const int iAttackSameStrengthMinDamage = bRangedAttack ? /*400*/ GC.getRANGE_ATTACK_SAME_STRENGTH_MIN_DAMAGE() : /*400*/ GC.getATTACK_SAME_STRENGTH_MIN_DAMAGE();
+				const int iAttackSameStrengthMinDamage = bRangedAttack ?         GC.getRANGE_ATTACK_SAME_STRENGTH_MIN_DAMAGE() :         GC.getATTACK_SAME_STRENGTH_MIN_DAMAGE();
 				iDamage = iAttackSameStrengthMinDamage * iWoundedRatio / iMaxHP;
 				kInfo.doRandomness(bAttacker ? BATTLE_UNIT_ATTACKER : BATTLE_UNIT_DEFENDER, iWoundedRatio);
 				iDamage += kInfo.getCombatSeed(bAttacker ? BATTLE_UNIT_ATTACKER : BATTLE_UNIT_DEFENDER);
 				double fStrengthRatio = kInfo.doStrengthRatio(iStrength, iOpponentStrength);
 				iDamage = static_cast<int>(iDamage * fStrengthRatio);
-				// Theoretical modifier for when a unit attacks a city. Not currently used (v35)
+
 				if (bAttacker && !bRangedAttack)
 				{
-					iDamage *= /*100*/ GC.getATTACKING_CITY_MELEE_DAMAGE_MOD();
+					iDamage *=         GC.getATTACKING_CITY_MELEE_DAMAGE_MOD();
 					iDamage /= 100;
 				}
 				if (bAttacker)
 				{
-					iDamage *= /*100*/ GC.getCITY_ATTACKING_DAMAGE_MOD();
+					iDamage *=         GC.getCITY_ATTACKING_DAMAGE_MOD();
 					iDamage /= 100;
 				}
 				iDamage /= 100;
@@ -13153,41 +13153,41 @@ void CvGame::getCombatDamage(CvCombatInfo& kInfo)
 				iDefenderDamageDealt = iMaxHP - attacker.getDamage();
 				iAttackerFinalDamage = iMaxHP;
 			}
-			// set Damages
-			kInfo.setFinalDamage(BATTLE_UNIT_ATTACKER, iAttackerFinalDamage); // Final HP - Attacker
-			kInfo.setDamageInflicted(BATTLE_UNIT_ATTACKER, iAttackerDamageDealt); // Damage inflicted by Attacker
-			kInfo.setFinalDamage(BATTLE_UNIT_DEFENDER, iDefenderFinalDamage); // Final HP - Defender
-			kInfo.setDamageInflicted(BATTLE_UNIT_DEFENDER, iDefenderDamageDealt); // Damage inflicted by Defender
+
+			kInfo.setFinalDamage(BATTLE_UNIT_ATTACKER, iAttackerFinalDamage);
+			kInfo.setDamageInflicted(BATTLE_UNIT_ATTACKER, iAttackerDamageDealt);
+			kInfo.setFinalDamage(BATTLE_UNIT_DEFENDER, iDefenderFinalDamage);
+			kInfo.setDamageInflicted(BATTLE_UNIT_DEFENDER, iDefenderDamageDealt);
 			kInfo.doExperience();
 		}
-		else if (kInfo.getCity(BATTLE_UNIT_DEFENDER) != NULL) // Defender is City
+		else if (kInfo.getCity(BATTLE_UNIT_DEFENDER) != NULL)
 		{
 			CvCity& defender = *kInfo.getCity(BATTLE_UNIT_DEFENDER);
 			iDefenderStrength = defender.getStrengthValue();
 			int iDamage = 0;
 			std::pair<int, int> damagePair(-1, -1);
-			damagePair.second = kInfo.getDefenderRetaliates() ? -1 : 0; // if defender retaliates, we need to calculate damage for both units, otherwise we only need to calculate damage dealt to the defender
+			damagePair.second = kInfo.getDefenderRetaliates() ? -1 : 0;
 			do
 			{
 				const bool bAttacker = (damagePair.first == -1);
 				const bool bRangedAttack = kInfo.getAttackIsRanged();
 				const int iStrength = bAttacker ? iAttackerStrength : iDefenderStrength;
 				const int iOpponentStrength = bAttacker ? iDefenderStrength : iAttackerStrength;
-				const int iAttackSameStrengthMinDamage = bRangedAttack ? /*400*/ GC.getRANGE_ATTACK_SAME_STRENGTH_MIN_DAMAGE() : /*400*/ GC.getATTACK_SAME_STRENGTH_MIN_DAMAGE();;
+				const int iAttackSameStrengthMinDamage = bRangedAttack ?         GC.getRANGE_ATTACK_SAME_STRENGTH_MIN_DAMAGE() :         GC.getATTACK_SAME_STRENGTH_MIN_DAMAGE();;
 				iDamage = iAttackSameStrengthMinDamage;
 				kInfo.doRandomness(bAttacker ? BATTLE_UNIT_ATTACKER : BATTLE_UNIT_DEFENDER, iMaxHP);
 				iDamage += kInfo.getCombatSeed(bAttacker ? BATTLE_UNIT_ATTACKER : BATTLE_UNIT_DEFENDER);
 				double fStrengthRatio = kInfo.doStrengthRatio(iStrength, iOpponentStrength);
 				iDamage = static_cast<int>(iDamage * fStrengthRatio);
-				// Theoretical modifier for when a unit attacks a city. Not currently used (v35)
+
 				if (bAttacker && !bRangedAttack)
 				{
-					iDamage *= /*100*/ GC.getATTACKING_CITY_MELEE_DAMAGE_MOD();
+					iDamage *=         GC.getATTACKING_CITY_MELEE_DAMAGE_MOD();
 					iDamage /= 100;
 				}
 				if (bAttacker)
 				{
-					iDamage *= /*100*/ GC.getCITY_ATTACKING_DAMAGE_MOD();
+					iDamage *=         GC.getCITY_ATTACKING_DAMAGE_MOD();
 					iDamage /= 100;
 				}
 				iDamage /= 100;
@@ -13201,11 +13201,11 @@ void CvGame::getCombatDamage(CvCombatInfo& kInfo)
 				iAttackerDamageDealt = GC.getMIN_CITY_STRIKE_DAMAGE();
 			}
 			int iDefenderDamageDealt = damagePair.second;
-			if (!kInfo.getDefenderRetaliates()) // No Retaliation
+			if (!kInfo.getDefenderRetaliates())
 			{
 				iDefenderDamageDealt = 0;
 			}
-			else if (iDefenderDamageDealt < GC.getMIN_CITY_STRIKE_DAMAGE()) // Retaliation is happening, but the damage is too low, so we set it to the minimum
+			else if (iDefenderDamageDealt < GC.getMIN_CITY_STRIKE_DAMAGE())
 			{
 				iDefenderDamageDealt = GC.getMIN_CITY_STRIKE_DAMAGE();
 			}
@@ -13222,11 +13222,11 @@ void CvGame::getCombatDamage(CvCombatInfo& kInfo)
 				iDefenderDamageDealt = attacker.GetMaxHitPoints() - 1 - attacker.getDamage();
 				iAttackerFinalDamage = attacker.GetMaxHitPoints() - 1;
 			}
-			// set Damages
-			kInfo.setFinalDamage(BATTLE_UNIT_ATTACKER, iAttackerFinalDamage); // Final HP - Attacker
-			kInfo.setDamageInflicted(BATTLE_UNIT_ATTACKER, iAttackerDamageDealt); // Damage inflicted by Attacker
-			kInfo.setFinalDamage(BATTLE_UNIT_DEFENDER, iDefenderFinalDamage); // Final HP - Defender
-			kInfo.setDamageInflicted(BATTLE_UNIT_DEFENDER, iDefenderDamageDealt); // Damage inflicted by Defender
+
+			kInfo.setFinalDamage(BATTLE_UNIT_ATTACKER, iAttackerFinalDamage);
+			kInfo.setDamageInflicted(BATTLE_UNIT_ATTACKER, iAttackerDamageDealt);
+			kInfo.setFinalDamage(BATTLE_UNIT_DEFENDER, iDefenderFinalDamage);
+			kInfo.setDamageInflicted(BATTLE_UNIT_DEFENDER, iDefenderDamageDealt);
 			kInfo.doExperience();
 		}
 		else
@@ -13241,8 +13241,8 @@ void CvGame::getCombatDamage(CvCombatInfo& kInfo)
 
 	return;
 }
-//	--------------------------------------------------------------------------------
-/// Shortcut for generating combat modifier tooltip help
+
+
 void CvGame::BuildCombatModHelpText(CvCombatModifierList& kModifierList, const char* szTextKey, int iModifier, const char* szExtraKey) const
 {
 	if (iModifier == 0)
@@ -13257,8 +13257,8 @@ void CvGame::BuildCombatModHelpText(CvCombatModifierList& kModifierList, const c
 
 	kModifierList.AddEntry(localizedText.toUTF8(), iModifier);
 }
-//	--------------------------------------------------------------------------------
-/// Combat modifier tooltip with an additional integer argument
+
+
 void CvGame::BuildCombatModHelpText(CvCombatModifierList& kModifierList, const char* szTextKey, int iModifier, int iExtraInt) const
 {
 	if (iModifier == 0)
@@ -13294,7 +13294,7 @@ void CvGame::BuildCombatStrengthHelpText(CvCombatModifierList& kModifierList, co
 	kModifierList.AddEntry(strText.toUTF8(), iValue, false);
 }
 #endif
-//	--------------------------------------------------------------------------------
+
 PlayerTypes GetRandomMajorPlayer()
 {
 	PlayerTypes ePlayer = NO_PLAYER;
@@ -13306,13 +13306,13 @@ PlayerTypes GetRandomMajorPlayer()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 PlayerTypes GetRandomPlayer()
 {
 	PlayerTypes ePlayer = NO_PLAYER;
 	do 
 	{
-		ePlayer = static_cast<PlayerTypes>(GC.getGame().getJonRandNum(MAX_CIV_PLAYERS, "Random Player")); // no barbs
+		ePlayer = static_cast<PlayerTypes>(GC.getGame().getJonRandNum(MAX_CIV_PLAYERS, "Random Player"));
 	} while (!GET_PLAYER(ePlayer).isEverAlive());
 	return ePlayer;
 }
@@ -13330,16 +13330,16 @@ void CvGame::PopulateDigSite(CvPlot& kPlot, EraTypes eEra, GreatWorkArtifactClas
 	digSite.m_eArtifactType = eArtifact;
 	digSite.m_eEra = eEra;
 
-	// find nearest city (preferably on same area)
-	CvCity* pNearestCity = theMap.findCity(iPlotX, iPlotY, NO_PLAYER, NO_TEAM, true /* bSameArea */);
-	pNearestCity = pNearestCity ? pNearestCity : theMap.findCity(iPlotX, iPlotY, NO_PLAYER, NO_TEAM, false /* bSameArea */); // expand search if we need to
+
+	CvCity* pNearestCity = theMap.findCity(iPlotX, iPlotY, NO_PLAYER, NO_TEAM, true                );
+	pNearestCity = pNearestCity ? pNearestCity : theMap.findCity(iPlotX, iPlotY, NO_PLAYER, NO_TEAM, false                );
 	if (pNearestCity)
 	{
 		digSite.m_ePlayer1 = pNearestCity->getOriginalOwner();
 	}
-	else //  we can't find a nearby city (likely a late era start)
+	else
 	{
-		// look for nearby units
+
 		CvUnit* pUnit = theMap.findUnit(iPlotX, iPlotY);
 		if (pUnit)
 		{
@@ -13347,13 +13347,13 @@ void CvGame::PopulateDigSite(CvPlot& kPlot, EraTypes eEra, GreatWorkArtifactClas
 		}
 		else
 		{
-			// look for the start location if it exists
+
 			PlayerTypes thisPlayer;
 			if (theMap.findNearestStartPlot(iPlotX, iPlotY, thisPlayer))
 			{
 				digSite.m_ePlayer1 = thisPlayer;
 			}
-			else // just make something up
+			else
 			{
 				digSite.m_ePlayer1 = GetRandomMajorPlayer();
 			}
@@ -13372,14 +13372,14 @@ void CvGame::PopulateDigSite(CvPlot& kPlot, EraTypes eEra, GreatWorkArtifactClas
 
 	kPlot.AddArchaeologicalRecord(digSite.m_eArtifactType, digSite.m_eEra, digSite.m_ePlayer1, digSite.m_ePlayer2);
 }
-//	--------------------------------------------------------------------------------
+
 void CvGame::SpawnArchaeologySitesHistorically()
 {
 	CvMap& theMap = GC.getMap();
 	const int iGridWidth = theMap.getGridWidth();
 
-	// we should now have a map of the dig sites
-	// turn this map into set of RESOURCE_ARTIFACTS
+
+
 	const ResourceTypes eArtifactResourceType = static_cast<ResourceTypes>(GC.getARTIFACT_RESOURCE());
 	const ResourceTypes eHiddenArtifactResourceType = static_cast<ResourceTypes>(GC.getHIDDEN_ARTIFACT_RESOURCE());
 
@@ -13394,20 +13394,20 @@ void CvGame::SpawnArchaeologySitesHistorically()
 		CvTypes::getARTIFACT_BATTLE_RANGED() 
 	};
 
-	// find how many dig sites we need to create
+
 	const int iNumMajorCivs = countMajorCivsEverAlive();
-	const int iMinDigSites = GC.getMIN_DIG_SITES_PER_MAJOR_CIV() * iNumMajorCivs; //todo: parameterize this
-	const int iMaxDigSites = GC.getMAX_DIG_SITES_PER_MAJOR_CIV() * iNumMajorCivs; //todo: parameterize this
+	const int iMinDigSites = GC.getMIN_DIG_SITES_PER_MAJOR_CIV() * iNumMajorCivs;
+	const int iMaxDigSites = GC.getMAX_DIG_SITES_PER_MAJOR_CIV() * iNumMajorCivs;
 	const int iIdealNumDigSites = iMinDigSites + getJonRandNum((iMaxDigSites - iMinDigSites) / 2, "Num dig sites") + getJonRandNum((iMaxDigSites - iMinDigSites) / 2, "Num dig sites");
 
-	// find the highest era any player has gotten to
+
 	EraTypes eHighestEra = NO_ERA;
 	PlayerTypes eLoopPlayer;
 	for(int iPlayerLoop = 0; iPlayerLoop < MAX_MAJOR_CIVS; iPlayerLoop++)
 	{
 		eLoopPlayer = (PlayerTypes) iPlayerLoop;
 
-		// Player not ever alive
+
 		if(!GET_PLAYER(eLoopPlayer).isEverAlive())
 			continue;
 
@@ -13430,10 +13430,10 @@ void CvGame::SpawnArchaeologySitesHistorically()
 	RandomNumberDelegate fcn;
 	fcn = MakeDelegate(this, &CvGame::getJonRandNum);
 
-	// find out how many dig sites we have now
+
 	int iHowManyChosenDigSites = 0;
 
-	// fill the historical buffer with the archaeological data
+
 	FFastVector<CvArchaeologyData, true, c_eCiv5GameplayDLL, 0> historicalDigSites;
 	FFastVector<CvArchaeologyData, true, c_eCiv5GameplayDLL, 0> scratchDigSites;
 	int iGridSize = theMap.numPlots();
@@ -13457,7 +13457,7 @@ void CvGame::SpawnArchaeologySitesHistorically()
 			historicalDigSites[i].m_ePlayer1 = NO_PLAYER;
 			historicalDigSites[i].m_ePlayer2 = NO_PLAYER;
 
-			//Cannot be an antiquity site if we cannot generate an artifact.
+
 			if(eResource == eArtifactResourceType || eResource == eHiddenArtifactResourceType)
 			{
 				pPlot->setResourceType(NO_RESOURCE, 0, true);
@@ -13465,21 +13465,21 @@ void CvGame::SpawnArchaeologySitesHistorically()
 		}
 		else
 		{
-			//If this plot is already marked as an antiquity site, ensure it's populated.
+
 			if(eResource == eArtifactResourceType || eResource == eHiddenArtifactResourceType)
 			{
 				if(pPlot->GetArchaeologicalRecord().m_eArtifactType == NO_GREAT_WORK_ARTIFACT_CLASS)
 				{
-					// pick an era before this one			
+
 					EraTypes eEra = static_cast<EraTypes>(eEraWeights.ChooseByWeight(&fcn, "Choosing an era by weight"));
 					eEra = eEra > static_cast<EraTypes>(0) ? eEra : static_cast<EraTypes>(0);
 
-					// pick a type of artifact
+
 					GreatWorkArtifactClass eArtifact = aRandomArtifacts[getJonRandNum(aRandomArtifactsCount, "Artifact type for non-historical dig site")];
 
 					PopulateDigSite(*pPlot, eEra, eArtifact);
 
-					//Record in scratch space for weights.
+
 					scratchDigSites[i] = pPlot->GetArchaeologicalRecord();
 				}
 
@@ -13490,7 +13490,7 @@ void CvGame::SpawnArchaeologySitesHistorically()
 		}
 	}
 
-	// calculate initial weights
+
 	FFastVector<int, true, c_eCiv5GameplayDLL, 0> digSiteWeights;
 	digSiteWeights.resize(iGridSize);
 	for (int i = 0; i < iGridSize; i++)
@@ -13499,8 +13499,8 @@ void CvGame::SpawnArchaeologySitesHistorically()
 	}
 	CalculateDigSiteWeights(iGridSize, historicalDigSites, scratchDigSites, digSiteWeights);
 
-	// build a weight vector
-	static CvWeightedVector<int, 128*80, true> aDigSiteWeights; // size of a HUGE world
+
+	static CvWeightedVector<int, 128*80, true> aDigSiteWeights;
 	aDigSiteWeights.resize(iGridSize);
 
 	vector<GreatWorkType> aWorksWriting;
@@ -13522,10 +13522,10 @@ void CvGame::SpawnArchaeologySitesHistorically()
 	int iNumDesiredWritingSites = iApproxNumHiddenSites * GC.getPERCENT_HIDDEN_SITES_WRITING() / 100;
 	int iNumWritingSites = min((int)aWorksWriting.size(), iNumDesiredWritingSites);
 
-	// while we are not in the proper range of number of dig sites
+
 	while (iHowManyChosenDigSites < iIdealNumDigSites)
 	{
-		// populate a weight vector
+
 		aDigSiteWeights.clear();
 		for (int i = 0; i < iGridSize; i++)
 		{
@@ -13535,14 +13535,14 @@ void CvGame::SpawnArchaeologySitesHistorically()
 			}
 		}
 
-		// sort the weight vector
+
 		aDigSiteWeights.SortItems();
 
-		// add the best dig site
+
 		int iBestSite = aDigSiteWeights.GetElement(0);
 		CvPlot* pPlot = theMap.plotByIndexUnchecked(iBestSite);
 
-		// Hidden site?
+
 		bool bHiddenSite = GC.getGame().getJonRandNum(100, "Hidden antiquity site roll") < GC.getPERCENT_SITES_HIDDEN();
 		if (bHiddenSite)
 		{
@@ -13553,38 +13553,38 @@ void CvGame::SpawnArchaeologySitesHistorically()
 			pPlot->setResourceType(eArtifactResourceType, 1);
 		}
 
-		// if this is not a historical dig site
+
 		if (scratchDigSites[iBestSite].m_eArtifactType == NO_GREAT_WORK_ARTIFACT_CLASS)
 		{
-			// fake the historical data
-			// pick an era before this one			
+
+
 			EraTypes eEra = static_cast<EraTypes>(eEraWeights.ChooseByWeight(&fcn, "Choosing an era by weight"));
 			eEra = eEra > static_cast<EraTypes>(0) ? eEra : static_cast<EraTypes>(0);
 
-			// pick a type of artifact
+
 			GreatWorkArtifactClass eArtifact;
 			eArtifact = aRandomArtifacts[getJonRandNum(aRandomArtifactsCount, "Artifact type for non-historical dig site")];
 
 			PopulateDigSite(*pPlot, eEra, eArtifact);
 		}
 
-		// If this is a hidden slot getting a writing, override a few things
+
 		if (bHiddenSite && iNumWritingSites > 0)
 		{
-			// First change the type
+
 			pPlot->SetArtifactType(CvTypes::getARTIFACT_WRITING());
 
-			// Then get a writing and set it
+
 			int iIndex = getJonRandNum(aWorksWriting.size(), "");
 			GreatWorkType eWrittenGreatWork = aWorksWriting[iIndex];
 			pPlot->SetArtifactGreatWork((GreatWorkType)eWrittenGreatWork);
 
-			// Erase that writing from future consideration
+
 			vector<GreatWorkType>::const_iterator it;
 			it = std::find (aWorksWriting.begin(), aWorksWriting.end(), eWrittenGreatWork);
 			aWorksWriting.erase(it);
 
-			// One less writing to give out
+
 			iNumWritingSites--;
 		}
 
@@ -13592,7 +13592,7 @@ void CvGame::SpawnArchaeologySitesHistorically()
 
 		iHowManyChosenDigSites++;
 
-		// recalculate weights near the chosen dig site (the rest of the world should still be fine)
+
 		const int iRange = 3;
 		int iPlotX = iBestSite % iGridWidth;
 		int iPlotY = iBestSite / iGridWidth;
@@ -13602,9 +13602,9 @@ void CvGame::SpawnArchaeologySitesHistorically()
 		for (int iDY = -iRange; iDY <= iRange; iDY++)
 		{
 			iMaxDX = iRange - MAX(0, iDY);
-			for (iDX = -iRange - MIN(0, iDY); iDX <= iMaxDX; iDX++) // MIN() and MAX() stuff is to reduce loops (hexspace!)
+			for (iDX = -iRange - MIN(0, iDY); iDX <= iMaxDX; iDX++)
 			{
-				// No need for range check because loops are set up properly
+
 				pLoopPlot = plotXY(iPlotX, iPlotY, iDX, iDY);
 #else
 		for (int iDX = -iRange; iDX <= iRange; iDX++)
@@ -13624,7 +13624,7 @@ void CvGame::SpawnArchaeologySitesHistorically()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 CombatPredictionTypes CvGame::GetCombatPrediction(const CvUnit* pAttackingUnit, const CvUnit* pDefendingUnit)
 {
 	if(!pAttackingUnit || !pDefendingUnit)
@@ -13724,17 +13724,17 @@ CombatPredictionTypes CvGame::GetCombatPrediction(const CvUnit* pAttackingUnit, 
 	return ePrediction;
 }
 
-//------------------------------------------------------------
-//------------------------------------------------------------
-//------------------------------------------------------------
-// Convert from city population to discrete size
-//------------------------------------------------------------
-//------------------------------------------------------------
-//------------------------------------------------------------
+
+
+
+
+
+
+
 const unsigned int CvGame::ms_aiSizes[10] = { 2, 3, 5, 7, 9, 11, 13, 15, 17, UINT_MAX };
 
-//	--------------------------------------------------------------------------------
-//Function to determine city size from city population
+
+
 unsigned int CvGame::GetVariableCitySizeFromPopulation(unsigned int nPopulation)
 {
 	for(unsigned int i = 0; i < 10; ++i)
@@ -13747,16 +13747,16 @@ unsigned int CvGame::GetVariableCitySizeFromPopulation(unsigned int nPopulation)
 	return 4;
 };
 
-//------------------------------------------------------------
-//------------------------------------------------------------
-//------------------------------------------------------------
 
-//	--------------------------------------------------------------------------------
+
+
+
+
 void CvGame::NetMessageStaticsReset()
-{//The net message system reset its static variables.  
+{
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvGame::SetLastTurnAICivsProcessed()
 {
 	if(m_lastTurnAICivsProcessed != getGameTurn()){
@@ -13764,18 +13764,3 @@ void CvGame::SetLastTurnAICivsProcessed()
 		m_lastTurnAICivsProcessed = getGameTurn();
 	}
 }
-
-/*bool CvGame::AnyoneHasBuildingClass(BuildingClassTypes iBuildingClassType) const
-{
-	for (int i = 0; i < MAX_PLAYERS; ++i) {
-		CvPlayer& player = GET_PLAYER(static_cast<PlayerTypes>(i));
-
-		if(player.isAlive() && player.HasBuildingClass(iBuildingClassType)) {
-			return true;
-		}
-	}
-
-	return false;
-}
-*/
-

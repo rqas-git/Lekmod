@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #ifndef CvReplayInfo_H
 #define CvReplayInfo_H
 
@@ -127,10 +127,10 @@ protected:
 	typedef std::vector<std::string> DataSetMap;
 	DataSetMap m_dataSetMap;
 
-	typedef std::map<unsigned int, int> TurnData;			//Turn#, value
-	typedef std::vector<TurnData> TurnDataSets;				//index is DataSet Index resolved by DataSetMap
+	typedef std::map<unsigned int, int> TurnData;
+	typedef std::vector<TurnData> TurnDataSets;
 
-	typedef std::vector<TurnDataSets> PlayerTurnDataSets;	//index is Player
+	typedef std::vector<TurnDataSets> PlayerTurnDataSets;
 	PlayerTurnDataSets m_listPlayerDataSets;
 
 	int m_iMapHeight;
@@ -151,7 +151,7 @@ protected:
 
 	ListOfPlots m_listPlots;
 
-	// serialization support
+
 	friend FDataStream& operator<<(FDataStream& saveTo, const CvReplayInfo::PlayerInfo& readFrom);
 	friend FDataStream& operator>>(FDataStream& loadFrom, CvReplayInfo::PlayerInfo& writeTo);
 	friend FDataStream& operator<<(FDataStream& saveTo, const CvReplayInfo::TurnData& readFrom);

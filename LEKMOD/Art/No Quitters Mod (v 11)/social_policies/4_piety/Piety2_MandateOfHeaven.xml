@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/11/2015 10:51:49 PM -->
+
 <GameData>
 
-	<!-- MANDATE OF HEAVEN -->
+
 	<Policy_BuildingClassYieldChanges>
 		<Row>
 			<PolicyType>POLICY_MANDATE_OF_HEAVEN</PolicyType>

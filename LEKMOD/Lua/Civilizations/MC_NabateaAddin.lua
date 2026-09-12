@@ -1,14 +1,14 @@
--- Nabatea Addin
--- Author: JFD, Sukritact
---=======================================================================================================================
+
+
+
 Events.SequenceGameInitComplete.Add(function()
 include("IconSupport")
 include("PlotIterators")
 print("loaded")
 
---=======================================================================================================================
--- Defines
---=======================================================================================================================
+
+
+
 local iCiv			= GameInfoTypes.CIVILIZATION_NABATEA
 local iBuilding		= GameInfoTypes.BUILDING_TRAIT_MC_NABATEA
 local iDesert 		= GameInfoTypes.TERRAIN_DESERT
@@ -26,18 +26,18 @@ local tFlavor = {
 		'BUY',
 		'BUY',
 		'BUY',
-	}	
---==========================================================================================================================
--- GAMEPLAY FUNCTIONS
---==========================================================================================================================
+	}
+
+
+
 function GetImprovementCost(pCity)
 	local iNum = pCity:GetNumBuilding(iBuilding)
-	local iCost = tCost[iNum+1] -- arrays in lua start at 1
+	local iCost = tCost[iNum+1]
 	if not(iCost) then
-		-- when you have 3 buildings, the next building should cost 200, then increment by 100 onwards
-		-- therefore 3 should return 200; 4 should return 300; 5 should return 400, etc.
-		-- the formula for that is (n-1) * 100
-		iCost = (iNum - 1) * 100 
+
+
+
+		iCost = (iNum - 1) * 100
 	end
 
 	local iMod2 = 1
@@ -49,22 +49,22 @@ function GetImprovementCost(pCity)
 	iCost = math.ceil(iMod * iCost * iMod2)
 	return iCost
 end
-------------------------------------
--- GetPleasureGarden
-------------------------------------
+
+
+
 function GetPleasureGarden(pCity)
 	local iNum = pCity:GetNumBuilding(iBuilding)
-	local iReward = tCost[iNum+1] -- arrays in lua start at 1
+	local iReward = tCost[iNum+1]
 	if not(iReward) then
-		iReward = (iNum - 1) * 100 
+		iReward = (iNum - 1) * 100
 	end
 
 	iReward = math.ceil(iMod * iReward/6)
 	return iReward
 end
-------------------------------------
--- IsDesertCity
-------------------------------------
+
+
+
 function IsDesertCity(pCity)
 	pPlot = pCity:Plot()
 
@@ -76,11 +76,11 @@ function IsDesertCity(pCity)
 
 	return false
 end
-------------------------------------
--- AI Support
-------------------------------------
+
+
+
 function AI_Support(iPlayer)
-	
+
 	local pPlayer = Players[iPlayer]
 	if not(pPlayer:GetCivilizationType() == iCiv) then return end
 	if pPlayer:IsHuman() then return end
@@ -91,21 +91,21 @@ function AI_Support(iPlayer)
 
 		if pPlayer:GetGold() < iCost then break end
 		pPlayer:ChangeGold(-iCost)
-		pCity:SetNumRealBuilding(iBuilding, iNum + 1)	
+		pCity:SetNumRealBuilding(iBuilding, iNum + 1)
 	end
 
 end
 
 GameEvents.PlayerDoTurn.Add(AI_Support)
---==========================================================================================================================
--- UI FUNCTIONS
---==========================================================================================================================
--- UI
-----------------------------------------------------------------------------------------------------------------------------
--- UpdateNabateaBoxAndResize
+
+
+
+
+
+
 function UpdateNabateaBoxAndResize()
 
-	-- Hide Where Applicable
+
 	local pCity = UI.GetHeadSelectedCity()
 	if not pCity then
 		Controls.NabateaBox:SetHide(true)
@@ -115,13 +115,13 @@ function UpdateNabateaBoxAndResize()
 	if iPlayer ~= Game.GetActivePlayer() then
 		Controls.NabateaBox:SetHide(true)
 		return
-	end		
+	end
 	local pPlayer = Players[iPlayer]
 	if not(pPlayer:GetCivilizationType() == iCiv) then
 		Controls.NabateaBox:SetHide(true)
 		return
 	end
-	
+
 	local tCultureBox = ContextPtr:LookUpControl("/InGame/CityView/RightStack")
 	Controls.NabateaBox:ChangeParent(tCultureBox)
 	Controls.NabateaBox:SetHide(false)
@@ -140,10 +140,10 @@ function UpdateNabateaBoxAndResize()
 
 	UpdateNabateaBox()
 end
--- UpdateNabateaBox
+
 function UpdateNabateaBox()
 
-	-- Hide Where Applicable
+
 	local pCity = UI.GetHeadSelectedCity()
 	if not pCity then
 		Controls.NabateaBox:SetHide(true)
@@ -153,7 +153,7 @@ function UpdateNabateaBox()
 	if iPlayer ~= Game.GetActivePlayer() then
 		Controls.NabateaBox:SetHide(true)
 		return
-	end		
+	end
 	local pPlayer = Players[iPlayer]
 	if not(pPlayer:GetCivilizationType() == iCiv) then
 		Controls.NabateaBox:SetHide(true)
@@ -165,7 +165,7 @@ function UpdateNabateaBox()
 	if Players[iPlayer]:HasPolicy(GameInfoTypes.POLICY_DECISIONS_NABATEANGARDENS) then
 		Controls.BuyButton:LocalizeAndSetToolTip("TXT_KEY_TRAIT_MC_NABATEA_TOOLTIP2", iCost, iNum * 2, GetPleasureGarden(pCity))
 	else
-		Controls.BuyButton:LocalizeAndSetToolTip("BUY", iCost, iNum * 2)		
+		Controls.BuyButton:LocalizeAndSetToolTip("BUY", iCost, iNum * 2)
 	end
 	Controls.BuyButton:SetDisabled(false)
 
@@ -186,9 +186,9 @@ if Players[Game.GetActivePlayer()]:GetCivilizationType() == iCiv then
 	Events.SerialEventCityInfoDirty.Add(UpdateNabateaBox)
 	Events.SerialEventGameDataDirty.Add(UpdateNabateaBox)
 end
-------------------------------------
--- On Button Click
-------------------------------------
+
+
+
 function OnClick()
 	local iPlayer = Game.GetActivePlayer()
 	local pPlayer = Players[iPlayer]
@@ -212,5 +212,3 @@ end
 Controls.BuyButton:RegisterCallback(Mouse.eLClick, OnClick)
 
 end)
---==========================================================================================================================
---==========================================================================================================================

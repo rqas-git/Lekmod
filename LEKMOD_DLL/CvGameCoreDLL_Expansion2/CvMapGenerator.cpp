@@ -1,16 +1,16 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvMapGenerator.h"
 #include "CvGame.h"
 #include "cvStopWatch.h"
 
-// must be included after all other headers
+
 #include "LintFree.h"
 
 struct GetMapInitDataArgs
@@ -20,14 +20,14 @@ struct GetMapInitDataArgs
 	int WorldSize;
 	bool bSuccess;
 };
-//------------------------------------------------------------------------------
+
 struct GetGameInitialItemsOverridesArgs
 {
 	ICvEngineScriptSystem1* pkScriptSystem;
 	CvGameInitialItemsOverrides* pkOverrides;
 	bool bSuccess;
 };
-//------------------------------------------------------------------------------
+
 CvMapGenerator::CvMapGenerator(const char* szMapScriptName)
 	: m_pkLuaState(NULL)
 {
@@ -37,19 +37,19 @@ CvMapGenerator::CvMapGenerator(const char* szMapScriptName)
 	DEBUG_VARIABLE(bLoaded);
 	CvAssertMsg(bLoaded, "Cannot load mapscript.");
 }
-//------------------------------------------------------------------------------
+
 CvMapGenerator::~CvMapGenerator()
 {
 	ICvEngineScriptSystem1* pkScriptSystem = gDLL->GetScriptSystem();
 	pkScriptSystem->FreeLuaThread(m_pkLuaState);
 }
-//------------------------------------------------------------------------------
+
 bool CvMapGenerator::GetMapInitData(CvMapInitData& kData, WorldSizeTypes eWorldSize)
 {
 	CvWorldInfo	kWorldInfo;
 	Database::Connection& db = *GC.GetGameDatabase();
 
-	//Query
+
 	Database::Results kQuery;
 	db.Execute(kQuery, "SELECT * from Worlds where ID = ? LIMIT 1");
 	kQuery.Bind(1, eWorldSize);
@@ -77,7 +77,7 @@ bool CvMapGenerator::GetMapInitData(CvMapInitData& kData, WorldSizeTypes eWorldS
 	pkScriptSystem->CallCFunction(m_pkLuaState, pGetMapInitData, &args);
 	return args.bSuccess;
 }
-//------------------------------------------------------------------------------------------------
+
 void CvMapGenerator::GenerateRandomMap()
 {
 	ICvEngineScriptSystem1* pkScriptSystem = gDLL->GetScriptSystem();
@@ -86,7 +86,7 @@ void CvMapGenerator::GenerateRandomMap()
 
 	lua_gc(m_pkLuaState, LUA_GCCOLLECT, 0);
 }
-//------------------------------------------------------------------------------
+
 bool CvMapGenerator::GetGameInitialItemsOverrides(CvGameInitialItemsOverrides& kOverrides)
 {
 	ICvEngineScriptSystem1* pkScriptSystem = gDLL->GetScriptSystem();
@@ -99,7 +99,7 @@ bool CvMapGenerator::GetGameInitialItemsOverrides(CvGameInitialItemsOverrides& k
 	pkScriptSystem->CallCFunction(m_pkLuaState, pGetGameInitialItemsOverrides, &args);
 	return args.bSuccess;
 }
-//------------------------------------------------------------------------------
+
 int CvMapGenerator::pGetMapInitData(lua_State* L)
 {
 	cvStopWatch stopWatch("CvMapGenerator - GetMapInitData()");
@@ -147,7 +147,7 @@ int CvMapGenerator::pGetMapInitData(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvMapGenerator::pGetGameInitialItemsOverrides(lua_State* L)
 {
 	cvStopWatch stopWatch("CvMapGenerator - GetGameInitialItemsOverrides()");
@@ -162,11 +162,11 @@ int CvMapGenerator::pGetGameInitialItemsOverrides(lua_State* L)
 		if(lua_istable(L, t))
 		{
 
-			//Initial Free Techs per Team
+
 			lua_getfield(L, t, "GrantInitialFreeTechsPerTeam");
 			if(lua_istable(L, -1))
 			{
-				lua_pushnil(L);  /* first key */
+				lua_pushnil(L);
 				while(lua_next(L, -2) != 0)
 				{
 					if(lua_isnumber(L, -2) && lua_isboolean(L, -1))
@@ -183,11 +183,11 @@ int CvMapGenerator::pGetGameInitialItemsOverrides(lua_State* L)
 			}
 			lua_pop(L, 1);
 
-			//Initial Gold per Player
+
 			lua_getfield(L, t, "GrantInitialGoldPerPlayer");
 			if(lua_istable(L, -1))
 			{
-				lua_pushnil(L);  /* first key */
+				lua_pushnil(L);
 				while(lua_next(L, -2) != 0)
 				{
 					if(lua_isnumber(L, -2) && lua_isboolean(L, -1))
@@ -204,11 +204,11 @@ int CvMapGenerator::pGetGameInitialItemsOverrides(lua_State* L)
 			}
 			lua_pop(L, 1);
 
-			//Initial Culture per Player
+
 			lua_getfield(L, t, "GrantInitialCulturePerPlayer");
 			if(lua_istable(L, -1))
 			{
-				lua_pushnil(L);  /* first key */
+				lua_pushnil(L);
 				while(lua_next(L, -2) != 0)
 				{
 					if(lua_isnumber(L, -2) && lua_isboolean(L, -1))
@@ -225,11 +225,11 @@ int CvMapGenerator::pGetGameInitialItemsOverrides(lua_State* L)
 			}
 			lua_pop(L, 1);
 
-			//Clear research queue per Player
+
 			lua_getfield(L, t, "ClearResearchQueuePerPlayer");
 			if(lua_istable(L, -1))
 			{
-				lua_pushnil(L);  /* first key */
+				lua_pushnil(L);
 				while(lua_next(L, -2) != 0)
 				{
 					if(lua_isnumber(L, -2) && lua_isboolean(L, -1))
@@ -246,11 +246,11 @@ int CvMapGenerator::pGetGameInitialItemsOverrides(lua_State* L)
 			}
 			lua_pop(L, 1);
 
-			//Initial Units per Player
+
 			lua_getfield(L, t, "GrantInitialUnitsPerPlayer");
 			if(lua_istable(L, -1))
 			{
-				lua_pushnil(L);  /* first key */
+				lua_pushnil(L);
 				while(lua_next(L, -2) != 0)
 				{
 					if(lua_isnumber(L, -2) && lua_isboolean(L, -1))
@@ -272,7 +272,7 @@ int CvMapGenerator::pGetGameInitialItemsOverrides(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvMapGenerator::pGenerateRandomMap(lua_State* L)
 {
 	cvStopWatch stopWatch("CvMapGenerator - GenerateRandomMap()");
@@ -286,5 +286,3 @@ int CvMapGenerator::pGenerateRandomMap(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
-

@@ -183,7 +183,7 @@
 			<Flavor>75</Flavor>
 		</Row>
 		
-		<!-- Now covered by the catcher for free buildings and Terracotta free units in the DLL -->
+
 		<Delete BuildingType="BUILDING_CN_TOWER" FlavorType="FLAVOR_CULTURE" />
 		<Delete BuildingType="BUILDING_TERRACOTTA_ARMY" FlavorType="FLAVOR_OFFENSE" />
 		<Delete BuildingType="BUILDING_TERRACOTTA_ARMY" FlavorType="FLAVOR_DEFENSE" />
@@ -214,7 +214,7 @@
 			<Where BuildingType="BUILDING_GREAT_LIBRARY" FlavorType="FLAVOR_SCIENCE" />
 		</Update>
 		
-		<!-- Was originally missing from the game files -->
+
 		<Row>
 			<BuildingType>BUILDING_NEUSCHWANSTEIN</BuildingType>
 			<FlavorType>FLAVOR_GOLD</FlavorType>

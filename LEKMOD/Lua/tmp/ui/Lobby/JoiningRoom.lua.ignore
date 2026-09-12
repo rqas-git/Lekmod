@@ -1,15 +1,15 @@
-----------------------------------------------------------------        
--- Globals
-----------------------------------------------------------------   
-local g_joinFailed = false;		-- Are we attempting to close this page after a join failure?
-															-- Used to prevent the ActivateAllowedDLC mechanic in ShowHideHander 
-															-- from restoring the page after a join failed.  This can occur
-															-- due to the event system frame lag.
 
 
-----------------------------------------------------------------        
--- Input Handler
-----------------------------------------------------------------        
+
+local g_joinFailed = false;
+
+
+
+
+
+
+
+
 function InputHandler( uiMsg, wParam, lParam )
 
 	if uiMsg == KeyEvents.KeyDown then
@@ -29,9 +29,9 @@ end
 ContextPtr:SetInputHandler( InputHandler );
 
 
--------------------------------------------------
--- Event Handler: MultiplayerJoinRoomComplete
--------------------------------------------------
+
+
+
 function OnJoinRoomComplete()
 
 	if Matchmaking.IsHost() then
@@ -48,15 +48,15 @@ function OnJoinRoomComplete()
 end
 
 
--------------------------------------------------
--- Event Handler: MultiplayerJoinRoomFailed
--------------------------------------------------
+
+
+
 function OnJoinRoomFailed( iExtendedError, aExtendedErrorText )
 
 	if iExtendedError == NetErrors.MISSING_REQUIRED_DATA then
 		local szText = Locale.ConvertTextKey("TXT_KEY_MP_JOIN_FAILED_MISSING_RESOURCES");
 		
-		-- The aExtendedErrorText will contain an array of the IDs of the resources (DLC/Mods) needed by the game.
+
 		local count = table.count(aExtendedErrorText);
 		if(count > 0) then
 			szText = szText .. "[NEWLINE]";
@@ -76,12 +76,12 @@ function OnJoinRoomFailed( iExtendedError, aExtendedErrorText )
 	UIManager:DequeuePopup( ContextPtr );
 end
 
--------------------------------------------------
--- Event Handler: MultiplayerConnectionFailed
--------------------------------------------------
+
+
+
 function OnMultiplayerConnectionFailed()
 
-	-- We should only get this if we couldn't complete the connection to the host of the room	
+
 	g_joinFailed = true;	
   Events.FrontEndPopup.CallImmediate( "TXT_KEY_MP_JOIN_FAILED" );
 	Matchmaking.LeaveMultiplayerGame();
@@ -89,9 +89,9 @@ function OnMultiplayerConnectionFailed()
 	
 end
 
--------------------------------------------------
--- Event Handler: MultiplayerGameAbandoned
--------------------------------------------------
+
+
+
 function OnMultiplayerGameAbandoned(eReason)
 
 	if (eReason == NetKicked.BY_HOST) then
@@ -107,16 +107,16 @@ function OnMultiplayerGameAbandoned(eReason)
 	
 end
 
--------------------------------------------------
--- Event Handler: ConnectedToNetworkHost
--------------------------------------------------
+
+
+
 function OnHostConnect()
 	Controls.JoiningLabel:SetText( Locale.ConvertTextKey("TXT_KEY_MULTIPLAYER_JOINING_PLAYERS" ));  
 end
 
--------------------------------------------------
--- Event Handler: MultiplayerConnectionComplete
--------------------------------------------------
+
+
+
 function OnConnectionCompete()
 
 	if not Matchmaking.IsHost() then
@@ -125,26 +125,26 @@ function OnConnectionCompete()
         UIManager:DequeuePopup( ContextPtr );
 	end
 
-    -- Version mismatch vs host lobby name (TXT_KEY_LEKMOD_VERSION).
+
     checkLekmodMismatch();
 end
 
--------------------------------------------------
--- Event Handler: MultiplayerNetRegistered
--------------------------------------------------
+
+
+
 function OnNetRegistered()
 	Controls.JoiningLabel:SetText( Locale.ConvertTextKey("TXT_KEY_MULTIPLAYER_JOINING_GAMESTATE" ));    
 end
 
--------------------------------------------------
--- Event Handler: PlayerVersionMismatchEvent
--------------------------------------------------
+
+
+
 function OnVersionMismatch( iPlayerID, playerName, bIsHost )
 	if( bIsHost ) then
 		Events.FrontEndPopup.CallImmediate( Locale.ConvertTextKey( "TXT_KEY_MP_VERSION_MISMATCH_FOR_HOST", playerName ) );
 		Matchmaking.KickPlayer( iPlayerID );
 	else
-		-- we mismatched with the host, exit the game.
+
 		Events.FrontEndPopup.CallImmediate( Locale.ConvertTextKey( "TXT_KEY_MP_VERSION_MISMATCH_FOR_PLAYER" ) );
 		g_joinFailed = true;	
 		Matchmaking.LeaveMultiplayerGame();
@@ -153,9 +153,9 @@ function OnVersionMismatch( iPlayerID, playerName, bIsHost )
 end
 Events.PlayerVersionMismatchEvent.Add( OnVersionMismatch );
 
--------------------------------------------------
--- 
--------------------------------------------------
+
+
+
 
 
 function checkLekmodMismatch(player_id)
@@ -177,7 +177,7 @@ function checkLekmodMismatch(player_id)
 	if lekmod_version == nil or lekmod_version == "" or lekmod_version == "TXT_KEY_LEKMOD_VERSION" then
 		return;
 	end
-	-- Plain find: dots in v35.006 must not be Lua patterns.
+
 	if string.find(current_game_version, lekmod_version, 1, true) == nil then
 		Events.FrontEndPopup.CallImmediate( Locale.ConvertTextKey( "TXT_KEY_MP_VERSION_MISMATCH_FOR_PLAYER" ) );
 		g_joinFailed = true;
@@ -186,21 +186,21 @@ function checkLekmodMismatch(player_id)
 	end
 
 end
--------------------------------------------------
--- Show / Hide Handler
--------------------------------------------------
+
+
+
 function ShowHideHandler( bIsHide, bIsInit )
 	if( not bIsInit ) then
 		if not bIsHide then
  			g_joinFailed = false;
 
-			-- Activate only the DLC allowed for this MP game.  Mods will also deactivated/activate too.
+
 			if (not ContextPtr:IsHotLoad()) then 
 				local prevCursor = UIManager:SetUICursor( 1 );
 				Modding.ActivateAllowedDLC();
 				UIManager:SetUICursor( prevCursor );
 				
-				-- Send out an event to continue on, as the ActivateDLC may have swapped out the UI	
+
 				Events.SystemUpdateUI( SystemUpdateUIType.RestoreUI, "JoiningRoom" );
 			end
 						
@@ -214,8 +214,8 @@ end
 ContextPtr:SetShowHideHandler( ShowHideHandler );
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function RegisterEvents()
     Events.MultiplayerJoinRoomComplete.Add( OnJoinRoomComplete );
     Events.MultiplayerJoinRoomFailed.Add( OnJoinRoomFailed );
@@ -229,8 +229,8 @@ function RegisterEvents()
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function UnregisterEvents()
     Events.MultiplayerJoinRoomComplete.Remove( OnJoinRoomComplete );
     Events.MultiplayerJoinRoomFailed.Remove( OnJoinRoomFailed );
@@ -244,8 +244,8 @@ function UnregisterEvents()
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function AdjustScreenSize()
     local _, screenY = UIManager:GetScreenSizeVal();
     local TOP_COMPENSATION = 52 + ((screenY - 768) * 0.3 );
@@ -256,8 +256,8 @@ function AdjustScreenSize()
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnUpdateUI( type, tag, iData1, iData2, strData1)
     if( type == SystemUpdateUIType.ScreenResize ) then
         AdjustScreenSize();

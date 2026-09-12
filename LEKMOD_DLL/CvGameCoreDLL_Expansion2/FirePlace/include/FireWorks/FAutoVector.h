@@ -1,33 +1,33 @@
-//---------------------------------------------------------------------------------------
-//
-//  *****************   FIRAXIS GAME ENGINE   ********************
-//
-//  FILE:		FAutoVariable.h
-//
-//  AUTHOR:		Justin Randall	--  07/29/2009
-//
-//  PURPOSE:	Wraps a vector of serializeable types to intercept write operations, 
-//              tracks changes to the elements, notifies an AutoArchive if a change has 
-//              been made, and registers itself with the containing AutoArchive for 
-//              automatic serialization.
-//
-//---------------------------------------------------------------------------------------
-//  Copyright (c) 2009 Firaxis Games, Inc. All rights reserved.
-//---------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #ifndef _INCLUDED_FAutoVector_H
 #define _INCLUDED_FAutoVector_H
 
-//---------------------------------------------------------------------------------------
+
 
 #include "FAutoVariable.h"
 #include <vector>
 
-//---------------------------------------------------------------------------------------
-// The order of operations for changes to a vector must be preserved to apply a sparse
-// delta to another copy of the vector. For example, an erase, then push back produces
-// a different vector than a push_back, then erase (last element changes on the first 
-// case, the vector is unchanged in the other). Actions mutating the underlying vector
-// are captured, in order, using AutoVectorCommands.
+
+
+
+
+
+
 template<typename ElementType>
 struct AutoVectorCommand
 {
@@ -79,14 +79,14 @@ struct AutoVectorCommand
 	ElementType   value;
 };
 
-//---------------------------------------------------------------------------------------
-// The FAutoVariable is specialized for vectors to allow smaller updates to be captured
-// against potentially large data sets. Without the specialization, the entire vector
-// would need to be serialized, sent and compared, even if only one element changed.
-// The FAutoVariable template provides no element-level access to it's type. This 
-// specialization tries to present an interface that is close to the STL vector 
-// interface. The interface differs from STL vector when mutable operations could not
-// otherwise be intercepted.
+
+
+
+
+
+
+
+
 template<typename ElementType, typename ClassContainer>
 class FAutoVariable<std::vector<ElementType>, ClassContainer> : public FAutoVariableBase
 {
@@ -112,12 +112,12 @@ public:
 	size_t size() const;
 
 	operator const std::vector<ElementType> &() const;
-	// Get direct access to the vector.  Use for unserialization only please!
+
 	std::vector<ElementType> & dirtyGet();
 
-	// for whatever reason, the VC9 doesn't deal with
-	// const_iterator use outside the declaration, otherwise
-	// it would exist with the rest of the definitions below
+
+
+
 	const_iterator begin() const { return m_value.begin(); }
 	const_iterator end() const { return m_value.end(); }
 
@@ -139,22 +139,22 @@ public:
 
 private:
 
-	typedef std::vector< AutoVectorCommand<ElementType> /*, FSTLBlockAllocator< AutoVectorCommand<ElementType>, 1, c_eCiv5GameplayDLL >*/ > COMMAND_VEC_TYPE;
+	typedef std::vector< AutoVectorCommand<ElementType>                                                                                   > COMMAND_VEC_TYPE;
 
 	mutable COMMAND_VEC_TYPE m_commands;
 	std::vector< ElementType >  m_value;
 	FAutoArchiveClassContainer<ClassContainer> &  m_owner;
 
-	// When debugging, help the developer out and provide
-	// the variable's name in the debugger. This is already
-	// available by way of the container, but is not as
-	// readily available when debugging.
+
+
+
+
 #ifdef _DEBUG
 	const std::string & m_name;
-#endif//_DEBUG
+#endif
 };
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 FDataStream & operator<<(FDataStream & saveTo, const FAutoVariable<std::vector<ElementType>, ClassContainer> & readFrom)
@@ -163,7 +163,7 @@ FDataStream & operator<<(FDataStream & saveTo, const FAutoVariable<std::vector<E
 	return saveTo;
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 FDataStream & operator>>(FDataStream & loadFrom, FAutoVariable<std::vector<ElementType>, ClassContainer> & writeTo)
@@ -172,7 +172,7 @@ FDataStream & operator>>(FDataStream & loadFrom, FAutoVariable<std::vector<Eleme
 	return loadFrom;
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 FAutoVariable<std::vector<ElementType>, ClassContainer>::FAutoVariable(const std::string & name, FAutoArchiveClassContainer<ClassContainer> & container) :
@@ -182,11 +182,11 @@ FAutoVariableBase(name, container)
 , m_owner(container)
 #ifdef _DEBUG
 , m_name(*container.getVariableName(*this))
-#endif//_DEBUG
+#endif
 {
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 FAutoVariable<std::vector<ElementType>, ClassContainer>::FAutoVariable(const std::string & name, FAutoArchiveClassContainer<ClassContainer> & container, bool callStackTracking) :
@@ -196,11 +196,11 @@ FAutoVariableBase(name, container, callStackTracking)
 , m_owner(container)
 #ifdef _DEBUG
 , m_name(*container.getVariableName(*this))
-#endif//_DEBUG
+#endif
 {
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 FAutoVariable<std::vector<ElementType>, ClassContainer>::FAutoVariable(const std::string & name, FAutoArchiveClassContainer<ClassContainer> & container, size_t reserveSize, bool callStackTracking) :
@@ -210,11 +210,11 @@ FAutoVariableBase(name, container, callStackTracking)
 , m_owner(container)
 #ifdef _DEBUG
 , m_name(*container.getVariableName(*this))
-#endif//_DEBUG
+#endif
 {
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 FAutoVariable<std::vector<ElementType>, ClassContainer> & FAutoVariable<std::vector<ElementType>, ClassContainer>::operator=(const std::vector<ElementType> & rhs)
@@ -232,7 +232,7 @@ FAutoVariable<std::vector<ElementType>, ClassContainer> & FAutoVariable<std::vec
 	return *this;
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 FAutoVariable<std::vector<ElementType>, ClassContainer>::operator const std::vector<ElementType> &() const
@@ -240,7 +240,7 @@ FAutoVariable<std::vector<ElementType>, ClassContainer>::operator const std::vec
 	return m_value;
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 std::vector<ElementType>& FAutoVariable<std::vector<ElementType>, ClassContainer>::dirtyGet()
@@ -248,7 +248,7 @@ std::vector<ElementType>& FAutoVariable<std::vector<ElementType>, ClassContainer
 	return m_value;
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 std::string FAutoVariable<std::vector<ElementType>, ClassContainer>::toString() const
@@ -256,7 +256,7 @@ std::string FAutoVariable<std::vector<ElementType>, ClassContainer>::toString() 
 	return FSerialization::toString(m_value);
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 void FAutoVariable<std::vector<ElementType>, ClassContainer>::load(FDataStream & loadFrom)
@@ -267,7 +267,7 @@ void FAutoVariable<std::vector<ElementType>, ClassContainer>::load(FDataStream &
 	m_commands.clear();
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 void FAutoVariable<std::vector<ElementType>, ClassContainer>::save(FDataStream & saveTo) const
@@ -275,7 +275,7 @@ void FAutoVariable<std::vector<ElementType>, ClassContainer>::save(FDataStream &
 	saveTo << m_value;
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 void FAutoVariable<std::vector<ElementType>, ClassContainer>::loadDelta(FDataStream & loadFrom)
@@ -283,7 +283,7 @@ void FAutoVariable<std::vector<ElementType>, ClassContainer>::loadDelta(FDataStr
 	loadFrom >> m_value;
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 void FAutoVariable<std::vector<ElementType>, ClassContainer>::saveDelta(FDataStream & saveTo) const
@@ -291,7 +291,7 @@ void FAutoVariable<std::vector<ElementType>, ClassContainer>::saveDelta(FDataStr
 	save(saveTo);
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 void FAutoVariable<std::vector<ElementType>, ClassContainer>::clearDelta()
@@ -299,7 +299,7 @@ void FAutoVariable<std::vector<ElementType>, ClassContainer>::clearDelta()
 	m_commands.clear();
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 size_t FAutoVariable<std::vector<ElementType>, ClassContainer>::size() const
@@ -307,7 +307,7 @@ size_t FAutoVariable<std::vector<ElementType>, ClassContainer>::size() const
 	return m_value.size();
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 bool FAutoVariable<std::vector<ElementType>, ClassContainer>::compare(FDataStream & otherValue) const
@@ -319,7 +319,7 @@ bool FAutoVariable<std::vector<ElementType>, ClassContainer>::compare(FDataStrea
 	return result;
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 const std::string & FAutoVariable<std::vector<ElementType>, ClassContainer>::name() const
@@ -327,7 +327,7 @@ const std::string & FAutoVariable<std::vector<ElementType>, ClassContainer>::nam
 	return *(m_owner.getVariableName(*this));
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 typename FAutoVariable<std::vector<ElementType>, ClassContainer>::const_reference 
@@ -336,7 +336,7 @@ FAutoVariable<std::vector<ElementType>, ClassContainer>::operator[](size_t index
 	return m_value[index];
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 void FAutoVariable<std::vector<ElementType>, ClassContainer>::setStackTraceRemark()
@@ -347,7 +347,7 @@ void FAutoVariable<std::vector<ElementType>, ClassContainer>::setStackTraceRemar
 }
 
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 void FAutoVariable<std::vector<ElementType>, ClassContainer>::setAt(size_t index, const ElementType & v)
@@ -360,10 +360,10 @@ void FAutoVariable<std::vector<ElementType>, ClassContainer>::setAt(size_t index
 	}
 }
 
-//---------------------------------------------------------------------------------------
+
 #ifdef LEKMOD_UNITCOMBAT_FREE_PROMOTION
-//make a setat that can take 3 arguments, the index and the subindex
-//this will allow us to set the value of a vector of vectors
+
+
 template<typename ElementType, typename ClassContainer>
 void FAutoVariable<std::vector<ElementType>, ClassContainer>::setAt2D(size_t index, size_t subindex, const ElementType& v)
 {
@@ -376,7 +376,7 @@ void FAutoVariable<std::vector<ElementType>, ClassContainer>::setAt2D(size_t ind
 }
 #endif
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 void FAutoVariable<std::vector<ElementType>, ClassContainer>::insert(size_t index, const ElementType & v)
@@ -387,7 +387,7 @@ void FAutoVariable<std::vector<ElementType>, ClassContainer>::insert(size_t inde
 	m_commands.push_back(AutoVectorCommand<ElementType>(AutoVectorCommand<ElementType>::INSERT, index, v));
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 void FAutoVariable<std::vector<ElementType>, ClassContainer>::push_back(const ElementType & v)
@@ -397,7 +397,7 @@ void FAutoVariable<std::vector<ElementType>, ClassContainer>::push_back(const El
 	m_value.push_back(v);
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 void FAutoVariable<std::vector<ElementType>, ClassContainer>::clear()
@@ -407,7 +407,7 @@ void FAutoVariable<std::vector<ElementType>, ClassContainer>::clear()
 	m_value.clear();
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 void FAutoVariable<std::vector<ElementType>, ClassContainer>::reset()
@@ -416,7 +416,7 @@ void FAutoVariable<std::vector<ElementType>, ClassContainer>::reset()
 	m_value.clear();
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 void FAutoVariable<std::vector<ElementType>, ClassContainer>::erase(size_t index)
@@ -429,7 +429,7 @@ void FAutoVariable<std::vector<ElementType>, ClassContainer>::erase(size_t index
 	
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 void FAutoVariable<std::vector<ElementType>, ClassContainer>::resize(size_t count)
@@ -440,7 +440,7 @@ void FAutoVariable<std::vector<ElementType>, ClassContainer>::resize(size_t coun
 	
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType, typename ClassContainer>
 void FAutoVariable<std::vector<ElementType>, ClassContainer>::resize(size_t count, const ElementType & v)
@@ -451,7 +451,7 @@ void FAutoVariable<std::vector<ElementType>, ClassContainer>::resize(size_t coun
 	
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType>
 FDataStream & operator>>(FDataStream & loadFrom, AutoVectorCommand<ElementType> & writeTo)
@@ -482,7 +482,7 @@ FDataStream & operator>>(FDataStream & loadFrom, AutoVectorCommand<ElementType> 
 	return loadFrom;
 }
 
-//---------------------------------------------------------------------------------------
+
 
 template<typename ElementType>
 FDataStream & operator<<(FDataStream & saveTo, const AutoVectorCommand<ElementType> & readFrom)
@@ -514,6 +514,6 @@ FDataStream & operator<<(FDataStream & saveTo, const AutoVectorCommand<ElementTy
 	return saveTo;
 }
 
-//---------------------------------------------------------------------------------------
 
-#endif//_INCLUDED_FAutoVector_H
+
+#endif

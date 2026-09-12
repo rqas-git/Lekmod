@@ -33,7 +33,7 @@ public:
 
 	void Add(const IDInfo& kInfo)
 	{
-		// Only if it is not already in.
+
 		if (!Find(kInfo))
 			push_back(kInfo);
 	}
@@ -129,4 +129,4 @@ protected:
 };
 
 
-#endif // _CVPLOTMANAGER_H_
+#endif

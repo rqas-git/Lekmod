@@ -1,18 +1,18 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//!	 \file		CvLuaGame.cpp
-//!  \brief     Private implementation to CvLuaGame.
-//!
-//!		This file includes the implementation for exposing the Game namespace
-//!		to Lua.
-//!
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvLuaSupport.h"
 #include "CvLuaCity.h"
@@ -29,12 +29,12 @@
 
 #define Method(func) RegisterMethod(L, l##func, #func);
 
-//------------------------------------------------------------------------------
+
 const char* CvLuaGame::GetInstanceName()
 {
 	return "Game";
 }
-//------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 CvGame* CvLuaGame::GetInstance(lua_State*, int)
 #else
@@ -43,7 +43,7 @@ CvGame* CvLuaGame::GetInstance(lua_State* L, int idx)
 {
 	return &GC.getGame();
 }
-//------------------------------------------------------------------------------
+
 void CvLuaGame::RegisterMembers(lua_State* L)
 {
 	Method(CanHandleAction);
@@ -427,12 +427,12 @@ void CvLuaGame::RegisterMembers(lua_State* L)
 	Method(GetCombatDamage);
 #endif
 }
-//------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
-// Lua Methods
-//------------------------------------------------------------------------------
-// bool CanHandleAction(int iAction, CvPlot* pPlot, bool bTestVisible)
+
+
+
+
+
 int CvLuaGame::lCanHandleAction(lua_State* L)
 {
 	const int iAction = lua_tointeger(L, 1);
@@ -442,34 +442,34 @@ int CvLuaGame::lCanHandleAction(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void HandleAction(iAction)
+
+
 int CvLuaGame::lHandleAction(lua_State* L)
 {
 	const int iAction = lua_tointeger(L, 1);
 	GetInstance()->handleAction(iAction);
 	return 0;
 }
-//------------------------------------------------------------------------------
-// void updateScore(bool bForce);
+
+
 int CvLuaGame::lUpdateScore(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::updateScore);
 }
-//------------------------------------------------------------------------------
-// void cycleCities(bool bForward, bool bAdd);
+
+
 int CvLuaGame::lCycleCities(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::cycleCities);
 }
-//------------------------------------------------------------------------------
-// void cycleUnits(bool bClear, bool bForward, bool bWorkers);
+
+
 int CvLuaGame::lCycleUnits(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::cycleUnits);
 }
-//------------------------------------------------------------------------------
-// bool cyclePlotUnits(CyPlot* pPlot, bool bForward, bool bAuto, int iCount);
+
+
 int CvLuaGame::lCyclePlotUnits(lua_State* L)
 {
 	CvPlot* pkPlot = CvLuaPlot::GetInstance(L, 1);
@@ -481,8 +481,8 @@ int CvLuaGame::lCyclePlotUnits(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-// void selectionListMove(CyPlot* pPlot, bool bAlt, bool bShift, bool bCtrl);
+
+
 int CvLuaGame::lSelectionListMove(lua_State* L)
 {
 	CvPlot* pkPlot = CvLuaPlot::GetInstance(L, 1);
@@ -491,8 +491,8 @@ int CvLuaGame::lSelectionListMove(lua_State* L)
 	GetInstance()->selectionListMove(pkPlot, bShift);
 	return 0;
 }
-//------------------------------------------------------------------------------
-// void selectionListGameNetMessage(int eMessage, int iData2 = -1, int iData3 = -1, int iData4 = -1, int iFlags = 0, bool bAlt = false, bool bShift = false);
+
+
 int CvLuaGame::lSelectionListGameNetMessage(lua_State* L)
 {
 	const int eMessage	= lua_tointeger(L, 1);
@@ -506,8 +506,8 @@ int CvLuaGame::lSelectionListGameNetMessage(lua_State* L)
 	GetInstance()->selectionListGameNetMessage(eMessage, iData2, iData3, iData4, iFlags, bAlt, bShift);
 	return 0;
 }
-//------------------------------------------------------------------------------
-// void selectedCitiesGameNetMessage(int eMessage, int iData2, int iData3, int iData4, bool bOption, bool bAlt, bool bShift, bool bCtrl);
+
+
 int CvLuaGame::lSelectedCitiesGameNetMessage(lua_State* L)
 {
 	const int eMessage = lua_tointeger(L, 1);
@@ -521,8 +521,8 @@ int CvLuaGame::lSelectedCitiesGameNetMessage(lua_State* L)
 	GetInstance()->selectedCitiesGameNetMessage(eMessage, iData2, iData3, iData4, bOption, bAlt, bShift, bCtrl);
 	return 0;
 }
-//------------------------------------------------------------------------------
-// void cityPushOrder(CyCity* pCity, OrderTypes eOrder, int iData, bool bAlt, bool bShift, bool bCtrl);
+
+
 int CvLuaGame::lCityPushOrder(lua_State* L)
 {
 	CvCity* pkCity			= CvLuaCity::GetInstance(L, 1);
@@ -535,8 +535,8 @@ int CvLuaGame::lCityPushOrder(lua_State* L)
 	GetInstance()->cityPushOrder(pkCity, eOrder, iData, bAlt, bShift, bCtrl);
 	return 0;
 }
-//------------------------------------------------------------------------------
-// void cityPurchase(CyCity* pCity, UnitTypes eUnitType, BuildingTypes eBuildingType, ProjectTypes eProjectTypes);
+
+
 int CvLuaGame::lCityPurchaseUnit(lua_State* L)
 {
 	CvCity* pkCity = CvLuaCity::GetInstance(L, 1);
@@ -546,8 +546,8 @@ int CvLuaGame::lCityPurchaseUnit(lua_State* L)
 	GetInstance()->CityPurchase(pkCity, eUnitType, NO_BUILDING, NO_PROJECT, ePurchaseYield);
 	return 0;
 }
-//------------------------------------------------------------------------------
-// void cityPurchase(CyCity* pCity, UnitTypes eUnitType, BuildingTypes eBuildingType, ProjectTypes eProjectTypes);
+
+
 int CvLuaGame::lCityPurchaseBuilding(lua_State* L)
 {
 	CvCity* pkCity = CvLuaCity::GetInstance(L, 1);
@@ -557,8 +557,8 @@ int CvLuaGame::lCityPurchaseBuilding(lua_State* L)
 	GetInstance()->CityPurchase(pkCity, NO_UNIT, eBuildingType, NO_PROJECT, ePurchaseYield);
 	return 0;
 }
-//------------------------------------------------------------------------------
-// void cityPurchase(CyCity* pCity, UnitTypes eUnitType, BuildingTypes eBuildingType, ProjectTypes eProjectTypes);
+
+
 int CvLuaGame::lCityPurchaseProject(lua_State* L)
 {
 	CvCity* pkCity = CvLuaCity::GetInstance(L, 1);
@@ -568,124 +568,124 @@ int CvLuaGame::lCityPurchaseProject(lua_State* L)
 	GetInstance()->CityPurchase(pkCity, NO_UNIT, NO_BUILDING, eProjectType, ePurchaseYield);
 	return 0;
 }
-//------------------------------------------------------------------------------
-// int getProductionPerPopulation(HurryTypes eHurry);
+
+
 int CvLuaGame::lGetProductionPerPopulation(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getProductionPerPopulation);
 }
-//------------------------------------------------------------------------------
-// int getAdjustedPopulationPercent(VictoryTypes eVictory);
+
+
 int CvLuaGame::lGetAdjustedPopulationPercent(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getAdjustedPopulationPercent);
 }
-//------------------------------------------------------------------------------
-// int getAdjustedLandPercent(VictoryTypes eVictory);
+
+
 int CvLuaGame::lGetAdjustedLandPercent(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getAdjustedLandPercent);
 }
-//------------------------------------------------------------------------------
-// bool GetUnitedNationsCountdown() const;
+
+
 int CvLuaGame::lGetUnitedNationsCountdown(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::GetUnitedNationsCountdown);
 }
-//------------------------------------------------------------------------------
-//void SetUnitedNationsCountdown(int iNewValue);
+
+
 int CvLuaGame::lSetUnitedNationsCountdown(lua_State* L)
 {
 	int iTurns = luaL_checkint(L, 1);
 	GC.getGame().SetUnitedNationsCountdown(iTurns);
 	return 0;
 }
-//------------------------------------------------------------------------------
-// int CountCivPlayersAlive();
+
+
 int CvLuaGame::lCountCivPlayersAlive(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::countCivPlayersAlive);
 }
-//------------------------------------------------------------------------------
-// int CountCivPlayersEverAlive();
+
+
 int CvLuaGame::lCountCivPlayersEverAlive(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::countCivPlayersEverAlive);
 }
-//------------------------------------------------------------------------------
-// int CountCivTeamsAlive();
+
+
 int CvLuaGame::lCountCivTeamsAlive(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::countCivTeamsAlive);
 }
-//------------------------------------------------------------------------------
-// int CountCivTeamsEverAlive();
+
+
 int CvLuaGame::lCountCivTeamsEverAlive(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::countCivTeamsEverAlive);
 }
-//------------------------------------------------------------------------------
-//int countHumanPlayersAlive();
+
+
 int CvLuaGame::lCountHumanPlayersAlive(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::countHumanPlayersAlive);
 }
-//------------------------------------------------------------------------------
-//int countHumanPlayersEverAlive();
+
+
 int CvLuaGame::lCountHumanPlayersEverAlive(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::countHumanPlayersEverAlive);
 }
-//------------------------------------------------------------------------------
-//int countTotalCivPower();
+
+
 int CvLuaGame::lCountTotalCivPower(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::countTotalCivPower);
 }
-//------------------------------------------------------------------------------
-//int countTotalNukeUnits();
+
+
 int CvLuaGame::lCountTotalNukeUnits(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::countTotalNukeUnits);
 }
-//------------------------------------------------------------------------------
-//int countKnownTechNumTeams(TechTypes eTech);
+
+
 int CvLuaGame::lCountKnownTechNumTeams(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::countKnownTechNumTeams);
 }
-//------------------------------------------------------------------------------
-//int goldenAgeLength();
+
+
 int CvLuaGame::lGoldenAgeLength(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::goldenAgeLength);
 }
-//------------------------------------------------------------------------------
-//int victoryDelay(VictoryTypes eVictory);
+
+
 int CvLuaGame::lVictoryDelay(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::victoryDelay);
 }
-//------------------------------------------------------------------------------
-//int getImprovementUpgradeTime(ImprovementTypes eImprovement, CyPlot* pPlot);
+
+
 int CvLuaGame::lGetImprovementUpgradeTime(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getImprovementUpgradeTime);
 }
-//------------------------------------------------------------------------------
-//bool canTrainNukes();
+
+
 int CvLuaGame::lCanTrainNukes(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::canTrainNukes);
 }
-//------------------------------------------------------------------------------
-//EraTypes getCurrentEra();
+
+
 int CvLuaGame::lGetCurrentEra(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getCurrentEra);
 }
-//------------------------------------------------------------------------------
-//string GetDiploResponse(leaderType, responseType)
+
+
 int CvLuaGame::lGetDiploResponse(lua_State* L)
 {
 	CvGame& game = GC.getGame();
@@ -699,80 +699,80 @@ int CvLuaGame::lGetDiploResponse(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getActiveTeam();
+
+
 int CvLuaGame::lGetActiveTeam(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getActiveTeam);
 }
-//------------------------------------------------------------------------------
-//CivilizationTypes getActiveCivilizationType();
+
+
 int CvLuaGame::lGetActiveCivilizationType(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getActiveCivilizationType);
 }
-//------------------------------------------------------------------------------
-//bool isNetworkMultiPlayer();
+
+
 int CvLuaGame::lIsNetworkMultiPlayer(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isNetworkMultiPlayer);
 }
-//------------------------------------------------------------------------------
-//bool isGameMultiPlayer();
+
+
 int CvLuaGame::lIsGameMultiPlayer(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isGameMultiPlayer);
 }
-//------------------------------------------------------------------------------
-//bool isTeamGame();
+
+
 int CvLuaGame::lIsTeamGame(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isTeamGame);
 }
-//------------------------------------------------------------------------------
-//void ReviveActivePlayer();
+
+
 int CvLuaGame::lReviveActivePlayer(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::ReviveActivePlayer);
 }
-//------------------------------------------------------------------------------
-//int getNumHumanPlayers();
+
+
 int CvLuaGame::lGetNumHumanPlayers(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getNumHumanPlayers);
 }
-//------------------------------------------------------------------------------
-//int getNumSequentialHumans();
+
+
 int CvLuaGame::lGetNumSequentialHumans(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getNumSequentialHumans);
 }
-//------------------------------------------------------------------------------
-//int getGameTurn();
+
+
 int CvLuaGame::lGetGameTurn(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getGameTurn);
 }
-//------------------------------------------------------------------------------
-//void setGameTurn(int iNewValue);
+
+
 int CvLuaGame::lSetGameTurn(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::setGameTurn);
 }
-//------------------------------------------------------------------------------
-//int getTurnYear(int iGameTurn);
+
+
 int CvLuaGame::lGetTurnYear(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getTurnYear);
 }
-//------------------------------------------------------------------------------
-//int getGameTurnYear();
+
+
 int CvLuaGame::lGetGameTurnYear(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getGameTurnYear);
 }
-//------------------------------------------------------------------------------
-//string GetTurnString();
+
+
 int CvLuaGame::lGetTurnString(lua_State* L)
 {
 	CvGame& game = GC.getGame();
@@ -787,153 +787,153 @@ int CvLuaGame::lGetTurnString(lua_State* L)
 	lua_pushstring(L, strString);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getElapsedGameTurns();
+
+
 int CvLuaGame::lGetElapsedGameTurns(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getElapsedGameTurns);
 }
-//------------------------------------------------------------------------------
-//int getMaxTurns();
+
+
 int CvLuaGame::lGetMaxTurns(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getMaxTurns);
 }
-//------------------------------------------------------------------------------
-//void setMaxTurns(int iNewValue);
+
+
 int CvLuaGame::lSetMaxTurns(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::setMaxTurns);
 }
-//------------------------------------------------------------------------------
-//void changeMaxTurns(int iChange);
+
+
 int CvLuaGame::lChangeMaxTurns(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::changeMaxTurns);
 }
-//------------------------------------------------------------------------------
-//int getMaxCityElimination();
+
+
 int CvLuaGame::lGetMaxCityElimination(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getMaxCityElimination);
 }
-//------------------------------------------------------------------------------
-//void setMaxCityElimination(int iNewValue);
+
+
 int CvLuaGame::lSetMaxCityElimination(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::setMaxCityElimination);
 }
-//------------------------------------------------------------------------------
-//int getNumAdvancedStartPoints();
+
+
 int CvLuaGame::lGetNumAdvancedStartPoints(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getNumAdvancedStartPoints);
 }
-//------------------------------------------------------------------------------
-//void setNumAdvancedStartPoints(int iNewValue);
+
+
 int CvLuaGame::lSetNumAdvancedStartPoints(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::setNumAdvancedStartPoints);
 }
-//------------------------------------------------------------------------------
-//int getStartTurn();
+
+
 int CvLuaGame::lGetStartTurn(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getStartTurn);
 }
-//------------------------------------------------------------------------------
-//int GetWinningTurn();
+
+
 int CvLuaGame::lGetWinningTurn(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::GetWinningTurn);
 }
-//------------------------------------------------------------------------------
-//int getStartYear();
+
+
 int CvLuaGame::lGetStartYear(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getStartYear);
 }
-//------------------------------------------------------------------------------
-//void setStartYear(int iNewValue);
+
+
 int CvLuaGame::lSetStartYear(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::setStartYear);
 }
-//------------------------------------------------------------------------------
-//int getEstimateEndTurn();
+
+
 int CvLuaGame::lGetEstimateEndTurn(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getEstimateEndTurn);
 }
-//------------------------------------------------------------------------------
-//void setEstimateEndTurn(int iNewValue);
+
+
 int CvLuaGame::lSetEstimateEndTurn(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::setEstimateEndTurn);
 }
-//------------------------------------------------------------------------------
-//int getTurnSlice();
+
+
 int CvLuaGame::lGetTurnSlice(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getTurnSlice);
 }
-//------------------------------------------------------------------------------
-//int getMinutesPlayed();
+
+
 int CvLuaGame::lGetMinutesPlayed(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getMinutesPlayed);
 }
-//------------------------------------------------------------------------------
-//int getTargetScore();
+
+
 int CvLuaGame::lGetTargetScore(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getTargetScore);
 }
-//------------------------------------------------------------------------------
-//void setTargetScore(int iNewValue);
+
+
 int CvLuaGame::lSetTargetScore(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::setTargetScore);
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lIsStaticTutorialActive(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::IsStaticTutorialActive);
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lSetStaticTutorialActive(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::SetStaticTutorialActive);
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lIsEverRightClickMoved(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::IsEverRightClickMoved);
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lSetEverRightClickMoved(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::SetEverRightClickMoved);
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lIsTutorialLogging(lua_State* L)
 {
 	lua_pushboolean(L, GC.GetTutorialLogging());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lIsTutorialDebugging(lua_State* L)
 {
 	lua_pushboolean(L, GC.GetTutorialDebugging());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetTutorialLevel(lua_State* L)
 {
 	lua_pushinteger(L, gDLL->GetTutorialLevel());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lHasAdvisorMessageBeenSeen(lua_State* L)
 {
 	const char* szAdvisorMessage = luaL_checkstring(L, 1);
@@ -941,7 +941,7 @@ int CvLuaGame::lHasAdvisorMessageBeenSeen(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lSetAdvisorMessageHasBeenSeen(lua_State* L)
 {
 	const char* szAdvisorMessage = luaL_checkstring(L, 1);
@@ -949,7 +949,7 @@ int CvLuaGame::lSetAdvisorMessageHasBeenSeen(lua_State* L)
 	GC.getGame().SetAdvisorMessageHasBeenSeen(szAdvisorMessage, bSeen);
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lSetAdvisorBadAttackInterrupt(lua_State* L)
 {
 	bool bValue = lua_toboolean(L, 1);
@@ -957,7 +957,7 @@ int CvLuaGame::lSetAdvisorBadAttackInterrupt(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lSetAdvisorCityAttackInterrupt(lua_State* L)
 {
 	bool bValue = lua_toboolean(L, 1);
@@ -965,121 +965,121 @@ int CvLuaGame::lSetAdvisorCityAttackInterrupt(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetAllowRClickMovementWhileScrolling(lua_State* L)
 {
 	lua_pushboolean(L, GC.GetAllowRClickMovementWhileScrolling());
 	return 1;
 }
 
-//------------------------------------------------------------------------------
-//int getNumGameTurnActive();
+
+
 int CvLuaGame::lGetNumGameTurnActive(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getNumGameTurnActive);
 }
-//------------------------------------------------------------------------------
-//int countNumHumanGameTurnActive();
+
+
 int CvLuaGame::lCountNumHumanGameTurnActive(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::countNumHumanGameTurnActive);
 }
-//------------------------------------------------------------------------------
-//int getNumCities();
+
+
 int CvLuaGame::lGetNumCities(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getNumCities);
 }
-//------------------------------------------------------------------------------
-//int getNumCivCities();
+
+
 int CvLuaGame::lGetNumCivCities(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getNumCivCities);
 }
-//------------------------------------------------------------------------------
-//int getTotalPopulation();
+
+
 int CvLuaGame::lGetTotalPopulation(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getTotalPopulation);
 }
-//------------------------------------------------------------------------------
-//int getNoNukesCount();
+
+
 int CvLuaGame::lGetNoNukesCount(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getNoNukesCount);
 }
-//------------------------------------------------------------------------------
-//bool isNoNukes();
+
+
 int CvLuaGame::lIsNoNukes(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isNoNukes);
 }
-//------------------------------------------------------------------------------
-//void changeNoNukesCount(int iChange);
+
+
 int CvLuaGame::lChangeNoNukesCount(lua_State* L)
 {
 	int iNumNukes = lua_tointeger(L, 2);
 	GC.getGame().changeNoNukesCount(iNumNukes);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getNukesExploded();
+
+
 int CvLuaGame::lGetNukesExploded(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getNukesExploded);
 }
-//------------------------------------------------------------------------------
-//void changeNukesExploded(int iChange);
+
+
 int CvLuaGame::lChangeNukesExploded(lua_State* L)
 {
 	int iNumNukes = lua_tointeger(L, 2);
 	GC.getGame().changeNukesExploded(iNumNukes);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getMaxPopulation();
+
+
 int CvLuaGame::lGetMaxPopulation(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getMaxPopulation);
 }
-//------------------------------------------------------------------------------
-//int getInitPopulation();
+
+
 int CvLuaGame::lGetInitPopulation(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getInitPopulation);
 }
-//------------------------------------------------------------------------------
-//int getInitLand();
+
+
 int CvLuaGame::lGetInitLand(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getInitLand);
 }
-//------------------------------------------------------------------------------
-//int getInitTech();
+
+
 int CvLuaGame::lGetInitTech(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getInitTech);
 }
-//------------------------------------------------------------------------------
-//int getInitWonders();
+
+
 int CvLuaGame::lGetInitWonders(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getInitWonders);
 }
-//------------------------------------------------------------------------------
-//int GetNumWorldWonders();
+
+
 int CvLuaGame::lGetNumWorldWonders(lua_State* L)
 {
 	int iWonderCount = 0;
 
-	// Loop through all players
+
 	PlayerTypes eLoopPlayer;
 	for(int iPlayerLoop = 0; iPlayerLoop < MAX_PLAYERS; iPlayerLoop++)
 	{
 		eLoopPlayer = (PlayerTypes) iPlayerLoop;
 		CvPlayerAI& kLoopPlayer = GET_PLAYER(eLoopPlayer);
 
-		// Loop through all buildings, see if they're a world wonder
+
 #ifdef AUI_WARNING_FIXES
 		for (uint iBuildingLoop = 0; iBuildingLoop < GC.getNumBuildingInfos(); iBuildingLoop++)
 #else
@@ -1101,104 +1101,104 @@ int CvLuaGame::lGetNumWorldWonders(lua_State* L)
 	lua_pushinteger(L, iWonderCount);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getAIAutoPlay();
+
+
 int CvLuaGame::lGetAIAutoPlay(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getAIAutoPlay);
 }
-//------------------------------------------------------------------------------
-//void setAIAutoPlay(int iNewValue);
+
+
 int CvLuaGame::lSetAIAutoPlay(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::setAIAutoPlay);
 }
-//------------------------------------------------------------------------------
-//bool isScoreDirty();
+
+
 int CvLuaGame::lIsScoreDirty(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isScoreDirty);
 }
-//------------------------------------------------------------------------------
-//void setScoreDirty(bool bNewValue);
+
+
 int CvLuaGame::lSetScoreDirty(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::setScoreDirty);
 }
-//------------------------------------------------------------------------------
-//bool isCircumnavigated();
+
+
 int CvLuaGame::lIsCircumnavigated(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isCircumnavigated);
 }
-//------------------------------------------------------------------------------
-//void makeCircumnavigated();
+
+
 int CvLuaGame::lMakeCircumnavigated(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::makeCircumnavigated);
 }
-//------------------------------------------------------------------------------
-//void DoFromUIDiploEvent(FromUIDiploEventTypes eEvent, PlayerTypes eAIPlayer, int iArg1, int iArg2, int iArg3);
+
+
 int CvLuaGame::lDoFromUIDiploEvent(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::DoFromUIDiploEvent);
 }
-//------------------------------------------------------------------------------
-//bool isDebugMode();
+
+
 int CvLuaGame::lIsDebugMode(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isDebugMode);
 }
-//------------------------------------------------------------------------------
-//bool setDebugMode();
+
+
 int CvLuaGame::lSetDebugMode(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::setDebugMode);
 }
-//------------------------------------------------------------------------------
-//void toggleDebugMode();
+
+
 int CvLuaGame::lToggleDebugMode(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::toggleDebugMode);
 }
-//------------------------------------------------------------------------------
-//void UpdateFOW();
+
+
 int CvLuaGame::lUpdateFOW(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::setFOW);
 }
-//------------------------------------------------------------------------------
-//int getPitbossTurnTime();
+
+
 int CvLuaGame::lGetPitbossTurnTime(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getPitbossTurnTime);
 }
-//------------------------------------------------------------------------------
-//void setPitbossTurnTime(int iHours);
+
+
 int CvLuaGame::lSetPitbossTurnTime(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::setPitbossTurnTime);
 }
-//------------------------------------------------------------------------------
-//bool isHotSeat();
+
+
 int CvLuaGame::lIsHotSeat(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isHotSeat);
 }
-//------------------------------------------------------------------------------
-//bool isPbem();
+
+
 int CvLuaGame::lIsPbem(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isPbem);
 }
-//------------------------------------------------------------------------------
-//bool isPitboss();
+
+
 int CvLuaGame::lIsPitboss(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isPitboss);
 }
-//------------------------------------------------------------------------------
-//bool isSimultaneousTeamTurns();
+
+
 int CvLuaGame::lIsSimultaneousTeamTurns(lua_State* L)
 {
 #ifdef AUI_GAME_BETTER_HYBRID_MODE
@@ -1207,31 +1207,31 @@ int CvLuaGame::lIsSimultaneousTeamTurns(lua_State* L)
 	return BasicLuaMethod(L, &CvGame::isSimultaneousTeamTurns);
 #endif
 }
-//------------------------------------------------------------------------------
-//bool isFinalInitialized();
+
+
 int CvLuaGame::lIsFinalInitialized(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isFinalInitialized);
 }
-//------------------------------------------------------------------------------
-//PlayerTypes getActivePlayer();
+
+
 int CvLuaGame::lGetActivePlayer(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getActivePlayer);
 }
-//------------------------------------------------------------------------------
-//void setActivePlayer(PlayerTypes eNewValue, bool bForceHotSeat);
+
+
 int CvLuaGame::lSetActivePlayer(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::setActivePlayer);
 }
-//------------------------------------------------------------------------------
-//int getPausePlayer();
+
+
 int CvLuaGame::lGetPausePlayer(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getPausePlayer);
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lSetPausePlayer(lua_State* L)
 {
 	CvGame& game = GC.getGame();
@@ -1243,35 +1243,35 @@ int CvLuaGame::lSetPausePlayer(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isPaused();
+
+
 int CvLuaGame::lIsPaused(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isPaused);
 }
 #ifdef TURN_TIMER_PAUSE_BUTTON
-//------------------------------------------------------------------------------
-//bool isTurnTimerPaused();
+
+
 int CvLuaGame::lIsTurnTimerPaused(lua_State* L)
 {
 	lua_pushboolean(L, GC.getGame().m_bIsPaused);
 	return 1;
 }
 #endif
-//------------------------------------------------------------------------------
-//UnitTypes getBestLandUnit();
+
+
 int CvLuaGame::lGetBestLandUnit(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getBestLandUnit);
 }
-//------------------------------------------------------------------------------
-//int getBestLandUnitCombat();
+
+
 int CvLuaGame::lGetBestLandUnitCombat(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getBestLandUnitCombat);
 }
-//------------------------------------------------------------------------------
-//int GetFaithCost();
+
+
 int CvLuaGame::lGetFaithCost(lua_State* L)
 {
 	const UnitTypes eUnit = (UnitTypes) lua_tointeger(L, 1);
@@ -1280,32 +1280,32 @@ int CvLuaGame::lGetFaithCost(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//TeamTypes getWinner();
+
+
 int CvLuaGame::lGetWinner(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getWinner);
 }
-//------------------------------------------------------------------------------
-//VictoryTypes getVictory();
+
+
 int CvLuaGame::lGetVictory(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getVictory);
 }
-//------------------------------------------------------------------------------
-//void setWinner(TeamTypes eNewWinner, VictoryTypes eNewVictory);
+
+
 int CvLuaGame::lSetWinner(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::setWinner);
 }
-//------------------------------------------------------------------------------
-//GameStateTypes getGameState();
+
+
 int CvLuaGame::lGetGameState(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getGameState);
 }
-//------------------------------------------------------------------------------
-//void SetGameState(GameplayGameStateTypes gameState);
+
+
 int CvLuaGame::lSetGameState(lua_State* L)
 {
 	int iGameState = luaL_checkint(L, 1);
@@ -1314,117 +1314,117 @@ int CvLuaGame::lSetGameState(lua_State* L)
 	GC.getGame().setGameState(eGameState);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//int GetVotesNeededForDiploVictory();
+
+
 int CvLuaGame::lGetVotesNeededForDiploVictory(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::GetVotesNeededForDiploVictory);
 }
-//------------------------------------------------------------------------------
-//bool IsUnitedNationsActive();
+
+
 int CvLuaGame::lIsUnitedNationsActive(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::IsUnitedNationsActive);
 }
-//------------------------------------------------------------------------------
-//int GetNumVictoryVotesTallied();
+
+
 int CvLuaGame::lGetNumVictoryVotesTallied(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::GetNumVictoryVotesTallied);
 }
-//------------------------------------------------------------------------------
-//TeamTypes GetVoteCast();
+
+
 int CvLuaGame::lGetVoteCast(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::GetVoteCast);
 }
-//------------------------------------------------------------------------------
-//TeamTypes GetPreviousVoteCast();
+
+
 int CvLuaGame::lGetPreviousVoteCast(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::GetPreviousVoteCast);
 }
-//------------------------------------------------------------------------------
-//int GetNumVotesForTeam(TeamTypes eTeam);
+
+
 int CvLuaGame::lGetNumVotesForTeam(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::GetNumVotesForTeam);
 }
-//------------------------------------------------------------------------------
-//int SetNumVotesForTeam(TeamTypes eTeam, int iValue);
+
+
 int CvLuaGame::lSetNumVotesForTeam(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::SetNumVotesForTeam);
 }
-//------------------------------------------------------------------------------
-//int ChangeNumVotesForTeam(TeamTypes eTeam, int iChange);
+
+
 int CvLuaGame::lChangeNumVotesForTeam(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::ChangeNumVotesForTeam);
 }
-//------------------------------------------------------------------------------
-//HandicapTypes getHandicapType();
+
+
 int CvLuaGame::lGetHandicapType(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getHandicapType);
 }
-//------------------------------------------------------------------------------
-//CalendarTypes getCalendar();
+
+
 int CvLuaGame::lGetCalendar(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getCalendar);
 }
-//------------------------------------------------------------------------------
-//EraTypes getStartEra();
+
+
 int CvLuaGame::lGetStartEra(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getStartEra);
 }
-//------------------------------------------------------------------------------
-//GameSpeedTypes getGameSpeedType();
+
+
 int CvLuaGame::lGetGameSpeedType(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getGameSpeedType);
 }
-//------------------------------------------------------------------------------
-//PlayerTypes getRankPlayer(int iRank);
+
+
 int CvLuaGame::lGetRankPlayer(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getRankPlayer);
 }
-//------------------------------------------------------------------------------
-//int getPlayerRank(PlayerTypes iIndex);
+
+
 int CvLuaGame::lGetPlayerRank(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getPlayerRank);
 }
-//------------------------------------------------------------------------------
-//int getPlayerScore(PlayerTypes iIndex);
+
+
 int CvLuaGame::lGetPlayerScore(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getPlayerScore);
 }
-//------------------------------------------------------------------------------
-//TeamTypes getRankTeam(int iRank);
+
+
 int CvLuaGame::lGetRankTeam(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getRankTeam);
 }
-//------------------------------------------------------------------------------
-//int getTeamRank(TeamTypes iIndex);
+
+
 int CvLuaGame::lGetTeamRank(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getTeamRank);
 }
-//------------------------------------------------------------------------------
-//int getTeamScore(TeamTypes iIndex);
+
+
 int CvLuaGame::lGetTeamScore(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getTeamScore);
 }
-//------------------------------------------------------------------------------
-//bool isOption(GameOptionTypes eIndex);
-//bool isOption(const char* pszOption);
+
+
+
 int CvLuaGame::lIsOption(lua_State* L)
 {
 	CvGame& kGame = GC.getGame();
@@ -1437,9 +1437,9 @@ int CvLuaGame::lIsOption(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setOption(GameOptionTypes eIndex, bool bEnabled);
-//void setOption(const char *pszOption, bool bEnabled);
+
+
+
 int CvLuaGame::lSetOption(lua_State* L)
 {
 	CvGame& kGame = GC.getGame();
@@ -1450,62 +1450,62 @@ int CvLuaGame::lSetOption(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
-//bool isMPOption(MultiplayerOptionTypes eIndex);
+
+
 int CvLuaGame::lIsMPOption(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isMPOption);
 }
-//------------------------------------------------------------------------------
-//int getUnitCreatedCount(UnitTypes eIndex);
+
+
 int CvLuaGame::lGetUnitCreatedCount(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getUnitCreatedCount);
 }
-//------------------------------------------------------------------------------
-//int getUnitClassCreatedCount(UnitClassTypes eIndex);
+
+
 int CvLuaGame::lGetUnitClassCreatedCount(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getUnitClassCreatedCount);
 }
-//------------------------------------------------------------------------------
-//bool isUnitClassMaxedOut(UnitClassTypes eIndex, int iExtra);
+
+
 int CvLuaGame::lIsUnitClassMaxedOut(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isUnitClassMaxedOut);
 }
-//------------------------------------------------------------------------------
-//int getBuildingClassCreatedCount(BuildingClassTypes eIndex);
+
+
 int CvLuaGame::lGetBuildingClassCreatedCount(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getBuildingClassCreatedCount);
 }
-//------------------------------------------------------------------------------
-//bool isBuildingClassMaxedOut(BuildingClassTypes eIndex, int iExtra);
+
+
 int CvLuaGame::lIsBuildingClassMaxedOut(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isBuildingClassMaxedOut);
 }
-//------------------------------------------------------------------------------
-//int getProjectCreatedCount(ProjectTypes eIndex);
+
+
 int CvLuaGame::lGetProjectCreatedCount(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getProjectCreatedCount);
 }
-//------------------------------------------------------------------------------
-//bool isProjectMaxedOut(ProjectTypes eIndex, int iExtra);
+
+
 int CvLuaGame::lIsProjectMaxedOut(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isProjectMaxedOut);
 }
-//------------------------------------------------------------------------------
-//bool isVictoryValid(VictoryTypes eIndex);
+
+
 int CvLuaGame::lIsVictoryValid(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isVictoryValid);
 }
-//------------------------------------------------------------------------------
-//bool setVictoryValid(VictoryTypes eIndex, bool bValid);
+
+
 int CvLuaGame::lSetVictoryValid(lua_State* L)
 {
 	CvGame& game = GC.getGame();
@@ -1519,51 +1519,51 @@ int CvLuaGame::lSetVictoryValid(lua_State* L)
 	return true;
 #endif
 }
-//------------------------------------------------------------------------------
-//bool isSpecialUnitValid(SpecialUnitTypes eSpecialUnitType);
+
+
 int CvLuaGame::lIsSpecialUnitValid(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isSpecialUnitValid);
 }
-//------------------------------------------------------------------------------
-//void makeSpecialUnitValid(SpecialUnitTypes eSpecialUnitType);
+
+
 int CvLuaGame::lMakeSpecialUnitValid(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::makeSpecialUnitValid);
 }
-//------------------------------------------------------------------------------
-//bool isNukesValid();
+
+
 int CvLuaGame::lIsNukesValid(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isNukesValid);
 }
-//------------------------------------------------------------------------------
-//void makeNukesValid(bool bValid);
+
+
 int CvLuaGame::lMakeNukesValid(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::makeNukesValid);
 }
-//------------------------------------------------------------------------------
-//bool isInAdvancedStart();
+
+
 int CvLuaGame::lIsInAdvancedStart(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isInAdvancedStart);
 }
-//------------------------------------------------------------------------------
-//void setName(char* szName);
+
+
 int CvLuaGame::lSetName(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::setName);
 }
-//------------------------------------------------------------------------------
-//wstring getName();
+
+
 int CvLuaGame::lGetName(lua_State* L)
 {
 	luaL_error(L, "NYI");
 	return 0;
 }
-//------------------------------------------------------------------------------
-//int Rand(max_num, log);
+
+
 int CvLuaGame::lRand(lua_State* L)
 {
 	const int max_num = luaL_checkinteger(L, 1);
@@ -1573,19 +1573,19 @@ int CvLuaGame::lRand(lua_State* L)
 	lua_pushinteger(L, rand_val);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int calculateSyncChecksum();
+
+
 int CvLuaGame::lCalculateSyncChecksum(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::calculateSyncChecksum);
 }
-//------------------------------------------------------------------------------
-//int calculateOptionsChecksum();
+
+
 int CvLuaGame::lCalculateOptionsChecksum(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::calculateOptionsChecksum);
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetReplayMessage(lua_State* L)
 {
 	CvGame& game = GC.getGame();
@@ -1660,7 +1660,7 @@ int CvLuaGame::lGetReplayMessage(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetReplayMessages(lua_State* L)
 {
 	CvGame& game = GC.getGame();
@@ -1737,16 +1737,16 @@ int CvLuaGame::lGetReplayMessages(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//uint getNumReplayMessages();
+
+
 int CvLuaGame::lGetNumReplayMessages(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::getNumReplayMessages);
 }
-//------------------------------------------------------------------------------
+
 #ifdef REPLAY_MESSAGE_EXTENDED
-// void AddChatReplayMessage(PlayerTypes ePlayer, string text, int iTargetType = CHATTARGET_ALL, int iToPlayerOrTeam = -1)
-// Used to import lobby chat into the in-game replay/chat history with the original author.
+
+
 int CvLuaGame::lAddChatReplayMessage(lua_State* L)
 {
 	const PlayerTypes ePlayer = (PlayerTypes)lua_tointeger(L, 1);
@@ -1759,75 +1759,75 @@ int CvLuaGame::lAddChatReplayMessage(lua_State* L)
 	return 0;
 }
 #endif
-//------------------------------------------------------------------------------
-//CyReplayInfo* getReplayInfo();
+
+
 int CvLuaGame::lGetReplayInfo(lua_State* L)
 {
 	luaL_error(L, "NYI");
 	return 0;
 }
-//------------------------------------------------------------------------------
-//void saveReplay(int iPlayer);
+
+
 int CvLuaGame::lSaveReplay(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::saveReplay);
 }
-//------------------------------------------------------------------------------
-//void addPlayer(PlayerTypes eNewPlayer, LeaderHeadTypes eLeader, CivilizationTypes eCiv);
+
+
 int CvLuaGame::lAddPlayer(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::addPlayer);
 }
-//------------------------------------------------------------------------------
-//void setPlotExtraYield(int iX, int iY, YieldTypes eYield, int iExtraYield);
+
+
 int CvLuaGame::lSetPlotExtraYield(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::setPlotExtraYield);
 }
-//------------------------------------------------------------------------------
-//void changePlotExtraCost(int iX, int iY, int iExtraCost);
+
+
 int CvLuaGame::lChangePlotExtraCost(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::changePlotExtraCost);
 }
-//------------------------------------------------------------------------------
-//bool isCivEverActive(CivilizationTypes eCivilization);
+
+
 int CvLuaGame::lIsCivEverActive(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isCivEverActive);
 }
-//------------------------------------------------------------------------------
-//bool isLeaderEverActive(LeaderHeadTypes eLeader);
+
+
 int CvLuaGame::lIsLeaderEverActive(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isLeaderEverActive);
 }
-//------------------------------------------------------------------------------
-//bool isUnitEverActive(UnitTypes eUnit);
+
+
 int CvLuaGame::lIsUnitEverActive(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isUnitEverActive);
 }
-//------------------------------------------------------------------------------
-//bool isBuildingEverActive(BuildingTypes eBuilding);
+
+
 int CvLuaGame::lIsBuildingEverActive(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::isBuildingEverActive);
 }
-//------------------------------------------------------------------------------
-//bool CanDoControl(ControlTypes eControl)
+
+
 int CvLuaGame::lCanDoControl(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::canDoControl);
 }
-//------------------------------------------------------------------------------
-//void DoControl(ControlTypes eControl)
+
+
 int CvLuaGame::lDoControl(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::doControl);
 }
-//------------------------------------------------------------------------------
-//void DoMinorPledgeProtection(int iMajorCivID, int iMinorCivID, bool bProtect);
+
+
 int CvLuaGame::lDoMinorPledgeProtection(lua_State* L)
 {
 	const int iMajor = lua_tointeger(L, 1);
@@ -1837,27 +1837,27 @@ int CvLuaGame::lDoMinorPledgeProtection(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void DoMinorGoldGift(int iMinorCivID, int iGold);
-// Old name, kept here for backwards compatibility
+
+
+
 int CvLuaGame::lDoMinorGoldGift(lua_State* L)
 {
 	return lDoMinorGiftGold(L);
 }
-//------------------------------------------------------------------------------
-//void DoMinorGiftGold(int iMinorCivID, iGold);
+
+
 int CvLuaGame::lDoMinorGiftGold(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::DoMinorGiftGold);
 }
-//------------------------------------------------------------------------------
-//void DoMinorGiftTileImprovement(int iMajorCivID, int iMinorCivID, iPlotX, iPlotY);
+
+
 int CvLuaGame::lDoMinorGiftTileImprovement(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::DoMinorGiftTileImprovement);
 }
-//------------------------------------------------------------------------------
-//void DoMinorBullyGold(int iBullyCivID, int iMinorCivID);
+
+
 int CvLuaGame::lDoMinorBullyGold(lua_State* L)
 {
 	const int iBully = lua_tointeger(L, 1);
@@ -1866,8 +1866,8 @@ int CvLuaGame::lDoMinorBullyGold(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void DoMinorBullyUnit(int iBullyCivID, int iMinorCivID);
+
+
 int CvLuaGame::lDoMinorBullyUnit(lua_State* L)
 {
 	const int iBully = lua_tointeger(L, 1);
@@ -1876,8 +1876,8 @@ int CvLuaGame::lDoMinorBullyUnit(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void DoMinorBuyout(int iMajorCivID, int iMinorCivID);
+
+
 int CvLuaGame::lDoMinorBuyout(lua_State* L)
 {
 	const int iMajor = lua_tointeger(L, 1);
@@ -1886,30 +1886,30 @@ int CvLuaGame::lDoMinorBuyout(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void GetBestWondersPlayer();
+
+
 int CvLuaGame::lGetBestWondersPlayer(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::GetBestWondersPlayer);
 }
-//------------------------------------------------------------------------------
-//void GetBestPoliciesPlayer();
+
+
 int CvLuaGame::lGetBestPoliciesPlayer(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::GetBestPoliciesPlayer);
 }
-//------------------------------------------------------------------------------
-//void GetBestGreatPeoplePlayer();
+
+
 int CvLuaGame::lGetBestGreatPeoplePlayer(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::GetBestGreatPeoplePlayer);
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lIsEverAttackedTutorial(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::IsEverAttackedTutorial);
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGameplayDiplomacyAILeaderMessage(lua_State* L)
 {
 	const int iPlayer = lua_tointeger(L, 1);
@@ -1920,7 +1920,7 @@ int CvLuaGame::lGameplayDiplomacyAILeaderMessage(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetResourceUsageType(lua_State* L)
 {
 	const ResourceTypes eResource = (ResourceTypes) lua_tointeger(L, 1);
@@ -1931,11 +1931,11 @@ int CvLuaGame::lGetResourceUsageType(lua_State* L)
 		lua_pushinteger(L, eUsage);
 	}
 	else
-		lua_pushinteger(L, -1);		// NO_USAGE
+		lua_pushinteger(L, -1);
 
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetNumResourceRequiredForUnit(lua_State* L)
 {
 	const UnitTypes eUnit = (UnitTypes) lua_tointeger(L, 1);
@@ -1954,7 +1954,7 @@ int CvLuaGame::lGetNumResourceRequiredForUnit(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetNumResourceRequiredForBuilding(lua_State* L)
 {
 	const BuildingTypes eBuilding = (BuildingTypes) luaL_checkint(L, 1);
@@ -1973,21 +1973,21 @@ int CvLuaGame::lGetNumResourceRequiredForBuilding(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lIsCombatWarned(lua_State* L)
 {
 	lua_pushboolean(L, GC.getGame().IsCombatWarned());
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lSetCombatWarned(lua_State* L)
 {
 	GC.getGame().SetCombatWarned(lua_toboolean(L, 1));
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetAdvisorCounsel(lua_State* L)
 {
 	const PlayerTypes ePlayer = GC.getGame().getActivePlayer();
@@ -2003,7 +2003,7 @@ int CvLuaGame::lGetAdvisorCounsel(lua_State* L)
 	{
 		if(GC.getGame().GetAdvisorCounsel()->m_aCounsel[ui].m_eAdvisor != eCurrentAdvisorType)
 		{
-			// close out previous table
+
 			if(eCurrentAdvisorType != NUM_ADVISOR_TYPES)
 			{
 				CvAssertMsg(bTableOpen, "Table should be open");
@@ -2014,7 +2014,7 @@ int CvLuaGame::lGetAdvisorCounsel(lua_State* L)
 			AdvisorTypes eNextAdvisorType = GC.getGame().GetAdvisorCounsel()->m_aCounsel[ui].m_eAdvisor;
 			if(eNextAdvisorType == NO_ADVISOR_TYPE)
 			{
-				// no more valid advisor info. Bail out!
+
 				break;
 			}
 			eCurrentAdvisorType = eNextAdvisorType;
@@ -2039,7 +2039,7 @@ int CvLuaGame::lGetAdvisorCounsel(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lSetAdvisorRecommenderCity(lua_State* L)
 {
 	CvCity* pkCity = CvLuaCity::GetInstance(L, 1);
@@ -2047,7 +2047,7 @@ int CvLuaGame::lSetAdvisorRecommenderCity(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lIsUnitRecommended(lua_State* L)
 {
 	UnitTypes eUnit = (UnitTypes)lua_tointeger(L, 1);
@@ -2057,7 +2057,7 @@ int CvLuaGame::lIsUnitRecommended(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lIsBuildingRecommended(lua_State* L)
 {
 	BuildingTypes eBuilding = (BuildingTypes)lua_tointeger(L, 1);
@@ -2067,7 +2067,7 @@ int CvLuaGame::lIsBuildingRecommended(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lIsProjectRecommended(lua_State* L)
 {
 	ProjectTypes eProject = (ProjectTypes)lua_tointeger(L, 1);
@@ -2077,7 +2077,7 @@ int CvLuaGame::lIsProjectRecommended(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lSetAdvisorRecommenderTech(lua_State* L)
 {
 	PlayerTypes ePlayer = (PlayerTypes)lua_tointeger(L, 1);
@@ -2085,7 +2085,7 @@ int CvLuaGame::lSetAdvisorRecommenderTech(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lIsTechRecommended(lua_State* L)
 {
 	TechTypes eTech = (TechTypes)lua_tointeger(L, 1);
@@ -2094,7 +2094,7 @@ int CvLuaGame::lIsTechRecommended(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetVariableCitySizeFromPopulation(lua_State* L)
 {
 	unsigned int nPopulation = (unsigned int)lua_tointeger(L, 1);
@@ -2103,7 +2103,7 @@ int CvLuaGame::lGetVariableCitySizeFromPopulation(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetResearchAgreementCost(lua_State* L)
 {
 	const PlayerTypes ePlayer1 = (PlayerTypes) lua_tointeger(L, 1);
@@ -2113,7 +2113,7 @@ int CvLuaGame::lGetResearchAgreementCost(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetCustomOption(lua_State* L)
 {
 	const char* szOptionName = luaL_checkstring(L, 1);
@@ -2126,19 +2126,19 @@ int CvLuaGame::lGetCustomOption(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetNumCitiesPolicyCostMod(lua_State* L)
 {
 	lua_pushinteger(L, GC.getMap().getWorldInfo().GetNumCitiesPolicyCostMod());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetNumCitiesTechCostMod(lua_State* L)
 {
 	lua_pushinteger(L, GC.getMap().getWorldInfo().GetNumCitiesTechCostMod());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetBuildingYieldChange(lua_State* L)
 {
 	const BuildingTypes eBuilding = (BuildingTypes) luaL_checkint(L, 1);
@@ -2156,7 +2156,7 @@ int CvLuaGame::lGetBuildingYieldChange(lua_State* L)
 	lua_pushinteger(L, iYieldChange);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetBuildingYieldModifier(lua_State* L)
 {
 	const BuildingTypes eBuilding = (BuildingTypes) luaL_checkint(L, 1);
@@ -2174,24 +2174,24 @@ int CvLuaGame::lGetBuildingYieldModifier(lua_State* L)
 	lua_pushinteger(L, iYieldModifier);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetWorldNumCitiesUnhappinessPercent(lua_State* L)
 {
 	lua_pushinteger(L, GC.getMap().getWorldInfo().getNumCitiesUnhappinessPercent());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetDealDuration(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::GetDealDuration);
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetPeaceDuration(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvGame::GetPeaceDuration);
 }
 #ifdef LEKMOD_PENDING_DEAL_TURN_PROMPT
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetPendingIncomingDealSenders(lua_State* L)
 {
 	const PlayerTypes eToPlayer = static_cast<PlayerTypes>(luaL_optint(L, 1, static_cast<int>(GC.getGame().getActivePlayer())));
@@ -2217,7 +2217,7 @@ int CvLuaGame::lGetPendingIncomingDealSenders(lua_State* L)
 }
 #endif
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetUnitUpgradesTo(lua_State* L)
 {
 	const UnitTypes eUnit = (UnitTypes) lua_tointeger(L, 1);
@@ -2238,7 +2238,7 @@ int CvLuaGame::lGetUnitUpgradesTo(lua_State* L)
 		CvUnitClassInfo* pkUnitClassInfo = GC.getUnitClassInfo((UnitClassTypes) iUnitClassLoop);
 		if(pkUnitClassInfo != NULL)
 		{
-			if(pkUnitInfo->GetUpgradeUnitClass(iUnitClassLoop))	// Hardcoded to look at entry 0
+			if(pkUnitInfo->GetUpgradeUnitClass(iUnitClassLoop))
 			{
 				lua_pushinteger(L, pkUnitClassInfo->getDefaultUnitIndex());
 				return 1;
@@ -2250,7 +2250,7 @@ int CvLuaGame::lGetUnitUpgradesTo(lua_State* L)
 	return 0;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetCombatPrediction(lua_State* L)
 {
 	const CvUnit* pAttackingUnit = CvLuaUnit::GetInstance(L, 1);
@@ -2260,7 +2260,7 @@ int CvLuaGame::lGetCombatPrediction(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetTimeString(lua_State* L)
 {
 	CvString timeString;
@@ -2271,20 +2271,20 @@ int CvLuaGame::lGetTimeString(lua_State* L)
 	lua_pushstring(L, timeString.GetCString());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetMinimumFaithNextPantheon(lua_State* L)
 {
 	int iFaith = GC.getGame().GetGameReligions()->GetMinimumFaithNextPantheon();
 	lua_pushinteger(L, iFaith);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lSetMinimumFaithNextPantheon(lua_State* L)
 {
 	GC.getGame().GetGameReligions()->SetMinimumFaithNextPantheon(lua_tointeger(L, 1));
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetAvailablePantheonBeliefs(lua_State* L)
 {
 	lua_createtable(L, 0, 0);
@@ -2307,7 +2307,7 @@ int CvLuaGame::lGetAvailablePantheonBeliefs(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetAvailableFounderBeliefs(lua_State* L)
 {
 	lua_createtable(L, 0, 0);
@@ -2330,7 +2330,7 @@ int CvLuaGame::lGetAvailableFounderBeliefs(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetAvailableFollowerBeliefs(lua_State* L)
 {
 	lua_createtable(L, 0, 0);
@@ -2353,7 +2353,7 @@ int CvLuaGame::lGetAvailableFollowerBeliefs(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetAvailableEnhancerBeliefs(lua_State* L)
 {
 	lua_createtable(L, 0, 0);
@@ -2376,7 +2376,7 @@ int CvLuaGame::lGetAvailableEnhancerBeliefs(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetAvailableBonusBeliefs(lua_State* L)
 {
 	lua_createtable(L, 0, 0);
@@ -2399,7 +2399,7 @@ int CvLuaGame::lGetAvailableBonusBeliefs(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetAvailableReformationBeliefs(lua_State* L)
 {
 	lua_createtable(L, 0, 0);
@@ -2422,7 +2422,7 @@ int CvLuaGame::lGetAvailableReformationBeliefs(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetNumFollowers(lua_State* L)
 {
 	int iRtnValue;
@@ -2432,7 +2432,7 @@ int CvLuaGame::lGetNumFollowers(lua_State* L)
 	lua_pushinteger(L, iRtnValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetNumCitiesFollowing(lua_State* L)
 {
 	int iRtnValue;
@@ -2442,7 +2442,7 @@ int CvLuaGame::lGetNumCitiesFollowing(lua_State* L)
 	lua_pushinteger(L, iRtnValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetBeliefsInReligion(lua_State* L)
 {
 	ReligionTypes eReligion;
@@ -2466,7 +2466,7 @@ int CvLuaGame::lGetBeliefsInReligion(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetNumReligionsStillToFound(lua_State* L)
 {
 	int iRtnValue;
@@ -2474,7 +2474,7 @@ int CvLuaGame::lGetNumReligionsStillToFound(lua_State* L)
 	lua_pushinteger(L, iRtnValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetNumReligionsFounded(lua_State* L)
 {
 	int iRtnValue;
@@ -2482,7 +2482,7 @@ int CvLuaGame::lGetNumReligionsFounded(lua_State* L)
 	lua_pushinteger(L, iRtnValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetHolyCityForReligion(lua_State* L)
 {
 	const ReligionTypes eReligion = static_cast<ReligionTypes>(luaL_checkint(L, 1));
@@ -2510,7 +2510,7 @@ int CvLuaGame::lGetHolyCityForReligion(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetReligionName(lua_State* L)
 {
 	const ReligionTypes eReligion = static_cast<ReligionTypes>(luaL_checkint(L, 1));
@@ -2534,7 +2534,7 @@ int CvLuaGame::lGetReligionName(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetFounderBenefitsReligion(lua_State* L)
 {
 	const PlayerTypes ePlayer = static_cast<PlayerTypes>(luaL_checkint(L, 1));
@@ -2542,7 +2542,7 @@ int CvLuaGame::lGetFounderBenefitsReligion(lua_State* L)
 	lua_pushinteger(L, eReligion);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lFoundPantheon(lua_State* L)
 {
 	const PlayerTypes ePlayer = static_cast<PlayerTypes>(luaL_checkint(L, 1));
@@ -2572,7 +2572,7 @@ int CvLuaGame::lFoundPantheon(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lFoundReligion(lua_State* L)
 {
 	const PlayerTypes ePlayer = static_cast<PlayerTypes>(luaL_checkint(L, 1));
@@ -2594,7 +2594,7 @@ int CvLuaGame::lFoundReligion(lua_State* L)
 		else
 		{
 			CvGameReligions::NotifyPlayer(ePlayer, eResult);
-			// We don't want them to lose the opportunity to found the religion, and the Great Prophet is already gone so just repost the notification
+
 			CvPlayerAI& kPlayer = GET_PLAYER(ePlayer);
 			if (kPlayer.isHuman() && eResult != CvGameReligions::FOUNDING_NO_RELIGIONS_AVAILABLE && eResult != CvGameReligions::FOUNDING_NO_BELIEFS_AVAILABLE)
 			{
@@ -2613,7 +2613,7 @@ int CvLuaGame::lFoundReligion(lua_State* L)
 				UnitTypes eUnit = (UnitTypes)GC.getInfoTypeForString("UNIT_PROPHET", true);
 				if (eUnit != NO_UNIT)
 				{
-					kPlayer.getCapitalCity()->GetCityCitizens()->DoSpawnGreatPerson(eUnit, false /*bIncrementCount*/, false, true);
+					kPlayer.getCapitalCity()->GetCityCitizens()->DoSpawnGreatPerson(eUnit, false                    , false, true);
 				}
 			}
 #endif
@@ -2625,7 +2625,7 @@ int CvLuaGame::lFoundReligion(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lEnhanceReligion(lua_State* L)
 {
 	const PlayerTypes ePlayer = static_cast<PlayerTypes>(luaL_checkint(L, 1));
@@ -2642,7 +2642,7 @@ int CvLuaGame::lEnhanceReligion(lua_State* L)
 	else
 	{
 		CvGameReligions::NotifyPlayer(ePlayer, eResult);
-		// We don't want them to lose the opportunity to enhance the religion, and the Great Prophet is already gone so just repost the notification
+
 		CvPlayerAI& kPlayer = GET_PLAYER(ePlayer);
 		CvCity* pkCity = kPlayer.getCapitalCity();
 		if (kPlayer.isHuman() && pkCity && eResult != CvGameReligions::FOUNDING_NO_BELIEFS_AVAILABLE)
@@ -2662,7 +2662,7 @@ int CvLuaGame::lEnhanceReligion(lua_State* L)
 			UnitTypes eUnit = (UnitTypes)GC.getInfoTypeForString("UNIT_PROPHET", true);
 			if (eUnit != NO_UNIT)
 			{
-				kPlayer.getCapitalCity()->GetCityCitizens()->DoSpawnGreatPerson(eUnit, false /*bIncrementCount*/, false, true);
+				kPlayer.getCapitalCity()->GetCityCitizens()->DoSpawnGreatPerson(eUnit, false                    , false, true);
 			}
 	}
 #endif
@@ -2673,7 +2673,7 @@ int CvLuaGame::lEnhanceReligion(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lSetHolyCity(lua_State* L)
 {
 	const ReligionTypes eReligion = static_cast<ReligionTypes>(luaL_checkint(L, 1));
@@ -2683,7 +2683,7 @@ int CvLuaGame::lSetHolyCity(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetFounder(lua_State* L)
 {
 	const ReligionTypes eReligion = static_cast<ReligionTypes>(luaL_checkint(L, 1));
@@ -2694,7 +2694,7 @@ int CvLuaGame::lGetFounder(lua_State* L)
 	lua_pushinteger(L, (int)pReligion->m_eFounder);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lSetFounder(lua_State* L)
 {
 	const ReligionTypes eReligion = static_cast<ReligionTypes>(luaL_checkint(L, 1));
@@ -2704,25 +2704,25 @@ int CvLuaGame::lSetFounder(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetTurnsBetweenMinorCivElections(lua_State* L)
 {
 	lua_pushinteger(L, GC.getGame().GetTurnsBetweenMinorCivElections());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetTurnsUntilMinorCivElection(lua_State* L)
 {
 	lua_pushinteger(L, GC.getGame().GetTurnsUntilMinorCivElection());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetNumActiveLeagues(lua_State* L)
 {
 	lua_pushinteger(L, GC.getGame().GetGameLeagues()->GetNumActiveLeagues());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetNumLeaguesEverFounded(lua_State* L)
 {
 #ifdef AUI_LEAGUES_FIX_POSSIBLE_DEALLOCATION_CRASH
@@ -2732,7 +2732,7 @@ int CvLuaGame::lGetNumLeaguesEverFounded(lua_State* L)
 #endif
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetLeague(lua_State* L)
 {
 #ifdef AUI_LEAGUES_FIX_POSSIBLE_DEALLOCATION_CRASH
@@ -2752,7 +2752,7 @@ int CvLuaGame::lGetLeague(lua_State* L)
 	}
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetActiveLeague(lua_State* L)
 {
 	CvLeague* pLeague = GC.getGame().GetGameLeagues()->GetActiveLeague();
@@ -2766,13 +2766,13 @@ int CvLuaGame::lGetActiveLeague(lua_State* L)
 	}
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lIsProcessingMessages(lua_State* L)
 {
 	lua_pushboolean(L, gDLL->IsProcessingGameCoreMessages());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetGreatWorkTooltip(lua_State* L)
 {
 #ifdef AUI_WARNING_FIXES
@@ -2789,7 +2789,7 @@ int CvLuaGame::lGetGreatWorkTooltip(lua_State* L)
 	}
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetGreatWorkName(lua_State* L)
 {
 #ifdef AUI_WARNING_FIXES
@@ -2805,7 +2805,7 @@ int CvLuaGame::lGetGreatWorkName(lua_State* L)
 	}
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetGreatWorkType(lua_State* L)
 {
 #ifdef AUI_WARNING_FIXES
@@ -2822,7 +2822,7 @@ int CvLuaGame::lGetGreatWorkType(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetGreatWorkClass(lua_State* L)
 {
 #ifdef AUI_WARNING_FIXES
@@ -2839,7 +2839,7 @@ int CvLuaGame::lGetGreatWorkClass(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetGreatWorkArtist(lua_State* L)
 {
 #ifdef AUI_WARNING_FIXES
@@ -2855,7 +2855,7 @@ int CvLuaGame::lGetGreatWorkArtist(lua_State* L)
 	}
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetGreatWorkEra(lua_State* L)
 {
 #ifdef AUI_WARNING_FIXES
@@ -2871,7 +2871,7 @@ int CvLuaGame::lGetGreatWorkEra(lua_State* L)
 	}
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetGreatWorkEraAbbreviation(lua_State* L)
 {
 #ifdef AUI_WARNING_FIXES
@@ -2888,7 +2888,7 @@ int CvLuaGame::lGetGreatWorkEraAbbreviation(lua_State* L)
 	return 0;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetGreatWorkEraShort(lua_State* L)
 {
 #ifdef AUI_WARNING_FIXES
@@ -2905,7 +2905,7 @@ int CvLuaGame::lGetGreatWorkEraShort(lua_State* L)
 	return 0;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetGreatWorkCreator(lua_State* L)
 {
 #ifdef AUI_WARNING_FIXES
@@ -2922,7 +2922,7 @@ int CvLuaGame::lGetGreatWorkCreator(lua_State* L)
 	return 0;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetGreatWorkController(lua_State* L)
 {
 #ifdef AUI_WARNING_FIXES
@@ -2939,7 +2939,7 @@ int CvLuaGame::lGetGreatWorkController(lua_State* L)
 	return 0;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetGreatWorkCurrentThemingBonus(lua_State* L)
 {
 #ifdef AUI_WARNING_FIXES
@@ -2956,7 +2956,7 @@ int CvLuaGame::lGetGreatWorkCurrentThemingBonus(lua_State* L)
 	return 0;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetArtifactName(lua_State* L)
 {
 	CvPlot* pkPlot = CvLuaPlot::GetInstance(L, 1, false);
@@ -2965,14 +2965,14 @@ int CvLuaGame::lGetArtifactName(lua_State* L)
 	lua_pushstring(L, szName);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetNumFreePolicies(lua_State* L)
 {
 	const PolicyBranchTypes eBranch = static_cast<PolicyBranchTypes>(luaL_checkint(L, 1));
 	lua_pushinteger(L, PolicyHelpers::GetNumFreePolicies(eBranch));
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetLongestCityConnectionPlots(lua_State* L)
 {
 	CvPlot* pPlot1 = NULL;
@@ -2998,7 +2998,7 @@ int CvLuaGame::lGetLongestCityConnectionPlots(lua_State* L)
 
 			for (pSecondCity = GET_PLAYER(ePlayer).firstCity(&iLoop2); pSecondCity != NULL; pSecondCity = GET_PLAYER(ePlayer).nextCity(&iLoop2))
 			{
-				// don't measure distance to same city
+
 				if (pFirstCity == pSecondCity)
 				{
 					continue;
@@ -3009,16 +3009,16 @@ int CvLuaGame::lGetLongestCityConnectionPlots(lua_State* L)
 				bool bUsingXP2Scenario2 = gDLL->IsModActivated(CIV5_XP2_SCENARIO2_MODID) || gDLL->IsModActivated(CIV5_COMPLETE_SCENARIO1_MODID);
 				if(bUsingXP2Scenario2)
 				{
-					// active player
+
 					if (GC.getGame().getActivePlayer() == ePlayer)
 					{
 						const char* szCivKey = GET_PLAYER(ePlayer).getCivilizationTypeKey();
 						if (strcmp(szCivKey, "CIVILIZATION_ENGLAND") == 0)
 						{
-							if (pFirstCityPlot->getX() == 41 && pFirstCityPlot->getY() == 62 && // cairo
-								pSecondCityPlot->getX() == 32 && pSecondCityPlot->getY() == 6) // cape town
+							if (pFirstCityPlot->getX() == 41 && pFirstCityPlot->getY() == 62 &&
+								pSecondCityPlot->getX() == 32 && pSecondCityPlot->getY() == 6)
 							{
-								// assuming that there are fewer than 256 players
+
 								int iRouteValue = ROUTE_RAILROAD + 1;
 								int iPathfinderFlags = ui;
 								iPathfinderFlags |= (iRouteValue << 8);
@@ -3035,14 +3035,14 @@ int CvLuaGame::lGetLongestCityConnectionPlots(lua_State* L)
 				int iThisPlotDistance = plotDistance(pFirstCityPlot->getX(), pFirstCityPlot->getY(), pSecondCityPlot->getX(), pSecondCityPlot->getY());
 				if (iThisPlotDistance > iFurthestPlotDistance)
 				{
-					// assuming that there are fewer than 256 players
+
 					int iRouteValue = ROUTE_RAILROAD + 1;
 					int iPathfinderFlags = ui;
 					iPathfinderFlags |= (iRouteValue << 8);
 
 					if (GC.getRouteFinder().GeneratePath(pFirstCityPlot->getX(), pFirstCityPlot->getY(), pSecondCityPlot->getX(), pSecondCityPlot->getY(), iPathfinderFlags, true))
 					{
-						// found a connection
+
 						pPlot1 = pFirstCityPlot;
 						pPlot2 = pSecondCityPlot;
 						iFurthestPlotDistance = iThisPlotDistance;
@@ -3052,7 +3052,7 @@ int CvLuaGame::lGetLongestCityConnectionPlots(lua_State* L)
 		}
 	}
 
-	// reconnect the land route pathfinder water methods
+
 	GC.getRouteFinder().SetNumExtraChildrenFunc(RouteGetNumExtraChildren);
 	GC.getRouteFinder().SetExtraChildGetterFunc(RouteGetExtraChild);
 
@@ -3061,7 +3061,7 @@ int CvLuaGame::lGetLongestCityConnectionPlots(lua_State* L)
 	return 2;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lSelectedUnit_SpeculativePopupTradeRoute_Display(lua_State* L)
 {
 	int iPlotX,iPlotY;
@@ -3076,7 +3076,7 @@ int CvLuaGame::lSelectedUnit_SpeculativePopupTradeRoute_Display(lua_State* L)
 	GC.getGame().GetGameTrade()->DisplayTemporaryPopupTradeRoute(iPlotX,iPlotY,type, eDomain);
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lSelectedUnit_SpeculativePopupTradeRoute_Hide(lua_State* L)
 {
 	int iPlotX,iPlotY;
@@ -3088,7 +3088,7 @@ int CvLuaGame::lSelectedUnit_SpeculativePopupTradeRoute_Hide(lua_State* L)
 	GC.getGame().GetGameTrade()->HideTemporaryPopupTradeRoute(iPlotX,iPlotY,type);
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lMouseoverUnit(lua_State* L)
 {
 	CvUnit* pUnit;
@@ -3100,13 +3100,13 @@ int CvLuaGame::lMouseoverUnit(lua_State* L)
 	GC.getGame().mouseoverUnit(pUnit, bEnter);
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetNumArchaeologySites(lua_State* L)
 {
 	lua_pushinteger(L, GC.getGame().GetNumArchaeologySites());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetNumHiddenArchaeologySites(lua_State* L)
 {
 	lua_pushinteger(L, GC.getGame().GetNumHiddenArchaeologySites());
@@ -3120,13 +3120,13 @@ int CvLuaGame::lExitLeaderScreen(lua_State* L)
 }
 #endif
 #ifdef MP_PLAYERS_VOTING_SYSTEM
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetLastProposalID(lua_State* L)
 {
 	lua_pushinteger(L, GC.getGame().GetMPVotingSystem()->GetLastProposalID());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetProposalExpirationCounter(lua_State* L)
 {
 	const int iProposalId = luaL_checkint(L, 1);
@@ -3134,7 +3134,7 @@ int CvLuaGame::lGetProposalExpirationCounter(lua_State* L)
 	lua_pushinteger(L, GC.getGame().GetMPVotingSystem()->GetProposalExpirationCounter(iProposalId));
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetProposalType(lua_State* L)
 {
 	const int iProposalId = luaL_checkint(L, 1);
@@ -3142,7 +3142,7 @@ int CvLuaGame::lGetProposalType(lua_State* L)
 	lua_pushinteger(L, static_cast<int>(GC.getGame().GetMPVotingSystem()->GetProposalType(iProposalId)));
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetProposalTypeCooldownResetTurn(lua_State* L)
 {
 	const MPVotingSystemProposalTypes eType = static_cast<MPVotingSystemProposalTypes>(luaL_checkint(L, 1));
@@ -3151,7 +3151,7 @@ int CvLuaGame::lGetProposalTypeCooldownResetTurn(lua_State* L)
 	lua_pushinteger(L, GC.getGame().GetMPVotingSystem()->GetProposalTypeCooldownResetTurn(eType, ePlayer));
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetProposalStatus(lua_State* L)
 {
 	const int iProposalId = luaL_checkint(L, 1);
@@ -3159,7 +3159,7 @@ int CvLuaGame::lGetProposalStatus(lua_State* L)
 	lua_pushinteger(L, static_cast<int>(GC.getGame().GetMPVotingSystem()->GetProposalStatus(iProposalId)));
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetProposalOwner(lua_State* L)
 {
 	const int iProposalId = luaL_checkint(L, 1);
@@ -3167,7 +3167,7 @@ int CvLuaGame::lGetProposalOwner(lua_State* L)
 	lua_pushinteger(L, static_cast<int>(GC.getGame().GetMPVotingSystem()->GetProposalOwner(iProposalId)));
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetProposalSubject(lua_State* L)
 {
 	const int iProposalId = luaL_checkint(L, 1);
@@ -3175,7 +3175,7 @@ int CvLuaGame::lGetProposalSubject(lua_State* L)
 	lua_pushinteger(L, static_cast<int>(GC.getGame().GetMPVotingSystem()->GetProposalSubject(iProposalId)));
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetProposalCompletion(lua_State* L)
 {
 	const int iProposalId = luaL_checkint(L, 1);
@@ -3183,7 +3183,7 @@ int CvLuaGame::lGetProposalCompletion(lua_State* L)
 	lua_pushboolean(L, GC.getGame().GetMPVotingSystem()->GetProposalCompletion(iProposalId));
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetProposalVoterVote(lua_State* L)
 {
 	const int iProposalId = luaL_checkint(L, 1);
@@ -3192,7 +3192,7 @@ int CvLuaGame::lGetProposalVoterVote(lua_State* L)
 	lua_pushboolean(L, GC.getGame().GetMPVotingSystem()->GetVoterVote(iProposalId, ePlayer));
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetProposalVoterHasVoted(lua_State* L)
 {
 	const int iProposalId = luaL_checkint(L, 1);
@@ -3201,7 +3201,7 @@ int CvLuaGame::lGetProposalVoterHasVoted(lua_State* L)
 	lua_pushboolean(L, GC.getGame().GetMPVotingSystem()->GetVoterHasVoted(iProposalId, ePlayer));
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetProposalVoterEligibility(lua_State* L)
 {
 	const int iProposalId = luaL_checkint(L, 1);
@@ -3210,7 +3210,7 @@ int CvLuaGame::lGetProposalVoterEligibility(lua_State* L)
 	lua_pushboolean(L, GC.getGame().GetMPVotingSystem()->GetVoterEligibility(iProposalId, ePlayer));
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetYesVotes(lua_State* L)
 {
 	const int iProposalId = luaL_checkint(L, 1);
@@ -3218,7 +3218,7 @@ int CvLuaGame::lGetYesVotes(lua_State* L)
 	lua_pushinteger(L, GC.getGame().GetMPVotingSystem()->GetYesVotes(iProposalId));
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetNoVotes(lua_State* L)
 {
 	const int iProposalId = luaL_checkint(L, 1);
@@ -3226,7 +3226,7 @@ int CvLuaGame::lGetNoVotes(lua_State* L)
 	lua_pushinteger(L, GC.getGame().GetMPVotingSystem()->GetNoVotes(iProposalId));
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lGetMaxVotes(lua_State* L)
 {
 	const int iProposalId = luaL_checkint(L, 1);
@@ -3234,7 +3234,7 @@ int CvLuaGame::lGetMaxVotes(lua_State* L)
 	lua_pushinteger(L, GC.getGame().GetMPVotingSystem()->GetMaxVotes(iProposalId));
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lIsPlayerHasActiveProposal(lua_State* L)
 {
 	const PlayerTypes ePlayer = static_cast<PlayerTypes>(luaL_checkint(L, 1));
@@ -3242,7 +3242,7 @@ int CvLuaGame::lIsPlayerHasActiveProposal(lua_State* L)
 	lua_pushboolean(L, GC.getGame().GetMPVotingSystem()->IsPlayerHasActiveProposal(ePlayer));
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lIsAnyActiveProposalType(lua_State* L)
 {
 	const MPVotingSystemProposalTypes eType = static_cast<MPVotingSystemProposalTypes>(luaL_checkint(L, 1));
@@ -3250,7 +3250,7 @@ int CvLuaGame::lIsAnyActiveProposalType(lua_State* L)
 	lua_pushboolean(L, GC.getGame().GetMPVotingSystem()->IsAnyActiveProposalType(eType));
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lIsProposalTypeOnCooldown(lua_State* L)
 {
 	const MPVotingSystemProposalTypes eType = static_cast<MPVotingSystemProposalTypes>(luaL_checkint(L, 1));
@@ -3259,7 +3259,7 @@ int CvLuaGame::lIsProposalTypeOnCooldown(lua_State* L)
 	lua_pushboolean(L, GC.getGame().GetMPVotingSystem()->IsProposalTypeOnCooldown(eType, ePlayer));
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGame::lIsProposalTypeAvailable(lua_State* L)
 {
 	const MPVotingSystemProposalTypes eType = static_cast<MPVotingSystemProposalTypes>(luaL_checkint(L, 1));
@@ -3269,8 +3269,8 @@ int CvLuaGame::lIsProposalTypeAvailable(lua_State* L)
 }
 #endif
 #ifdef INGAME_HOTKEY_MANAGER
-//------------------------------------------------------------------------------
-// replace GameInfoActions with fresh hotkeys data, may be called ingame with Game.UpdateActions()
+
+
 namespace Lua = FLua::Details;
 using FLua::Table;
 int CvLuaGame::lUpdateActions(lua_State* L)
@@ -3376,7 +3376,7 @@ int CvLuaGame::lGetCombatDamage(lua_State* L)
 
 	lua_createtable(L, 0, 0);
 
-	// Combat flags
+
 	lua_pushboolean(L, kInfo.getAttackIsRanged());
 	lua_setfield(L, -2, "IsRangedAttack");
 
@@ -3389,7 +3389,7 @@ int CvLuaGame::lGetCombatDamage(lua_State* L)
 	lua_pushboolean(L, kInfo.getDefenderRetaliates());
 	lua_setfield(L, -2, "DefenderRetaliates");
 
-	// Attacker table
+
 	lua_createtable(L, 0, 10);
 
 	lua_pushinteger(L, kInfo.getDamageInflicted(BATTLE_UNIT_ATTACKER));
@@ -3445,11 +3445,11 @@ int CvLuaGame::lGetCombatDamage(lua_State* L)
 		lua_setfield(L, -2, "MaxHitPoints");
 	}
 
-	// Pops the attacker table and assigns it to the root table.
+
 	lua_setfield(L, -2, "Attacker");
 
 
-	// Defender table
+
 	lua_createtable(L, 0, 10);
 
 	lua_pushinteger(L, kInfo.getDamageInflicted(BATTLE_UNIT_DEFENDER));
@@ -3508,7 +3508,7 @@ int CvLuaGame::lGetCombatDamage(lua_State* L)
 	lua_setfield(L, -2, "Defender");
 
 
-	// Interceptor table
+
 	if (pInterceptor != NULL)
 	{
 		lua_createtable(L, 0, 10);

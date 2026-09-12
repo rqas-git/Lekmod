@@ -1,4 +1,4 @@
-"""EUI package validation, transactional switching, and launch checks."""
+
 from contextlib import ExitStack
 import hashlib
 import io
@@ -42,8 +42,8 @@ class EUITests(unittest.TestCase):
             ARCHIVE_SHA256=hashlib.sha256(self.data).hexdigest(), TREE_SHA256=eui.tree_digest(package)))
 
     def switch(self, enabled):
-        # Tiny installer fixture has only two UI sources; real overlay rules are
-        # exercised separately below against the actual repository assets.
+
+
         def package(source, destination, eui=None):
             prepare_lekmod(source, destination)
             (destination / 'Lua/UI/mode.lua').write_text('eui' if eui else 'standard')

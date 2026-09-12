@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GameData>
 	<Defines>
-		<!-- Settle Yield Multipliers are now the same as Citizen Yield values -->
+
 		<Update>
 			<Set Value="20" />
 			<Where Name="SETTLER_FOOD_MULTIPLIER" />

@@ -1,10 +1,10 @@
--- modified by bc1 from 1.0.3.144 brave new world code
--- extend full unit & building info pregame
--- extend AI mood info
--- code is common using gk_mode and bnw_mode switches
--- compatible with Communitas breaking yield types
--- TODO: lots !
---print( "Loading EUI tooltips for "..tostring(ContextPtr:GetID()).." context" )
+
+
+
+
+
+
+
 
 local civ5_mode = InStrategicView ~= nil
 local civBE_mode = not civ5_mode
@@ -22,12 +22,12 @@ local YieldNames = EUI.YieldNames
 local GreatPeopleIcon = EUI.GreatPeopleIcon
 local PushScratchDeal = EUI.PushScratchDeal
 local PopScratchDeal = EUI.PopScratchDeal
-local GameInfo = EUI.GameInfoCache -- warning! use iterator ONLY with table field conditions, NOT string SQL query
+local GameInfo = EUI.GameInfoCache
 
---print( "Root contexts:", LookUpControl( "/FrontEnd" ) or "nil", LookUpControl( "/InGame" ) or "nil", LookUpControl( "/LeaderHeadRoot" ) or "nil")
--------------------------------
--- minor lua optimizations
--------------------------------
+
+
+
+
 local ipairs = ipairs
 local math_ceil = math.ceil
 local math_floor = math.floor
@@ -72,7 +72,7 @@ local g_dealDuration = Game and Game.GetDealDuration()
 
 local g_isScienceEnabled = not Game or not Game.IsOption(GameOptionTypes.GAMEOPTION_NO_SCIENCE)
 local g_isPoliciesEnabled = not Game or not Game.IsOption(GameOptionTypes.GAMEOPTION_NO_POLICIES)
-local g_isHappinessEnabled = not Game or not Game.IsOption(GameOptionTypes.GAMEOPTION_NO_HAPPINESS) -- uncomment in v34
+local g_isHappinessEnabled = not Game or not Game.IsOption(GameOptionTypes.GAMEOPTION_NO_HAPPINESS)
 local g_isReligionEnabled = civ5gk_mode and (not Game or not Game.IsOption(GameOptionTypes.GAMEOPTION_NO_RELIGION))
 
 local function GetCivUnit( civilizationType, unitClassType )
@@ -117,24 +117,24 @@ local function GetYieldString( ... )
 end
 
 local function GetCivName( player )
-	-- Met
+
 	if Teams[Game.GetActiveTeam()]:IsHasMet(player:GetTeam()) then
 		return player:GetCivilizationShortDescription()
-	-- Not met
+
 	else
 		return L"TXT_KEY_UNMET_PLAYER"
 	end
 end
 
 local function GetLeaderName( player )
-	-- You
+
 	if player:GetID() == Game.GetActivePlayer() then
 		return L"TXT_KEY_YOU"
-	-- Not met
+
 	elseif not Teams[Game.GetActiveTeam()]:IsHasMet(player:GetTeam()) then
 		return L"TXT_KEY_UNMET_PLAYER"
-	-- Human
-	elseif player:IsHuman() then -- Game.IsGameMultiPlayer()
+
+	elseif player:IsHuman() then
 		local n = player:GetNickName()
 		if n and n ~= "" then
 			return player:GetNickName()
@@ -181,7 +181,7 @@ local function SetKey( t, key, value )
 	end
 end
 
-local function AddPreWrittenHelpTextAndConcat( tips, row ) -- assumes tips is custom EUI table object
+local function AddPreWrittenHelpTextAndConcat( tips, row )
 	local tip = row and row.Help and L( row.Help ) or ""
 	if tip ~= "" then
 		tips:insertIf( #tips > 2 and "----------------" )
@@ -190,36 +190,36 @@ local function AddPreWrittenHelpTextAndConcat( tips, row ) -- assumes tips is cu
 	return tips:concat( "[NEWLINE]" )
 end
 
--------------------------------------------------
--- Help text for Units
--------------------------------------------------
 
--- How much does it cost to upgrade a Unit to a shiny new eUnit?
+
+
+
+
 local function unitUpgradePrice( unit, unitUpgrade, unitProductionCost, unitUpgradeProductionCost )
 	local upgradePrice = GameDefines.BASE_UNIT_UPGRADE_COST
 		+ math_max( 0, (unitUpgradeProductionCost or unitUpgrade.Cost or 0) - (unitProductionCost or unit.Cost or 0) ) * GameDefines.UNIT_UPGRADE_COST_PER_PRODUCTION
-	-- Upgrades for later units are more expensive
+
 	local tech = unitUpgrade.PrereqTech and GameInfo.Technologies[ unitUpgrade.PrereqTech ]
 	if tech then
 		upgradePrice = math_floor( upgradePrice * ( GameInfo.Eras[ tech.Era ].ID * GameDefines.UNIT_UPGRADE_COST_MULTIPLIER_PER_ERA + 1 ) )
 	end
-	-- Discount
-	-- upgradePrice = upgradePrice - math_floor( upgradePrice * unit:UpgradeDiscount() / 100)
-	-- Mod (Policies, etc.)
-	-- upgradePrice = math_floor( (upgradePrice * (100 + activePlayer:GetUnitUpgradeCostMod()))/100 )
-	-- Apply exponent
+
+
+
+
+
 	upgradePrice = math_floor( upgradePrice ^ GameDefines.UNIT_UPGRADE_COST_EXPONENT )
-	-- Make the number not be funky
+
 	return math_floor( upgradePrice / GameDefines.UNIT_UPGRADE_COST_VISIBLE_DIVISOR ) * GameDefines.UNIT_UPGRADE_COST_VISIBLE_DIVISOR
 end
 
-local function GetHelpTextForUnit( unitID ) -- isIncludeRequirementsInfo )
+local function GetHelpTextForUnit( unitID )
 	local unit = GameInfo.Units[ unitID ]
 	if not unit then
 		return "<Unit undefined in game database>"
 	end
 
-	-- Unit XML stats
+
 	local productionCost = unit.Cost
 	local rangedStrength = unit.RangedCombat
 	local unitRange = unit.Range
@@ -240,15 +240,15 @@ local function GetHelpTextForUnit( unitID ) -- isIncludeRequirementsInfo )
 		end
 	end
 
-	-- Player data
+
 	local activePlayerID = Game and Game.GetActivePlayer()
 	local activePlayer = activePlayerID and Players[ activePlayerID ]
 	local city, activeCivilizationType
 
-	-- BE orbital units
+
 	local orbitalInfo = civBE_mode and unit.Orbital and GameInfo.OrbitalUnits[ unit.Orbital ]
 
-	-- BE unit upgrades
+
 	local unitName = unit.Description
 	if activePlayer and civBE_mode then
 		local bestUpgradeInfo = GameInfo.UnitUpgrades[ activePlayer:GetBestUnitUpgrade(unit.ID) ]
@@ -265,55 +265,55 @@ local function GetHelpTextForUnit( unitID ) -- isIncludeRequirementsInfo )
 		city = city or activePlayer:GetCapitalCity() or activePlayer:Cities()(activePlayer)
 	end
 
-	-- Name
+
 	local combatClass = unit.CombatClass and GameInfo.UnitCombatInfos[ unit.CombatClass ]
 	local tips = table( UnitColor( Locale_ToUpper( unitName ) ) .. (combatClass and " ("..L(combatClass.Description)..")" or "") )
 	local item
 
 	if orbitalInfo then
 		tips:append( " ("..L"TXT_KEY_ORBITAL_UNITS"..")" )
-		-- Orbital Duration
-		tips:insertIf( activePlayer and L("TXT_KEY_PRODUCTION_ORBITAL_DURATION", activePlayer:GetTurnsUnitAllowedInOrbit(unit.ID, true) ) ) --todo xml
-		-- Orbital Effect Range
+
+		tips:insertIf( activePlayer and L("TXT_KEY_PRODUCTION_ORBITAL_DURATION", activePlayer:GetTurnsUnitAllowedInOrbit(unit.ID, true) ) )
+
 		tips:insertLocalized( "TXT_KEY_PRODUCTION_ORBITAL_EFFECT_RANGE", orbitalInfo.EffectRange or 0 )
 	else
-		-- Movement:
+
 		tips:insertIf( unitDomainType ~= "DOMAIN_AIR" and L"TXT_KEY_PEDIA_MOVEMENT_LABEL" .. " " .. unitMoves .. "[ICON_MOVES]" )
 	end
 
-	-- Ranged Combat:
+
 	tips:insertIf( rangedStrength > 0 and L"TXT_KEY_PEDIA_RANGEDCOMBAT_LABEL" .. " " .. rangedStrength .. "[ICON_RANGE_STRENGTH]" .. unitRange )
 
-	-- Combat:
+
 	tips:insertIf( combatStrength > 0 and S( "%s %g[ICON_STRENGTH]", L"TXT_KEY_PEDIA_COMBAT_LABEL", combatStrength ) )
 
-	-- Abilities:	--TXT_KEY_PEDIA_FREEPROMOTIONS_LABEL
+
 	tips:insertIf( #freePromotions > 0 and "[ICON_BULLET]" .. freePromotions:concat( "[NEWLINE][ICON_BULLET]" ) )
 
-	-- Ability to create building in city (e.g. vanilla great general)
+
 	for row in GameInfo.Unit_Buildings( thisUnitType ) do
 		local building = GameInfo.Buildings[ row.BuildingType ]
 		tips:insertIf( building and "[ICON_BULLET]"..L"TXT_KEY_MISSION_CONSTRUCT".." " .. BuildingColor( L(building.Description) ) )
 	end
 
-	-- Actions	--TXT_KEY_PEDIA_WORKER_ACTION_LABEL
+
 	for row in GameInfo.Unit_Builds( thisUnitType ) do
 		local build = GameInfo.Builds[ row.BuildType ]
 		if build then
 			local requiredCivilizationType = build.ImprovementType and (GameInfo.Improvements[ build.ImprovementType ] or {}).CivilizationType
-			if not requiredCivilizationType or not activePlayer or GameInfoTypes[ requiredCivilizationType ] == activePlayer:GetCivilizationType() then -- GameInfoTypes not available pregame: works because activePlayer is also nil
+			if not requiredCivilizationType or not activePlayer or GameInfoTypes[ requiredCivilizationType ] == activePlayer:GetCivilizationType() then
 				item = build.PrereqTech and GameInfo.Technologies[ build.PrereqTech ]
 				tips:insert( "[ICON_BULLET]" .. (item and TechColor( L(item.Description) ) .. " " or "") .. L(build.Description) )
 			end
 		end
 	end
-	-- Great Engineer
+
 	tips:insertIf( (unit.BaseHurry or 0) > 0 and S( "[ICON_BULLET]%s %i[ICON_PRODUCTION]%+i[ICON_PRODUCTION]/[ICON_CITIZEN]", L"TXT_KEY_MISSION_HURRY_PRODUCTION", unit.BaseHurry, unit.HurryMultiplier or 0 ) )
 
-	-- Great Merchant
+
 	tips:insertIf( (unit.BaseGold or 0) > 0 and S( "[ICON_BULLET]%s %i%s%+i[ICON_INFLUENCE]", L"TXT_KEY_MISSION_CONDUCT_TRADE_MISSION", unit.BaseGold + ( unit.NumGoldPerEra or 0 ) * ( Game and Teams[Game.GetActiveTeam()]:GetCurrentEra() or PreGame.GetEra() ), g_currencyIcon, GameDefines.MINOR_FRIENDSHIP_FROM_TRADE_MISSION or 0 ) )
 	local tipKey, tip
-	-- Other tags
+
 	for k,v in pairs(unit) do
 		if v and v ~=0 and v~=-1 then
 			tipKey = "TXT_KEY_EUI_UNIT_" .. k:upper()
@@ -323,14 +323,14 @@ local function GetHelpTextForUnit( unitID ) -- isIncludeRequirementsInfo )
 			end
 		end
 	end
-	-- Technology_DomainExtraMoves
+
 	for row in GameInfo.Technology_DomainExtraMoves{ DomainType = unitDomainType } do
 		item = GameInfo.Technologies[ row.TechType ]
 		tips:insertIf( item and (row.Moves or 0)~=0 and S( "[ICON_BULLET]%s %+i[ICON_MOVES]", TechColor( L(item.Description) ), row.Moves ) )
 	end
---TODO Technology_TradeRouteDomainExtraRange
 
-	-- Ability to generate tourism upon spawn
+
+
 	if bnw_mode then
 		for row in GameInfo.Policy_TourismOnUnitCreation( thisUnitClass ) do
 			item = GameInfo.Policies[ row.PolicyType ]
@@ -338,7 +338,7 @@ local function GetHelpTextForUnit( unitID ) -- isIncludeRequirementsInfo )
 		end
 	end
 
-	-- Resources required:
+
 	if Game then
 		for resource in GameInfo.Resources() do
 			local numResource = Game.GetNumResourceRequiredForUnit( unitID, resource.ID )
@@ -353,9 +353,9 @@ local function GetHelpTextForUnit( unitID ) -- isIncludeRequirementsInfo )
 
 	tips:insert( "----------------" )
 
-	-- Cost:
+
 	local costTip
-	if productionCost > 1 then -- Production cost
+	if productionCost > 1 then
 		local goldCost = 0
 		if city then
 			productionCost = city:GetUnitProductionNeeded( unitID )
@@ -365,11 +365,11 @@ local function GetHelpTextForUnit( unitID ) -- isIncludeRequirementsInfo )
 			goldCost = (unit.HurryCostModifier + 100) * goldCost / 100
 			goldCost = goldCost - ( goldCost % GameDefines.GOLD_PURCHASE_VISIBLE_DIVISOR )
 		end
-		-- Add Production to the CostTip if not PurchaseOnly
+
 		if not unit.PurchaseOnly then
 			costTip = productionCost .. "[ICON_PRODUCTION]"
 		end
-		-- Add Gold to the CostTip if > 0
+
 		if goldCost > 0 then
 			if costTip then
 				costTip = costTip .. ("(%i%%)"):format(productionCost*100/goldCost)
@@ -382,8 +382,8 @@ local function GetHelpTextForUnit( unitID ) -- isIncludeRequirementsInfo )
 				costTip = goldCost .. g_currencyIcon
 			end
 		end
-	end -- production & Gold cost
-	if g_isReligionEnabled then -- Faith cost
+	end
+	if g_isReligionEnabled then
 		local faithCost = 0
 		if city then
 			faithCost = city:GetUnitFaithPurchaseCost( unitID, true )
@@ -399,13 +399,13 @@ local function GetHelpTextForUnit( unitID ) -- isIncludeRequirementsInfo )
 				costTip = faithCost .. "[ICON_PEACE]"
 			end
 		end
-	end --faith cost
+	end
 	tips:insertIf( costTip and L"TXT_KEY_PEDIA_COST_LABEL" .. " " .. ( costTip or L"TXT_KEY_FREE" ) )
 
-	-- Settler Specifics
-	tips:insertLocalizedIf( unit.Food and "TXT_KEY_CITYVIEW_STAGNATION_TEXT" ) -- build using food / stop city growth
+
+	tips:insertLocalizedIf( unit.Food and "TXT_KEY_CITYVIEW_STAGNATION_TEXT" )
 	if unit.Found or unit.FoundAbroad then
-		if unit.PopulationReq <= 0 then -- Custom Population Req, not hardcoded :) so skip the hardcoded blurb
+		if unit.PopulationReq <= 0 then
 		tips:append( L("TXT_KEY_NO_ACTION_SETTLER_SIZE_LIMIT", GameDefines.CITY_MIN_SIZE_FOR_SETTLERS) )
 	end
 	end
@@ -413,7 +413,7 @@ local function GetHelpTextForUnit( unitID ) -- isIncludeRequirementsInfo )
 		tips:append( L("TXT_KEY_NO_ACTION_UNIT_SIZE_LIMIT", unit.PopulationReq, unit.Description) )
 	end
 
-	-- Civilization:
+
 	local civs = table()
 	for requiredCivilizationType in GameInfo.Civilization_UnitClassOverrides( thisUnitType ) do
 		item = GameInfo.Civilizations[ requiredCivilizationType.CivilizationType ]
@@ -421,23 +421,23 @@ local function GetHelpTextForUnit( unitID ) -- isIncludeRequirementsInfo )
 	end
 	tips:insertIf( #civs > 0 and L"TXT_KEY_PEDIA_CIVILIZATIONS_LABEL".." "..civs:concat(", ") )
 
-	-- Replaces:
+
 	item = GameInfo.Units[ (GameInfo.UnitClasses[ unit.Class ] or {}).DefaultUnit ]
-	tips:insertIf( item and item ~= unit and L"TXT_KEY_PEDIA_REPLACES_LABEL".." "..UnitColor( L(item.Description) ) ) --!!! row
+	tips:insertIf( item and item ~= unit and L"TXT_KEY_PEDIA_REPLACES_LABEL".." "..UnitColor( L(item.Description) ) )
 
 	if civBE_mode then
-		-- Affinity Level Requirements
+
 		for affinityPrereq in GameInfo.Unit_AffinityPrereqs( thisUnitType ) do
 			local affinityInfo = (tonumber( affinityPrereq.Level) or 0 ) > 0 and GameInfo.Affinity_Types[ affinityPrereq.AffinityType ]
 			tips:insertIf( affinityInfo and L( "TXT_KEY_AFFINITY_LEVEL_REQUIRED", affinityInfo.ColorType, affinityPrereq.Level, tostring(affinityInfo.IconString), tostring(affinityInfo.Description) ) )
 		end
 	end
 
-	-- Required Policies:
+
 	item = unit.PolicyType and GameInfo.Policies[ unit.PolicyType ]
 	tips:insertIf( item and L"TXT_KEY_PEDIA_PREREQ_POLICY_LABEL" .. " " .. PolicyColor( L(item.Description) ) )
 
-	-- Required Buildings:
+
 	local buildings = table()
 	for row in GameInfo.Unit_BuildingClassRequireds( thisUnitType ) do
 		item = GetCivBuilding( activeCivilizationType, row.BuildingClassType )
@@ -445,13 +445,13 @@ local function GetHelpTextForUnit( unitID ) -- isIncludeRequirementsInfo )
 	end
 	item = unit.ProjectPrereq and GameInfo.Projects[ unit.ProjectPrereq ]
 	buildings:insertIf( item and BuildingColor( L(item.Description) ) )
-	tips:insertIf( #buildings > 0 and L"TXT_KEY_PEDIA_REQ_BLDG_LABEL" .. " " .. buildings:concat(", ") ) -- TXT_KEY_NO_ACTION_UNIT_REQUIRES_BUILDING
+	tips:insertIf( #buildings > 0 and L"TXT_KEY_PEDIA_REQ_BLDG_LABEL" .. " " .. buildings:concat(", ") )
 
-	-- Prerequisite Techs:
+
 	item = unit.PrereqTech and GameInfo.Technologies[ unit.PrereqTech ]
 	tips:insertIf( item and item.ID > 0 and L"TXT_KEY_PEDIA_PREREQ_TECH_LABEL" .. " " .. TechColor( L(item.Description) ) )
 
-	-- Upgrade from:
+
 	local unitClassUpgrades = {}
 	for unitUpgrade in GameInfo.Unit_ClassUpgrades( thisUnitClass ) do
 		unitUpgrade = GameInfo.Units[ unitUpgrade.UnitType ]
@@ -464,11 +464,11 @@ local function GetHelpTextForUnit( unitID ) -- isIncludeRequirementsInfo )
 	end
 	tips:insertIf( #unitUpgrades > 0 and L"TXT_KEY_GOLD_UPGRADE_UNITS_HEADING3_TITLE" .. ": " .. unitUpgrades:concat(", ") )
 
-	-- Becomes Obsolete with:
+
 	local obsoleteTech = unit.ObsoleteTech and GameInfo.Technologies[ unit.ObsoleteTech ]
 	tips:insertIf( obsoleteTech and L"TXT_KEY_PEDIA_OBSOLETE_TECH_LABEL" .. " " .. TechColor( L(obsoleteTech.Description) ) )
 
-	-- Upgrade unit
+
 	if Game then
 		local unitUpgrade = Game.GetUnitUpgradesTo( unit.ID )
 		unitUpgrade = unitUpgrade and GameInfo.Units[ unitUpgrade ]
@@ -489,20 +489,20 @@ local function GetHelpTextForUnit( unitID ) -- isIncludeRequirementsInfo )
 		tips:insertIf( #unitUpgrades > 0 and L"TXT_KEY_COMMAND_UPGRADE" .. ": " .. unitUpgrades:concat(", ") )
 	end
 
-	-- Pre-written Help text
+
 	return AddPreWrittenHelpTextAndConcat( tips, unit )
 end
 
 
--------------------------------------------------
--- Help text for Buildings
--------------------------------------------------
+
+
+
 
 local g_gameAvailableBeliefs = Game and { Game.GetAvailablePantheonBeliefs, Game.GetAvailableFounderBeliefs, Game.GetAvailableFollowerBeliefs, Game.GetAvailableFollowerBeliefs, Game.GetAvailableEnhancerBeliefs, Game.GetAvailableBonusBeliefs }
 
--------------------------------------------------
--- Helper function to build religion tooltip string
--------------------------------------------------
+
+
+
 local function GetSpecialistSlotsTooltip( specialistType, numSlots )
 	local tip = ""
 	for row in GameInfo.SpecialistYields{ SpecialistType = specialistType } do
@@ -515,9 +515,9 @@ local function GetSpecialistYields( city, specialist )
 	local specialistID = specialist.ID
 	local tip = ""
 	if city then
-		-- Culture
+
 		local cultureFromSpecialist = city:GetCultureFromSpecialist( specialistID )
-		-- Yield
+
 		for yieldID = 0, YieldTypes.NUM_YIELD_TYPES-1 do
 			local specialistYield = city:GetSpecialistYield( specialistID, yieldID )
 			if specialistYield ~= 0 then
@@ -577,33 +577,33 @@ local function GetHelpTextForBuilding( buildingID, bExcludeName, bExcludeHeader,
 		end
 
 		for i = 1, activePlayer:IsTraitBonusReligiousBelief() and 6 or 5 do
-			if (activePlayerBeliefs[i] or -1) < 0 then -- active player does not already have a belief in "i" belief class
+			if (activePlayerBeliefs[i] or -1) < 0 then
 				for _,beliefID in pairs( g_gameAvailableBeliefs[i]() ) do
-					availableBeliefs[beliefID] = true -- because available to active player in "i" belief class
+					availableBeliefs[beliefID] = true
 				end
 			end
 		end
 	end
-	------------------
-	-- Tech Filter
+
+
 	local function techFilter( row )
 		return row and g_isScienceEnabled and ( not activeTeamTechs or not activeTeamTechs:HasTech( row.ID ) )
 	end
-	------------------
-	-- Era Filter
+
+
 	local function eraFilter(row)
     return row and g_isScienceEnabled and (not activeTeamEra or row.ID > activeTeamEra)
 end
-	------------------
-	-- Policy Filter
+
+
 	local function policyFilter( row )
 		return row and g_isPoliciesEnabled
 			and not( activePlayer and activePlayer:HasPolicy( row.ID ) and not activePlayer:IsPolicyBlocked( row.ID ) )
 			and not( activePlayerIdeologyType and activePlayerIdeologyType ~= row.PolicyBranchType )
 	end
 
-	------------------
-	-- Belief Filter
+
+
 	local function beliefFilter( row )
 		return row and g_isReligionEnabled and ( not activePlayer or availableBeliefs[ row.ID ] )
 	end
@@ -625,17 +625,17 @@ end
 		city = city or UI_GetHeadSelectedCity()
 		city = (city and city:GetOwner() == activePlayerID and city) or activePlayer:GetCapitalCity() or activePlayer:Cities()(activePlayer)
 
-		-- player production cost
+
 		productionCost = activePlayer:GetBuildingProductionNeeded( buildingID )
 		if civ5_mode then
-			-- player extra happiness
+
 			happinessChange = happinessChange + activePlayer:GetExtraBuildingHappinessFromPolicies( buildingID )
 			if gk_mode then
 				happinessChange = happinessChange + activePlayer:GetPlayerBuildingClassHappiness( buildingClassID )
 				happinessChange = happinessChange + activePlayer:GetTraitBuildingClassHappiness( buildingID )
 			end
 		else
-			-- get the active perk types
+
 			activePerkTypes = activePlayer:GetAllActivePlayerPerkTypes()
 		end
 	end
@@ -645,10 +645,10 @@ end
 	end
 
 	local tip, tipKey, items, item
-	-- Name
+
 	local tips = table( BuildingColor( Locale_ToUpper( building.Description ) ) )
 
-	-- Other tags
+
 	for k,v in pairs(building) do
 		if v and v ~=0 and v~=-1 then
 			tipKey = "TXT_KEY_EUI_BUILDING_" .. k:upper()
@@ -659,8 +659,8 @@ end
 		end
 	end
 
---local function GetBuildingYields( buildingID, buildingType, buildingClassID, activePlayer )
-	-- Yields
+
+
 	local thisBuildingAndYieldTypes = { BuildingType = buildingType }
 	tip = ""
 	for yield in GameInfo.Yields() do
@@ -669,7 +669,7 @@ end
 		local yieldModifier = 0
 		thisBuildingAndYieldTypes.YieldType = yield.Type
 
-		if Game and buildingClassID and yieldID < YieldTypes.NUM_YIELD_TYPES then -- weed out strange Communitas yields
+		if Game and buildingClassID and yieldID < YieldTypes.NUM_YIELD_TYPES then
 			yieldChange = Game.GetBuildingYieldChange( buildingID, yieldID )
 			yieldModifier = Game.GetBuildingYieldModifier( buildingID, yieldID )
 			if activePlayer then
@@ -693,7 +693,7 @@ end
 					yieldChange = yieldChange + city:GetLeagueBuildingClassYieldChange( buildingClassID, yieldID )
 				end
 			end
-			-- Era Enhanced Yields
+
 			for row in GameInfo.Building_EraEnhancedYieldChanges ( thisBuildingAndYieldTypes ) do
 				local eraEnhancedYield = row.Yield or 0
 				local eRowEra = GameInfoTypes[row.EraType]
@@ -704,11 +704,11 @@ end
 					end
 				end
 			end
-			-- MOD.EAP START
-			-- Tech Enhanced Yield support
+
+
 			for row in GameInfo.Building_TechEnhancedYieldChanges( thisBuildingAndYieldTypes ) do
 				local techEnhancedYield = row.Yield or 0
-				-- Check if the team has the required tech instead of the player
+
 				local teamHasTech = false
 				if building.EnhancedYieldTech then
 					local techID = GameInfoTypes[building.EnhancedYieldTech]
@@ -734,9 +734,9 @@ end
 					end
 				end
 			end
-			-- MOD.EAP END
+
 			
-		else -- not Game
+		else
 			for row in GameInfo.Building_YieldChanges( thisBuildingAndYieldTypes ) do
 				yieldChange = yieldChange + (row.Yield or 0)
 			end
@@ -744,7 +744,7 @@ end
 				yieldModifier = yieldModifier + (row.Yield or 0)
 			end
 		end
-		if yield.Type == "YIELD_CULTURE" then -- works pregame, when GameInfoTypes is not available
+		if yield.Type == "YIELD_CULTURE" then
 			yieldChange = yieldChange + cultureChange
 			yieldModifier = yieldModifier + cultureModifier
 			cultureChange = 0
@@ -768,7 +768,7 @@ end
 			tip = ""
 		end
 	end
-	-- Culture leftovers
+
 	if cultureChange ~=0 then
 		tip = S("%s %+i[ICON_CULTURE]", tip, cultureChange )
 	end
@@ -784,7 +784,7 @@ end
 		tips:insert( "Growth: " .. S("%+i%%[ICON_FOOD]", excessGrowth) )
 	end
 	if civ5_mode then
-		-- Happiness:
+
 		if happinessChange ~=0 then
 			tip = S( "%s %+i[ICON_HAPPINESS_1]", tip, happinessChange )
 		end
@@ -796,13 +796,13 @@ end
 			tip = ""
 		end
 	else
-		-- Health
+
 		local healthChange = (tonumber(building.Health) or 0) + (tonumber(building.UnmoddedHealth) or 0)
 		local healthModifier = tonumber(building.HealthModifier) or 0
 		if activePlayer then
-			-- Health from Virtues
+
 			healthChange = healthChange + activePlayer:GetExtraBuildingHealthFromPolicies( buildingID )
-			-- Player Perks
+
 			for i=1, #activePerkTypes do
 				healthChange = healthChange + Game.GetPlayerPerkBuildingClassPercentHealthChange( activePerkTypes[i], buildingClassID )
 				healthModifier = healthModifier + Game.GetPlayerPerkBuildingClassPercentHealthChange( activePerkTypes[i], buildingClassID )
@@ -823,7 +823,7 @@ end
 		end
 	end
 
-	-- Defense:
+
 	if defenseChange ~=0 then
 		tip = S("%s %+g[ICON_STRENGTH]", tip, defenseChange / 100 )
 	end
@@ -839,10 +839,10 @@ end
 		tips:insert( S("%s: %+i%%[ICON_PRODUCTION]", L("TXT_KEY_PEDIA_CATEGORY_MILITARY"), militaryProductionMod ) )
 	end
 
-	-- Maintenance:
+
 	tips:insertIf( maintenanceCost ~= 0 and	S( "%s %+i%s", L"TXT_KEY_PEDIA_MAINT_LABEL", -maintenanceCost, g_currencyIcon) )
 
-	-- Resources required:
+
 	if Game then
 		for resource in GameInfo.Resources() do
 			local numResource = Game.GetNumResourceRequiredForBuilding( buildingID, resource.ID )
@@ -856,7 +856,7 @@ end
 	end
 
 
-	-- Specialists
+
 	local specialistType = building.SpecialistType
 	local specialist = specialistType and GameInfo.Specialists[ specialistType ]
 	if specialist then
@@ -875,23 +875,23 @@ end
 	end
 
 	if civ5bnw_mode then
-		-- Great Work Slots
+
 		local greatWorkType = (building.GreatWorkCount or 0) > 0 and building.GreatWorkSlotType and GameInfo.GreatWorkSlots[building.GreatWorkSlotType]
 		tips:insertIf( greatWorkType and L( greatWorkType.SlotsToolTipText, building.GreatWorkCount ) )
 		for row in GameInfo.Building_DomainFreeExperiencePerGreatWork( thisBuildingType ) do
 			item = GameInfo.Domains[ row.DomainType ]
 			tips:insertIf( item and (row.Experience or 0)>0 and L(item.Description).." "..L( "TXT_KEY_EXPERIENCE_POPUP", row.Experience ).."/ "..L("TXT_KEY_VP_GREAT_WORKS") )
 		end
-		-- Theming Bonus
-	-- TODO Building_ThemingBonuses
-	--		tips:insertLocalizedIf( building.ThemingBonusHelp )
-		-- Free Great Work
+
+
+
+
 		local freeGreatWork = building.FreeGreatWork and GameInfo.GreatWorks[ building.FreeGreatWork ]
-	-- TODO type rather than blurb
+
 		tips:insertIf( freeGreatWork and L"TXT_KEY_FREE" .." "..L( freeGreatWork.Description ) )
 
-	-- TODO sacred sites properly
-	-- TODO Building_YieldChangesPerReligion
+
+
 		tip = ""
 		if (building.FaithCost or 0) > 0 and building.UnlockedByBelief and building.Cost == -1 then
 			local tourism = city and city:GetFaithBuildingTourism() or 0
@@ -904,16 +904,16 @@ end
 		end
 		tips:insertIf( #tip > 0 and L"TXT_KEY_CITYVIEW_TOURISM_TEXT" .. ":" .. tip )
 	end
-	-- TODO GetInternationalTradeRouteYourBuildingBonus
+
 	if gk_mode then
-		-- Resources
+
 		for row in GameInfo.Building_ResourceQuantity( thisBuildingType ) do
 			local resource = GameInfo.Resources[ row.ResourceType ]
 			tips:insertIf( resource and (row.Quantity or 0)~=0 and S("%s: %+i%s", L(resource.Description), row.Quantity, tostring(resource.IconString) ) )
 		end
 	end
 
-	-- Resource Yields enhanced by Building
+
 	for resource in GameInfo.Resources() do
 		thisBuildingAndResourceTypes.ResourceType = resource.Type or -1
 		tip = GetYieldString( GameInfo.Building_ResourceYieldChanges( thisBuildingAndResourceTypes ) )
@@ -929,16 +929,16 @@ end
 				end
 			end
 		end
-	-- TODO GameInfo.Building_ResourceYieldModifiers( thisBuildingType ), ResourceType, YieldType, Yield
+
 		tips:insertIf( #tip > 0 and tostring(resource.IconString) .. " " .. L(resource.Description) .. ":" .. tip )
 	end
 
-	-- Feature Yields enhanced by Building
+
 	for feature in GameInfo.Features() do
 		tip = GetYieldString( GameInfo.Building_FeatureYieldChanges{ BuildingType = buildingType, FeatureType = feature.Type } )
 		tips:insertIf( #tip > 0 and L(feature.Description) .. ":" .. tip )
 	end
-	-- Improvement Yields enhanced by Building (city-local)
+
 	for improvement in GameInfo.Improvements() do
 		tip = GetYieldString( GameInfo.Building_ImprovementYieldChanges{ BuildingType = buildingType, ImprovementType = improvement.Type } )
 		if #tip > 0 then
@@ -947,7 +947,7 @@ end
 		end
 	end
 	if gk_mode then
-		-- Terrain Yields enhanced by Building
+
 		for terrain in GameInfo.Terrains() do
 			tip = GetYieldString( GameInfo.Building_TerrainYieldChanges{ BuildingType = buildingType, TerrainType = terrain.Type } )
 			if civBE_mode then
@@ -961,11 +961,11 @@ end
 			end
 			tips:insertIf( #tip > 0 and L(terrain.Description) .. ":" .. tip )
 
-			-- Nearby Terrain Free Yields: describes the rule (already folded into the yield totals above when a city is known)
+
 			for row in GameInfo.Building_NearbyTerrainFreeYields{ BuildingType = buildingType, TerrainType = terrain.Type } do
 				item = GameInfo.Yields[ row.YieldType ]
 				if item and (row.Yield or 0) ~= 0 then
-					-- Radius 0 means "max city working radius", which is 3 (see CvCity::GetNumTerrainNearCity)
+
 					local radius = ( (row.Radius or 0) ~= 0 ) and row.Radius or 3
 					if (row.MinTerrainRequired or 0) > 0 then
 						tips:insert( S( "[ICON_BULLET]%+i%s if %i+ %s in %i tiles",
@@ -978,70 +978,70 @@ end
 			end
 		end
 	end
-	-- Specialist Yields enhanced by Building
+
 	for specialist in GameInfo.Specialists() do
 		tip = GetYieldString( GameInfo.Building_SpecialistYieldChanges{ BuildingType = buildingType, SpecialistType = specialist.Type } )
 		tips:insertIf( #tip > 0 and L(specialist.Description) .. ":" .. tip )
 	end
 
-	-- River Yields enhanced by Building
+
 	tip = GetYieldString( GameInfo.Building_RiverPlotYieldChanges( thisBuildingType ) )
 	tips:insertIf( #tip > 0 and L"TXT_KEY_PLOTROLL_RIVER" .. ":" .. tip )
 
-	-- Lake Yields enhanced by Building
+
 	tip = GetYieldString( GameInfo.Building_LakePlotYieldChanges( thisBuildingType ) )
 	tips:insertIf( #tip > 0 and L"TXT_KEY_PLOTROLL_LAKE" .. ":" .. tip )
 
-	-- Ocean Yields enhanced by Building
+
 	tip = GetYieldString( GameInfo.Building_SeaPlotYieldChanges( thisBuildingType ) )
 	tips:insertIf( #tip > 0 and L"TXT_KEY_PLOTROLL_OCEAN" .. ":" .. tip )
 
-	-- Ocean Resource Yields enhanced by Building
+
 	tip = GetYieldString( GameInfo.Building_SeaResourceYieldChanges( thisBuildingType ) )
-	-- todo determine sea resources
+
 	tips:insertIf( #tip > 0 and L"TXT_KEY_PLOTROLL_OCEAN" .." "..L"TXT_KEY_TOPIC_RESOURCES".. ":" .. tip )
 
-	-- Area Yields enhanced by Building
+
 	tip = GetYieldStringSpecial( "Yield", "%s %+i%%%s", GameInfo.Building_AreaYieldModifiers( thisBuildingType ) )
 	tips:insertIf( #tip > 0 and L"TXT_KEY_PGSCREEN_CONTINENTS" .. ":" .. tip )
-	-- Map Yields enhanced by Building
+
 	tip = GetYieldStringSpecial( "Yield", "%s %+i%%%s", GameInfo.Building_GlobalYieldModifiers( thisBuildingType ) )
 	tips:insertIf( #tip > 0 and L"TXT_KEY_TOPIC_CITIES" .. ":" .. tip )
 
-	-- victory requisite
+
 	local victory = building.VictoryPrereq and GameInfo.Victories[ building.VictoryPrereq ]
 	tips:insertIf( victory and TextColor( "[COLOR_GREEN]", L( victory.Description ) ) )
 
-	-- free building in this city
+
 	local freeBuilding = GetCivBuilding( activeCivilizationType, building.FreeBuildingThisCity )
 	tips:insertIf( freeBuilding and L"TXT_KEY_FREE".." "..BuildingColor( L( freeBuilding.Description ) ) )
 
-	-- free building in all cities
-	freeBuilding = GetCivBuilding( activeCivilizationType, building.FreeBuilding )
-	tips:insertIf( freeBuilding and L"TXT_KEY_FREE".." "..BuildingColor( L( freeBuilding.Description ) ) )-- todo xml
 
-	-- free units
+	freeBuilding = GetCivBuilding( activeCivilizationType, building.FreeBuilding )
+	tips:insertIf( freeBuilding and L"TXT_KEY_FREE".." "..BuildingColor( L( freeBuilding.Description ) ) )
+
+
 	for row in GameInfo.Building_FreeUnits( thisBuildingType ) do
 		local freeUnit = GameInfo.Units[ row.UnitType ]
 		freeUnit = freeUnit and GetCivUnit( activeCivilizationType, freeUnit.Class )
 		tips:insertIf( freeUnit and (row.NumUnits or 0)>0 and ( row.NumUnits > 1 and row.NumUnits.." " or "" ) ..L"TXT_KEY_FREE".." "..UnitColor( L( freeUnit.Description ) ) )
 	end
-	--Building_FreeSpecialistCounts unused ?
-	-- free promotion to units trained in this city
+
+
 	local freePromotion = building.TrainedFreePromotion and GameInfo.UnitPromotions[ building.TrainedFreePromotion ]
 	tips:insertIf( freePromotion and L"TXT_KEY_PEDIA_FREEPROMOTIONS_LABEL".." "..L( freePromotion.Help ) )
 
-	-- free promotion for all units
+
 	freePromotion = building.FreePromotion and GameInfo.UnitPromotions[ building.FreePromotion ]
 	tips:insertIf( freePromotion and L"TXT_KEY_PEDIA_FREEPROMOTIONS_LABEL".." "..L( freePromotion.Help ) )
 
-	-- hurry modifiers
+
 	for row in GameInfo.Building_HurryModifiers( thisBuildingType ) do
 		item = GameInfo.HurryInfos[ row.HurryType ]
 		tips:insertIf( item and (row.HurryCostModifier or 0)~=0 and S( "%s %+i%%", L(item.Description), row.HurryCostModifier ) )
 	end
 
-	-- Unit production modifier
+
 	for row in GameInfo.Building_UnitCombatProductionModifiers( thisBuildingType ) do
 		item = GameInfo.UnitCombatInfos[ row.UnitCombatType ]
 		tips:insertIf( item and (row.Modifier or 0)~=0 and S( "%s %+i%%[ICON_PRODUCTION]", L(item.Description), row.Modifier ) )
@@ -1051,14 +1051,14 @@ end
 		tips:insertIf( item and (row.Modifier or 0)~=0 and S( "%s %+i%%[ICON_PRODUCTION]", L(item.Description), row.Modifier ) )
 	end
 
-	-- Lekmodv34 START
-	-- Unit combat production cost modifiers
+
+
 	for row in GameInfo.Building_UnitCombatProductionCostModifiers( thisBuildingType ) do
 		item = GameInfo.UnitCombatInfos[ row.UnitCombatType ]
 		tips:insertIf( item and (row.CostModifier or 0)~=0 and S( "%s %+i%% [ICON_PRODUCTION] Cost", L(item.Description), row.CostModifier ) )
 	end
 
-	-- Unit combat extra production
+
 	for row in GameInfo.Building_UnitCombatExtraProduction( thisBuildingType ) do
 		item = GameInfo.UnitCombatInfos[ row.UnitCombatType ]
 		if item and (row.ExtraProduction or 0) > 0 then
@@ -1069,8 +1069,8 @@ end
 			end
 		end
 	end
-	-- Lekmod v34 END
-	-- free experience
+
+
 	for row in GameInfo.Building_DomainFreeExperiences( thisBuildingType ) do
 		item = GameInfo.Domains[ row.DomainType ]
 		tips:insertIf( item and (row.Experience or 0)~=0 and L(item.Description).." "..L( "TXT_KEY_EXPERIENCE_POPUP", row.Experience ) )
@@ -1080,14 +1080,14 @@ end
 		tips:insertIf( item and (row.Experience or 0)>0 and L(item.Description).." "..L( "TXT_KEY_EXPERIENCE_POPUP", row.Experience ) )
 	end
 
-	-- Yields enhanced by Technology
+
 	if techFilter( enhancedYieldTech ) then
 		tip = GetYieldString( GameInfo.Building_TechEnhancedYieldChanges( thisBuildingType ) )
 		tips:insertIf( #tip > 0 and "[ICON_BULLET]" .. enhancedYieldTechName .. tip )
 	end
 
 	items = {}
-	-- Yields enhanced by Era
+
 	for row in GameInfo.Building_EraEnhancedYieldChanges( thisBuildingType ) do
 	    if row.EraType and (row.Yield or 0) ~= 0 then
 	        items[row.EraType] = S("%s %+i%s", items[row.EraType] or "", row.Yield, tostring(YieldIcons[row.YieldType]))
@@ -1100,13 +1100,13 @@ end
 	    end
 	end
 	items = {}
-	-- Yields enhanced by Policy
+
 	for row in GameInfo.Policy_BuildingClassYieldChanges( thisBuildingClassType ) do
 		if row.PolicyType and (row.YieldChange or 0)~=0 then
 			items[row.PolicyType] = S( "%s %+i%s", items[row.PolicyType] or "", row.YieldChange, tostring(YieldIcons[row.YieldType]) )
 		end
 	end
-	if maxGlobalInstances > 0 then -- world wonder
+	if maxGlobalInstances > 0 then
 		for row in GameInfo.WorldWonderYieldChanges() do
 			if row.PolicyType and (row.YieldChange or 0)~=0 then
 				items[row.PolicyType] = S( "%s %+i%s", items[row.PolicyType] or "", row.Yield, tostring(YieldIcons[row.YieldType]) )
@@ -1118,7 +1118,7 @@ end
 			items[row.PolicyType] = S( "%s %+i[ICON_CULTURE]", items[row.PolicyType] or "", row.CultureChange )
 		end
 	end
-	-- Yield modifiers enhanced by Policy
+
 	for row in GameInfo.Policy_BuildingClassYieldModifiers( thisBuildingClassType ) do
 		if row.PolicyType and (row.YieldMod or 0)~=0 then
 			items[row.PolicyType] = S( "%s %+i%%%s", items[row.PolicyType] or "", row.YieldMod, tostring(YieldIcons[row.YieldType]) )
@@ -1137,7 +1137,7 @@ end
 				items[row.PolicyType] = S( "%s %+i[ICON_HAPPINESS_1]", items[row.PolicyType] or "", row.Happiness )
 			end
 		end
-		local lastTip -- universal healthcare kludge
+		local lastTip
 		for policyType, tip in pairs(items) do
 			local policy = GameInfo.Policies[ policyType ]
 			if policyFilter( policy ) and #tip > 0 then
@@ -1148,14 +1148,14 @@ end
 		end
 
 		if gk_mode then
-			-- Yields enhanced by Beliefs
+
 			items = {}
 			for row in GameInfo.Belief_BuildingClassYieldChanges( thisBuildingClassType ) do
 				if row.BeliefType and (row.YieldChange or 0)~=0 then
 					items[row.BeliefType] = S( "%s %+i%s", items[row.BeliefType] or "", row.YieldChange, tostring(YieldIcons[row.YieldType]) )
 				end
 			end
-			if maxGlobalInstances > 0 then -- world wonder
+			if maxGlobalInstances > 0 then
 				for row in GameInfo.WorldWonderYieldChanges() do
 					if row.BeliefType and (row.Yield or 0)~=0 then
 						items[row.BeliefType] = S( "%s %+i%s", items[row.BeliefType] or "", row.Yield, tostring(YieldIcons[row.YieldType]) )
@@ -1179,7 +1179,7 @@ end
 				tips:insertIf( beliefFilter( belief ) and #tip > 0 and "[ICON_BULLET]" .. BeliefColor( L(belief.ShortDescription) ) .. tip )
 			end
 
-			-- Other Building Yields enhanced by this Building
+
 			local buildingClassTypes = {}
 			for row in GameInfo.Building_BuildingClassYieldChanges( thisBuildingType ) do
 				SetKey( buildingClassTypes, row.BuildingClassType )
@@ -1207,24 +1207,24 @@ end
 			end
 		end
 	else
-		-- Orbital Production
+
 		tips:insertLocalizedIfNonZero( "TXT_KEY_DOMAIN_PRODUCTION_MOD", building.OrbitalProductionModifier or 0, "TXT_KEY_ORBITAL_UNITS" )
 
-		-- Orbital Coverage
+
 		tips:insertLocalizedIfNonZero( "TXT_KEY_BUILDING_ORBITAL_COVERAGE", building.OrbitalCoverageChange or 0 )
 
-		-- Anti-Orbital Strike
+
 		tips:insertLocalizedIfNonZero( "TXT_KEY_UNITPERK_RANGE_AGAINST_ORBITAL_CHANGE", building.OrbitalStrikeRangeChange or 0 )
 
-		-- Covert Ops Intrigue Cap
+
 		tips:insertLocalizedIfNonZero( "TXT_KEY_BUILDING_CITY_INTRIGUE_CAP", -(building.IntrigueCapChange or 0) * (GameDefines.MAX_CITY_INTRIGUE_LEVELS or 0) / 100 )
 	end
 
 	tips:insert( "----------------" )
 
-	-- Cost:
+
 	local costTip
-	-- League project
+
 	if bnw_mode and building.UnlockedByLeague then
 		if Game
 			and Game.GetNumActiveLeagues() > 0
@@ -1235,12 +1235,12 @@ end
 		else
 			local leagueProjectReward = GameInfo.LeagueProjectRewards{ Building = buildingType }()
 			local leagueProject = leagueProjectReward and GameInfo.LeagueProjects{ RewardTier3 = leagueProjectReward.Type }()
-			local costPerPlayer = leagueProject and leagueProject.CostPerPlayer	-- * GameInfo.GameSpeeds[ PreGame.GetGameSpeed() ].ConstructPercent * GameInfo.Eras[ PreGame.GetEra() ].ConstructPercent / 100000	-- GameInfo.Eras[ player:GetCurrentEra() ]
+			local costPerPlayer = leagueProject and leagueProject.CostPerPlayer
 			if costPerPlayer then
 				costTip = L( "TXT_KEY_LEAGUE_PROJECT_COST_PER_PLAYER", costPerPlayer )
 			end
 		end
-	-- Production
+
 	else
 		if productionCost > 1 then
 			costTip = productionCost .. "[ICON_PRODUCTION]"
@@ -1266,7 +1266,7 @@ end
 				end
 			end
 		end
-		-- Faith
+
 		if g_isReligionEnabled then
 			local faithCost = 0
 			if city then
@@ -1285,7 +1285,7 @@ end
 	end
 	tips:insert( L"TXT_KEY_PEDIA_COST_LABEL" .. " " .. ( costTip or L"TXT_KEY_FREE" ) )
 
-	-- Production Modifiers
+
 	for row in GameInfo.Policy_BuildingClassProductionModifiers( thisBuildingClassType ) do
 		local policy = GameInfo.Policies[ row.PolicyType ]
 		tips:insertIf( policyFilter( policy ) and (row.ProductionModifier or 0)~=0 and S( "[ICON_BULLET]%s +%i%%[ICON_PRODUCTION]", PolicyColor( L(policy.Description) ), row.ProductionModifier ) )
@@ -1293,29 +1293,29 @@ end
 
 
 	if civBE_mode then
-		-- Affinity Level Requirement
+
 		for affinityPrereq in GameInfo.Building_AffinityPrereqs( thisBuildingType ) do
 			local affinityInfo = (tonumber( affinityPrereq.Level) or 0 ) > 0 and GameInfo.Affinity_Types[ affinityPrereq.AffinityType ]
 			tips:insertIf( affinityInfo and L( "TXT_KEY_AFFINITY_LEVEL_REQUIRED", affinityInfo.ColorType, affinityPrereq.Level, tostring(affinityInfo.IconString), tostring(affinityInfo.Description) ) )
 		end
 	end
 
-	-- Civilization:
+
 	local civs = table()
 	for row in GameInfo.Civilization_BuildingClassOverrides( thisBuildingType ) do
 		civs:insertLocalizedIf( ( GameInfo.Civilizations[ row.CivilizationType ] or{} ).ShortDescription )
 	end
 	tips:insertIf( #civs > 0 and L"TXT_KEY_PEDIA_CIVILIZATIONS_LABEL" .. " " .. civs:concat(", ") )
 
-	-- Replaces:
-	local buildingReplaced = buildingClass and GameInfo.Buildings[ buildingClass.DefaultBuilding ]
-	tips:insertIf( buildingReplaced and buildingReplaced ~= building and L"TXT_KEY_PEDIA_REPLACES_LABEL".." "..BuildingColor( L(buildingReplaced.Description) ) ) --!!! row
 
-	-- Required Social Policy:
+	local buildingReplaced = buildingClass and GameInfo.Buildings[ buildingClass.DefaultBuilding ]
+	tips:insertIf( buildingReplaced and buildingReplaced ~= building and L"TXT_KEY_PEDIA_REPLACES_LABEL".." "..BuildingColor( L(buildingReplaced.Description) ) )
+
+
 	item = building.PolicyBranchType and GameInfo.PolicyBranchTypes[ building.PolicyBranchType ]
 	tips:insertIf( item and L"TXT_KEY_PEDIA_PREREQ_POLICY_LABEL" .. " " .. PolicyColor( L(item.Description) ) )
 
-	-- Prerequisite Techs:
+
 	local techs = table()
 	item = building.PrereqTech and GameInfo.Technologies[ building.PrereqTech ]
 	techs:insertIf( item and item.ID > 0 and TechColor( L(item.Description) ) )
@@ -1325,7 +1325,7 @@ end
 	end
 	tips:insertIf( #techs > 0 and L"TXT_KEY_PEDIA_PREREQ_TECH_LABEL" .. " " .. techs:concat( ", " ) )
 
-	-- Required Buildings:
+
 	local buildings = table()
 	for row in GameInfo.Building_PrereqBuildingClasses( thisBuildingType ) do
 		local item = GetCivBuilding( activeCivilizationType, row.BuildingClassType )
@@ -1350,18 +1350,18 @@ end
 	end
 	tips:insertIf( #buildings > 0 and L"TXT_KEY_PEDIA_REQ_BLDG_LABEL" .. " " .. buildings:concat(", ") )
 
-	-- Local Resources Required:
+
 	local resources = table()
 	for row in GameInfo.Building_LocalResourceAnds( thisBuildingType ) do
 		local resource = GameInfo.Resources[ row.ResourceType ]
-		resources:insertIf( resource and tostring(resource.IconString) ) -- .. L(resource.Description) )
+		resources:insertIf( resource and tostring(resource.IconString) )
 	end
 	if #resources > 0 then
 		resources = table( resources:concat(", ") )
 	end
 	for row in GameInfo.Building_LocalResourceOrs( thisBuildingType ) do
 		local resource = GameInfo.Resources[ row.ResourceType ]
-		resources:insertIf( resource and tostring(resource.IconString) ) -- .. L(resource.Description) )
+		resources:insertIf( resource and tostring(resource.IconString) )
 	end
 	if civ5gk_mode then
 		local txt = resources[1] or ""
@@ -1382,20 +1382,20 @@ end
 	terrains:insertIf( building.NearbyMountainRequired and L"TXT_KEY_TERRAIN_MOUNTAIN" .. "[ICON_RANGE_STRENGTH]2" )
 	terrains:insertLocalizedIf( building.Hill and "TXT_KEY_TERRAIN_HILL" )
 	terrains:insertLocalizedIf( building.Flat and "TXT_KEY_MAP_OPTION_FLAT" )
-	-- mandatory terrain
+
 	local terrain = building.NearbyTerrainRequired and GameInfo.Terrains[ building.NearbyTerrainRequired ]
 	terrains:insertIf( terrain and L(terrain.Description) .. "[ICON_RANGE_STRENGTH]1" )
-	-- prohibited terrain
+
 	terrain = building.ProhibitedCityTerrain and GameInfo.Terrains[ building.ProhibitedCityTerrain ]
 	terrains:insertIf( terrain and TextColor( "[COLOR_RED]", L( terrain.Description ) ) )
 
 	tips:insertIf( #terrains > 0 and L"TXT_KEY_PEDIA_TERRAIN_LABEL"..": "..terrains:concat(", ") )
 
-	-- Becomes Obsolete with:
+
 	local obsoleteTech = building.ObsoleteTech and GameInfo.Technologies[ building.ObsoleteTech ]
 	tips:insertIf( obsoleteTech and L"TXT_KEY_PEDIA_OBSOLETE_TECH_LABEL" .. " " .. TechColor( L(obsoleteTech.Description) ) )
 
-	-- Buildings Unlocked:
+
 	local buildingsUnlocked = {}
 	for row in GameInfo.Building_ClassesNeededInCity( thisBuildingClassType ) do
 		local buildingUnlocked = GameInfo.Buildings[ row.BuildingType ]
@@ -1408,7 +1408,7 @@ end
 	end
 	tips:insertIf( #buildings > 0 and L"TXT_KEY_PEDIA_BLDG_UNLOCK_LABEL" .. " " .. buildings:concat(", ") )
 
-	-- Limited number can be built
+
 	local function InsertBuiltLimit( count, text, id, activeTeamID )
 		if (count or 0) > 0 then
 			if activePlayer then
@@ -1441,15 +1441,15 @@ end
 		or InsertBuiltLimit( buildingClass.MaxPlayerInstances, "TXT_KEY_NO_ACTION_PLAYER_COUNT_MAX", activePlayerID ) )
 		and activePlayer
 	then
-		tips:insertLocalized( "TXT_KEY_EUI_BUILT_IN_X_CITIES", activePlayer:GetBuildingClassCount( buildingClassID ), activePlayer:GetBuildingClassMaking( buildingClassID ) )    --CountNumBuildings( buildingID ) )
+		tips:insertLocalized( "TXT_KEY_EUI_BUILT_IN_X_CITIES", activePlayer:GetBuildingClassCount( buildingClassID ), activePlayer:GetBuildingClassMaking( buildingClassID ) )
 	end
-	-- Pre-written Help text
+
 	return AddPreWrittenHelpTextAndConcat( tips, building )
 end
 
--------------------------------------------------
--- Help text for Improvements
--------------------------------------------------
+
+
+
 local function GetHelpTextForImprovement( improvementID )
 	local improvement = improvementID and GameInfo.Improvements[ improvementID ]
 
@@ -1457,13 +1457,13 @@ local function GetHelpTextForImprovement( improvementID )
 	local ItemBuild = GameInfo.Builds( thisImprovementType )()
 	local tip, items, item, condition
 
-	-- Name
+
 	local tips = table( TextColor( "[COLOR_GREEN]", Locale_ToUpper( improvement.Description ) ) )
 
-	-- Maintenance:
+
 	tips:insertIf( (improvement[g_maintenanceCurrency] or 0) ~= 0 and S( "%s %+i%s", L"TXT_KEY_PEDIA_MAINT_LABEL", -improvement[g_maintenanceCurrency], g_currencyIcon) )
 
-	-- Improved Resources
+
 	items = table()
 	for row in GameInfo.Improvement_ResourceTypes( thisImprovementType ) do
 		item = GameInfo.Resources[ row.ResourceType ]
@@ -1471,7 +1471,7 @@ local function GetHelpTextForImprovement( improvementID )
 	end
 	tips:insertIf( #items > 0  and L"TXT_KEY_PEDIA_IMPROVES_RESRC_LABEL" .. " " .. items:concat( ", " ) )
 
-	-- Yields
+
 	items = table()
 	for row in GameInfo.Improvement_Yields( thisImprovementType ) do
 		SetKey( items, (row.Yield or 0)~=0 and row.YieldType, S("%s %+i%s", items[ row.YieldType ] or "", row.Yield, tostring(YieldIcons[ row.YieldType ]) ) )
@@ -1488,16 +1488,16 @@ local function GetHelpTextForImprovement( improvementID )
 		tips:insert( tostring(YieldNames[ yieldType ]) .. ":" ..  tip )
 	end
 
-	-- Culture
+
 	tips:insertIf( (improvement.Culture or 0)~=0 and S( "%s: %+i[ICON_CULTURE]", L"TXT_KEY_CITYVIEW_CULTURE_TEXT", improvement.Culture ) )
 
-	-- Mountain Bonus
+
 	tip = GetYieldString( GameInfo.Improvement_AdjacentMountainYieldChanges( thisImprovementType ) )
 	tips:insertIf( #tip>0 and L"TXT_KEY_PEDIA_MOUNTAINADJYIELD_LABEL" .. tip )
-	-- Defense Modifier
+
 	tips:insertIf( (improvement.DefenseModifier or 0)~=0 and S( "%s %+i%%[ICON_STRENGTH]", L"TXT_KEY_PEDIA_DEFENSE_LABEL", improvement.DefenseModifier ) )
 
-	-- Tech yield changes
+
 	items = {}
 	condition = { ImprovementType = improvement.Type }
 	for row in GameInfo.Improvement_TechYieldChanges( thisImprovementType ) do
@@ -1536,7 +1536,7 @@ local function GetHelpTextForImprovement( improvementID )
 		end
 	end
 
-	-- Policy yield changes
+
 	items = {}
 	condition = { ImprovementType = improvement.Type }
 	for row in GameInfo.Policy_ImprovementYieldChanges( thisImprovementType ) do
@@ -1560,7 +1560,7 @@ local function GetHelpTextForImprovement( improvementID )
 		end
 	end
 
-	-- Belief yield changes
+
 	if g_isReligionEnabled then
 		items = {}
 		condition = { ImprovementType = improvement.Type }
@@ -1578,7 +1578,7 @@ local function GetHelpTextForImprovement( improvementID )
 
 	end
 
-	-- Resource Yields
+
 	local thisImprovementAndResourceTypes = { ImprovementType = improvement.Type or -1 }
 	for resource in GameInfo.Resources() do
 		thisImprovementAndResourceTypes.ResourceType = resource.Type or -1
@@ -1588,16 +1588,16 @@ local function GetHelpTextForImprovement( improvementID )
 
 	tips:insert( "----------------" )
 
-	-- Civ Requirement
+
 	item = improvement.SpecificCivRequired and improvement.CivilizationType
 	item = item and GameInfo.Civilizations[ item ]
 	tips:insertIf( item and L"TXT_KEY_PEDIA_CIVILIZATIONS_LABEL".." "..L( item.ShortDescription ) )
 
-	-- Tech Requirements
+
 	item = ItemBuild and ItemBuild.PrereqTech and GameInfo.Technologies[ItemBuild.PrereqTech]
 	tips:insertIf( item and item.ID > 0  and L"TXT_KEY_PEDIA_PREREQ_TECH_LABEL" .. " " .. TechColor( L(item.Description) ) )
 
-	-- Terrain
+
 	items = table()
 	for row in GameInfo.Improvement_ValidTerrains( thisImprovementType ) do
 		item = GameInfo.Terrains[ row.TerrainType ]
@@ -1617,51 +1617,51 @@ local function GetHelpTextForImprovement( improvementID )
 		item = GameInfo.Resources[ row.ResourceType ]
 		items:insertIf( item and row.ResourceMakesValid and item.IconString )
 	end
---	items:insertIf( improvement.HillsMakesValid and L( (GameInfo.Terrains.TERRAIN_HILL or {}).Description ) )-- hackery for hills
+
 	tips:insertIf( #items > 0  and L"TXT_KEY_PEDIA_FOUNDON_LABEL" .. " " .. items:concat( ", " ) )
 
---[[
-	-- Upgrade
-	item = improvement.ImprovementUpgrade and GameInfo.Improvements[ improvement.ImprovementUpgrade ]
--- TODO xml text
-	tips:insertIf( item and L"" .. " " .. L(item.Description) )
---]]
-	-- Pre-written Help text
+
+
+
+
+
+
+
 	return AddPreWrittenHelpTextAndConcat( tips, improvement )
 end
 
--- ===========================================================================
--- Help text for Projects
--- ===========================================================================
+
+
+
 local function GetHelpTextForProject( projectID )
 	local project = GameInfo.Projects[ projectID ]
 
-	-- Name & Cost
+
 	local productionCost = (Game and Players[Game.GetActivePlayer()]:GetProjectProductionNeeded(projectID)) or project.Cost
 	local tips = table( Locale_ToUpper( project.Description ), "----------------", L"TXT_KEY_PEDIA_COST_LABEL" .. " " .. productionCost .. "[ICON_PRODUCTION]" )
 
 	if civBE_mode then
-		-- Affinity Level Requirement
+
 		for affinityPrereq in GameInfo.Project_AffinityPrereqs{ ProjectType = project.Type } do
 			local affinityInfo = (tonumber( affinityPrereq.Level) or 0 ) > 0 and GameInfo.Affinity_Types[ affinityPrereq.AffinityType ]
 			tips:insertIf( affinityInfo and L( "TXT_KEY_AFFINITY_LEVEL_REQUIRED", affinityInfo.ColorType, affinityPrereq.Level, tostring(affinityInfo.IconString), tostring(affinityInfo.Description) ) )
 		end
 	end
 
-	-- Requirements?
+
 	tips:insertLocalizedIf( project.Requirements )
 
-	-- Pre-written Help text
+
 	return AddPreWrittenHelpTextAndConcat( tips, project )
 end
 
--- ===========================================================================
--- Help text for Processes
--- ===========================================================================
+
+
+
 local function GetHelpTextForProcess( processID )
 	local process = GameInfo.Processes[ processID ]
 
-	-- Name
+
 	local tips = table( Locale_ToUpper( process.Description ), "----------------" )
 	for row in GameInfo.Process_ProductionYields{ ProcessType = process.Type } do
 		local yield = GameInfo.Yields[ row.YieldType ]
@@ -1673,7 +1673,7 @@ local function GetHelpTextForProcess( processID )
 			tips:insert( S( "%s = %i%%([ICON_PRODUCTION])", tostring(yield.IconString), percent ) )
 		end
 	end
-	-- League Project text
+
 	local activeLeague = civ5bnw_mode and Game and not Game.IsOption("GAMEOPTION_NO_LEAGUES") and Game.GetActiveLeague()
 	if activeLeague then
 		for row in GameInfo.LeagueProjects{ Process = process.Type } do
@@ -1681,22 +1681,22 @@ local function GetHelpTextForProcess( processID )
 		end
 	end
 
-	-- Pre-written Help text
+
 	return AddPreWrittenHelpTextAndConcat( tips, process )
 end
 
--- ===========================================================================
--- PLAYER PERK (civ BE only)
--- ===========================================================================
+
+
+
 
 function TT.GetHelpTextForPlayerPerk( perkID )
 
 	local perkInfo = GameInfo.PlayerPerks[ perkID ]
 
-	-- Name
+
 	local tips = table( Locale_ToUpper( perkInfo.Description ), "----------------" )
 
-	-- Yield from Buildings
+
 	for playerPerkBuildingYieldEffect in GameInfo.PlayerPerks_BuildingYieldEffects{ PlayerPerkType = perkInfo.Type } do
 		local building = GameInfo.BuildingClasses[ playerPerkBuildingYieldEffect.BuildingClassType ]
 		local yield = building and GameInfo.Yields[ playerPerkBuildingYieldEffect.YieldType ]
@@ -1705,69 +1705,69 @@ function TT.GetHelpTextForPlayerPerk( perkID )
 		end
 	end
 
-	-- Pre-written Help text
+
 	return AddPreWrittenHelpTextAndConcat( tips, perkInfo )
 end
 
--- ===========================================================================
--- Tooltips for Yield & Similar (e.g. Culture)
--- ===========================================================================
 
--- Helper function to build yield tooltip string
+
+
+
+
 local function GetYieldTooltip( city, yieldID, baseYield, totalYield, yieldIconString, strModifiersString )
 
 	yieldIconString = tostring(yieldIconString or YieldIcons[yieldID])
 	local tips = table()
 
-	-- Base Yield from Terrain
+
 	tips:insertLocalizedBulletIfNonZero( "TXT_KEY_YIELD_FROM_TERRAIN", city:GetBaseYieldRateFromTerrain( yieldID ), yieldIconString )
 
-	-- Base Yield from Buildings
+
 	tips:insertLocalizedBulletIfNonZero( "TXT_KEY_YIELD_FROM_BUILDINGS", city:GetBaseYieldRateFromBuildings( yieldID ), yieldIconString )
 
-	-- Base Yield Rate from Policies, 34.8
+
 	tips:insertLocalizedBulletIfNonZero( "TXT_KEY_YIELD_FROM_POLICIES", city:GetBaseYieldRateFromPolicies( yieldID ), yieldIconString )
 
-	-- Base Yield Rate from Traits, 34.8
+
 	tips:insertLocalizedBulletIfNonZero( "TXT_KEY_YIELD_FROM_TRAITS", city:GetBaseYieldRateFromTraits( yieldID ), yieldIconString )
 
-	-- Base Yield from Specialists
+
 	tips:insertLocalizedBulletIfNonZero( "TXT_KEY_YIELD_FROM_SPECIALISTS", city:GetBaseYieldRateFromSpecialists( yieldID ), yieldIconString )
 
-	-- Base Yield Rate from Leagues, 34.8
+
 	tips:insertLocalizedBulletIfNonZero( "TXT_KEY_YIELD_FROM_LEAGUES", city:GetBaseYieldRateFromLeagues( yieldID ), yieldIconString )
 
-	-- Base Yield Rate from Garrison, 34.8
+
 	tips:insertLocalizedBulletIfNonZero( "TXT_KEY_YIELD_FROM_GARRISON", city:GetBaseYieldRateFromGarrison( yieldID ), yieldIconString )
 
-	-- Base Yield from Misc
+
 	tips:insertLocalizedBulletIfNonZero( yieldID == YieldTypes.YIELD_SCIENCE and "TXT_KEY_YIELD_FROM_POP" or "TXT_KEY_YIELD_FROM_MISC", city:GetBaseYieldRateFromMisc( yieldID ), yieldIconString )
 
-	-- Base Yield from Population
+
 	tips:insertLocalizedBulletIfNonZero( "TXT_KEY_YIELD_FROM_POP_EXTRA", city:GetYieldPerPopTimes100( yieldID ) * city:GetPopulation() / 100, yieldIconString )
 
-	-- Base Yield Rate from Great Works & Themes, 34.8
+
 	tips:insertLocalizedBulletIfNonZero( "TXT_KEY_YIELD_FROM_GREAT_WORKS", city:GetBaseYieldRateFromGreatWorks( yieldID ), yieldIconString )
 	tips:insertLocalizedBulletIfNonZero( "TXT_KEY_YIELD_FROM_THEMED_BUILDINGS", city:GetBaseYieldRateFromThemedBuildings( yieldID ), yieldIconString )
-	-- Landmark Yield
+
 	tips:insertLocalizedBulletIfNonZero( "TXT_KEY_YIELD_FROM_LANDMARKS", city:GetBaseYieldRateFromLandmarks(yieldID), yieldIconString)
-	-- Base Yield from Religion
+
 	if gk_mode then
 		tips:insertLocalizedBulletIfNonZero( "TXT_KEY_YIELD_FROM_RELIGION", city:GetBaseYieldRateFromReligion( yieldID ), yieldIconString )
 	end
 
 	if civBE_mode then
-		-- Yield from Production Processes
+
 		local yieldFromProcesses = city:GetYieldRateFromProductionProcesses( yieldID )
 		if yieldFromProcesses ~= 0 then
 			local processInfo = GameInfo.Processes[ city:GetProductionProcess() ]
 			strModifiersString = strModifiersString .. "[NEWLINE][ICON_BULLET]" .. L( "TXT_KEY_SHORT_YIELD_FROM_SPECIFIC_OBJECT", yieldFromProcesses, yieldIconString, tostring(processInfo and processInfo.Description) )
 		end
-		-- Base Yield from Loadout (colonists)
+
 		tips:insertLocalizedBulletIfNonZero( "TXT_KEY_YIELD_FROM_LOADOUT", city:GetYieldPerTurnFromLoadout( yieldID ), yieldIconString )
 	end
 
-	-- Food eaten by pop
+
 	if yieldID == YieldTypes.YIELD_FOOD then
 		tips:insertLocalizedBulletIfNonZero( "TXT_KEY_FOOD_FROM_TRADE_ROUTES", (city:GetYieldRateTimes100( yieldID, false ) - city:GetYieldRateTimes100( yieldID, true ) ) / 100 )
 		strModifiersString = "[NEWLINE][ICON_BULLET]" .. L( "TXT_KEY_YIELD_EATEN_BY_POP", city:FoodConsumption( true, 0 ), yieldIconString ) .. strModifiersString
@@ -1778,13 +1778,13 @@ local function GetYieldTooltip( city, yieldID, baseYield, totalYield, yieldIconS
 		end
 	end
 
-	-- Modifiers
+
 	if strModifiersString ~= "" then
 		tips:insert( "----------------" )
 		tips:insertLocalized( "TXT_KEY_YIELD_BASE", baseYield, yieldIconString )
 		tips:insert( strModifiersString )
 	end
-	-- Total
+
 	tips:insert( "----------------" )
 	tips:insertLocalized( totalYield >= 0 and "TXT_KEY_YIELD_TOTAL" or "TXT_KEY_YIELD_TOTAL_NEGATIVE", totalYield, yieldIconString )
 
@@ -1792,7 +1792,7 @@ local function GetYieldTooltip( city, yieldID, baseYield, totalYield, yieldIconS
 
 end
 
--- Yield Tooltip Helper
+
 local function GetYieldTooltipHelper( city, yieldID, yieldIconString )
 	local modifierTooltip = city:GetYieldModifierTooltip( yieldID )
 	if yieldID == YieldTypes.YIELD_FOOD then
@@ -1801,7 +1801,7 @@ local function GetYieldTooltipHelper( city, yieldID, yieldIconString )
 	return GetYieldTooltip( city, yieldID, city:GetBaseYieldRate( yieldID ) + city:GetYieldPerPopTimes100( yieldID ) * city:GetPopulation() / 100, yieldID == YieldTypes.YIELD_FOOD and city:FoodDifferenceTimes100()/100 or city:GetYieldRateTimes100( yieldID )/100, yieldIconString, modifierTooltip )
 end
 
--- FOOD
+
 local function GetFoodTooltip( city )
 
 	local tipText
@@ -1809,7 +1809,7 @@ local function GetFoodTooltip( city )
 	local cityPopulation = city:GetPopulation()
 
 	local foodStoredTimes100 = city:GetFoodTimes100()
-	local foodPerTurnTimes100 = city:FoodDifferenceTimes100( true )	-- true means size 1 city cannot starve
+	local foodPerTurnTimes100 = city:FoodDifferenceTimes100( true )
 	local foodThreshold = city:GrowthThreshold()
 	local turnsToCityGrowth = city:GetFoodTurnsLeft()
 
@@ -1860,7 +1860,7 @@ local function GetFoodTooltip( city )
 	end
 end
 
--- GOLD
+
 local function GetGoldTooltip( city )
 
 	if civ5_mode and OptionsManager.IsNoBasicHelp() then
@@ -1870,13 +1870,13 @@ local function GetGoldTooltip( city )
 	end
 end
 
--- ENERGY
+
 local function GetEnergyTooltip( city )
 
 	return L"TXT_KEY_ENERGY_HELP_INFO" .. "[NEWLINE][NEWLINE]" .. GetYieldTooltipHelper( city, YieldTypes.YIELD_ENERGY )
 end
 
--- SCIENCE
+
 local function GetScienceTooltip( city )
 
 	if g_isScienceEnabled then
@@ -1890,7 +1890,7 @@ local function GetScienceTooltip( city )
 	end
 end
 
--- Golden Age Points 
+
 local function GetGoldenAgePointsTooltip( city )
 
 	if civ5_mode and OptionsManager.IsNoBasicHelp() then
@@ -1901,7 +1901,7 @@ local function GetGoldenAgePointsTooltip( city )
 end
 
 
--- PRODUCTION
+
 local function GetProductionTooltip( city )
 
 	local isNoob = civBE_mode or not OptionsManager.IsNoBasicHelp()
@@ -1909,7 +1909,7 @@ local function GetProductionTooltip( city )
 	local tipText = ""
 	local productionColor
 
-	local productionPerTurn100 = city:GetCurrentProductionDifferenceTimes100( false, false )	-- food = false, overflow = false
+	local productionPerTurn100 = city:GetCurrentProductionDifferenceTimes100( false, false )
 	local productionStored100 = city:GetProductionTimes100() + city:GetCurrentProductionDifferenceTimes100(false, true) - productionPerTurn100
 	local productionNeeded = 0
 	local productionTurnsLeft = 1
@@ -1920,15 +1920,15 @@ local function GetProductionTooltip( city )
 	local processProductionID = city:GetProductionProcess()
 
 	if unitProductionID ~= -1 then
---		tipText = GetHelpTextForUnit( unitProductionID, false )
+
 		productionColor = UnitColor
 
 	elseif buildingProductionID ~= -1 then
---		tipText = GetHelpTextForBuilding( buildingProductionID, true, true, true, city )
+
 		productionColor = BuildingColor
 
 	elseif projectProductionID ~= -1 then
---		tipText = GetHelpTextForProject( projectProductionID, false )
+
 		productionColor = BuildingColor
 
 	elseif processProductionID ~= -1 then
@@ -1961,7 +1961,7 @@ local function GetProductionTooltip( city )
 		end
 	end
 	local strModifiersString = city:GetYieldModifierTooltip( YieldTypes.YIELD_PRODUCTION )
-	-- Extra Production from Food (ie. producing Colonists)
+
 	if city:IsFoodProduction() then
 		local productionFromFood = city:GetFoodProduction(city:GetYieldRate( YieldTypes.YIELD_FOOD, false ) - city:FoodConsumption( true, 0 ))
 		if productionFromFood > 0 then
@@ -1970,7 +1970,7 @@ local function GetProductionTooltip( city )
 	end
 	tipText = GetYieldTooltip( city, YieldTypes.YIELD_PRODUCTION, city:GetBaseYieldRate( YieldTypes.YIELD_PRODUCTION ), productionPerTurn100 / 100, "[ICON_PRODUCTION]", strModifiersString ) .. "[NEWLINE][NEWLINE]" .. tipText
 
-	-- Basic explanation of production
+
 	if isNoob then
 		return L"TXT_KEY_PRODUCTION_HELP_INFO" .. "[NEWLINE][NEWLINE]" .. tipText
 	else
@@ -1978,12 +1978,12 @@ local function GetProductionTooltip( city )
 	end
 end
 
--- HEALTH
+
 function TT.GetHealthTooltip(city)
 
 	local tips = table( L"TXT_KEY_HEALTH_HELP_INFO", "", L"TXT_KEY_HEALTH_HELP_INFO_POP_CAP_WARNING", "" )
 	
-	-- base Health
+
 	local localHealth = city:GetLocalHealth()
 	local healthFromTerrain = city:GetHealthFromTerrain()
 	local healthFromBuildings = city:GetHealthFromBuildings()	
@@ -1994,17 +1994,17 @@ function TT.GetHealthTooltip(city)
 	tips:insertLocalized( "TXT_KEY_YIELD_BASE", baseLocalHealth, "[ICON_HEALTH_1]" )
 	tips:insert( "----------------" )
 
-	-- health Modifier
+
 	local healthModifier = city:GetTotalHealthModifier() - 100
 	if healthModifier ~= 0 then
 		tips:insertLocalizedBulletIfNonZero( "TXT_KEY_HEALTH_BUILDING_MOD_INFO", healthModifier )
 		tips:insert( "----------------" )
 	end
 
-	-- total Health
+
 	tips:insertLocalized( "TXT_KEY_YIELD_TOTAL", localHealth, localHealth < 0 and "[ICON_HEALTH_3]" or "[ICON_HEALTH_1]" )
 
-	-- if local health is positive and our output is higher than the city's population, include the cap reminder
+
 	if baseLocalHealth > localHealth then		
 		tips:append( L("TXT_KEY_HEALTH_POP_CAPPED", city:GetPopulation() ) )
 	end
@@ -2012,12 +2012,12 @@ function TT.GetHealthTooltip(city)
 	return tips:concat( "[NEWLINE]" )
 end
 
--- CULTURE
+
 local function GetCultureTooltip( city )
 
 	local tips = table()
 	local isNoob = civBE_mode or not OptionsManager.IsNoBasicHelp()
-	-- Thanks fo Firaxis Cleverness...
+
 	local culturePerTurn, cultureStored, cultureNeeded
 	if civ5_mode then
 		culturePerTurn = city:GetJONSCulturePerTurn()
@@ -2036,7 +2036,7 @@ local function GetCultureTooltip( city )
 		tips:insert(GetYieldTooltipHelper( city, YieldTypes.YIELD_CULTURE) )
 
 
-	-- Tile growth
+
 	tips:insert( "" )
 	tips:insertLocalized( "TXT_KEY_CULTURE_INFO", "[COLOR_MAGENTA]" .. cultureStored .. "[ICON_CULTURE][ENDCOLOR]", "[COLOR_MAGENTA]" .. cultureNeeded .. "[ICON_CULTURE][ENDCOLOR]" )
 	if culturePerTurn > 0 then
@@ -2051,9 +2051,9 @@ local function GetCultureTooltip( city )
 	return tips:concat( "[NEWLINE]" )
 end
 
--------------------------------------------------
--- Helper function to build religion tooltip string
--------------------------------------------------
+
+
+
 local function GetReligionTooltip(city)
 
 	if g_isReligionEnabled then
@@ -2112,9 +2112,9 @@ local function GetReligionTooltip(city)
 	end
 end
 
---------
--- FAITH
---------
+
+
+
 
 local function GetFaithTooltip( city )
 
@@ -2136,7 +2136,7 @@ local function GetFaithTooltip( city )
 	end
 end
 
--- TOURISM
+
 local function GetTourismTooltip(city)
 	local tips = table()
 
@@ -2150,9 +2150,9 @@ local function GetTourismTooltip(city)
 
 end
 
-----------------------------------------------------------------
--- MAJOR PLAYER MOOD INFO
-----------------------------------------------------------------
+
+
+
 local function addIfNz( v, icon )
 	if v and v > 0 then
 		return "+"..(v/100)..icon
@@ -2187,10 +2187,10 @@ local function GetMoodInfo( playerID )
 	local teamID = player:GetTeam()
 	local team = Teams[teamID]
 
-	-- Player & civ names
+
 	local strInfo = GetCivName(player) .. " (" .. GetLeaderName(player) .. ") "
 
-	-- Always war ?
+
 	if (playerID ~= activePlayerID) and (
 		( activeTeam:IsAtWar( teamID )
 		and Game.IsOption( GameOptionTypes.GAMEOPTION_NO_CHANGING_WAR_PEACE ) )
@@ -2199,10 +2199,10 @@ local function GetMoodInfo( playerID )
 		return strInfo .. L"TXT_KEY_ALWAYS_WAR_TT"
 	end
 
-	-- Era
+
 	strInfo = strInfo .. L( ( GameInfo.Eras[ player:GetCurrentEra() ] or {} ).Description )
 
-	-- Tech in Progress
+
 	if teamID == activeTeamID then
 		local currentTechID = player:GetCurrentResearch()
 		local currentTech = GameInfo.Technologies[currentTechID]
@@ -2210,30 +2210,30 @@ local function GetMoodInfo( playerID )
 			strInfo = strInfo .. " [ICON_RESEARCH] " .. L(currentTech.Description)
 		end
 	else
-	-- Mood
+
 		local visibleApproachID = activePlayer:GetApproachTowardsUsGuess(playerID)
 		strInfo = strInfo .. " " .. (
-		-- At war
+
 		((team:IsAtWar( activeTeamID ) or visibleApproachID == MajorCivApproachTypes.MAJOR_CIV_APPROACH_WAR) and L"TXT_KEY_DIPLO_MAJOR_CIV_DIPLO_STATE_WAR")
-		-- Denouncing
+
 		or (player:IsDenouncingPlayer( activePlayerID ) and L"TXT_KEY_DIPLO_MAJOR_CIV_DIPLO_STATE_DENOUNCING")
-		-- Resurrected
+
 		or (gk_mode and player:WasResurrectedThisTurnBy( activePlayerID ) and L"TXT_KEY_DIPLO_MAJOR_CIV_DIPLO_STATE_LIBERATED")
-		-- Appears Hostile
+
 		or (visibleApproachID == MajorCivApproachTypes.MAJOR_CIV_APPROACH_HOSTILE and L"TXT_KEY_DIPLO_MAJOR_CIV_DIPLO_STATE_HOSTILE")
-		-- Appears Guarded
+
 		or (visibleApproachID == MajorCivApproachTypes.MAJOR_CIV_APPROACH_GUARDED and L"TXT_KEY_DIPLO_MAJOR_CIV_DIPLO_STATE_GUARDED")
-		-- Appears Afraid
+
 		or (visibleApproachID == MajorCivApproachTypes.MAJOR_CIV_APPROACH_AFRAID and L"TXT_KEY_DIPLO_MAJOR_CIV_DIPLO_STATE_AFRAID")
-		-- Appears Friendly
+
 		or (visibleApproachID == MajorCivApproachTypes.MAJOR_CIV_APPROACH_FRIENDLY and L"TXT_KEY_DIPLO_MAJOR_CIV_DIPLO_STATE_FRIENDLY")
-		-- Neutral - default string
+
 		or L"TXT_KEY_DIPLO_MAJOR_CIV_DIPLO_STATE_NEUTRAL" ) .. "[/COLOR]"
 	end
 
-	-- Techs Known
+
 	local tips = table( team:GetTeamTechs():GetNumTechsKnown() .. " " .. TechColor( Locale_ToLower("TXT_KEY_VP_TECH") ) )
-	-- Policies
+
 	for policyBranch in GameInfo.PolicyBranchTypes() do
 		local policyCount = 0
 
@@ -2245,14 +2245,14 @@ local function GetMoodInfo( playerID )
 
 		tips:insertIf( policyCount > 0 and policyCount .. " " .. PolicyColor( Locale_ToLower(policyBranch.Description) ) )
 	end
-	-- Religion Founded
+
 	if g_isReligionEnabled then
 		local religionID = player:GetReligionCreatedByPlayer()
 		tips:insertIf( religionID > 0 and tostring( (GameInfo.Religions[ religionID ] or {}).IconString )..BeliefColor( L("TXT_KEY_RO_STATUS_FOUNDER", Game.GetReligionName( religionID ) ) ) )
 	end
 	tips = table( strInfo, tips:concat(", ") )
 
-	-- Wonders
+
 	local wonders = table()
 	for building in GameInfo.Buildings() do
 		if building.BuildingClass
@@ -2262,50 +2262,50 @@ local function GetMoodInfo( playerID )
 			wonders:insert( BuildingColor( L(building.Description) ) )
 		end
 	end
-	-- Population
+
 	tips:insert( player:GetTotalPopulation() .. "[ICON_CITIZEN]"
 			.. ", "
 			.. player:GetNumCities() .. " " .. Locale_ToLower("TXT_KEY_VP_CITIES")
 			.. ", "
 			.. player:GetNumWorldWonders() .. " " .. Locale_ToLower("TXT_KEY_VP_WONDERS")
 			.. (#wonders>0 and ": " .. wonders:concat( ", " ) or "") )
---[[ too much info
-	local cities = table()
-	for city in player:Cities() do
-		-- Name & population
-		local cityTxt = S("%i[ICON_CITIZEN] %s", city:GetPopulation(), city:GetName())
-		if city:IsCapital() then
-			cityTxt = "[ICON_CAPITAL]" .. cityTxt
-		end
-		-- Wonders
-		local wonders = table()
-		for building in GameInfo.Buildings() do
-			if building.BuildingClass
-				and GameInfo.BuildingClasses[building.BuildingClass].MaxGlobalInstances > 0
-				and city:IsHasBuilding(building.ID)
-			then
-				wonders:insert( L(building.Description) )
-			end
-		end
-		if #wonders > 0 then
-			cityTxt = cityTxt .. " (" .. wonders:concat(", ") .. ")"
-		end
-		cities:insert( cityTxt )
-	end
-	if #cities > 1 then
-		tips:insert( #cities .. " " .. L("TXT_KEY_DIPLO_CITIES"):lower() .. " : " .. cities:concat(", ") )
-	elseif #cities ==1 then
-		tips:insert( cities[1] )
-	end
---]]
 
-	-- Gold (can be seen in diplo relation ship)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	tips:insert( S( "%i%s(%+i)", player:GetGold(), g_currencyIcon, player:CalculateGoldRate() ) )
 
 
-	--------------------------------------------------------------------
-	-- Loop through the active player's current deals
-	--------------------------------------------------------------------
+
+
+
 
 	local isTradeable, isActiveDeal
 	local dealsFinalTurn = {}
@@ -2318,7 +2318,7 @@ local function GetMoodInfo( playerID )
 
 	local function GetDealTurnsRemaining( itemID )
 		local turnsRemaining
-		if bnw_mode and itemID == TradeableItems.TRADE_ITEM_DECLARATION_OF_FRIENDSHIP then -- DoF special kinky case
+		if bnw_mode and itemID == TradeableItems.TRADE_ITEM_DECLARATION_OF_FRIENDSHIP then
 			turnsRemaining = g_relationshipDuration - activePlayer:GetDoFCounter( playerID )
 		elseif itemID then
 			local finalTurn = dealsFinalTurn[ itemID ]
@@ -2343,7 +2343,7 @@ local function GetMoodInfo( playerID )
 			end
 			if itemID then
 				if isUs or toPlayerID == playerID or fromPlayerID == playerID then
---					finalTurn = finalTurn - currentTurn
+
 					local isFromUs = fromPlayerID == activePlayerID
 					local dealItem = dealItems[ finalTurn ]
 					if not dealItem then
@@ -2402,7 +2402,7 @@ local function GetMoodInfo( playerID )
 
 	if isUs then
 
-		-- Resources available for trade
+
 		local luxuries = table()
 		local strategic = table()
 		for resource in GameInfo.Resources() do
@@ -2417,21 +2417,21 @@ local function GetMoodInfo( playerID )
 		end
 		tips:append( luxuries:concat() .. strategic:concat() )
 
-	else  --if teamID ~= activeTeamID then
+	else
 
 		local visibleApproachID = activePlayer:GetApproachTowardsUsGuess(playerID)
 
-		if activeTeam:IsAtWar( teamID ) then	-- At war right now
+		if activeTeam:IsAtWar( teamID ) then
 
 			opinions:insert( L"TXT_KEY_DIPLO_MAJOR_CIV_DIPLO_STATE_WAR" )
 
-		else	-- Not at war right now
+		else
 
-			-- Resources available from them
+
 			local luxuries = table()
 			local strategic = table()
 			for resource in GameInfo.Resources() do
-				if g_deal:IsPossibleToTradeItem( playerID, activePlayerID, TradeableItems.TRADE_ITEM_RESOURCES, resource.ID, 1 ) then	-- 1 here is 1 quantity of the Resource, which is the minimum possible
+				if g_deal:IsPossibleToTradeItem( playerID, activePlayerID, TradeableItems.TRADE_ITEM_RESOURCES, resource.ID, 1 ) then
 					local resource = "  " .. player:GetNumResourceAvailable( resource.ID, false ) .. tostring(resource.IconString)
 					if resource.ResourceClassType == "RESOURCECLASS_LUXURY" then
 						luxuries:insert( resource )
@@ -2442,11 +2442,11 @@ local function GetMoodInfo( playerID )
 			end
 			tips:append( luxuries:concat() .. strategic:concat() )
 
-			-- Resources they would like from us
+
 			luxuries = table()
 			strategic = table()
 			for resource in GameInfo.Resources() do
-				if g_deal:IsPossibleToTradeItem( activePlayerID, playerID, TradeableItems.TRADE_ITEM_RESOURCES, resource.ID, 1 ) then	-- 1 here is 1 quantity of the Resource, which is the minimum possible
+				if g_deal:IsPossibleToTradeItem( activePlayerID, playerID, TradeableItems.TRADE_ITEM_RESOURCES, resource.ID, 1 ) then
 					if resource.ResourceClassType == "RESOURCECLASS_LUXURY" then
 						luxuries:insert( " " .. activePlayer:GetNumResourceAvailable( resource.ID, true ) .. tostring(resource.IconString) )
 					else
@@ -2458,25 +2458,25 @@ local function GetMoodInfo( playerID )
 				tips:insert( L"TXT_KEY_DIPLO_YOUR_ITEMS_LABEL" .. ": " .. luxuries:concat() .. strategic:concat() )
 			end
 
-			-- Treaties
+
 			local peaceTurnExpire = dealsFinalTurn[ TradeableItems.TRADE_ITEM_PEACE_TREATY ]
 			if peaceTurnExpire and peaceTurnExpire > currentTurn then
 				treaties:insert( "[ICON_PEACE]" .. L( "TXT_KEY_DIPLO_PEACE_TREATY", peaceTurnExpire - currentTurn ) )
 			end
 			if gk_mode then
 
-				-- Embassy to them
+
 				isTradeable = g_deal:IsPossibleToTradeItem( activePlayerID, playerID, TradeableItems.TRADE_ITEM_ALLOW_EMBASSY, g_dealDuration )
 				isActiveDeal = team:HasEmbassyAtTeam( activeTeamID )
 
 				if isTradeable or isActiveDeal then
 					treaties:insert( negativeOrPositiveTextColor[isActiveDeal] .. "[ICON_CAPITAL]"
 							.. L("TXT_KEY_DIPLO_ALLOW_EMBASSY"):lower()
-							.. "[ENDCOLOR]" .. GetDealTurnsRemaining( TradeableItems.TRADE_ITEM_ALLOW_EMBASSY + 65536 ) -- 65536 means from us
+							.. "[ENDCOLOR]" .. GetDealTurnsRemaining( TradeableItems.TRADE_ITEM_ALLOW_EMBASSY + 65536 )
 					)
 				end
 
-				-- Embassy from them
+
 				isTradeable = g_deal:IsPossibleToTradeItem( playerID, activePlayerID, TradeableItems.TRADE_ITEM_ALLOW_EMBASSY, g_dealDuration )
 				isActiveDeal = activeTeam:HasEmbassyAtTeam( teamID )
 
@@ -2488,18 +2488,18 @@ local function GetMoodInfo( playerID )
 				end
 			end
 
-			-- Open Borders to them
+
 			isTradeable = g_deal:IsPossibleToTradeItem( activePlayerID, playerID, TradeableItems.TRADE_ITEM_OPEN_BORDERS, g_dealDuration )
 			isActiveDeal = activeTeam:IsAllowsOpenBordersToTeam(teamID)
 
 			if isTradeable or isActiveDeal then
 				treaties:insert( negativeOrPositiveTextColor[isActiveDeal] .. "<"
 						.. L"TXT_KEY_DO_OPEN_BORDERS"
-						.. "[ENDCOLOR]" .. GetDealTurnsRemaining( TradeableItems.TRADE_ITEM_OPEN_BORDERS + 65536 ) -- 65536 means from us
+						.. "[ENDCOLOR]" .. GetDealTurnsRemaining( TradeableItems.TRADE_ITEM_OPEN_BORDERS + 65536 )
 				)
 			end
 
-			-- Open Borders from them
+
 			isTradeable = g_deal:IsPossibleToTradeItem( playerID, activePlayerID, TradeableItems.TRADE_ITEM_OPEN_BORDERS, g_dealDuration )
 			isActiveDeal = team:IsAllowsOpenBordersToTeam( activeTeamID )
 
@@ -2510,7 +2510,7 @@ local function GetMoodInfo( playerID )
 				)
 			end
 
-			-- Declaration of Friendship
+
 			isTradeable = not gk_mode or g_deal:IsPossibleToTradeItem( playerID, activePlayerID, TradeableItems.TRADE_ITEM_DECLARATION_OF_FRIENDSHIP, g_dealDuration )
 			isActiveDeal = activePlayer:IsDoF(playerID)
 			if isTradeable or isActiveDeal then
@@ -2520,10 +2520,10 @@ local function GetMoodInfo( playerID )
 				)
 			end
 
-			-- Research Agreement
---			isTradeable = (activeTeam:IsResearchAgreementTradingAllowed() or team:IsResearchAgreementTradingAllowed())
---				and not activeTeam:GetTeamTechs():HasResearchedAllTechs() and not team:GetTeamTechs():HasResearchedAllTechs()
---				and not g_isScienceEnabled
+
+
+
+
 			isTradeable = g_deal:IsPossibleToTradeItem( playerID, activePlayerID, TradeableItems.TRADE_ITEM_RESEARCH_AGREEMENT, g_dealDuration )
 			isActiveDeal = activeTeam:IsHasResearchAgreement(teamID)
 			if isTradeable or isActiveDeal then
@@ -2533,7 +2533,7 @@ local function GetMoodInfo( playerID )
 				)
 			end
 
-			-- Trade Agreement
+
 			isTradeable = g_deal:IsPossibleToTradeItem( playerID, activePlayerID, TradeableItems.TRADE_ITEM_TRADE_AGREEMENT, g_dealDuration )
 			isActiveDeal = activeTeam:IsHasTradeAgreement(teamID)
 			if isTradeable or isActiveDeal then
@@ -2543,7 +2543,7 @@ local function GetMoodInfo( playerID )
 				)
 			end
 
-			-- Defensive Pact
+
 			isTradeable = g_deal:IsPossibleToTradeItem( playerID, activePlayerID, TradeableItems.TRADE_ITEM_DEFENSIVE_PACT, g_dealDuration )
 			isActiveDeal = activeTeam:IsDefensivePact(teamID)
 			if isTradeable or isActiveDeal then
@@ -2553,13 +2553,13 @@ local function GetMoodInfo( playerID )
 				)
 			end
 
-			-- We've fought before
+
 			if not gk_mode and activePlayer:GetNumWarsFought(playerID) > 0 then
-				-- They don't appear to be mad
+
 				if visibleApproachID == MajorCivApproachTypes.MAJOR_CIV_APPROACH_FRIENDLY or
 					visibleApproachID == MajorCivApproachTypes.MAJOR_CIV_APPROACH_NEUTRAL then
 					opinions:insert( L"TXT_KEY_DIPLO_PAST_WAR_NEUTRAL" )
-				-- They aren't happy with us
+
 				else
 					opinions:insert( L"TXT_KEY_DIPLO_PAST_WAR_BAD" )
 				end
@@ -2570,21 +2570,21 @@ local function GetMoodInfo( playerID )
 			opinions = player:GetOpinionTable( activePlayerID )
 		else
 
-			-- Good things
+
 			opinions:insertLocalizedIf( activePlayer:IsDoF(playerID) and "TXT_KEY_DIPLO_DOF" )
-			opinions:insertLocalizedIf( activePlayer:IsPlayerDoFwithAnyFriend(playerID) and "TXT_KEY_DIPLO_MUTUAL_DOF" ) -- Human has a mutual friend with the AI
-			opinions:insertLocalizedIf( activePlayer:IsPlayerDenouncedEnemy(playerID) and "TXT_KEY_DIPLO_MUTUAL_ENEMY" ) -- Human has denounced an enemy of the AI
+			opinions:insertLocalizedIf( activePlayer:IsPlayerDoFwithAnyFriend(playerID) and "TXT_KEY_DIPLO_MUTUAL_DOF" )
+			opinions:insertLocalizedIf( activePlayer:IsPlayerDenouncedEnemy(playerID) and "TXT_KEY_DIPLO_MUTUAL_ENEMY" )
 			opinions:insertLocalizedIf( player:GetNumCiviliansReturnedToMe(activePlayerID) > 0 and "TXT_KEY_DIPLO_CIVILIANS_RETURNED" )
 
-			-- Neutral things
+
 			opinions:insertLocalizedIf( visibleApproachID == MajorCivApproachTypes.MAJOR_CIV_APPROACH_AFRAID and "TXT_KEY_DIPLO_AFRAID" )
 
-			-- Bad things
-			opinions:insertLocalizedIf( player:IsFriendDeclaredWarOnUs(activePlayerID) and "TXT_KEY_DIPLO_HUMAN_FRIEND_DECLARED_WAR" ) -- Human was a friend and declared war on us
-			opinions:insertLocalizedIf( player:IsFriendDenouncedUs(activePlayerID) and "TXT_KEY_DIPLO_HUMAN_FRIEND_DENOUNCED" ) -- Human was a friend and denounced us
-			opinions:insertLocalizedIf( activePlayer:GetWeDeclaredWarOnFriendCount() > 0 and "TXT_KEY_DIPLO_HUMAN_DECLARED_WAR_ON_FRIENDS" ) -- Human declared war on friends
-			opinions:insertLocalizedIf( activePlayer:GetWeDenouncedFriendCount() > 0 and "TXT_KEY_DIPLO_HUMAN_DENOUNCED_FRIENDS" ) -- Human has denounced his friends
-			opinions:insertLocalizedIf( activePlayer:GetNumFriendsDenouncedBy() > 0 and "TXT_KEY_DIPLO_HUMAN_DENOUNCED_BY_FRIENDS" ) -- Human has been denounced by friends
+
+			opinions:insertLocalizedIf( player:IsFriendDeclaredWarOnUs(activePlayerID) and "TXT_KEY_DIPLO_HUMAN_FRIEND_DECLARED_WAR" )
+			opinions:insertLocalizedIf( player:IsFriendDenouncedUs(activePlayerID) and "TXT_KEY_DIPLO_HUMAN_FRIEND_DENOUNCED" )
+			opinions:insertLocalizedIf( activePlayer:GetWeDeclaredWarOnFriendCount() > 0 and "TXT_KEY_DIPLO_HUMAN_DECLARED_WAR_ON_FRIENDS" )
+			opinions:insertLocalizedIf( activePlayer:GetWeDenouncedFriendCount() > 0 and "TXT_KEY_DIPLO_HUMAN_DENOUNCED_FRIENDS" )
+			opinions:insertLocalizedIf( activePlayer:GetNumFriendsDenouncedBy() > 0 and "TXT_KEY_DIPLO_HUMAN_DENOUNCED_BY_FRIENDS" )
 			opinions:insertLocalizedIf( activePlayer:IsDenouncedPlayer(playerID) and "TXT_KEY_DIPLO_DENOUNCED_BY_US" )
 			opinions:insertLocalizedIf( player:IsDenouncedPlayer(activePlayerID) and "TXT_KEY_DIPLO_DENOUNCED_BY_THEM" )
 			opinions:insertLocalizedIf( player:IsPlayerDoFwithAnyEnemy(activePlayerID) and "TXT_KEY_DIPLO_HUMAN_DOF_WITH_ENEMY" )
@@ -2612,53 +2612,53 @@ local function GetMoodInfo( playerID )
 			opinions:insertLocalizedIf( player:IsHasPaidTributeTo(activePlayerID) and "TXT_KEY_DIPLO_PAID_TRIBUTE" )
 			opinions:insertLocalizedIf( player:IsNukedBy(activePlayerID) and "TXT_KEY_DIPLO_NUKED" )
 			opinions:insertLocalizedIf( player:IsCapitalCapturedBy(activePlayerID) and "TXT_KEY_DIPLO_CAPTURED_CAPITAL" )
-			-- Protected Minors
+
 			if player:GetOtherPlayerNumProtectedMinorsKilled(activePlayerID) > 0 then
 				opinions:insert( L"TXT_KEY_DIPLO_PROTECTED_MINORS_KILLED" )
-			-- Only worry about protected minors ATTACKED if they haven't KILLED any
+
 			elseif player:GetOtherPlayerNumProtectedMinorsAttacked(activePlayerID) > 0 then
 				opinions:insert( L"TXT_KEY_DIPLO_PROTECTED_MINORS_ATTACKED" )
 			end
 
-			--local actualApproachID = player:GetMajorCivApproach(activePlayerID)
 
-			-- Bad things we don't want visible if someone is friendly (acting or truthfully)
+
+
 			if visibleApproachID ~= MajorCivApproachTypes.MAJOR_CIV_APPROACH_FRIENDLY then
-				-- and actualApproachID ~= MajorCivApproachTypes.MAJOR_CIV_APPROACH_DECEPTIVE then
+
 				opinions:insertLocalizedIf( player:GetLandDisputeLevel(activePlayerID) > DisputeLevelTypes.DISPUTE_LEVEL_NONE and "TXT_KEY_DIPLO_LAND_DISPUTE" )
-				--opinions:insertLocalizedIf( player:GetVictoryDisputeLevel(activePlayerID) > DisputeLevelTypes.DISPUTE_LEVEL_NONE and "TXT_KEY_DIPLO_VICTORY_DISPUTE" )
+
 				opinions:insertLocalizedIf( player:GetWonderDisputeLevel(activePlayerID) > DisputeLevelTypes.DISPUTE_LEVEL_NONE and "TXT_KEY_DIPLO_WONDER_DISPUTE" )
 				opinions:insertLocalizedIf( player:GetMinorCivDisputeLevel(activePlayerID) > DisputeLevelTypes.DISPUTE_LEVEL_NONE and "TXT_KEY_DIPLO_MINOR_CIV_DISPUTE" )
 				opinions:insertLocalizedIf( player:GetWarmongerThreat(activePlayerID) > ThreatTypes.THREAT_NONE and "TXT_KEY_DIPLO_WARMONGER_THREAT" )
 			end
 		end
 
-		--  No specific events - let's see what string we should use
+
 		if #opinions == 0 then
-			-- At war
+
 			if visibleApproachID == MajorCivApproachTypes.MAJOR_CIV_APPROACH_WAR then
 				opinions = { L"TXT_KEY_DIPLO_AT_WAR" }
-			-- Appears Friendly
+
 			elseif visibleApproachID == MajorCivApproachTypes.MAJOR_CIV_APPROACH_FRIENDLY then
 				opinions = { L"TXT_KEY_DIPLO_FRIENDLY" }
-			-- Appears Guarded
+
 			elseif visibleApproachID == MajorCivApproachTypes.MAJOR_CIV_APPROACH_GUARDED then
 				opinions = { L"TXT_KEY_DIPLO_GUARDED" }
-			-- Appears Hostile
+
 			elseif visibleApproachID == MajorCivApproachTypes.MAJOR_CIV_APPROACH_HOSTILE then
 				opinions = { L"TXT_KEY_DIPLO_HOSTILE" }
-			-- Appears Affraid
+
 			elseif visibleApproachID == MajorCivApproachTypes.MAJOR_CIV_APPROACH_AFRAID  then
 				opinions = { L"TXT_KEY_DIPLO_AFRAID" }
-			-- Neutral - default string
+
 			else
 				opinions = { L"TXT_KEY_DIPLO_DEFAULT_STATUS" }
 			end
 		end
 
-	end -- playerID vs activePlayerID
+	end
 
---TODO "TXT_KEY_DO_WE_PROVIDE" & "TXT_KEY_DO_THEY_PROVIDE"
+
 	tips:insertIf( #deals > 0 and L"TXT_KEY_DO_CURRENT_DEALS" .. "[NEWLINE]" .. deals:concat( ", " ) )
 	tips:insertIf( #tradeRoutes > 0 and tradeRoutes:concat( "[NEWLINE]" ) )
 	tips:insertIf( #treaties > 0 and treaties:concat( ", " ) .. "[ENDCOLOR]" )
@@ -2672,7 +2672,7 @@ local function GetMoodInfo( playerID )
 	local denouncedBy = table()
 	local wars = table()
 
-	-- Relationships with others
+
 	for otherPlayerID = 0, GameDefines.MAX_CIV_PLAYERS - 1 do
 		local otherPlayer = Players[otherPlayerID]
 		if otherPlayer
@@ -2681,37 +2681,37 @@ local function GetMoodInfo( playerID )
 			and activeTeam:IsHasMet(otherPlayer:GetTeam())
 		then
 			local otherPlayerName =  GetCivName(otherPlayer)
-			-- Wars
+
 			if team:IsAtWar(otherPlayer:GetTeam()) then
 				wars:insert( otherPlayerName )
 			end
 			if otherPlayer:IsMinorCiv() then
-				-- Alliances
+
 				if otherPlayer:IsAllies(playerID) then
 					allied:insert( otherPlayerName )
-				-- Friendships
+
 				elseif otherPlayer:IsFriends(playerID) then
 					if isUs then
 						friends:insert( otherPlayerName )
 					end
 				end
-				-- Protections
+
 				if player:IsProtectingMinor(otherPlayerID) then
-					protected:insert( otherPlayerName .. inParentheses( gk_mode and isUs and ( otherPlayer:GetTurnLastPledgedProtectionByMajor(playerID) - Game.GetGameTurn() + 10 ) ) )  -- todo check scaling % game speed
+					protected:insert( otherPlayerName .. inParentheses( gk_mode and isUs and ( otherPlayer:GetTurnLastPledgedProtectionByMajor(playerID) - Game.GetGameTurn() + 10 ) ) )
 				end
 			else
-				-- Friendships
+
 				if player:IsDoF(otherPlayerID) then
 					friends:insert( otherPlayerName .. inParentheses( bnw_mode and ( g_relationshipDuration - player:GetDoFCounter( otherPlayerID ) ) ) )
 				end
-				-- Backstab
+
 				if otherPlayer:IsFriendDenouncedUs(playerID) or otherPlayer:IsFriendDeclaredWarOnUs(playerID) then
 					backstabs:insert( otherPlayerName )
-				-- Denouncement
+
 				elseif player:IsDenouncedPlayer(otherPlayerID) then
 					denouncements:insert( otherPlayerName .. inParentheses( bnw_mode and ( g_relationshipDuration - player:GetDenouncedPlayerCounter( otherPlayerID ) ) ) )
 				end
-				-- Denounced by 3rd party
+
 				if otherPlayer:IsDenouncedPlayer(playerID) then
 					denouncedBy:insert( otherPlayerName .. inParentheses( bnw_mode and ( g_relationshipDuration - otherPlayer:GetDenouncedPlayerCounter( playerID ) ) ) )
 				end
@@ -2730,9 +2730,9 @@ local function GetMoodInfo( playerID )
 	return tips:concat( "[NEWLINE]" )
 end
 
--------------------------------------------------
--- Expose functions
--------------------------------------------------
+
+
+
 
 if Game and Game.GetReligionName == nil then
 	if not GetCityStateStatusToolTip then
@@ -2755,7 +2755,7 @@ function TT.GetScienceTooltip( ... ) return select(2, pcall( GetScienceTooltip, 
 function TT.GetProductionTooltip( ... ) return select(2, pcall( GetProductionTooltip, ... ) ) end
 function TT.GetCultureTooltip( ... ) return select(2, pcall( GetCultureTooltip, ... ) ) end
 function TT.GetFaithTooltip( ... ) return select(2, pcall( GetFaithTooltip, ... ) ) end
-function TT.GetGoldenAgePointsTooltip( ... ) return select(2, pcall( GetGoldenAgePointsTooltip, ... ) ) end --v34
+function TT.GetGoldenAgePointsTooltip( ... ) return select(2, pcall( GetGoldenAgePointsTooltip, ... ) ) end
 function TT.GetTourismTooltip( ... ) return select(2, pcall( GetTourismTooltip, ... ) ) end
 function TT.GetYieldTooltipHelper( ... ) return select(2, pcall( GetYieldTooltipHelper, ... ) ) end
 function TT.GetYieldTooltip( ... ) return select(2, pcall( GetYieldTooltip, ... ) ) end
@@ -2764,18 +2764,18 @@ function TT.GetReligionTooltip( ... ) return select(2, pcall( GetReligionTooltip
 
 if civBE_mode then
 	local GetHelpTextForUnitAttributes, GetHelpTextForUnitPlayerPerkBuffs, GetHelpTextForUnitInherentPromotions, GetHelpTextForUnitPromotions, GetHelpTextForUnitPerks, GetHelpTextForAffinityLevel
-	----------------------------------------------------------------
-	----------------------------------------------------------------
-	-- UNIT COMBO THINGS
-	----------------------------------------------------------------
-	----------------------------------------------------------------
+
+
+
+
+
 	function TT.GetHelpTextForSpecificUnit(unit)
 		local s = "";
 
-		-- Attributes
+
 		s = s .. GetHelpTextForUnitAttributes(unit:GetUnitType(), "[ICON_BULLET]");
 
-		-- Player Perks
+
 		local temp = GetHelpTextForUnitPlayerPerkBuffs(unit:GetUnitType(), unit:GetOwner(), "[ICON_BULLET]");
 		if temp ~= "" then
 			if s ~= "" then
@@ -2784,7 +2784,7 @@ if civBE_mode then
 			s = s .. temp;
 		end
 
-		-- Promotions
+
 		temp = GetHelpTextForUnitPromotions(unit, "[ICON_BULLET]");
 		if temp ~= "" then
 			if s ~= "" then
@@ -2793,7 +2793,7 @@ if civBE_mode then
 			s = s .. temp;
 		end
 
-		-- Upgrades and Perks
+
 		local player = Players[unit:GetOwner()];
 		if player then
 			local allPerks = player:GetPerksForUnit(unit:GetUnitType());
@@ -2817,10 +2817,10 @@ if civBE_mode then
 	function TT.GetHelpTextForUnitType(unitType, playerID, includeFreePromotions)
 		local s = "";
 
-		-- Attributes
+
 		s = s .. GetHelpTextForUnitAttributes(unitType, nil);
 
-		-- Player Perks
+
 		if includeFreePromotions and includeFreePromotions == true then
 			local temp = GetHelpTextForUnitPlayerPerkBuffs(unitType, playerID, nil);
 			if temp ~= "" then
@@ -2831,7 +2831,7 @@ if civBE_mode then
 			end
 		end
 
-		-- Promotions
+
 		if includeFreePromotions and includeFreePromotions == true then
 			local temp = GetHelpTextForUnitInherentPromotions(unitType, nil);
 			if temp ~= "" then
@@ -2842,7 +2842,7 @@ if civBE_mode then
 			end
 		end
 
-		-- Upgrades and Perks
+
 		local player = Players[playerID];
 		if player then
 			local allPerks = player:GetPerksForUnit(unitType);
@@ -2863,12 +2863,12 @@ if civBE_mode then
 		return s;
 	end
 
-	----------------------------------------------------------------
-	----------------------------------------------------------------
-	-- UNIT MISCELLANY
-	-- Stuff not covered by promotions or perks
-	----------------------------------------------------------------
-	----------------------------------------------------------------
+
+
+
+
+
+
 	function TT.GetUpgradedUnitDescriptionKey(player, unitType)
 		local descriptionKey = "";
 		local unitInfo = GameInfo.Units[unitType];
@@ -2887,10 +2887,10 @@ if civBE_mode then
 		return descriptionKey;
 	end
 
-	--TODO: antonjs: Once we have a text budget and refactor time,
-	--roll these miscellaneous things (player perks, attributes in
-	--the base unit XML) in with existing unit buff systems
-	--instead of being special case like this.
+
+
+
+
 	function TT.GetHelpTextForUnitAttributes(unitType, prefix)
 		local s = "";
 		local unitInfo = GameInfo.Units[unitType];
@@ -2926,7 +2926,7 @@ if civBE_mode then
 						s = s .. L(GameInfo.PlayerPerks[info.ID].Help);
 					end
 
-					-- Help text for this player perk is inaccurate. Commencing hax0rs.
+
 					if info.UnitFlatVisibilityChange > 0 then
 						if s ~= "" then
 							s = s .. "[NEWLINE]";
@@ -2943,11 +2943,11 @@ if civBE_mode then
 	end
 	GetHelpTextForUnitPlayerPerkBuffs = TT.GetHelpTextForUnitPlayerPerkBuffs
 
-	----------------------------------------------------------------
-	----------------------------------------------------------------
-	-- UNIT PROMOTIONS
-	----------------------------------------------------------------
-	----------------------------------------------------------------
+
+
+
+
+
 	function TT.GetHelpTextForUnitInherentPromotions(unitType, prefix)
 		local s = "";
 		local unitInfo = GameInfo.Units[unitType];
@@ -2985,11 +2985,11 @@ if civBE_mode then
 		return s;
 	end
 
-	----------------------------------------------------------------
-	----------------------------------------------------------------
-	-- UNIT PERKS
-	----------------------------------------------------------------
-	----------------------------------------------------------------
+
+
+
+
+
 
 	local function ComposeUnitPerkNumberHelpText(perkIDTable, textKey, numberKey, firstEntry, prefix)
 		local s = "";
@@ -3069,7 +3069,7 @@ if civBE_mode then
 	function GetHelpTextForUnitPerks(perkIDTable, ignoreCoreStats, prefix)
 		local s = "";
 
-		-- Text key overrides
+
 		local filteredPerkIDTable = {};
 		for _, perkID in ipairs(perkIDTable) do
 			local perkInfo = GameInfo.UnitPerks[perkID];
@@ -3088,7 +3088,7 @@ if civBE_mode then
 			end
 		end
 
-		-- Basic Attributes
+
 		if not ignoreCoreStats then
 			s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_EXTRA_COMBAT_STRENGTH", "ExtraCombatStrength", s == "", prefix);
 			s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_EXTRA_RANGED_COMBAT_STRENGTH", "ExtraRangedCombatStrength", s == "", prefix);
@@ -3103,7 +3103,7 @@ if civBE_mode then
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_VISIBILITY_CHANGE", "VisibilityChange", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_CARGO_CHANGE", "CargoChange", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_RANGE_AGAINST_ORBITAL_CHANGE", "RangeAgainstOrbitalChange", s == "", prefix);
-		-- General combat
+
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_ATTACK_MOD", "AttackMod", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_ATTACK_FORTIFIED_MOD", "AttackFortifiedMod", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_ATTACK_WOUNDED_MOD", "AttackWoundedMod", s == "", prefix);
@@ -3114,42 +3114,42 @@ if civBE_mode then
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_DEFEND_RANGED_MOD", "DefendRangedMod", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_DEFEND_WHILE_IN_MIASMA_MOD", "DefendWhileInMiasmaMod", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_DEFEND_FOR_ONBOARD_MOD", "DefendForOnboardMod", s == "", prefix);
-		-- Air combat
+
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_ATTACK_WITH_AIR_SWEEP_MOD", "AttackWithAirSweepMod", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_ATTACK_WITH_INTERCEPTION_MOD", "AttackWithInterceptionMod", s == "", prefix);
-		-- Territory
+
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_FRIENDLY_LANDS_MOD", "FriendlyLandsMod", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_OUTSIDE_FRIENDLY_LANDS_MOD", "OutsideFriendlyLandsMod", s == "", prefix);
-		-- Battlefield position
+
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_ADJACENT_FRIENDLY_MOD", "AdjacentFriendlyMod", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_PER_ADJACENT_FRIENDLY_MOD", "PerAdjacentFriendlyMod", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_NO_ADJACENT_FRIENDLY_MOD", "NoAdjacentFriendlyMod", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_FLANKING_MOD", "FlankingMod", s == "", prefix);
-		-- Other conditional bonuses
+
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_ALIEN_COMBAT_MOD", "AlienCombatMod", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_FORTIFIED_MOD", "FortifiedMod", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_CITY_MOD", "CityMod", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_PER_UNUSED_MOVE_MOD", "PerUnusedMoveMod", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_DAMAGE_TO_ADJACENT_UNITS_ON_DEATH", "DamageToAdjacentUnitsOnDeath", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_DAMAGE_TO_ADJACENT_UNITS_ON_ATTACK", "DamageToAdjacentUnitsOnAttack", s == "", prefix);
-		-- Attack logistics
+
 		s = s .. ComposeUnitPerkFlagHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_IGNORE_RANGED_ATTACK_LINE_OF_SIGHT", "IgnoreRangedAttackLineOfSight", s == "", prefix);
 		s = s .. ComposeUnitPerkFlagHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_MELEE_ATTACK_HEAVY_CHARGE", "MeleeAttackHeavyCharge", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_EXTRA_ATTACKS", "ExtraAttacks", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_EXTRA_INTERCEPTIONS", "ExtraInterceptions", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_RANGED_ATTACK_SETUPS_NEEDED_MOD", "RangedAttackSetupsNeededMod", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_RANGED_ATTACK_SCATTER_CHANCE_MOD", "RangedAttackScatterChanceMod", s == "", prefix);
-		-- Movement logistics
+
 		s = s .. ComposeUnitPerkFlagHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_MOVE_AFTER_ATTACKING", "MoveAfterAttacking", s == "", prefix);
 		s = s .. ComposeUnitPerkFlagHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_IGNORE_TERRAIN_COST", "IgnoreTerrainCost", s == "", prefix);
 		s = s .. ComposeUnitPerkFlagHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_IGNORE_PILLAGE_COST", "IgnorePillageCost", s == "", prefix);
 		s = s .. ComposeUnitPerkFlagHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_IGNORE_ZONE_OF_CONTROL", "IgnoreZoneOfControl", s == "", prefix);
 		s = s .. ComposeUnitPerkFlagHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_FLAT_MOVEMENT_COST", "FlatMovementCost", s == "", prefix);
 		s = s .. ComposeUnitPerkFlagHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_MOVE_ANYWHERE", "MoveAnywhere", s == "", prefix);
-		-- Don't show "Hover", since it is redundant with the descriptions for "FlatMovementCost" and "MoveAnywhere"
+
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_WITHDRAW_FROM_MELEE_CHANCE_MOD", "WithdrawFromMeleeChanceMod", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_FREE_REBASES", "FreeRebases", s == "", prefix);
-		-- Healing
+
 		s = s .. ComposeUnitPerkFlagHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_ALWAYS_HEAL", "AlwaysHeal", s == "", prefix);
 		s = s .. ComposeUnitPerkFlagHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_HEAL_OUTSIDE_FRIENDLY_TERRITORY", "HealOutsideFriendlyTerritory", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_ENEMY_HEAL_CHANGE", "EnemyHealChange", s == "", prefix);
@@ -3160,13 +3160,13 @@ if civBE_mode then
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_SAME_TILE_HEAL_CHANGE", "SameTileHealChange", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_KILL_UNIT_HEAL_CHANGE", "KillUnitHealChange", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_PILLAGE_HEAL_CHANGE", "PillageHealChange", s == "", prefix);
-		-- Orbital layer
+
 		s = s .. ComposeUnitPerkFlagHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_GENERATE_MIASMA_IN_ORBIT", "GenerateMiasmaInOrbit", s == "", prefix);
 		s = s .. ComposeUnitPerkFlagHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_ALLOW_MANUAL_DEORBIT", "AllowManualDeorbit", s == "", prefix);
 		s = s .. ComposeUnitPerkNumberHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_ORBITAL_COVERAGE_RADIUS_CHANGE", "OrbitalCoverageRadiusChange", s == "", prefix);
-		-- Attrition
-		-- Actions
-		-- Domain combat mods
+
+
+
 		s = s .. ComposeUnitPerkDomainCombatModHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_DOMAIN_COMBAT_MOD_LAND", "DOMAIN_LAND", s == "", prefix);
 		s = s .. ComposeUnitPerkDomainCombatModHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_DOMAIN_COMBAT_MOD_SEA", "DOMAIN_SEA", s == "", prefix);
 		s = s .. ComposeUnitPerkDomainCombatModHelpText(filteredPerkIDTable, "TXT_KEY_UNITPERK_DOMAIN_COMBAT_MOD_AIR", "DOMAIN_AIR", s == "", prefix);
@@ -3179,11 +3179,11 @@ if civBE_mode then
 		return GetHelpTextForUnitPerks( {perkID}, false )
 	end
 
-	----------------------------------------------------------------
-	----------------------------------------------------------------
-	-- VIRTUES
-	----------------------------------------------------------------
-	----------------------------------------------------------------
+
+
+
+
+
 
 	local function ComposeVirtueNumberHelpText(virtueIDTable, textKey, numberKey, firstEntry, postProcessFunction)
 		local s = "";
@@ -3361,9 +3361,9 @@ if civBE_mode then
 	local function GetHelpTextForVirtues(virtueIDTable)
 		local s = "";
 
-		-- Post-processing functions to display values more clearly to player
+
 		local divByHundred = function(number)
-			-- Some database values are in multiplied by 100 to match game core usage
+
 			number = number * 0.01;
 			return number;
 		end;
@@ -3377,7 +3377,7 @@ if civBE_mode then
 				gameSpeedResearchMod = Game.GetResearchPercent() / 100;
 			end
 			number = number * gameSpeedResearchMod;
-			number = math_floor(number); -- for display, truncate trailing decimals
+			number = math_floor(number);
 			return number;
 		end;
 
@@ -3385,10 +3385,10 @@ if civBE_mode then
 
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_BARBARIAN_COMBAT_BONUS", "BarbarianCombatBonus", s == "");
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_RESEARCH_FROM_BARBARIAN_KILLS", "ResearchFromBarbarianKills", s == "");
-		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_RESEARCH_FROM_BARBARIAN_CAMPS", "ResearchFromBarbarianCamps", s == "", modByGameResearchSpeed); --value modified by game speed
+		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_RESEARCH_FROM_BARBARIAN_CAMPS", "ResearchFromBarbarianCamps", s == "", modByGameResearchSpeed);
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_EXP_MODIFIER", "ExpModifier", s == "");
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_MILITARY_PRODUCTION_MODIFIER", "MilitaryProductionModifier", s == "");
-		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_HEALTH_PER_MILITARY_UNIT_TIMES_100", "HealthPerMilitaryUnitTimes100", s == "", divByHundred); --value in hundredths
+		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_HEALTH_PER_MILITARY_UNIT_TIMES_100", "HealthPerMilitaryUnitTimes100", s == "", divByHundred);
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_TECH_AFFINITY_XP_MODIFIER", "TechAffinityXPModifier", s == "");
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_COVERT_OPS_INTRIGUE_MODIFIER", "CovertOpsIntrigueModifier", s == "");
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_NUM_FREE_AFFINITY_LEVELS", "NumFreeAffinityLevels", s == "");
@@ -3402,12 +3402,12 @@ if civBE_mode then
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_WORKER_SPEED_MODIFIER", "WorkerSpeedModifier", s == "");
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_PLOT_CULTURE_COST_MODIFIER", "PlotCultureCostModifier", s == "");
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_EXPLORER_EXPEDITION_CHARGES", "ExplorerExpeditionCharges", s == "");
-		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_LAND_TRADE_ROUTE_GOLD_CHANGE", "LandTradeRouteGoldChange", s == "", divByHundred); --value in hundredths
-		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_SEA_TRADE_ROUTE_GOLD_CHANGE", "SeaTradeRouteGoldChange", s == "", divByHundred); --value in hundredths
+		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_LAND_TRADE_ROUTE_GOLD_CHANGE", "LandTradeRouteGoldChange", s == "", divByHundred);
+		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_SEA_TRADE_ROUTE_GOLD_CHANGE", "SeaTradeRouteGoldChange", s == "", divByHundred);
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_NEW_CITY_EXTRA_POPULATION", "NewCityExtraPopulation", s == "");
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_EXTRA_HEALTH", "ExtraHealth", s == "");
-		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_EXTRA_HEALTH_PER_LUXURY", "HealthPerBasicResourceTypeTimes100", s == "", divByHundred); --value in hundredths
-		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_UNHEALTH_MOD", "UnhealthMod", s == "", flipSign); --less confusing to show as a positive number in text
+		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_EXTRA_HEALTH_PER_LUXURY", "HealthPerBasicResourceTypeTimes100", s == "", divByHundred);
+		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_UNHEALTH_MOD", "UnhealthMod", s == "", flipSign);
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_RESEARCH_MOD_PER_EXTRA_CONNECTED_TECH", "ResearchModPerExtraConnectedTech", s == "");
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_HEALTH_TO_SCIENCE", "HealthToScience", s == "");
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_HEALTH_TO_CULTURE", "HealthToCulture", s == "");
@@ -3423,17 +3423,17 @@ if civBE_mode then
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_WONDER_PRODUCTION_MODIFIER", "WonderProductionModifier", s == "");
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_BUILDING_ALREADY_IN_CAPITAL_MODIFIER", "BuildingAlreadyInCapitalModifier", s == "");
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_INTERNAL_TRADE_ROUTE_YIELD_MODIFIER", "InternalTradeRouteYieldModifier", s == "");
-		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_HEALTH_PER_TRADE_ROUTE_TIMES_100", "HealthPerTradeRouteTimes100", s == "", divByHundred); --value in hundredths
+		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_HEALTH_PER_TRADE_ROUTE_TIMES_100", "HealthPerTradeRouteTimes100", s == "", divByHundred);
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_ORBITAL_PRODUCTION_MODIFIER", "OrbitalProductionModifier", s == "");
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_ORBITAL_DURATION_MODIFIER", "OrbitalDurationModifier", s == "");
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_UNIT_PURCHASE_COST_MODIFIER", "UnitPurchaseCostModifier", s == "");
-		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_HEALTH_PER_BUILDING_TIMES_100", "HealthPerBuildingTimes100", s == "", divByHundred); --value in hundredths
+		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_HEALTH_PER_BUILDING_TIMES_100", "HealthPerBuildingTimes100", s == "", divByHundred);
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_EXTRA_HEALTH_PER_CITY", "ExtraHealthPerCity", s == "");
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_NUM_FREE_TECHS", "NumFreeTechs", s == "");
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_NUM_FREE_POLICIES", "NumFreePolicies", s == "");
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_NUM_FREE_COVERT_AGENTS", "NumFreeCovertAgents", s == "");
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_ORBITAL_COVERAGE_MODIFIER", "OrbitalCoverageModifier", s == "");
-		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_RESEARCH_FROM_EXPEDITIONS", "ResearchFromExpeditions", s == "", modByGameResearchSpeed); --value modified by game speed
+		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_RESEARCH_FROM_EXPEDITIONS", "ResearchFromExpeditions", s == "", modByGameResearchSpeed);
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_CITY_GROWTH_MOD", "CityGrowthMod", s == "");
 		s = s .. ComposeVirtueNumberHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_CAPITAL_GROWTH_MOD", "CapitalGrowthMod", s == "");
 
@@ -3442,7 +3442,7 @@ if civBE_mode then
 		s = s .. ComposeVirtueYieldHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_YIELD_MODIFIER", "Policy_YieldModifiers", s == "");
 		s = s .. ComposeVirtueYieldHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_CAPITAL_YIELD_MODIFIER", "Policy_CapitalYieldModifiers", s == "");
 		s = s .. ComposeVirtueYieldHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_CITY_YIELD_CHANGE", "Policy_CityYieldChanges", s == "");
-		s = s .. ComposeVirtueYieldHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_CITY_YIELD_PER_POP_CHANGE", "Policy_CityYieldPerPopChanges", s == "", divByHundred); --value in hundredths
+		s = s .. ComposeVirtueYieldHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_CITY_YIELD_PER_POP_CHANGE", "Policy_CityYieldPerPopChanges", s == "", divByHundred);
 		s = s .. ComposeVirtueYieldHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_CAPITAL_YIELD_CHANGE", "Policy_CapitalYieldChanges", s == "");
 		s = s .. ComposeVirtueYieldHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_SPECIALIST_EXTRA_YIELD", "Policy_SpecialistExtraYields", s == "");
 		s = s .. ComposeVirtueYieldHelpText(virtueIDTable, "TXT_KEY_POLICY_EFFECT_TRADE_ROUTE_WITH_STATION_PER_TIER_YIELD_CHANGE", "Policy_TradeRouteWithStationPerTierYieldChanges", s == "");
@@ -3461,11 +3461,11 @@ if civBE_mode then
 		return GetHelpTextForVirtues{virtueID}
 	end
 
-	----------------------------------------------------------------
-	----------------------------------------------------------------
-	-- AFFINITIES
-	----------------------------------------------------------------
-	----------------------------------------------------------------
+
+
+
+
+
 	function TT.GetHelpTextForAffinity(affinityID, player)
 		local s = "";
 		local affinityInfo = GameInfo.Affinity_Types[affinityID]
@@ -3473,13 +3473,13 @@ if civBE_mode then
 
 			local currentLevel = -1;
 			if player then
-				-- Current level
+
 				s = s .. L("TXT_KEY_AFFINITY_STATUS_DETAIL", tostring(affinityInfo.IconString), affinityInfo.ColorType, affinityInfo.Description, player:GetAffinityLevel(affinityInfo.ID));
 				s = s .. "[NEWLINE][NEWLINE]";
 				currentLevel = player:GetAffinityLevel(affinityID);
 			end
 
-			-- Player perks we can earn
+
 			local firstEntry = true;
 			for levelInfo in GameInfo.Affinity_Levels() do
 				local levelText = GetHelpTextForAffinityLevel(affinityID, levelInfo.ID);
@@ -3504,7 +3504,7 @@ if civBE_mode then
 				local nextLevel = player:GetAffinityLevel(affinityID) + 1;
 				local nextLevelInfo = GameInfo.Affinity_Levels[nextLevel];
 
-				-- Progress towards next level
+
 				if nextLevelInfo then
 					s = s .. "[NEWLINE][NEWLINE]";
 					s = s .. L("TXT_KEY_AFFINITY_STATUS_PROGRESS", player:GetAffinityScoreTowardsNextLevel(affinityInfo.ID), player:CalculateAffinityScoreNeededForNextLevel(affinityInfo.ID));
@@ -3513,11 +3513,11 @@ if civBE_mode then
 					s = s .. L("TXT_KEY_AFFINITY_STATUS_MAX_LEVEL");
 				end
 
-				-- Dominance
+
 				local isDominant = affinityInfo.ID == player:GetDominantAffinityType();
 				if nextLevelInfo then
 					local penalty = nextLevelInfo.AffinityValueNeededAsNonDominant - nextLevelInfo.AffinityValueNeededAsDominant;
-					-- Only show dominance once we are at the point where the level curve diverges
+
 					if penalty > 0 then
 						if isDominant then
 							s = s .. "[NEWLINE][NEWLINE]";
@@ -3528,7 +3528,7 @@ if civBE_mode then
 						end
 					end
 				elseif isDominant then
-					-- Or once we have reached max level
+
 					s = s .. "[NEWLINE][NEWLINE]";
 					s = s .. L("TXT_KEY_AFFINITY_STATUS_DOMINANT");
 				end
@@ -3538,31 +3538,31 @@ if civBE_mode then
 	end
 
 	local g_playerPerkKey = { [GameInfoTypes.AFFINITY_TYPE_HARMONY] = "HarmonyPlayerPerk", [GameInfoTypes.AFFINITY_TYPE_PURITY] = "PurityPlayerPerk", [GameInfoTypes.AFFINITY_TYPE_SUPREMACY] = "SupremacyPlayerPerk" }
-	-- Does not include unit upgrade unlocks
+
 	function GetHelpTextForAffinityLevel( affinityID, affinityLevel )
 		local tips = table()
 		local affinityInfo = GameInfo.Affinity_Types[ affinityID ]
 		local affinityLevelInfo = GameInfo.Affinity_Levels[ affinityLevel ]
 		if affinityInfo and affinityLevelInfo then
 
-			-- Gained a Player Perk?
+
 			local perkInfo = GameInfo.PlayerPerks[ affinityLevelInfo[ g_playerPerkKey[affinityID] ] ]
 			tips:insertLocalizedIf( perkInfo and perkInfo.Help )
 
-			-- Unlocked Covert Ops?
+
 			for row in GameInfo.CovertOperation_AffinityPrereqs{ AffinityType = affinityInfo.Type, Level = affinityLevel } do
 				local covertOpInfo = GameInfo.CovertOperations[ row.CovertOperationType ] or {}
 				tips:insertLocalized( "TXT_KEY_AFFINITY_LEVEL_UP_DETAILS_COVERT_OP_UNLOCKED", covertOpInfo.Description )
 			end
 
-			-- Unlocked Projects (for Victory)?
+
 			for row in GameInfo.Project_AffinityPrereqs{ AffinityType = affinityInfo.Type, Level = affinityLevel } do
 				local projectInfo = GameInfo.Projects[ row.ProjectType ] or {}
 				local victoryInfo = GameInfo.Victories[ projectInfo.VictoryPrereq ] or {}
 				tips:insertLocalized( "TXT_KEY_AFFINITY_LEVEL_UP_DETAILS_PROJECT_UNLOCKED", projectInfo.Description, victoryInfo.Description )
 			end
 
-			-- Unlocked Units
+
 			for affinity in GameInfo.Unit_AffinityPrereqs{ AffinityType = affinityInfo.Type, Level = affinityLevel } do
 				local unit = GameInfo.Units[affinity.UnitType]
 				if unit then
@@ -3576,7 +3576,7 @@ if civBE_mode then
 				end
 			end
 
-			-- Unlocked Buildings
+
 			for affinity in GameInfo.Building_AffinityPrereqs{ AffinityType = affinityInfo.Type, Level = affinityLevel } do
 				local building = GameInfo.Buildings[ affinity.BuildingType ]
 				tips:insertIf( building and BuildingColor( L(building.Description) ) )

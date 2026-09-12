@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_BUILDER_TASKING_AI_H
@@ -13,22 +13,22 @@
 #define SAFE_ESTIMATE_NUM_EXTRA_PLOTS 64
 
 class CvPlayer;
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvBuilderTaskingAI
-//!  \brief		Deals with what builders need to deal with
-//
-//!  Key Attributes:
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
 struct BuilderDirective
 {
 	typedef enum BuilderDirectiveType
 	{
-	    BUILD_IMPROVEMENT_ON_RESOURCE, // enabling a special resource
-	    BUILD_IMPROVEMENT,			   // improving a tile
-	    BUILD_ROUTE,				   // build a route on a tile
-	    REPAIR,						   // repairing a pillaged route or improvement
-	    CHOP,						   // remove a feature to improve production
-	    REMOVE_ROAD,				   // remove a road from a plot
+	    BUILD_IMPROVEMENT_ON_RESOURCE,
+	    BUILD_IMPROVEMENT,
+	    BUILD_ROUTE,
+	    REPAIR,
+	    CHOP,
+	    REMOVE_ROAD,
 	    NUM_DIRECTIVES
 #ifdef AUI_WARNING_FIXES
 	} _BuilderDirectiveType;
@@ -57,7 +57,7 @@ struct BuilderDirective
 	short m_sX;
 	short m_sY;
 #endif
-	//int m_iGoldCost;
+
 #ifdef AUI_WARNING_FIXES
 	int m_sMoveTurnsAway;
 #else
@@ -65,12 +65,12 @@ struct BuilderDirective
 #endif
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvBuilderTaskingAI
-//!  \brief		Deals with what builders need to deal with
-//
-//!  Key Attributes:
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
 class CvBuilderTaskingAI
 {
 public:
@@ -80,12 +80,14 @@ public:
 	void Init(CvPlayer* pPlayer);
 	void Uninit(void);
 
-	//// Serialization routines
+
 	void Read(FDataStream& kStream);
 	void Write(FDataStream& kStream);
 
 	void Update(void);
 	void UpdateRoutePlots(void);
+	static void ClearBuildTypeCache();
+	static void CacheBuildTypes();
 
 	bool EvaluateBuilder(CvUnit* pUnit, BuilderDirective* paDirectives, UINT uaDirectives, bool bKeepOnlyBest = false, bool bOnlyEvaluateWorkersPlot = false);
 
@@ -100,8 +102,8 @@ public:
 	void AddRemoveUselessRoadDirectives(CvUnit* pUnit, CvPlot* pPlot, int iMoveTurnsAway);
 	void AddScrubFalloutDirectives(CvUnit* pUnit, CvPlot* pPlot, int iMoveTurnsAway);
 
-	bool ShouldBuilderConsiderPlot(CvUnit* pUnit, CvPlot* pPlot);  // determines all the logistics if the builder should get to the plot
-	int FindTurnsAway(CvUnit* pUnit, CvPlot* pPlot);  // returns -1 if no path can be found, otherwise it returns the # of turns to get there
+	bool ShouldBuilderConsiderPlot(CvUnit* pUnit, CvPlot* pPlot);
+	int FindTurnsAway(CvUnit* pUnit, CvPlot* pPlot);
 
 	int GetBuildCostWeight(int iWeight, CvPlot* pPlot, BuildTypes eBuild);
 	int GetBuildTimeWeight(CvUnit* pUnit, CvPlot* pPlot, BuildTypes eBuild, bool bIgnoreFeatureTime = false, int iAdditionalTime = 0);
@@ -128,7 +130,7 @@ public:
 	BuildTypes GetFalloutRemove() const;
 #else
 	BuildTypes GetBuildTypeFromImprovement(ImprovementTypes eImprovement);
-	//static YieldTypes GetDeficientYield (CvCity* pCity, bool bIgnoreHappiness = false); // this is different from the CityStrategy one because it checks unhappiness before declaring a food emergency
+
 	BuildTypes GetRepairBuild(void);
 	FeatureTypes GetFalloutFeature(void);
 	BuildTypes GetFalloutRemove(void);
@@ -136,16 +138,16 @@ public:
 
 #ifdef AUI_WARNING_FIXES
 	static void LogInfo(const CvString& str, CvPlayer* pPlayer, bool bWriteToOutput = false);
-	static void LogYieldInfo(const CvString& strNewLogStr, CvPlayer* pPlayer); //Log yield related info to BuilderTaskingYieldLog.csv.
+	static void LogYieldInfo(const CvString& strNewLogStr, CvPlayer* pPlayer);
 #else
 	static void LogInfo(CvString str, CvPlayer* pPlayer, bool bWriteToOutput = false);
-	static void LogYieldInfo(CvString strNewLogStr, CvPlayer* pPlayer); //Log yield related info to BuilderTaskingYieldLog.csv.
+	static void LogYieldInfo(CvString strNewLogStr, CvPlayer* pPlayer);
 #endif
 
 	static CvWeightedVector<BuilderDirective, 100, true> m_aDirectives;
-	static FStaticVector<int, SAFE_ESTIMATE_NUM_EXTRA_PLOTS, true, c_eCiv5GameplayDLL, 0> m_aiNonTerritoryPlots; // plots that we need to evaluate that are outside of our territory
+	static FStaticVector<int, SAFE_ESTIMATE_NUM_EXTRA_PLOTS, true, c_eCiv5GameplayDLL, 0> m_aiNonTerritoryPlots;
 
-	//---------------------------------------PROTECTED MEMBER VARIABLES---------------------------------
+
 protected:
 
 	void LogFlavors(FlavorTypes eFlavor);
@@ -177,4 +179,4 @@ protected:
 #endif
 };
 
-#endif //CIV5_BUILDER_TASKING_AI_H
+#endif

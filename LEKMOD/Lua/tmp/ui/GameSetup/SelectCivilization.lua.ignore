@@ -1,17 +1,17 @@
--------------------------------------------------
--- Select Civilization
--------------------------------------------------
+
+
+
 include( "UniqueBonuses" );
 
-------------------------------------------------
--- Global Variables
-------------------------------------------------
+
+
+
 g_bIsScenario = false;
 g_bWasScenario = true;
 g_bRefreshCivs = false;
   
--------------------------------------------------
--------------------------------------------------
+
+
 function OnBack()
 	UIManager:DequeuePopup( ContextPtr );
 	ContextPtr:SetHide( true );
@@ -19,8 +19,8 @@ end
 Controls.BackButton:RegisterCallback( Mouse.eLClick, OnBack );
 
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function ShowHideHandler( bIsHide )
 
 	local isWBMap = IsWBMap(PreGame.GetMapScript());
@@ -39,15 +39,15 @@ function ShowHideHandler( bIsHide )
 end
 ContextPtr:SetShowHideHandler( ShowHideHandler );
 
-----------------------------------------------------------------        
----------------------------------------------------------------- 
+
+
 function IsWBMap(file)
 	return Path.UsesExtension(file,".Civ5Map"); 
 end
 
-----------------------------------------------------------------        
--- Input processing
-----------------------------------------------------------------        
+
+
+
 function InputHandler( uiMsg, wParam, lParam )
     if uiMsg == KeyEvents.KeyDown then
         if wParam == Keys.VK_ESCAPE then
@@ -59,9 +59,9 @@ end
 ContextPtr:SetInputHandler( InputHandler );
 
 
-----------------------------------------------------------------        
--- set the Civ
-----------------------------------------------------------------        
+
+
+
 function CivilizationSelected( civID, scenarioPlayerID )
     PreGame.SetCivilization( 0, civID );
     if g_bIsScenario then
@@ -80,9 +80,9 @@ function CivilizationSelected( civID, scenarioPlayerID )
 end
 
 function AddRandomCivilizationEntry()
-	------------------------------------------------------------------------------------------------
-	-- set up the random slot
-	------------------------------------------------------------------------------------------------
+
+
+
 	local controlTable = {};
 	ContextPtr:BuildInstanceForControl( "ItemInstance", controlTable, Controls.Stack );
 	controlTable.Button:SetVoid1( -1 );
@@ -97,10 +97,10 @@ function AddRandomCivilizationEntry()
 		controlTable.CivIcon:SetTextureOffset( questionOffset );
 	end
 		
-	-- Sets Trait bonus Text
+
 	controlTable.BonusDescription:SetText( "" );
 
-	 -- Sets Bonus Icons
+
 	local maxSmallButtons = 2;
 	for buttonNum = 1, maxSmallButtons, 1 do
 		local buttonName = "B"..tostring(buttonNum);
@@ -129,7 +129,7 @@ function AddCivilizationEntry(traitsQuery, populateUniqueBonuses, civ, leaderTyp
 		controlTable.CivIcon:SetTextureOffset( textureOffset );
 	end
     
-    -- Sets Trait bonus Text
+
 	local shortDescription = "";
 	
 	for row in traitsQuery(leaderType) do
@@ -191,10 +191,10 @@ function InitCivSelection()
 				end
 			end
 			
-			-- Sort by leader description;
-			-- table.sort(civEntries, function(a, b) return Locale.Compare(a[1], b[1]) == -1 end);
 
-			-- Sorting Civs by Short Description
+
+
+
 			table.sort(civEntries, function(a,b)
 				local astr = a[1];
 				local bstr = b[1];
@@ -211,7 +211,7 @@ function InitCivSelection()
 				end
 				return Locale.Compare(a0, b0) == -1;
 			end);
-			-- Sorting Civs by Short Description END
+
 			
 			for i,v in ipairs(civEntries) do
 				local row = v[2];
@@ -244,10 +244,10 @@ function InitCivSelection()
 			table.insert(civEntries, {Locale.Lookup(row.ShortDescription), row});
 		end
 		
-		-- Sort by leader description;
-		-- table.sort(civEntries, function(a, b) return Locale.Compare(a[1], b[1]) == -1 end);
 
-		-- Sorting Civs by Short Description
+
+
+
 		table.sort(civEntries, function(a,b)
 			local astr = a[1];
 			local bstr = b[1];
@@ -264,7 +264,7 @@ function InitCivSelection()
 			end
 			return Locale.Compare(a0, b0) == -1;
 		end);
-		-- Sorting Civs by Short Description END
+
 		
 		for i,v in ipairs(civEntries) do
 			local row = v[2];

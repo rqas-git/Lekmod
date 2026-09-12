@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/9/2015 11:46:09 PM -->
+
 <GameData>
 
-	<!-- PROFESSIONAL ARMY -->
+
 	<Policies>
 		<Update>
 			<Set UnitUpgradeCostMod="0" />

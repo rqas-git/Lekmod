@@ -1,13 +1,13 @@
--------------------------------------------------------------------
--- edit: extended replay messages for EUI & vanilla UI
--------------------------------------------------------------------
+
+
+
 include("InstanceManager");
 include("IconSupport");
 include("GameCalendarUtilities.lua");
 
--------------------------------------------------------------------
--- Color Utilities
--------------------------------------------------------------------
+
+
+
 local function ColorIsWhite(color)
 	return color.Red == 1 and color.Blue == 1 and color.Green == 1;
 end
@@ -147,9 +147,9 @@ local function ColorFromHSL(hue, sat, lum)
     return {Red = r, Green = g, Blue = b, Alpha = 1};
 end
 
----------------------------------------------------------------
--- Globals
-----------------------------------------------------------------
+
+
+
 g_bIsEndGame = (ContextPtr:GetID() == "EndGameReplay"); 
 
 g_GraphVerticalMarkers = {
@@ -181,9 +181,9 @@ Panels = {
 		Panel = Controls.MessagesPanel,
 		Refresh = function(panel)
 		
-			-- First, determine the best player colors to use.
-			-- Certain players use dark player colors and as such we can't use that as the text color on 
-			-- a black background :(				
+
+
+
 			local function MakeColorVector(c) 
 				return {
 					x = c.Red,
@@ -212,11 +212,11 @@ Panels = {
 				
 				print(l);
 				if(l < 0.4) then
-					--usedColor = ColorFromHSL(h, s, 0.5);
-					--print("CONVERT");
-					--print(usedColor.Red);
-					--print(usedColor.Blue);
-					--print(usedColor.Green);
+
+
+
+
+
 				end
 				
 				
@@ -244,7 +244,7 @@ Panels = {
 				
 					messageInstance.MessageText2:SetHide(true);
 				
-					-- NEW: extended replay messages -- add timestamp
+
 					local text = "T" .. tostring(message.Turn) .. " (" .. (message.Timestamp / 1000) .. "s) - " .. message.Text;
 										
 					if(message.Player > -1) then					
@@ -254,13 +254,13 @@ Panels = {
 							
 								local h,s,l = HSLFromColor(colorVector.x, colorVector.y, colorVector.z);
 				
-							--	print(l);
+
 								if(l < 0.4) then
-									--usedColor = ColorFromHSL(h, s, 0.5);
-									--print("CONVERT");
-									--print(usedColor.Red);
-									--print(usedColor.Blue);
-									--print(usedColor.Green);
+
+
+
+
+
 									messageInstance.MessageText2:SetHide(false);
 								end
 											
@@ -287,7 +287,7 @@ Panels = {
 				end				
 			end
 			
-			-- Add empty text to padd the bottom.
+
 			local bottomPadding = g_ReplayMessageInstanceManager:GetInstance();
 			bottomPadding.MessageText:SetText(" ");
 			
@@ -310,7 +310,7 @@ Panels = {
 		PlayerGraphColors = {},
 		
 		
-		-- This method will pad the horizontal values if they are too small so that they show up correctly
+
 		PadHorizontalValues = function(minTurn, maxTurn)
 			local range = maxTurn - minTurn;
 			local numHorizontalMarkers = #g_GraphHorizontalMarkers - 1;
@@ -323,7 +323,7 @@ Panels = {
 		
 		CreateUpdateHandler = function(panel)
 
-			--Calculate the graph's bounding rect in absolute coords (kinda a hack since this sasumes the con)
+
 			local screenX, screenY = UIManager:GetScreenSizeVal();
 			
 			local xAbsoluteOffset = (screenX * 0.5) - (Controls.MainPanel:GetSizeX() * 0.5);
@@ -444,7 +444,7 @@ Panels = {
 					return lineSegment;
 				end
 				
-				-- First, gather only the data we require and adjust the turn.
+
 				local turnData = {};
 				for i, v in pairs(playerInfo.Scores) do
 					local value = v[scoreType];
@@ -453,7 +453,7 @@ Panels = {
 					end
 				end
 								
-				-- Second, reduce set down to fixed increments by lerping
+
 				function lerp(y1,y2,x)
 					return y1 + (y2-y1)*x;
 				end
@@ -477,7 +477,7 @@ Panels = {
 					end	
 				end
 				
-				-- Third, draw line segments!				
+
 				for i = 1, numSegments, 1 do
 					local y1 = incrementData[i];
 					local y2 = incrementData[i+1];
@@ -494,7 +494,7 @@ Panels = {
 						local endX = math.floor((i/(numVerts-1)) * graphWidth);
 						local endY = math.floor((y2 - yOffset) * yScale);		
 					
-						-- inverse Y
+
 						endY = graphHeight - endY;
 					
 						lineSegment.LineSegment:SetEndVal(endX, endY);
@@ -504,7 +504,7 @@ Panels = {
 				return lineSegments;
 			end	
 			
-			-- Determine the maximum score for all players
+
 			local maxScore = 0;
 			local minScore = nil;
 			for i,v in ipairs(playerInfos) do
@@ -522,11 +522,11 @@ Panels = {
 				end
 			end
 			
-			if(minScore ~= nil) then	-- this usually means that there were no values for that dataset.
+			if(minScore ~= nil) then
 				
 				Controls.NoGraphData:SetHide(true);
 				
-				--We want a value that is nicely divisible by the number of vertical markers
+
 				local numSegments = #g_GraphVerticalMarkers - 1;
 				local range = maxScore - minScore;
 				local newRange = range + numSegments - range % numSegments;		
@@ -579,14 +579,14 @@ Panels = {
 								
 				for i,v in ipairs(g_GraphHorizontalMarkers) do
 					if(i == #g_GraphHorizontalMarkers) then
-						--v:SetText(GetShortDateString(finalTurn, calendarType, gameSpeedType, startYear));
+
 						v:SetText(Locale.ConvertTextKey("TXT_KEY_TP_TURN_COUNTER", finalTurn));
 					else
 						local turnIncrement = math.floor((i - 1) * turnIncrements) + minTurn;
 						if(turnIncrement < initialTurn) then
 							v:SetText("");	
 						else
-							--v:SetText(GetShortDateString(turnIncrement, calendarType, gameSpeedType, startYear));
+
 							v:SetText(Locale.ConvertTextKey("TXT_KEY_TP_TURN_COUNTER", turnIncrement));
 						end
 					end
@@ -602,7 +602,7 @@ Panels = {
 					local colorDistanceTable = colorDistances[color1.Type];
 					if(colorDistanceTable == nil) then
 						colorDistanceTable = {
-							[color1.Type] = 0;	--We can assume the distance of a color to itself is 0.
+							[color1.Type] = 0;
 						};
 						
 						colorDistances[color1.Type] = colorDistanceTable
@@ -649,15 +649,15 @@ Panels = {
 					return false;
 				end
 					
-				--[[function DetermineGraphColor(playerColor)
-					if(IsUniqueColor(GameInfo.Colors[playerColor.PrimaryColor])) then
-						return GameInfo.Colors[playerColor.PrimaryColor];
-					elseif(IsUniqueColor(GameInfo.Colors[playerColor.SecondaryColor])) then
-						return GameInfo.Colors[playerColor.SecondaryColor];
-					else
-						--error("Could not find a unique color");
-						return {Type = "COLOR_GREEN", Red = 0, Green = 1, Blue = 0, Alpha = 1,};
-					end--]]
+
+
+
+
+
+
+
+
+
 				function DetermineGraphColor(i)
 					local playernum = i;
 					local hue = 0;
@@ -679,7 +679,7 @@ Panels = {
 					
 					IconHookup( civ.PortraitIndex, 32, civ.IconAtlas, graphLegendInstance.LegendIcon );
 					
-					--local color = DetermineGraphColor(GameInfo.PlayerColors[player.PlayerColor]);
+
 					local color = DetermineGraphColor(i);
 					panel.PlayerGraphColors[i] = color;
 									
@@ -691,7 +691,7 @@ Panels = {
 						graphLegendInstance.LegendName:LocalizeAndSetText(civ.ShortDescription);
 					end	
 					
-					-- Default city states to be unchecked.
+
 					local checked = civ.Type ~= "CIVILIZATION_MINOR";
 					graphLegendInstance.ShowHide:SetCheck(checked);
 					
@@ -738,7 +738,7 @@ Panels = {
 				Red = 0, Green = 0, Blue = 0, Alpha = 0
 			};
 			
-			-- Cache the player colors in a more usable structure.
+
 			local playerColors = {};
 			local minorCiv = GameInfo.Civilizations["CIVILIZATION_MINOR"];
 			
@@ -748,7 +748,7 @@ Panels = {
 				local primaryColor = GameInfo.Colors[playerColor.PrimaryColor];
 				local secondaryColor = GameInfo.Colors[playerColor.SecondaryColor];
 				
-				-- Reverse colors for minor civs.
+
 				local civ = GameInfo.Civilizations[player.Civilization];
 				if(civ.Type == minorCiv.Type) then
 					local temp = primaryColor;
@@ -789,14 +789,14 @@ Panels = {
 			
 			local IceFeatureID = GameInfo.Features["FEATURE_ICE"].ID
 			
-			-- We've got 3 tables here, terrain, culture, and cities.
-			-- Each one is populated with values that will ultimately
-			-- determine the map tile color.
+
+
+
 			local featureColors = {};
 			local cultureColors = {};
 			local cityColors = {};
 			
-			-- Gather and organize how plot colors are stored so that they can be quickly accessed.
+
 			local plotColors = {};
 			for turn = initialTurn, finalTurn, 1 do
 				plotColors[turn] = {};
@@ -804,11 +804,11 @@ Panels = {
 				cityColors[turn] = {};
 			end
 					
-			-- Create a single table of just the TerrainType.
-			-- The data structure supports the plotstate changing per turn but
-			-- for now we only care about the first found state.
+
+
+
 			
-			-- Also assign a ice blue color overlay for tiles w/ ICE on them.
+
 			local plotTerrains = {};
 			for i, plot in pairs(replayInfo.Plots) do
 				for turn, plotStateAtTurn in pairs(plot) do
@@ -880,9 +880,9 @@ Panels = {
 				end				
 			end
 			
-			-- These new datasets are nice but still not as fast as we'd like since we must
-			-- iterate backwards to obtain the plot colors for all plots.
-			-- Let's populate the list further so that no iteration is necessary later.
+
+
+
 			for y = 0, mapHeight - 1, 1 do	
 				for x = 0, mapWidth - 1, 1 do
 					local idx = x + (y * mapWidth);
@@ -911,7 +911,7 @@ Panels = {
 				end
 			end
 			
-			-- Just a nice utility function to get the color based on a priority.
+
 			local function GetPlotColor(turn, plotIdx) 
 				local cultureColorsAtTurn = cultureColors[turn];
 				local cityColorsAtTurn = cityColors[turn];
@@ -931,7 +931,7 @@ Panels = {
 				end
 			end
 			
-			-- Populate the plotColors table
+
 			for y = 0, mapHeight - 1, 1 do	
 				for x = 0, mapWidth - 1, 1 do
 					local idx = x + (y * mapWidth);
@@ -947,13 +947,13 @@ Panels = {
 			local turnSlider = Controls.TurnSlider;
 		
 			return function(panel, currentTurn)
-				-- Up Values
-				-- defaultColor
-				-- plotTerrains
-				-- plotColors
-				-- mapWidth
-				-- mapHeight
-				-- turnLabel
+
+
+
+
+
+
+
 				
 				print("Drawing Map at Turn " .. currentTurn);
 				
@@ -989,7 +989,7 @@ Panels = {
 		end,
 		
 		CreateUpdateFunction = function(panel, replayInfo)
-			local turnDelay = 0.25; -- seconds per turn.
+			local turnDelay = 0.25;
 			local currentDelay = turnDelay;
 			
 			return function(panel, dTime)
@@ -1013,7 +1013,7 @@ Panels = {
 			
 			Controls.ReplayMap:SetMapSize(mapWidth, mapHeight, 0, -1);
 			
-			-- Generate a new SetCurrentTurn function that has many items pre-cached
+
 			panel.SetCurrentTurn = panel:CreateSetCurrentTurnFunction(g_ReplayInfo);
 			panel.OnUpdate = panel:CreateUpdateFunction(g_ReplayInfo);
 			
@@ -1028,8 +1028,8 @@ Panels = {
 
 CurrentPanelIndex = 1;
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnBack()
 	UIManager:SetUICursor(1);
 	Modding.DeactivateMods();
@@ -1038,7 +1038,7 @@ function OnBack()
 end
 Controls.BackButton:RegisterCallback(Mouse.eLClick, OnBack);
 
-----------------------------------------------------------------
+
 function InputHandler(uiMsg, wParam, lParam)
     if(uiMsg == KeyEvents.KeyDown) then
         if(wParam == Keys.VK_ESCAPE or wParam == Keys.VK_RETURN) then
@@ -1053,7 +1053,7 @@ if(not g_bIsEndGame) then
 	ContextPtr:SetInputHandler(InputHandler);
 end
 
-----------------------------------------------------------------
+
 function SetCurrentPanel(panelIndex)
 	for i,v in pairs(Panels) do
 		v.Panel:SetHide(true);
@@ -1089,7 +1089,7 @@ function Refresh()
 	
 	SetCurrentPanel(1);
 
-	-- Get First Dataset Type
+
 	local firstDataSet;
 	for row in GameInfo.ReplayDataSets() do
 		firstDataSet = row.Type;
@@ -1107,8 +1107,8 @@ function OnUpdate(dTime)
 end
 ContextPtr:SetUpdate(OnUpdate);
 
--------------------------------------------------
--------------------------------------------------
+
+
 function ShowHideHandler( bIsHide )
 	if(not bIsHide) then
 		if(g_bIsEndGame) then
@@ -1116,14 +1116,14 @@ function ShowHideHandler( bIsHide )
 			Refresh();
 		end
 	else
-		-- Dispose of temporary data.
-		-- NOTE: This is all hard-coded here but could probably be better architected.
-		-- Free Instances
+
+
+
 		g_ReplayMessageInstanceManager:ResetInstances();
 		g_GraphLegendInstanceManager:ResetInstances();
 		g_LineSegmentInstanceManager:ResetInstances();
 		
-		-- Graph Panel
+
 		local graphPanel = Panels[2];
 		graphPanel.CurrentGraphDataSetIndex = nil;		
 		graphPanel.SegmentsByPlayer = {};
@@ -1131,14 +1131,14 @@ function ShowHideHandler( bIsHide )
 		graphPanel.GraphLegendsByPlayer = {};			
 		graphPanel.OnUpdate = nil;
 		
-		-- Map Panel
+
 		local mapPanel = Panels[3];
 		mapPanel.IsAnimating = false;
 		mapPanel.CurrentTurn = nil;
 		mapPanel.SetCurrentTurn = nil;
 		mapPanel.OnUpdate = nil;
 		
-		-- Replay Info
+
 		g_ReplayInfo = nil;
 	end
 end
@@ -1161,9 +1161,9 @@ function OnTurnSliderValueChanged(newValue)
 end
 Controls.TurnSlider:RegisterSliderCallback(OnTurnSliderValueChanged);
 
-----------------------------------------------------------------
--- Static Initialization
-----------------------------------------------------------------
+
+
+
 local replayInfoPulldown = Controls.ReplayInfoPulldown;
 replayInfoPulldown:ClearEntries();
 for i, v in ipairs(Panels) do
@@ -1217,29 +1217,29 @@ function GenerateReplayInfoFromCurrentGame()
 	local mapWidth, mapHeight = Map.GetGridSize();
 	local finalTurn = Game.GetGameTurn();
 	g_ReplayInfo = {
-		--Populate Generic Info
+
 		
-		--MapScriptName =
-		--WorldSize = 
-		--Climate =
-		--SeaLevel = 
+
+
+
+
 		Era = Game.GetStartEra(),
 		GameSpeed = Game.GetGameSpeedType(),
-		--VictoryType = 
-		--NormalizedScore =
+
+
 		
 		Calendar = Game.GetCalendar(),
 		InitialTurn = Game.GetStartTurn(),
 		FinalTurn = finalTurn,
 		StartYear = Game.GetStartYear(),
-		--GameType = nil,
-		--FinalDate = nil,
+
+
 		
 		MapWidth = mapWidth,
 		MapHeight= mapHeight,
 	};
 	
-	-- Populate Player Info
+
 	local playerInfos = {};	
 	local playerMap = { [-1] = -1};
 	local playerInfosIndex = 1;
@@ -1259,8 +1259,8 @@ function GenerateReplayInfoFromCurrentGame()
 				Scores = {},	
 			};
 			
-			-- Player:GetReplayData returns table[dataset][turn] = value
-			-- We need to convert this to scores[turn][dataset] = value
+
+
 			local scores = {};
 			local playerScores = player:GetReplayData();	
 			for ds,v in pairs(playerScores) do
@@ -1286,24 +1286,24 @@ function GenerateReplayInfoFromCurrentGame()
 	g_ReplayInfo.PlayerInfo = playerInfos;
 	g_ReplayInfo.ActivePlayer = playerMap[Game.GetActivePlayer()];
 	
-	-- Populate Messages	
-	-- Grab messages and sort by their turn.
+
+
 	local replayMessages = {};
 	local messages = Game.GetReplayMessages();
-	-- table.sort(messages, function(a, b) return a.Turn < b.Turn end);
+
 	for i,message in ipairs(messages) do
-		-- NEW: extended replay messages -- add timestamp
+
 		table.insert(replayMessages, {Turn = message.Turn, Text = message.Text, Type = message.Type, Player = playerMap[message.Player], Plots = message.Plots, Timestamp = message.Timestamp});
 	end
 	g_ReplayInfo.Messages = replayMessages;
 	
-	-- Populate Plots
+
 	local plots = {};
 	for i = 0, Map.GetNumPlots() - 1, 1 do
 		local plot = Map.GetPlotByIndex(i);
 		
 		plots[i + 1] = {
-			-- Only record final turn for now
+
 			[finalTurn] = {
 				TerrainType = plot:GetTerrainType(),
 				FeatureType = plot:GetFeatureType(),
@@ -1317,4 +1317,3 @@ end
 if(g_bIsEndGame) then
 	Controls.FrontEndReplayViewer:SetHide(true);
 end
-

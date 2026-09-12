@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	? 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_BELIEF_CLASSES_H
@@ -14,15 +14,15 @@ class CvReligion;
 
 #define SAFE_ESTIMATE_NUM_BELIEFS 100
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvBeliefEntry
-//!  \brief		A single entry in the Belief XML file
-//
-//!  Key Attributes:
-//!  - Used to be called CvBeliefInfo
-//!  - Populated from XML\Civilizations\CIV5Beliefs.xml
-//!  - Array of these contained in CvBeliefXMLEntries class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvBeliefEntry: public CvBaseInfo
 {
 public:
@@ -86,7 +86,7 @@ public:
 	int GetCityStateMinimumInfluence() const;
 	int GetCityStateInfluenceModifier() const;
 #ifdef LEKMOD_BELIEF_CITY_STATE_FOLLOWING_RELIGION_INFLUENCE
-	// Like Greece UA trait mod, but from a belief; only applies when a city-state follows your religion (see CvMinorCivAI::GetFriendshipChangePerTurnTimes100).
+
 	int GetCityStateFollowingReligionDecayMod() const;
 	int GetCityStateFollowingReligionRecoveryMod() const;
 #endif
@@ -120,7 +120,7 @@ public:
 	const char* getShortDescription() const;
 	void setShortDescription(const char* szVal);
 
-	// Arrays
+
 	int GetCityYieldChange(int i) const;
 	int GetHolyCityYieldChange(int i) const;
 	int GetYieldChangePerForeignCity(int i) const;
@@ -147,10 +147,10 @@ public:
 	int GetYieldChangeAnySpecialist(int i) const;
 	int GetYieldChangeTradeRoute(int i) const;
 #if defined(TRADE_REFACTOR)
-	// Yield for SENDER if creating a Trade Route from a city with this belief
+
 	int GetTradeConnectionOriginLandYieldChange(int i, int j) const;
 	int GetTradeConnectionOriginSeaYieldChange(int i, int j) const;
-	// Yield for the SENDER if they send a Trade Route to a city with this belief, if international, else to RECEIVER city.
+
 	int GetIncomingTradeConnectionLandYieldChange(int i, int j) const;
 	int GetIncomingTradeConnectionSeaYieldChange(int i, int j) const;
 #endif
@@ -255,7 +255,7 @@ protected:
 
 	CvString m_strShortDescription;
 
-	// Arrays
+
 	int* m_paiCityYieldChange;
 	int* m_paiHolyCityYieldChange;
 	int* m_paiYieldChangePerForeignCity;
@@ -313,23 +313,23 @@ private:
 	CvBeliefEntry& operator=(const CvBeliefEntry&);
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvBeliefXMLEntries
-//!  \brief		Game-wide information about religious beliefs
-//
-//! Key Attributes:
-//! - Plan is it will be contained in CvGameRules object within CvGame class
-//! - Populated from XML\GameInfo\CIV5Beliefs.xml
-//! - Contains an array of CvBeliefEntry from the above XML file
-//! - One instance for the entire game
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
 class CvBeliefXMLEntries
 {
 public:
 	CvBeliefXMLEntries(void);
 	~CvBeliefXMLEntries(void);
 
-	// Accessor functions
+
 	std::vector<CvBeliefEntry*>& GetBeliefEntries();
 	int GetNumBeliefs();
 	CvBeliefEntry* GetEntry(int index);
@@ -342,14 +342,14 @@ private:
 
 typedef FStaticVector<int, 5, false, c_eCiv5GameplayDLL >BeliefList;
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvReligionBeliefs
-//!  \brief		Information about the beliefs of a religion
-//
-//!  Key Attributes:
-//!  - One instance for each religion (or pantheon)
-//!  - Accessed by any class that needs to check belief info
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvReligionBeliefs
 {
 public:
@@ -360,7 +360,7 @@ public:
 	void Reset();
 	void AddBelief(BeliefTypes eBelief);
 
-	// Accessor functions
+
 	bool HasBelief(BeliefTypes eBelief) const;
 	BeliefTypes GetBelief(int iIndex) const;
 	int GetNumBeliefs() const;
@@ -566,10 +566,10 @@ public:
 	int GetYieldChangeAnySpecialist(YieldTypes eYieldType) const;
 	int GetYieldChangeTradeRoute(YieldTypes eYieldType) const;
 #if defined(TRADE_REFACTOR)
-	// Yield for SENDER if creating a Trade Route from a city with this belief
+
 	int GetTradeConnectionOriginLandYieldChange(TradeConnectionType eConnection, YieldTypes eYield) const;
 	int GetTradeConnectionOriginSeaYieldChange(TradeConnectionType eConnection, YieldTypes eYield) const;
-	// Yield for the SENDER if they send a Trade Route to a city with this belief, if international, else to RECEIVER city.
+
 	int GetIncomingTradeConnectionLandYieldChange(TradeConnectionType eConnection, YieldTypes eYield) const;
 	int GetIncomingTradeConnectionSeaYieldChange(TradeConnectionType eConnection, YieldTypes eYield) const;
 #endif
@@ -596,12 +596,12 @@ public:
 	bool TryGetBuildingPurchaseFaithGoldRawCost(BuildingTypes eBuilding, YieldTypes eYield, int iNumCities, int* piTotal) const;
 #endif
 
-	// Serialization
+
 	void Read(FDataStream& kStream);
 	void Write(FDataStream& kStream) const;
 
 private:
-	// Cached data about this religion's beliefs
+
 	int m_iFaithFromDyingUnits;
 	int m_iRiverHappiness;
 	int m_iPlotCultureCostModifier;
@@ -658,7 +658,7 @@ private:
 
 	BeliefList m_ReligionBeliefs;
 
-	// Arrays
+
 	int* m_paiBuildingClassEnabled;
 };
 
@@ -667,4 +667,4 @@ namespace CvBeliefHelpers
 	bool ConvertBarbarianUnit(CvPlayer *pPlayer, UnitHandle pUnit);
 }
 
-#endif //CIV5_BELIEF_CLASSES_H
+#endif

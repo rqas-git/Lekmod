@@ -1,6 +1,6 @@
--------------------------------------------------
--- edit: MP voting system for EUI & vanilla UI
--------------------------------------------------
+
+
+
 include( "IconSupport" );
 include( "InstanceManager" );
 include( "SupportFunctions"  );
@@ -8,20 +8,20 @@ include( "SupportFunctions"  );
 local g_InstanceManager = InstanceManager:new( "DiploVoteButton", "Button", Controls.ButtonStack );
 local m_PopupInfo = nil;
 
--------------------------------------------------
--- On Diplo Vote Chosen
--------------------------------------------------
+
+
+
 function DoDiploVoteChosen( iVotePlayer )
 	print('--CC PLAYER CHOICE:', iVotePlayer)
 	Network.SendGiftUnit(iVotePlayer, -3);
     
     OnClose();
-    --ContextPtr:SetHide( true );
+
 end
 
--------------------------------------------------
--- Popup construction
--------------------------------------------------
+
+
+
 function OnPopupMessage(popupInfo)
 	
 	local type = popupInfo.Type;
@@ -58,13 +58,13 @@ function OnPopupMessage(popupInfo)
 			iPlayerLoop = pOtherTeam:GetLeaderID();
 			pOtherPlayer = Players[iPlayerLoop];
 
-			-- Valid player? - Has to be alive
+
 			if (pOtherPlayer ~= nil and pOtherPlayer:IsAlive() and pOtherPlayer:IsHuman()) then
-				-- Not minor
+
 				if (not pOtherPlayer:IsMinorCiv()) then
-					-- Not ourselves
+
 					if (pOtherTeam:GetID() ~= pTeam:GetID() and not tAddedPlayers[iPlayerLoop]) then
-						-- Defensive de-duplication for edge cases where the same player can be surfaced twice.
+
 						tAddedPlayers[iPlayerLoop] = true;
 					
 						local controlTable = g_InstanceManager:GetInstance();
@@ -115,16 +115,16 @@ end
 LuaEvents.MPProposeCCButtonPress.Add( OnPopupMessage );
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function OnClose ()
     UIManager:DequeuePopup( ContextPtr );
 end
 Controls.CloseButton:RegisterCallback( Mouse.eLClick, OnClose );
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function InputHandler( uiMsg, wParam, lParam )
     if uiMsg == KeyEvents.KeyDown then
         if wParam == Keys.VK_ESCAPE or wParam == Keys.VK_RETURN then
@@ -136,8 +136,8 @@ end
 ContextPtr:SetInputHandler( InputHandler );
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function ShowHideHandler( bIsHide, bInitState )
 
     if( not bInitState ) then
@@ -152,7 +152,7 @@ function ShowHideHandler( bIsHide, bInitState )
 end
 ContextPtr:SetShowHideHandler( ShowHideHandler );
 
-----------------------------------------------------------------
--- 'Active' (local human) player has changed
-----------------------------------------------------------------
+
+
+
 Events.GameplaySetActivePlayer.Add(OnClose);

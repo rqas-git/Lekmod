@@ -1,17 +1,17 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//!	 \file		CvLuaEnums.cpp
-//!  \brief     Private implementation to CvLuaEnums.
-//!
-//!		This file includes the implementation for exposing enums to Lua.
-//!
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #include <CvGameCoreDLLPCH.h>
 #include "CvLuaSupport.h"
 #include "CvLuaEnums.h"
@@ -26,11 +26,11 @@ void CvLuaEnums::Register(lua_State* L)
 {
 	FLua::Details::CCallWithErrorHandling(L, pRegister);
 }
-//------------------------------------------------------------------------------
+
 int CvLuaEnums::pRegister(lua_State* L)
 {
-	// Things from CvDefines.h
-	// Interface Dirty Bits
+
+
 	EnumStart(L, "InterfaceDirtyBits");
 	RegisterEnum(SelectionCamera_DIRTY_BIT);
 	RegisterEnum(Fog_DIRTY_BIT);
@@ -69,7 +69,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_INTERFACE_DIRTY_BITS);
 	EnumEnd(L);
 
-	// City Update Types
+
 	EnumStart(L, "CityUpdateTypes");
 	RegisterEnum(NO_CITY_UPDATE_TYPE);
 	RegisterEnum(CITY_UPDATE_TYPE_BANNER);
@@ -80,7 +80,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_CITY_UPDATE_TYPES);
 	EnumEnd(L);
 
-	//Button Popup Types
+
 	EnumStart(L, "ButtonPopupTypes");
 	RegisterEnum(BUTTONPOPUP_TEXT);
 	RegisterEnum(BUTTONPOPUP_MAIN_MENU);
@@ -196,7 +196,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	EnumEnd(L);
 
 
-	//YieldTypes
+
 	EnumStart(L, "YieldTypes");
 	RegisterEnum(NO_YIELD);
 	RegisterEnum(YIELD_FOOD);
@@ -214,7 +214,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_YIELD_TYPES);
 	EnumEnd(L);
 
-	//GameOptionTypes
+
 	EnumStart(L, "GameOptionTypes");
 	RegisterEnum(NO_GAMEOPTION);
 	RegisterEnum(GAMEOPTION_NO_CITY_RAZING);
@@ -242,7 +242,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_GAMEOPTION_TYPES);
 
 
-	//DomainTypes
+
 	EnumStart(L, "DomainTypes");
 	RegisterEnum(NO_DOMAIN);
 	RegisterEnum(DOMAIN_SEA);
@@ -253,11 +253,11 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_DOMAIN_TYPES);
 	EnumEnd(L);
 
-	//FeatureTypes
+
 	EnumStart(L, "FeatureTypes");
 	RegisterEnum(NO_FEATURE);
 #if defined(LEKMOD_LUA_FEATURETYPES_FROM_DB)
-	// Expose all Features DB rows (FEATURE_SHALLOWS, ATOLL, NWs, etc.)
+
 	RegisterDynamicEnums(L, "Features", "ID", "Type", "NUM_FEATURE_TYPES");
 #else
 	RegisterEnum(FEATURE_ICE);
@@ -271,7 +271,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 #endif
 	EnumEnd(L);
 
-	//FogOfWarModeTypes
+
 	EnumStart(L, "FogOfWarModeTypes");
 	RegisterEnum(FOGOFWARMODE_OFF);
 	RegisterEnum(FOGOFWARMODE_NOVIS);
@@ -288,7 +288,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_ORDER_TYPES);
 	EnumEnd(L);
 
-	//PlotTypes
+
 	EnumStart(L, "PlotTypes");
 	RegisterEnum(NO_PLOT);
 	RegisterEnum(PLOT_MOUNTAIN);
@@ -298,7 +298,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_PLOT_TYPES);
 	EnumEnd(L);
 
-	//TerrainTypes
+
 	EnumStart(L, "TerrainTypes");
 	RegisterEnum(NO_TERRAIN);
 	RegisterEnum(TERRAIN_GRASS);
@@ -313,7 +313,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_TERRAIN_TYPES);
 	EnumEnd(L);
 
-	//InterfaceModeTypes
+
 	EnumStart(L, "InterfaceModeTypes");
 	RegisterEnum(NO_INTERFACEMODE);
 	RegisterEnum(INTERFACEMODE_DEBUG);
@@ -360,7 +360,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	}
 	EnumEnd(L);
 
-	// ActivityTypes
+
 	EnumStart(L, "ActivityTypes");
 	RegisterEnum(NO_ACTIVITY);
 	RegisterEnum(ACTIVITY_AWAKE);
@@ -372,14 +372,14 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(ACTIVITY_MISSION);
 	EnumEnd(L);
 
-	// MissionTypes
+
 	EnumStart(L, "MissionTypes");
 	RegisterEnum(NO_MISSION);
 	RegisterDynamicEnums(L, "Missions", "ID", "Type", "NUM_MISSION_TYPES");
 	EnumEnd(L);
 
 
-	// ActionSubTypes
+
 	EnumStart(L, "ActionSubTypes");
 	RegisterEnum(ACTIONSUBTYPE_INTERFACEMODE);
 	RegisterEnum(ACTIONSUBTYPE_COMMAND);
@@ -393,7 +393,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	EnumEnd(L);
 
 
-	// GameMessageTypes
+
 	EnumStart(L, "GameMessageTypes");
 	RegisterEnum(GAMEMESSAGE_NETWORK_READY);
 	RegisterEnum(GAMEMESSAGE_VERIFY_VERSION);
@@ -490,7 +490,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(GAMEMESSAGE_AVOID_GROWTH);
 	EnumEnd(L);
 
-	// TaskTypes
+
 	EnumStart(L, "TaskTypes");
 	RegisterEnum(TASK_RAZE);
 	RegisterEnum(TASK_UNRAZE);
@@ -516,7 +516,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_TASK_TYPES);
 	EnumEnd(L);
 
-	// CommandTypes
+
 	EnumStart(L, "CommandTypes");
 	RegisterEnum(COMMAND_PROMOTION);
 	RegisterEnum(COMMAND_UPGRADE);
@@ -531,7 +531,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_COMMAND_TYPES);
 	EnumEnd(L);
 
-	// DirectionTypes
+
 	EnumStart(L, "DirectionTypes");
 	RegisterEnum(NO_DIRECTION);
 	RegisterEnum(DIRECTION_NORTHEAST);
@@ -543,7 +543,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_DIRECTION_TYPES);
 	EnumEnd(L);
 
-	// DiploUIStateTypes
+
 	EnumStart(L, "DiploUIStateTypes");
 	RegisterEnum(NO_DIPLO_UI_STATE);
 
@@ -623,12 +623,12 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(FLOWDIRECTION_NORTHEAST_MASK);
 	EnumEnd(L);
 
-	// PolicyBranchTypes
+
 	EnumStart(L, "PolicyBranchTypes");
 	RegisterEnum(NO_POLICY_BRANCH_TYPE);
 	EnumEnd(L);
 
-	// FromUIDiploEventTypes
+
 	EnumStart(L, "FromUIDiploEventTypes");
 	RegisterEnum(NO_FROM_UI_DIPLO_EVENT);
 
@@ -669,7 +669,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 
 	RegisterEnum(FROM_UI_DIPLO_EVENT_PLAN_RA_RESPONSE);
 
-	// Post Civ 5 release
+
 	RegisterEnum(FROM_UI_DIPLO_EVENT_AI_REQUEST_DENOUNCE_RESPONSE);
 	RegisterEnum(FROM_UI_DIPLO_EVENT_CAUGHT_YOUR_SPY_RESPONSE);
 	RegisterEnum(FROM_UI_DIPLO_EVENT_KILLED_MY_SPY_RESPONSE);
@@ -685,7 +685,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_FROM_UI_DIPLO_EVENTS);
 	EnumEnd(L);
 
-	// CoopWarStates
+
 	EnumStart(L, "CoopWarStates");
 	RegisterEnum(NO_COOP_WAR_STATE);
 	RegisterEnum(COOP_WAR_STATE_REJECTED);
@@ -694,7 +694,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_COOP_WAR_STATES);
 	EnumEnd(L);
 
-	// ThreatTypes
+
 	EnumStart(L, "ThreatTypes");
 	RegisterEnum(NO_THREAT_VALUE);
 	RegisterEnum(THREAT_NONE);
@@ -705,7 +705,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_THREAT_VALUES);
 	EnumEnd(L);
 
-	// DisputeLevelTypes
+
 	EnumStart(L, "DisputeLevelTypes");
 	RegisterEnum(NO_DISPUTE_LEVEL);
 	RegisterEnum(DISPUTE_LEVEL_NONE);
@@ -715,7 +715,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_DISPUTE_LEVELS);
 	EnumEnd(L);
 
-	// LeaderheadAnimationTypes
+
 	EnumStart(L, "LeaderheadAnimationTypes");
 	RegisterEnum(NO_LEADERHEAD_ANIM);
 	RegisterEnum(LEADERHEAD_ANIM_INTRO);
@@ -735,7 +735,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(LEADERHEAD_ANIM_NO);
 	EnumEnd(L);
 
-	// TradeableItems
+
 	EnumStart(L, "TradeableItems");
 	RegisterEnum(TRADE_ITEM_NONE);
 	RegisterEnum(TRADE_ITEM_GOLD);
@@ -761,7 +761,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_TRADEABLE_ITEMS);
 	EnumEnd(L);
 
-	// EndTurnBlockingTypes
+
 	EnumStart(L, "EndTurnBlockingTypes");
 	RegisterEnum(NO_ENDTURN_BLOCKING_TYPE);
 	RegisterEnum(ENDTURN_BLOCKING_POLICY);
@@ -791,7 +791,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_ENDTURN_BLOCKING_TYPES);
 	EnumEnd(L);
 
-	// ResourceUsageTypes
+
 	EnumStart(L, "ResourceUsageTypes");
 	RegisterEnum(RESOURCEUSAGE_BONUS);
 	RegisterEnum(RESOURCEUSAGE_STRATEGIC);
@@ -799,7 +799,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_RESOURCEUSAGE_TYPES);
 	EnumEnd(L);
 
-	// MajorCivApproachTypes
+
 	EnumStart(L, "MajorCivApproachTypes");
 	RegisterEnum(NO_MAJOR_CIV_APPROACH);
 	RegisterEnum(MAJOR_CIV_APPROACH_WAR);
@@ -812,7 +812,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_MAJOR_CIV_APPROACHES);
 	EnumEnd(L);
 
-	// MinorCivTraitTypes
+
 	EnumStart(L, "MinorCivTraitTypes");
 	RegisterEnum(NO_MINOR_CIV_TRAIT_TYPE);
 	RegisterEnum(MINOR_CIV_TRAIT_CULTURED);
@@ -823,7 +823,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_MINOR_CIV_TRAIT_TYPES);
 	EnumEnd(L);
 
-	// MinorCivPersonalityTypes
+
 	EnumStart(L, "MinorCivPersonalityTypes");
 	RegisterEnum(NO_MINOR_CIV_PERSONALITY_TYPE);
 	RegisterEnum(MINOR_CIV_PERSONALITY_FRIENDLY);
@@ -833,7 +833,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_MINOR_CIV_PERSONALITY_TYPES);
 	EnumEnd(L);
 
-	// MinorCivQuestTypes
+
 	EnumStart(L, "MinorCivQuestTypes");
 	RegisterEnum(NO_MINOR_CIV_QUEST_TYPE);
 	RegisterEnum(MINOR_CIV_QUEST_ROUTE);
@@ -858,7 +858,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	EnumEnd(L);
 
 
-	// Resource Usage
+
 	EnumStart(L, "ResourceUsageTypes");
 	RegisterEnum(RESOURCEUSAGE_BONUS);
 	RegisterEnum(RESOURCEUSAGE_STRATEGIC);
@@ -866,7 +866,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_RESOURCEUSAGE_TYPES);
 	EnumEnd(L);
 
-	// CityAIFocusTypes
+
 	EnumStart(L, "CityAIFocusTypes");
 	RegisterEnum(NO_CITY_AI_FOCUS_TYPE);
 	RegisterEnum(CITY_AI_FOCUS_TYPE_FOOD);
@@ -878,13 +878,13 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(CITY_AI_FOCUS_TYPE_PROD_GROWTH);
 	RegisterEnum(CITY_AI_FOCUS_TYPE_GOLD_GROWTH);
 	RegisterEnum(CITY_AI_FOCUS_TYPE_FAITH);
-#if defined(LEKMOD_v34) // RegisterEnum(CITY_AI_FOCUS_TYPE_GOLDEN_AGE_POINTS);
+#if defined(LEKMOD_v34)
 	RegisterEnum(CITY_AI_FOCUS_TYPE_GOLDEN_AGE_POINTS);
 #endif
 	RegisterEnum(NUM_CITY_AI_FOCUS_TYPES);
 	EnumEnd(L);
 
-	// Resource Usage
+
 	EnumStart(L, "AdvisorTypes");
 	RegisterEnum(NO_ADVISOR_TYPE);
 	RegisterEnum(ADVISOR_ECONOMIC);
@@ -894,7 +894,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_ADVISOR_TYPES);
 	EnumEnd(L);
 
-	// GenericWorldAnchorTypes
+
 	EnumStart(L, "GenericWorldAnchorTypes");
 	RegisterEnum(NO_WORLD_ANCHOR);
 	RegisterEnum(WORLD_ANCHOR_NATURAL_WONDER);
@@ -903,7 +903,7 @@ int CvLuaEnums::pRegister(lua_State* L)
 	RegisterEnum(NUM_WORLD_ANCHORS);
 	EnumEnd(L);
 
-	// Game States
+
 	EnumStart(L, "GameStates");
 	pRegisterEnum(L, "MainMenu", 0);
 	pRegisterEnum(L, "MainGameView", 1);
@@ -912,14 +912,14 @@ int CvLuaEnums::pRegister(lua_State* L)
 	pRegisterEnum(L, "NUM_GAME_STATES", 4);
 	EnumEnd(L);
 
-	// Gameplay Game States (not to be confused with the engine game states above)
+
 	EnumStart(L, "GameplayGameStateTypes");
 	RegisterEnum(GAMESTATE_ON);
 	RegisterEnum(GAMESTATE_OVER);
 	RegisterEnum(GAMESTATE_EXTENDED);
 	EnumEnd(L);
 
-	//
+
 	EnumStart(L, "CombatPredictionTypes");
 	RegisterEnum(NO_COMBAT_PREDICTION);
 	RegisterEnum(COMBAT_PREDICTION_RANGED);
@@ -1042,19 +1042,19 @@ int CvLuaEnums::pRegister(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 void CvLuaEnums::pRegisterEnum(lua_State* L, const char* enumName, const int enumVal)
 {
 	lua_pushinteger(L, enumVal);
 	lua_setfield(L, -2, enumName);
 }
-//------------------------------------------------------------------------------
+
 void CvLuaEnums::pRegisterEnumUInt(lua_State* L, const char* enumName, const uint enumVal)
 {
 	lua_pushnumber(L, enumVal);
 	lua_setfield(L, -2, enumName);
 }
-//------------------------------------------------------------------------------
+
 void CvLuaEnums::EnumStart(lua_State* L, const char* enumType)
 {
 	lua_getglobal(L, enumType);
@@ -1066,13 +1066,13 @@ void CvLuaEnums::EnumStart(lua_State* L, const char* enumType)
 		lua_setglobal(L, enumType);
 	}
 }
-//------------------------------------------------------------------------------
+
 void CvLuaEnums::EnumEnd(lua_State* L)
 {
 	lua_checkstack(L, 1);
 	lua_pop(L, 1);
 }
-//------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 void CvLuaEnums::RegisterDynamicEnums(lua_State* L, _In_z_ const char* szTableName, _In_z_ const char* szIdField, _In_z_ const char* szNameField, _In_opt_z_ const char* szCountName)
 #else

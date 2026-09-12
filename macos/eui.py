@@ -1,4 +1,4 @@
-"""Pinned EUI assets, kept outside Steam for offline installation and repair."""
+
 import hashlib
 import io
 from contextlib import contextmanager
@@ -12,7 +12,7 @@ from integrity import tree_digest
 from launcher_preferences import SUPPORT
 
 VERSION = '1.28g'
-# Original 1.28g release: CivFanatics resource 24303, version 22637.
+
 ARCHIVE_SHA256 = '772a3dae6c512725f6bb5d51c70a4ed8bcf70ca0fc454a1c5019448f3ff666e5'
 TREE_SHA256 = '62b412f7a5a7aabc6dfc0dd0ed301c65a4bb27dcb88f5c25a8cd7cc49034915e'
 TEXT_SHA256 = '7d6af624ea695be3afde63ef2d493c6b7ac97820babc137e72cd7aa06651e40c'
@@ -51,7 +51,7 @@ def import_archive(path):
 
 @contextmanager
 def text_files(enabled, data):
-    """Roll back the user Text file if the app transaction fails too."""
+
     if TEXT.is_symlink() or TEXT.parent.is_symlink():
         raise RuntimeError('The EUI text path must not be a symbolic link.')
     original = TEXT.read_bytes() if TEXT.exists() else None
@@ -61,7 +61,7 @@ def text_files(enabled, data):
         if original is not None and original != replacement:
             raise RuntimeError(f'A different EUI text file already exists. Move it aside first: {TEXT}')
     else:
-        # Preserve translations or edits not installed by this launcher.
+
         replacement = None if original is not None and hashlib.sha256(original).hexdigest() == TEXT_SHA256 else original
     if original == replacement:
         yield
@@ -92,7 +92,7 @@ def existing(app):
 
 
 def guard(app, state):
-    """Never replace an unrelated EUI installation silently."""
+
     folders = existing(app)
     if not folders:
         return
@@ -130,7 +130,7 @@ def prepare(staged, state, enabled, data=None):
     if not enabled:
         state.pop('eui', None)
         return None
-    # Only a checksum-verified, fixed release is accepted, even during repairs.
+
     if data is None or hashlib.sha256(data).hexdigest() != ARCHIVE_SHA256:
         raise RuntimeError('The EUI archive has not been verified.')
     with zipfile.ZipFile(io.BytesIO(data)) as archive:

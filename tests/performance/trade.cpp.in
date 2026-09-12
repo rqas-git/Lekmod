@@ -1,0 +1,219 @@
+
+#include <algorithm>
+#include <array>
+#include <cassert>
+#include <climits>
+#include <iostream>
+#include <random>
+#include <string>
+#include <tuple>
+#include <vector>
+typedef unsigned int uint;
+typedef int PlayerTypes;
+typedef int UnitTypes;
+typedef std::string CvString;
+enum { MAX_INT=INT_MAX, NO_PROJECT=-1, DOMAIN_LAND=0, DOMAIN_SEA=1 };
+long pathCopies=0, pathElementsCopied=0, stringsFormatted=0;
+struct TradeConnectionPlot {
+    int m_iX=0, m_iY=0;
+    bool operator==(const TradeConnectionPlot& b)const{return m_iX==b.m_iX&&m_iY==b.m_iY;}
+};
+struct Path : std::vector<TradeConnectionPlot> {
+    Path(){}
+    Path(const Path& b):std::vector<TradeConnectionPlot>(b){++pathCopies;pathElementsCopied+=size();}
+    Path& operator=(const Path& b){std::vector<TradeConnectionPlot>::operator=(b);++pathCopies;pathElementsCopied+=size();return *this;}
+};
+struct TradeConnection {
+    int m_iID=0, m_iOriginX=0, m_iOriginY=0, m_iDestX=0, m_iDestY=0;
+    int m_eOriginOwner=0, m_eDestOwner=0, m_eDomain=0, m_iTradeUnitLocationIndex=0;
+    Path m_aPlotList;
+    std::array<int,32> payload{};
+    bool operator==(const TradeConnection& b)const{
+        return std::tie(m_iID,m_iOriginX,m_iOriginY,m_iDestX,m_iDestY,m_eOriginOwner,m_eDestOwner,
+                        m_eDomain,m_iTradeUnitLocationIndex,m_aPlotList,payload)==
+               std::tie(b.m_iID,b.m_iOriginX,b.m_iOriginY,b.m_iDestX,b.m_iDestY,b.m_eOriginOwner,b.m_eDestOwner,
+                        b.m_eDomain,b.m_iTradeUnitLocationIndex,b.m_aPlotList,b.payload);
+    }
+};
+typedef std::vector<TradeConnection> TradeConnectionList;
+struct CvCity {
+    int id=0,population=1,production=-1;
+    int getPopulation(){return population;}
+    int getProductionUnit(){return production;}
+    const char* getNameKey(){return "city";}
+};
+struct CvPlot {
+    int x=0,y=0; CvCity* city=nullptr;
+    int getX(){return x;} int getY(){return y;}
+    CvCity* getPlotCity(){return city;}
+};
+struct Specialization { CvCity* wonder=nullptr; CvCity* GetWonderBuildCity(){return wonder;} };
+struct CvPlayer {
+    int id=0,happiness=0; bool minor=false;
+    std::vector<CvCity*> cities; Specialization specialization;
+    int GetID(){return id;} int GetHappiness(){return happiness;}
+    bool isMinorCiv(){return minor;}
+    const char* getCivilizationAdjectiveKey(){return "civ";}
+    const char* getCivilizationShortDescriptionKey(){return "civ";}
+    CvCity* firstCity(int* i){*i=0;return cities.empty()?nullptr:cities[0];}
+    CvCity* nextCity(int* i){++*i;return *i<int(cities.size())?cities[*i]:nullptr;}
+    Specialization* GetCitySpecializationAI(){return &specialization;}
+} players[4];
+#define GET_PLAYER(id) players[id]
+struct CvUnitEntry { int project=-1; int GetSpaceshipProject(){return project;} };
+struct Units {
+    CvUnitEntry entries[2];
+    CvUnitEntry* GetEntry(int i){return i>=0&&i<2?&entries[i]:nullptr;}
+};
+struct CvGameTrade {
+    TradeConnectionList m_aTradeConnections;
+    bool IsTradeRouteIndexEmpty(int iIndex) const;
+    bool IsTradeRouteIndexEmpty(TradeConnectionList::iterator it)const{
+        return IsTradeRouteIndexEmpty(static_cast<int>(it-m_aTradeConnections.begin()));
+    }
+};
+struct Game { CvGameTrade trade; CvGameTrade* GetGameTrade(){return &trade;} };
+struct Map { CvPlot endpoint; CvPlot* plot(int,int){return &endpoint;} };
+struct Globals {
+    Units units; Game game; Map map;
+    Units* GetGameUnits(){return &units;} Game& getGame(){return game;} Map& getMap(){return map;}
+} GC;
+namespace Localization {
+struct String {
+    String& operator<<(const char*){return *this;}
+    std::string toUTF8(){++stringsFormatted;return "tooltip";}
+};
+String Lookup(const char*){return String();}
+}
+class CvPlayerTrade {
+public:
+    CvPlayer* m_pPlayer=&players[0];
+#ifdef AUI_CONSTIFY
+    std::vector<CvString> GetPlotToolTips(CvPlot*) const;
+#else
+    std::vector<CvString> GetPlotToolTips(CvPlot*);
+#endif
+    bool HasPlotToolTips(CvPlot*) const;
+};
+class CvTradeAI {
+public:
+    CvPlayer* m_pPlayer=&players[0]; TradeConnectionList candidates;
+    std::vector<std::array<int,3>> scores;
+    std::vector<std::vector<int>> trace;
+    void GetAvailableTR(TradeConnectionList& out){out=candidates;pathCopies=pathElementsCopied=0;trace.clear();}
+    int ScoreFoodTR(const TradeConnection& r,CvCity* city){trace.push_back({0,r.m_iID,city->id});return scores.at(r.m_iID)[0];}
+#ifdef AUI_CONSTIFY
+    int ScoreProductionTR(const TradeConnection& r,std::vector<const CvCity*>& cities){
+#else
+    int ScoreProductionTR(const TradeConnection& r,std::vector<CvCity*>& cities){
+#endif
+        std::vector<int> call{1,r.m_iID};for(auto* c:cities)call.push_back(c->id);trace.push_back(call);return scores.at(r.m_iID)[1];
+    }
+    int ScoreInternationalTR(const TradeConnection& r){trace.push_back({2,r.m_iID});return scores.at(r.m_iID)[2];}
+    void PrioritizeTradeRoutes(TradeConnectionList&);
+    void PrioritizeTradeRoutesBaseline(TradeConnectionList&);
+};
+@BASELINE_RANKING@
+@CURRENT_RANKING@
+@IS_EMPTY@
+@TOOLTIP@
+@PREDICATE@
+
+int main(){
+    std::mt19937 random(824399);
+    long oldCopies=0,newCopies=0,oldElements=0,newElements=0;
+    int rankCases=0;
+    const int sizes[]={0,1,2,3,10,40,168,169,400};
+    const int lengths[]={0,1,2,40,41,128};
+#ifdef TRADE_SANITIZER_FIXTURES
+    const int rankingScenarios=60, predicateScenarios=40;
+#else
+    const int rankingScenarios=360, predicateScenarios=240;
+#endif
+    for(int scenario=0;scenario<rankingScenarios;++scenario){
+        for(auto& player:players)player=CvPlayer();
+        std::vector<CvCity> cities(scenario%7==0?0:4);
+        for(int i=0;i<int(cities.size());++i){
+            cities[i].id=i;cities[i].population=(scenario%3==0)?5:1+random()%12;
+            cities[i].production=scenario%5==0?-1:int(random()%4)-1;
+            players[0].cities.push_back(&cities[i]);
+        }
+        players[0].happiness=scenario%3-1;
+        players[0].specialization.wonder=(scenario%2||cities.empty())?nullptr:&cities[0];
+        GC.units.entries[0].project=NO_PROJECT;GC.units.entries[1].project=0;
+        CvTradeAI ai;
+        int n=sizes[scenario%9];
+        ai.candidates.resize(n);ai.scores.resize(n);
+        for(int i=0;i<n;++i){
+            auto& r=ai.candidates[i];r.m_iID=i;
+            r.m_eOriginOwner=0;r.m_eDestOwner=i%4;r.m_eDomain=i%2;
+            r.m_iOriginX=i%7;r.m_iDestX=i%11;
+            for(auto& value:r.payload)value=int(random());
+            r.m_aPlotList.resize(lengths[(scenario+i)%6]);
+            for(auto& point:r.m_aPlotList){point.m_iX=random()%20;point.m_iY=random()%20;}
+            for(auto& value:ai.scores[i]){
+                value=int(random()%9)-3;
+                if(scenario%5==0)value=1;
+                if(scenario%11==0)value=0;
+                if(scenario%13==0)value=-1;
+                if(scenario%17==0)value=i%2?INT_MAX:INT_MIN;
+            }
+        }
+
+        std::shuffle(ai.candidates.begin(),ai.candidates.end(),random);
+        TradeConnectionList before,after;
+        for(int update=0;update<2;++update){
+            ai.PrioritizeTradeRoutesBaseline(before);
+            oldCopies+=pathCopies;oldElements+=pathElementsCopied;
+            auto trace=ai.trace;
+            ai.PrioritizeTradeRoutes(after);
+            newCopies+=pathCopies;newElements+=pathElementsCopied;
+            assert(before==after&&trace==ai.trace);
+            for(auto& score:ai.scores)for(auto& value:score)value=value>0?0:1;
+            players[0].happiness=-players[0].happiness;
+            ++rankCases;
+        }
+    }
+    assert(newCopies<oldCopies&&newElements<oldElements);
+
+
+    int predicateCases=0;long formatted=0;
+    CvPlayerTrade playerTrade;CvCity endpoint;GC.map.endpoint.city=&endpoint;
+    for(int scenario=0;scenario<predicateScenarios;++scenario){
+        auto& routes=GC.game.trade.m_aTradeConnections;routes.clear();
+        for(int owner=0;owner<4;++owner){players[owner].id=owner;players[owner].minor=owner%2;}
+        for(int i=0;i<scenario%19;++i){
+            TradeConnection r;r.m_iID=i;r.m_eOriginOwner=random()%4;r.m_eDestOwner=random()%4;
+            r.m_eDomain=i%3;
+            r.m_aPlotList.resize(1+random()%128);
+            for(auto& p:r.m_aPlotList){p.m_iX=random()%10;p.m_iY=random()%6;}
+            r.m_iTradeUnitLocationIndex=random()%r.m_aPlotList.size();
+            if(i%7==0){r.m_iOriginX=r.m_iOriginY=r.m_iDestX=r.m_iDestY=-1;r.m_aPlotList.clear();}
+            routes.push_back(r);
+        }
+        for(int update=0;update<3;++update){
+            for(int owner=0;owner<4;++owner){
+                playerTrade.m_pPlayer=&players[owner];
+                for(int i=-1;i<60;++i){
+                    CvPlot plot;plot.x=i%10;plot.y=i/10;
+                    CvPlot* p=i<0?nullptr:&plot;
+                    stringsFormatted=0;
+                    bool expected=!playerTrade.GetPlotToolTips(p).empty();
+                    formatted+=stringsFormatted;stringsFormatted=0;
+                    assert(playerTrade.HasPlotToolTips(p)==expected);
+                    assert(stringsFormatted==0);++predicateCases;
+                }
+            }
+            for(auto& r:routes)if(!r.m_aPlotList.empty()){
+                r.m_iTradeUnitLocationIndex=(r.m_iTradeUnitLocationIndex+1)%r.m_aPlotList.size();
+                r.m_eOriginOwner=(r.m_eOriginOwner+1)%4;
+                if(update==1)r.m_iOriginX=r.m_iOriginY=r.m_iDestX=r.m_iDestY=-1;
+            }
+            GC.map.endpoint.city=update==0?nullptr:&endpoint;
+        }
+    }
+    assert(formatted>0);
+    std::cout<<"{\"ranking_cases\":"<<rankCases<<",\"path_copies\":["<<oldCopies<<","<<newCopies
+             <<"],\"path_elements_copied\":["<<oldElements<<","<<newElements
+             <<"],\"predicate_cases\":"<<predicateCases<<",\"formatted_strings\":["<<formatted<<",0]}\n";
+}

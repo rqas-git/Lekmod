@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Context ColorSet="Beige_Black" Font="TwCenMT20" FontStyle="Shadow" >
 
-  <!-- Combat Info Label Instances -->
+
   <Instance Name="UsCombatInfo">
   	<Box ID="Root" Size="250,15" Color="0,0,0,0" HideBox="1">
   		<Label Anchor="R,C" Offset="48,0" Font="TwCenMT14" ID="Text">
@@ -25,7 +25,7 @@
 	</Box>
 </Instance>
 
-  <!-- Stacks for Combat Result Info -->
+
     <Grid Anchor="L,B" Offset="210,160" Size="608,160" Padding="0,26" Style="Grid9BlackTint8" Hidden="0" ID="DetailsGrid" >
 
       <Box  Anchor="C,C" AnchorSide="o,o" Offset="0,0" Size="2,160" Color="255,255,200,32" HideBox="0" ID="DetailsSeperator" />
@@ -51,7 +51,7 @@
       </Stack>
 
 
-      <!-- Health Bars  -->
+
         <Container Anchor="C,T" AnchorSide="I.I" Size="12,80" Offset="0,24" Color="0,0,0,0" Hidden="0">
             <Box Anchor="C,T" AnchorSide="I.I" Size="12,120" Offset="-12,0" Color="0,0,0,200" Hidden="0">
                 <Image Anchor="C,B"  Offset="0,2"  Texture="assets/UI/Art/UnitPanel/HealthBarGreen.dds" Size="8.55" Hidden="0" ID="MyGreenBar"/>
@@ -106,11 +106,11 @@
 
   <Box Anchor="L,B" Size="166,128" Offset="244,0" Color="PlayerColor2,200" Hidden="1" />
 
-  <!-- Unit Portrait -->
+
   <Grid Anchor="L,B" Offset="517,-39" Size="346,208"  Padding="0,0" Style="Grid9DetailFive140" Hidden="0" >
 
     <Stack Anchor="L,C" Offset="18,0"  Padding="0" Size="0,0" StackGrowth="Bottom">
-      <!-- Promotions -->
+
       <Box Anchor="R,T" Size="310,26" Offset="0,0" Color="White,0" HideBox="0">
         <Stack Anchor="L,T"  Offset="-2,-4" Padding="-7"  StackGrowth="Right">
           <Image Size="32,32"  TextureOffset="0,0" Texture="Promotions256.dds" ID="UnitPromotion1"  />
@@ -123,7 +123,7 @@
         </Stack>
 
       </Box>
-      <!-- XP METER -->
+
       <Grid Anchor="R,C" Offset="0,0" Size="310,12" Padding="0,0" Style="Grid9FrameTurns" >
         <Image Anchor="L,T"  Offset="3,2"  Texture="assets/UI/Art/UnitPanel/XPmeter.dds" Size="269,7" Hidden="1" ID=""/>
       </Grid>
@@ -141,7 +141,7 @@
       </Grid>
     </Stack>
     <Box Anchor="L,T" Size="225,24" Offset="32,15" Color="0,0,0,0" >
-        <!--Label String="GERMAN SCOUT"  Anchor="C,C" AnchorSide="O.I" Offset="0,1" Font="TwCenMT24" ColorSet="Beige_Black_Alpha" FontStyle="SoftShadow" ID="UnitName" /-->
+
 		<Label ID="UnitName" String="TXT_KEY_UPANEL_UNIT_NAME" Anchor="C,C" Offset="0,-4" Font="TwCenMT24" ColorSet="Beige_Black_Alpha" FontStyle="SoftShadow" ToolTip="TXT_KEY_CURRENTLY_SELECTED_UNIT"/>
 		<Label ID="LongUnitName" String="TXT_KEY_UPANEL_UNIT_NAME" Anchor="C,C" Offset="0,-4" Font="TwCenMT20" ColorSet="Beige_Black_Alpha" FontStyle="SoftShadow" ToolTip="TXT_KEY_CURRENTLY_SELECTED_UNIT"/>
 		<Label ID="ReallyLongUnitName" String="TXT_KEY_UPANEL_UNIT_NAME" Anchor="C,C" Offset="0,-4" Font="TwCenMT14" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ToolTip="TXT_KEY_CURRENTLY_SELECTED_UNIT" WrapWidth="235"/>
@@ -167,10 +167,10 @@
 
 
 
-  <!-- Next/Prev Unit -->
+
   <Box Anchor="R,B" Size="274,22" Offset="216,125" Color="0,0,0,0" >
 
-    <!-- Upgrades -->
+
 
 
 

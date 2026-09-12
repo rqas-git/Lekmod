@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-24 14:15:24 -->
+
 <GameData>
 
-	<!-- +1 Happiness from Shrines. -->
+
 	<Beliefs>
 		<Row>
 			<Type>BELIEF_VISION_QUESTS</Type>
@@ -19,7 +19,7 @@
 		</Row>
 	</Belief_BuildingClassHappiness>
 	
-	<!-- localization -->
+
 	<Language_en_US>
 		<Row Tag="TXT_KEY_BELIEF_VISION_QUESTS">
 			<Text>+1 [ICON_HAPPINESS_1] Happiness from Shrines</Text>

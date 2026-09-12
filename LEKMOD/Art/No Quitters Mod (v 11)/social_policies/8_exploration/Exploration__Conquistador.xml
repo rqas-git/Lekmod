@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/7/2015 12:55:40 AM -->
+
 <GameData>
 
-	<!-- Conquistador -->
+
 	<UnitClasses>
 		<Row>
 			<Type>UNITCLASS_CONQUISTADOR</Type>
@@ -12,7 +12,7 @@
 	</UnitClasses>
 	<Units>
 		<Update>
-			<!-- If both FoundAbroad and Found are set to true, Venice will only allow FoundAbroad while everyone else can use Found -->
+
 			<Set Moves="4" Combat="16" Cost="32" FoundAbroad="true" Found="true" PrereqTech="NULL" Class="UNITCLASS_CONQUISTADOR" ObsoleteTech="NULL" GoodyHutUpgradeUnitClass="NULL" />
 			<Where Type="UNIT_SPANISH_CONQUISTADOR" />
 		</Update>

@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvGlobals.h"
 #include "ICvDLLUserInterface.h"
@@ -16,10 +16,10 @@
 #include "abi_checks.hpp"
 #endif
 
-// must be included after all other headers
+
 #include "LintFree.h"
 
-//------------------------------------------------------------------------------
+
 #if defined(LEKMOD_MACOS)
 extern "C"
 __attribute__((visibility("default")))
@@ -30,7 +30,7 @@ extern "C" ICvGameContext1* DllGetGameContext()
 {
 	return CvDllGameContext::GetSingleton();
 }
-//------------------------------------------------------------------------------
+
 #if defined(LEKMOD_MACOS)
 __attribute__((constructor)) static void LekmodInitialize()
 {
@@ -54,16 +54,16 @@ BOOL APIENTRY DllMain(HANDLE hModule,
 	{
 	case DLL_PROCESS_ATTACH:
 	{
-		// The DLL is being loaded into the virtual address space of the current process as a result of the process starting up
+
 		OutputDebugString("DLL_PROCESS_ATTACH\n");
 		FDebugHelper::GetInstance().LoadSymbols((HMODULE)hModule);
-		// set timer precision
+
 #ifdef CVASSERT_ENABLE
-		MMRESULT iTimeSet = timeBeginPeriod(1);		// set timeGetTime and sleep resolution to 1 ms, otherwise it's 10-16ms
+		MMRESULT iTimeSet = timeBeginPeriod(1);
 		DEBUG_VARIABLE(iTimeSet);
 		CvAssertMsg(iTimeSet==TIMERR_NOERROR, "failed setting timer resolution to 1 ms");
 #else
-		timeBeginPeriod(1);		// set timeGetTime and sleep resolution to 1 ms, otherwise it's 10-16ms
+		timeBeginPeriod(1);
 #endif
 		CvDllGameContext::InitializeSingleton();
 	}
@@ -82,6 +82,6 @@ BOOL APIENTRY DllMain(HANDLE hModule,
 		break;
 	}
 
-	return TRUE;	// success
+	return TRUE;
 }
 #endif

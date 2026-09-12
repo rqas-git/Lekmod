@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/9/2015 11:34:48 PM -->
+
 <GameData>
 
-	<!-- MILITARY CASTE -->
+
 	<Policies>
 		<Update>
 			<Set GarrisonFreeMaintenance="true" ProductionFromGarrison="0" />

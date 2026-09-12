@@ -1,8 +1,8 @@
--------------------------------------------------
--- Select Civilization
--- modified by bc1 from 1.0.3.144 code
--------------------------------------------------
-CivilopediaControl = "/FrontEnd/MainMenu/Other/Civilopedia";-- MUST be before include( "PopulateUniques" ) to enable pedia callback
+
+
+
+
+CivilopediaControl = "/FrontEnd/MainMenu/Other/Civilopedia";
 include( "PopulateUniques" ); local InitializePopulateUniques = InitializePopulateUniques; local PopulateUniquesForSelectCivilization = PopulateUniquesForSelectCivilization;
 local pairs = pairs
 local ipairs = ipairs
@@ -13,9 +13,9 @@ local g_bIsScenario = false;
 local g_bWasScenario = true;
 local g_bRefreshCivs = false;
 
--------------------------------------------------
--- Event processing
--------------------------------------------------
+
+
+
 local function RequireRefreshCivs()
 	g_bRefreshCivs = true;
 end;
@@ -36,9 +36,9 @@ function( uiMsg, wParam, lParam )
 	end
 end );
 
-----------------------------------------------------------------
--- Set the Civ
-----------------------------------------------------------------
+
+
+
 local function CivilizationSelected( civID, scenarioPlayerID )
 	PreGame.SetCivilization( 0, civID );
 	if g_bIsScenario and scenarioPlayerID then
@@ -52,9 +52,9 @@ local function CivilizationSelected( civID, scenarioPlayerID )
 	OnBack();
 end
 
--------------------------------------------------
--- Main processing
--------------------------------------------------
+
+
+
 ContextPtr:SetShowHideHandler(
 function( bIsHide )
 
@@ -104,9 +104,9 @@ function( bIsHide )
 				end
 			end
 		else
-			-- Start with random civ slot
+
 			civEntries = {{""}};
-			-- Add playable civilizations
+
 			for row in DB.Query([[ SELECT
 						Civilizations.ID,
 						Civilizations.Type,
@@ -127,10 +127,10 @@ function( bIsHide )
 			end
 		end
 
-		-- Sort civs by leader description
-		-- table_sort( civEntries, function(a, b) return Locale.Compare(a[1], b[1]) == -1 end );
 
-		-- Sorting Civs by Short Description
+
+
+
 		table.sort(civEntries, function(a,b)
 			local astr = a[1];
 			local bstr = b[1];
@@ -147,9 +147,9 @@ function( bIsHide )
 			end
 			return Locale.Compare(a0, b0) == -1;
 		end);
-		-- Sorting Civs by Short Description END
 
-		-- Populate civ slots
+
+
 		for i, civEntry in ipairs( civEntries ) do
 			local civControls = {};
 			ContextPtr:BuildInstanceForControl( "CivInstance", civControls, Controls.CivStack );

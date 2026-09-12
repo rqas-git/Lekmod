@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 9/12/2015 9:06:67 PM -->
+
 <GameData>
 	<Defines>
 		<Update>
@@ -13,7 +13,7 @@
 		</Update>
 	</Defines>
 
-	<!-- allow production of naval units in those cities -->
+
 	<Units>
 		<Update>
 			<Set MinAreaSize="6" />
@@ -21,9 +21,9 @@
 		</Update>
 	</Units>
 	
-	<!-- allow production of coastal buildings in those cities -->
+
 	<Buildings>
-		<!--Normal Buildings-->
+
 		<Update>
 			<Where Type="BUILDING_LIGHTHOUSE"/>
 			<Set MinAreaSize="6"/>
@@ -39,7 +39,7 @@
 			<Set MinAreaSize="6"/>
 		</Update>
 
-		<!--Wonders-->
+
 		<Update>
 			<Where Type="BUILDING_GREAT_LIGHTHOUSE"/>
 			<Set MinAreaSize="6"/>

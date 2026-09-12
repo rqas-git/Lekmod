@@ -1,10 +1,10 @@
--------------------------------------------------
--- Include file that has handy stuff for the tech tree and other screens that need to show a tech button
--------------------------------------------------
+
+
+
 include( "IconSupport" );
 include( "InfoTooltipInclude" );
 
--- List the textures that we will need here
+
 local defaultErrorTextureSheet;
 
 techPediaSearchStrings = {};
@@ -21,7 +21,7 @@ local validImprovementBuilds = nil;
 
 turnsString = Locale.ConvertTextKey("TXT_KEY_TURNS");
 freeString = Locale.ConvertTextKey("TXT_KEY_FREE");
-lockedString = "[ICON_LOCKED]"; --Locale.ConvertTextKey("TXT_KEY_LOCKED");
+lockedString = "[ICON_LOCKED]";
 
 function GetTechPedia( void1, void2, button )
 	local searchString = techPediaSearchStrings[tostring(button)];
@@ -34,38 +34,38 @@ function GatherInfoAboutUniqueStuff( civType )
 	validBuildingBuilds = {};
 	validImprovementBuilds = {};
 
-	-- put in the default units for any civ
+
 	for thisUnitClass in GameInfo.UnitClasses() do
 
 		validUnitBuilds[thisUnitClass.Type]	= thisUnitClass.DefaultUnit;
 
-		-- MOD.EAP: Remove any units that are not allowed to be built for this player
+
 		if validUnitBuilds[thisUnitClass.Type] == "UNIT_WORKBOAT" then
 			validUnitBuilds[thisUnitClass.Type] = nil;
 		end
 
 	end
 
-	-- put in my overrides
+
 	for thisOverride in GameInfo.Civilization_UnitClassOverrides() do
  		if thisOverride.CivilizationType == civType then
 			validUnitBuilds[thisOverride.UnitClassType]	= thisOverride.UnitType;
  		end
 	end
 
-	-- put in the default buildings for any civ
+
 	for thisBuildingClass in GameInfo.BuildingClasses() do
 		validBuildingBuilds[thisBuildingClass.Type]	= thisBuildingClass.DefaultBuilding;	
 	end
 
-	-- put in my overrides
+
 	for thisOverride in GameInfo.Civilization_BuildingClassOverrides() do
  		if thisOverride.CivilizationType == civType then
 			validBuildingBuilds[thisOverride.BuildingClassType]	= thisOverride.BuildingType;	
  		end
 	end
 	
-	-- add in support for unique improvements
+
 	for thisImprovement in GameInfo.Improvements() do
 
 		if thisImprovement.CivilizationType == civType or thisImprovement.CivilizationType == nil then
@@ -74,7 +74,7 @@ function GatherInfoAboutUniqueStuff( civType )
 			validImprovementBuilds[thisImprovement.Type] = nil;	
 		end
 
-		-- MOD.EAP: Remove any improvements that are not allowed for this civ
+
 		for leader in GameInfo.Civilization_Leaders() do
 			if leader.CivilizationType == civType then
 				local leaderType = leader.LeaderheadType;
@@ -94,7 +94,7 @@ function GatherInfoAboutUniqueStuff( civType )
 			end
 		end
 
-		-- MOD.EAP: Hardcode remove rubber plantation from the tech tree until I have a better solution
+
 		if thisImprovement.Type == "IMPROVEMENT_RUBBER_PLANTATION" then
 			validImprovementBuilds[thisImprovement.Type] = nil;
 		end
@@ -104,13 +104,13 @@ end
 
 
 function AddSmallButtonsToTechButton( thisTechButtonInstance, tech, maxSmallButtons, textureSize )
-	-- This has a few assumptions, the main one being that the small buttons are named "B1", "B2", "B3"... and that GatherInfoAboutUniqueStuff() has been called before this
+
 
 	local function setCircularHover( buttonNum, isCircular )
-		-- hover chrome removed
+
 	end
 
-	-- first, hide the ones we aren't using
+
 	for buttonNum = 1, maxSmallButtons, 1 do
 		local buttonName = "B"..tostring(buttonNum);
 		local thisButton = thisTechButtonInstance[buttonName];
@@ -128,9 +128,9 @@ function AddSmallButtonsToTechButton( thisTechButtonInstance, tech, maxSmallButt
 
 	local techType = tech.Type;
 
-	-- add the stuff granted by this tech here
+
   	for thisUnitInfo in GameInfo.Units(string.format("PreReqTech = '%s'", techType)) do
- 		-- if this tech grants this player the ability to make this unit
+
 		if validUnitBuilds[thisUnitInfo.Class] == thisUnitInfo.Type then
 			local buttonName = "B"..tostring(buttonNum);
 			local thisButton = thisTechButtonInstance[buttonName];
@@ -143,7 +143,7 @@ function AddSmallButtonsToTechButton( thisTechButtonInstance, tech, maxSmallButt
  	end
  	
  	for thisBuildingInfo in GameInfo.Buildings(string.format("PreReqTech = '%s'", techType)) do
- 		-- if this tech grants this player the ability to construct this building
+
 		if validBuildingBuilds[thisBuildingInfo.BuildingClass] == thisBuildingInfo.Type then
 			local buttonName = "B"..tostring(buttonNum);
 			local thisButton = thisTechButtonInstance[buttonName];
@@ -156,7 +156,7 @@ function AddSmallButtonsToTechButton( thisTechButtonInstance, tech, maxSmallButt
  	end
 
  	for thisResourceInfo in GameInfo.Resources(string.format("TechReveal = '%s'", techType)) do
- 		-- if this tech grants this player the ability to reveal this resource
+
 		local buttonName = "B"..tostring(buttonNum);
 		local thisButton = thisTechButtonInstance[buttonName];
 		if thisButton then
@@ -167,7 +167,7 @@ function AddSmallButtonsToTechButton( thisTechButtonInstance, tech, maxSmallButt
  	end
  
  	for thisProjectInfo in GameInfo.Projects(string.format("TechPrereq = '%s'", techType)) do
- 		-- if this tech grants this player the ability to build this project
+
 		local buttonName = "B"..tostring(buttonNum);
 		local thisButton = thisTechButtonInstance[buttonName];
  		if thisButton then
@@ -177,7 +177,7 @@ function AddSmallButtonsToTechButton( thisTechButtonInstance, tech, maxSmallButt
  		end
 	end
 
-	-- if this tech grants this player the ability to perform this action (usually only workers can do these)
+
 	for thisBuildInfo in GameInfo.Builds{PrereqTech = techType, ShowInTechTree  = 1} do
 		if thisBuildInfo.ImprovementType then
 			if validImprovementBuilds[thisBuildInfo.ImprovementType] == thisBuildInfo.ImprovementType then
@@ -200,7 +200,7 @@ function AddSmallButtonsToTechButton( thisTechButtonInstance, tech, maxSmallButt
 		end
 	end
 	
-	-- show processes
+
 	local processCondition = "TechPrereq = '" .. techType .. "'";
 	for row in GameInfo.Processes(processCondition) do
 		local buttonName = "B"..tostring(buttonNum);
@@ -215,7 +215,7 @@ function AddSmallButtonsToTechButton( thisTechButtonInstance, tech, maxSmallButt
 		buttonNum = buttonNum + 1;
 	end	
 		
- 	-- todo: need to add abilities, etc.
+
 	local condition = "TechType = '" .. techType .. "'";
 		
 	for row in GameInfo.Route_TechMovementChanges(condition) do
@@ -232,12 +232,12 @@ function AddSmallButtonsToTechButton( thisTechButtonInstance, tech, maxSmallButt
 		end
 	end	
 	
-	-- Some improvements can have multiple yield changes, group them and THEN add buttons.
+
 	local yieldChanges = {};
 	for row in GameInfo.Improvement_TechYieldChanges(condition) do
 		local improvementType = row.ImprovementType;
 
-		-- MOD.EAP: Check if the improvement is valid for this civ
+
 		if validImprovementBuilds[row.ImprovementType] == row.ImprovementType then
 			if(yieldChanges[improvementType] == nil) then
 				yieldChanges[improvementType] = {};
@@ -250,7 +250,7 @@ function AddSmallButtonsToTechButton( thisTechButtonInstance, tech, maxSmallButt
 		end
 	end
 	
-	-- Let's sort the yield change butons!
+
 	local sortedYieldChanges = {};
 	for k,v in pairs(yieldChanges) do
 	
@@ -278,8 +278,8 @@ function AddSmallButtonsToTechButton( thisTechButtonInstance, tech, maxSmallButt
 	for row in GameInfo.Improvement_TechNoFreshWaterYieldChanges(condition) do
 		local buttonName = "B"..tostring(buttonNum);
 		local thisButton = thisTechButtonInstance[buttonName];
-		-- MOD.EAP: Check if the improvement is valid for this civ
-		if validImprovementBuilds[row.ImprovementType] ~= row.ImprovementType then -- skip
+
+		if validImprovementBuilds[row.ImprovementType] ~= row.ImprovementType then
 		elseif thisButton then
 			IconHookup( 0, textureSize, "GENERIC_FUNC_ATLAS", thisButton );
 			thisButton:SetHide( false );
@@ -295,8 +295,8 @@ function AddSmallButtonsToTechButton( thisTechButtonInstance, tech, maxSmallButt
 		local buttonName = "B"..tostring(buttonNum);
 		local thisButton = thisTechButtonInstance[buttonName];
 
-		-- MOD.EAP: Check if the improvement is valid for this civ
-		if validImprovementBuilds[row.ImprovementType] ~= row.ImprovementType then -- skip
+
+		if validImprovementBuilds[row.ImprovementType] ~= row.ImprovementType then
 		elseif thisButton then
 			IconHookup( 0, textureSize, "GENERIC_FUNC_ATLAS", thisButton );
 			thisButton:SetHide( false );
@@ -604,7 +604,7 @@ function AddSmallButtonsToTechButton( thisTechButtonInstance, tech, maxSmallButt
 		end
 	end
 
-	-- MOD.EAP: Globalization custom button
+
 	if tech.AdditionalDelegates > 0 then
 		local buttonName = "B"..tostring(buttonNum);
 		local thisButton = thisTechButtonInstance[buttonName];
@@ -647,10 +647,10 @@ end
 
 
 function AdjustArtOnGrantedUnitButton( thisButton, thisUnitInfo, textureSize )
-	-- if we have one, update the unit picture
+
 	if thisButton then
 		
-		-- Tooltip
+
 		local bIncludeRequirementsInfo = true;
 		thisButton:SetToolTipString( GetHelpTextForUnit(thisUnitInfo.ID, bIncludeRequirementsInfo) );
 		local portraitOffset, portraitAtlas = UI.GetUnitPortraitIcon(thisUnitInfo.ID);
@@ -669,10 +669,10 @@ end
 
 
 function AdjustArtOnGrantedBuildingButton( thisButton, thisBuildingInfo, textureSize )
-	-- if we have one, update the building (or wonder) picture
+
 	if thisButton then
 		
-		-- Tooltip
+
 		local bExcludeName = false;
 		local bExcludeHeader = false;
 		thisButton:SetToolTipString( GetHelpTextForBuilding(thisBuildingInfo.ID, bExcludeName, bExcludeHeader, false, nil) );
@@ -692,10 +692,10 @@ end
 
 
 function AdjustArtOnGrantedProjectButton( thisButton, thisProjectInfo, textureSize )
-	-- if we have one, update the project picture
+
 	if thisButton then
 		
-		-- Tooltip
+
 		local bIncludeRequirementsInfo = true;
 		thisButton:SetToolTipString( GetHelpTextForProject(thisProjectInfo.ID, bIncludeRequirementsInfo) );
 
@@ -746,11 +746,11 @@ function AdjustArtOnGrantedActionButton( thisButton, thisBuildInfo, textureSize 
 			techPediaSearchStrings[tostring(thisButton)] = Locale.ConvertTextKey( GameInfo.Routes[thisBuildInfo.RouteType].Description );
 		elseif thisBuildInfo.ImprovementType then
 			techPediaSearchStrings[tostring(thisButton)] = Locale.ConvertTextKey( GameInfo.Improvements[thisBuildInfo.ImprovementType].Description );
-		else -- we are a choppy thing
+		else
 			techPediaSearchStrings[tostring(thisButton)] = Locale.ConvertTextKey( GameInfo.Concepts["CONCEPT_WORKERS_CLEARINGLAND"].Description );
 		end
 		thisButton:RegisterCallback( Mouse.eRClick, GetTechPedia );
-		--techPediaSearchStrings[tostring(thisButton)] = Locale.ConvertTextKey( thisBuildInfo.Description );
-		--thisButton:RegisterCallback( Mouse.eRClick, GetTechPedia );
+
+
 	end
 end

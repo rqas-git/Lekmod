@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 
 #include "CvGameCoreDLLPCH.h"
 #include "CvLuaSupport.h"
@@ -15,17 +15,17 @@
 #include "../CvMinorCivAI.h"
 #include "../CvUnitCombat.h"
 
-//Utility macro for registering methods
+
 #define Method(Name)			\
 	lua_pushcclosure(L, l##Name, 0);	\
 	lua_setfield(L, t, #Name);
 
-//------------------------------------------------------------------------------
+
 void CvLuaUnit::HandleMissingInstance(lua_State* L)
 {
 	luaL_error(L, "Instance no longer exists.");
 }
-//------------------------------------------------------------------------------
+
 void CvLuaUnit::PushMethods(lua_State* L, int t)
 {
 	Method(IsNone);
@@ -486,7 +486,7 @@ void CvLuaUnit::PushMethods(lua_State* L, int t)
 
 	Method(GetGreatWorkSlotType);
 
-	// Helper Functions
+
 	Method(RangeStrike);
 
 	Method(PushMission);
@@ -511,16 +511,16 @@ void CvLuaUnit::PushMethods(lua_State* L, int t)
 	Method(IsNearImprovementType);
 #endif
 }
-//------------------------------------------------------------------------------
+
 const char* CvLuaUnit::GetTypeName()
 {
 	return "Unit";
 }
 
-//------------------------------------------------------------------------------
-// Lua member methods
-//------------------------------------------------------------------------------
-//bool isNone();
+
+
+
+
 int CvLuaUnit::lIsNone(lua_State* L)
 {
 #ifdef AUI_WARNING_FIXES
@@ -533,8 +533,8 @@ int CvLuaUnit::lIsNone(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void convert(CyUnit* pUnit);
+
+
 int CvLuaUnit::lConvert(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -544,8 +544,8 @@ int CvLuaUnit::lConvert(lua_State* L)
 	pkUnit->convert(pkUnitToConvert, bIsUpgrade);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//void kill(bool bDelay, PlayerTypes ePlayer = NO_PLAYER);
+
+
 int CvLuaUnit::lKill(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -556,14 +556,14 @@ int CvLuaUnit::lKill(lua_State* L)
 	pkUnit->kill(bDelay, ePlayer);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//bool isActionRecommended(int i);
+
+
 int CvLuaUnit::lIsActionRecommended(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvUnit::isActionRecommended);
 }
-//------------------------------------------------------------------------------
-//bool isBetterDefenderThan(CyUnit* pDefender, CyUnit* pAttacker);
+
+
 int CvLuaUnit::lIsBetterDefenderThan(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -574,30 +574,30 @@ int CvLuaUnit::lIsBetterDefenderThan(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canDoCommand(CommandTypes eCommand, int iData1, int iData2, bool bTestVisible = false, bool bTestBusy = true);
+
+
 int CvLuaUnit::lCanDoCommand(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
 	const CommandTypes eCommand = (CommandTypes)lua_tointeger(L, 2);
 	const int iData1		= lua_tointeger(L, 3);
 	const int iData2		= lua_tointeger(L, 4);
-	const bool bTestVisible = luaL_optint(L, 5, 0);		//defaults to false
-	const bool bTestBusy	= luaL_optint(L, 6, 1);		//defaults to true
+	const bool bTestVisible = luaL_optint(L, 5, 0);
+	const bool bTestBusy	= luaL_optint(L, 6, 1);
 
 	const bool bResult = pkUnit->canDoCommand(eCommand, iData1, iData2, bTestVisible, bTestBusy);
 
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void doCommand(CommandTypes eCommand, int iData1, int iData2);
+
+
 int CvLuaUnit::lDoCommand(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvUnit::doCommand);
 }
-//------------------------------------------------------------------------------
-//CyPlot* getPathEndTurnPlot();
+
+
 int CvLuaUnit::lGetPathEndTurnPlot(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -607,8 +607,8 @@ int CvLuaUnit::lGetPathEndTurnPlot(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//CyPlot* getPathAttackFromPlot(CyPlot* pTargetPlot);
+
+
 int CvLuaUnit::lGetPathAttackFromPlot(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -619,23 +619,23 @@ int CvLuaUnit::lGetPathAttackFromPlot(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool generatePath(CyPlot* pToPlot, int iFlags = 0, bool bReuse = false, int* piPathTurns = NULL);
+
+
 int CvLuaUnit::lGeneratePath(lua_State* L)
 {
 	luaL_error(L, "NYI");
-	/*CvUnit* pkUnit = GetInstance(L);
-	CvPlot* pkPlot = CvLuaPlot::GetInstance(L, 2);
-	const int iFlags = 0;
-	const bool bReuse = luaL_optint(L, 4, 0);	//defeaults to false
-	const bool bResult = pkUnit->generatePath();
 
-	lua_pushboolean(L, bResult);
-	return 1;*/
+
+
+
+
+
+
+
 	return 0;
 }
-//------------------------------------------------------------------------------
-//bool canEnterTerritory(int /*TeamTypes*/ eTeam, bool bIgnoreRightOfPassage = false, bool bIsCity = false);
+
+
 int CvLuaUnit::lCanEnterTerritory(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -648,8 +648,8 @@ int CvLuaUnit::lCanEnterTerritory(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//TeamTypes GetDeclareWarRangeStrike(CvPlot* pPlot)
+
+
 int CvLuaUnit::lGetDeclareWarRangeStrike(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -663,8 +663,8 @@ int CvLuaUnit::lGetDeclareWarRangeStrike(lua_State* L)
 	lua_pushinteger(L, eResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canMoveOrAttackInto(CyPlot* pPlot, bool bDeclareWar = false, bDestination = false);
+
+
 int CvLuaUnit::lCanMoveOrAttackInto(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -691,8 +691,8 @@ int CvLuaUnit::lCanMoveOrAttackInto(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canMoveThrough(CyPlot* pPlot);
+
+
 int CvLuaUnit::lCanMoveThrough(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -706,8 +706,8 @@ int CvLuaUnit::lCanMoveThrough(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void jumpToNearestValidPlot();
+
+
 int CvLuaUnit::lJumpToNearestValidPlot(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -716,8 +716,8 @@ int CvLuaUnit::lJumpToNearestValidPlot(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-// int getCombatDamage(int iStrength, int iOpponentStrength, int iCurrentDamage, bool bIncludeRand = true, bool bAttackerIsCity = false, bool bDefenderIsCity = false);
+
+
 int CvLuaUnit::lGetCombatDamage(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -733,8 +733,8 @@ int CvLuaUnit::lGetCombatDamage(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//CvUnit* getFireSupportUnit(PlayerTypes eDefender, int iX, int iY);
+
+
 int CvLuaUnit::lGetFireSupportUnit(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -747,8 +747,8 @@ int CvLuaUnit::lGetFireSupportUnit(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canAutomate(AutomateTypes eAutomate);
+
+
 int CvLuaUnit::lCanAutomate(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -758,8 +758,8 @@ int CvLuaUnit::lCanAutomate(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canRebaseAt(plot,x,y);
+
+
 int CvLuaUnit::lCanRebaseAt(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -771,8 +771,8 @@ int CvLuaUnit::lCanRebaseAt(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canScrap();
+
+
 int CvLuaUnit::lCanScrap(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -781,8 +781,8 @@ int CvLuaUnit::lCanScrap(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool GetScrapGold();
+
+
 int CvLuaUnit::lGetScrapGold(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -791,8 +791,8 @@ int CvLuaUnit::lGetScrapGold(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canGift(bool bTestVisible = false, bool bTestTransport = false);
+
+
 int CvLuaUnit::lCanGift(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -803,8 +803,8 @@ int CvLuaUnit::lCanGift(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool CanDistanceGift();
+
+
 int CvLuaUnit::lCanDistanceGift(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -814,8 +814,8 @@ int CvLuaUnit::lCanDistanceGift(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canLoadUnit(CyUnit* pUnit, CyPlot* pPlot);
+
+
 int CvLuaUnit::lCanLoadUnit(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -830,8 +830,8 @@ int CvLuaUnit::lCanLoadUnit(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canLoad(CyPlot* pPlot);
+
+
 int CvLuaUnit::lCanLoad(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -845,8 +845,8 @@ int CvLuaUnit::lCanLoad(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canUnload();
+
+
 int CvLuaUnit::lCanUnload(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -855,8 +855,8 @@ int CvLuaUnit::lCanUnload(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canUnloadAll();
+
+
 int CvLuaUnit::lCanUnloadAll(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -865,8 +865,8 @@ int CvLuaUnit::lCanUnloadAll(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canHold(CyPlot* pPlot);
+
+
 int CvLuaUnit::lCanHold(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -876,8 +876,8 @@ int CvLuaUnit::lCanHold(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canSleep(CyPlot* pPlot);
+
+
 int CvLuaUnit::lCanSleep(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -887,8 +887,8 @@ int CvLuaUnit::lCanSleep(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canFortify(CyPlot* pPlot);
+
+
 int CvLuaUnit::lCanFortify(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -898,8 +898,8 @@ int CvLuaUnit::lCanFortify(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canAirPatrol(CyPlot* pPlot);
+
+
 int CvLuaUnit::lCanAirPatrol(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -909,8 +909,8 @@ int CvLuaUnit::lCanAirPatrol(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isEmbarked();
+
+
 int CvLuaUnit::lIsEmbarked(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -919,8 +919,8 @@ int CvLuaUnit::lIsEmbarked(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setEmbarked(bool bNewValue);
+
+
 int CvLuaUnit::lSetEmbarked(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -929,8 +929,8 @@ int CvLuaUnit::lSetEmbarked(lua_State* L)
 	pkUnit->setEmbarked(bNewValue);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//bool canHeal(CyPlot* pPlot);
+
+
 int CvLuaUnit::lCanHeal(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -940,8 +940,8 @@ int CvLuaUnit::lCanHeal(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canSentry(CyPlot* pPlot);
+
+
 int CvLuaUnit::lCanSentry(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -951,8 +951,8 @@ int CvLuaUnit::lCanSentry(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canEmbark(CvPlot* pPlot)
+
+
 int CvLuaUnit::lCanEmbark(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -962,8 +962,8 @@ int CvLuaUnit::lCanEmbark(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canDisembark(CvPlot* pPlot)
+
+
 int CvLuaUnit::lCanDisembark(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -973,14 +973,14 @@ int CvLuaUnit::lCanDisembark(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool CanEmbarkOnto(CvPlot* pPlot)
+
+
 int CvLuaUnit::lCanEmbarkOnto(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
 	CvPlot* pkOriginPlot = CvLuaPlot::GetInstance(L, 2);
 	CvPlot* pkTargetPlot = CvLuaPlot::GetInstance(L, 3);
-	bool bIsDestination = luaL_optbool(L, 4, true);		// Assume Lua is querying for a destination of the embark.  This will cause the test to fail if there is are stacking issues.
+	bool bIsDestination = luaL_optbool(L, 4, true);
 	bool bResult = false;
 	if(pkOriginPlot && pkTargetPlot)
 	{
@@ -990,13 +990,13 @@ int CvLuaUnit::lCanEmbarkOnto(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool CanDisembarkOnto(CvPlot* pPlot)
+
+
 int CvLuaUnit::lCanDisembarkOnto(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
 	CvPlot* pkTargetPlot = CvLuaPlot::GetInstance(L, 2);
-	bool bIsDestination = luaL_optbool(L, 3, true);		// Assume Lua is querying for a destination of the dis-embark.  This will cause the test to fail if there is are stacking issues.
+	bool bIsDestination = luaL_optbool(L, 3, true);
 
 	bool bResult = false;
 	if(pkTargetPlot)
@@ -1007,8 +1007,8 @@ int CvLuaUnit::lCanDisembarkOnto(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void Embark(CvPlot* pPlot)
+
+
 int CvLuaUnit::lEmbark(lua_State* L)
 {
 	bool bSuccess = false;
@@ -1033,14 +1033,14 @@ int CvLuaUnit::lEmbark(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsRangeAttackIgnoreLOS(CyPlot* pPlot);
+
+
 int CvLuaUnit::lIsRangeAttackIgnoreLOS(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvUnit::IsRangeAttackIgnoreLOS);
 }
-//------------------------------------------------------------------------------
-//bool canAirlift(CyPlot* pPlot);
+
+
 int CvLuaUnit::lCanAirlift(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1050,8 +1050,8 @@ int CvLuaUnit::lCanAirlift(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canAirliftAt(CyPlot* pPlot, int iX, int iY);
+
+
 int CvLuaUnit::lCanAirliftAt(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1063,8 +1063,8 @@ int CvLuaUnit::lCanAirliftAt(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isNukeVictim(CyPlot* pPlot, int /*TeamTypes*/ eTeam);
+
+
 int CvLuaUnit::lIsNukeVictim(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1075,8 +1075,8 @@ int CvLuaUnit::lIsNukeVictim(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canNuke(CyPlot* pPlot);
+
+
 int CvLuaUnit::lCanNuke(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1085,8 +1085,8 @@ int CvLuaUnit::lCanNuke(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canNukeAt(CyPlot* pPlot, int iX, int iY);
+
+
 int CvLuaUnit::lCanNukeAt(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1097,14 +1097,14 @@ int CvLuaUnit::lCanNukeAt(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool CanRangeStrike()
+
+
 int CvLuaUnit::lCanRangeStrike(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvUnit::canRangeStrike);
 }
-//------------------------------------------------------------------------------
-//bool CanRangeStrikeAt(int iX, int iY)
+
+
 int CvLuaUnit::lCanRangeStrikeAt(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1118,10 +1118,10 @@ int CvLuaUnit::lCanRangeStrikeAt(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 
-	//return BasicLuaMethod(L, &CvUnit::canRangeStrikeAt);
+
 }
-//------------------------------------------------------------------------------
-//bool canParadrop(CyPlot* pPlot);
+
+
 int CvLuaUnit::lCanParadrop(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1132,8 +1132,8 @@ int CvLuaUnit::lCanParadrop(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canParadropAt(CyPlot* pPlot, int iX, int iY);
+
+
 int CvLuaUnit::lCanParadropAt(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1145,8 +1145,8 @@ int CvLuaUnit::lCanParadropAt(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canMakeTradeRoute(CyPlot* pPlot)
+
+
 int CvLuaUnit::lCanMakeTradeRoute(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1156,8 +1156,8 @@ int CvLuaUnit::lCanMakeTradeRoute(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canMakeTradeRouteAt(CyPlot* pPlot, int iX, int iY)
+
+
 int CvLuaUnit::lCanMakeTradeRouteAt(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1170,8 +1170,8 @@ int CvLuaUnit::lCanMakeTradeRouteAt(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetExoticGoodsGoldAmount()
+
+
 int CvLuaUnit::lGetExoticGoodsGoldAmount(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1180,8 +1180,8 @@ int CvLuaUnit::lGetExoticGoodsGoldAmount(lua_State* L)
 	lua_pushinteger(L, iValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetExoticGoodsXPAmount()
+
+
 int CvLuaUnit::lGetExoticGoodsXPAmount(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1190,8 +1190,8 @@ int CvLuaUnit::lGetExoticGoodsXPAmount(lua_State* L)
 	lua_pushinteger(L, iValue);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canPillage(CyPlot* pPlot);
+
+
 int CvLuaUnit::lCanPillage(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1201,8 +1201,8 @@ int CvLuaUnit::lCanPillage(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsSelected( void );
+
+
 int CvLuaUnit::lIsSelected(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1211,8 +1211,8 @@ int CvLuaUnit::lIsSelected(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canFound(CyPlot* pPlot, bool bTestVisible = false);
+
+
 int CvLuaUnit::lCanFound(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1223,8 +1223,8 @@ int CvLuaUnit::lCanFound(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canJoin(CyPlot* pPlot, int /*SpecialistTypes*/ eSpecialist);
+
+
 int CvLuaUnit::lCanJoin(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1235,8 +1235,8 @@ int CvLuaUnit::lCanJoin(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canConstruct(CyPlot* pPlot, int /*BuildingTypes*/ eBuilding);
+
+
 int CvLuaUnit::lCanConstruct(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1247,7 +1247,7 @@ int CvLuaUnit::lCanConstruct(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaUnit::lIsRangeAttackOnlyInDomain(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1263,7 +1263,7 @@ int CvLuaUnit::lIsRangeAttackOnlyInDomain(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaUnit::lIsCityAttackOnly(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1271,29 +1271,29 @@ int CvLuaUnit::lIsCityAttackOnly(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//TechTypes getDiscoveryTech();
-//int CvLuaUnit::lGetDiscoveryTech(lua_State* L)
-//{
-//	CvUnit* pkUnit = GetInstance(L);
-//
-//	const TechTypes eResult = pkUnit->getDiscoveryTech();
-//	lua_pushinteger(L, eResult);
-//	return 1;
-//}
-////------------------------------------------------------------------------------
-////int getDiscoverResearch(int /*TechTypes*/ eTech);
-//int CvLuaUnit::lGetDiscoverResearch(lua_State* L)
-//{
-//	CvUnit* pkUnit = GetInstance(L);
-//	const TechTypes eTech = (TechTypes)lua_tointeger(L, 2);
-//
-//	const int iResult = pkUnit->getDiscoverResearch(eTech);
-//	lua_pushinteger(L, iResult);
-//	return 1;
-//}
-//------------------------------------------------------------------------------
-//bool canDiscover(CyPlot* pPlot);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int CvLuaUnit::lCanDiscover(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1303,8 +1303,8 @@ int CvLuaUnit::lCanDiscover(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getDiscoverAmount();
+
+
 int CvLuaUnit::lGetDiscoverAmount(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1313,8 +1313,8 @@ int CvLuaUnit::lGetDiscoverAmount(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetHurryProduction(CvPlot* pPlot);
+
+
 int CvLuaUnit::lGetHurryProduction(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1324,8 +1324,8 @@ int CvLuaUnit::lGetHurryProduction(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetTradeGold(CyPlot* pPlot);
+
+
 int CvLuaUnit::lGetTradeGold(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1335,8 +1335,8 @@ int CvLuaUnit::lGetTradeGold(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetTradeInfluence(CyPlot* pPlot);
+
+
 int CvLuaUnit::lGetTradeInfluence(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1346,8 +1346,8 @@ int CvLuaUnit::lGetTradeInfluence(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canBuyCityState(CyPlot* pPlot, bool bTestVisible);
+
+
 int CvLuaUnit::lCanBuyCityState(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1358,8 +1358,8 @@ int CvLuaUnit::lCanBuyCityState(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canTrade(CyPlot* pPlot, bool bTestVisible);
+
+
 int CvLuaUnit::lCanTrade(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1370,8 +1370,8 @@ int CvLuaUnit::lCanTrade(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canRepairFleet(CyPlot* pPlot, bool bTestVisible);
+
+
 int CvLuaUnit::lCanRepairFleet(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1382,8 +1382,8 @@ int CvLuaUnit::lCanRepairFleet(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool CanBuildSpaceship(CyPlot* pPlot, bool bVisible);
+
+
 int CvLuaUnit::lCanBuildSpaceship(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1394,8 +1394,8 @@ int CvLuaUnit::lCanBuildSpaceship(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canGoldenAge(CyPlot* pPlot, bool bTestVisible);
+
+
 int CvLuaUnit::lCanGoldenAge(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1405,8 +1405,8 @@ int CvLuaUnit::lCanGoldenAge(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetGoldenAgeTurns();
+
+
 int CvLuaUnit::lGetGoldenAgeTurns(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1415,8 +1415,8 @@ int CvLuaUnit::lGetGoldenAgeTurns(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetGivePoliciesCulture()
+
+
 int CvLuaUnit::lGetGivePoliciesCulture(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1425,8 +1425,8 @@ int CvLuaUnit::lGetGivePoliciesCulture(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetBlastTourism()
+
+
 int CvLuaUnit::lGetBlastTourism(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1435,8 +1435,8 @@ int CvLuaUnit::lGetBlastTourism(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canBuild(CyPlot* pPlot, int /*BuildTypes*/ eBuild, bool bTestVisible = false, bTestGold = true);
+
+
 int CvLuaUnit::lCanBuild(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1449,8 +1449,8 @@ int CvLuaUnit::lCanBuild(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int canLead(CyPlot* pPlot, int iUnitId) const;
+
+
 int CvLuaUnit::lCanLead(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1462,8 +1462,8 @@ int CvLuaUnit::lCanLead(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool lead(int iUnitId);
+
+
 int CvLuaUnit::lLead(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1473,8 +1473,8 @@ int CvLuaUnit::lLead(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int canGiveExperience(CyPlot* pPlot) const;
+
+
 int CvLuaUnit::lCanGiveExperience(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1484,8 +1484,8 @@ int CvLuaUnit::lCanGiveExperience(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool giveExperience();
+
+
 int CvLuaUnit::lGiveExperience(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1494,8 +1494,8 @@ int CvLuaUnit::lGiveExperience(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canPromote(int /*PromotionTypes*/ ePromotion, int iLeaderUnitId);
+
+
 int CvLuaUnit::lCanPromote(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1506,8 +1506,8 @@ int CvLuaUnit::lCanPromote(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void promote(int /*PromotionTypes*/ ePromotion, int iLeaderUnitId);
+
+
 int CvLuaUnit::lPromote(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1518,8 +1518,8 @@ int CvLuaUnit::lPromote(lua_State* L)
 	return 0;
 }
 #if defined(LEKMOD_RETRAIN_MISSION)
-//------------------------------------------------------------------------------
-//int getNumPlayerChosenPromotions()
+
+
 int CvLuaUnit::lGetNumPlayerChosenPromotions(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1528,8 +1528,8 @@ int CvLuaUnit::lGetNumPlayerChosenPromotions(lua_State* L)
 	return 1;
 }
 #endif
-//------------------------------------------------------------------------------
-//int GetUpgradeUnitType();
+
+
 int CvLuaUnit::lGetUpgradeUnitType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1538,8 +1538,8 @@ int CvLuaUnit::lGetUpgradeUnitType(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int upgradePrice(int /*UnitTypes*/ eUnit);
+
+
 int CvLuaUnit::lUpgradePrice(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1549,7 +1549,7 @@ int CvLuaUnit::lUpgradePrice(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaUnit::lCanUpgradeRightNow(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1559,7 +1559,7 @@ int CvLuaUnit::lCanUpgradeRightNow(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaUnit::lGetNumResourceNeededToUpgrade(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1579,8 +1579,8 @@ int CvLuaUnit::lGetNumResourceNeededToUpgrade(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int /*HandicapTypes*/ getHandicapType();
+
+
 int CvLuaUnit::lGetHandicapType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1589,8 +1589,8 @@ int CvLuaUnit::lGetHandicapType(lua_State* L)
 	lua_pushinteger(L, eResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int /*CivilizationTypes*/ getCivilizationType();
+
+
 int CvLuaUnit::lGetCivilizationType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1599,8 +1599,8 @@ int CvLuaUnit::lGetCivilizationType(lua_State* L)
 	lua_pushinteger(L, eResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int /*SpecialUnitTypes*/ getSpecialUnitType();
+
+
 int CvLuaUnit::lGetSpecialUnitType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1609,8 +1609,8 @@ int CvLuaUnit::lGetSpecialUnitType(lua_State* L)
 	lua_pushinteger(L, eResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int /*UnitTypes*/ getCaptureUnitType(int /*CivilizationTypes*/ eCivilization);
+
+
 int CvLuaUnit::lGetCaptureUnitType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1620,8 +1620,8 @@ int CvLuaUnit::lGetCaptureUnitType(lua_State* L)
 	lua_pushinteger(L, eResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int /*UnitCombatTypes*/ getUnitCombatType();
+
+
 int CvLuaUnit::lGetUnitCombatType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1630,8 +1630,8 @@ int CvLuaUnit::lGetUnitCombatType(lua_State* L)
 	lua_pushinteger(L, eResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int /*UnitAITypes*/ getUnitAIType();
+
+
 int CvLuaUnit::lGetUnitAIType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1640,8 +1640,8 @@ int CvLuaUnit::lGetUnitAIType(lua_State* L)
 	lua_pushinteger(L, eResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setUnitAIType(UnitAITypes eNewValue);
+
+
 int CvLuaUnit::lSetUnitAIType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1649,8 +1649,8 @@ int CvLuaUnit::lSetUnitAIType(lua_State* L)
 	pkUnit->AI_setUnitAIType(eUnitAI);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int /*DomainTypes*/ getDomainType();
+
+
 int CvLuaUnit::lGetDomainType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1659,8 +1659,8 @@ int CvLuaUnit::lGetDomainType(lua_State* L)
 	lua_pushinteger(L, eResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int /*InvisibleTypes*/ getInvisibleType();
+
+
 int CvLuaUnit::lGetInvisibleType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1669,8 +1669,8 @@ int CvLuaUnit::lGetInvisibleType(lua_State* L)
 	lua_pushinteger(L, eResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int /*InvisibleTypes*/ getSeeInvisibleType();
+
+
 int CvLuaUnit::lGetSeeInvisibleType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1679,8 +1679,8 @@ int CvLuaUnit::lGetSeeInvisibleType(lua_State* L)
 	lua_pushinteger(L, eResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetDropRange();
+
+
 int CvLuaUnit::lGetDropRange(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1689,8 +1689,8 @@ int CvLuaUnit::lGetDropRange(lua_State* L)
 	lua_pushinteger(L, eResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int flavorValue(int /*FlavorTypes*/ eFlavor);
+
+
 int CvLuaUnit::lFlavorValue(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1700,8 +1700,8 @@ int CvLuaUnit::lFlavorValue(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isBarbarian();
+
+
 int CvLuaUnit::lIsBarbarian(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1711,8 +1711,8 @@ int CvLuaUnit::lIsBarbarian(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
-//bool isHuman();
+
+
 int CvLuaUnit::lIsHuman(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1721,8 +1721,8 @@ int CvLuaUnit::lIsHuman(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int visibilityRange();
+
+
 int CvLuaUnit::lVisibilityRange(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1731,8 +1731,8 @@ int CvLuaUnit::lVisibilityRange(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int maxMoves();
+
+
 int CvLuaUnit::lMaxMoves(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1741,8 +1741,8 @@ int CvLuaUnit::lMaxMoves(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int movesLeft();
+
+
 int CvLuaUnit::lMovesLeft(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1751,8 +1751,8 @@ int CvLuaUnit::lMovesLeft(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canMove();
+
+
 int CvLuaUnit::lCanMove(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1761,8 +1761,8 @@ int CvLuaUnit::lCanMove(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool hasMoved();
+
+
 int CvLuaUnit::lHasMoved(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1771,8 +1771,8 @@ int CvLuaUnit::lHasMoved(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetRange();
+
+
 int CvLuaUnit::lRange(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1781,8 +1781,8 @@ int CvLuaUnit::lRange(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetNukeDamageLevel();
+
+
 int CvLuaUnit::lNukeDamageLevel(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1791,8 +1791,8 @@ int CvLuaUnit::lNukeDamageLevel(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canBuildRoute();
+
+
 int CvLuaUnit::lCanBuildRoute(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1801,8 +1801,8 @@ int CvLuaUnit::lCanBuildRoute(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int /*BuildTypes*/ getBuildType();
+
+
 int CvLuaUnit::lGetBuildType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1811,8 +1811,8 @@ int CvLuaUnit::lGetBuildType(lua_State* L)
 	lua_pushinteger(L, eResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int workRate(bool bMax);
+
+
 int CvLuaUnit::lWorkRate(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1822,8 +1822,8 @@ int CvLuaUnit::lWorkRate(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isNoBadGoodies();
+
+
 int CvLuaUnit::lIsNoBadGoodies(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1832,8 +1832,8 @@ int CvLuaUnit::lIsNoBadGoodies(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isOnlyDefensive();
+
+
 int CvLuaUnit::lIsOnlyDefensive(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1842,8 +1842,8 @@ int CvLuaUnit::lIsOnlyDefensive(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isNoCapture();
+
+
 int CvLuaUnit::lIsNoCapture(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1852,8 +1852,8 @@ int CvLuaUnit::lIsNoCapture(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isRivalTerritory();
+
+
 int CvLuaUnit::lIsRivalTerritory(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1862,8 +1862,8 @@ int CvLuaUnit::lIsRivalTerritory(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isFound();
+
+
 int CvLuaUnit::lIsFound(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1872,8 +1872,8 @@ int CvLuaUnit::lIsFound(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-// bool IsWork()
+
+
 int CvLuaUnit::lIsWork(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1882,8 +1882,8 @@ int CvLuaUnit::lIsWork(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isGoldenAge();
+
+
 int CvLuaUnit::lIsGoldenAge(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1893,8 +1893,8 @@ int CvLuaUnit::lIsGoldenAge(lua_State* L)
 	return 1;
 }
 #ifdef NQ_COMBAT_STRENGTH_NEAR_FRIENDLY_MINOR
-//------------------------------------------------------------------------------
-//bool IsNearFriendlyMinor();
+
+
 int CvLuaUnit::lIsNearFriendlyMinor(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1906,8 +1906,8 @@ int CvLuaUnit::lIsNearFriendlyMinor(lua_State* L)
 	return 1;
 }
 #endif
-//------------------------------------------------------------------------------
-//bool canCoexistWithEnemyUnit(int /*TeamTypes*/ eTeam);
+
+
 int CvLuaUnit::lCanCoexistWithEnemyUnit(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1917,8 +1917,8 @@ int CvLuaUnit::lCanCoexistWithEnemyUnit(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsGreatPerson();
+
+
 int CvLuaUnit::lIsGreatPerson(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1927,8 +1927,8 @@ int CvLuaUnit::lIsGreatPerson(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isFighting();
+
+
 int CvLuaUnit::lIsFighting(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1937,8 +1937,8 @@ int CvLuaUnit::lIsFighting(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isAttacking();
+
+
 int CvLuaUnit::lIsAttacking(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1947,8 +1947,8 @@ int CvLuaUnit::lIsAttacking(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isDefending();
+
+
 int CvLuaUnit::lIsDefending(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1957,8 +1957,8 @@ int CvLuaUnit::lIsDefending(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isInCombat();
+
+
 int CvLuaUnit::lIsInCombat(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1967,8 +1967,8 @@ int CvLuaUnit::lIsInCombat(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int maxHitPoints();
+
+
 int CvLuaUnit::lGetMaxHitPoints(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1977,8 +1977,8 @@ int CvLuaUnit::lGetMaxHitPoints(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int currHitPoints();
+
+
 int CvLuaUnit::lGetCurrHitPoints(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1987,8 +1987,8 @@ int CvLuaUnit::lGetCurrHitPoints(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isHurt();
+
+
 int CvLuaUnit::lIsHurt(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -1997,8 +1997,8 @@ int CvLuaUnit::lIsHurt(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isDead();
+
+
 int CvLuaUnit::lIsDead(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2007,8 +2007,8 @@ int CvLuaUnit::lIsDead(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isDelayedDeath();
+
+
 int CvLuaUnit::lIsDelayedDeath(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2017,8 +2017,8 @@ int CvLuaUnit::lIsDelayedDeath(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setBaseCombatStr(int iCombat);
+
+
 int CvLuaUnit::lSetBaseCombatStrength(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2027,8 +2027,8 @@ int CvLuaUnit::lSetBaseCombatStrength(lua_State* L)
 	pkUnit->SetBaseCombatStrength(iCombat);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//int baseCombatStr();
+
+
 int CvLuaUnit::lGetBaseCombatStrength(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2037,8 +2037,8 @@ int CvLuaUnit::lGetBaseCombatStrength(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool HasCombatStrength();
+
+
 int CvLuaUnit::lIsCombatUnit(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2047,8 +2047,8 @@ int CvLuaUnit::lIsCombatUnit(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool CanDefend(CyPlot* pPlot);
+
+
 int CvLuaUnit::lIsCanDefend(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2058,8 +2058,8 @@ int CvLuaUnit::lIsCanDefend(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool CanAttackWithMove();
+
+
 int CvLuaUnit::lIsCanAttackWithMove(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2068,8 +2068,8 @@ int CvLuaUnit::lIsCanAttackWithMove(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool CanAttackRanged()
+
+
 int CvLuaUnit::lIsCanAttackRanged(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2078,8 +2078,8 @@ int CvLuaUnit::lIsCanAttackRanged(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
-//bool CanAttack()
+
+
 int CvLuaUnit::lIsCanAttack(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2088,8 +2088,8 @@ int CvLuaUnit::lIsCanAttack(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
-//bool CanAttackWithMoveNow()
+
+
 int CvLuaUnit::lIsCanAttackWithMoveNow(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2098,8 +2098,8 @@ int CvLuaUnit::lIsCanAttackWithMoveNow(lua_State* L)
 	return 1;
 }
 #if !defined(LEKMOD_COMBAT_PREDICTOR_IMPROVEMENTS)
-//------------------------------------------------------------------------------
-//int GetMaxAttackStrength(const CvPlot* pFromPlot, const CvPlot* pToPlot, const CvUnit* pDefender);
+
+
 int CvLuaUnit::lGetMaxAttackStrength(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2112,8 +2112,8 @@ int CvLuaUnit::lGetMaxAttackStrength(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
-//int GetMaxDefenseStrength(const CvPlot* pInPlot, const CvUnit* pAttacker);
+
+
 int CvLuaUnit::lGetMaxDefenseStrength(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2125,8 +2125,8 @@ int CvLuaUnit::lGetMaxDefenseStrength(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int airMaxCombatStr(CyUnit* pOther, bool bAttacking);
+
+
 int CvLuaUnit::lGetMaxRangedCombatStrength(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2140,8 +2140,8 @@ int CvLuaUnit::lGetMaxRangedCombatStrength(lua_State* L)
 	return 1;
 }
 #else
-//------------------------------------------------------------------------------
-//int GetMaxAttackStrength(const CvPlot* pFromPlot, const CvPlot* pToPlot, const CvUnit* pDefender);
+
+
 int CvLuaUnit::lGetMaxAttackStrength(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2231,8 +2231,8 @@ int CvLuaUnit::lGetAttackModifierList(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetMaxDefenseStrength(const CvPlot* pInPlot, const CvUnit* pAttacker);
+
+
 int CvLuaUnit::lGetMaxDefenseStrength(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2320,8 +2320,8 @@ int CvLuaUnit::lGetDefenseModifierList(lua_State* L)
 	return 1;
 }
 #endif
-//------------------------------------------------------------------------------
-//int GetEmbarkedUnitDefense();
+
+
 int CvLuaUnit::lGetEmbarkedUnitDefense(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2330,8 +2330,8 @@ int CvLuaUnit::lGetEmbarkedUnitDefense(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
-//bool canSiege(int /*TeamTypes*/ eTeam);
+
+
 int CvLuaUnit::lCanSiege(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2342,7 +2342,7 @@ int CvLuaUnit::lCanSiege(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaUnit::lIsEnemyInMovementRange(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2353,7 +2353,7 @@ int CvLuaUnit::lIsEnemyInMovementRange(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaUnit::lIsTrade(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2361,8 +2361,8 @@ int CvLuaUnit::lIsTrade(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
-//int airBaseCombatStr();
+
+
 int CvLuaUnit::lGetBaseRangedCombatStrength(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2371,8 +2371,8 @@ int CvLuaUnit::lGetBaseRangedCombatStrength(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int combatLimit();
+
+
 int CvLuaUnit::lGetCombatLimit(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2381,8 +2381,8 @@ int CvLuaUnit::lGetCombatLimit(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetRangedCombatLimit();
+
+
 int CvLuaUnit::lGetRangedCombatLimit(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2391,8 +2391,8 @@ int CvLuaUnit::lGetRangedCombatLimit(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canAirAttack();
+
+
 int CvLuaUnit::lCanAirAttack(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2401,8 +2401,8 @@ int CvLuaUnit::lCanAirAttack(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canAirDefend(CyPlot* pPlot);
+
+
 int CvLuaUnit::lCanAirDefend(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2412,8 +2412,8 @@ int CvLuaUnit::lCanAirDefend(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int airCombatDamage( CyUnit* pDefender);
+
+
 int CvLuaUnit::lGetAirCombatDamage(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2425,8 +2425,8 @@ int CvLuaUnit::lGetAirCombatDamage(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-// int rangeCombatDamage(const CvUnit* pDefender, CvCity* pCity, bool bIncludeRand) const;
+
+
 int CvLuaUnit::lGetRangeCombatDamage(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2438,8 +2438,8 @@ int CvLuaUnit::lGetRangeCombatDamage(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int airCombatDamage( CyUnit* pDefender);
+
+
 int CvLuaUnit::lGetAirStrikeDefenseDamage(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2450,8 +2450,8 @@ int CvLuaUnit::lGetAirStrikeDefenseDamage(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//CvUnit* GetBestInterceptor( CvPlot* pPlot, CvUnit *pDefender, bool bLandInterceptorsOnly, bool bVisibleInterceptorsOnly);
+
+
 int CvLuaUnit::lGetBestInterceptor(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2470,8 +2470,8 @@ int CvLuaUnit::lGetBestInterceptor(lua_State* L)
 	CvLuaUnit::Push(L, pkBestUnit);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//CvUnit* GetInterceptor Count( CvPlot* pPlot, CvUnit *pDefender, bool bLandInterceptorsOnly, bool bVisibleInterceptorsOnly);
+
+
 int CvLuaUnit::lGetInterceptorCount(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2490,8 +2490,8 @@ int CvLuaUnit::lGetInterceptorCount(lua_State* L)
 	lua_pushinteger(L, iCount);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//CyUnit* bestSeaPillageInterceptor( CyPlot* pPlot);
+
+
 int CvLuaUnit::lGetBestSeaPillageInterceptor(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2506,8 +2506,8 @@ int CvLuaUnit::lGetBestSeaPillageInterceptor(lua_State* L)
 	CvLuaUnit::Push(L, pkBestUnit);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetCaptureChance (CvUnit *pEnemy);
+
+
 int CvLuaUnit::lGetCaptureChance(lua_State* L)
 {
 	int iChance = 0;
@@ -2523,8 +2523,8 @@ int CvLuaUnit::lGetCaptureChance(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isAutomated();
+
+
 int CvLuaUnit::lIsAutomated(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2533,8 +2533,8 @@ int CvLuaUnit::lIsAutomated(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isWaiting();
+
+
 int CvLuaUnit::lIsWaiting(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2543,8 +2543,8 @@ int CvLuaUnit::lIsWaiting(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isFortifyable();
+
+
 int CvLuaUnit::lIsFortifyable(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2553,7 +2553,7 @@ int CvLuaUnit::lIsFortifyable(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaUnit::lIsEverFortifyable(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2562,8 +2562,8 @@ int CvLuaUnit::lIsEverFortifyable(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int fortifyModifier();
+
+
 int CvLuaUnit::lFortifyModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2572,8 +2572,8 @@ int CvLuaUnit::lFortifyModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int experienceNeeded();
+
+
 int CvLuaUnit::lExperienceNeeded(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2582,8 +2582,8 @@ int CvLuaUnit::lExperienceNeeded(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int attackXPValue();
+
+
 int CvLuaUnit::lAttackXPValue(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2592,8 +2592,8 @@ int CvLuaUnit::lAttackXPValue(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int defenseXPValue();
+
+
 int CvLuaUnit::lDefenseXPValue(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2602,8 +2602,8 @@ int CvLuaUnit::lDefenseXPValue(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int maxXPValue();
+
+
 int CvLuaUnit::lMaxXPValue(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2612,8 +2612,8 @@ int CvLuaUnit::lMaxXPValue(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int firstStrikes();
+
+
 int CvLuaUnit::lFirstStrikes(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2622,8 +2622,8 @@ int CvLuaUnit::lFirstStrikes(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int chanceFirstStrikes();
+
+
 int CvLuaUnit::lChanceFirstStrikes(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2632,8 +2632,8 @@ int CvLuaUnit::lChanceFirstStrikes(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int maxFirstStrikes();
+
+
 int CvLuaUnit::lMaxFirstStrikes(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2642,8 +2642,8 @@ int CvLuaUnit::lMaxFirstStrikes(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isRanged();
+
+
 int CvLuaUnit::lIsRanged(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2652,23 +2652,23 @@ int CvLuaUnit::lIsRanged(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaUnit::lIsMustSetUpToRangedAttack(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvUnit::isMustSetUpToRangedAttack);
 }
-//------------------------------------------------------------------------------
+
 int CvLuaUnit::lCanSetUpForRangedAttack(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvUnit::canSetUpForRangedAttack);
 }
-//------------------------------------------------------------------------------
+
 int CvLuaUnit::lIsSetUpForRangedAttack(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvUnit::isSetUpForRangedAttack);
 }
-//------------------------------------------------------------------------------
-//bool immuneToFirstStrikes();
+
+
 int CvLuaUnit::lImmuneToFirstStrikes(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2677,8 +2677,8 @@ int CvLuaUnit::lImmuneToFirstStrikes(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool noDefensiveBonus();
+
+
 int CvLuaUnit::lNoDefensiveBonus(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2687,8 +2687,8 @@ int CvLuaUnit::lNoDefensiveBonus(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool ignoreBuildingDefense();
+
+
 int CvLuaUnit::lIgnoreBuildingDefense(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2697,8 +2697,8 @@ int CvLuaUnit::lIgnoreBuildingDefense(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canMoveImpassable();
+
+
 int CvLuaUnit::lCanMoveImpassable(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2707,8 +2707,8 @@ int CvLuaUnit::lCanMoveImpassable(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canMoveAllTerrain();
+
+
 int CvLuaUnit::lCanMoveAllTerrain(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2717,14 +2717,14 @@ int CvLuaUnit::lCanMoveAllTerrain(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsHoveringUnit();
+
+
 int CvLuaUnit::lIsHoveringUnit(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvUnit::IsHoveringUnit);
 }
-//------------------------------------------------------------------------------
-//bool flatMovementCost();
+
+
 int CvLuaUnit::lFlatMovementCost(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2733,8 +2733,8 @@ int CvLuaUnit::lFlatMovementCost(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool ignoreTerrainCost();
+
+
 int CvLuaUnit::lIgnoreTerrainCost(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2743,8 +2743,8 @@ int CvLuaUnit::lIgnoreTerrainCost(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isNeverInvisible();
+
+
 int CvLuaUnit::lIsNeverInvisible(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2753,8 +2753,8 @@ int CvLuaUnit::lIsNeverInvisible(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isInvisible(int /*TeamTypes*/ eTeam, bool bDebug, bCheckCargo = false);
+
+
 int CvLuaUnit::lIsInvisible(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2767,7 +2767,7 @@ int CvLuaUnit::lIsInvisible(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaUnit::lIsEnemyCityAdjacent(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2776,8 +2776,8 @@ int CvLuaUnit::lIsEnemyCityAdjacent(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
-//bool isNukeImmune();
+
+
 int CvLuaUnit::lIsNukeImmune(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2786,8 +2786,8 @@ int CvLuaUnit::lIsNukeImmune(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int maxInterceptionProbability();
+
+
 int CvLuaUnit::lMaxInterceptionProbability(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2796,8 +2796,8 @@ int CvLuaUnit::lMaxInterceptionProbability(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int currInterceptionProbability();
+
+
 int CvLuaUnit::lCurrInterceptionProbability(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2806,8 +2806,8 @@ int CvLuaUnit::lCurrInterceptionProbability(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int evasionProbability();
+
+
 int CvLuaUnit::lEvasionProbability(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2816,8 +2816,8 @@ int CvLuaUnit::lEvasionProbability(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int withdrawalProbability();
+
+
 int CvLuaUnit::lWithdrawalProbability(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2826,8 +2826,8 @@ int CvLuaUnit::lWithdrawalProbability(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetAdjacentModifier();
+
+
 int CvLuaUnit::lGetAdjacentModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2836,8 +2836,8 @@ int CvLuaUnit::lGetAdjacentModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getAttackModifier();
+
+
 int CvLuaUnit::lGetAttackModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2846,8 +2846,8 @@ int CvLuaUnit::lGetAttackModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getDefenseModifier();
+
+
 int CvLuaUnit::lGetDefenseModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2857,8 +2857,8 @@ int CvLuaUnit::lGetDefenseModifier(lua_State* L)
 	return 1;
 }
 #ifdef FIX_RANGE_DEFENSE_MOD
-//------------------------------------------------------------------------------
-//int rangedDefenseModifier();
+
+
 int CvLuaUnit::lRangedDefenseModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2869,8 +2869,8 @@ int CvLuaUnit::lRangedDefenseModifier(lua_State* L)
 	return 1;
 }
 #endif
-//------------------------------------------------------------------------------
-//int GetRangedAttackModifier();
+
+
 int CvLuaUnit::lGetRangedAttackModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2879,8 +2879,8 @@ int CvLuaUnit::lGetRangedAttackModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int cityAttackModifier();
+
+
 int CvLuaUnit::lCityAttackModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2889,8 +2889,8 @@ int CvLuaUnit::lCityAttackModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int cityDefenseModifier();
+
+
 int CvLuaUnit::lCityDefenseModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2899,8 +2899,8 @@ int CvLuaUnit::lCityDefenseModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int hillsAttackModifier();
+
+
 int CvLuaUnit::lHillsAttackModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2910,8 +2910,8 @@ int CvLuaUnit::lHillsAttackModifier(lua_State* L)
 	return 1;
 }
 #ifdef NQ_HEAVY_CHARGE_DOWNHILL
-//------------------------------------------------------------------------------
-//int heavyChargeDownhillModifier();
+
+
 int CvLuaUnit::lHeavyChargeDownhillModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2932,8 +2932,8 @@ int CvLuaUnit::lGetCombatBonusVsDifferentIdeologyModifier(lua_State* L)
 }
 #endif
 #ifdef LEKMOD_TOURISM_COMBAT_MOD
-//------------------------------------------------------------------------------
-//int GetTourismInfluenceCombatModifier(CyUnit pOtherUnit);
+
+
 int CvLuaUnit::lGetTourismInfluenceCombatModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2943,8 +2943,8 @@ int CvLuaUnit::lGetTourismInfluenceCombatModifier(lua_State* L)
 	return 1;
 }
 #endif
-//------------------------------------------------------------------------------
-//int hillsDefenseModifier();
+
+
 int CvLuaUnit::lHillsDefenseModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2953,8 +2953,8 @@ int CvLuaUnit::lHillsDefenseModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int openAttackModifier();
+
+
 int CvLuaUnit::lOpenAttackModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2963,8 +2963,8 @@ int CvLuaUnit::lOpenAttackModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int openRangedAttackModifier();
+
+
 int CvLuaUnit::lOpenRangedAttackModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2973,8 +2973,8 @@ int CvLuaUnit::lOpenRangedAttackModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int RoughAttackModifier();
+
+
 int CvLuaUnit::lRoughAttackModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2983,8 +2983,8 @@ int CvLuaUnit::lRoughAttackModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int roughRangedAttackModifier();
+
+
 int CvLuaUnit::lRoughRangedAttackModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -2993,8 +2993,8 @@ int CvLuaUnit::lRoughRangedAttackModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int AttackFortifiedModifier();
+
+
 int CvLuaUnit::lAttackFortifiedModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3003,8 +3003,8 @@ int CvLuaUnit::lAttackFortifiedModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int AttackWoundedModifier();
+
+
 int CvLuaUnit::lAttackWoundedModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3013,8 +3013,8 @@ int CvLuaUnit::lAttackWoundedModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int FlankAttackModifier();
+
+
 int CvLuaUnit::lFlankAttackModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3023,8 +3023,8 @@ int CvLuaUnit::lFlankAttackModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int openDefenseModifier();
+
+
 int CvLuaUnit::lOpenDefenseModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3033,8 +3033,8 @@ int CvLuaUnit::lOpenDefenseModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int RoughDefenseModifier();
+
+
 int CvLuaUnit::lRoughDefenseModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3043,8 +3043,8 @@ int CvLuaUnit::lRoughDefenseModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int terrainAttackModifier(int /*TerrainTypes*/ eTerrain);
+
+
 int CvLuaUnit::lTerrainAttackModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3054,8 +3054,8 @@ int CvLuaUnit::lTerrainAttackModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int terrainDefenseModifier(int /*TerrainTypes*/ eTerrain);
+
+
 int CvLuaUnit::lTerrainDefenseModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3065,8 +3065,8 @@ int CvLuaUnit::lTerrainDefenseModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int featureAttackModifier(int /*FeatureTypes*/ eFeature);
+
+
 int CvLuaUnit::lFeatureAttackModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3076,8 +3076,8 @@ int CvLuaUnit::lFeatureAttackModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int featureDefenseModifier(int /*FeatureTypes*/ eFeature);
+
+
 int CvLuaUnit::lFeatureDefenseModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3087,8 +3087,8 @@ int CvLuaUnit::lFeatureDefenseModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int unitClassAttackModifier(int /*UnitClassTypes*/ eUnitClass);
+
+
 int CvLuaUnit::lUnitClassAttackModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3098,8 +3098,8 @@ int CvLuaUnit::lUnitClassAttackModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int unitClassDefenseModifier(int /*UnitClassTypes*/ eUnitClass);
+
+
 int CvLuaUnit::lUnitClassDefenseModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3109,8 +3109,8 @@ int CvLuaUnit::lUnitClassDefenseModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int unitCombatModifier(int /*UnitCombatTypes*/ eUnitCombat);
+
+
 int CvLuaUnit::lUnitCombatModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3120,8 +3120,8 @@ int CvLuaUnit::lUnitCombatModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int domainModifier(int /*DomainTypes*/ eDomain);
+
+
 int CvLuaUnit::lDomainModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3131,7 +3131,7 @@ int CvLuaUnit::lDomainModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaUnit::lGetStrategicResourceCombatPenalty(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3140,7 +3140,7 @@ int CvLuaUnit::lGetStrategicResourceCombatPenalty(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaUnit::lGetUnhappinessCombatPenalty(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3149,26 +3149,26 @@ int CvLuaUnit::lGetUnhappinessCombatPenalty(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int AirSweepCombatMod();
+
+
 int CvLuaUnit::lAirSweepCombatMod(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvUnit::GetAirSweepCombatModifier);
 }
-//------------------------------------------------------------------------------
-//int CapitalDefenseModifier();
+
+
 int CvLuaUnit::lCapitalDefenseModifier(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvUnit::GetCapitalDefenseModifier);
 }
-//------------------------------------------------------------------------------
-//int CapitalDefenseFalloff();
+
+
 int CvLuaUnit::lCapitalDefenseFalloff(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvUnit::GetCapitalDefenseFalloff);
 }
-//------------------------------------------------------------------------------
-//int /*SpecialUnitTypes*/ specialCargo();
+
+
 int CvLuaUnit::lSpecialCargo(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3177,8 +3177,8 @@ int CvLuaUnit::lSpecialCargo(lua_State* L)
 	lua_pushinteger(L, eResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int /*DomainTypes*/ domainCargo();
+
+
 int CvLuaUnit::lDomainCargo(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3187,8 +3187,8 @@ int CvLuaUnit::lDomainCargo(lua_State* L)
 	lua_pushinteger(L, eResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int cargoSpace();
+
+
 int CvLuaUnit::lCargoSpace(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3197,8 +3197,8 @@ int CvLuaUnit::lCargoSpace(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void changeCargoSpace(int iChange);
+
+
 int CvLuaUnit::lChangeCargoSpace(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3207,8 +3207,8 @@ int CvLuaUnit::lChangeCargoSpace(lua_State* L)
 	pkUnit->changeCargoSpace(iChange);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//bool isFull();
+
+
 int CvLuaUnit::lIsFull(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3217,8 +3217,8 @@ int CvLuaUnit::lIsFull(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int cargoSpaceAvailable(int /*SpecialUnitTypes*/ eSpecialCargo, int /*DomainTypes*/ eDomainCargo);
+
+
 int CvLuaUnit::lCargoSpaceAvailable(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3227,8 +3227,8 @@ int CvLuaUnit::lCargoSpaceAvailable(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool hasCargo();
+
+
 int CvLuaUnit::lHasCargo(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3237,8 +3237,8 @@ int CvLuaUnit::lHasCargo(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canCargoAllMove();
+
+
 int CvLuaUnit::lCanCargoAllMove(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3247,8 +3247,8 @@ int CvLuaUnit::lCanCargoAllMove(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getUnitAICargo(UnitAITypes eUnitAI);
+
+
 int CvLuaUnit::lGetUnitAICargo(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3258,8 +3258,8 @@ int CvLuaUnit::lGetUnitAICargo(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getID();
+
+
 int CvLuaUnit::lGetID(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3268,8 +3268,8 @@ int CvLuaUnit::lGetID(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getHotKeyNumber();
+
+
 int CvLuaUnit::lGetHotKeyNumber(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3278,8 +3278,8 @@ int CvLuaUnit::lGetHotKeyNumber(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setHotKeyNumber(int iNewValue);
+
+
 int CvLuaUnit::lSetHotKeyNumber(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3288,8 +3288,8 @@ int CvLuaUnit::lSetHotKeyNumber(lua_State* L)
 	pkUnit->setHotKeyNumber(iNewValue);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//int getX();
+
+
 int CvLuaUnit::lGetX(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3298,8 +3298,8 @@ int CvLuaUnit::lGetX(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getY();
+
+
 int CvLuaUnit::lGetY(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3308,8 +3308,8 @@ int CvLuaUnit::lGetY(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setXY(int iX, int iY, bool bGroup = false, bool bUpdate = true, bool bShow = false, bCheckPlotVisible = false);
+
+
 int CvLuaUnit::lSetXY(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3323,8 +3323,8 @@ int CvLuaUnit::lSetXY(lua_State* L)
 	pkUnit->setXY(x, y, bGroup, bUpdate, bShow, bCheckPlotVisible);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//bool at(int iX, int iY);
+
+
 int CvLuaUnit::lAt(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3336,8 +3336,8 @@ int CvLuaUnit::lAt(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool atPlot(CyPlot* pPlot);
+
+
 int CvLuaUnit::lAtPlot(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3352,8 +3352,8 @@ int CvLuaUnit::lAtPlot(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//CyPlot* plot();
+
+
 int CvLuaUnit::lGetPlot(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3367,8 +3367,8 @@ int CvLuaUnit::lGetPlot(lua_State* L)
 	CvLuaPlot::Push(L, pkUnit->plot());
 	return 1;
 }
-//------------------------------------------------------------------------------
-//CyArea* area();
+
+
 int CvLuaUnit::lGetArea(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3376,8 +3376,8 @@ int CvLuaUnit::lGetArea(lua_State* L)
 	CvLuaArea::Push(L, pkUnit->area());
 	return 1;
 }
-//------------------------------------------------------------------------------
-//CyPlot* getReconPlot();
+
+
 int CvLuaUnit::lGetReconPlot(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3387,8 +3387,8 @@ int CvLuaUnit::lGetReconPlot(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setReconPlot(CyPlot* pNewValue);
+
+
 int CvLuaUnit::lSetReconPlot(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3397,8 +3397,8 @@ int CvLuaUnit::lSetReconPlot(lua_State* L)
 	pkUnit->setReconPlot(pkPlot);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//int getGameTurnCreated();
+
+
 int CvLuaUnit::lGetGameTurnCreated(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3407,8 +3407,8 @@ int CvLuaUnit::lGetGameTurnCreated(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getLastMoveTurn()
+
+
 int CvLuaUnit::lGetLastMoveTurn(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3417,8 +3417,8 @@ int CvLuaUnit::lGetLastMoveTurn(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getDamage();
+
+
 int CvLuaUnit::lGetDamage(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3427,8 +3427,8 @@ int CvLuaUnit::lGetDamage(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setDamage(int iNewValue, int /*PlayerTypes*/ ePlayer, bNotifyEntity = true);
+
+
 int CvLuaUnit::lSetDamage(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3439,8 +3439,8 @@ int CvLuaUnit::lSetDamage(lua_State* L)
 	pkUnit->setDamage(iNewValue, ePlayer, bNotifyEntity);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//void changeDamage(int iChange, int /*PlayerTypes*/ ePlayer);
+
+
 int CvLuaUnit::lChangeDamage(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3450,8 +3450,8 @@ int CvLuaUnit::lChangeDamage(lua_State* L)
 	pkUnit->changeDamage(iChange, ePlayer);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//int getMoves();
+
+
 int CvLuaUnit::lGetMoves(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3460,8 +3460,8 @@ int CvLuaUnit::lGetMoves(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setMoves(int iNewValue);
+
+
 int CvLuaUnit::lSetMoves(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3470,8 +3470,8 @@ int CvLuaUnit::lSetMoves(lua_State* L)
 	pkUnit->setMoves(iNewValue);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//void changeMoves(int iChange);
+
+
 int CvLuaUnit::lChangeMoves(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3480,8 +3480,8 @@ int CvLuaUnit::lChangeMoves(lua_State* L)
 	pkUnit->changeMoves(iChange);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//void finishMoves();
+
+
 int CvLuaUnit::lFinishMoves(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3489,8 +3489,8 @@ int CvLuaUnit::lFinishMoves(lua_State* L)
 	pkUnit->finishMoves();
 	return 0;
 }
-//------------------------------------------------------------------------------
-//int IsImmobile();
+
+
 int CvLuaUnit::lIsImmobile(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3499,8 +3499,8 @@ int CvLuaUnit::lIsImmobile(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExperience();
+
+
 int CvLuaUnit::lGetExperience(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3509,8 +3509,8 @@ int CvLuaUnit::lGetExperience(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setExperience(int iNewValue, int iMax = -1);
+
+
 int CvLuaUnit::lSetExperience(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3520,8 +3520,8 @@ int CvLuaUnit::lSetExperience(lua_State* L)
 	pkUnit->setExperience(iNewValue, iMax);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//void changeExperience(int iChange, int iMax = -1, bool bFromCombat = false, bool bInBorders = false, bool bUpdateGlobal = false);
+
+
 int CvLuaUnit::lChangeExperience(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3534,8 +3534,8 @@ int CvLuaUnit::lChangeExperience(lua_State* L)
 	pkUnit->changeExperience(iChange, iMax, bFromCombat, bInBorders, bUpdateGlobal);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//int getLevel();
+
+
 int CvLuaUnit::lGetLevel(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3544,8 +3544,8 @@ int CvLuaUnit::lGetLevel(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setLevel(int iNewLevel);
+
+
 int CvLuaUnit::lSetLevel(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3554,8 +3554,8 @@ int CvLuaUnit::lSetLevel(lua_State* L)
 	pkUnit->setLevel(iNewLevel);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//void changeLevel(int iChange);
+
+
 int CvLuaUnit::lChangeLevel(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3564,8 +3564,8 @@ int CvLuaUnit::lChangeLevel(lua_State* L)
 	pkUnit->changeLevel(iChange);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//int getFacingDirection();
+
+
 int CvLuaUnit::lGetFacingDirection(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3575,8 +3575,8 @@ int CvLuaUnit::lGetFacingDirection(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void rotateFacingDirectionClockwise();
+
+
 int CvLuaUnit::lRotateFacingDirectionClockwise(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3584,8 +3584,8 @@ int CvLuaUnit::lRotateFacingDirectionClockwise(lua_State* L)
 	pkUnit->rotateFacingDirectionClockwise();
 	return 0;
 }
-//------------------------------------------------------------------------------
-//void rotateFacingDirectionCounterClockwise();
+
+
 int CvLuaUnit::lRotateFacingDirectionCounterClockwise(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3593,8 +3593,8 @@ int CvLuaUnit::lRotateFacingDirectionCounterClockwise(lua_State* L)
 	pkUnit->rotateFacingDirectionCounterClockwise();
 	return 0;
 }
-//------------------------------------------------------------------------------
-//int getCargo();
+
+
 int CvLuaUnit::lGetCargo(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3603,8 +3603,8 @@ int CvLuaUnit::lGetCargo(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getFortifyTurns();
+
+
 int CvLuaUnit::lGetFortifyTurns(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3613,8 +3613,8 @@ int CvLuaUnit::lGetFortifyTurns(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getBlitzCount();
+
+
 int CvLuaUnit::lGetBlitzCount(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3623,8 +3623,8 @@ int CvLuaUnit::lGetBlitzCount(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isBlitz();
+
+
 int CvLuaUnit::lIsBlitz(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3633,8 +3633,8 @@ int CvLuaUnit::lIsBlitz(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getAmphibCount();
+
+
 int CvLuaUnit::lGetAmphibCount(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3643,8 +3643,8 @@ int CvLuaUnit::lGetAmphibCount(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isAmphib();
+
+
 int CvLuaUnit::lIsAmphib(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3653,8 +3653,8 @@ int CvLuaUnit::lIsAmphib(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getRiverCrossingNoPenaltyCount();
+
+
 int CvLuaUnit::lGetRiverCrossingNoPenaltyCount(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3663,8 +3663,8 @@ int CvLuaUnit::lGetRiverCrossingNoPenaltyCount(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isRiverCrossingNoPenalty();
+
+
 int CvLuaUnit::lIsRiverCrossingNoPenalty(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3673,8 +3673,8 @@ int CvLuaUnit::lIsRiverCrossingNoPenalty(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isEnemyRoute();
+
+
 int CvLuaUnit::lIsEnemyRoute(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3683,8 +3683,8 @@ int CvLuaUnit::lIsEnemyRoute(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isAlwaysHeal();
+
+
 int CvLuaUnit::lIsAlwaysHeal(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3693,8 +3693,8 @@ int CvLuaUnit::lIsAlwaysHeal(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isHealOutsideFriendly();
+
+
 int CvLuaUnit::lIsHealOutsideFriendly(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3703,8 +3703,8 @@ int CvLuaUnit::lIsHealOutsideFriendly(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isHillsDoubleMove();
+
+
 int CvLuaUnit::lIsHillsDoubleMove(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3713,8 +3713,8 @@ int CvLuaUnit::lIsHillsDoubleMove(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsGarrisoned()
+
+
 int CvLuaUnit::lIsGarrisoned(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3723,8 +3723,8 @@ int CvLuaUnit::lIsGarrisoned(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//CvCity* lGetGarrisonedCity()
+
+
 int CvLuaUnit::lGetGarrisonedCity(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3732,8 +3732,8 @@ int CvLuaUnit::lGetGarrisonedCity(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraVisibilityRange();
+
+
 int CvLuaUnit::lGetExtraVisibilityRange(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3742,8 +3742,8 @@ int CvLuaUnit::lGetExtraVisibilityRange(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraMoves();
+
+
 int CvLuaUnit::lGetExtraMoves(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3752,8 +3752,8 @@ int CvLuaUnit::lGetExtraMoves(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraMoveDiscount();
+
+
 int CvLuaUnit::lGetExtraMoveDiscount(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3762,8 +3762,8 @@ int CvLuaUnit::lGetExtraMoveDiscount(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraRange();
+
+
 int CvLuaUnit::lGetExtraRange(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3772,8 +3772,8 @@ int CvLuaUnit::lGetExtraRange(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraIntercept();
+
+
 int CvLuaUnit::lGetExtraIntercept(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3782,8 +3782,8 @@ int CvLuaUnit::lGetExtraIntercept(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraEvasion();
+
+
 int CvLuaUnit::lGetExtraEvasion(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3792,8 +3792,8 @@ int CvLuaUnit::lGetExtraEvasion(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraFirstStrikes();
+
+
 int CvLuaUnit::lGetExtraFirstStrikes(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3802,8 +3802,8 @@ int CvLuaUnit::lGetExtraFirstStrikes(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraChanceFirstStrikes();
+
+
 int CvLuaUnit::lGetExtraChanceFirstStrikes(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3812,8 +3812,8 @@ int CvLuaUnit::lGetExtraChanceFirstStrikes(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraWithdrawal();
+
+
 int CvLuaUnit::lGetExtraWithdrawal(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3822,8 +3822,8 @@ int CvLuaUnit::lGetExtraWithdrawal(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraEnemyHeal();
+
+
 int CvLuaUnit::lGetExtraEnemyHeal(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3832,8 +3832,8 @@ int CvLuaUnit::lGetExtraEnemyHeal(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraNeutralHeal();
+
+
 int CvLuaUnit::lGetExtraNeutralHeal(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3842,8 +3842,8 @@ int CvLuaUnit::lGetExtraNeutralHeal(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraFriendlyHeal();
+
+
 int CvLuaUnit::lGetExtraFriendlyHeal(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3852,8 +3852,8 @@ int CvLuaUnit::lGetExtraFriendlyHeal(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getSameTileHeal();
+
+
 int CvLuaUnit::lGetSameTileHeal(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3862,8 +3862,8 @@ int CvLuaUnit::lGetSameTileHeal(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getAdjacentTileHeal();
+
+
 int CvLuaUnit::lGetAdjacentTileHeal(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3872,8 +3872,8 @@ int CvLuaUnit::lGetAdjacentTileHeal(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraCombatPercent();
+
+
 int CvLuaUnit::lGetExtraCombatPercent(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3882,8 +3882,8 @@ int CvLuaUnit::lGetExtraCombatPercent(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetFriendlyLandsModifier();
+
+
 int CvLuaUnit::lGetFriendlyLandsModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3892,8 +3892,8 @@ int CvLuaUnit::lGetFriendlyLandsModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetFriendlyLandsAttackModifier();
+
+
 int CvLuaUnit::lGetFriendlyLandsAttackModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3902,8 +3902,8 @@ int CvLuaUnit::lGetFriendlyLandsAttackModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetOutsideFriendlyLandsModifier();
+
+
 int CvLuaUnit::lGetOutsideFriendlyLandsModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3913,8 +3913,8 @@ int CvLuaUnit::lGetOutsideFriendlyLandsModifier(lua_State* L)
 	return 1;
 }
 #ifdef NQ_GOLDEN_AGE_FOREIGN_ATTACK_BONUS
-//------------------------------------------------------------------------------
-//int GetGoldenAgeForeignAttackBonus();
+
+
 int CvLuaUnit::lGetGoldenAgeForeignAttackBonus(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3925,8 +3925,8 @@ int CvLuaUnit::lGetGoldenAgeForeignAttackBonus(lua_State* L)
 }
 #endif
 #ifdef NQ_COMBAT_STRENGTH_NEAR_FRIENDLY_MINOR
-//------------------------------------------------------------------------------
-//int GetCombatStrengthNearFriendlyMinor();
+
+
 int CvLuaUnit::lGetCombatStrengthNearFriendlyMinor(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3936,8 +3936,8 @@ int CvLuaUnit::lGetCombatStrengthNearFriendlyMinor(lua_State* L)
 	return 1;
 }
 #endif
-//------------------------------------------------------------------------------
-//int getExtraCityAttackPercent();
+
+
 int CvLuaUnit::lGetExtraCityAttackPercent(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3946,8 +3946,8 @@ int CvLuaUnit::lGetExtraCityAttackPercent(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraCityDefensePercent();
+
+
 int CvLuaUnit::lGetExtraCityDefensePercent(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3956,8 +3956,8 @@ int CvLuaUnit::lGetExtraCityDefensePercent(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraHillsAttackPercent();
+
+
 int CvLuaUnit::lGetExtraHillsAttackPercent(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3966,8 +3966,8 @@ int CvLuaUnit::lGetExtraHillsAttackPercent(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraHillsDefensePercent();
+
+
 int CvLuaUnit::lGetExtraHillsDefensePercent(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3976,8 +3976,8 @@ int CvLuaUnit::lGetExtraHillsDefensePercent(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraOpenAttackPercent();
+
+
 int CvLuaUnit::lGetExtraOpenAttackPercent(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3986,8 +3986,8 @@ int CvLuaUnit::lGetExtraOpenAttackPercent(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraOpenRangedAttackMod();
+
+
 int CvLuaUnit::lGetExtraOpenRangedAttackMod(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -3996,8 +3996,8 @@ int CvLuaUnit::lGetExtraOpenRangedAttackMod(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraRoughAttackPercent();
+
+
 int CvLuaUnit::lGetExtraRoughAttackPercent(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4006,8 +4006,8 @@ int CvLuaUnit::lGetExtraRoughAttackPercent(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraRoughRangedAttackMod();
+
+
 int CvLuaUnit::lGetExtraRoughRangedAttackMod(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4016,8 +4016,8 @@ int CvLuaUnit::lGetExtraRoughRangedAttackMod(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraAttackFortifiedMod();
+
+
 int CvLuaUnit::lGetExtraAttackFortifiedMod(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4026,8 +4026,8 @@ int CvLuaUnit::lGetExtraAttackFortifiedMod(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraAttackWoundedMod();
+
+
 int CvLuaUnit::lGetExtraAttackWoundedMod(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4036,8 +4036,8 @@ int CvLuaUnit::lGetExtraAttackWoundedMod(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraOpenDefensePercent();
+
+
 int CvLuaUnit::lGetExtraOpenDefensePercent(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4046,8 +4046,8 @@ int CvLuaUnit::lGetExtraOpenDefensePercent(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getPillageChange() const;
+
+
 int CvLuaUnit::lGetPillageChange(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4056,8 +4056,8 @@ int CvLuaUnit::lGetPillageChange(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getUpgradeDiscount() const;
+
+
 int CvLuaUnit::lGetUpgradeDiscount(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4066,8 +4066,8 @@ int CvLuaUnit::lGetUpgradeDiscount(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExperiencePercent() const;
+
+
 int CvLuaUnit::lGetExperiencePercent(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4076,8 +4076,8 @@ int CvLuaUnit::lGetExperiencePercent(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getKamikazePercent() const;
+
+
 int CvLuaUnit::lGetKamikazePercent(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4086,8 +4086,8 @@ int CvLuaUnit::lGetKamikazePercent(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isOutOfAttacks();
+
+
 int CvLuaUnit::lIsOutOfAttacks(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4096,8 +4096,8 @@ int CvLuaUnit::lIsOutOfAttacks(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setMadeAttack(bool bNewValue);
+
+
 int CvLuaUnit::lSetMadeAttack(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4106,8 +4106,8 @@ int CvLuaUnit::lSetMadeAttack(lua_State* L)
 	pkUnit->setMadeAttack(bNewValue);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//bool isOutOfInterceptions();
+
+
 int CvLuaUnit::lisOutOfInterceptions(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4116,8 +4116,8 @@ int CvLuaUnit::lisOutOfInterceptions(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setMadeInterception(bool bNewValue);
+
+
 int CvLuaUnit::lSetMadeInterception(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4126,8 +4126,8 @@ int CvLuaUnit::lSetMadeInterception(lua_State* L)
 	pkUnit->setMadeInterception(bNewValue);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//bool isPromotionReady();
+
+
 int CvLuaUnit::lIsPromotionReady(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4136,8 +4136,8 @@ int CvLuaUnit::lIsPromotionReady(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setPromotionReady(bool bNewValue);
+
+
 int CvLuaUnit::lSetPromotionReady(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4146,8 +4146,8 @@ int CvLuaUnit::lSetPromotionReady(lua_State* L)
 	pkUnit->setPromotionReady(bNewValue);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//int getOwner();
+
+
 int CvLuaUnit::lGetOwner(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4156,8 +4156,8 @@ int CvLuaUnit::lGetOwner(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getVisualOwner();
+
+
 int CvLuaUnit::lGetVisualOwner(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4166,8 +4166,8 @@ int CvLuaUnit::lGetVisualOwner(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getCombatOwner(int /* TeamTypes*/ eForTeam);
+
+
 int CvLuaUnit::lGetCombatOwner(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4177,14 +4177,14 @@ int CvLuaUnit::lGetCombatOwner(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//PlayerTypes getOriginalOwner();
+
+
 int CvLuaUnit::lGetOriginalOwner(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvUnit::GetOriginalOwner);
 }
-//------------------------------------------------------------------------------
-//void setOriginalOwner(int /*UnitTypes*/ leaderUnitType);
+
+
 int CvLuaUnit::lSetOriginalOwner(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4193,8 +4193,8 @@ int CvLuaUnit::lSetOriginalOwner(lua_State* L)
 	pkUnit->SetOriginalOwner(ePlayerType);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//int getTeam();
+
+
 int CvLuaUnit::lGetTeam(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4203,8 +4203,8 @@ int CvLuaUnit::lGetTeam(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int /*UnitTypes*/ getUnitType();
+
+
 int CvLuaUnit::lGetUnitType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4213,8 +4213,8 @@ int CvLuaUnit::lGetUnitType(lua_State* L)
 	lua_pushinteger(L, eResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int /*UnitClassTypes*/ getUnitClassType();
+
+
 int CvLuaUnit::lGetUnitClassType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4223,8 +4223,8 @@ int CvLuaUnit::lGetUnitClassType(lua_State* L)
 	lua_pushinteger(L, eResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int /*UnitTypes*/ getLeaderUnitType();
+
+
 int CvLuaUnit::lGetLeaderUnitType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4233,8 +4233,8 @@ int CvLuaUnit::lGetLeaderUnitType(lua_State* L)
 	lua_pushinteger(L, eResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setLeaderUnitType(int /*UnitTypes*/ leaderUnitType);
+
+
 int CvLuaUnit::lSetLeaderUnitType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4243,8 +4243,8 @@ int CvLuaUnit::lSetLeaderUnitType(lua_State* L)
 	pkUnit->setLeaderUnitType(eLeaderUnitType);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//bool IsNearGreatGeneral();
+
+
 int CvLuaUnit::lIsNearGreatGeneral(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4253,8 +4253,8 @@ int CvLuaUnit::lIsNearGreatGeneral(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsStackedGreatGeneral();
+
+
 int CvLuaUnit::lIsStackedGreatGeneral(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4263,8 +4263,8 @@ int CvLuaUnit::lIsStackedGreatGeneral(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsIgnoresGreatGeneralBenefit();
+
+
 int CvLuaUnit::lIsIgnoreGreatGeneralBenefit(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4273,8 +4273,8 @@ int CvLuaUnit::lIsIgnoreGreatGeneralBenefit(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool GetReverseGreatGeneralModifier();
+
+
 int CvLuaUnit::lGetReverseGreatGeneralModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4283,8 +4283,8 @@ int CvLuaUnit::lGetReverseGreatGeneralModifier(lua_State* L)
 	lua_pushinteger(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool GetGreatGeneralCombatModifier();
+
+
 int CvLuaUnit::lGetGreatGeneralCombatModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4293,8 +4293,8 @@ int CvLuaUnit::lGetGreatGeneralCombatModifier(lua_State* L)
 	lua_pushinteger(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsNearSapper(CvCity* pTargetCity);
+
+
 int CvLuaUnit::lIsNearSapper(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4304,8 +4304,8 @@ int CvLuaUnit::lIsNearSapper(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool GetNearbyImprovementModifier();
+
+
 int CvLuaUnit::lGetNearbyImprovementModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4314,8 +4314,8 @@ int CvLuaUnit::lGetNearbyImprovementModifier(lua_State* L)
 	lua_pushinteger(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsFriendlyUnitAdjacent(bool bCombatUnit);
+
+
 int CvLuaUnit::lIsFriendlyUnitAdjacent(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4325,8 +4325,8 @@ int CvLuaUnit::lIsFriendlyUnitAdjacent(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool GetNumEnemyUnitsAdjacent(CvUnit* pOtherUnit);
+
+
 int CvLuaUnit::lGetNumEnemyUnitsAdjacent(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4336,8 +4336,8 @@ int CvLuaUnit::lGetNumEnemyUnitsAdjacent(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//CyUnit* getTransportUnit() const;
+
+
 int CvLuaUnit::lGetTransportUnit(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4346,8 +4346,8 @@ int CvLuaUnit::lGetTransportUnit(lua_State* L)
 	CvLuaUnit::Push(L, pkTransportUnit);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isCargo();
+
+
 int CvLuaUnit::lIsCargo(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4356,8 +4356,8 @@ int CvLuaUnit::lIsCargo(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraDomainModifier(int /*DomainTypes*/ eIndex);
+
+
 int CvLuaUnit::lGetExtraDomainModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4367,8 +4367,8 @@ int CvLuaUnit::lGetExtraDomainModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//string GetName();
+
+
 int CvLuaUnit::lGetName(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4376,7 +4376,7 @@ int CvLuaUnit::lGetName(lua_State* L)
 	lua_pushstring(L, pkUnit->getName());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaUnit::lGetNameNoDesc(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4384,7 +4384,7 @@ int CvLuaUnit::lGetNameNoDesc(lua_State* L)
 	lua_pushstring(L, name.c_str());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaUnit::lHasName(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4392,8 +4392,8 @@ int CvLuaUnit::lHasName(lua_State* L)
 	lua_pushboolean(L, !name.IsEmpty());
 	return 1;
 }
-//------------------------------------------------------------------------------
-//string GetNameKey();
+
+
 int CvLuaUnit::lGetNameKey(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4401,8 +4401,8 @@ int CvLuaUnit::lGetNameKey(lua_State* L)
 	lua_pushstring(L, pkUnit->getNameKey());
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setName(std::string szNewValue);
+
+
 int CvLuaUnit::lSetName(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4411,8 +4411,8 @@ int CvLuaUnit::lSetName(lua_State* L)
 	pkUnit->setName(strName);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//bool isTerrainDoubleMove(int /*TerrainTypes*/ eIndex);
+
+
 int CvLuaUnit::lIsTerrainDoubleMove(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4422,8 +4422,8 @@ int CvLuaUnit::lIsTerrainDoubleMove(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isFeatureDoubleMove(int /*FeatureTypes*/ eIndex);
+
+
 int CvLuaUnit::lIsFeatureDoubleMove(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4433,8 +4433,8 @@ int CvLuaUnit::lIsFeatureDoubleMove(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//string getScriptData() const;
+
+
 int CvLuaUnit::lGetScriptData(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4443,8 +4443,8 @@ int CvLuaUnit::lGetScriptData(lua_State* L)
 	lua_pushstring(L, szScriptData);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setScriptData(string szNewValue);
+
+
 int CvLuaUnit::lSetScriptData(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4453,8 +4453,8 @@ int CvLuaUnit::lSetScriptData(lua_State* L)
 	pkUnit->setScriptData(strNewValue);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//int getScenarioData();
+
+
 int CvLuaUnit::lGetScenarioData(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4463,8 +4463,8 @@ int CvLuaUnit::lGetScenarioData(lua_State* L)
 	lua_pushinteger(L, iData);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setScenarioData(int iNewValue);
+
+
 int CvLuaUnit::lSetScenarioData(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4473,8 +4473,8 @@ int CvLuaUnit::lSetScenarioData(lua_State* L)
 	pkUnit->setScenarioData(iNewData);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//int getExtraTerrainAttackPercent(int /*TerrainTypes*/ eIndex);
+
+
 int CvLuaUnit::lGetExtraTerrainAttackPercent(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4484,8 +4484,8 @@ int CvLuaUnit::lGetExtraTerrainAttackPercent(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraTerrainDefensePercent(int /*TerrainTypes*/ eIndex);
+
+
 int CvLuaUnit::lGetExtraTerrainDefensePercent(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4495,8 +4495,8 @@ int CvLuaUnit::lGetExtraTerrainDefensePercent(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraFeatureAttackPercent(int /*FeatureTypes*/ eIndex);
+
+
 int CvLuaUnit::lGetExtraFeatureAttackPercent(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4506,8 +4506,8 @@ int CvLuaUnit::lGetExtraFeatureAttackPercent(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraFeatureDefensePercent(int /*FeatureTypes*/ eIndex);
+
+
 int CvLuaUnit::lGetExtraFeatureDefensePercent(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4517,8 +4517,8 @@ int CvLuaUnit::lGetExtraFeatureDefensePercent(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int getExtraUnitCombatModifier(int /*UnitCombatTypes*/ eIndex);
+
+
 int CvLuaUnit::lGetExtraUnitCombatModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4528,8 +4528,8 @@ int CvLuaUnit::lGetExtraUnitCombatModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetUnitClassModifier(int /*UnitClassTypes*/ eIndex);
+
+
 int CvLuaUnit::lGetUnitClassModifier(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4539,8 +4539,8 @@ int CvLuaUnit::lGetUnitClassModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canAcquirePromotion(int /*PromotionTypes*/ ePromotion);
+
+
 int CvLuaUnit::lCanAcquirePromotion(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4550,8 +4550,8 @@ int CvLuaUnit::lCanAcquirePromotion(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool canAcquirePromotionAny();
+
+
 int CvLuaUnit::lCanAcquirePromotionAny(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4560,8 +4560,8 @@ int CvLuaUnit::lCanAcquirePromotionAny(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isPromotionValid(int /*PromotionTypes*/ ePromotion);
+
+
 int CvLuaUnit::lIsPromotionValid(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4571,8 +4571,8 @@ int CvLuaUnit::lIsPromotionValid(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool isHasPromotion(int /*PromotionTypes*/ ePromotion);
+
+
 int CvLuaUnit::lIsHasPromotion(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4582,8 +4582,8 @@ int CvLuaUnit::lIsHasPromotion(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void setHasPromotion(int /*PromotionTypes*/ eIndex, bool bNewValue);
+
+
 int CvLuaUnit::lSetHasPromotion(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4593,8 +4593,8 @@ int CvLuaUnit::lSetHasPromotion(lua_State* L)
 	pkUnit->setHasPromotion(eIndex, bNewValue);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//ReligionTypes GetReligion();
+
+
 int CvLuaUnit::lGetReligion(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4603,8 +4603,8 @@ int CvLuaUnit::lGetReligion(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetConversionStrength();
+
+
 int CvLuaUnit::lGetConversionStrength(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4614,8 +4614,8 @@ int CvLuaUnit::lGetConversionStrength(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetReligionSpreads();
+
+
 int CvLuaUnit::lGetSpreadsLeft(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4624,8 +4624,8 @@ int CvLuaUnit::lGetSpreadsLeft(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetNumFollowersAfterSpread();
+
+
 int CvLuaUnit::lGetNumFollowersAfterSpread(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4634,8 +4634,8 @@ int CvLuaUnit::lGetNumFollowersAfterSpread(lua_State* L)
 	lua_pushinteger(L, iData);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//ReligionTypes GetMajorityReligionAfterSpread();
+
+
 int CvLuaUnit::lGetMajorityReligionAfterSpread(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4644,8 +4644,8 @@ int CvLuaUnit::lGetMajorityReligionAfterSpread(lua_State* L)
 	lua_pushinteger(L, iData);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetTourismBlastStrength();
+
+
 int CvLuaUnit::lGetTourismBlastStrength(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4655,8 +4655,8 @@ int CvLuaUnit::lGetTourismBlastStrength(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//GreatWorkSlotType GetGreatWorkSlotType();
+
+
 int CvLuaUnit::lGetGreatWorkSlotType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4665,8 +4665,8 @@ int CvLuaUnit::lGetGreatWorkSlotType(lua_State* L)
 	lua_pushinteger(L, iData);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//void rangeStrike(int iX, int iY);
+
+
 int CvLuaUnit::lRangeStrike(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4677,8 +4677,8 @@ int CvLuaUnit::lRangeStrike(lua_State* L)
 		CvUnitCombat::AttackRanged(*pkUnit, x, y, CvUnitCombat::ATTACK_OPTION_NONE);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//int GetUnitFlagIconOffset
+
+
 int CvLuaUnit::lGetUnitFlagIconOffset(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4687,8 +4687,8 @@ int CvLuaUnit::lGetUnitFlagIconOffset(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//int GetUnitPortraitOffset
+
+
 int CvLuaUnit::lGetUnitPortraitOffset(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4698,8 +4698,8 @@ int CvLuaUnit::lGetUnitPortraitOffset(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
-//
+
+
 int CvLuaUnit::lGetActivityType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4714,8 +4714,8 @@ int CvLuaUnit::lGetActivityType(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
-// bool ReadyToMove() const;
+
+
 int CvLuaUnit::lIsReadyToMove(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4725,7 +4725,7 @@ int CvLuaUnit::lIsReadyToMove(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaUnit::lIsBusy(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4735,8 +4735,8 @@ int CvLuaUnit::lIsBusy(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
-//void PushMission(MissionTypes eMission, int iData1 = -1, int iData2 = -1, int iFlags = 0, bool bAppend = false, bool bManual = fa;se, MissionAITypes eMissionAI = NO_MISSIONAI, CyPlot* pMissionAIPlot = NULL, CyUnit* pMissionAIUnit = NULL)
+
+
 int CvLuaUnit::lPushMission(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4754,8 +4754,8 @@ int CvLuaUnit::lPushMission(lua_State* L)
 
 	return 0;
 };
-//------------------------------------------------------------------------------
-//void PopMission()
+
+
 int CvLuaUnit::lPopMission(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4763,8 +4763,8 @@ int CvLuaUnit::lPopMission(lua_State* L)
 
 	return 0;
 };
-//------------------------------------------------------------------------------
-//CyPlot* LastMissionPlot();
+
+
 int CvLuaUnit::lLastMissionPlot(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4773,8 +4773,8 @@ int CvLuaUnit::lLastMissionPlot(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool CanStartMission(int iMission, int iData1, int iData2, CyPlot* pPlot = NULL, bool bTestVisible = false)
+
+
 int CvLuaUnit::lCanStartMission(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4791,8 +4791,8 @@ int CvLuaUnit::lCanStartMission(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 };
-//------------------------------------------------------------------------------
-//bool ExecuteSpecialExploreMove (CvPlot *pPlot);
+
+
 int CvLuaUnit::lExecuteSpecialExploreMove(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4804,8 +4804,8 @@ int CvLuaUnit::lExecuteSpecialExploreMove(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 };
-//------------------------------------------------------------------------------
-//void SetDeployFromOperationTurn(int iTurn);
+
+
 int CvLuaUnit::lSetDeployFromOperationTurn(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4814,8 +4814,8 @@ int CvLuaUnit::lSetDeployFromOperationTurn(lua_State* L)
 	pkUnit->SetDeployFromOperationTurn(iTurn);
 	return 0;
 }
-//------------------------------------------------------------------------------
-//bool IsHigherTechThan(UnitTypes eOtherUnit );
+
+
 int CvLuaUnit::lIsHigherTechThan(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4825,8 +4825,8 @@ int CvLuaUnit::lIsHigherTechThan(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsLargerCivThan(CvUnit *pOtherUnit);
+
+
 int CvLuaUnit::lIsLargerCivThan(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4836,8 +4836,8 @@ int CvLuaUnit::lIsLargerCivThan(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsRangedSupportFire();
+
+
 int CvLuaUnit::lIsRangedSupportFire(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4847,8 +4847,8 @@ int CvLuaUnit::lIsRangedSupportFire(lua_State* L)
 	return 1;
 }
 #ifdef NQ_UNIT_IMMUNE_TO_PLUNDER_FROM_TRAIT
-//------------------------------------------------------------------------------
-//bool IsPlunderBlockedByOpposingTrait();
+
+
 int CvLuaUnit::lIsPlunderBlockedByOpposingTrait(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4860,8 +4860,8 @@ int CvLuaUnit::lIsPlunderBlockedByOpposingTrait(lua_State* L)
 #endif
 
 #ifdef LEKMOD_NEW_LUA_METHODS
-//------------------------------------------------------------------------------
-//bool IsNearUnitWithPromotion(PromotionTypes ePromotion, int iRange, bool bSameDomain, bool SamePlayer);
+
+
 int CvLuaUnit::lIsNearUnitWithPromotion(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4874,8 +4874,8 @@ int CvLuaUnit::lIsNearUnitWithPromotion(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsNearTerrainType(TerrainTypes eTerrainType, int iRange, bool bSamePlayer);
+
+
 int CvLuaUnit::lIsNearTerrainType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4887,8 +4887,8 @@ int CvLuaUnit::lIsNearTerrainType(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
-//bool IsNearFeatureType(FeatureTypes eFeature, int iRange, bool bSamePlayer);
+
+
 int CvLuaUnit::lIsNearFeatureType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
@@ -4900,7 +4900,7 @@ int CvLuaUnit::lIsNearFeatureType(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//bool IsNearImprovementType(ImprovementTypes eImprovement, int iRange, bool bSamePlayer);
+
 int CvLuaUnit::lIsNearImprovementType(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/2/2015 11:22:00 PM -->
+
 <GameData>
 	
-	<!-- New Policy Tree
+
 	
-					   Philanthropy
-			 _______________|___________________
-			|			    |					|
-	Scholasticism	Cultural Diplomacy	Merchant Confederacy
-						    |
-						    |
-						Consulates
-	-->
+
+
+
+
+
+
+
+
 
 	<Policies>
 		<Update>

@@ -1,24 +1,24 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_PROJECT_CLASSES_H
 #define CIV5_PROJECT_CLASSES_H
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvProjectEntry
-//!  \brief		A single project available in the game
-//
-//!  Key Attributes:
-//!  - Used to be called CvProjectInfo
-//!  - Populated from XML\GameInfo\CIV5ProjectInfo.xml
-//!  - Array of these contained in CvProjectXMLEntries class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvProjectEntry: public CvBaseInfo
 {
 public:
@@ -47,7 +47,7 @@ public:
 	const char* GetCreateSound() const;
 	void SetCreateSound(const char* szVal);
 
-	// Arrays
+
 #ifdef AUI_WARNING_FIXES
 	int GetResourceQuantityRequirement(uint i) const;
 	int GetVictoryThreshold(uint i) const;
@@ -79,7 +79,7 @@ protected:
 	CvString m_strCreateSound;
 	CvString m_strMovieArtDef;
 
-	// Arrays
+
 	int* m_piResourceQuantityRequirements;
 	int* m_piVictoryThreshold;
 	int* m_piVictoryMinThreshold;
@@ -87,24 +87,24 @@ protected:
 	int* m_piFlavorValue;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvProjectXMLEntries
-//!  \brief		Game-wide information about projects
-//
-//! Key Attributes:
-//! - Plan is it will be contained in CvGameRules object within CvGame class
-//! - Populated from XML\GameInfo\CIV5ProjectInfo.xml
-//! - Contains an array of CvProjectEntry from the above XML file
-//! - One instance for the entire game
-//! - Accessed heavily by the [what stores info on projects built?] class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
 class CvProjectXMLEntries
 {
 public:
 	CvProjectXMLEntries(void);
 	~CvProjectXMLEntries(void);
 
-	// Accessor functions
+
 	std::vector<CvProjectEntry*>& GetProjectEntries();
 #ifdef AUI_WARNING_FIXES
 	uint GetNumProjects() const;
@@ -120,4 +120,4 @@ private:
 	std::vector<CvProjectEntry*> m_paProjectEntries;
 };
 
-#endif //CIV5_PROJECT_CLASSES_H
+#endif

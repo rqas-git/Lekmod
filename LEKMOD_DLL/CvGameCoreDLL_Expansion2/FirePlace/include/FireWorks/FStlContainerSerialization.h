@@ -1,36 +1,36 @@
-//---------------------------------------------------------------------------------------
-//
-//  *****************   FIRAXIS GAME ENGINE   ********************
-//
-//  FILE:		FStlContainerSerialization.h
-//
-//  AUTHOR:		Justin Randall
-//
-//  PURPOSE:	Support STL containers with any type serializable with FDataStream.
-//
-//---------------------------------------------------------------------------------------
-//  Copyright (c) 2009 Firaxis Games, Inc. All rights reserved.
-//---------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #ifndef _INCLUDED_FStlContainerSerialization_H
 #define _INCLUDED_FStlContainerSerialization_H
 
-//---------------------------------------------------------------------
-// Specific container specializations help the compiler associate
-// the right code for the type serializing with an FDataStream. 
-//
-// Many containers are represented identically in an FDataStream, so
-// use more generic methods for moving data to/from the FDataStream.
-// For example, lists, vectors and deques are all sequence containers
-// and so all use the same load/save code, but specify explicit 
-// specializations to match the template with the container calling
-// the shift operator. 
-//
-// maps and sets are associative containers.
-// Though hash_maps aren't implemented in this file, they can use the 
-// same associative container code here and simply provide the 
-// specialized template wrapper.
-//---------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #include <deque>
 #include <list>
@@ -56,10 +56,10 @@ FDataStream & operator>>(FDataStream & loadFrom, std::pair<FirstType, SecondType
 	return loadFrom;
 }
 
-// STL sequence containers are all serialized the same way.
-// deques, vectors and lists are identical in a stream, so
-// the Serialize[To/From]SequenceContainer functors
-// handle the specifics of serialization.
+
+
+
+
 template<typename ElementType, typename ContainerType>
 struct SerializeFromSequenceContainer
 {
@@ -101,29 +101,29 @@ void SerializeToSequenceContainer(FDataStream & loadFrom, ContainerType & contai
 	}
 }
 
-/*
-template<typename ElementType, typename ContainerType>
-struct SerializeToSequenceContainer
-{
-	SerializeToSequenceContainer(FDataStream & loadFrom, ContainerType & container) :
-	m_loadFrom(loadFrom)
-	, m_container(container)
-	{
-		container.clear();
-		size_t count = 0;
-		m_loadFrom >> count;
-		container.resize(count);
-	}
 
-	void operator() (ElementType & i)
-	{
-		m_loadFrom >> i;
-	}
 
-	FDataStream & m_loadFrom;
-	ContainerType & m_container;
-};
-*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 template<typename ElementType, typename ContainerType>
 struct SerializeFromAssociativeContainer
 {
@@ -211,9 +211,9 @@ FDataStream & operator<<(FDataStream & saveTo, const std::vector<ElementType> & 
 template<typename ElementType>
 FDataStream & operator>>(FDataStream & loadFrom, std::deque<ElementType> & writeTo)
 {
-	// The functor needs to be instantiated to properly resize the container based 
-	// on how many elements the stream says it should have before passing it along
-	// to std::for_each
+
+
+
 	SerializeToSequenceContainer<ElementType, std::deque<ElementType> >(loadFrom, writeTo);
 	return loadFrom;
 }
@@ -221,9 +221,9 @@ FDataStream & operator>>(FDataStream & loadFrom, std::deque<ElementType> & write
 template<typename ElementType>
 FDataStream & operator>>(FDataStream & loadFrom, std::list<ElementType> & writeTo)
 {
-	// The functor needs to be instantiated to properly resize the container based 
-	// on how many elements the stream says it should have before passing it along
-	// to std::for_each
+
+
+
 	SerializeToSequenceContainer<ElementType, std::list<ElementType> >(loadFrom, writeTo);
 	return loadFrom;
 }
@@ -231,12 +231,12 @@ FDataStream & operator>>(FDataStream & loadFrom, std::list<ElementType> & writeT
 template<typename ElementType>
 FDataStream & operator>>(FDataStream & loadFrom, std::vector<ElementType> & writeTo)
 {
-	// The functor needs to be instantiated to properly resize the container based 
-	// on how many elements the stream says it should have before passing it along
-	// to std::for_each
+
+
+
 	SerializeToSequenceContainer<ElementType, std::vector<ElementType> >(loadFrom, writeTo);
 
-	//std::for_each(writeTo.begin(), writeTo.end(), func);
+
 	return loadFrom;
 }
 
@@ -271,4 +271,4 @@ FDataStream & operator>>(FDataStream & loadFrom, std::set<ElementType> & writeTo
 FDataStream & operator<<(FDataStream & saveTo, const std::string & readFrom);
 FDataStream & operator>>(FDataStream & loadFrom, std::string & writeTo);
 
-#endif//_INCLUDED_FStlContainerSerialization_H
+#endif

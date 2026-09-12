@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvDllContext.h"
 
@@ -50,8 +50,8 @@
 CvDllGameContext* CvDllGameContext::s_pSingleton = NULL;
 HANDLE CvDllGameContext::s_hHeap = INVALID_HANDLE_VALUE;
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+
+
 CvDllGameContext::CvDllGameContext()
 	: m_uiRngCounter(0)
 	, m_uiNetInitInfoCounter(0)
@@ -62,7 +62,7 @@ CvDllGameContext::CvDllGameContext()
 	m_pScriptSystemUtility = new CvDllScriptSystemUtility();
 	m_pWorldBuilderMapLoader = new CvDllWorldBuilderMapLoader();
 }
-//------------------------------------------------------------------------------
+
 CvDllGameContext::~CvDllGameContext()
 {
 	delete m_pNetworkSyncronizer;
@@ -95,7 +95,7 @@ CvDllGameContext::~CvDllGameContext()
 	}
 	m_NetLoadGameInfos.clear();
 }
-//------------------------------------------------------------------------------
+
 void* CvDllGameContext::QueryInterface(GUID guidInterface)
 {
 	if(	guidInterface == ICvUnknown::GetInterfaceId() ||
@@ -109,24 +109,24 @@ void* CvDllGameContext::QueryInterface(GUID guidInterface)
 	return NULL;
 }
 
-//	---------------------------------------------------------------------------
+
 GUID CvDllGameContext::GetDLLGUID()
 {
 	return CIV5_XP2_DLL_GUID;
 }
 
-//	---------------------------------------------------------------------------
+
 const char* CvDllGameContext::GetDLLVersion()
 {
 	return CIV5_XP2_DLL_VERSION;
 }
 
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::Destroy()
 {
-	//Do nothing, it's a singleton controlled by the DLL.
+
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::InitializeSingleton()
 {
 	if(s_pSingleton == NULL)
@@ -134,11 +134,11 @@ void CvDllGameContext::InitializeSingleton()
 		FAssert(s_hHeap == INVALID_HANDLE_VALUE);
 		s_hHeap = HeapCreate(0, 0, 0);
 
-		//
-		// Enable the low-fragmentation heap (LFH). Starting with Windows Vista,
-		// the LFH is enabled by default but this call does not cause an error.
-		//
-		ULONG HeapInformation = 2;	//Low Fragmentation Heap
+
+
+
+
+		ULONG HeapInformation = 2;
 		HeapSetInformation(s_hHeap,
 		                   HeapCompatibilityInformation,
 		                   &HeapInformation,
@@ -147,29 +147,29 @@ void CvDllGameContext::InitializeSingleton()
 	}
 	s_pSingleton = FNEW(CvDllGameContext(), c_eCiv5GameplayDLL, 0);
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::DestroySingleton()
 {
 	SAFE_DELETE(s_pSingleton);
 	HeapDestroy(s_hHeap);
 	s_hHeap = INVALID_HANDLE_VALUE;
 }
-//------------------------------------------------------------------------------
+
 CvDllGameContext* CvDllGameContext::GetSingleton()
 {
 	return s_pSingleton;
 }
-//------------------------------------------------------------------------------
+
 HANDLE CvDllGameContext::GetHeap()
 {
 	return s_hHeap;
 }
-//------------------------------------------------------------------------------
+
 HANDLE CvDllGameContext::Debug_GetHeap() const
 {
 	return s_hHeap;
 }
-//------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 _Check_return_ void* CvDllGameContext::Allocate(size_t bytes)
 #else
@@ -178,7 +178,7 @@ void* CvDllGameContext::Allocate(size_t bytes)
 {
 	return HeapAlloc(s_hHeap, 0, bytes);
 }
-//------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 void CvDllGameContext::Free(_In_ void* p)
 #else
@@ -187,27 +187,27 @@ void CvDllGameContext::Free(void* p)
 {
 	HeapFree(s_hHeap, 0, p);
 }
-//------------------------------------------------------------------------------
+
 ICvNetworkSyncronization1* CvDllGameContext::GetNetworkSyncronizer()
 {
 	return m_pNetworkSyncronizer;
 }
-//------------------------------------------------------------------------------
+
 ICvNetMessageHandler1* CvDllGameContext::GetNetMessageHandler()
 {
 	return (ICvNetMessageHandler1*)m_pNetMessageHandler->QueryInterface(ICvNetMessageHandler1::GetInterfaceId());
 }
-//------------------------------------------------------------------------------
+
 ICvWorldBuilderMapLoader1* CvDllGameContext::GetWorldBuilderMapLoader()
 {
 	return m_pWorldBuilderMapLoader;
 }
-//------------------------------------------------------------------------------
+
 ICvPreGame1* CvDllGameContext::GetPreGame()
 {
 	return new CvDllPreGame();
 }
-//------------------------------------------------------------------------------
+
 ICvGame1* CvDllGameContext::GetGame()
 {
 	CvGame* pkGame = GC.getGamePointer();
@@ -215,7 +215,7 @@ ICvGame1* CvDllGameContext::GetGame()
 		return new CvDllGame(pkGame);
 	return NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvGameAsynch1* CvDllGameContext::GetGameAsynch()
 {
 	CvGame* pkGame = GC.getGamePointer();
@@ -223,7 +223,7 @@ ICvGameAsynch1* CvDllGameContext::GetGameAsynch()
 		return new CvDllGameAsynch(pkGame);
 	return NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvMap1* CvDllGameContext::GetMap()
 {
 	CvMap* pkMap = GC.getMapPointer();
@@ -231,7 +231,7 @@ ICvMap1* CvDllGameContext::GetMap()
 		return new CvDllMap(pkMap);
 	return NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvTeam1* CvDllGameContext::GetTeam(TeamTypes eTeam)
 {
 	if(eTeam < MAX_TEAMS)
@@ -242,301 +242,301 @@ ICvTeam1* CvDllGameContext::GetTeam(TeamTypes eTeam)
 
 	return NULL;
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetInfoTypeForString(const char* szType, bool hideAssert) const
 {
 	return GC.getInfoTypeForString(szType, hideAssert);
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetInfoTypeForHash(uint uiHash, bool hideAssert) const
 {
 	return GC.getInfoTypeForHash(uiHash, hideAssert);
 }
-//------------------------------------------------------------------------------
+
 CivilizationTypes CvDllGameContext::GetCivilizationInfoIndex(const char* pszType)
 {
 	return GC.getCivilizationInfoIndex(pszType);
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumPlayableCivilizationInfos()
 {
 	return GC.getNumPlayableCivilizationInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumAIPlayableCivilizationInfos()
 {
 	return GC.getNumAIPlayableCivilizationInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumPlayableMinorCivs()
 {
 	return GC.GetNumPlayableMinorCivs();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumBuildInfos()
 {
 	return GC.getNumBuildInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumBuildingInfos()
 {
 	return GC.getNumBuildingInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumCivilizationInfos()
 {
 	return GC.getNumCivilizationInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumClimateInfos()
 {
 	return GC.getNumClimateInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumColorInfos()
 {
 	return GC.GetNumColorInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumEraInfos()
 {
 	return GC.getNumEraInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumFeatureInfos()
 {
 	return GC.getNumFeatureInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumGameOptionInfos()
 {
 	return GC.getNumGameOptionInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumGameSpeedInfos()
 {
 	return GC.getNumGameSpeedInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumHandicapInfos()
 {
 	return GC.getNumHandicapInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumImprovementInfos()
 {
 	return GC.getNumImprovementInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumLeaderHeadInfos()
 {
 	return GC.getNumLeaderHeadInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumMinorCivInfos()
 {
 	return GC.getNumMinorCivInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumPlayerColorInfos()
 {
 	return GC.GetNumPlayerColorInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumPolicyInfos()
 {
 	return GC.getNumPolicyInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumPromotionInfos()
 {
 	return GC.getNumPromotionInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumResourceInfos()
 {
 	return GC.getNumResourceInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumSeaLevelInfos()
 {
 	return GC.getNumSeaLevelInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumTechInfos()
 {
 	return GC.getNumTechInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumTerrainInfos()
 {
 	return GC.getNumTerrainInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumUnitCombatClassInfos()
 {
 	return GC.getNumUnitCombatClassInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumUnitInfos()
 {
 	return GC.getNumUnitInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumVictoryInfos()
 {
 	return GC.getNumVictoryInfos();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNumWorldInfos()
 {
 	return GC.getNumWorldInfos();
 }
-//------------------------------------------------------------------------------
+
 ICvBuildInfo1* CvDllGameContext::GetBuildInfo(BuildTypes eBuildNum)
 {
 	CvBuildInfo* pkInfo = GC.getBuildInfo(eBuildNum);
 	return (NULL != pkInfo)? new CvDllBuildInfo(pkInfo) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvBuildingInfo1* CvDllGameContext::GetBuildingInfo(BuildingTypes eBuilding)
 {
 	CvBuildingEntry* pkEntry = GC.getBuildingInfo(eBuilding);
 	return (NULL != pkEntry)? new CvDllBuildingInfo(pkEntry) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvCivilizationInfo1* CvDllGameContext::GetCivilizationInfo(CivilizationTypes eCivilizationNum)
 {
 	CvCivilizationInfo* pkInfo = GC.getCivilizationInfo(eCivilizationNum);
 	return (NULL != pkInfo)? new CvDllCivilizationInfo(pkInfo) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvColorInfo1* CvDllGameContext::GetColorInfo(ColorTypes e)
 {
 	CvColorInfo* pkInfo = GC.GetColorInfo(e);
 	return (NULL != pkInfo)? new CvDllColorInfo(pkInfo) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvEraInfo1* CvDllGameContext::GetEraInfo(EraTypes eEraNum)
 {
 	CvEraInfo* pkInfo = GC.getEraInfo(eEraNum);
 	return (NULL != pkInfo)? new CvDllEraInfo(pkInfo) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvFeatureInfo1* CvDllGameContext::GetFeatureInfo(FeatureTypes eFeatureNum)
 {
 	CvFeatureInfo* pkInfo = GC.getFeatureInfo(eFeatureNum);
 	return (NULL != pkInfo)? new CvDllFeatureInfo(pkInfo) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvGameOptionInfo1* CvDllGameContext::GetGameOptionInfo(GameOptionTypes eGameOptionNum)
 {
 	CvGameOptionInfo* pkInfo = GC.getGameOptionInfo(eGameOptionNum);
 	return (NULL != pkInfo)? new CvDllGameOptionInfo(pkInfo) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvGameSpeedInfo1* CvDllGameContext::GetGameSpeedInfo(GameSpeedTypes eGameSpeedNum)
 {
 	CvGameSpeedInfo* pkInfo = GC.getGameSpeedInfo(eGameSpeedNum);
 	return (NULL != pkInfo)? new CvDllGameSpeedInfo(pkInfo) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvHandicapInfo1* CvDllGameContext::GetHandicapInfo(HandicapTypes eHandicapNum)
 {
 	CvHandicapInfo* pkInfo = GC.getHandicapInfo(eHandicapNum);
 	return (NULL != pkInfo)? new CvDllHandicapInfo(pkInfo) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvInterfaceModeInfo1* CvDllGameContext::GetInterfaceModeInfo(InterfaceModeTypes e)
 {
 	CvInterfaceModeInfo* pkInfo = GC.getInterfaceModeInfo(e);
 	return (NULL != pkInfo)? new CvDllInterfaceModeInfo(pkInfo) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvImprovementInfo1* CvDllGameContext::GetImprovementInfo(ImprovementTypes eImprovement)
 {
 	CvImprovementEntry* pkEntry = GC.getImprovementInfo(eImprovement);
 	return (NULL != pkEntry)? new CvDllImprovementInfo(pkEntry) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvLeaderHeadInfo1* CvDllGameContext::GetLeaderHeadInfo(LeaderHeadTypes eLeaderHeadNum)
 {
 	CvLeaderHeadInfo* pkInfo = GC.getLeaderHeadInfo(eLeaderHeadNum);
 	return (NULL != pkInfo)? new CvDllLeaderHeadInfo(pkInfo) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvMinorCivInfo1* CvDllGameContext::GetMinorCivInfo(MinorCivTypes eMinorCiv)
 {
 	CvMinorCivInfo* pkInfo = GC.getMinorCivInfo(eMinorCiv);
 	return (NULL != pkInfo)? new CvDllMinorCivInfo(pkInfo) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvMissionInfo1* CvDllGameContext::GetMissionInfo(MissionTypes eMission)
 {
 	CvMissionInfo* pkInfo = GC.getMissionInfo(eMission);
 	return (NULL != pkInfo)? new CvDllMissionInfo(pkInfo) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvPlayerColorInfo1* CvDllGameContext::GetPlayerColorInfo(PlayerColorTypes e)
 {
 	CvPlayerColorInfo* pkInfo = GC.GetPlayerColorInfo(e);
 	return (NULL != pkInfo)? new CvDllPlayerColorInfo(pkInfo) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvPlayerOptionInfo1* CvDllGameContext::GetPlayerOptionInfo(PlayerOptionTypes ePlayerOptionNum)
 {
 	CvPlayerOptionInfo* pkInfo = GC.getPlayerOptionInfo(ePlayerOptionNum);
 	return (NULL != pkInfo)? new CvDllPlayerOptionInfo(pkInfo) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvPolicyInfo1* CvDllGameContext::GetPolicyInfo(PolicyTypes ePolicy)
 {
 	CvPolicyEntry* pkInfo = GC.getPolicyInfo(ePolicy);
 	return (NULL != pkInfo)? new CvDllPolicyInfo(pkInfo) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvPromotionInfo1* CvDllGameContext::GetPromotionInfo(PromotionTypes ePromotion)
 {
 	CvPromotionEntry* pkInfo = GC.getPromotionInfo(ePromotion);
 	return (NULL != pkInfo)? new CvDllPromotionInfo(pkInfo) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvResourceInfo1* CvDllGameContext::GetResourceInfo(ResourceTypes eResourceNum)
 {
 	CvResourceInfo* pkInfo = GC.getResourceInfo(eResourceNum);
 	return (NULL != pkInfo)? new CvDllResourceInfo(pkInfo) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvTechInfo1* CvDllGameContext::GetTechInfo(TechTypes eTech)
 {
 	CvTechEntry* pkEntry = GC.getTechInfo(eTech);
 	return (NULL != pkEntry)? new CvDllTechInfo(pkEntry) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvTerrainInfo1* CvDllGameContext::GetTerrainInfo(TerrainTypes eTerrainNum)
 {
 	CvTerrainInfo* pkInfo = GC.getTerrainInfo(eTerrainNum);
 	return (NULL != pkInfo)? new CvDllTerrainInfo(pkInfo) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvUnitInfo1* CvDllGameContext::GetUnitInfo(UnitTypes eUnit)
 {
 	CvUnitEntry* pkEntry = GC.getUnitInfo(eUnit);
 	return (NULL != pkEntry)? new CvDllUnitInfo(pkEntry) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvUnitCombatClassInfo1* CvDllGameContext::GetUnitCombatClassInfo(UnitCombatTypes eUnitCombat)
 {
 	CvBaseInfo* pkEntry = GC.getUnitCombatClassInfo(eUnitCombat);
 	return (NULL != pkEntry)? new CvDllUnitCombatClassInfo(pkEntry) : NULL;
 }
-//------------------------------------------------------------------------------
+
 ICvVictoryInfo1* CvDllGameContext::GetVictoryInfo(VictoryTypes eVictoryType)
 {
 	CvVictoryInfo* pkEntry = GC.getVictoryInfo(eVictoryType);
 	return (NULL != pkEntry)? new CvDllVictoryInfo(pkEntry) : NULL;
 }
-//------------------------------------------------------------------------------
+
 bool CvDllGameContext::GetDefineSTRING(char* szBuffer, size_t lenBuffer, const char* szName, bool bReportErrors)
 {
 	if(szBuffer != NULL && lenBuffer > 0)
@@ -551,132 +551,132 @@ bool CvDllGameContext::GetDefineSTRING(char* szBuffer, size_t lenBuffer, const c
 
 	return false;
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetMOVE_DENOMINATOR() const
 {
 	return GC.getMOVE_DENOMINATOR();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetMAX_CITY_HIT_POINTS() const
 {
 	return GC.getMAX_CITY_HIT_POINTS();
 }
-//------------------------------------------------------------------------------
+
 float CvDllGameContext::GetCITY_ZOOM_OFFSET() const
 {
 	return GC.getCITY_ZOOM_OFFSET();
 }
-//------------------------------------------------------------------------------
+
 float CvDllGameContext::GetCITY_ZOOM_LEVEL_1() const
 {
 	return GC.getCITY_ZOOM_LEVEL_1();
 }
-//------------------------------------------------------------------------------
+
 float CvDllGameContext::GetCITY_ZOOM_LEVEL_2() const
 {
 	return GC.getCITY_ZOOM_LEVEL_2();
 }
-//------------------------------------------------------------------------------
+
 float CvDllGameContext::GetCITY_ZOOM_LEVEL_3() const
 {
 	return GC.getCITY_ZOOM_LEVEL_3();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetRUINS_IMPROVEMENT() const
 {
 	return GC.getRUINS_IMPROVEMENT();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetSHALLOW_WATER_TERRAIN() const
 {
 	return GC.getSHALLOW_WATER_TERRAIN();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetDEFICIT_UNIT_DISBANDING_THRESHOLD() const
 {
 	return GC.getDEFICIT_UNIT_DISBANDING_THRESHOLD();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetLAST_UNIT_ART_ERA() const
 {
 	return GC.getLAST_UNIT_ART_ERA();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetLAST_EMBARK_ART_ERA() const
 {
 	return GC.getLAST_EMBARK_ART_ERA();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetHEAVY_RESOURCE_THRESHOLD() const
 {
 	return GC.getHEAVY_RESOURCE_THRESHOLD();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetSTANDARD_HANDICAP() const
 {
 	return GC.getSTANDARD_HANDICAP();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetSTANDARD_GAMESPEED() const
 {
 	return GC.getSTANDARD_GAMESPEED();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetLAST_BRIDGE_ART_ERA() const
 {
 	return GC.getLAST_BRIDGE_ART_ERA();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetBARBARIAN_CIVILIZATION() const
 {
 	return GC.getBARBARIAN_CIVILIZATION();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetMINOR_CIVILIZATION() const
 {
 	return GC.getMINOR_CIVILIZATION();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetBARBARIAN_HANDICAP() const
 {
 	return GC.getBARBARIAN_HANDICAP();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetBARBARIAN_LEADER() const
 {
 	return GC.getBARBARIAN_LEADER();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetMINOR_CIV_HANDICAP() const
 {
 	return GC.getMINOR_CIV_HANDICAP();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetWALLS_BUILDINGCLASS() const
 {
 	return GC.getWALLS_BUILDINGCLASS();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetAI_HANDICAP() const
 {
 	return GC.getAI_HANDICAP();
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetNUM_CITY_PLOTS() const
 {
 	return NUM_CITY_PLOTS;
 }
-//------------------------------------------------------------------------------
+
 const char** CvDllGameContext::GetHexDebugLayerNames()
 {
 	return GC.GetHexDebugLayerNames();
 }
-//------------------------------------------------------------------------------
+
 float CvDllGameContext::GetHexDebugLayerScale(const char* szLayerName)
 {
 	return GC.GetHexDebugLayerScale(szLayerName);
 }
-//------------------------------------------------------------------------------
+
 bool CvDllGameContext::GetHexDebugLayerString(ICvPlot1* pPlot, const char* szLayerName, PlayerTypes ePlayer, char* szBuffer, unsigned int uiBufferLength)
 {
 	CvPlot* pkPlot = (NULL != pPlot)? static_cast<CvDllPlot*>(pPlot)->GetInstance() : NULL;
@@ -687,22 +687,22 @@ bool CvDllGameContext::GetHexDebugLayerString(ICvPlot1* pPlot, const char* szLay
 
 	return false;
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::Init()
 {
 	GC.init();
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::Uninit()
 {
 	GC.uninit();
 }
-//------------------------------------------------------------------------------
+
 ICvScriptSystemUtility1* CvDllGameContext::GetScriptSystemUtility()
 {
 	return m_pScriptSystemUtility;
 }
-//------------------------------------------------------------------------------
+
 const char* CvDllGameContext::GetNotificationType(int NotificationID) const
 {
 	CvNotificationXMLEntries* pkEntries = GC.GetNotificationEntries();
@@ -715,140 +715,140 @@ const char* CvDllGameContext::GetNotificationType(int NotificationID) const
 
 	return NULL;
 }
-//------------------------------------------------------------------------------
+
 bool CvDllGameContext::GetLogging()
 {
 	return GC.getLogging();
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::SetLogging(bool bEnable)
 {
 	GC.setLogging(bEnable);
 }
-//------------------------------------------------------------------------------
+
 int CvDllGameContext::GetRandLogging()
 {
 	return GC.getRandLogging();
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::SetRandLogging(int iRandLoggingFlags)
 {
 	GC.setRandLogging(iRandLoggingFlags);
 }
-//------------------------------------------------------------------------------
+
 bool CvDllGameContext::GetAILogging()
 {
 	return GC.getAILogging();
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::SetAILogging(bool bEnable)
 {
 	GC.setAILogging(bEnable);
 }
-//------------------------------------------------------------------------------
+
 bool CvDllGameContext::GetAIPerfLogging()
 {
 	return GC.getAIPerfLogging();
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::SetAIPerfLogging(bool bEnable)
 {
 	GC.setAIPerfLogging(bEnable);
 }
-//------------------------------------------------------------------------------
+
 bool CvDllGameContext::GetBuilderAILogging()
 {
 	return GC.GetBuilderAILogging();
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::SetBuilderAILogging(bool bEnable)
 {
 	GC.SetBuilderAILogging(bEnable);
 }
-//------------------------------------------------------------------------------
+
 bool CvDllGameContext::GetPlayerAndCityAILogSplit()
 {
 	return GC.getPlayerAndCityAILogSplit();
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::SetPlayerAndCityAILogSplit(bool bEnable)
 {
 	GC.setPlayerAndCityAILogSplit(bEnable);
 }
-//------------------------------------------------------------------------------
+
 bool CvDllGameContext::GetTutorialLogging()
 {
 	return GC.GetTutorialLogging();
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::SetTutorialLogging(bool bEnable)
 {
 	GC.SetTutorialLogging(bEnable);
 }
-//------------------------------------------------------------------------------
+
 bool CvDllGameContext::GetTutorialDebugging()
 {
 	return GC.GetTutorialDebugging();
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::SetTutorialDebugging(bool bEnable)
 {
 	GC.SetTutorialDebugging(bEnable);
 }
-//------------------------------------------------------------------------------
+
 bool CvDllGameContext::GetAllowRClickMovementWhileScrolling()
 {
 	return GC.GetAllowRClickMovementWhileScrolling();
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::SetAllowRClickMovementWhileScrolling(bool bAllow)
 {
 	GC.SetAllowRClickMovementWhileScrolling(bAllow);
 }
-//------------------------------------------------------------------------------
+
 bool CvDllGameContext::GetPostTurnAutosaves()
 {
 	return GC.GetPostTurnAutosaves();
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::SetPostTurnAutosaves(bool bEnable)
 {
 	GC.SetPostTurnAutosaves(bEnable);
 }
-//------------------------------------------------------------------------------
+
 ICvDLLDatabaseUtility1* CvDllGameContext::GetDatabaseLoadUtility()
 {
 	return GC.getDatabaseLoadUtility();
 }
-//------------------------------------------------------------------------------
+
 int* CvDllGameContext::GetPlotDirectionX()
 {
 	return GC.getPlotDirectionX();
 }
-//------------------------------------------------------------------------------
+
 int* CvDllGameContext::GetPlotDirectionY()
 {
 	return GC.getPlotDirectionY();
 }
-//------------------------------------------------------------------------------
+
 int* CvDllGameContext::GetCityPlotX()
 {
 	return GC.getCityPlotX();
 }
-//------------------------------------------------------------------------------
+
 int* CvDllGameContext::GetCityPlotY()
 {
 	return GC.getCityPlotY();
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::SetGameDatabase(Database::Connection* pGameDatabase)
 {
 	GC.SetGameDatabase(pGameDatabase);
 }
-//------------------------------------------------------------------------------
+
 bool CvDllGameContext::SetDLLIFace(ICvEngineUtility1* pDll)
 {
-	//Since we're using QueryInterface to allocate a new instance, we need to explicitly clean up the old reference.
+
 	ICvEngineUtility4* pOldDll = GC.getDLLIFace();
 #ifndef AUI_WARNING_FIXES
 	if(pOldDll != NULL)
@@ -858,33 +858,33 @@ bool CvDllGameContext::SetDLLIFace(ICvEngineUtility1* pDll)
 	}
 
 	ICvEngineUtility4* pDllInterface = (pDll != NULL)? pDll->QueryInterface<ICvEngineUtility4>() : NULL;
-	GC.setDLLIFace(pDllInterface);	//GameCore will claim ownership.
+	GC.setDLLIFace(pDllInterface);
 
 	return pDllInterface != NULL;
 }
-//------------------------------------------------------------------------------
+
 bool CvDllGameContext::IsGraphicsInitialized() const
 {
 	return GC.IsGraphicsInitialized();
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::SetGraphicsInitialized(bool bVal)
 {
 	GC.SetGraphicsInitialized(bVal);
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::SetOutOfSyncDebuggingEnabled(bool isEnabled)
 {
 	GC.setOutOfSyncDebuggingEnabled(isEnabled);
 }
-//------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 bool CvDllGameContext::RandomNumberGeneratorSyncCheck(PlayerTypes, ICvRandom1* pRandom, bool)
 #else
 bool CvDllGameContext::RandomNumberGeneratorSyncCheck(PlayerTypes ePlayer, ICvRandom1* pRandom, bool bIsHost)
 #endif
 {
-	// uh oh! Check the Random number generator!
+
 	const CvRandom& localSimRandomNumberGenerator = GC.getGame().getJonRand();
 	CvRandom* pkRandom = GC.UnwrapRandomPointer(pRandom);
 
@@ -1028,7 +1028,7 @@ bool CvDllGameContext::RandomNumberGeneratorSyncCheck(PlayerTypes ePlayer, ICvRa
 				}
 			}
 
-			// find first different call
+
 			std::vector<std::string>::const_iterator localCallStackIterator;
 			std::vector<std::string>::const_iterator remoteCallStackIterator;
 			for(localCallStackIterator = localCallStacks.begin(), remoteCallStackIterator = remoteCallStacks.begin(), callNumber = 0; localCallStackIterator != localCallStacks.end() && remoteCallStackIterator != remoteCallStacks.end(); ++localCallStackIterator, ++remoteCallStackIterator, ++callNumber)
@@ -1063,7 +1063,7 @@ bool CvDllGameContext::RandomNumberGeneratorSyncCheck(PlayerTypes ePlayer, ICvRa
 				rngLogMessage = "\nDebug dump:\n";
 
 
-				// add full history
+
 				rngLogMessage += "Seed History -\n";
 				localSeedIterator = localSeedHistory.begin();
 				remoteSeedIterator = remoteSeedHistory.begin();
@@ -1192,23 +1192,23 @@ bool CvDllGameContext::RandomNumberGeneratorSyncCheck(PlayerTypes ePlayer, ICvRa
 		}
 
 
-		/* If this point has been reached, the OOS may be nearly unrecoverable
-		// attempt to recover
-		if(m_isHost)
-		{
-			CvRandom & rng = auto_ptr<ICvGame1> pGame = GameCore::GetGame();\n.getJonRand();
-			rng.reset(m_simRandomNumberGenerator.getSeed());
-		}
-		// brute force approach
-		// JAR : todo - this is the solution of last resort if
-		// loadDelta() doesn't work out
-		*/
+
+
+
+
+
+
+
+
+
+
+
 		return false;
 	}
 
 	return true;
 }
-//------------------------------------------------------------------------------
+
 unsigned int CvDllGameContext::CreateRandomNumberGenerator()
 {
 	uint index = m_uiRngCounter++;
@@ -1217,7 +1217,7 @@ unsigned int CvDllGameContext::CreateRandomNumberGenerator()
 	m_RandomNumberGenerators.push_back(entry);
 	return index;
 }
-//------------------------------------------------------------------------------
+
 ICvRandom1* CvDllGameContext::GetRandomNumberGenerator(unsigned int index)
 {
 	for(std::vector<std::pair<uint, CvRandom*> >::iterator it = m_RandomNumberGenerators.begin();
@@ -1229,7 +1229,7 @@ ICvRandom1* CvDllGameContext::GetRandomNumberGenerator(unsigned int index)
 
 	return NULL;
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::DestroyRandomNumberGenerator(unsigned int index)
 {
 	std::vector<std::pair<uint, CvRandom*> >::iterator it = m_RandomNumberGenerators.end();
@@ -1246,7 +1246,7 @@ void CvDllGameContext::DestroyRandomNumberGenerator(unsigned int index)
 		m_RandomNumberGenerators.erase(it);
 	}
 }
-//------------------------------------------------------------------------------
+
 unsigned int CvDllGameContext::CreateNetInitInfo()
 {
 	uint index = m_uiNetInitInfoCounter++;
@@ -1255,7 +1255,7 @@ unsigned int CvDllGameContext::CreateNetInitInfo()
 	m_NetInitInfos.push_back(entry);
 	return index;
 }
-//------------------------------------------------------------------------------
+
 ICvNetInitInfo1* CvDllGameContext::GetNetInitInfo(unsigned int index)
 {
 	for(std::vector<std::pair<uint, CvDllNetInitInfo*> >::iterator it = m_NetInitInfos.begin();
@@ -1270,7 +1270,7 @@ ICvNetInitInfo1* CvDllGameContext::GetNetInitInfo(unsigned int index)
 
 	return NULL;
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::DestroyNetInitInfo(unsigned int index)
 {
 	std::vector<std::pair<uint, CvDllNetInitInfo*> >::iterator it = m_NetInitInfos.end();
@@ -1287,7 +1287,7 @@ void CvDllGameContext::DestroyNetInitInfo(unsigned int index)
 		m_NetInitInfos.erase(it);
 	}
 }
-//------------------------------------------------------------------------------
+
 unsigned int CvDllGameContext::CreateNetLoadGameInfo()
 {
 	uint index = m_uiNetLoadGameInfoCounter++;
@@ -1296,7 +1296,7 @@ unsigned int CvDllGameContext::CreateNetLoadGameInfo()
 	m_NetLoadGameInfos.push_back(entry);
 	return index;
 }
-//------------------------------------------------------------------------------
+
 ICvNetLoadGameInfo1* CvDllGameContext::GetNetLoadGameInfo(unsigned int index)
 {
 	for(std::vector<std::pair<uint, CvDllNetLoadGameInfo*> >::iterator it = m_NetLoadGameInfos.begin();
@@ -1311,7 +1311,7 @@ ICvNetLoadGameInfo1* CvDllGameContext::GetNetLoadGameInfo(unsigned int index)
 
 	return NULL;
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::DestroyNetLoadGameInfo(unsigned int index)
 {
 	std::vector<std::pair<uint, CvDllNetLoadGameInfo*> >::iterator it = m_NetLoadGameInfos.end();
@@ -1328,18 +1328,18 @@ void CvDllGameContext::DestroyNetLoadGameInfo(unsigned int index)
 		m_NetLoadGameInfos.erase(it);
 	}
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::TEMPOnHexUnitChanged(ICvUnit1* pUnit)
 {
 	CvUnit* pkUnit = GC.UnwrapUnitPointer(pUnit);
 	CvTwoLayerPathFinder& thePathfinder = GC.getInterfacePathFinder();
 
-	// change the unit pathfinder to use these funcs instead
+
 	thePathfinder.SetDestValidFunc(NULL);
 	thePathfinder.SetValidFunc(UIPathValid);
 	thePathfinder.SetNotifyChildFunc(UIPathAdd);
 
-	// call the pathfinder
+
 	thePathfinder.SetData(pkUnit);
 #ifdef AUI_WARNING_FIXES
 	thePathfinder.GeneratePath(pkUnit->getX(), pkUnit->getY(), -1, -1, MOVE_DECLARE_WAR, false);
@@ -1347,25 +1347,25 @@ void CvDllGameContext::TEMPOnHexUnitChanged(ICvUnit1* pUnit)
 	bool bCanFindPath = thePathfinder.GeneratePath(pkUnit->getX(), pkUnit->getY(), -1, -1, MOVE_DECLARE_WAR, false);
 #endif
 
-	// change the unit pathfinder back
+
 	thePathfinder.SetDestValidFunc(PathDestValid);
 	thePathfinder.SetValidFunc(PathValid);
 	thePathfinder.SetNotifyChildFunc(PathAdd);
 	thePathfinder.ForceReset();
 
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::TEMPOnHexUnitChangedAttack(ICvUnit1* pUnit)
 {
 	CvUnit* pkUnit = GC.UnwrapUnitPointer(pUnit);
 	CvTwoLayerPathFinder& thePathfinder = GC.getInterfacePathFinder();
 
-	// change the unit pathfinder to use these funcs instead
+
 	thePathfinder.SetDestValidFunc(NULL);
 	thePathfinder.SetValidFunc(UIPathValid);
 	thePathfinder.SetNotifyChildFunc(AttackPathAdd);
 
-	// call the pathfinder
+
 	thePathfinder.SetData(pkUnit);
 #ifdef AUI_WARNING_FIXES
 	thePathfinder.GeneratePath(pkUnit->getX(), pkUnit->getY(), -1, -1, MOVE_DECLARE_WAR, false);
@@ -1373,13 +1373,13 @@ void CvDllGameContext::TEMPOnHexUnitChangedAttack(ICvUnit1* pUnit)
 	bool bCanFindPath = thePathfinder.GeneratePath(pkUnit->getX(), pkUnit->getY(), -1, -1, MOVE_DECLARE_WAR, false);
 #endif
 
-	// change the unit pathfinder back
+
 	thePathfinder.SetDestValidFunc(PathDestValid);
 	thePathfinder.SetValidFunc(PathValid);
 	thePathfinder.SetNotifyChildFunc(PathAdd);
 	thePathfinder.ForceReset();
 }
-//------------------------------------------------------------------------------
+
 ICvEnumerator* CvDllGameContext::TEMPCalculatePathFinderUpdates(ICvUnit1* pHeadSelectedUnit, int iMouseMapX, int iMouseMapY)
 {
 	CvUnit* pkUnit = GC.UnwrapUnitPointer(pHeadSelectedUnit);
@@ -1388,10 +1388,10 @@ ICvEnumerator* CvDllGameContext::TEMPCalculatePathFinderUpdates(ICvUnit1* pHeadS
 	thePathfinder.SetData(pkUnit);
 	if(thePathfinder.GeneratePath(pkUnit->getX(), pkUnit->getY(), iMouseMapX, iMouseMapY, MOVE_DECLARE_WAR, false))
 	{
-		// seed the pathfinder with a unit
+
 		thePathfinder.SetData(pkUnit);
 
-		//get the number of waypoints on the path
+
 		CvAStarNode* lastNode = thePathfinder.GetLastNode();
 		CvAStarNode* pathNode = lastNode;
 
@@ -1410,7 +1410,7 @@ ICvEnumerator* CvDllGameContext::TEMPCalculatePathFinderUpdates(ICvUnit1* pHeadS
 
 		pUpdateData.reserve(size);
 
-		// now fill out the event array in reverse order
+
 		pathNode = lastNode;
 		int index = 0;
 		while(pathNode != NULL)
@@ -1432,14 +1432,13 @@ ICvEnumerator* CvDllGameContext::TEMPCalculatePathFinderUpdates(ICvUnit1* pHeadS
 
 	return NULL;
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::ResetPathFinder()
 {
 	GC.getInterfacePathFinder().ForceReset();
 }
-//------------------------------------------------------------------------------
+
 void CvDllGameContext::SetEngineUserInterface(ICvUserInterface2* pUI)
 {
 	GC.SetEngineUserInterface(pUI);
 }
-//------------------------------------------------------------------------------

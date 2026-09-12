@@ -2,7 +2,7 @@ import AppKit
 import SwiftUI
 import UniformTypeIdentifiers
 
-// Render the launcher's own vector mark while building the app bundle.
+
 func writeIcons(to directory: String) {
     for pixels in [16, 32, 64, 128, 256, 512, 1024] {
         guard let bitmap = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: pixels, pixelsHigh: pixels,
@@ -42,8 +42,8 @@ func writeIcons(to directory: String) {
     }
 }
 
-// Downsample the full-resolution originals once per display scale. This avoids
-// thin wordmark strokes aliasing when SwiftUI repeatedly shrinks a large texture.
+
+
 func refinedLogo(_ original: NSImage, width: CGFloat) -> NSImage {
     let target = NSSize(width: width, height: 20)
     let image = NSImage(size: target)
@@ -85,10 +85,10 @@ struct Report: Decodable {
     let version: String
     let crossplay: Bool
     let checks: [Check]
-    let ready: Bool
-    let repairable: Bool
-    let running: Bool
-    let launched: Bool?
+    var ready: Bool
+    var repairable: Bool
+    var running: Bool
+    var launched: Bool?
     let message: String?
     let running_message: String?
     let steam_session: SteamSession?
@@ -246,7 +246,7 @@ final class LauncherModel: ObservableObject {
         task.standardOutput = pipe
         task.standardError = pipe
         process = task
-        // One reader preserves stdout ordering, drains the pipe, and keeps the UI responsive.
+
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 try task.run()
@@ -274,8 +274,28 @@ final class LauncherModel: ObservableObject {
         }
     }
 
-    // Only process discovery runs periodically. Full file validation runs when
-    // the observed game lifecycle changes, including games opened outside here.
+
+
+    func observeGame(_ running: Bool, at now: Date = Date()) -> Bool {
+        guard !busy, var current = report else { return false }
+        if running {
+            if !current.running || current.launched == true {
+                current.running = true
+                current.launched = false
+                current.ready = false
+                current.repairable = false
+                report = current
+                launchRequestedAt = nil
+            }
+            return false
+        }
+
+        if current.launched == true, let requested = launchRequestedAt,
+           now.timeIntervalSince(requested) < 15 { return false }
+        return gameActive
+    }
+
+
     func refreshGameLifecycle() {
         guard !busy, !probingGame, report != nil, !app.isEmpty,
               let repository = Bundle.main.object(forInfoDictionaryKey: "LekmodRepository") as? String,
@@ -297,15 +317,12 @@ final class LauncherModel: ObservableObject {
                    let event = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
                     running = event["running"] as? Bool
                 }
-            } catch { /* A failed probe must not claim that the game has closed. */ }
+            } catch {                                                               }
             let observed = running
             DispatchQueue.main.async {
                 self.probingGame = false
-                guard !self.busy, let observed else { return }
-                // Give Steam time to create its process after accepting the URL.
-                if self.report?.launched == true, !observed,
-                   let requested = self.launchRequestedAt, Date().timeIntervalSince(requested) < 15 { return }
-                if observed != self.gameActive || self.report?.launched == true && observed {
+                guard let observed else { return }
+                if self.observeGame(observed) {
                     self.run("status")
                 }
             }
@@ -456,7 +473,7 @@ struct StatusBadge: View {
     }
 }
 
-// Compact vector brand silhouettes share the same Civ gold stroke as the controls.
+
 struct BrandMark: Shape {
     let name: String
     func path(in rect: CGRect) -> Path {

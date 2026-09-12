@@ -1,18 +1,18 @@
 
-//-----------------------------------------------------------------------------
-//
-//
-//
-//-----------------------------------------------------------------------------
-// Copyright (c) 2006 Firaxis Games, Inc. All rights reserved.
-//-----------------------------------------------------------------------------
+
+
+
+
+
+
+
 
 #if !defined(USE_MFC)
-#if defined(FXS_MEMORY_MANAGER_ENABLED) || defined(MS_MEMORY_TRACKER) // Memory Manager or leak detection Enabled
+#if defined(FXS_MEMORY_MANAGER_ENABLED) || defined(MS_MEMORY_TRACKER)
 
-//-----------------------------------------------------------------------------
-// Standard C Memory Management Functions
-//-----------------------------------------------------------------------------
+
+
+
 
 	#ifdef malloc
 	#undef malloc
@@ -46,9 +46,9 @@
 	#undef _msize
 	#endif
 
-//-----------------------------------------------------------------------------
-// Standard C++ Memory Management Functions
-//-----------------------------------------------------------------------------
+
+
+
 
 	#ifdef new
 	#undef new
@@ -58,5 +58,5 @@
 	#undef delete
 	#endif
 
-#endif	// FXS_MEMORY_MANAGER_ENABLED
-#endif	// ! USE_MFC
+#endif
+#endif

@@ -1,35 +1,35 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//!	 \file		CvLuaGameInfo.cpp
-//!  \brief     Public interface to CvLuaGameInfo.
-//!
-//!		This file includes the implementation for exposing game infos to Lua.
-//!
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #include <CvGameCoreDLLPCH.h>
 #include "CvLuaSupport.h"
 #include "CvLuaGameInfo.h"
 #include <LuaExposures.h>
 
-// Namespace aliases to reduce typing.
+
 namespace Lua = FLua::Details;
 using FLua::Table;
 
-//------------------------------------------------------------------------------
+
 void CvLuaGameInfo::Register(lua_State* L)
 {
-	//Register other game info structures.
+
 	Lua::CCallWithErrorHandling(L, pRegisterActions);
 	Lua::CCallWithErrorHandling(L, pRegisterTypesInfo);
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaGameInfo::pRegisterActions(lua_State* L)
 {
 	lua_newtable(L);
@@ -98,7 +98,7 @@ int CvLuaGameInfo::pRegisterActions(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaGameInfo::pRegisterTypesInfo(lua_State* L)
 {
 	lua_newtable(L);

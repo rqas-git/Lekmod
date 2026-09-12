@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_ECONOMIC_AI_H
@@ -50,13 +50,13 @@ public:
 	int m_iPriority;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvEconomicAIStrategyXMLEntry
-//!  \brief		A single entry in the AI strategy XML file
-//
-//!  Key Attributes:
-//!  - Populated from XML\AI\CIV5EconomicAIStrategies.xml
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 class CvEconomicAIStrategyXMLEntry: public CvBaseInfo
 {
 public:
@@ -65,7 +65,7 @@ public:
 
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
 
-	// Accessor Functions
+
 	int GetPlayerFlavorValue(int i) const;
 	int GetCityFlavorValue(int i) const;
 
@@ -105,23 +105,23 @@ private:
 	int m_iAdvisorCounselImportance;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvEconomicAIStrategyXMLEntries
-//!  \brief		Game-wide information about possible AI strategies
-//
-//! Key Attributes:
-//! - Populated from XML\AI\Civ5EconomicAIStrategyInfos.xml
-//! - Contains an array of CvEconomicAIStrategyXMLEntry from the above XML file
-//! - One instance for the entire game
-//! - Accessed heavily by CvEconomicAIStrategy class (which stores the AI strategy state for 1 player)
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
 class CvEconomicAIStrategyXMLEntries
 {
 public:
 	CvEconomicAIStrategyXMLEntries(void);
 	~CvEconomicAIStrategyXMLEntries(void);
 
-	// Accessor functions
+
 	std::vector<CvEconomicAIStrategyXMLEntry*>& GetEconomicAIStrategyEntries();
 	int GetNumEconomicAIStrategies();
 	CvEconomicAIStrategyXMLEntry* GetEntry(int index);
@@ -132,15 +132,15 @@ private:
 	std::vector<CvEconomicAIStrategyXMLEntry*> m_paAIStrategyEntries;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvEconomicAI
-//!  \brief		Information about the AI strategies of a single player
-//
-//!  Key Attributes:
-//!  - Plan is it will be contained in CvPlayerState object within CvPlayer class
-//!  - One instance for each civ (player or AI)
-//!  - Accessed by any class that needs to check a civ's AI strategy state
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 
 class CvEconomicAI
 {
@@ -240,7 +240,7 @@ public:
 
 private:
 
-	// DoTurn() sub-functions
+
 	void DoHurry();
 	void DoPlotPurchases();
 	void DoReconState();
@@ -248,13 +248,13 @@ private:
 	void DisbandExtraWorkers();
 	void DisbandExtraArchaeologists();
 
-	// Low-level utility functions
+
 	void AssignExplorersToHuts();
 	void AssignHutsToExplorers();
 	CvUnit* FindWorkerToScrap();
 	CvUnit* FindArchaeologistToScrap();
 
-	// Logging functions
+
 	void LogStrategy(EconomicAIStrategyTypes eStrategy, bool bValue);
 	void LogScrapUnit(UnitHandle pUnit, int iNumWorkers, int iNumCities, int iNumImprovedPlots, int iNumValidPlots);
 
@@ -271,20 +271,20 @@ private:
 	int m_iLastTurnWorkerDisbanded;
 	int m_iVisibleAntiquitySites;
 
-	// Cached AI parameters
+
 	int m_iMinimumSettleFertility;
 
-	// used for the log monitor
+
 	FFastVector<uint> m_auiYields;
 
-	// for the exploration plots
+
 	FFastVector<int> m_aiExplorationPlots;
 	FFastVector<int> m_aiExplorationPlotRatings;
 	FFastVector<int> m_aiGoodyHutPlots;
 	struct GoodyHutUnitAssignment
 	{
-		int m_iUnitID;				// The unit that is assigned.
-		int m_iStepPlotID;			// The plot ID of the next step toward the destination.  -1 = no defined.
+		int m_iUnitID;
+		int m_iStepPlotID;
 
 		GoodyHutUnitAssignment(int unitID, int plotID) : m_iUnitID(unitID), m_iStepPlotID(plotID) {}
 		void Clear() { m_iUnitID = -1; m_iStepPlotID = -1; }
@@ -303,7 +303,7 @@ namespace EconomicAIHelpers
 int GetWeightThresholdModifier(EconomicAIStrategyTypes eStrategy, CvPlayer* pPlayer);
 bool IsAreaSafeForQuickColony(int iAreaID, CvPlayer* pPlayer);
 
-// Functions that check triggers to see if a strategy should be adopted/continued
+
 bool IsTestStrategy_NeedRecon(CvPlayer* pPlayer);
 bool IsTestStrategy_EnoughRecon(CvPlayer* pPlayer);
 bool IsTestStrategy_ReallyNeedReconSea(CvPlayer* pPlayer);
@@ -337,7 +337,7 @@ bool IsTestStrategy_NeedMuseums(CvPlayer* pPlayer);
 bool IsTestStrategy_NeedGuilds(CvPlayer* pPlayer);
 bool IsTestStrategy_StartedPiety(CvPlayer* pPlayer);
 
-// these make a few players' behaviors a bit more extreme
+
 bool IsTestStrategy_ExpandLikeCrazy(EconomicAIStrategyTypes eStrategy, CvPlayer* pPlayer);
 bool IsTestStrategy_GrowLikeCrazy(EconomicAIStrategyTypes eStrategy, CvPlayer* pPlayer);
 
@@ -349,4 +349,4 @@ bool IsTestStrategy_GS_Spaceship(CvPlayer* pPlayer);
 bool IsTestStrategy_GS_SpaceshipHomestretch(CvPlayer* pPlayer);
 }
 
-#endif //CIV5_ECONOMIC_AI_H
+#endif

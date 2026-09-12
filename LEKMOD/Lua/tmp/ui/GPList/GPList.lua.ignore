@@ -1,8 +1,8 @@
--- edit:
--- expandable Info Panel size
--- for EUI & vanilla UI
---------------------------------------------------------------
---------------------------------------------------------------
+
+
+
+
+
 include( "IconSupport" );
 include( "InstanceManager" );
 include( "SupportFunctions" );
@@ -22,8 +22,8 @@ local m_MusicianIM = InstanceManager:new( "GPInstance", "Root", Controls.Musicia
 local m_ScientistIM = InstanceManager:new( "GPInstance", "Root", Controls.ScientistStack );
 local m_WriterIM = InstanceManager:new( "GPInstance", "Root", Controls.WriterStack );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function ShowHideHandler( bIsHide )
 	if( not bIsHide ) then
 		UpdateDisplay();
@@ -32,8 +32,8 @@ end
 ContextPtr:SetShowHideHandler( ShowHideHandler );
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnClose( )
 	ContextPtr:SetHide( true );
 	Events.OpenInfoCorner( InfoCornerID.None );
@@ -41,9 +41,9 @@ end
 Controls.CloseButton:RegisterCallback( Mouse.eLClick, OnClose );
 
 
-----------------------------------------------------------------
--- Key Down Processing
-----------------------------------------------------------------
+
+
+
 function InputHandler( uiMsg, wParam, lParam )
 	if uiMsg == KeyEvents.KeyDown then
 		if wParam == Keys.VK_ESCAPE then
@@ -54,8 +54,8 @@ function InputHandler( uiMsg, wParam, lParam )
 end
 ContextPtr:SetInputHandler( InputHandler );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnChangeEvent()
 	if( ContextPtr:IsHidden() == false ) then
 		UpdateDisplay();
@@ -65,8 +65,8 @@ Events.SerialEventGameDataDirty.Add( OnChangeEvent );
 Events.SerialEventCityInfoDirty.Add( OnChangeEvent );
 Events.GameplaySetActivePlayer.Add( OnChangeEvent );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function UpdateDisplay()
 	m_SortTable = {};
 
@@ -152,7 +152,7 @@ function UpdateDisplay()
 							end
 						end
 
-						--strTurns = Locale.ConvertTextKey( "TXT_KEY_GPLIST_TURNS", iRate, iNumTurns );
+
 						strTurns = Locale.ConvertTextKey( "TXT_KEY_GPLIST_TURNS", iRate );
 						strProgress = Locale.ConvertTextKey( "TXT_KEY_GPLIST_PROGRESS", iProgress, iThreshold, strNumTurns );
 
@@ -173,7 +173,7 @@ function UpdateDisplay()
 		end
 	end	
 
-	--add great general at the end
+
 	local fProgress  = pPlayer:GetCombatExperience();
 	local fThreshold = pPlayer:GreatGeneralThreshold();
 	local GGString = Locale.ConvertTextKey("TXT_KEY_GREAT_GENERAL_PROGRESS", fProgress, fThreshold);
@@ -223,9 +223,9 @@ function UpdateDisplay()
 	Controls.ScrollPanel:ReprocessAnchoring();
 end
 
--------------------------------------------------
--------------------------------------------------
---check if player has any GPs being built
+
+
+
 function checkIfGP(player) 
 	for pCity in player:Cities() do
 		for pSpecialistInfo in GameInfo.Specialists() do	
@@ -239,9 +239,9 @@ function checkIfGP(player)
 	return false;
 end
 
--------------------------------------------------
--------------------------------------------------
---check if player has any of a specific Specialist being built
+
+
+
 function checkIfSpecialist(player, specialist, city) 
 	local iSpecialistIndex =  specialist.ID;			
 	local iProgress = city:GetSpecialistGreatPersonProgress(iSpecialistIndex);	
@@ -251,9 +251,9 @@ function checkIfSpecialist(player, specialist, city)
 	return false;
 end
 
--------------------------------------------------
--------------------------------------------------
---given a city and GP, returns the progress per turn
+
+
+
 function getRateOfChange(city, specialistInfo, player)
 	local iCount = city:GetSpecialistCount( specialistInfo.ID );
 	local iGPPChange = specialistInfo.GreatPeopleRateChange * iCount * 100;
@@ -268,13 +268,13 @@ function getRateOfChange(city, specialistInfo, player)
 	if iGPPChange > 0 then
 		local iMod = 0;
 		
-		-- Generic GP mods
+
 		local iPlayerMod = player:GetGreatPeopleRateModifier();
 		local iCityMod = city:GetGreatPeopleRateModifier();
 		local iGoldenAgeMod = 0;
 		local bGoldenAge = (player:GetGoldenAgeTurns() > 0);
 		
-		-- GP mods by type		
+
 		if (specialistInfo.GreatPeopleUnitClass == "UNITCLASS_WRITER") then
 			iPlayerMod = iPlayerMod + player:GetGreatWriterRateModifier();
 			if (bGoldenAge and player:GetGoldenAgeGreatWriterRateModifier() > 0) then
@@ -307,8 +307,8 @@ function getRateOfChange(city, specialistInfo, player)
 	end
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnArtistToggle()
 	local bWasHidden = Controls.ArtistStack:IsHidden();
 	Controls.ArtistStack:SetHide( not bWasHidden );
@@ -324,8 +324,8 @@ function OnArtistToggle()
 end
 Controls.ArtistToggle:RegisterCallback( Mouse.eLClick, OnArtistToggle );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnEngineerToggle()
 	local bWasHidden = Controls.EngineerStack:IsHidden();
 	Controls.EngineerStack:SetHide( not bWasHidden );
@@ -341,8 +341,8 @@ function OnEngineerToggle()
 end
 Controls.EngineerToggle:RegisterCallback( Mouse.eLClick, OnEngineerToggle );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnMerchantToggle()
 	local bWasHidden = Controls.MerchantStack:IsHidden();
 	Controls.MerchantStack:SetHide( not bWasHidden );
@@ -358,8 +358,8 @@ function OnMerchantToggle()
 end
 Controls.MerchantToggle:RegisterCallback( Mouse.eLClick, OnMerchantToggle );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnMusicianToggle()
 	local bWasHidden = Controls.MusicianStack:IsHidden();
 	Controls.MusicianStack:SetHide( not bWasHidden );
@@ -375,8 +375,8 @@ function OnMusicianToggle()
 end
 Controls.MusicianToggle:RegisterCallback( Mouse.eLClick, OnMusicianToggle );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnScientistToggle()
 	local bWasHidden = Controls.ScientistStack:IsHidden();
 	Controls.ScientistStack:SetHide( not bWasHidden );
@@ -392,8 +392,8 @@ function OnScientistToggle()
 end
 Controls.ScientistToggle:RegisterCallback( Mouse.eLClick, OnScientistToggle );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnWriterToggle()
 	local bWasHidden = Controls.WriterStack:IsHidden();
 	Controls.WriterStack:SetHide( not bWasHidden );
@@ -409,8 +409,8 @@ function OnWriterToggle()
 end
 Controls.WriterToggle:RegisterCallback( Mouse.eLClick, OnWriterToggle );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SortFunction( a, b )
 	local valueA, valueB;
 	local entryA = m_SortTable[ tostring( a ) ];
@@ -423,9 +423,9 @@ function SortFunction( a, b )
 			return true;
 		else
 			if( m_bSortReverse ) then
-				return tostring(a) > tostring(b); -- gotta do something deterministic
+				return tostring(a) > tostring(b);
 			else
-				return tostring(a) < tostring(b); -- gotta do something deterministic
+				return tostring(a) < tostring(b);
 			end
 		end
 	else
@@ -456,8 +456,8 @@ function SortFunction( a, b )
 	end
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnSort( type )
 	if( m_SortMode == type ) then
 		m_bSortReverse = not m_bSortReverse;
@@ -476,8 +476,8 @@ Controls.SortTurns:RegisterCallback( Mouse.eLClick, OnSort );
 Controls.SortCity:SetVoid1( eCity );
 Controls.SortTurns:SetVoid1( eTurns );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnOpenInfoCorner( iInfoType )
 	if( iInfoType == InfoCornerID.GP ) then
 		ContextPtr:SetHide( false );
@@ -487,8 +487,8 @@ function OnOpenInfoCorner( iInfoType )
 end
 Events.OpenInfoCorner.Add( OnOpenInfoCorner );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnCityClick( x, y )
     local plot = Map.GetPlot( x, y );
     if( plot ~= nil ) then
@@ -496,8 +496,8 @@ function OnCityClick( x, y )
 	end
 end
 	
--------------------------------------------------
--------------------------------------------------
+
+
 function OnCityRClick( x, y )
     local plot = Map.GetPlot( x, y );
     if( plot ~= nil ) then
@@ -505,9 +505,9 @@ function OnCityRClick( x, y )
 	end
 end
 
--------------------------------------------------
--- NEW: expandable Info Panel size
--------------------------------------------------
+
+
+
 local EUI_options = Modding.OpenUserData( "Enhanced User Interface Options", 1);
 local iUnitListSizeY = EUI_options.GetValue( "DB_iInfoPanelSizeY" );
 if iUnitListSizeY ~= nil then
@@ -541,7 +541,7 @@ function OnEditVerticalSize(v)
         local w, h = UIManager:GetScreenSizeVal();
         local dx, dy = UIManager:GetMouseDelta();
         local y1 = math.max( math.min( Controls.MainGrid:GetSizeY() - dy, h - 200 ), 200 );
-        if os.clock() - timeSinceLastDBWrite > 0.1 then  -- 0.1s cooldown for DB access
+        if os.clock() - timeSinceLastDBWrite > 0.1 then
             EUI_options.SetValue( "DB_iInfoPanelSizeY", y1 );
             timeSinceLastDBWrite = os.clock();
         end

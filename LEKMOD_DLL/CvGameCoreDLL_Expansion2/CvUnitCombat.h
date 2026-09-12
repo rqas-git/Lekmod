@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #ifndef CVUNITCOMBAT_H
 #define CVUNITCOMBAT_H
 
@@ -13,16 +13,16 @@
 #include "CvUnit.h"
 #include "CvPlot.h"
 
-// Combat controller for CvUnits
+
 class CvUnitCombat
 {
 public:
-	// Results from requesting an attack
+
 	enum ATTACK_RESULT
 	{
-	    ATTACK_ABORTED		= 0,			// It was determined that the unit cannot make the attack, no attack was issued.
-	    ATTACK_COMPLETED	= 1,			// The unit attacked and resolved the combat immediately
-	    ATTACK_QUEUED		= 2				// The unit has queued the attack.  This may have occurred because the defender is busy or the attack is going to be visualized
+	    ATTACK_ABORTED		= 0,
+	    ATTACK_COMPLETED	= 1,
+	    ATTACK_QUEUED		= 2
 	};
 
 	enum ATTACK_OPTION
@@ -46,7 +46,7 @@ public:
 	static ATTACK_RESULT AttackCity(CvUnit& kAttacker, CvPlot& plot, ATTACK_OPTION eOption);
 	static ATTACK_RESULT AttackNuclear(CvUnit& kAttacker, int iX, int iY, ATTACK_OPTION eOption);
 
-	//	Return a ranged unit that will defend the supplied location against the attacker at the specified location.
+
 	static CvUnit*		GetFireSupportUnit(PlayerTypes eDefender, int iDefendX, int iDefendY, int iAttackX, int iAttackY);
 	static uint			ApplyNuclearExplosionDamage(CvPlot* pkTargetPlot, int iDamageLevel, CvUnit* pkAttacker = NULL);
 
@@ -67,4 +67,4 @@ protected:
 	static void ApplyPostCityCombatEffects(CvUnit* pkAttacker, CvCity* pkDefender, int iAttackerDamageInflicted);
 };
 
-#endif // CVUNITCOMBAT_H
+#endif

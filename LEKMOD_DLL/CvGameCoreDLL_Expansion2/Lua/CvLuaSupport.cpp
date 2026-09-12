@@ -1,17 +1,17 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//!	 \file		CvLuaSupport.cpp
-//!  \brief     Private implementation of the Gamecore Lua framework.
-//!
-//!		This file includes methods for registering game data w/ Lua.
-//!
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #include <CvGameCoreDLLPCH.h>
 #include "CvLuaSupport.h"
 #include "CvLuaEnums.h"
@@ -22,9 +22,9 @@
 #include "CvLuaPlayer.h"
 #include "CvLuaTeam.h"
 
-//------------------------------------------------------------------------------
-// Utility methods
-//------------------------------------------------------------------------------
+
+
+
 bool luaL_optbool(lua_State* L, int idx, bool bdefault)
 {
 	if(lua_isnoneornil(L, idx))
@@ -37,7 +37,7 @@ bool luaL_optbool(lua_State* L, int idx, bool bdefault)
 	}
 }
 
-//------------------------------------------------------------------------------
+
 void LuaSupport::RegisterScriptData(lua_State* L)
 {
 	CvLuaEnums::Register(L);
@@ -49,7 +49,7 @@ void LuaSupport::RegisterScriptData(lua_State* L)
 	CvLuaTeam::Register(L);
 }
 
-//------------------------------------------------------------------------------
+
 void LuaSupport::DumpCallStack(lua_State* L)
 {
 	for(int i = 1; i < 10; ++i)
@@ -68,14 +68,14 @@ void LuaSupport::DumpCallStack(lua_State* L)
 	}
 }
 
-//------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 bool LuaSupport::CallHook(_In_ ICvEngineScriptSystem1* pkScriptSystem, _In_z_ const char* szName, _In_opt_ ICvEngineScriptSystemArgs1* args, bool& value)
 #else
 bool LuaSupport::CallHook(ICvEngineScriptSystem1* pkScriptSystem, const char* szName, ICvEngineScriptSystemArgs1* args, bool& value)
 #endif
 {
-	// Must release our lock so that if the main thread has the Lua lock and is waiting for the Game Core lock, we don't freeze
+
 	bool bHadLock = gDLL->HasGameCoreLock();
 	if(bHadLock)
 		gDLL->ReleaseGameCoreLock();
@@ -85,14 +85,14 @@ bool LuaSupport::CallHook(ICvEngineScriptSystem1* pkScriptSystem, const char* sz
 	return bResult;
 }
 
-//------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 bool LuaSupport::CallTestAll(_In_ ICvEngineScriptSystem1* pkScriptSystem, _In_z_ const char* szName, _In_opt_ ICvEngineScriptSystemArgs1* args, bool& value)
 #else
 bool LuaSupport::CallTestAll(ICvEngineScriptSystem1* pkScriptSystem, const char* szName, ICvEngineScriptSystemArgs1* args, bool& value)
 #endif
 {
-	// Must release our lock so that if the main thread has the Lua lock and is waiting for the Game Core lock, we don't freeze
+
 	bool bHadLock = gDLL->HasGameCoreLock();
 	if(bHadLock)
 		gDLL->ReleaseGameCoreLock();
@@ -102,14 +102,14 @@ bool LuaSupport::CallTestAll(ICvEngineScriptSystem1* pkScriptSystem, const char*
 	return bResult;
 }
 
-//------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 bool LuaSupport::CallTestAny(_In_ ICvEngineScriptSystem1* pkScriptSystem, _In_z_ const char* szName, _In_opt_ ICvEngineScriptSystemArgs1* args, bool& value)
 #else
 bool LuaSupport::CallTestAny(ICvEngineScriptSystem1* pkScriptSystem, const char* szName, ICvEngineScriptSystemArgs1* args, bool& value)
 #endif
 {
-	// Must release our lock so that if the main thread has the Lua lock and is waiting for the Game Core lock, we don't freeze
+
 	bool bHadLock = gDLL->HasGameCoreLock();
 	if(bHadLock)
 		gDLL->ReleaseGameCoreLock();
@@ -119,10 +119,10 @@ bool LuaSupport::CallTestAny(ICvEngineScriptSystem1* pkScriptSystem, const char*
 	return bResult;
 }
 
-//------------------------------------------------------------------------------
+
 bool LuaSupport::CallAccumulator(_In_ ICvEngineScriptSystem1* pkScriptSystem, _In_z_ const char* szName, _In_opt_ ICvEngineScriptSystemArgs1* args, int& value)
 {
-	// Must release our lock so that if the main thread has the Lua lock and is waiting for the Game Core lock, we don't freeze
+
 	bool bHadLock = gDLL->HasGameCoreLock();
 	if(bHadLock)
 		gDLL->ReleaseGameCoreLock();
@@ -132,10 +132,10 @@ bool LuaSupport::CallAccumulator(_In_ ICvEngineScriptSystem1* pkScriptSystem, _I
 	return bResult;
 }
 
-//------------------------------------------------------------------------------
+
 bool LuaSupport::CallAccumulator(_In_ ICvEngineScriptSystem1* pkScriptSystem, _In_z_ const char* szName, _In_opt_ ICvEngineScriptSystemArgs1* args, float& value)
 {
-	// Must release our lock so that if the main thread has the Lua lock and is waiting for the Game Core lock, we don't freeze
+
 	bool bHadLock = gDLL->HasGameCoreLock();
 	if(bHadLock)
 		gDLL->ReleaseGameCoreLock();
@@ -144,5 +144,3 @@ bool LuaSupport::CallAccumulator(_In_ ICvEngineScriptSystem1* pkScriptSystem, _I
 		gDLL->GetGameCoreLock();
 	return bResult;
 }
-
-//------------------------------------------------------------------------------

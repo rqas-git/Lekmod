@@ -151,9 +151,9 @@
 			<Flavor>5</Flavor>
 		</Row>
 		
-	<!-- Freedom; Total = 645 -->
+
 		<Row>
-			<PolicyType>POLICY_OPEN_SOCIETY</PolicyType> <!-- Avant Garde -->
+			<PolicyType>POLICY_OPEN_SOCIETY</PolicyType>
 			<FlavorType>FLAVOR_GREAT_PEOPLE</FlavorType>
 			<Flavor>30</Flavor>
 		</Row>
@@ -348,7 +348,7 @@
 			<Flavor>25</Flavor>
 		</Row>
 		
-	<!-- Order; Total = 650 -->
+
 		<Row>
 			<PolicyType>POLICY_HERO_OF_THE_PEOPLE</PolicyType>
 			<FlavorType>FLAVOR_GREAT_PEOPLE</FlavorType>
@@ -505,7 +505,7 @@
 			<Flavor>25</Flavor>
 		</Row>
 		
-	<!-- Autocracy; Total = 680 (though dominated by Offense flavor) -->
+
 		<Row>
 			<PolicyType>POLICY_ELITE_FORCES</PolicyType>
 			<FlavorType>FLAVOR_OFFENSE</FlavorType>
@@ -672,7 +672,7 @@
 			<Flavor>25</Flavor>
 		</Row>
 		<Row>
-			<PolicyType>POLICY_NEW_ORDER</PolicyType> <!-- Clausewitz's Legacy -->
+			<PolicyType>POLICY_NEW_ORDER</PolicyType>
 			<FlavorType>FLAVOR_OFFENSE</FlavorType>
 			<Flavor>100</Flavor>
 		</Row>

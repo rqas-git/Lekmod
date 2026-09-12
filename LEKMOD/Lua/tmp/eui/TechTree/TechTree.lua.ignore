@@ -1,12 +1,12 @@
--------------------------------------------------
--- Tech Tree Popup
--- coded by bc1 from Civ V 1.0.3.276 code
--- capture choose tech & steal tech popup events
--- fix escape/enter popup exit code
--- support Technology_ORPrereqTechs in addition to Technology_PrereqTechs
--- code is common except for vanila gk_mode needs to be set false
--- decreased code size by over 1/3 and still do more :lol:
--------------------------------------------------
+
+
+
+
+
+
+
+
+
 Events.SequenceGameInitComplete.Add(function()
 print("Loading EUI tech tree",ContextPtr,os.clock(),[[ 
  _____         _   _____              
@@ -28,9 +28,9 @@ local lockedString = lockedString
 include( "TechHelpInclude" )
 local GetHelpTextForTech = GetHelpTextForTech
 
--------------------------------
--- minor lua optimizations
--------------------------------
+
+
+
 local math_abs = math.abs
 local math_max = math.max
 local math_min = math.min
@@ -40,7 +40,7 @@ local ContextPtr = ContextPtr
 local Controls = Controls
 local Events = Events
 local Game = Game
-local GameInfo = EUI.GameInfoCache or GameInfo -- warning! use iterator ONLY with table field conditions, NOT string SQL query
+local GameInfo = EUI.GameInfoCache or GameInfo
 local GameInfoTypes = GameInfoTypes
 local KeyEvents_KeyDown = KeyEvents.KeyDown
 local Keys = Keys
@@ -75,13 +75,13 @@ local g_unlockVisibleSlots = 5
 
 local g_activePlayerID, g_activePlayer, g_activeCivType, g_activeTeamID, g_activeTeam, g_activeTeamTechs
 
-local g_connectorSizeX = 32	-- connector texture width
-local g_connectorSizeY = 42	-- connector texture height
-local g_connectorXshift = 12	-- horizontal connector texture shift
-local g_connectorYshift = 15	-- vertical connector texture shift
-local g_blockSizeX = 270	-- tech block width
+local g_connectorSizeX = 32
+local g_connectorSizeY = 42
+local g_connectorXshift = 12
+local g_connectorYshift = 15
+local g_blockSizeX = 270
 local g_blockOffsetX = 64
-local g_blockSpacingY = 68	-- tech block vertical spacing
+local g_blockSpacingY = 68
 local g_blockOffsetY = 32 - 5*g_blockSpacingY
 local g_blockSpacingX = g_blockSizeX + 96
 local g_branchOffsetY1 = g_blockOffsetY + 12
@@ -100,11 +100,11 @@ local CloseTechTree
 local LayoutUnlockIcons
 local NudgeUnlockScroll
 
--------------------------------------------------
--- Unlock icon scroll (corner arrows; only if more icons than visible slots)
--------------------------------------------------
+
+
+
 local function CountUnlockIcons( thisTechButton )
-	-- Contiguous visible B1..Bn after AddSmallButtons (already player/civ filtered)
+
 	local n = 0
 	for i = 1, g_maxSmallButtons do
 		local b = thisTechButton["B"..i]
@@ -123,7 +123,7 @@ LayoutUnlockIcons = function( thisTechButton, usedCount )
 	local leftBtn = thisTechButton.UnlockScrollLeft
 	local rightBtn = thisTechButton.UnlockScrollRight
 	local vis = g_unlockVisibleSlots
-	-- Top row between tech name (Offset 64,4) and turns (R,T Offset 8,4)
+
 	local arrowY = 6
 	local arrowRightX = 178
 	local arrowLeftX = 158
@@ -136,7 +136,7 @@ LayoutUnlockIcons = function( thisTechButton, usedCount )
 	if leftBtn then leftBtn:SetSizeVal( 18, 18 ) end
 	if rightBtn then rightBtn:SetSizeVal( 18, 18 ) end
 
-	-- Vanilla stack packs visible children; hide unused / off-window icons
+
 	for i = 1, g_maxSmallButtons do
 		local button = thisTechButton["B"..i]
 		if button then
@@ -192,7 +192,7 @@ LayoutUnlockIcons = function( thisTechButton, usedCount )
 		if leftBtn then
 			leftBtn:SetHide( not showLeft )
 			if showLeft then
-				-- Sit just left of the right arrow when both are shown
+
 				leftBtn:SetOffsetVal( showRight and arrowLeftX or arrowRightX, arrowY )
 			end
 		end
@@ -223,9 +223,9 @@ local function WireUnlockScrollButtons( thisTechButton, techID )
 	end
 end
 
--------------------------------------------------
--- Tech Pipe Management
--------------------------------------------------
+
+
+
 
 local function AddNewPipeIconWithoutColor( x, y )
 	local newPipeInstance = {}
@@ -254,7 +254,7 @@ local function AddTechPipes( AddNewPipeIcon, techPairs )
 		pipeIcon:SetTexture( "TechBranchH.dds" )
 	end
 
-	-- add straight connectors first
+
 	for row in techPairs() do
 		local prereq = GameInfo.Technologies[row.PrereqTech]
 		local tech = GameInfo.Technologies[row.TechType]
@@ -264,7 +264,7 @@ local function AddTechPipes( AddNewPipeIcon, techPairs )
 
 			local height = math_abs( tech.GridY - prereq.GridY ) * g_blockSpacingY - g_deltaHeight
 
-			-- vertical connector
+
 			if height > 0 then
 				local x = x2 - g_branchDeltaX
 				local pipeIcon = AddNewPipeIcon( x, ( (tech.GridY + prereq.GridY) * g_blockSpacingY - g_connectorYshift ) / 2 + g_branchOffsetY1 )
@@ -279,7 +279,7 @@ local function AddTechPipes( AddNewPipeIcon, techPairs )
 		end
 	end
 
-	-- add elbow connectors on top
+
 	for row in techPairs() do
 		local prereq = GameInfo.Technologies[row.PrereqTech]
 		local tech = GameInfo.Technologies[row.TechType]
@@ -288,23 +288,23 @@ local function AddTechPipes( AddNewPipeIcon, techPairs )
 			local y1 = prereq.GridY*g_blockSpacingY
 			local y2 = tech.GridY*g_blockSpacingY
 
-			if y1 < y2 then -- elbow case |__
+			if y1 < y2 then
 
-				AddElbowPipe( x + g_branchOffsetX2, y1 + g_branchOffsetY1, 72, 0 )	--topRightTexture  |
-				AddElbowPipe( x + g_branchOffsetX1, y2 + g_branchOffsetY2 , 0, 72 )	--bottomLeftTexture |_
+				AddElbowPipe( x + g_branchOffsetX2, y1 + g_branchOffsetY1, 72, 0 )
+				AddElbowPipe( x + g_branchOffsetX1, y2 + g_branchOffsetY2 , 0, 72 )
 
-			elseif y1 > y2 then -- elbow case ______|
+			elseif y1 > y2 then
 
-				AddElbowPipe( x + g_branchOffsetX2, y1 + g_branchOffsetY2, 72, 72 )	--bottomRightTexture _|
-				AddElbowPipe( x + g_branchOffsetX1, y2 + g_branchOffsetY1, 0, 0 )	--topLeftTexture |
+				AddElbowPipe( x + g_branchOffsetX2, y1 + g_branchOffsetY2, 72, 72 )
+				AddElbowPipe( x + g_branchOffsetX1, y2 + g_branchOffsetY1, 0, 0 )
 			end
 		end
 	end
 end
 
--------------------------------------------------
--- Mouse Click Management
--------------------------------------------------
+
+
+
 
 local function TechSelected( techID )
 	if not g_RefreshRequested and GameInfo.Technologies[ techID ] then
@@ -335,9 +335,9 @@ local function setTechToolTip( techID, _, button )
 	button:SetToolTipString( GetHelpTextForTech( techID, g_activePlayer:CanResearch( techID ) ) )
 end
 
--------------------------------------------------
--- Display Refresh Management
--------------------------------------------------
+
+
+
 
 local function RefreshDisplayOfSpecificTech( tech )
 	local techID = tech.ID
@@ -346,10 +346,10 @@ local function RefreshDisplayOfSpecificTech( tech )
 	local turnText = L( "TXT_KEY_STR_TURNS", g_activePlayer:GetResearchTurnsLeft( techID, true ) )
 	local researchPerTurn = g_activePlayer:GetScience()
 
-	-- Rebuild the small buttons if needed
+
 	if g_NeedsFullRefresh then
 		AddSmallButtonsToTechButton( thisTechButton, tech, g_maxSmallButtons, g_smallIconSize )
-		-- Count only icons actually shown for this player (uniques already filtered in AddSmallButtons)
+
 		LayoutUnlockIcons( thisTechButton, CountUnlockIcons( thisTechButton ) )
 	end
 	thisTechButton.TechButton:RegisterCallback( Mouse.eMouseEnter, setTechToolTip )
@@ -357,52 +357,52 @@ local function RefreshDisplayOfSpecificTech( tech )
 	local showAlreadyResearched, showFreeTech, showCurrentlyResearching, showAvailable, showUnavailable, showLocked, queueUpdate, queueText, turnLabel, isClickable
 
 	if g_activeTeamTechs:HasTech( techID ) then
-	-- the active player already has this tech
+
 		showAlreadyResearched = true
-		-- update the era marker for this tech
+
 		(g_eraColumns[GameInfoTypes[tech.Era]] or {}).researched = true
 
 	elseif g_stealingTechTargetPlayer or g_activePlayer:GetNumFreeTechs() > 0 then
-	-- Stealing a tech or Choosing a free tech
+
 		if canResearchThisTech and ( 
 			( g_stealingTechTargetPlayer and Teams[ g_stealingTechTargetPlayer:GetTeam() ]:IsHasTech( techID ) )
 			or (not g_stealingTechTargetPlayer and (not gk_mode or g_activePlayer:CanResearchForFree( techID ))) )
 		then
 			showFreeTech = true
 			turnLabel = thisTechButton.FreeTurns
-			queueText = freeString	-- update queue number to say "FREE"
+			queueText = freeString
 			isClickable = true
 		else
 			showLocked = true
 		end
 
-	-- the active player is currently researching this one
+
 	elseif g_activePlayer:GetCurrentResearch() == techID then
 		showCurrentlyResearching = true
 		turnLabel = thisTechButton.CurrentlyResearchingTurns
-		queueUpdate = g_activePlayer:GetLengthResearchQueue() > 1	-- update queue number if needed
-		isClickable = true -- to clear research queue
---[[
-		-- turn on the meter
-		local currentResearchProgress = g_activePlayer:GetResearchProgress( techID )
-		local researchNeeded = g_activePlayer:GetResearchCost( techID )
-		local currentResearchPlusThisTurn = currentResearchProgress + researchPerTurn
-		local researchProgressPercent = currentResearchProgress / researchNeeded
-		local researchProgressPlusThisTurnPercent = math_min( 1, currentResearchPlusThisTurn / researchNeeded )
---]]
-	-- the active player can research this one right now if he wants
+		queueUpdate = g_activePlayer:GetLengthResearchQueue() > 1
+		isClickable = true
+
+
+
+
+
+
+
+
+
 	elseif canResearchThisTech and g_scienceEnabled then
 		showAvailable = true
 		turnLabel = thisTechButton.AvailableTurns
-		queueUpdate = true	-- update queue number if needed
+		queueUpdate = true
 		isClickable = true
 
 	elseif g_activePlayer:CanEverResearch( techID ) and g_scienceEnabled then
-	-- currently unavailable
+
 		showUnavailable = true
-		queueUpdate = true	-- update queue number if needed
+		queueUpdate = true
 		turnLabel = thisTechButton.UnavailableTurns
-		isClickable = true  -- shift clickable
+		isClickable = true
 	else
 		showLocked = true
 	end
@@ -413,7 +413,7 @@ local function RefreshDisplayOfSpecificTech( tech )
 	thisTechButton.Unavailable:SetHide( not showUnavailable )
 	thisTechButton.Locked:SetHide( not showLocked )
 	if showLocked then
-		queueText = lockedString	-- have queue number say "LOCKED"
+		queueText = lockedString
 	elseif queueUpdate then
 		local queuePosition = g_activePlayer:GetQueuePosition( techID )
 		if queuePosition ~= -1 then
@@ -453,7 +453,7 @@ local function RefreshDisplayNow()
 		RefreshDisplayOfSpecificTech( tech )
 	end
 
-	-- update the era panels
+
 	local highestEra = 0
 	for thisEra = 0, #g_eraBlocks do
 		if g_eraColumns[thisEra] and g_eraColumns[thisEra].researched then
@@ -479,9 +479,9 @@ local function RefreshDisplay()
 end
 
 
--------------------------------------------------
--- find the range of columns that each era takes
--------------------------------------------------
+
+
+
 for tech in GameInfo.Technologies() do
 	local eraID = GameInfoTypes[tech.Era]
 	local eraColumn = g_eraColumns[eraID]
@@ -497,24 +497,24 @@ for tech in GameInfo.Technologies() do
 	end
 end
 
--------------------------------------------------
--- add the era panels to the background
--------------------------------------------------
+
+
+
 local eraBlockX = -g_blockSpacingX-32
 for era in GameInfo.Eras() do
 
 	local thisEraBlockInstance = {}
 	ContextPtr:BuildInstanceForControl( "EraBlockInstance", thisEraBlockInstance, Controls.EraStack )
-	-- store this panel off for later
+
 	g_eraBlocks[era.ID] = thisEraBlockInstance
 
-	-- add the correct text for this era panel
+
 	local localizedLabel = L( era.Description )
 	thisEraBlockInstance.OldLabel:SetText( localizedLabel )
 	thisEraBlockInstance.CurrentLabel:SetText( localizedLabel )
 	thisEraBlockInstance.FutureLabel:SetText( localizedLabel )
 
-	-- adjust the sizes of the era panels
+
 	local eraBlockWidth = 0
 	if g_eraColumns[era.ID] then
 		eraBlockWidth = g_eraColumns[era.ID].maxGridX * g_blockSpacingX
@@ -535,24 +535,24 @@ for era in GameInfo.Eras() do
 	thisEraBlockInstance.FutureBlock:SetSizeX( eraBlockWidth )
 end
 
--------------------------------------------------
--- add the tech button pipes
--------------------------------------------------
+
+
+
 AddTechPipes( AddNewPipeIconWithoutColor, GameInfo.Technology_PrereqTechs )
 AddTechPipes( AddNewPipeIconColored, GameInfo.Technology_ORPrereqTechs )
 
--------------------------------------------------
--- add the tech buttons
--------------------------------------------------
+
+
+
 for tech in GameInfo.Technologies() do
 	local thisTechButton = {}
 	local techID = tech.ID
 	ContextPtr:BuildInstanceForControl( "TechButtonInstance", thisTechButton, Controls.TechTreeScrollPanel )
 
-	-- store this instance off for later
+
 	g_techButtons[techID] = thisTechButton
 
-	-- add the input handler to this button
+
 	thisTechButton.TechButton:SetVoids( techID, -1 )
 	thisTechButton.TechButton:RegisterCallback( Mouse.eRClick, TechPedia )
 	thisTechButton.TechButton:RegisterCallback( Mouse.eMouseEnter, setTechToolTip )
@@ -561,10 +561,10 @@ for tech in GameInfo.Technologies() do
 		thisTechButton.TechButton:RegisterCallback( Mouse.eLClick, TechSelected )
 	end
 
-	-- position
+
 	thisTechButton.TechButton:SetOffsetVal( tech.GridX*g_blockSpacingX + g_blockOffsetX, tech.GridY*g_blockSpacingY + g_blockOffsetY )
 
-	-- name
+
 	local techName = Locale.TruncateString( L(tech.Description), g_maxTechNameLength, true )
 	thisTechButton.AlreadyResearchedTechName:SetText( techName )
 	thisTechButton.CurrentlyResearchingTechName:SetText( techName )
@@ -573,7 +573,7 @@ for tech in GameInfo.Technologies() do
 	thisTechButton.LockedTechName:SetText( techName )
 	thisTechButton.FreeTechName:SetText( techName )
 
-	-- picture
+
 	thisTechButton.TechPortrait:SetHide( not IconHookup( tech.PortraitIndex, 64, tech.IconAtlas, thisTechButton.TechPortrait ) )
 
 	thisTechButton._unlockScroll = 0
@@ -587,17 +587,17 @@ for tech in GameInfo.Technologies() do
 	end
 end
 
--------------------------------------------------
--- Resize the panel to fit the contents, and the scroll bar for the display size
--------------------------------------------------
+
+
+
 Controls.TechTreeScrollBar:SetSizeX( Controls.TechTreeScrollPanel:GetSizeX() - 150 )
 Controls.EraStack:CalculateSize()
 Controls.EraStack:ReprocessAnchoring()
 Controls.TechTreeScrollPanel:CalculateInternalSize()
 
--------------------------------------------------
--- Close Tech Tree
--------------------------------------------------
+
+
+
 CloseTechTree = function()
 	if g_popupInfoType then
 		Events.SerialEventGameMessagePopupProcessed.CallImmediate(g_popupInfoType, 0)
@@ -609,9 +609,9 @@ CloseTechTree = function()
 end
 Controls.CloseButton:RegisterCallback( Mouse.eLClick, CloseTechTree )
 
--------------------------------------------------
--- Open Tech Tree
--------------------------------------------------
+
+
+
 Events.SerialEventGameMessagePopup.Add(
 function( popupInfo )
 	if popupInfo.Type == ButtonPopupTypes.BUTTONPOPUP_CHOOSETECH then
@@ -621,7 +621,7 @@ function( popupInfo )
 	else
 		return
 	end
-	g_stealingTechTargetPlayer = Players[ g_stealingTechTargetPlayerID ] -- g_activePlayer:GetNumTechsToSteal( g_stealingTechTargetPlayerID ) > 0
+	g_stealingTechTargetPlayer = Players[ g_stealingTechTargetPlayerID ]
 
 	Events.SerialEventGameMessagePopupShown(popupInfo)
 
@@ -631,7 +631,7 @@ function( popupInfo )
 		g_popupInfoType = popupInfo.Type
 		UIManager:QueuePopup( ContextPtr, PopupPriority_InGameUtmost )
 		UI.incTurnTimerSemaphore()
-		-- initialize scrollbar position
+
 		if Controls.TechTreeScrollPanel:GetScrollValue() == 0 then
 			local pPlayer = Players[Game.GetActivePlayer()]
 			local techID = pPlayer:GetCurrentResearch()
@@ -650,12 +650,12 @@ function( popupInfo )
 	end
 end)
 
--------------------------------------------------
--- Input processing
--------------------------------------------------
+
+
+
 
 ContextPtr:SetInputHandler(
-function ( uiMsg, wParam )--, lParam )
+function ( uiMsg, wParam )
 	if uiMsg == KeyEvents_KeyDown
 		and (wParam == Keys.VK_ESCAPE or wParam == Keys.VK_RETURN)
 	then
@@ -666,9 +666,9 @@ end)
 
 Events.SerialEventResearchDirty.Add( RefreshDisplay )
 
--------------------------------------------------
--- Initialize active player data
--------------------------------------------------
+
+
+
 local function InitActivePlayerData()
 	g_activePlayerID = Game.GetActivePlayer()
 	g_activePlayer = Players[g_activePlayerID]
@@ -677,7 +677,7 @@ local function InitActivePlayerData()
 	g_activeTeam = Teams[g_activeTeamID]
 	g_activeTeamTechs = g_activeTeam:GetTeamTechs()
 
-	-- gather info about this active player's unique units and buldings
+
 	GatherInfoAboutUniqueStuff( g_activeCivType )
 
 	g_NeedsFullRefresh = true
@@ -686,7 +686,7 @@ end
 InitActivePlayerData()
 
 local function UpdateOptions()
---	g_isAdvisor = not ( g_options and g_options.GetValue and g_options.GetValue( "CityAdvisor" ) == 0 )
+
 	g_isAutoClose = not ( g_options and g_options.GetValue and g_options.GetValue( "AutoClose" ) == 0 )
 	return RefreshDisplay()
 end
@@ -694,9 +694,9 @@ UpdateOptions()
 Events.GameOptionsChanged.Add( UpdateOptions )
 
 Events.GameplaySetActivePlayer.Add( function()
-	-- So some extra stuff gets re-built on the refresh call
+
 	if g_popupInfoType then
-		CloseTechTree() -- so the next active player does not have to
+		CloseTechTree()
 	end
 	InitActivePlayerData()
 end)

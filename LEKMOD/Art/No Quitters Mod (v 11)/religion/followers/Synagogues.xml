@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-25 05:44:53 -->
+
 <GameData>
 
-	<!-- May use Faith to purchase Synagogues (+1 Faith / +1 Culture / +10% Production towards Buildings) -->
+
 	<Beliefs>
 		<Row>
 			<Type>BELIEF_SYNAGOGUES</Type>
@@ -18,7 +18,7 @@
 		</Row>
 	</Belief_BuildingClassFaithPurchase>
 
-	<!-- Synagogue building -->
+
 	<BuildingClasses>
 		<Row>
 			<Type>BUILDINGCLASS_SYNAGOGUE</Type>
@@ -80,7 +80,7 @@
 		</Row>
 	</Building_YieldChanges>
 
-	<!-- localization -->
+
 	<Language_en_US>
 		<Row Tag="TXT_KEY_BELIEF_SYNAGOGUES">
 			<Text>Use 130 [ICON_PEACE] Faith to purchase Synagogues (+2 [ICON_PEACE] Faith, +1 [ICON_CULTURE] Culture, +15% [ICON_PRODUCTION] Production when constructing Buildings)</Text>

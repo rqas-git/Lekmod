@@ -9,8 +9,43 @@ on:
   workflow_dispatch:
 
 jobs:
+  checks:
+    name: Refactor and packaging checks
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-2022]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Python dependencies
+        run: python -m pip install requests
+      - name: Install native test dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y clang pkg-config lua5.1 liblua5.1-0-dev libsqlite3-dev
+      - name: Verify UI packages, map output, bindings, and installer lifecycle
+        env:
+          CXX: clang++
+        run: python -m unittest discover -s tests -v
+      - name: Verify macOS installer filesystem behavior
+        if: runner.os == 'Linux'
+        run: python -m unittest discover -s macos/tests -v
+      - name: Verify transactional Windows installer updates
+        run: python -m unittest discover -s LekmodInstaller/tests -v
+      - name: Install performance fixture dependencies
+        if: runner.os == 'Linux'
+        run: python -m pip install -r tests/performance/requirements.txt
+      - name: Verify gameplay performance equivalence
+        if: runner.os == 'Linux'
+        run: python -B tests/performance/validate.py
+
   build:
     name: Build from source
+    needs: checks
     strategy:
       matrix:
         config: [Debug, Release]
@@ -21,13 +56,21 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           sparse-checkout: |
             LEKMOD/
             !LEKMOD/*.dll
             LEKMOD_DLL/
+            LekmodInstaller/
+            tools/
+            tests/
             !**/BuildOutput/
             !**/BuildTemp/
           sparse-checkout-cone-mode: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
       - name: Cache Visual Studio 2008 Installer
         id: cache-vs2008-install
@@ -63,8 +106,7 @@ jobs:
           if ("${{ matrix.config }}" -eq "Debug") {
             Copy-Item "LEKMOD_DLL\CvGameCoreDLL_Expansion2\BuildOutput\VS2008_${{ matrix.config }}Win32\CvGameCore_Expansion2.*" -Destination LEKMOD
           }
-          mkdir artifact
-          Move-Item -Path LEKMOD -Destination artifact
+          python tools/package_lekmod.py --destination artifact/LEKMOD
 
       - name: Upload Artifact
         if: ${{ github.event_name != 'pull_request' }}

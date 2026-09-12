@@ -1,18 +1,18 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//!	 \file		CvLuaGame.h
-//!  \brief     Public interface to CvLuaGame.
-//!
-//!		This file includes the interface for exposing the Game namespace to
-//!		Lua.
-//!
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #pragma once
 #ifndef CVLUAGAME_H
 #define CVLUAGAME_H
@@ -22,13 +22,13 @@
 class CvLuaGame : public CvLuaStaticInstance<CvLuaGame, CvGame>
 {
 public:
-	//! Returns the name of the static instance.
+
 	static const char* GetInstanceName();
 
-	//! Returns the static instance
+
 	static CvGame* GetInstance(lua_State* L = NULL, int idx = 0);
 
-	//! Registers member methods with instance.
+
 	static void RegisterMembers(lua_State* L);
 
 protected:
@@ -54,8 +54,8 @@ protected:
 	static int lGetAdjustedPopulationPercent(lua_State* L);
 	static int lGetAdjustedLandPercent(lua_State* L);
 
-	static int lGetUnitedNationsCountdown(lua_State* L); // DEPRECATED
-	static int lSetUnitedNationsCountdown(lua_State* L); // DEPRECATED
+	static int lGetUnitedNationsCountdown(lua_State* L);
+	static int lSetUnitedNationsCountdown(lua_State* L);
 
 	static int lCountCivPlayersAlive(lua_State* L);
 	static int lCountCivPlayersEverAlive(lua_State* L);
@@ -194,14 +194,14 @@ protected:
 	static int lGetVotesNeededForDiploVictory(lua_State* L);
 	static int lIsUnitedNationsActive(lua_State* L);
 
-	// DEPRECATED
+
 	static int lGetNumVictoryVotesTallied(lua_State* L);
 	static int lGetVoteCast(lua_State* L);
 	static int lGetPreviousVoteCast(lua_State* L);
 	static int lGetNumVotesForTeam(lua_State* L);
 	static int lSetNumVotesForTeam(lua_State* L);
 	static int lChangeNumVotesForTeam(lua_State* L);
-	// End DEPRECATED
+
 
 	static int lGetHandicapType(lua_State* L);
 	static int lGetCalendar(lua_State* L);
@@ -263,7 +263,7 @@ protected:
 	static int lDoControl(lua_State* L);
 
 	static int lDoMinorPledgeProtection(lua_State* L);
-	static int lDoMinorGoldGift(lua_State* L); // old name, kept here for backwards compatibility with old Lua
+	static int lDoMinorGoldGift(lua_State* L);
 	static int lDoMinorGiftGold(lua_State* L);
 	static int lDoMinorGiftTileImprovement(lua_State* L);
 	static int lDoMinorBullyGold(lua_State* L);
@@ -300,7 +300,7 @@ protected:
 
 	static int lGetResearchAgreementCost(lua_State* L);
 
-	//! Gets a custom game option of specified name.
+
 	static int lGetCustomOption(lua_State* L);
 
 	static int lGetNumCitiesPolicyCostMod(lua_State* L);
@@ -419,4 +419,4 @@ protected:
 #endif
 };
 
-#endif //CVLUAGAME_H
+#endif

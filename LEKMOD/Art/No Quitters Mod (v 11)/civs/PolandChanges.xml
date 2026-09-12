@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 5/4/2016 10:10:36 AM -->
+
 <GameData>
 
-	<!-- New Solidarity: Culture cost of adopting new Policies reduced by 20%. -->
+
 	<Traits>
 		<Update>
 			<Set PolicyCostModifier="-10" FreeSocialPoliciesPerEra="0" />

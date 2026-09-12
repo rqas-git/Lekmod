@@ -1,4 +1,4 @@
--- Author: 404NotFound & EnormousApplePie
+
 
 include("Lekmod_utilities.lua")
 include("PlotIterators.lua")
@@ -6,9 +6,9 @@ include("PlotIterators.lua")
 local this_civ = GameInfoTypes["CIVILIZATION_PALMYRA"]
 local is_active = LekmodUtilities:is_civilization_active(this_civ)
 
-------------------------------------------------------------------------------------------------------------------------
--- Palmyra UA: Add fresh water to cities settled
-------------------------------------------------------------------------------------------------------------------------
+
+
+
 function lekmod_ua_palmyra_add_fresh_water(player_id, x, y, new_player_id)
 
    local player = Players[player_id]

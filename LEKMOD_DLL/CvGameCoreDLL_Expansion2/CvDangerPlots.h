@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_DANGER_PLOTS_H
@@ -12,13 +12,13 @@
 
 #include "CvDiplomacyAIEnums.h"
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvDangerPlots
-//!  \brief		Used to calculate the relative danger of a given plot for a player
-//
-//!  Key Attributes:
-//!  - Replaces the AI_getPlotDanger function in CvPlayerAI
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 class CvDangerPlots
 {
 public:
@@ -33,7 +33,7 @@ public:
 	void AddDanger(int iPlotX, int iPlotY, int iValue, bool bWithinOneMove);
 	int GetDanger(const CvPlot& pPlot) const;
 	bool IsUnderImmediateThreat(const CvPlot& pPlot) const;
-	int GetCityDanger(CvCity* pCity);  // sums the plots around the city to determine it's danger value
+	int GetCityDanger(CvCity* pCity);
 
 	int ModifyDangerByRelationship(PlayerTypes ePlayer, CvPlot* pPlot, int iDanger);
 
@@ -90,4 +90,4 @@ protected:
 #endif
 };
 
-#endif //CIV5_PROJECT_CLASSES_H
+#endif

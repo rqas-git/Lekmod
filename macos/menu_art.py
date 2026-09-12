@@ -1,4 +1,4 @@
-"""Read the installed Brave New World menu texture; no game artwork is shipped."""
+
 import hashlib
 from pathlib import Path
 import struct
@@ -8,7 +8,7 @@ import zlib
 
 
 def read_texture(archive, name):
-    """Read one bounded entry from the Aspyr FPK version-6 texture directory."""
+
     size = archive.stat().st_size
     with archive.open('rb') as stream:
         header = stream.read(14)
@@ -63,7 +63,7 @@ def background(app, cache):
 
 
 def rgba_texture(data, index=None):
-    """Decode Civ's BGRA texture, optionally indexed in 2×2 pixel blocks."""
+
     height, width = struct.unpack_from('<II', data, 12)
     if not data.startswith(b'DDS ') or not 0 < width * height <= 16000000:
         raise ValueError('Invalid logo texture')

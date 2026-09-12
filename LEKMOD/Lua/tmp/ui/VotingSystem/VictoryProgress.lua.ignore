@@ -1,15 +1,15 @@
-----------------------------------------------------------------
--- edit: MP voting system for EUI & vanilla UI
-----------------------------------------------------------------
+
+
+
 local g_NextProposalRequestTurn = -1;
 REQUEST_PROPOSALS_COOLDOWN = 1;
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 include( "IconSupport" );
 include( "SupportFunctions"  );
 include( "InstanceManager" );
 
--- Domination Variables
+
 local g_DominationRowsIM = InstanceManager:new( "DominationRow", "RowStack", Controls.DominationStack );
 local g_DominationRowList = {};
 local g_DominationItemIMList = {};
@@ -17,19 +17,19 @@ local g_DominationItemList = {};
 
 MAX_DOMINATION_ICONS_PER_ROW = 8;
 
--- Tech Variables
+
 local g_TechPreReqList = {};
 local g_PreReqsAcquired = 0;
 
--- Tech Details Variables
+
 local g_TechIM = InstanceManager:new( "TechCiv", "Civ", Controls.TechStack );
 local g_TechList = {};
 
--- Diplo Details Variables
+
 local g_DiploIM = InstanceManager:new( "DiploCiv", "Civ", Controls.DiploStack );
 local g_DiploList = {};
 
--- Cultural Details Variables
+
 local g_CultureRowsIM = InstanceManager:new( "CultureRow", "RowStack", Controls.CultureStack );
 local g_CultureRowList = {};
 local g_CultureItemIMList = {};
@@ -37,12 +37,12 @@ local g_CultureItemList = {};
 
 MAX_CULTURE_ICONS_PER_ROW = 8;
 
--- Score Details Variables
+
 local g_ScoreIM = InstanceManager:new( "ScoreCiv", "Civ", Controls.ScoreStack );
 local g_ScoreList = {};
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnProposeIrr()
 	Controls.MPProposeIrrButton:SetDisabled(true)
 	Controls.MPProposeCCButton:SetDisabled(true)
@@ -79,8 +79,8 @@ function OnProposeScrap()
 end
 Controls.MPProposeScrapButton:RegisterCallback( Mouse.eLClick, OnProposeScrap );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnBack()
 	Controls.YourDetails:SetHide(false);
 	Controls.ScoreScreen:SetHide(true);
@@ -88,7 +88,7 @@ function OnBack()
 	Controls.DiploScreen:SetHide(true);
 			
 	
-	-- Delete instanced screens
+
 	DeleteSpaceRaceScreen();
 	DeleteDiploScreen();
 	DeleteScoreScreen();
@@ -97,48 +97,48 @@ function OnBack()
 end
 Controls.BackButton:RegisterCallback( Mouse.eLClick, OnBack );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnSpaceRaceDetails()
 	Controls.YourDetails:SetHide(true);
 	Controls.SpaceRaceScreen:SetHide(false);
 	Controls.BackButton:SetHide(true);
 	Controls.SpaceRaceClose:SetHide(false);
 	
-	-- Populate Detail Screens
+
 	PopulateSpaceRaceScreen();
 end
 Controls.SpaceRaceDetails:RegisterCallback( Mouse.eLClick, OnSpaceRaceDetails );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
---[[
-function OnDiploDetails()
-	Controls.YourDetails:SetHide(true);
-	Controls.DiploScreen:SetHide(false);
-	Controls.BackButton:SetHide(true);
-	Controls.DiploClose:SetHide(false);
-	
-	-- Populate Detail Screens
-	PopulateDiploScreen();
-	
-end
-Controls.DiploDetails:RegisterCallback( Mouse.eLClick, OnDiploDetails );
---]]
 
-----------------------------------------------------------------
-----------------------------------------------------------------
---function OnCultureDetails()
---
- --local popupInfo = {
-        --Type = ButtonPopupTypes.BUTTONPOPUP_CULTURE_OVERVIEW,
-    --}
-    --Events.SerialEventGameMessagePopup(popupInfo);
---end
---Controls.CultureDetails:RegisterCallback( Mouse.eLClick, OnCultureDetails );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
+
+
+
+
+	
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function OnScoreDetails()
 	Controls.YourDetails:SetHide(true);
 	Controls.ScoreScreen:SetHide(true);
@@ -151,46 +151,46 @@ function OnScoreDetails()
 	Controls.DiploClose:SetHide(true);
 	Controls.SpaceRaceClose:SetHide(true);
 	
-	-- Populate Detail Screens
+
 	PopulateScoreScreen();
 end
 Controls.ScoreDetails:RegisterCallback( Mouse.eLClick, OnScoreDetails );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnSpaceRaceClose()
 	Controls.YourDetails:SetHide(false);
 	Controls.SpaceRaceScreen:SetHide(true);
 	Controls.BackButton:SetHide(false);
 	Controls.SpaceRaceClose:SetHide(true);
 	
-	-- Delete instanced parts of culture screen
+
 	DeleteSpaceRaceScreen();
 end
 Controls.SpaceRaceClose:RegisterCallback( Mouse.eLClick, OnSpaceRaceClose );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnDiploClose()
 	Controls.YourDetails:SetHide(false);
 	Controls.DiploScreen:SetHide(true);
 	Controls.BackButton:SetHide(false);
 	Controls.DiploClose:SetHide(true);
 	
-	-- Delete instanced parts of culture screen
+
 	DeleteDiploScreen();
 end
 Controls.DiploClose:RegisterCallback( Mouse.eLClick, OnDiploClose );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnScoreClose()
 	Controls.YourDetails:SetHide(false);
 	Controls.ScoreScreen:SetHide(true);
 	Controls.BackButton:SetHide(false);
 	Controls.ScoreClose:SetHide(true);
 	
-	-- Delete instanced parts of culture screen
+
 	DeleteScoreScreen();
 end
 Controls.ScoreClose:RegisterCallback( Mouse.eLClick, OnScoreClose );
@@ -290,8 +290,8 @@ function PopulateScoreBreakdown()
 	end
 end
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function PopulateDomination()
 		
 	if(PreGame.IsVictory(GameInfo.Victories["VICTORY_DOMINATION"].ID))then		
@@ -323,7 +323,7 @@ function PopulateDomination()
 		print("GameDefines.MAX_CIV_PLAYERS: " .. GameDefines.MAX_MAJOR_CIVS);
 		
 		for iTeamLoop = 0, GameDefines.MAX_CIV_TEAMS-1, 1 do
-			-- Loop through all the civs the active player knows
+
 			local iNumCapitals = 0;
 			local iNumPlayersOnTeam = 0;
 			local iPlayerOnTeam = -1;
@@ -348,10 +348,10 @@ function PopulateDomination()
 				end
 			end
 			
-			--print("iNumCapitals: " .. iNumCapitals);
-			--print("iNumPlayersOnTeam: " .. iNumPlayersOnTeam);
-			--print("iLeadingNumCapitals: " .. iLeadingNumCapitals);
-			--print("iLeadingNumPlayersOnTeam: " .. iLeadingNumPlayersOnTeam);
+
+
+
+
 			
 			if (iNumCapitals - iNumPlayersOnTeam > iLeadingNumCapitals - iLeadingNumPlayersOnTeam) then
 				iLeadingTeam = iTeamLoop;
@@ -361,13 +361,13 @@ function PopulateDomination()
 			end
 		end
 		
-		-- Loop through all the civs the active player knows
+
 		for iPlayerLoop = 0, GameDefines.MAX_CIV_PLAYERS-1, 1 do
 
 			local pPlayer = Players[iPlayerLoop];
 			
 			if(not pPlayer:IsMinorCiv() and pPlayer:IsEverAlive()) then
-				-- Create new row if one does not alread exist.
+
 				if(curRow == nil) then
 					numRows = numRows + 1;
 					curRow = g_DominationRowsIM:GetInstance();
@@ -398,23 +398,23 @@ function PopulateDomination()
 		
 		if (iLeadingTeam == -1) then
 			if (bAnyoneLostControlOfCapital) then
-				--print("Hiding string because it is a weird circumstance");
+
 				Controls.DominationLabel:SetHide(true);
 			else
-				--print("Everybody has their own capital.");
+
 				Controls.DominationLabel:SetText(Locale.ConvertTextKey("TXT_KEY_VP_DIPLO_NEW_CAPITALS_REMAINING"));	
 				Controls.DominationLabel:SetHide(false);
 			end
 		elseif (iLeadingNumPlayersOnTeam > 1) then
-			--print("A team is winning");
+
 			Controls.DominationLabel:SetText(Locale.ConvertTextKey("TXT_KEY_VP_DIPLO_CAPITALS_TEAM_LEADING", iLeadingTeam + 1, iLeadingNumCapitals));	
 			Controls.DominationLabel:SetHide(false);		
 		else
 			if (iLeadingPlayer == Game.GetActivePlayer()) then
-				--print("The current player is winning");
+
 				Controls.DominationLabel:SetText(Locale.ConvertTextKey("TXT_KEY_VP_DIPLO_CAPITALS_ACTIVE_PLAYER_LEADING", iLeadingNumCapitals));
 			else
-				--print("Some other player is winning");
+
 				local pOtherPlayer = Players[iLeadingPlayer];			
 				if (pOtherPlayer:GetNickName() ~= "" and pOtherPlayer:IsHuman()) then
 					Controls.DominationLabel:SetText(Locale.ConvertTextKey("TXT_KEY_VP_DIPLO_CAPITALS_PLAYER_LEADING", pOtherPlayer:GetNickName(), iLeadingNumCapitals));
@@ -427,7 +427,7 @@ function PopulateDomination()
 			Controls.DominationLabel:SetHide(false);	
 		end
 		
-		--Controls.DominationLabel:SetText(Locale.ConvertTextKey("TXT_KEY_VP_DIPLO_CAPITALS_REMAINING",  numCapitals));
+
 			
 		Controls.DominationStack:CalculateSize();
 		Controls.DominationStack:ReprocessAnchoring();
@@ -441,8 +441,8 @@ function PopulateDomination()
 	end
 end
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function AddDominationCiv(pPlayer, pDominatingPlayer, numItems, civMgr)
 	
 	if(pPlayer:IsEverAlive()) then
@@ -451,7 +451,7 @@ function AddDominationCiv(pPlayer, pDominatingPlayer, numItems, civMgr)
 		numItems = numItems + 1;
 		
 		local iPlayer = pPlayer:GetID();
-		-- Set Civ Icon
+
 		SetConquestCivIcon(pPlayer, 64, item.Icon, item.IconFrame,
 				   item.ConqueredCivSmallFrame, item.ConqueredCivIconBG, item.ConqueredCivIconShadow, item.ConqueredCivIcon, item.IconOut, pDominatingPlayer,
 				   item.CivIconBG, item.CivIconShadow); 
@@ -467,8 +467,8 @@ function AddDominationCiv(pPlayer, pDominatingPlayer, numItems, civMgr)
 	return numItems;
 end 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function PopulateSpaceRace()
 	if(PreGame.IsVictory(GameInfo.Victories["VICTORY_SPACE_RACE"].ID))then
 		local apolloProj = GameInfoTypes["PROJECT_APOLLO_PROGRAM"];
@@ -489,7 +489,7 @@ function PopulateSpaceRace()
 			else
 				local totalPreReqs = #g_TechPreReqList;
 				
-				-- Prevent a divide by 0.
+
 				if(totalPreReqs == 0) then
 					totalPreReqs = 1;
 				end
@@ -522,8 +522,8 @@ function PopulateSpaceRace()
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function SetProjectValue( sProject, iTeam, controlTable, controlTag )
 
 	local white = {x = 1, y = 1, z = 1, w = 1};
@@ -544,8 +544,8 @@ function SetProjectValue( sProject, iTeam, controlTable, controlTag )
 end 
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function PopulateDiplomatic()
 	Controls.UNIcon:SetHide(true);
 	Controls.TurnsUntilSessionLabel:SetHide(true);
@@ -612,8 +612,8 @@ function PopulateDiplomatic()
 	end
 end
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function PopulateCultural()
 	
 	local cultureVictory = GameInfo.Victories["VICTORY_CULTURAL"];
@@ -637,13 +637,13 @@ function PopulateCultural()
 		local iActivePlayer = Game.GetActivePlayer();
 		local pActivePlayer = Players[iActivePlayer];
 			
-		-- Loop through all the civs the active player knows
+
 		for iPlayerLoop = 0, GameDefines.MAX_CIV_PLAYERS-1, 1 do
 
 			local pPlayer = Players[iPlayerLoop];
 			
 			if(iPlayerLoop ~= iActivePlayer and not pPlayer:IsMinorCiv() and pPlayer:IsEverAlive()) then
-				-- Create new row if one does not alread exist.
+
 				if(curRow == nil) then
 					numRows = numRows + 1;
 					curRow = g_CultureRowsIM:GetInstance();
@@ -676,13 +676,13 @@ function PopulateCultural()
 				local iPlayerIcon = bHasMet and iPlayer or -1;
 				local influenceKey = bHasMet and "TXT_KEY_VP_CULTURE_INFLUENCE" or "TXT_KEY_VP_CULTURE_INFLUENCE_UNMET";
 					
-				-- Set Civ Icon
+
 				CivIconHookup(iPlayerIcon, 64, item.Icon, item.IconBG, item.IconShadow, true, true);
 				
 				local width, height = 64,64;	
 				
-				-- Rather than use the entire size of the control to display percentage, we're only using the area inside the icon frame.
-				-- So instead of 0-64, we're using 12-54.
+
+
 				local newHeight = 42 * (1 - influencePercent) + 12;
 				
 				item.IconDark:SetSizeVal(width, newHeight);
@@ -714,22 +714,22 @@ function PopulateCultural()
 
 end
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function SetupScreen()	
-	-- Title Icon
+
 	SimpleCivIconHookup( Game.GetActivePlayer(), 64, Controls.Icon ); 
 	
-	-- Set Remaining Turns
+
 	local remainingTurns = Game.GetMaxTurns() - Game.GetElapsedGameTurns();
 	if remainingTurns < 0 then
 		remainingTurns = 0;
 	end
 	Controls.RemainingTurns:SetText(remainingTurns);
 	
-	-- Set Player Score
+
 	PopulateScoreBreakdown();
-	-- Proposal buttons
+
 	local pPlayer = Game.GetActivePlayer();
 	local bAnyProposalOngoing = false;
 	if Game.GetLastProposalID then
@@ -796,38 +796,38 @@ function SetupScreen()
 	Controls.MPProposeScrapButton:SetToolTipString( table.concat(tstrHintScrap, '[ENDCOLOR][NEWLINE]') );
 
 	if (Game.GetElapsedGameTurns() >= g_NextProposalRequestTurn) and (Game.IsPlayerHasActiveProposal(Game.GetActivePlayer()) == false) and (bAnyProposalOngoing == false) then
-		--print('has active proposal false')
-		if (Game.IsAnyActiveProposalType(0) == false) and (Game.IsProposalTypeAvailable(0) == true) and (Game.IsProposalTypeOnCooldown(0, pPlayer) == false) then  -- irr
-			--print('any active irr false')
+
+		if (Game.IsAnyActiveProposalType(0) == false) and (Game.IsProposalTypeAvailable(0) == true) and (Game.IsProposalTypeOnCooldown(0, pPlayer) == false) then
+
 			Controls.MPProposeIrrButton:SetDisabled(false)
 			Controls.MPProposeIrrLabel:SetAlpha( 1 );
 		else
-			--print('any active irr true')
+
 			Controls.MPProposeIrrButton:SetDisabled(true)
 			Controls.MPProposeIrrLabel:SetAlpha( 0.5 );
 		end
 
-		if (Game.IsAnyActiveProposalType(1) == false) and (Game.IsProposalTypeAvailable(1) == true) and (Game.IsProposalTypeOnCooldown(1, pPlayer) == false) then  -- cc
-			--print('any active cc false')
+		if (Game.IsAnyActiveProposalType(1) == false) and (Game.IsProposalTypeAvailable(1) == true) and (Game.IsProposalTypeOnCooldown(1, pPlayer) == false) then
+
 			Controls.MPProposeCCButton:SetDisabled(false)
 			Controls.MPProposeCCLabel:SetAlpha( 1 );
 		else
-			--print('any active cc true')
+
 			Controls.MPProposeCCButton:SetDisabled(true)
 			Controls.MPProposeCCLabel:SetAlpha( 0.5 );
 		end
 
-		if (Game.IsAnyActiveProposalType(2) == false) and (Game.IsProposalTypeAvailable(2) == true) and (Game.IsProposalTypeOnCooldown(2, pPlayer) == false) then  -- scrap
-			--print('any active scrap false')
+		if (Game.IsAnyActiveProposalType(2) == false) and (Game.IsProposalTypeAvailable(2) == true) and (Game.IsProposalTypeOnCooldown(2, pPlayer) == false) then
+
 			Controls.MPProposeScrapButton:SetDisabled(false)
 			Controls.MPProposeScrapLabel:SetAlpha( 1 );
 		else
-			--print('any active scrap true')
+
 			Controls.MPProposeScrapButton:SetDisabled(true)
 			Controls.MPProposeScrapLabel:SetAlpha( 0.5 );
 		end
 	else
-		--print('has active proposal true')
+
 		Controls.MPProposeIrrButton:SetDisabled(true)
 		Controls.MPProposeCCButton:SetDisabled(true)
 		Controls.MPProposeScrapButton:SetDisabled(true)
@@ -836,7 +836,7 @@ function SetupScreen()
 		Controls.MPProposeScrapLabel:SetAlpha( 0.5 );
 	end
 
-	-- Populate Victories
+
 	PopulateDomination();
 	PopulateSpaceRace();
 	PopulateDiplomatic();
@@ -854,14 +854,14 @@ LuaEvents.OnProposalCreated.Add( UpdateIfVisible )
 Events.ActivePlayerTurnStart.Add( UpdateIfVisible );
 GameEvents.MPVotingSystemProposalResult.Add( UpdateIfVisible )
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function PopulateScoreScreen()
 	g_ScoreIM:ResetInstances();
 	g_ScoreList = {};
 	
 	local sortedPlayerList = {};
-	-- Loop through all the civs the active player knows
+
 	for iPlayerLoop = 0, GameDefines.MAX_CIV_PLAYERS-1, 1 do
 		local pPlayer = Players[iPlayerLoop];
 		if(not pPlayer:IsMinorCiv() and pPlayer:IsEverAlive()) then
@@ -874,22 +874,22 @@ function PopulateScoreScreen()
 	for i, v in ipairs(sortedPlayerList) do	
 		local pPlayer = Players[v];
 		
-		-- Create Instance
+
 		local controlTable = g_ScoreIM:GetInstance();
 		g_ScoreList[i] = controlTable;
 		
-		-- Set Leader Icon
+
 		SetCivLeader(pPlayer, 64, controlTable.Portrait);
 	
-		-- Set Civ Name
+
 		SetCivName(pPlayer, i, controlTable.Score, PreGame.IsMultiplayerGame(), 730);
 		controlTable.Name:SetText(controlTable.Score:GetText());
 		
-		-- Set Civ Icon
+
 		SetCivIcon(pPlayer, 64, controlTable.Icon, nil, controlTable.IconOut, not pPlayer:IsAlive(), 
 				   controlTable.CivIconBG, controlTable.CivIconShadow);
 		
-		-- Set Civ Score
+
 		controlTable.Score:SetText(pPlayer:GetScore());
 	end	
 	
@@ -898,8 +898,8 @@ function PopulateScoreScreen()
 	Controls.ScoreScrollPanel:CalculateInternalSize();
 end
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function PopulateSpaceRaceScreen()
 	g_TechIM:ResetInstances();
 	g_TechList = {};
@@ -910,7 +910,7 @@ function PopulateSpaceRaceScreen()
 	local apolloProj = GameInfoTypes["PROJECT_APOLLO_PROGRAM"];
 	if(apolloProj ~= -1) then
 		local sortedPlayerList = {};
-		-- Loop through all the civs the active player knows
+
 		for iPlayerLoop = 0, GameDefines.MAX_CIV_PLAYERS-1, 1 do
 			local pPlayer = Players[iPlayerLoop];
 			if(not pPlayer:IsMinorCiv() and pPlayer:IsEverAlive()) then
@@ -924,18 +924,18 @@ function PopulateSpaceRaceScreen()
 			local pPlayer = Players[v];
 			local pTeam = pPlayer:GetTeam();
 			
-			-- Create Instance
+
 			local controlTable = g_TechIM:GetInstance();
 			g_TechList[i] = controlTable;
 	
-			-- Set Civ Name
+
 			SetCivName(pPlayer, i, controlTable.Name, true, controlTable.Civ:GetSizeX() - controlTable.CivIconBG:GetSizeX());
 			
-			-- Set Civ Icon
+
 			SetCivIcon(pPlayer, 45, controlTable.Icon, nil, controlTable.IconOut, not pPlayer:IsAlive(),
 					   controlTable.CivIconBG, controlTable.CivIconShadow);
 			
-			-- Fill in Apollo Project
+
 			if(Teams[pTeam]:GetProjectCount(apolloProj) == 1) then
 				controlTable.ApolloIcon:SetColor(white);
 				
@@ -950,8 +950,8 @@ function PopulateSpaceRaceScreen()
 	Controls.ScrollPanel:CalculateInternalSize();
 end
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function CompareSpaceRace(a, b)
 	local playerA = Players[a];
 	local playerB = Players[b];
@@ -962,7 +962,7 @@ function CompareSpaceRace(a, b)
 	
 	if(apolloA) then
 		if(apolloB)then
-			--Add up parts
+
 			local partsA = 0;
 			local partsB = 0;
 			local proj = GameInfoTypes["PROJECT_SS_BOOSTER"];
@@ -1000,111 +1000,111 @@ function CompareSpaceRace(a, b)
 	end
 end
 
-----------------------------------------------------------------
-----------------------------------------------------------------
---[[
-function PopulateDiploScreen()
-	g_DiploIM:ResetInstances();
-	g_DiploList = {};
-	
-	local numDiplo = 0;
-	local tintColor = {x = 1, y = 1, z = 1, w = 0.25};
-	local totalVotes = 0;
-	
-	local sortedPlayerList = {};
-	-- Loop through all the civs the active player knows
-	for iPlayerLoop = 0, GameDefines.MAX_CIV_PLAYERS-1, 1 do
-		local pPlayer = Players[iPlayerLoop];
-		if(not pPlayer:IsMinorCiv() and pPlayer:IsEverAlive()) then
-			table.insert(sortedPlayerList, iPlayerLoop);			
-		end
-	end
-	
-	table.sort(sortedPlayerList, function(a, b) return Teams[Players[b]:GetTeam()]:GetTotalSecuredVotes() < 
-													   Teams[Players[a]:GetTeam()]:GetTotalSecuredVotes() end );
 
-	for i, v in ipairs(sortedPlayerList) do	
-		local pPlayer = Players[v];
-		local pTeam = pPlayer:GetTeam();
-		local iPlayerLoop = pPlayer:GetID();
 
-		-- Create Instance
-		numDiplo = numDiplo + 1;
-		local controlTable = g_DiploIM:GetInstance();
-		g_DiploList[numDiplo] = controlTable;
 
-		-- Set Civ Number
-		controlTable.Name:SetText( Locale.ConvertTextKey("TXT_KEY_NUMBERING_FORMAT", numDiplo) );
+
+
+
+	
+
+
+
+	
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		
-		-- Set Civ Icon
-		SetCivIcon(pPlayer, 45, controlTable.Icon, controlTable.IconFrame, controlTable.IconOut,
-				    not pPlayer:IsAlive() or Teams[pTeam]:GetLiberatedByTeam() ~= -1,
-				    controlTable.CivIconBG, controlTable.CivIconShadow);
+
+
+
+
 		
-		-- Alternate Colors
-		if(numDiplo % 2 == 0) then
-			controlTable.Civ:SetColor(tintColor);
-		end
+
+
+
+
 		
-		-- Set Votes
-		local selfVote = 0;
-		local csVotes = 0;
-		local libCityState = 0;
-		local libCiv = 0;
-		totalVotes = 0;
-		for i, v in pairs(Teams) do
-		    local iLeader = v:GetLeaderID();
-		    if( iLeader ~= -1 ) then
-    			local curPlayer = Players[v:GetLeaderID()];
-    			if(v:IsAlive()) then
-    				totalVotes = totalVotes + 1;
-    			end
+
+
+
+
+
+
+
+
+
+
+
+
+
     			
-    			if(v:IsHomeOfUnitedNations()) then
-    				totalVotes = totalVotes + 1;
-    			end
+
+
+
     			
-    			if(curPlayer:IsAlive()) then
-    				if(v:GetTeamVotingForInDiplo() == pTeam) then
-    					if(i == pTeam) then
-    						if(v:IsHomeOfUnitedNations()) then
-    							selfVote = 2;
-    						else
-    							selfVote = 1;
-    						end
-    					elseif(v:IsMinorCiv()) then
-    						if(pTeam == v:GetLiberatedByTeam()) then
-    							libCityState = libCityState + 1;
-    						elseif(iPlayerLoop == curPlayer:GetAlly()) then
-    							csVotes = csVotes + 1;
-    						end
-    					else
-    						if(pTeam == v:GetLiberatedByTeam()) then
-    							libCiv = libCiv + 1;
-    						end
-    					end
-    				end
-    			end
-			end
-		end	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		
-		controlTable.TotalVotes:SetText(Teams[pTeam]:GetTotalSecuredVotes());
-		controlTable.SelfVote:SetText(selfVote);
-		controlTable.CityStates:SetText(csVotes);	
-		controlTable.LiberatedCityStates:SetText(libCityState);		
-		controlTable.LiberatedCivs:SetText(libCiv);		
 
-	end	
-	Controls.TotalDiploVotes:SetText(Locale.ConvertTextKey("TXT_KEY_VP_DIPLO_VOTES").." "..totalVotes);
-	Controls.NeededVotes:SetText(Locale.ConvertTextKey("TXT_KEY_VP_DIPLO_VOTES_NEEDED").." "..Game.GetVotesNeededForDiploVictory());
-	Controls.DiploScrollPanel:CalculateInternalSize();
-end
---]]
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
 function SetCivLeader(pPlayer, iconSize, controlTable)
-	-- Use the Civilization_Leaders table to cross reference from this civ to the Leaders table
+
 	local pTeam = Teams[pPlayer:GetTeam()];
 	if (pTeam:IsHasMet(Game.GetActiveTeam()) or Game:IsNetworkMultiPlayer()) then
 		local leader = GameInfo.Leaders[pPlayer:GetLeaderType()];
@@ -1115,14 +1115,14 @@ function SetCivLeader(pPlayer, iconSize, controlTable)
 		IconHookup( 22, iconSize, "LEADER_ATLAS", controlTable );
 	end
 end
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function SetCivName(pPlayer, number, controlTable, truncate, controlSize)
 	if(truncate == nil)then
 		truncate = false;
 	end
 	
-	-- Set Text
+
 	local strPlayer = "";
 	local strCiv = "";
 	local myCivType = pPlayer:GetCivilizationType(); 
@@ -1162,11 +1162,11 @@ function SetCivName(pPlayer, number, controlTable, truncate, controlSize)
 	end
 end
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function SetCivIcon(pPlayer, iconSize, controlTable, controlTableTT, controlLost, lostCondition, controlBG, controlShadow)
 	local iPlayer = pPlayer:GetID();
-	-- Set Civ Icon
+
 	local pTeam = Teams[pPlayer:GetTeam()];
 	if (pTeam:IsHasMet(Game.GetActiveTeam()) or Game:IsNetworkMultiPlayer()) then
 		CivIconHookup( iPlayer, iconSize, controlTable, controlBG, controlShadow, false, true );
@@ -1188,7 +1188,7 @@ function SetCivIcon(pPlayer, iconSize, controlTable, controlTableTT, controlLost
 		end
 	end
 	
-	-- X out and gray any icons of civs who have lost capitals
+
 	if(lostCondition and controlLost ~= nil) then
 		local darken = {x = 1, y = 1, z = 1, w = 0.25};
 		controlLost:SetHide(false);
@@ -1196,12 +1196,12 @@ function SetCivIcon(pPlayer, iconSize, controlTable, controlTableTT, controlLost
 	end
 end
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function SetConquestCivIcon(pPlayer, iconSize, controlTable, controlTableTT, controlDominatingPlayer, controlConqueredCivIconBG, controlConqueredCivIconShadow, controlConqueredCivIcon, controlIconOut, pDominatingPlayer, controlBG, controlShadow)
 	local iPlayer = pPlayer:GetID();
 	
-	-- Set Civ Icon
+
 	local pTeam = Teams[pPlayer:GetTeam()];
 	local bHasMetOrMultiplayer = pTeam:IsHasMet(Game.GetActiveTeam()) or Game:IsNetworkMultiPlayer();
 	
@@ -1236,25 +1236,25 @@ function SetConquestCivIcon(pPlayer, iconSize, controlTable, controlTableTT, con
 	
 	if (iPlayer == iDominatingPlayer) then
 		controlDominatingPlayer:SetHide(true);
-		--controlIconOut:SetHide(true);
+
 	else
 		controlDominatingPlayer:SetHide(false);
-		--controlIconOut:SetHide(false);
-		--if (controlConqueredCivIcon) then
-		--	print("controlDominatingPlayer.ConqueredCivIcon: " .. controlConqueredCivIcon);
-		--else
-		--	print("controlDominatingPlayer.ConqueredCivIcon: nil");
-		--end
-		--if (controlConqueredCivIconBG) then
-		--	print("controlDominatingPlayer.ConqueredCivIconBG: " .. controlConqueredCivIconBG);
-		--else
-		--	print("controlDominatingPlayer.ConqueredCivIconBG: nil");		
-		--end
-		--if (controlConqueredCivIconShadow) then
-		--	print("controlDominatingPlayer.ConqueredCivIconShadow" .. controlConqueredCivIconShadow);
-		--else
-		--	print("controlDominatingPlayer.ConqueredCivIconShadow: nil");
-		--end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		if (pDominatingTeam:IsHasMet(Game.GetActiveTeam())) then
 			CivIconHookup(iDominatingPlayer, 45, controlConqueredCivIcon, controlConqueredCivIconBG, controlConqueredCivIconShadow, false, true);
 		else
@@ -1265,7 +1265,7 @@ function SetConquestCivIcon(pPlayer, iconSize, controlTable, controlTableTT, con
 	if (controlTableTT ~= nil) then
 		if (iPlayer == iDominatingPlayer) then
 			if (pTeam:IsHasMet(Game.GetActiveTeam())) then
-				-- get city name
+
 				local pOriginalCapital = nil;
 				for pCity in pPlayer:Cities() do
 					if (pCity:IsOriginalMajorCapital() and pCity:GetOriginalOwner() == iPlayer) then
@@ -1286,9 +1286,9 @@ function SetConquestCivIcon(pPlayer, iconSize, controlTable, controlTableTT, con
 				controlTableTT:SetToolTipString(Locale.ConvertTextKey("TXT_KEY_VP_DIPLO_TT_UNMET_CONTROLS_THEIR_CAPITAL"));			
 			end
 		else
-			-- get city name
+
 			if (pTeam:IsHasMet(Game.GetActiveTeam())) then
-				-- get city name
+
 				local pOriginalCapital = nil;
 				for pCity in pDominatingPlayer:Cities() do
 					if (pCity:IsOriginalMajorCapital() and pCity:GetOriginalOwner() == iPlayer) then
@@ -1330,49 +1330,49 @@ function SetConquestCivIcon(pPlayer, iconSize, controlTable, controlTableTT, con
 			end
 		end
 	
-		-- if not domination
-		--    if known player
-		--       "player controls their original capital of capital name"
-		--    else
-		--       "unknown player controls their original capital"
-		-- else
-		--    if known player
-		--       if known conquerer
-		--          "Dominating player controls the original adj capital of capital name"
-		--       else 
-		--          "An unmet player controls the original adj capital of capital name"
-		--    else unknown player
-		--       if known conquerer
-		--			"Dominating player controls the original capital of another civilization"
-		--       else
-		--          "An unmet player controls the original capital of another unmet civilization."
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	end
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function DeleteScoreScreen()
 	g_ScoreIM:ResetInstances();
 	g_ScoreList = {};
 end
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function DeleteSpaceRaceScreen()
 	g_TechIM:ResetInstances();
 	g_TechList = {};
 end
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function DeleteDiploScreen()
 	g_DiploIM:ResetInstances();
 	g_DiploList = {};
 end
 
---------------------------------------------
---------------------------------------------
+
+
 function GetPreReqs(techID)
 	
 	local found = false;
@@ -1392,8 +1392,8 @@ function GetPreReqs(techID)
 	end
 end
 
---------------------------------------------
---------------------------------------------
+
+
 function CountPreReqsAcquired()
 	g_PreReqsAcquired = 0;
 	local pTeam = Teams[Game.GetActiveTeam()];
@@ -1411,19 +1411,19 @@ function CountPreReqsAcquired()
 end
 Events.TechAcquired.Add( CountPreReqsAcquired );
 
---------------------------------------------
---------------------------------------------
--- Find Tech Pre-Reqs Once
---------------------------------------------
+
+
+
+
 local ApolloTech = GameInfo.Projects["PROJECT_APOLLO_PROGRAM"].TechPrereq;
 
 GetPreReqs(ApolloTech);
 CountPreReqsAcquired();
 
 
--------------------------------------------------
--- On Popup
--------------------------------------------------
+
+
+
 function OnPopup( popupInfo )
 
 	if( popupInfo.Type == ButtonPopupTypes.BUTTONPOPUP_VICTORY_INFO ) then
@@ -1442,9 +1442,9 @@ function OnPopup( popupInfo )
 end
 Events.SerialEventGameMessagePopup.Add( OnPopup );
 
-----------------------------------------------------------------
--- Key Down Processing
-----------------------------------------------------------------
+
+
+
 function InputHandler( uiMsg, wParam, lParam )
     if( uiMsg == KeyEvents.KeyDown )
     then
@@ -1457,15 +1457,15 @@ end
 ContextPtr:SetInputHandler( InputHandler );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
---function OnDisplay( type, player )
-	--UIManager:QueuePopup( ContextPtr, PopupPriority.VictoryProgress );
---end
 
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
+
+
+
+
+
 function ShowHideHandler( bIsHide, bIsInit )
     
     if( not bIsInit ) then
@@ -1482,7 +1482,7 @@ function ShowHideHandler( bIsHide, bIsInit )
 end
 ContextPtr:SetShowHideHandler( ShowHideHandler );
 
-----------------------------------------------------------------
--- 'Active' (local human) player has changed
-----------------------------------------------------------------
+
+
+
 Events.GameplaySetActivePlayer.Add(OnBack);

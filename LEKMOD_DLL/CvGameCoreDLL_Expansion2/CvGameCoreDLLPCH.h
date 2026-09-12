@@ -1,27 +1,27 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//!	 \file		CvGameCoreDLLPCH.h
-//!  \brief     Precompiled header for GameCore DLL.
-//!
-//!		This includes all common header files and defines used by GameCore.
-//!
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #pragma once
 #ifndef CVGAMECOREDLLPCH_H
 #define CVGAMECOREDLLPCH_H
 
-//  [5/18/2009 dbaker]
-// Disables warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+
+
 #pragma warning( disable : 4800 )
 #pragma warning( disable : 4355 )
 
-// Take off iterator security checks in release mode
+
 #if (defined(_MSC_VER) && (_MSC_VER >= 1300) && !defined(_DEBUG))
 #  if !defined(_SECURE_SCL)
 #    define _SECURE_SCL 0
@@ -30,13 +30,13 @@
 #    define _HAS_ITERATOR_DEBUGGING 0
 #  endif
 
-// Safety check. If _SECURE_SCL is off, and _HAS_ITERATOR_DEBUGGING is on, you will crash.
+
 #  if (_SECURE_SCL == 0) && (_HAS_ITERATOR_DEBUGGING == 1 )
 #    error "_SECURE_SCL == 0 and _HAS_ITERATOR_DEBUGGING == 1. This combination settings can cause crashes."
 #  endif
 #endif
 
-//Similar to UNUSED_VARIABLE, but implies that the variable IS used in debug builds.
+
 #define DEBUG_VARIABLE(x) (void)(sizeof(x))
 
 #include "CvGameCoreDLLUtil_Win32Headers.h"
@@ -69,12 +69,12 @@ typedef wchar_t          wchar;
 
 #define LIMIT_RANGE(low, value, high) value = (value < low ? low : (value > high ? high : value));
 #define M_PI       3.14159265358979323846
-#define fM_PI		3.141592654f		//!< Pi (float)
+#define fM_PI		3.141592654f
 
 #define STDEXT stdext
 #ifdef NQM_FAST_COMP
-// Avoids Visual Studio's compiler from generating inefficient code
-// FastMax() and FastMin() taken from https://randomascii.wordpress.com/2013/11/24/stdmin-causing-three-times-slowdown-on-vc/
+
+
 template<class T> inline T FastMax(const T& _Left, const T& _Right) { return (_DEBUG_LT(_Left, _Right) ? _Right : _Left); }
 template<class T> inline T FastMin(const T& _Left, const T& _Right) { return (_DEBUG_LT(_Right, _Left) ? _Right : _Left); }
 #define MAX(a, b) FastMax(a, b)
@@ -170,9 +170,9 @@ template<class T> inline T FastMin(const T& _Left, const T& _Right) { return (_D
 using namespace fastdelegate;
 
 #ifdef FINAL_RELEASE
-// Undefine OutputDebugString in final release builds
+
 #undef OutputDebugString
 #define OutputDebugString(x)
-#endif //FINAL_RELEASE
+#endif
 
-#endif	// CVGAMECOREDLLPCH_H
+#endif

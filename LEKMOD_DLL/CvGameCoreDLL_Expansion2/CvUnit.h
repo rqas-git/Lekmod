@@ -1,13 +1,13 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
-// unit.h
+
 
 #ifndef CIV5_UNIT_H
 #define CIV5_UNIT_H
@@ -23,7 +23,7 @@
 
 #define DEFAULT_UNIT_MAP_LAYER 0
 
-#pragma warning( disable: 4251 )		// needs to have dll-interface to be used by clients of class
+#pragma warning( disable: 4251 )
 
 class CvPlot;
 class CvArea;
@@ -41,9 +41,9 @@ typedef FObjectHandle<CvUnit> UnitHandle;
 typedef FStaticVector<CvPlot*, 20, true, c_eCiv5GameplayDLL, 0> UnitMovementQueue;
 struct CvUnitCaptureDefinition
 {
-	PlayerTypes eOriginalOwner;		// Who first created the unit
-	PlayerTypes eOldPlayer;			// The previous owner of the unit, no necessarily the original owner
-	UnitTypes	eOldType;			// Previous type of the unit, the type can change when capturing
+	PlayerTypes eOriginalOwner;
+	PlayerTypes eOldPlayer;
+	UnitTypes	eOldType;
 	PlayerTypes eCapturingPlayer;
 	UnitTypes	eCaptureUnitType;
 	int iX;
@@ -91,10 +91,10 @@ public:
 	    MOVEFLAG_DESTINATION				  = 0x004,
 	    MOVEFLAG_NOT_ATTACKING_THIS_TURN	  = 0x008,
 	    MOVEFLAG_IGNORE_STACKING			  = 0x010,
-	    MOVEFLAG_PRETEND_EMBARKED			  = 0x020, // so we can check movement as if the unit was embarked
-	    MOVEFLAG_PRETEND_UNEMBARKED			  = 0x040, // to check movement as if the unit was unembarked
-	    MOVEFLAG_PRETEND_CORRECT_EMBARK_STATE = 0x080, // check to see if the unit can move into the tile in an embarked or unembarked state
-		MOVEFLAG_STAY_ON_LAND                 = 0x100, // don't embark, even if you can
+	    MOVEFLAG_PRETEND_EMBARKED			  = 0x020,
+	    MOVEFLAG_PRETEND_UNEMBARKED			  = 0x040,
+	    MOVEFLAG_PRETEND_CORRECT_EMBARK_STATE = 0x080,
+		MOVEFLAG_STAY_ON_LAND                 = 0x100,
 	};
 
 	DestructionNotification<UnitHandle>& getDestructionNotification();
@@ -113,7 +113,7 @@ public:
 	void setupGraphical();
 
 	void initPromotions();
-	void uninitInfos();  // used to uninit arrays that may be reset due to mod changes
+	void uninitInfos();
 
 	void convert(CvUnit* pUnit, bool bIsUpgrade);
 	void kill(bool bDelay, PlayerTypes ePlayer = NO_PLAYER);
@@ -154,7 +154,7 @@ public:
 
 	bool UnitAttack(int iX, int iY, int iFlags, int iSteps=0);
 	bool UnitMove(CvPlot* pPlot, bool bCombat, CvUnit* pCombatUnit, bool bEndMove = false);
-	int  UnitPathTo(int iX, int iY, int iFlags, int iPrevETA = -1, bool bBuildingRoute = false); // slewis'd the iPrevETA
+	int  UnitPathTo(int iX, int iY, int iFlags, int iPrevETA = -1, bool bBuildingRoute = false);
 	bool UnitRoadTo(int iX, int iY, int iFlags);
 	bool UnitBuild(BuildTypes eBuild);
 	bool canEnterTerritory(TeamTypes eTeam, bool bIgnoreRightOfPassage = false, bool bIsCity = false, bool bIsDeclareWarMove = false) const;
@@ -200,7 +200,7 @@ public:
 
 	bool CanDistanceGift(PlayerTypes eToPlayer) const;
 
-	// Cargo/transport methods (units inside other units)
+
 	bool canLoadUnit(const CvUnit& pUnit, const CvPlot& pPlot) const;
 	void loadUnit(CvUnit& pUnit);
 	bool canLoad(const CvPlot& pPlot) const;
@@ -224,9 +224,9 @@ public:
 	bool hasCargo() const;
 	bool canCargoAllMove() const;
 	int getUnitAICargo(UnitAITypes eUnitAI) const;
-	//
 
-	bool canHold(const CvPlot* pPlot) const; // skip turn
+
+	bool canHold(const CvPlot* pPlot) const;
 	bool canSleep(const CvPlot* pPlot) const;
 	bool canFortify(const CvPlot* pPlot) const;
 	bool canAirPatrol(const CvPlot* pPlot) const;
@@ -251,7 +251,7 @@ public:
 	bool canEmbarkOnto(const CvPlot& pOriginPlot, const CvPlot& pTargetPlot, bool bOverrideEmbarkedCheck = false, bool bIsDestination = false) const;
 	bool canDisembarkOnto(const CvPlot& pOriginPlot, const CvPlot& pTargetPlot, bool bOverrideEmbarkedCheck = false, bool bIsDestination = false) const;
 	bool canDisembarkOnto(const CvPlot& pTargetPlot, bool bIsDestination = false) const;
-	bool CanEverEmbark() const;  // can this unit ever change into an embarked unit
+	bool CanEverEmbark() const;
 	void embark(CvPlot* pPlot);
 	void disembark(CvPlot* pPlot);
 	inline bool isEmbarked() const
@@ -520,7 +520,7 @@ public:
 	int GetMaxDefenseStrength(const CvPlot* pInPlot, const CvUnit* pAttacker, bool bFromRangedAttack = false) const;
 	int GetMaxRangedCombatStrength(const CvUnit* pOtherUnit, const CvCity* pCity, bool bAttacking, bool bForRangedAttack) const;
 #else
-	// Change to CvCombatInfo based parameters
+
 	int GetGenericMaxStrengthModifier(const CvCombatInfo& kInfo, CvCombatModifierList* kModifierList = NULL) const;
 	int GetMaxAttackStrength(const CvCombatInfo& kInfo, CvCombatModifierList* kModifierList = NULL) const;
 	int GetMaxDefenseStrength(const CvCombatInfo& kInfo, CvCombatModifierList* kModifierList = NULL) const;
@@ -572,7 +572,7 @@ public:
 	int getIgnoreTerrainCostCount() const;
 	void changeIgnoreTerrainCostCount(int iValue);
 
-	// from CMP
+
 
 	const DomainTypes getGiveDomain() const;
 	void ChangeGiveDomain(DomainTypes eDomain);
@@ -582,7 +582,7 @@ public:
 	const UnitTypes getConvertDomainUnitType() const;
 	void ChangeConvertDomainUnit(UnitTypes eUnit);
 
-	//
+
 
 	bool IsRoughTerrainEndsTurn() const;
 	int GetRoughTerrainEndsTurnCount() const;
@@ -977,14 +977,14 @@ public:
 
 	void changeExtraAttacks(int iChange);
 
-	// Citadel
+
 	bool IsNearEnemyCitadel(int& iCitadelDamage);
 
-	// Great General Stuff
+
 	bool IsNearGreatGeneral() const;
 	bool IsStackedGreatGeneral() const;
 	int GetGreatGeneralStackMovement() const;
-	int GetEmbarkedUnitStackMovement() const; // NQMP GJS - Danish Longship
+	int GetEmbarkedUnitStackMovement() const;
 #ifdef LEKMOD_LONGSHIP_ALL_PROMO
 	int GetLandUnitStackMovement() const;
 #endif
@@ -1003,8 +1003,8 @@ public:
 
 	bool IsGreatGeneralReceivesMovement() const;
 	void ChangeGreatGeneralReceivesMovementCount(int iChange);
-	bool IsEmbarkedUnitReceivesMovement() const; // NQMP GJS - Danish Longship
-	void ChangeEmbarkedUnitReceivesMovementCount(int iChange); // NQMP GJS - Danish Longship
+	bool IsEmbarkedUnitReceivesMovement() const;
+	void ChangeEmbarkedUnitReceivesMovementCount(int iChange);
 #ifdef LEKMOD_LONGSHIP_ALL_PROMO
 	bool IsLandUnitReceivesMovement() const;
 	void ChangeLandUnitReceivesMovementCount(int iChange);
@@ -1018,7 +1018,7 @@ public:
 
 	bool IsIgnoreGreatGeneralBenefit() const;
 	void ChangeIgnoreGreatGeneralBenefitCount(int iChange);
-	// END Great General Stuff
+
 
 	bool IsIgnoreZOC() const;
 	void ChangeIgnoreZOCCount(int iChange);
@@ -1189,7 +1189,7 @@ public:
 	int GetScientistBirthTurn() const;
 	void SetScientistBirthTurn(int iValue);
 #endif
-	// Arbitrary Script Data
+
 	std::string getScriptData() const;
 #ifdef AUI_WARNING_FIXES
 	void setScriptData(const std::string& szNewValue);
@@ -1316,7 +1316,7 @@ public:
 	const FAutoArchive& getSyncArchive() const;
 	FAutoArchive& getSyncArchive();
 
-	// Mission routines
+
 	void PushMission(MissionTypes eMission, int iData1 = -1, int iData2 = -1, int iFlags = 0, bool bAppend = false, bool bManual = false, MissionAITypes eMissionAI = NO_MISSIONAI, CvPlot* pMissionAIPlot = NULL, CvUnit* pMissionAIUnit = NULL);
 	void PopMission();
 	void AutoMission();
@@ -1339,7 +1339,7 @@ public:
 	void SetMissionAI(MissionAITypes eNewMissionAI, CvPlot* pNewPlot, CvUnit* pNewUnit);
 	CvUnit* GetMissionAIUnit();
 
-	// Combat eligibility routines
+
 	inline bool IsCombatUnit() const
 	{
 		return (m_iBaseCombat > 0);
@@ -1352,7 +1352,7 @@ public:
 	bool IsCanDefend(const CvPlot* pPlot = NULL) const;
 	bool IsEnemyInMovementRange(bool bOnlyFortified = false, bool bOnlyCities = false);
 
-	// Path-finding routines
+
 	bool GeneratePath(const CvPlot* pToPlot, int iFlags = 0, bool bReuse = false, int* piPathTurns = NULL) const;
 	void ResetPath();
 	CvPlot* GetPathFirstPlot() const;
@@ -1422,7 +1422,7 @@ public:
 	int GetNumGoodyHutsPopped() const;
 	void ChangeNumGoodyHutsPopped(int iValue);
 
-	// Ported in from old CvUnitAI class
+
 	int SearchRange(int iRange) const;
 	bool PlotValid(CvPlot* pPlot) const;
 
@@ -1447,7 +1447,7 @@ public:
 #endif
 	bool DoWithdrawFromMelee(CvUnit& pAttacker);
 
-	// these are do to a unit using Heavy Charge against you
+
 #ifdef AUI_UNIT_FIX_HEAVY_CHARGE_BONUS_INTEGRATED_INTO_STACKS
 	bool CanFallBackFromMelee(const CvUnit& kAttacker, const CvPlot* pFromPlot = NULL) const;
 #elif defined(AUI_CONSTIFY)
@@ -1593,13 +1593,13 @@ protected:
 
 	FAutoVariable<int, CvUnit> m_iIgnoreTerrainCostCount;
 
-	// CMP
+
 
 	FAutoVariable<int, CvUnit> m_eGiveDomain;
 	FAutoVariable<int, CvUnit> m_eConvertDomain;
 	FAutoVariable<UnitTypes, CvUnit> m_eConvertDomainUnit;
 
-	//
+
 	FAutoVariable<int, CvUnit> m_iRoughTerrainEndsTurnCount;
 	FAutoVariable<int, CvUnit> m_iEmbarkAbilityCount;
 	FAutoVariable<int, CvUnit> m_iHoveringUnitCount;
@@ -1623,7 +1623,7 @@ protected:
 	int m_iGoldenAgeValueFromKills;
 	FAutoVariable<int, CvUnit> m_iTacticalAIPlotX;
 	FAutoVariable<int, CvUnit> m_iTacticalAIPlotY;
-	FAutoVariable<int, CvUnit> m_iGarrisonCityID;   // unused
+	FAutoVariable<int, CvUnit> m_iGarrisonCityID;
 	FAutoVariable<int, CvUnit> m_iFlags;
 	FAutoVariable<int, CvUnit> m_iNumAttacks;
 	FAutoVariable<int, CvUnit> m_iAttacksMade;
@@ -1636,7 +1636,7 @@ protected:
 	int m_iGreatAdmiralCount;
 	FAutoVariable<int, CvUnit> m_iGreatGeneralModifier;
 	int m_iGreatGeneralReceivesMovementCount;
-	int m_iEmbarkedUnitReceivesMovementCount; // NQMP GJS - Danish Longship
+	int m_iEmbarkedUnitReceivesMovementCount;
 #ifdef LEKMOD_LONGSHIP_ALL_PROMO
 	int m_iLandUnitReceivesMovementCount;
 #endif
@@ -1697,7 +1697,7 @@ protected:
 	FAutoVariable<GreatPeopleDirectiveTypes, CvUnit> m_eGreatPeopleDirectiveType;
 	CvUnitEntry* m_pUnitInfo;
 
-	bool m_bWaitingForMove;			///< If true, the unit is busy visualizing its move.
+	bool m_bWaitingForMove;
 
 	IDInfo m_combatUnit;
 	IDInfo m_combatCity;
@@ -1740,7 +1740,7 @@ protected:
 
 	UnitMovementQueue m_unitMoveLocs;
 
-	bool m_bIgnoreDangerWakeup; // slewis - make this an autovariable when saved games are broken
+	bool m_bIgnoreDangerWakeup;
 	int m_iEmbarkedAllWaterCount;
 	int m_iEmbarkExtraVisibility;
 	int m_iEmbarkDefensiveModifier;
@@ -1759,14 +1759,14 @@ protected:
 	int m_iKillRefreshMovesCount;
 	int m_iKillRefreshAttacksCount;
 #endif
-	int m_iMapLayer;		// Which layer does the unit reside on for pathing/stacking/etc.
+	int m_iMapLayer;
 	int m_iNumGoodyHutsPopped;
 	int m_iLastGameTurnAtFullHealth;
 		
 	CvString m_strName;
 	GreatWorkType m_eGreatWork;
 	int m_iTourismBlastStrength;
-	int m_iResearchBulbAmount; // GJS - new stored bulb amount
+	int m_iResearchBulbAmount;
 
 #ifdef DECREASE_BULB_AMOUNT_OVER_TIME
 	int m_iScientistBirthTurn;
@@ -1799,7 +1799,7 @@ protected:
 #endif
 	bool DoWithdrawFromMelee(CvUnit& pAttacker);
 
-	// these are do to a unit using Heavy Charge against you
+
 	bool CanFallBackFromMelee(const CvUnit& pAttacker) const;
 	bool DoFallBackFromMelee(CvUnit& pAttacker);
 

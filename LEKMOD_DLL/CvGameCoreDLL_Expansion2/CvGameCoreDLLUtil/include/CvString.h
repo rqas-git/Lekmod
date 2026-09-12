@@ -9,14 +9,14 @@
 #include "CvAssert.h"
 class FDataStream;
 
-//
-// simple string classes, based on stl, but with a few helpers
-//
-// DON'T add any data members or virtual functions to these classes, so they stay the same size as their stl counterparts
-//
-// Mustafa Thamer
-// Firaxis Games, copyright 2005
-//
+
+
+
+
+
+
+
+
 class CvString : public std::string
 {
 public:
@@ -27,17 +27,17 @@ public:
 
 	~CvString() {}
 
-	// implicit conversion
+
 	operator const char*() const 	{ return c_str(); }												
 
-	// operators
+
 	char& operator[](int i) { return std::string::operator[](i);	}
 	char& operator[](std::string::size_type i) { return std::string::operator[](i);	}
 	const char operator[](int i) const { return std::string::operator[](i);	}
 	CvString& operator=( const char* s) { if (s) assign(s); else clear();	return *this; }	
 	CvString& operator=( const std::string& s) { assign(s.c_str());	return *this; }	
 
-	// FString compatibility
+
 #if defined(LEKMOD_MACOS)
 	bool IsEmpty() const { return (empty() || (*this)[0] == '\0');}
 #else
@@ -50,7 +50,7 @@ public:
 	int GetLength() const { return (int) size(); }
 	int Replace( char chOld, char chNew );
 
-	// static helpers
+
 	static bool formatv(std::string& out, const char * fmt, va_list args);
 	static bool format(std::string & out, const char * fmt, ...);
 	static CvString format(const char * fmt, ...);
@@ -78,7 +78,7 @@ public:
 		int newLength = m_iLength + 1;
 		ensureCapacity(newLength + 1);
 		m_pBuffer[m_iLength] = character;
-		m_pBuffer[m_iLength + 1] = 0; //null character
+		m_pBuffer[m_iLength + 1] = 0;
 		m_iLength = newLength;
 	}
 
@@ -91,8 +91,8 @@ public:
 		int newLength = m_iLength + inputLength;
 		ensureCapacity(newLength + 1);
 
-		//append data
-		memcpy(m_pBuffer + m_iLength, szCharacters, sizeof(char) * (inputLength + 1)); //null character
+
+		memcpy(m_pBuffer + m_iLength, szCharacters, sizeof(char) * (inputLength + 1));
 		m_iLength = newLength;
 	}
 
@@ -122,7 +122,7 @@ public:
 		if(m_pBuffer != NULL)
 		{
 			m_iLength = 0;
-			m_pBuffer[0] = 0; //null character
+			m_pBuffer[0] = 0;
 		}
 	}
 
@@ -145,19 +145,19 @@ private:
 	{
 		if(newCapacity > m_iCapacity)
 		{
-			m_iCapacity = 2 * newCapacity; //grow by %100
+			m_iCapacity = 2 * newCapacity;
 			char *newBuffer = new char[m_iCapacity];
 
-			//copy data
+
 			if(m_pBuffer != NULL)
 			{
-				memcpy(newBuffer, m_pBuffer, sizeof(char) * (m_iLength + 1)); //null character
-				//erase old memory
+				memcpy(newBuffer, m_pBuffer, sizeof(char) * (m_iLength + 1));
+
 				delete [] m_pBuffer;
 			}
 			else
 			{
-				newBuffer[0] = 0; //null character
+				newBuffer[0] = 0;
 			}
 
 			m_pBuffer = newBuffer;
@@ -169,10 +169,10 @@ private:
 	int m_iCapacity;
 };
 
-//////////////////////////////////////////////////////////////////////////
-// INLINES
-// Don't move these into a cpp file, since I don't want CvString to be part of the DLL, MT
-//////////////////////////////////////////////////////////////////////////
+
+
+
+
 
 inline int CvString::Replace( char chOld, char chNew )
 {
@@ -188,9 +188,9 @@ inline int CvString::Replace( char chOld, char chNew )
 	return iCnt;
 }
 
-//
-// static
-//
+
+
+
 inline bool CvString::formatv(std::string & out, const char * fmt, va_list args)
 {
 	char buf[2048];
@@ -217,7 +217,7 @@ inline bool CvString::formatv(std::string & out, const char * fmt, va_list args)
 
 	if ( attempts==kMaxAttempts )
 	{
-		// dxPrintNL( "CvString::formatv - Max reallocs occurred while formatting string. Result is likely truncated!", 0 );
+
 	}
 
 	if (success)
@@ -231,18 +231,18 @@ inline bool CvString::formatv(std::string & out, const char * fmt, va_list args)
 	return success;
 }
 
-//
-// static
-//
+
+
+
 inline std::string CvString::formatv(const char * fmt, va_list args)
 {
 	std::string result;
 	formatv( result, fmt, args );
 	return result;
 }
-//
-// static
-//
+
+
+
 inline CvString CvString::format(const char * fmt, ...)
 {
 	std::string result;
@@ -253,9 +253,9 @@ inline CvString CvString::format(const char * fmt, ...)
 	return CvString(result);
 }
 
-//
-// static
-//
+
+
+
 inline bool CvString::format(std::string & out, const char * fmt, ...)
 {
 	va_list args;
@@ -266,9 +266,9 @@ inline bool CvString::format(std::string & out, const char * fmt, ...)
 }
 
 
-//
-//
-//
+
+
+
 inline void CvString::Format( const char* lpszFormat, ... )
 {
 	std::string result;
@@ -279,5 +279,4 @@ inline void CvString::Format( const char* lpszFormat, ... )
 	*this = result;
 }
 
-#endif	// CvString_h
-
+#endif

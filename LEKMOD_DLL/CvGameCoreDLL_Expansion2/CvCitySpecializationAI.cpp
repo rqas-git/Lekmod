@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 
 #include "CvGameCoreDLLPCH.h"
 #include "CvCitySpecializationAI.h"
@@ -17,14 +17,14 @@
 #include "CvWonderProductionAI.h"
 #include "cvStopWatch.h"
 
-// must be included after all other headers
+
 #include "LintFree.h"
 
 
 
-//=====================================
-// CvCitySpecializationXMLEntry
-//=====================================
+
+
+
 CvCitySpecializationXMLEntry::CvCitySpecializationXMLEntry(void):
 	m_piFlavorValue(NULL),
 	m_piYieldTargetTimes100(NULL),
@@ -36,34 +36,34 @@ CvCitySpecializationXMLEntry::CvCitySpecializationXMLEntry(void):
 	m_bOperationUnitProvider(false)
 {
 }
-//------------------------------------------------------------------------------
+
 CvCitySpecializationXMLEntry::~CvCitySpecializationXMLEntry(void)
 {
 	SAFE_DELETE_ARRAY(m_piFlavorValue);
 	SAFE_DELETE_ARRAY(m_piYieldTargetTimes100);
 }
-//------------------------------------------------------------------------------
+
 bool CvCitySpecializationXMLEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
 		return false;
 
-	//Basic Properties
+
 	m_iSubtype = kResults.GetInt("SubType");
 
-	//References
+
 	const char* szYieldType = kResults.GetText("YieldType");
 	if(szYieldType != NULL)
 	{
 		m_eYieldType = (YieldTypes)GC.getInfoTypeForString(szYieldType);
 	}
 
-	//Arrays
+
 	const char* szType = GetType();
 	kUtility.SetFlavors(m_piFlavorValue, "CitySpecialization_Flavors", "CitySpecializationType", szType);
 	kUtility.SetYields(m_piYieldTargetTimes100, "CitySpecialization_TargetYields", "CitySpecializationType", szType);
 
-	//Booleans
+
 	m_bWonder = kResults.GetBool("IsWonder");
 	m_bDefault = kResults.GetBool("IsDefault");
 	m_bMustBeCoastal = kResults.GetBool("MustBeCoastal");
@@ -72,7 +72,7 @@ bool CvCitySpecializationXMLEntry::CacheResults(Database::Results& kResults, CvD
 	return true;
 }
 
-/// What Flavors will be added by adopting this Strategy?
+
 int CvCitySpecializationXMLEntry::GetFlavorValue(int i) const
 {
 	FAssertMsg(i < GC.getNumFlavorTypes(), "Index out of bounds");
@@ -80,7 +80,7 @@ int CvCitySpecializationXMLEntry::GetFlavorValue(int i) const
 	return m_piFlavorValue ? m_piFlavorValue[i] : -1;
 }
 
-/// Yield associated with this specialization
+
 YieldTypes CvCitySpecializationXMLEntry::GetYieldType() const
 {
 	return m_eYieldType;
@@ -92,40 +92,40 @@ int CvCitySpecializationXMLEntry::GetYieldTargetTimes100(YieldTypes eYield) cons
 }
 
 
-/// Subtype of this city specialization if there are more than one specializations for this yield
+
 int CvCitySpecializationXMLEntry::GetSubtype() const
 {
 	return m_iSubtype;
 }
 
-/// Is this the subtype for building wonders (a special case)
+
 bool CvCitySpecializationXMLEntry::IsWonder() const
 {
 	return m_bWonder;
 }
 
-/// Is this the default subtype used to fill in gaps (a special case)
+
 bool CvCitySpecializationXMLEntry::IsDefault() const
 {
 	return m_bDefault;
 }
 
-/// Is this a specialization reserved for coastal cities?
+
 bool CvCitySpecializationXMLEntry::IsMustBeCoastal() const
 {
 	return m_bMustBeCoastal;
 }
 
-/// Is this a specialization used to provide units to operations?
+
 bool CvCitySpecializationXMLEntry::IsOperationUnitProvider() const
 {
 	return m_bOperationUnitProvider;
 }
 
-//=====================================
-// CvCitySpecializationXMLEntries
-//=====================================
-/// Constructor
+
+
+
+
 CvCitySpecializationXMLEntries::CvCitySpecializationXMLEntries(void)
 {
 #ifdef AUI_WARNING_FIXES
@@ -134,31 +134,31 @@ CvCitySpecializationXMLEntries::CvCitySpecializationXMLEntries(void)
 #endif
 }
 
-/// Destructor
+
 CvCitySpecializationXMLEntries::~CvCitySpecializationXMLEntries(void)
 {
 	DeleteArray();
 }
 
-/// Returns vector of AIStrategy entries
+
 std::vector<CvCitySpecializationXMLEntry*>& CvCitySpecializationXMLEntries::GetCitySpecializationEntries()
 {
 	return m_paCitySpecializationEntries;
 }
 
-/// Number of defined AIStrategies
+
 int CvCitySpecializationXMLEntries::GetNumCitySpecializations()
 {
 	return m_paCitySpecializationEntries.size();
 }
 
-/// Get a specific entry
+
 CvCitySpecializationXMLEntry* CvCitySpecializationXMLEntries::GetEntry(int index)
 {
 	return m_paCitySpecializationEntries[index];
 }
 
-/// Find the first specializations for a yield
+
 CitySpecializationTypes CvCitySpecializationXMLEntries::GetFirstSpecializationForYield(YieldTypes eYield)
 {
 	m_CurrentYield = eYield;
@@ -172,7 +172,7 @@ CitySpecializationTypes CvCitySpecializationXMLEntries::GetFirstSpecializationFo
 	return NO_CITY_SPECIALIZATION;
 }
 
-/// Find the next specialization for a yield
+
 CitySpecializationTypes CvCitySpecializationXMLEntries::GetNextSpecializationForYield()
 {
 #ifdef AUI_WARNING_FIXES
@@ -189,7 +189,7 @@ CitySpecializationTypes CvCitySpecializationXMLEntries::GetNextSpecializationFor
 	return NO_CITY_SPECIALIZATION;
 }
 
-// How many specializations are there for this yield?
+
 int CvCitySpecializationXMLEntries::GetNumSpecializationsForYield(YieldTypes eYield)
 {
 	int iRtnValue = 0;
@@ -204,7 +204,7 @@ int CvCitySpecializationXMLEntries::GetNumSpecializationsForYield(YieldTypes eYi
 	return iRtnValue;
 }
 
-/// Clear AIStrategy entries
+
 void CvCitySpecializationXMLEntries::DeleteArray()
 {
 	for(std::vector<CvCitySpecializationXMLEntry*>::iterator it = m_paCitySpecializationEntries.begin(); it != m_paCitySpecializationEntries.end(); ++it)
@@ -215,11 +215,11 @@ void CvCitySpecializationXMLEntries::DeleteArray()
 	m_paCitySpecializationEntries.clear();
 }
 
-//=====================================
-// CvCitySpecializationAI
-//=====================================
 
-/// Constructor
+
+
+
+
 CvCitySpecializationAI::CvCitySpecializationAI():
 	m_bSpecializationsDirty(false),
 	m_bInterruptWonders(false),
@@ -239,13 +239,13 @@ CvCitySpecializationAI::CvCitySpecializationAI():
 {
 }
 
-/// Destructor
+
 CvCitySpecializationAI::~CvCitySpecializationAI(void)
 {
 	Uninit();
 }
 
-/// Initialize
+
 void CvCitySpecializationAI::Init(CvCitySpecializationXMLEntries* pSpecializations, CvPlayer* pPlayer)
 {
 	m_pSpecializations = pSpecializations;
@@ -254,12 +254,12 @@ void CvCitySpecializationAI::Init(CvCitySpecializationXMLEntries* pSpecializatio
 	Reset();
 }
 
-/// Deallocate memory created in initialize
+
 void CvCitySpecializationAI::Uninit()
 {
 }
 
-/// Reset AIStrategy status array to all false
+
 void CvCitySpecializationAI::Reset()
 {
 	m_bSpecializationsDirty = false;
@@ -273,10 +273,10 @@ void CvCitySpecializationAI::Reset()
 	m_iLastTurnEvaluated = 0;
 }
 
-/// Serialization read
+
 void CvCitySpecializationAI::Read(FDataStream& kStream)
 {
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion;
 	kStream >> uiVersion;
 
@@ -298,10 +298,10 @@ void CvCitySpecializationAI::Read(FDataStream& kStream)
 	}
 }
 
-/// Serialization write
+
 void CvCitySpecializationAI::Write(FDataStream& kStream) const
 {
-	// Current version number
+
 	uint uiVersion = 2;
 	kStream << uiVersion;
 
@@ -314,59 +314,59 @@ void CvCitySpecializationAI::Write(FDataStream& kStream) const
 	kStream << m_iLastTurnEvaluated;
 }
 
-/// Returns the Player object the Strategies are associated with
+
 CvPlayer* CvCitySpecializationAI::GetPlayer()
 {
 	return m_pPlayer;
 }
 
-/// Returns AIStrategies object stored in this class
+
 CvCitySpecializationXMLEntries* CvCitySpecializationAI::GetCitySpecializations()
 {
 	return m_pSpecializations;
 }
 
-/// Called every turn to see what Strategies this player should using (or not)
+
 void CvCitySpecializationAI::DoTurn()
 {
 	AI_PERF_FORMAT("AI-perf.csv", ("CvCitySpecializationAI::DoTurn, Turn %03d, %s", GC.getGame().getElapsedGameTurns(), GetPlayer()->getCivilizationShortDescription()) );
 
 	int iCityLoop = 0;
 
-	// No city specializations for humans!
+
 	if(m_pPlayer->isHuman())
 	{
 		return;
 	}
 
-	// No city specializations for minor civs
+
 	if(m_pPlayer->isMinorCiv())
 	{
 		return;
 	}
 
-	// No city specializations early in the game
+
 	if(GC.getGame().getGameTurn() < GC.getAI_CITY_SPECIALIZATION_EARLIEST_TURN())
 	{
 		return;
 	}
 
-	// No city specialization if we don't have enough cities
+
 	if(m_pPlayer->getNumCities() < 2)
 	{
 		return;
 	}
 
-	// See if need to update assignments
+
 	if(m_bSpecializationsDirty || (m_iLastTurnEvaluated + GC.getAI_CITY_SPECIALIZATION_REEVALUATION_INTERVAL() > GC.getGame().getGameTurn()))
 	{
-		m_eNextWonderDesired = m_pPlayer->GetWonderProductionAI()->ChooseWonder(false /*bUseAsyncRandom*/, true /*bAdjustForOtherPlayers*/, m_iNextWonderWeight);
+		m_eNextWonderDesired = m_pPlayer->GetWonderProductionAI()->ChooseWonder(false                    , true                           , m_iNextWonderWeight);
 		WeightSpecializations();
 		AssignSpecializations();
 		m_bSpecializationsDirty = false;
 		m_iLastTurnEvaluated = GC.getGame().getGameTurn();
 
-		// Do we need to choose production again at all our cities?
+
 		if(m_bInterruptWonders)
 		{
 			CvCity* pLoopCity = NULL;
@@ -374,20 +374,20 @@ void CvCitySpecializationAI::DoTurn()
 			{
 				if(!pLoopCity->IsBuildingUnitForOperation())
 				{
-					pLoopCity->AI_chooseProduction(true /*bInterruptWonders*/);
+					pLoopCity->AI_chooseProduction(true                      );
 				}
 			}
 		}
 
-		// Reset this flag -- need a new high priority event before we'll interrupt again
+
 		m_bInterruptWonders = false;
 	}
 }
 
-/// Change specializations for cities since world state has changed
+
 void CvCitySpecializationAI::SetSpecializationsDirty(CitySpecializationUpdateType eUpdateType)
 {
-	// No city specializations for minor civs
+
 	if(!m_pPlayer->isMinorCiv())
 	{
 		m_bSpecializationsDirty = true;
@@ -400,8 +400,8 @@ void CvCitySpecializationAI::SetSpecializationsDirty(CitySpecializationUpdateTyp
 			m_bInterruptWonders = true;
 			break;
 		default:
-			// Don't set it to false for these other cases!
-			// We shouldn't set it to false until after the next time we've picked specializations.
+
+
 			break;
 		}
 	}
@@ -409,7 +409,7 @@ void CvCitySpecializationAI::SetSpecializationsDirty(CitySpecializationUpdateTyp
 	return;
 }
 
-/// Which city should build the next wonder?
+
 CvCity* CvCitySpecializationAI::GetWonderBuildCity() const
 {
 	CvCity* pRtnValue = NULL;
@@ -420,9 +420,9 @@ CvCity* CvCitySpecializationAI::GetWonderBuildCity() const
 	return pRtnValue;
 }
 
-// PRIVATE METHODS
 
-/// Evaluate which specializations we need
+
+
 void CvCitySpecializationAI::WeightSpecializations()
 {
 	int iFoodYieldWeight = 0;
@@ -431,11 +431,11 @@ void CvCitySpecializationAI::WeightSpecializations()
 	int iScienceYieldWeight = 0;
 	int iGeneralEconomicWeight = 0;
 
-	// Clear old weights
+
 	m_YieldWeights.clear();
 	m_ProductionSubtypeWeights.clear();
 
-	// Must have a capital to do any specialization
+
 	if(m_pPlayer->getCapitalCity() != NULL)
 	{
 		int iFlavorExpansion = 0;
@@ -455,9 +455,9 @@ void CvCitySpecializationAI::WeightSpecializations()
 		iFlavorSpaceship = m_pPlayer->GetFlavorManager()->GetIndividualFlavor((FlavorTypes)GC.getInfoTypeForString("FLAVOR_SPACESHIP"));
 		if(iFlavorSpaceship < 0) iFlavorSpaceship = 0;
 
-		// COMPUTE NEW WEIGHTS
 
-		//   Food
+
+
 		CvArea* pArea = GC.getMap().getArea(m_pPlayer->getCapitalCity()->getArea());
 		int iNumUnownedTiles = pArea->getNumUnownedTiles();
 		int iNumCities = m_pPlayer->getNumCities();
@@ -465,34 +465,34 @@ void CvCitySpecializationAI::WeightSpecializations()
 		EconomicAIStrategyTypes eStrategy = (EconomicAIStrategyTypes) GC.getInfoTypeForString("ECONOMICAISTRATEGY_EARLY_EXPANSION");
 		if(eStrategy != NO_ECONOMICAISTRATEGY && m_pPlayer->GetEconomicAI()->IsUsingStrategy(eStrategy))
 		{
-			iFoodYieldWeight += GC.getAI_CITY_SPECIALIZATION_FOOD_WEIGHT_EARLY_EXPANSION() /* 500 */;
+			iFoodYieldWeight += GC.getAI_CITY_SPECIALIZATION_FOOD_WEIGHT_EARLY_EXPANSION()          ;
 		}
-		iFoodYieldWeight += iFlavorExpansion * GC.getAI_CITY_SPECIALIZATION_FOOD_WEIGHT_FLAVOR_EXPANSION() /* 5 */;
-		iFoodYieldWeight += (iNumUnownedTiles * 100) / pArea->getNumTiles() * GC.getAI_CITY_SPECIALIZATION_FOOD_WEIGHT_PERCENT_CONTINENT_UNOWNED() /* 5 */;;
-		iFoodYieldWeight += iNumCities * GC.getAI_CITY_SPECIALIZATION_FOOD_WEIGHT_NUM_CITIES() /* -50 */;
-		iFoodYieldWeight += iNumSettlers * GC.getAI_CITY_SPECIALIZATION_FOOD_WEIGHT_NUM_SETTLERS() /* -40 */;
+		iFoodYieldWeight += iFlavorExpansion * GC.getAI_CITY_SPECIALIZATION_FOOD_WEIGHT_FLAVOR_EXPANSION()        ;
+		iFoodYieldWeight += (iNumUnownedTiles * 100) / pArea->getNumTiles() * GC.getAI_CITY_SPECIALIZATION_FOOD_WEIGHT_PERCENT_CONTINENT_UNOWNED()        ;;
+		iFoodYieldWeight += iNumCities * GC.getAI_CITY_SPECIALIZATION_FOOD_WEIGHT_NUM_CITIES()          ;
+		iFoodYieldWeight += iNumSettlers * GC.getAI_CITY_SPECIALIZATION_FOOD_WEIGHT_NUM_SETTLERS()          ;
 		if((iNumCities + iNumSettlers) == 1)
 		{
-			iFoodYieldWeight *= 3;   // Really want to get up over 1 city
+			iFoodYieldWeight *= 3;
 		}
 		if(iFoodYieldWeight < 0) iFoodYieldWeight = 0;
 
-		//   Production
+
 		iProductionYieldWeight = WeightProductionSubtypes(iFlavorWonder, iFlavorSpaceship);
 
-		//   Trade
+
 		int iLandDisputeLevel = m_pPlayer->GetDiplomacyAI()->GetTotalLandDisputeLevel();
-		iGoldYieldWeight += iFlavorGold * GC.getAI_CITY_SPECIALIZATION_GOLD_WEIGHT_FLAVOR_GOLD() /* 20 */;
-		iGoldYieldWeight += iLandDisputeLevel * GC.getAI_CITY_SPECIALIZATION_GOLD_WEIGHT_LAND_DISPUTE() /* 10 */;
+		iGoldYieldWeight += iFlavorGold * GC.getAI_CITY_SPECIALIZATION_GOLD_WEIGHT_FLAVOR_GOLD()         ;
+		iGoldYieldWeight += iLandDisputeLevel * GC.getAI_CITY_SPECIALIZATION_GOLD_WEIGHT_LAND_DISPUTE()         ;
 
-		//   Science
-		iScienceYieldWeight += iFlavorScience * GC.getAI_CITY_SPECIALIZATION_SCIENCE_WEIGHT_FLAVOR_SCIENCE() /* 20 */;
-		iScienceYieldWeight += iFlavorSpaceship * GC.getAI_CITY_SPECIALIZATION_SCIENCE_WEIGHT_FLAVOR_SPACESHIP() /* 10 */;
 
-		//   General Economics
-		iGeneralEconomicWeight = GC.getAI_CITY_SPECIALIZATION_GENERAL_ECONOMIC_WEIGHT() /* 200 */;
+		iScienceYieldWeight += iFlavorScience * GC.getAI_CITY_SPECIALIZATION_SCIENCE_WEIGHT_FLAVOR_SCIENCE()         ;
+		iScienceYieldWeight += iFlavorSpaceship * GC.getAI_CITY_SPECIALIZATION_SCIENCE_WEIGHT_FLAVOR_SPACESHIP()         ;
 
-		//   Add in any contribution from the current grand strategy
+
+		iGeneralEconomicWeight = GC.getAI_CITY_SPECIALIZATION_GENERAL_ECONOMIC_WEIGHT()          ;
+
+
 #ifdef AUI_WARNING_FIXES
 		for (uint iGrandStrategyLoop = 0; iGrandStrategyLoop < GC.getNumAIGrandStrategyInfos(); iGrandStrategyLoop++)
 #else
@@ -515,21 +515,21 @@ void CvCitySpecializationAI::WeightSpecializations()
 			}
 		}
 
-		// Add weights to our weighted vector
+
 		m_YieldWeights.push_back(YIELD_FOOD, iFoodYieldWeight);
 		m_YieldWeights.push_back(YIELD_PRODUCTION, iProductionYieldWeight);
 		m_YieldWeights.push_back(YIELD_GOLD, iGoldYieldWeight);
 		m_YieldWeights.push_back(YIELD_SCIENCE, iScienceYieldWeight);
 		m_YieldWeights.push_back(NO_YIELD, iGeneralEconomicWeight);
 
-		// Log results
+
 		LogSpecializationWeights();
 	}
 
 	return;
 }
 
-/// Compute the weight of each production subtype (return value is total of all these weights)
+
 int CvCitySpecializationAI::WeightProductionSubtypes(int iFlavorWonder, int iFlavorSpaceship)
 {
 	bool bCriticalDefenseOn = false;
@@ -545,42 +545,42 @@ int CvCitySpecializationAI::WeightProductionSubtypes(int iFlavorWonder, int iFla
 
 	int iUnitsRequested = m_pPlayer->GetNumUnitsNeededToBeBuilt();
 
-	// LONG-TERM MILITARY BUILD-UP
-	iMilitaryTrainingWeight += (iFlavorOffense * GC.getAI_CITY_SPECIALIZATION_PRODUCTION_TRAINING_PER_OFFENSE()) /* 10 */;
-	iMilitaryTrainingWeight += (m_pPlayer->GetDiplomacyAI()->GetPersonalityMajorCivApproachBias(MAJOR_CIV_APPROACH_WAR) * GC.getAI_CITY_SPECIALIZATION_PRODUCTION_TRAINING_PER_PERSONALITY() /* 10 */);
 
-	// EMERGENCY UNITS
-	iEmergencyUnitWeight += iUnitsRequested * GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_OPERATIONAL_UNITS_REQUESTED() /* 10 */;
-	iEmergencyUnitWeight += m_pPlayer->GetMilitaryAI()->GetNumberCivsAtWarWith() * GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_CIVS_AT_WAR_WITH() /* 100 */;
+	iMilitaryTrainingWeight += (iFlavorOffense * GC.getAI_CITY_SPECIALIZATION_PRODUCTION_TRAINING_PER_OFFENSE())         ;
+	iMilitaryTrainingWeight += (m_pPlayer->GetDiplomacyAI()->GetPersonalityMajorCivApproachBias(MAJOR_CIV_APPROACH_WAR) * GC.getAI_CITY_SPECIALIZATION_PRODUCTION_TRAINING_PER_PERSONALITY()         );
 
-	// Is our capital under threat?
+
+	iEmergencyUnitWeight += iUnitsRequested * GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_OPERATIONAL_UNITS_REQUESTED()         ;
+	iEmergencyUnitWeight += m_pPlayer->GetMilitaryAI()->GetNumberCivsAtWarWith() * GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_CIVS_AT_WAR_WITH()          ;
+
+
 	AICityStrategyTypes eCityStrategy = (AICityStrategyTypes) GC.getInfoTypeForString("AICITYSTRATEGY_CAPITAL_UNDER_THREAT");
 	CvCity* pCapital;
 	pCapital = m_pPlayer->getCapitalCity();
 	if(pCapital && eCityStrategy != NO_AICITYSTRATEGY && pCapital->GetCityStrategyAI()->IsUsingCityStrategy(eCityStrategy))
 	{
-		iEmergencyUnitWeight += GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_CAPITAL_THREAT() /* 50 */;
+		iEmergencyUnitWeight += GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_CAPITAL_THREAT()         ;
 	}
 
-	// Add in weights depending on what the military AI is up to
+
 	MilitaryAIStrategyTypes eStrategy = (MilitaryAIStrategyTypes) GC.getInfoTypeForString("MILITARYAISTRATEGY_WAR_MOBILIZATION");
 	if(eStrategy != NO_MILITARYAISTRATEGY && m_pPlayer->GetMilitaryAI()->IsUsingStrategy(eStrategy))
 	{
-		iMilitaryTrainingWeight += GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_WAR_MOBILIZATION() /* 150 */;
+		iMilitaryTrainingWeight += GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_WAR_MOBILIZATION()          ;
 	}
 	eStrategy = (MilitaryAIStrategyTypes) GC.getInfoTypeForString("MILITARYAISTRATEGY_EMPIRE_DEFENSE");
 	if(eStrategy != NO_MILITARYAISTRATEGY && m_pPlayer->GetMilitaryAI()->IsUsingStrategy(eStrategy))
 	{
-		iEmergencyUnitWeight += GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_EMPIRE_DEFENSE() /* 150 */;
+		iEmergencyUnitWeight += GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_EMPIRE_DEFENSE()          ;
 	}
 	eStrategy = (MilitaryAIStrategyTypes) GC.getInfoTypeForString("MILITARYAISTRATEGY_EMPIRE_DEFENSE_CRITICAL");
 	if(eStrategy != NO_MILITARYAISTRATEGY && m_pPlayer->GetMilitaryAI()->IsUsingStrategy(eStrategy))
 	{
 		bCriticalDefenseOn = true;
-		iEmergencyUnitWeight += GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_EMPIRE_DEFENSE_CRITICAL() /* 1000 */;
+		iEmergencyUnitWeight += GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_EMPIRE_DEFENSE_CRITICAL()           ;
 	}
 
-	// Override all this if have too many units!
+
 	eStrategy = (MilitaryAIStrategyTypes) GC.getInfoTypeForString("MILITARYAISTRATEGY_ENOUGH_MILITARY_UNITS");
 	if(eStrategy != NO_MILITARYAISTRATEGY && m_pPlayer->GetMilitaryAI()->IsUsingStrategy(eStrategy))
 	{
@@ -591,12 +591,12 @@ int CvCitySpecializationAI::WeightProductionSubtypes(int iFlavorWonder, int iFla
 	eStrategy = (MilitaryAIStrategyTypes) GC.getInfoTypeForString("MILITARYAISTRATEGY_NEED_NAVAL_UNITS");
 	if(eStrategy != NO_MILITARYAISTRATEGY && m_pPlayer->GetMilitaryAI()->IsUsingStrategy(eStrategy))
 	{
-		iSeaWeight += GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_NEED_NAVAL_UNITS() /* 50 */;
+		iSeaWeight += GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_NEED_NAVAL_UNITS()         ;
 	}
 	eStrategy = (MilitaryAIStrategyTypes) GC.getInfoTypeForString("MILITARYAISTRATEGY_NEED_NAVAL_UNITS_CRITICAL");
 	if(eStrategy != NO_MILITARYAISTRATEGY && m_pPlayer->GetMilitaryAI()->IsUsingStrategy(eStrategy))
 	{
-		iSeaWeight += GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_NEED_NAVAL_UNITS_CRITICAL() /* 250 */;
+		iSeaWeight += GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_NEED_NAVAL_UNITS_CRITICAL()          ;
 	}
 	eStrategy = (MilitaryAIStrategyTypes) GC.getInfoTypeForString("MILITARYAISTRATEGY_ENOUGH_NAVAL_UNITS");
 	if(eStrategy != NO_MILITARYAISTRATEGY && m_pPlayer->GetMilitaryAI()->IsUsingStrategy(eStrategy))
@@ -604,13 +604,13 @@ int CvCitySpecializationAI::WeightProductionSubtypes(int iFlavorWonder, int iFla
 		iSeaWeight = 0;
 	}
 
-	// Wonder is MIN between weight of wonders available to build and value from flavors (but not less than zero)
-	int iWonderFlavorWeight = iFlavorWonder * GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_FLAVOR_WONDER() /* 200 */;
-	int iWeightOfWonders = (int)(m_iNextWonderWeight * GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_NEXT_WONDER()); /* 0.2 */
+
+	int iWonderFlavorWeight = iFlavorWonder * GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_FLAVOR_WONDER()          ;
+	int iWeightOfWonders = (int)(m_iNextWonderWeight * GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_NEXT_WONDER());
 	iWonderWeight = min(iWonderFlavorWeight, iWeightOfWonders);
 	iWonderWeight = max(iWonderWeight, 0);
 
-	// One-half of normal weight if critical defense is on
+
 	if(bCriticalDefenseOn)
 	{
 		iWonderWeight /= 2;
@@ -618,7 +618,7 @@ int CvCitySpecializationAI::WeightProductionSubtypes(int iFlavorWonder, int iFla
 
 	if(CanBuildSpaceshipParts())
 	{
-		iSpaceshipWeight += iFlavorSpaceship * GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_FLAVOR_SPACESHIP() /* 5 */;
+		iSpaceshipWeight += iFlavorSpaceship * GC.getAI_CITY_SPECIALIZATION_PRODUCTION_WEIGHT_FLAVOR_SPACESHIP()        ;
 	}
 
 #ifdef AUI_WARNING_FIXES
@@ -651,7 +651,7 @@ int CvCitySpecializationAI::WeightProductionSubtypes(int iFlavorWonder, int iFla
 		}
 	}
 
-	// Add weights to our weighted vector
+
 	m_ProductionSubtypeWeights.push_back(PRODUCTION_SPECIALIZATION_MILITARY_TRAINING, iMilitaryTrainingWeight);
 	m_ProductionSubtypeWeights.push_back(PRODUCTION_SPECIALIZATION_EMERGENCY_UNITS, iEmergencyUnitWeight);
 	m_ProductionSubtypeWeights.push_back(PRODUCTION_SPECIALIZATION_MILITARY_NAVAL, iSeaWeight);
@@ -661,7 +661,7 @@ int CvCitySpecializationAI::WeightProductionSubtypes(int iFlavorWonder, int iFla
 	return iMilitaryTrainingWeight + iEmergencyUnitWeight + iSeaWeight + iWonderWeight + iSpaceshipWeight;
 }
 
-/// Assign specializations to cities
+
 void CvCitySpecializationAI::AssignSpecializations()
 {
 	int iI;
@@ -679,10 +679,10 @@ void CvCitySpecializationAI::AssignSpecializations()
 
 	CitySpecializationTypes eWonderSpecialiation = GetWonderSpecialization();
 
-	// Find specializations needed (including for the next city we build)
+
 	SelectSpecializations();
 
-	// OBVIOUS ASSIGNMENTS: Loop through our cities making obvious assignments
+
 	CvCity* pLoopCity;
 	int iLoop;
 	for(pLoopCity = m_pPlayer->firstCity(&iLoop); pLoopCity != NULL; pLoopCity = m_pPlayer->nextCity(&iLoop))
@@ -694,7 +694,7 @@ void CvCitySpecializationAI::AssignSpecializations()
 			continue;
 		}
 
-		// If this is the city to build our current wonder in, mark all that
+
 		if(m_bWonderChosen && pLoopCity->GetID() == m_iWonderCityID)
 		{
 			it = find(m_SpecializationsNeeded.begin(), m_SpecializationsNeeded.end(), eWonderSpecialiation);
@@ -707,7 +707,7 @@ void CvCitySpecializationAI::AssignSpecializations()
 			}
 		}
 
-		// If city default is equal to a needed type, go with that
+
 		eSpecialization = pLoopCity->GetCityStrategyAI()->GetDefaultSpecialization();
 		it = find(m_SpecializationsNeeded.begin(), m_SpecializationsNeeded.end(), eSpecialization);
 		if(it != m_SpecializationsNeeded.end())
@@ -718,7 +718,7 @@ void CvCitySpecializationAI::AssignSpecializations()
 		}
 		else
 		{
-			// If cities' current specialization is needed, stick with that
+
 			eSpecialization = pLoopCity->GetCityStrategyAI()->GetSpecialization();
 			it = find(m_SpecializationsNeeded.begin(), m_SpecializationsNeeded.end(), eSpecialization);
 			if(it != m_SpecializationsNeeded.end())
@@ -728,7 +728,7 @@ void CvCitySpecializationAI::AssignSpecializations()
 				LogSpecializationAssignment(pLoopCity, eSpecialization);
 			}
 
-			// Save this city off (with detailed data about what it is good at) to assign later
+
 			else
 			{
 				cityData.m_eID = pLoopCity->GetID();
@@ -736,7 +736,7 @@ void CvCitySpecializationAI::AssignSpecializations()
 				{
 					if(iI == YIELD_SCIENCE)
 					{
-						cityData.m_iWeight[iI] = PlotValueForScience(pLoopCity->plot()); // -- BKW, looks like PlotValueForScience is making some assumptions that are no longer true
+						cityData.m_iWeight[iI] = PlotValueForScience(pLoopCity->plot());
 					}
 					else
 					{
@@ -758,9 +758,9 @@ void CvCitySpecializationAI::AssignSpecializations()
 
 	FAssert(citiesWithoutSpecialization.size() + 1 == m_SpecializationsNeeded.size());
 
-	// NEXT SPECIALIZATION NEEDED: Now figure out what we want to assign as our "next specialization needed"
 
-	// If only one specialization left, it's easy
+
+
 	if(citiesWithoutSpecialization.empty())
 	{
 		it = m_SpecializationsNeeded.begin();
@@ -769,7 +769,7 @@ void CvCitySpecializationAI::AssignSpecializations()
 		return;
 	}
 
-	// If all specializations left are "general economic", set that as next needed
+
 	bool bAllGeneral = true;
 	it = m_SpecializationsNeeded.begin();
 	iterEnd = m_SpecializationsNeeded.end();
@@ -791,10 +791,10 @@ void CvCitySpecializationAI::AssignSpecializations()
 
 	else
 	{
-		// Find best possible sites for each of the yield types
+
 		FindBestSites();
 
-		// Compute the yield which we can improve the most with a new city
+
 		int iCurrentDelta;
 		int iBestDelta[YIELD_SCIENCE + 1];
 		for(iI = 0; iI <= YIELD_SCIENCE; iI++)
@@ -816,7 +816,7 @@ void CvCitySpecializationAI::AssignSpecializations()
 			}
 		}
 
-		// Save yield improvements in a vector we can sort
+
 		CvWeightedVector<int, YIELD_SCIENCE+1, true> yieldImprovements;
 		for(iI = 0; iI <= YIELD_SCIENCE; iI++)
 		{
@@ -833,13 +833,13 @@ void CvCitySpecializationAI::AssignSpecializations()
 		}
 		yieldImprovements.SortItems();
 
-		// Take them out in order and see if we need this specialization
+
 		bool bFoundIt = false;
 		for(iI = 0; iI < yieldImprovements.size(); iI++)
 		{
 			YieldTypes eMostImprovedYield = (YieldTypes)yieldImprovements.GetElement(iI);
 
-			// Loop through needed specializations until we find one that matches
+
 			it = m_SpecializationsNeeded.begin();
 			iterEnd = m_SpecializationsNeeded.end();
 			for(; it != iterEnd; ++it)
@@ -864,7 +864,7 @@ void CvCitySpecializationAI::AssignSpecializations()
 
 	FAssert(citiesWithoutSpecialization.size() == m_SpecializationsNeeded.size());
 
-	// REMAINING ASSIGNMENTS: Make the rest of the assignments
+
 	it = m_SpecializationsNeeded.begin();
 	iterEnd = m_SpecializationsNeeded.end();
 	for(; it != iterEnd; ++it)
@@ -878,7 +878,7 @@ void CvCitySpecializationAI::AssignSpecializations()
 		bool bCoastal = pkCitySpecializationEntry->IsMustBeCoastal();
 		bestCity = citiesWithoutSpecialization.end();
 
-		// Pick best existing city based on a better computation of existing city's value for a yield type
+
 		int iBestValue = -1;
 		cityIter = citiesWithoutSpecialization.begin();
 		cityIterEnd = citiesWithoutSpecialization.end();
@@ -893,7 +893,7 @@ void CvCitySpecializationAI::AssignSpecializations()
 
 			if(eYield == NO_YIELD)
 			{
-				// General economic is all yields added together
+
 				int iCityValue = 0;
 				for(iI = 0; iI <= YIELD_SCIENCE; iI++)
 				{
@@ -915,7 +915,7 @@ void CvCitySpecializationAI::AssignSpecializations()
 			}
 		}
 
-		// Found a city to set
+
 		if(bestCity != citiesWithoutSpecialization.end())
 		{
 			CvCity* pCity = m_pPlayer->getCity(bestCity->m_eID);
@@ -924,7 +924,7 @@ void CvCitySpecializationAI::AssignSpecializations()
 			citiesWithoutSpecialization.erase(bestCity);
 		}
 
-		// No (coastal) city found, use default specialization as last resort
+
 		else
 		{
 			CvCity* pCity = m_pPlayer->getCity(citiesWithoutSpecialization.begin()->m_eID);
@@ -937,7 +937,7 @@ void CvCitySpecializationAI::AssignSpecializations()
 	return;
 }
 
-/// Find specializations needed (including for the next city we build)
+
 void CvCitySpecializationAI::SelectSpecializations()
 {
 	CitySpecializationTypes eSpecialization;
@@ -949,7 +949,7 @@ void CvCitySpecializationAI::SelectSpecializations()
 	m_SpecializationsNeeded.clear();
 	m_bWonderChosen = false;
 
-	// Clear info about what we've picked
+
 	for(int iI = 0; iI < NUM_SPECIALIZATION_YIELDS; iI++)
 	{
 		m_iNumSpecializationsForThisYield[iI] = 0;
@@ -966,7 +966,7 @@ void CvCitySpecializationAI::SelectSpecializations()
 		pkProductionBuildingInfo = GC.getBuildingInfo(pkWonderBuildCity->getProductionBuilding());
 	}
 
-	// Do we have a wonder build in progress that we can't interrupt?
+
 	if(!m_bInterruptWonders && NULL != pkProductionBuildingInfo && m_pPlayer->GetWonderProductionAI()->IsWonder(*pkProductionBuildingInfo))
 	{
 		m_SpecializationsNeeded.push_back(GetWonderSpecialization());
@@ -975,7 +975,7 @@ void CvCitySpecializationAI::SelectSpecializations()
 		iReductionAmount = m_ProductionSubtypeWeights.GetWeight(GetWonderSubtype());
 		m_YieldWeights.SetWeight(YIELD_PRODUCTION, (iOldWeight - iReductionAmount));
 
-		// Only one wonder at a time, so zero out the weight for this subtype entirely
+
 		m_ProductionSubtypeWeights.SetWeight(GetWonderSubtype(), 0);
 		m_bWonderChosen = true;
 	}
@@ -984,13 +984,13 @@ void CvCitySpecializationAI::SelectSpecializations()
 		m_iWonderCityID = -1;
 	}
 
-	// LOOP as many times as we have cities PLUS ONE
+
 	while(m_SpecializationsNeeded.size() < iSpecializationsToAssign)
 	{
-		// Find highest weighted specialization
+
 		m_YieldWeights.SortItems();
 
-		// Mark that we need one city of this type
+
 		YieldTypes eYield = m_YieldWeights.GetElement(0);
 		if(GC.GetGameCitySpecializations()->GetNumSpecializationsForYield(eYield) > 1)
 		{
@@ -1012,7 +1012,7 @@ void CvCitySpecializationAI::SelectSpecializations()
 		{
 			eSpecialization = GC.GetGameCitySpecializations()->GetFirstSpecializationForYield(eYield);
 
-			// Reduce weight for this specialization based on dividing original weight by <num of this type + 1>
+
 			iOldWeight = m_YieldWeights.GetWeight(0);
 			m_iNumSpecializationsForThisYield[1 + (int)eYield]++;
 			iNewWeight = iOldWeight * m_iNumSpecializationsForThisYield[1 + (int)eYield] / (m_iNumSpecializationsForThisYield[1 + (int)eYield] + 1);
@@ -1022,12 +1022,12 @@ void CvCitySpecializationAI::SelectSpecializations()
 	}
 }
 
-/// Find production specializations needed
+
 CitySpecializationTypes CvCitySpecializationAI::SelectProductionSpecialization(int& iReductionAmount)
 {
 	CitySpecializationTypes eSpecialization;
 
-	// Find highest weighted subtype
+
 	m_ProductionSubtypeWeights.SortItems();
 
 	ProductionSpecializationSubtypes eSubtype = m_ProductionSubtypeWeights.GetElement(0);
@@ -1041,7 +1041,7 @@ CitySpecializationTypes CvCitySpecializationAI::SelectProductionSpecialization(i
 		FAssertMsg(eSpecialization != NO_CITY_SPECIALIZATION, "Production specializations in XML doesn't match NUM_PRODUCTION_SPECIALIZATION_SUBTYPES");
 	}
 
-	// If this is the wonder type, make sure we have a city to build it
+
 	if(eSubtype == GetWonderSubtype())
 	{
 		CvCity* pCity = FindBestWonderCity();
@@ -1051,7 +1051,7 @@ CitySpecializationTypes CvCitySpecializationAI::SelectProductionSpecialization(i
 			m_bWonderChosen = true;
 		}
 
-		// No wonder city, substitute default specialization instead
+
 		else
 		{
 			eSpecialization = GetEconomicDefaultSpecialization();
@@ -1062,7 +1062,7 @@ CitySpecializationTypes CvCitySpecializationAI::SelectProductionSpecialization(i
 
 	else
 	{
-		// Reduce weight for this subtype based on dividing original weight by <num of this type + 1>
+
 		int iOldWeight = m_ProductionSubtypeWeights.GetWeight(0);
 		m_iNumSpecializationsForThisSubtype[(int)iNumSubTypes]++;
 		int iNewWeight = iOldWeight * m_iNumSpecializationsForThisSubtype[(int)iNumSubTypes] / (m_iNumSpecializationsForThisSubtype[(int)iNumSubTypes] + 1);
@@ -1073,7 +1073,7 @@ CitySpecializationTypes CvCitySpecializationAI::SelectProductionSpecialization(i
 	return eSpecialization;
 }
 
-/// Find the specialization type for building wonders
+
 CitySpecializationTypes CvCitySpecializationAI::GetWonderSpecialization() const
 {
 	CvCitySpecializationXMLEntry* pEntry;
@@ -1094,7 +1094,7 @@ CitySpecializationTypes CvCitySpecializationAI::GetWonderSpecialization() const
 	return (CitySpecializationTypes)-1;
 }
 
-/// Find the specialization type for building wonders
+
 CitySpecializationTypes CvCitySpecializationAI::GetEconomicDefaultSpecialization() const
 {
 	CvCitySpecializationXMLEntry* pEntry;
@@ -1115,7 +1115,7 @@ CitySpecializationTypes CvCitySpecializationAI::GetEconomicDefaultSpecialization
 	return (CitySpecializationTypes)-1;
 }
 
-/// Find the production subtype for wonders
+
 int CvCitySpecializationAI::GetWonderSubtype() const
 {
 	CvCitySpecializationXMLEntry* pEntry;
@@ -1141,7 +1141,7 @@ int CvCitySpecializationAI::GetWonderSubtype() const
 	return iSubType;
 }
 
-/// Choose a city to build the next wonder
+
 CvCity* CvCitySpecializationAI::FindBestWonderCity() const
 {
 	CvCity* pBestCity = NULL;
@@ -1150,8 +1150,8 @@ CvCity* CvCitySpecializationAI::FindBestWonderCity() const
 	int iBestProduction = 0;
 	int iProduction;
 
-	// First, see if we already have a wonder underway somewhere.  If so that's our wonder city
-	pLoopCity = NULL;//GetWonderBuildCity();
+
+	pLoopCity = NULL;
 
 	CvBuildingEntry* pkProductionBuildingInfo = NULL;
 	if(pLoopCity != NULL && pLoopCity->getProductionBuilding() != NO_BUILDING)
@@ -1180,7 +1180,7 @@ CvCity* CvCitySpecializationAI::FindBestWonderCity() const
 						iProduction = (iProduction * 3) / 2;
 					}
 
-					// factor in Marble, etc.
+
 					iProduction = (iProduction * (100 + pLoopCity->GetWonderProductionModifier())) / 100;
 
 					if(iProduction > iBestProduction)
@@ -1196,7 +1196,7 @@ CvCity* CvCitySpecializationAI::FindBestWonderCity() const
 	return pBestCity;
 }
 
-/// Find the best nearby city site for all yield types
+
 void CvCitySpecializationAI::FindBestSites()
 {
 	CvPlot* pPlot;
@@ -1208,13 +1208,13 @@ void CvCitySpecializationAI::FindBestSites()
 #endif
 	CvCity* pNearestCity;
 
-	// Clear output
+
 	for(int iI = 0; iI <= YIELD_SCIENCE; iI++)
 	{
 		m_iBestValue[iI] = 0;
 	}
 
-	// Found value drops off based on distance, so safe to only look halfway out
+
 	int iEvalDistance = GC.getSETTLER_EVALUATION_DISTANCE() / 2;
 
 	CvSiteEvaluatorForSettler* pSiteEval = GC.getGame().GetSettlerSiteEvaluator();
@@ -1224,8 +1224,8 @@ void CvCitySpecializationAI::FindBestSites()
 
 		if(pSiteEval->CanFound(pPlot, m_pPlayer, true))
 		{
-			// Check if within range of any of our cities
-			pNearestCity = GC.getMap().findCity(pPlot->getX(), pPlot->getY(), m_pPlayer->GetID(), NO_TEAM, true /* bSameArea */);
+
+			pNearestCity = GC.getMap().findCity(pPlot->getX(), pPlot->getY(), m_pPlayer->GetID(), NO_TEAM, true                );
 			if(pNearestCity != NULL)
 			{
 				if(plotDistance(pPlot->getX(), pPlot->getY(), pNearestCity->getX(), pNearestCity->getY()) <= iEvalDistance)
@@ -1256,7 +1256,7 @@ void CvCitySpecializationAI::FindBestSites()
 	return;
 }
 
-/// Evaluate strength of an existing city for providing a specific type of yield (except Science!)
+
 int CvCitySpecializationAI::PlotValueForSpecificYield(CvPlot* pPlot, YieldTypes eYield)
 {
 	int iTotalPotentialYield = 0;
@@ -1266,7 +1266,7 @@ int CvCitySpecializationAI::PlotValueForSpecificYield(CvPlot* pPlot, YieldTypes 
 	int iSecondRingMultiplier = GC.getAI_CITY_SPECIALIZATION_YIELD_WEIGHT_SECOND_RING();
 	int iThirdRingMultiplier = GC.getAI_CITY_SPECIALIZATION_YIELD_WEIGHT_THIRD_RING();
 
-	// Evaluate potential from plots not currently being worked
+
 	for(int iI = 0; iI < GC.getAI_CITY_SPECIALIZATION_YIELD_NUM_TILES_CONSIDERED(); iI++)
 	{
 		if(iI != CITY_HOME_PLOT)
@@ -1276,7 +1276,7 @@ int CvCitySpecializationAI::PlotValueForSpecificYield(CvPlot* pPlot, YieldTypes 
 			{
 				iPotentialYield = pLoopPlot->getYield(eYield);
 
-				// If owned by someone else, not worth anything
+
 				if(pLoopPlot->isOwned() && pLoopPlot->getOwner() != m_pPlayer->GetID())
 				{
 					iMultiplier = 0;
@@ -1305,11 +1305,11 @@ int CvCitySpecializationAI::PlotValueForSpecificYield(CvPlot* pPlot, YieldTypes 
 	return iTotalPotentialYield;
 }
 
-/// Evaluate strength of a city plot for providing science
+
 int CvCitySpecializationAI::PlotValueForScience(CvPlot* pPlot)
 {
-	// Roughly half of weight comes from food yield
-	// The other half will be are there open tiles we can easily build schools on
+
+
 	int iTotalFoodYield = 0;
 	int iTotalClearTileWeight = 0;
 	int iMultiplier = 0;
@@ -1318,7 +1318,7 @@ int CvCitySpecializationAI::PlotValueForScience(CvPlot* pPlot)
 	int iSecondRingMultiplier = GC.getAI_CITY_SPECIALIZATION_YIELD_WEIGHT_SECOND_RING();
 	int iThirdRingMultiplier = GC.getAI_CITY_SPECIALIZATION_YIELD_WEIGHT_THIRD_RING();
 
-	// Evaluate potential from plots not currently being worked
+
 	for(int iI = 0; iI < GC.getAI_CITY_SPECIALIZATION_YIELD_NUM_TILES_CONSIDERED(); iI++)
 	{
 		bool bIsClear = false;
@@ -1344,7 +1344,7 @@ int CvCitySpecializationAI::PlotValueForScience(CvPlot* pPlot)
 
 				iPotentialYield = pLoopPlot->getYield(YIELD_FOOD) + pLoopPlot->getYield(YIELD_SCIENCE);
 
-				// If owned by someone else, not worth anything
+
 				if(pLoopPlot->isOwned() && pLoopPlot->getOwner() != m_pPlayer->GetID())
 				{
 					iMultiplier = 0;
@@ -1378,37 +1378,37 @@ int CvCitySpecializationAI::PlotValueForScience(CvPlot* pPlot)
 	return iTotalFoodYield + iTotalClearTileWeight;
 }
 
-/// Multiply city value for a yield based on buildings present
+
 int CvCitySpecializationAI::AdjustValueBasedOnBuildings(CvCity* pCity, YieldTypes eYield, int iInitialValue)
 {
 	int iRtnValue;
 
-	// Everything looks at yield modifier
+
 	iRtnValue = iInitialValue * (100 + pCity->getYieldRateModifier(eYield)) / 100;
 
-	// ... and yield per pop
+
 	int iYieldPerPop = pCity->GetYieldPerPopTimes100(eYield);
 	if(iYieldPerPop > 0)
 	{
 		iRtnValue = iRtnValue * (100 + iYieldPerPop) / 100;
 	}
 
-	// ... and yield per pop
+
 	int iYieldPerReligion = pCity->GetYieldPerReligionTimes100(eYield);
 	if(iYieldPerPop > 0)
 	{
 		iRtnValue = iRtnValue * (100 + (iYieldPerReligion * pCity->GetCityReligions()->GetNumReligionsWithFollowers())) / 100;
 	}
 
-	// ... and yield changes
+
 	int iYieldChanges = pCity->GetBaseYieldRateFromBuildings(eYield);
 	if(iYieldChanges > 0)
 	{
-		// +20% per point of yield change
+
 		iRtnValue = iRtnValue * (100 + (iYieldChanges * 20)) / 100;
 	}
 
-	// Other modifiers (unique by yield type)
+
 	switch(eYield)
 	{
 	case YIELD_FOOD:
@@ -1423,7 +1423,7 @@ int CvCitySpecializationAI::AdjustValueBasedOnBuildings(CvCity* pCity, YieldType
 	break;
 
 	case YIELD_PRODUCTION:
-		// Double production if any military training facilities present
+
 		if(pCity->getDomainFreeExperience(DOMAIN_LAND) > 0)
 		{
 			iRtnValue *= 2;
@@ -1440,15 +1440,15 @@ int CvCitySpecializationAI::AdjustValueBasedOnBuildings(CvCity* pCity, YieldType
 	return iRtnValue;
 }
 
-/// Should this player worry about assigning cities to build spaceship parts?
+
 bool CvCitySpecializationAI::CanBuildSpaceshipParts()
 {
 	int iLoop;
 
-	// Find a city to test with
+
 	CvCity* pCity = m_pPlayer->firstCity(&iLoop);
 
-	// Loop through adding the available units
+
 #ifdef AUI_WARNING_FIXES
 	for (uint iUnitLoop = 0; iUnitLoop < GC.GetGameUnits()->GetNumUnits(); iUnitLoop++)
 #else
@@ -1461,7 +1461,7 @@ bool CvCitySpecializationAI::CanBuildSpaceshipParts()
 		{
 			if(pkUnitEntry->GetSpaceshipProject() != NO_PROJECT)
 			{
-				// See if this unit can be built now
+
 				if(pCity->canTrain((UnitTypes)iUnitLoop))
 				{
 					return true;
@@ -1472,7 +1472,7 @@ bool CvCitySpecializationAI::CanBuildSpaceshipParts()
 	return false;
 }
 
-/// Log which specializations were needed
+
 void CvCitySpecializationAI::LogSpecializationWeights()
 {
 	if(GC.getLogging() && GC.getAILogging())
@@ -1484,11 +1484,11 @@ void CvCitySpecializationAI::LogSpecializationWeights()
 		CvString strOutBuf;
 		FILogFile* pLog;
 
-		// Find the name of this civ
+
 		strPlayerName = GetPlayer()->getCivilizationShortDescription();
 		pLog = LOGFILEMGR.GetLog(GetLogFileName(strPlayerName), FILogFile::kDontTimeStamp);
 
-		// Get the leading info for this line
+
 		strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 		strBaseString += strPlayerName + ", Empire-wide specialization weight, ";
 
@@ -1521,7 +1521,7 @@ void CvCitySpecializationAI::LogSpecializationWeights()
 	}
 }
 
-/// Log which specializations were assigned
+
 void CvCitySpecializationAI::LogSpecializationAssignment(CvCity* pCity, CitySpecializationTypes eType, bool bWonderCity)
 {
 	if(GC.getLogging() && GC.getAILogging())
@@ -1533,11 +1533,11 @@ void CvCitySpecializationAI::LogSpecializationAssignment(CvCity* pCity, CitySpec
 		CvString strSpecialization;
 		FILogFile* pLog;
 
-		// Find the name of this civ
+
 		strPlayerName = GetPlayer()->getCivilizationShortDescription();
 		pLog = LOGFILEMGR.GetLog(GetLogFileName(strPlayerName), FILogFile::kDontTimeStamp);
 
-		// Get the leading info for this line
+
 		strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 		strBaseString += strPlayerName + ", ";
 
@@ -1554,7 +1554,7 @@ void CvCitySpecializationAI::LogSpecializationAssignment(CvCity* pCity, CitySpec
 	}
 }
 
-/// Report the reason for reevaluating specializations
+
 void CvCitySpecializationAI::LogSpecializationUpdate(CitySpecializationUpdateType eUpdate)
 {
 	if(GC.getLogging() && GC.getAILogging())
@@ -1565,11 +1565,11 @@ void CvCitySpecializationAI::LogSpecializationUpdate(CitySpecializationUpdateTyp
 		CvString strTypeString;
 		FILogFile* pLog;
 
-		// Find the name of this civ
+
 		strPlayerName = GetPlayer()->getCivilizationShortDescription();
 		pLog = LOGFILEMGR.GetLog(GetLogFileName(strPlayerName), FILogFile::kDontTimeStamp);
 
-		// Get the leading info for this line
+
 		strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 		strBaseString += strPlayerName + ", ";
 
@@ -1613,7 +1613,7 @@ void CvCitySpecializationAI::LogSpecializationUpdate(CitySpecializationUpdateTyp
 	}
 }
 
-/// Record the specialization we want for our next city
+
 void CvCitySpecializationAI::LogNextSpecialization(CitySpecializationTypes eType)
 {
 	if(GC.getLogging() && GC.getAILogging())
@@ -1625,11 +1625,11 @@ void CvCitySpecializationAI::LogNextSpecialization(CitySpecializationTypes eType
 		CvString strYieldString;
 		FILogFile* pLog;
 
-		// Find the name of this civ
+
 		strPlayerName = GetPlayer()->getCivilizationShortDescription();
 		pLog = LOGFILEMGR.GetLog(GetLogFileName(strPlayerName), FILogFile::kDontTimeStamp);
 
-		// Get the leading info for this line
+
 		strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 		strBaseString += strPlayerName + ", ";
 
@@ -1651,15 +1651,15 @@ void CvCitySpecializationAI::LogBestSites()
 		CvString strWeightString;
 		FILogFile* pLog;
 
-		// Find the name of this civ
+
 		strPlayerName = GetPlayer()->getCivilizationShortDescription();
 		pLog = LOGFILEMGR.GetLog(GetLogFileName(strPlayerName), FILogFile::kDontTimeStamp);
 
-		// Get the leading info for this line
+
 		strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 		strBaseString += strPlayerName + ", ";
 
-		// Loop through each yield type
+
 		for(int iI = 0; iI <= YIELD_SCIENCE; iI++)
 		{
 			CvYieldInfo* pYieldInfo = GC.getYieldInfo((YieldTypes)iI);
@@ -1691,16 +1691,16 @@ void CvCitySpecializationAI::LogCity(CvCity* pCity, CitySpecializationData data)
 		CvString strWeightString;
 		FILogFile* pLog;
 
-		// Find the name of this civ
+
 		strPlayerName = GetPlayer()->getCivilizationShortDescription();
 		pLog = LOGFILEMGR.GetLog(GetLogFileName(strPlayerName), FILogFile::kDontTimeStamp);
 		strCityName = pCity->getName();
 
-		// Get the leading info for this line
+
 		strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 		strBaseString += strPlayerName + ", " + strCityName + ", ";
 
-		// Loop through each yield type
+
 		for(int iI = 0; iI <= YIELD_SCIENCE; iI++)
 		{
 			CvYieldInfo* pYieldInfo = GC.getYieldInfo((YieldTypes)iI);
@@ -1716,12 +1716,12 @@ void CvCitySpecializationAI::LogCity(CvCity* pCity, CitySpecializationData data)
 	}
 }
 
-/// Build log filename
+
 CvString CvCitySpecializationAI::GetLogFileName(CvString& playerName) const
 {
 	CvString strLogName;
 
-	// Open the log file
+
 	if(GC.getPlayerAndCityAILogSplit())
 	{
 		strLogName = "CitySpecializationLog_" + playerName + ".csv";

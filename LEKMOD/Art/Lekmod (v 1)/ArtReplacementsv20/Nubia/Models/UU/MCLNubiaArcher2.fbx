@@ -1,7 +1,7 @@
-; FBX 6.1.0 project file
-; Created by Blender FBX Exporter
-; for support mail: ideasman42@gmail.com
-; ----------------------------------------------------
+
+
+
+
 
 FBXHeaderExtension:  {
 	FBXHeaderVersion: 1003
@@ -24,8 +24,8 @@ FBXHeaderExtension:  {
 CreationTime: "2012-10-08 16:48:21:000"
 Creator: "Blender3D version 249.00"
 
-; Object definitions
-;------------------------------------------------------------------
+
+
 
 Definitions:  {
 	Version: 100
@@ -56,8 +56,8 @@ Definitions:  {
 	}
 }
 
-; Object properties
-;------------------------------------------------------------------
+
+
 
 Objects:  {
 	Model: "Model::Camera Switcher", "CameraSwitcher" {
@@ -5327,8 +5327,8 @@ Objects:  {
 	}
 }
 
-; Object relations
-;------------------------------------------------------------------
+
+
 
 Relations:  {
 	Model: "Model::point_WORLD", "Null" {
@@ -5467,8 +5467,8 @@ Relations:  {
 	}
 }
 
-; Object connections
-;------------------------------------------------------------------
+
+
 
 Connections:  {
 	Connect: "OO", "Model::point_WORLD", "Model::Scene"
@@ -5558,14 +5558,14 @@ Connections:  {
 	Connect: "OO", "Model::Base HumanLFoot", "Model::Base HumanLCalf"
 	Connect: "OO", "Model::Scene Root", "Model::point_WORLD"
 }
-;Takes and animation section
-;----------------------------------------------------
+
+
 
 Takes:  {
 	Current: ""
 }
-;Version 5 settings
-;------------------------------------------------------------------
+
+
 
 Version5:  {
 	AmbientRenderSettings:  {

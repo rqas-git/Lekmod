@@ -1,13 +1,13 @@
-------------------------------------------------------
--- CityStateStatusHelper.lua
--- Author: Anton Strenger
---
--- Consolidation of code associated with displaying
--- the friendship status of a player with a city-state
-------------------------------------------------------
--- modified by bc1 from 1.0.3.144 brave new world & civ BE code
--- code is common using gk_mode, bnw_mode, and civ5_mode switches
-------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 local pairs = pairs
 local print = print
@@ -37,29 +37,29 @@ local civ5_mode = type( MouseOverStrategicViewResource ) == "function"
 
 local newLine = civ5_mode and "[NEWLINE]" or "/n"
 
---[[
-local GetCityStateStatusRow = GetCityStateStatusRow
-local GetCityStateStatusType = GetCityStateStatusType
-local UpdateCityStateStatusBar = UpdateCityStateStatusBar
-local UpdateCityStateStatusIconBG = UpdateCityStateStatusIconBG
-local UpdateCityStateStatusUI = UpdateCityStateStatusUI
-local GetCityStateStatusText = GetCityStateStatusText
-local GetCityStateResourceExports = GetCityStateResourceExports
-local GetCityStateBonuses = GetCityStateBonuses
-local GetCityStateStatusToolTip = GetCityStateStatusToolTip
-local GetAllyText = GetAllyText
-local GetAllyToolTip = GetAllyToolTip
-local GetActiveQuestText = GetActiveQuestText
-local GetGreatPersonQuestIconText = GetGreatPersonQuestIconText
-local GetActiveQuestToolTip = GetActiveQuestToolTip
-local GetCityStateTraitText = GetCityStateTraitText
-local GetCityStateTraitToolTip = GetCityStateTraitToolTip
-local GetCityStateStatusAlly = GetCityStateStatusAlly
---]]
 
-------------------------------------------------------
--- Global Constants
-------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 local kPosInfRange = math_abs( GameDefines.FRIENDSHIP_THRESHOLD_ALLIES - GameDefines.FRIENDSHIP_THRESHOLD_NEUTRAL )
 local kNegInfRange = math_abs( GameDefines.MINOR_FRIENDSHIP_AT_WAR - GameDefines.FRIENDSHIP_THRESHOLD_NEUTRAL )
 local kPosBarRange = 81
@@ -90,29 +90,29 @@ local ktQuestsIcon = {
 } ktQuestsIcon[false] = nil
 
 if gk_mode then
-	-- The order of precedence in which the quest icons and tooltip points are displayed
+
 	ktQuestsDisplayOrder = {
-		-- Global quests are first
-		MinorCivQuestTypes.MINOR_CIV_QUEST_CONTEST_CULTURE or false,	-- g&k+
-		MinorCivQuestTypes.MINOR_CIV_QUEST_CONTEST_FAITH or false,	-- g&k+
-		MinorCivQuestTypes.MINOR_CIV_QUEST_CONTEST_TECHS or false,	-- g&k+
-		MinorCivQuestTypes.MINOR_CIV_QUEST_INVEST or false,		-- g&k+
-		MinorCivQuestTypes.MINOR_CIV_QUEST_KILL_CAMP or false,		-- vanilla+
-		-- Then personal support quests
-		MinorCivQuestTypes.MINOR_CIV_QUEST_GIVE_GOLD or false,		-- g&k+
-		MinorCivQuestTypes.MINOR_CIV_QUEST_PLEDGE_TO_PROTECT or false,	-- g&k+
-		MinorCivQuestTypes.MINOR_CIV_QUEST_DENOUNCE_MAJOR or false,	-- g&k+
-		-- Then other pesonal quests
-		MinorCivQuestTypes.MINOR_CIV_QUEST_TRADE_ROUTE or false,	-- bnw+
-		MinorCivQuestTypes.MINOR_CIV_QUEST_SPREAD_RELIGION or false,	-- g&k+
-		MinorCivQuestTypes.MINOR_CIV_QUEST_BULLY_CITY_STATE or false,	-- g&k+
-		MinorCivQuestTypes.MINOR_CIV_QUEST_FIND_NATURAL_WONDER or false,-- vanilla+ but NOT civBE
-		MinorCivQuestTypes.MINOR_CIV_QUEST_FIND_PLAYER or false,	-- vanilla+
-		MinorCivQuestTypes.MINOR_CIV_QUEST_KILL_CITY_STATE or false,	-- vanilla+
-		MinorCivQuestTypes.MINOR_CIV_QUEST_GREAT_PERSON or false,	-- vanilla+
-		MinorCivQuestTypes.MINOR_CIV_QUEST_CONSTRUCT_WONDER or false,	-- vanilla+
-		MinorCivQuestTypes.MINOR_CIV_QUEST_CONNECT_RESOURCE or false,	-- vanilla+
-		MinorCivQuestTypes.MINOR_CIV_QUEST_ROUTE or false,		-- vanilla+
+
+		MinorCivQuestTypes.MINOR_CIV_QUEST_CONTEST_CULTURE or false,
+		MinorCivQuestTypes.MINOR_CIV_QUEST_CONTEST_FAITH or false,
+		MinorCivQuestTypes.MINOR_CIV_QUEST_CONTEST_TECHS or false,
+		MinorCivQuestTypes.MINOR_CIV_QUEST_INVEST or false,
+		MinorCivQuestTypes.MINOR_CIV_QUEST_KILL_CAMP or false,
+
+		MinorCivQuestTypes.MINOR_CIV_QUEST_GIVE_GOLD or false,
+		MinorCivQuestTypes.MINOR_CIV_QUEST_PLEDGE_TO_PROTECT or false,
+		MinorCivQuestTypes.MINOR_CIV_QUEST_DENOUNCE_MAJOR or false,
+
+		MinorCivQuestTypes.MINOR_CIV_QUEST_TRADE_ROUTE or false,
+		MinorCivQuestTypes.MINOR_CIV_QUEST_SPREAD_RELIGION or false,
+		MinorCivQuestTypes.MINOR_CIV_QUEST_BULLY_CITY_STATE or false,
+		MinorCivQuestTypes.MINOR_CIV_QUEST_FIND_NATURAL_WONDER or false,
+		MinorCivQuestTypes.MINOR_CIV_QUEST_FIND_PLAYER or false,
+		MinorCivQuestTypes.MINOR_CIV_QUEST_KILL_CITY_STATE or false,
+		MinorCivQuestTypes.MINOR_CIV_QUEST_GREAT_PERSON or false,
+		MinorCivQuestTypes.MINOR_CIV_QUEST_CONSTRUCT_WONDER or false,
+		MinorCivQuestTypes.MINOR_CIV_QUEST_CONNECT_RESOURCE or false,
+		MinorCivQuestTypes.MINOR_CIV_QUEST_ROUTE or false,
 	}
 	kMinorWar = GameInfo.MinorCivTraits_Status.MINOR_FRIENDSHIP_STATUS_WAR
 	kMinorAllies = GameInfo.MinorCivTraits_Status.MINOR_FRIENDSHIP_STATUS_ALLIES
@@ -129,7 +129,7 @@ else
 	kMinorNeutral = GameInfo.MinorCivTraits_Status.FRIENDSHIP_THRESHOLD_NEUTRAL
 end
 
-------------------------------------------------------
+
 
 function GetCityStateStatusRow( majorPlayerID, minorPlayerID )
 	local majorPlayer = Players[majorPlayerID]
@@ -137,27 +137,27 @@ function GetCityStateStatusRow( majorPlayerID, minorPlayerID )
 
 	if majorPlayer and minorPlayer then
 
-		-- War
+
 		if Teams[majorPlayer:GetTeam()]:IsAtWar(minorPlayer:GetTeam()) then
 			return kMinorWar
 
-		-- Allies
+
 		elseif minorPlayer:IsAllies(majorPlayerID) then
 			return kMinorAllies
 
-		-- Friends
+
 		elseif minorPlayer:IsFriends(majorPlayerID) then
 			return kMinorFriends
 
-		-- Able to bully?
+
 		elseif gk_mode and minorPlayer:CanMajorBullyGold(majorPlayerID) then
 			return kMinorAfraid
 
-		-- Angry
+
 		elseif minorPlayer:GetMinorCivFriendshipWithMajor(majorPlayerID) < GameDefines.FRIENDSHIP_THRESHOLD_NEUTRAL then
 			return kMinorAngry
 
-		-- Neutral
+
 		else
 			return kMinorNeutral
 		end
@@ -204,9 +204,9 @@ function UpdateCityStateStatusBar(majorPlayerID, minorPlayerID, posBarCtrl, negB
 		end
 
 		if gk_mode then
-			-- Bubble icon for meter
+
 			local size = barMarkerCtrl:GetSize().x
-			-- Special case when INF = 0
+
 			if iInf == 0 then
 				IconHookup(kBarIconNeutralIndex, size, kBarIconAtlas, barMarkerCtrl)
 			elseif info and info.StatusMeterIconAtlasIndex then
@@ -245,40 +245,40 @@ function GetCityStateStatusText( majorPlayerID, minorPlayerID )
 		local isAtWar = majorTeam:IsAtWar(minorTeamID)
 		local majorInfluenceWithMinor = minorPlayer:GetMinorCivFriendshipWithMajor(majorPlayerID)
 
-		-- Status
 
-		if minorPlayer:IsAllies(majorPlayerID) then			-- Allies
+
+		if minorPlayer:IsAllies(majorPlayerID) then
 			strStatusText = "[COLOR_CYAN]" .. L("TXT_KEY_ALLIES")
 
-		elseif minorPlayer:IsFriends(majorPlayerID) then		-- Friends
+		elseif minorPlayer:IsFriends(majorPlayerID) then
 			strStatusText = "[COLOR_POSITIVE_TEXT]" .. L("TXT_KEY_FRIENDS")
 
-		elseif minorPlayer:IsMinorPermanentWar(majorTeamID) then	-- Permanent War
+		elseif minorPlayer:IsMinorPermanentWar(majorTeamID) then
 			strStatusText = "[COLOR_NEGATIVE_TEXT]" .. L("TXT_KEY_PERMANENT_WAR")
 
-		elseif minorPlayer:IsPeaceBlocked(majorTeamID) then		-- Peace blocked by being at war with ally
+		elseif minorPlayer:IsPeaceBlocked(majorTeamID) then
 			strStatusText = "[COLOR_NEGATIVE_TEXT]" .. L("TXT_KEY_PEACE_BLOCKED")
 
-		elseif isAtWar then		-- War
+		elseif isAtWar then
 			strStatusText = "[COLOR_NEGATIVE_TEXT]" .. L("TXT_KEY_WAR")
 
 		elseif majorInfluenceWithMinor < GameDefines.FRIENDSHIP_THRESHOLD_NEUTRAL then
-			-- Afraid
+
 			if gk_mode and minorPlayer:CanMajorBullyGold(majorPlayerID) then
 				strStatusText = "[COLOR_PLAYER_LIGHT_ORANGE_TEXT]"..L("TXT_KEY_AFRAID").."[ENDCOLOR]"
-			-- Angry
+
 			else
 				strStatusText = "[COLOR_MAGENTA]"..L("TXT_KEY_ANGRY")
 			end
 
-		else		-- Neutral
+		else
 			strStatusText = "[COLOR_WHITE]" .. L("TXT_KEY_CITY_STATE_PERSONALITY_NEUTRAL")
 		end
 		strStatusText = strStatusText .. "[ENDCOLOR]"
 		if not isAtWar then
 			strStatusText = strStatusText .. " " .. majorInfluenceWithMinor .. "[ICON_INFLUENCE]"
 			if not gk_mode and majorInfluenceWithMinor ~= 0 then
-				strStatusText = strStatusText .. (" (%+g[ICON_INFLUENCE] / "):format(minorPlayer:GetFriendshipChangePerTurnTimes100(majorPlayerID) / 100).. L"TXT_KEY_DO_TURN" .. ")" --"TXT_KEY_CITY_STATE_TITLE_TOOL_TIP_CURRENT"
+				strStatusText = strStatusText .. (" (%+g[ICON_INFLUENCE] / "):format(minorPlayer:GetFriendshipChangePerTurnTimes100(majorPlayerID) / 100).. L"TXT_KEY_DO_TURN" .. ")"
 			end
 		end
 	else
@@ -289,7 +289,7 @@ function GetCityStateStatusText( majorPlayerID, minorPlayerID )
 end
 
 function GetCityStateResourceExports( minorPlayer )
-	-- Resources
+
 	local resourceExports = {}
 
 	if minorPlayer and minorPlayer.GetResourceExport then
@@ -349,7 +349,7 @@ function GetCityStateBonuses( majorPlayerID, minorPlayerID )
 			end
 		end
 
-		-- Resources
+
 		local resourceExports = GetCityStateResourceExports( minorPlayer )
 
 		if minorPlayer:IsAllies(majorPlayerID) and #resourceExports > 0 then
@@ -375,9 +375,9 @@ function GetCityStateStatusToolTip( majorPlayerID, minorPlayerID, isFullInfo )
 		local strShortDesc = minorPlayer:GetCivilizationShortDescription()
 		local influenceAccumulated = minorPlayer:GetMinorCivFriendshipWithMajor(majorPlayerID)
 
-		-- Name
+
 		local tip = strShortDesc
-		-- Resources
+
 		for resource in GameInfo.Resources() do
 			if resource.ResourceClassType ~= "RESOURCECLASS_BONUS" then
 				local resourceForExport = minorPlayer:GetResourceExport(resource.ID)
@@ -387,17 +387,17 @@ function GetCityStateStatusToolTip( majorPlayerID, minorPlayerID, isFullInfo )
 				end
 			end
 		end
-		-- Status
+
 		tip = tip .. " " .. GetCityStateStatusText( majorPlayerID, minorPlayerID )
 		table_insert( tips, tip )
 
-		-- Influence change
+
 		if gk_mode then
 			local influenceAnchor = minorPlayer:GetMinorCivFriendshipAnchorWithMajor(majorPlayerID)
 			if influenceAccumulated ~= influenceAnchor then
 				table_insert( tips, L( "TXT_KEY_CSTATE_INFLUENCE_RATE", minorPlayer:GetFriendshipChangePerTurnTimes100(majorPlayerID) / 100, influenceAnchor ) )
 			end
-			-- Bullying
+
 			if minorPlayer:CanMajorBullyGold(majorPlayerID) then
 				table_insert( tips, L"TXT_KEY_CSTATE_CAN_BULLY" )
 			else
@@ -406,13 +406,13 @@ function GetCityStateStatusToolTip( majorPlayerID, minorPlayerID, isFullInfo )
 		end
 
 		if isFullInfo then
-			-- Bonuses
+
 			local bonuses = GetCityStateBonuses( majorPlayerID, minorPlayerID )
 			if #bonuses > 0 then
 				table_insert( tips, table_concat( bonuses, newLine ) )
 			end
 
-			-- Protected by anyone?
+
 			local protectors={}
 			for playerID = 0, GameDefines.MAX_MAJOR_CIVS-1 do
 				local player = Players[playerID]
@@ -428,7 +428,7 @@ function GetCityStateStatusToolTip( majorPlayerID, minorPlayerID, isFullInfo )
 				table_insert( tips, L"TXT_KEY_POP_CSTATE_PLEDGE_TO_PROTECT" .. ": " .. table_concat(protectors, ", ") )
 			end
 
-			-- At war with anyone ?
+
 			local wars={}
 			for playerID = 0, GameDefines.MAX_CIV_PLAYERS - 1 do
 				local player = Players[playerID]
@@ -460,22 +460,22 @@ function GetAllyText( majorPlayerID, minorPlayerID )
 	if majorPlayer and minorPlayer then
 		local allyID = minorPlayer:GetAlly()
 		local ally = Players[ allyID ]
-		-- Has an ally
+
 		if ally then
-			-- Not us
+
 			if allyID ~= majorPlayerID then
-				-- Someone we know
+
 				if Teams[majorPlayer:GetTeam()]:IsHasMet( ally:GetTeam() ) then
 					return L( ally:GetCivilizationShortDescriptionKey() )
-				-- Someone we haven't met
+
 				else
 					return L"TXT_KEY_UNMET_PLAYER"
 				end
-			-- Us
+
 			else
 				return "[COLOR_POSITIVE_TEXT]" .. L"TXT_KEY_YOU" .. "[ENDCOLOR]"
 			end
-		-- No ally
+
 		else
 			return L"TXT_KEY_CITY_STATE_NOBODY"
 		end
@@ -493,34 +493,34 @@ function GetAllyToolTip( majorPlayerID, minorPlayerID )
 		local minorCivFriendshipWithMajor = minorPlayer:GetMinorCivFriendshipWithMajor(majorPlayerID)
 		local allyID = minorPlayer:GetAlly()
 		local ally = Players[allyID]
-		-- Has an ally
+
 		if ally then
 			local minorCivFriendshipWithAlly = minorPlayer:GetMinorCivFriendshipWithMajor(allyID)
-			-- Not us
+
 			if allyID ~= majorPlayerID then
-				-- Someone we know
-				local influenceUntilAllied = minorCivFriendshipWithAlly - minorCivFriendshipWithMajor + 1	-- needs to pass up the current ally, not just match
+
+				local influenceUntilAllied = minorCivFriendshipWithAlly - minorCivFriendshipWithMajor + 1
 				if not gk_mode then
 					toolTip = L("TXT_KEY_CITY_STATE_TITLE_TOOL_TIP_ALLIES", influenceUntilAllied, minorPlayer:GetCivilizationShortDescription() )
 				elseif Teams[majorPlayer:GetTeam()]:IsHasMet(ally:GetTeam()) then
 					toolTip = L("TXT_KEY_CITY_STATE_ALLY_TT", Players[allyID]:GetCivilizationShortDescription(), influenceUntilAllied)
-				-- Someone we haven't met
+
 				else
 					toolTip = L("TXT_KEY_CITY_STATE_ALLY_UNKNOWN_TT", influenceUntilAllied)
 				end
-				-- Remove Firaxis' tedious drone blurb
+
 				return toolTip:sub(1,(toolTip:find("[NEWLINE]",1,true) or 999)-1)
 
-			-- Us
+
 			else
 				toolTip = L("TXT_KEY_CITY_STATE_RELATIONSHIP_ALLIES")
-				-- Bonuses
+
 				local bonuses = GetCityStateBonuses( majorPlayerID, minorPlayerID )
 				if #bonuses > 0 then
 					toolTip = toolTip .. " " .. table_concat( bonuses, " " )
 				end
 			end
-		-- No ally
+
 		else
 			local influenceUntilAllied = GameDefines.FRIENDSHIP_THRESHOLD_ALLIES - minorCivFriendshipWithMajor
 			if gk_mode then
@@ -554,12 +554,12 @@ if gk_mode then
 				end
 			end
 
-			-- Threatening Barbarians event
+
 			if minorPlayer:IsThreateningBarbariansEventActiveForPlayer(majorPlayerID) then
 				sIconText = sIconText .. "[ICON_RAZING]"
 			end
 
-			-- Proxy War event
+
 			if bnw_mode and minorPlayer:IsProxyWarActiveForMajor(majorPlayerID) then
 				sIconText = sIconText .. "[ICON_RESISTANCE]"
 			end
@@ -661,7 +661,7 @@ if gk_mode then
 				if isMinorCivQuestForPlayer( minorPlayer, majorPlayerID, questID ) then
 					local questData1 = minorPlayer:GetQuestData1(majorPlayerID, questID)
 					local questString = QuestString(majorPlayerID, minorPlayer, questID, questData1)
-					local turnsRemaining = minorPlayer:GetQuestTurnsRemaining(majorPlayerID, questID, Game_GetGameTurn() - 1)	-- add 1 since began on CS's turn (1 before), and avoids "0 turns remaining"
+					local turnsRemaining = minorPlayer:GetQuestTurnsRemaining(majorPlayerID, questID, Game_GetGameTurn() - 1)
 					if turnsRemaining >= 0 then
 						questString = questString .. " " .. L( "TXT_KEY_CITY_STATE_QUEST_TURNS_REMAINING_FORMAL", turnsRemaining )
 					end
@@ -669,18 +669,18 @@ if gk_mode then
 				end
 			end
 
-			-- Threatening Barbarians event
+
 			if minorPlayer:IsThreateningBarbariansEventActiveForPlayer(majorPlayerID) then
 				table_insert( tips,"[ICON_RAZING]" .. L("TXT_KEY_CITY_STATE_QUEST_INVADING_BARBS_FORMAL") )
 			end
 
-			-- Proxy War event
+
 			if bnw_mode and minorPlayer:IsProxyWarActiveForMajor(majorPlayerID) then
 				table_insert( tips,"[ICON_RESISTANCE]" .. L("TXT_KEY_CITY_STATE_QUEST_GIFT_UNIT_FORMAL") )
 			end
 		else
 			print("Lua error - invalid player index")
-		end -- minorPlayer
+		end
 
 		if #tips > 0 then
 			return table_concat( tips, newLine )
@@ -698,10 +698,10 @@ else
 			end
 		else
 			print("Lua error - invalid player index")
-		end -- minorPlayer
+		end
 		return L("TXT_KEY_CITY_STATE_BARB_QUEST_SHORT")..": "..L("TXT_KEY_SV_ICONS_NONE")
 	end
-end -- gk_mode
+end
 
 function GetCityStateTraitText(minorPlayerID)
 
@@ -735,7 +735,7 @@ function GetCityStateTraitToolTip( minorPlayerID )
 				if GameInfo.Units[eUniqueUnit] then
 					local ePrereqTech = GameInfo.Units[eUniqueUnit].PrereqTech
 					if not ePrereqTech then
-						-- If no prereq then just make it Agriculture, but make sure that Agriculture is in our database. Otherwise, show the fallback tooltip.
+
 						ePrereqTech = GameInfo.Technologies.TECH_AGRICULTURE
 						ePrereqTech = ePrereqTech and ePrereqTech.ID
 					end
@@ -773,9 +773,9 @@ function GetCityStateStatusAlly( majorPlayerID, minorPlayerID, isFullInfo )
 	elseif majorPlayer and minorPlayer then
 		local allyID = minorPlayer:GetAlly()
 		local minorCivFriendshipWithMajor = minorPlayer:GetMinorCivFriendshipWithMajor(majorPlayerID)
-		if allyID and allyID ~= -1 then -- already has an ally
+		if allyID and allyID ~= -1 then
 
-			local minorCivFriendshipAlly = minorPlayer:GetMinorCivFriendshipWithMajor(allyID) - minorCivFriendshipWithMajor + 1	-- needs to pass up the current ally, not just match
+			local minorCivFriendshipAlly = minorPlayer:GetMinorCivFriendshipWithMajor(allyID) - minorCivFriendshipWithMajor + 1
 			local ally = Players[allyID]
 
 			if Teams[majorPlayer:GetTeam()]:IsHasMet(ally:GetTeam()) then

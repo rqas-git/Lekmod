@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvNotifications.h"
 #include "CvPlayer.h"
@@ -14,7 +14,7 @@
 #include "CvEnumSerialization.h"
 #include "CvDllPlot.h"
 
-// Include this after all other headers.
+
 #include "LintFree.h"
 
 #define MAX_NOTIFICATIONS 100
@@ -169,7 +169,7 @@ static uint V1_IndexToHash[] =
 	NOTIFICATION_CITY_REVOLT
 };
 
-/// Serialization read
+
 FDataStream& operator>>(FDataStream& loadFrom, CvNotifications::Notification& writeTo)
 {
 	loadFrom >> writeTo.m_eNotificationType;
@@ -183,13 +183,13 @@ FDataStream& operator>>(FDataStream& loadFrom, CvNotifications::Notification& wr
 	loadFrom >> writeTo.m_iLookupIndex;
 	loadFrom >> writeTo.m_bDismissed;
 	loadFrom >> writeTo.m_ePlayerID;
-	writeTo.m_bNeedsBroadcast = true; // all loads should re-broadcast their events
-	writeTo.m_bWaitExtraTurn = false; // not saving this
+	writeTo.m_bNeedsBroadcast = true;
+	writeTo.m_bWaitExtraTurn = false;
 
 	return loadFrom;
 }
 
-/// Serialization write
+
 FDataStream& operator<<(FDataStream& saveTo, const CvNotifications::Notification& readFrom)
 {
 	saveTo << readFrom.m_eNotificationType;
@@ -203,10 +203,10 @@ FDataStream& operator<<(FDataStream& saveTo, const CvNotifications::Notification
 	saveTo << readFrom.m_iLookupIndex;
 	saveTo << readFrom.m_bDismissed;
 	saveTo << readFrom.m_ePlayerID;
-	// this is not saved because we want to re-broadcast on load
-	// saveTo << writeTo.m_bBroadcast;
-	// Not saving this either
-	// saveTo << readFrom.m_bWaitExtraTurn;
+
+
+
+
 
 	return saveTo;
 }
@@ -226,19 +226,19 @@ void CvNotifications::Notification::Clear()
 	m_bWaitExtraTurn = false;
 }
 
-/// Constructor
+
 CvNotifications::CvNotifications(void)
 {
 	Uninit();
 }
 
-/// Destructor
+
 CvNotifications::~CvNotifications(void)
 {
 	Uninit();
 }
 
-/// Init
+
 void CvNotifications::Init(PlayerTypes ePlayer)
 {
 	Uninit();
@@ -253,7 +253,7 @@ void CvNotifications::Init(PlayerTypes ePlayer)
 	m_iNotificationsEndIndex = 0;
 }
 
-/// Uninit
+
 void CvNotifications::Uninit(void)
 {
 	m_ePlayer = NO_PLAYER;
@@ -264,10 +264,10 @@ void CvNotifications::Uninit(void)
 	m_iNotificationsEndIndex = -1;
 }
 
-/// Serialization read
+
 void CvNotifications::Read(FDataStream& kStream)
 {
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion;
 	kStream >> uiVersion;
 
@@ -281,7 +281,7 @@ void CvNotifications::Read(FDataStream& kStream)
 		kStream >> m_aNotifications[ui];
 		if (uiVersion <= 1)
 		{
-			// Translate the old index the hash ID.
+
 			int iIndex = (int)(m_aNotifications[ui].m_eNotificationType);
 #ifdef AUI_WARNING_FIXES
 			if (iIndex >= 0 && iIndex < sizeof(V1_IndexToHash) / sizeof(int))
@@ -293,14 +293,14 @@ void CvNotifications::Read(FDataStream& kStream)
 	}
 }
 
-/// Serialization write
+
 void CvNotifications::Write(FDataStream& kStream) const
 {
-	// Current version number
+
 	uint uiVersion = 2;
 	kStream << uiVersion;
 
-	// need to serialize notification list
+
 	kStream << m_ePlayer;
 	kStream << m_iCurrentLookupIndex;
 	kStream << m_iNotificationsBeginIndex;
@@ -312,7 +312,7 @@ void CvNotifications::Write(FDataStream& kStream) const
 	}
 }
 
-/// Update - called from within CvPlayer
+
 void CvNotifications::Update(void)
 {
 	int iIndex = m_iNotificationsBeginIndex;
@@ -324,16 +324,16 @@ void CvNotifications::Update(void)
 		{
 			if(IsNotificationExpired(iIndex))
 			{
-				Dismiss(kNotification.m_iLookupIndex, /*bUserInvoked*/ false);
-				//GC.GetEngineUserInterface()->RemoveNotification(kNotification.m_iLookupIndex);
-				//kNotification.m_bDismissed = true;
+				Dismiss(kNotification.m_iLookupIndex,                  false);
+
+
 			}
 			else
 			{
 				if(kNotification.m_bNeedsBroadcast)
 				{
-					// If the notification is for the 'active' player and that active player actually has his turn active or its not hotseat, then show the notification, else wait.
-					// The 'active' player is only set to a human and during the AI turn, the 'active' player is the last human to do their turn.
+
+
 					if(kNotification.m_ePlayerID == GC.getGame().getActivePlayer())
 					{
 						if(!CvPreGame::isHotSeatGame() || GET_PLAYER(GC.getGame().getActivePlayer()).isTurnActive())
@@ -343,8 +343,8 @@ void CvNotifications::Update(void)
 						}
 					}
 					else if(gDLL->IsPlayerConnected(kNotification.m_ePlayerID))
-					{//We consider a notification to have been broadcast if the notification 
-						//is for a remote player who is network connected to the game.
+					{
+
 						kNotification.m_bNeedsBroadcast = false;
 					}
 				}
@@ -360,7 +360,7 @@ void CvNotifications::Update(void)
 	}
 }
 
-// EndOfTurnCleanup - called from within CvPlayer at the end of turn
+
 void CvNotifications::EndOfTurnCleanup(void)
 {
 	int iIndex = m_iNotificationsBeginIndex;
@@ -373,7 +373,7 @@ void CvNotifications::EndOfTurnCleanup(void)
 				if (m_aNotifications[iIndex].m_bWaitExtraTurn)
 					m_aNotifications[iIndex].m_bWaitExtraTurn = false;
 				else
-					Dismiss(m_aNotifications[iIndex].m_iLookupIndex, /*bUserInvoked*/ false);
+					Dismiss(m_aNotifications[iIndex].m_iLookupIndex,                  false);
 			}
 		}
 
@@ -386,7 +386,7 @@ void CvNotifications::EndOfTurnCleanup(void)
 	}
 }
 
-/// Adds a new notification to the list
+
 int CvNotifications::AddByName(const char* pszNotificationName, const char* strMessage, const char* strSummary, int iX, int iY, int iGameDataIndex, int iExtraGameData)
 {
 	if (pszNotificationName && pszNotificationName[0] != 0)
@@ -396,16 +396,16 @@ int CvNotifications::AddByName(const char* pszNotificationName, const char* strM
 	return -1;
 }
 
-/// Adds a new notification to the list
+
 int CvNotifications::Add(NotificationTypes eNotificationType, const char* strMessage, const char* strSummary, int iX, int iY, int iGameDataIndex, int iExtraGameData)
 {
-	// if the player is not human, do not record
+
 	if(!GET_PLAYER(m_ePlayer).isHuman())
 	{
 		return -1;
 	}
 
-	// If we're in debug mode, don't do anything
+
 	if(GC.getGame().isDebugMode())
 		return -1;
 
@@ -426,14 +426,14 @@ int CvNotifications::Add(NotificationTypes eNotificationType, const char* strMes
 	newNotification.m_bDismissed = false;
 	newNotification.m_bWaitExtraTurn = false;
 
-	// Is this notification being added during the player's auto-moves and will it expire at the end of the turn?
-	// If so, set a flag so the notification will stick around for an extra turn.
+
+
 	if (GET_PLAYER(m_ePlayer).isTurnActive() && GET_PLAYER(m_ePlayer).isAutoMoves() && IsNotificationTypeEndOfTurnExpired(eNotificationType))
 		newNotification.m_bWaitExtraTurn = true;
 
 	if(IsNotificationRedundant(newNotification))
 	{
-		// redundant notification
+
 		return -1;
 	}
 
@@ -446,13 +446,13 @@ int CvNotifications::Add(NotificationTypes eNotificationType, const char* strMes
 
 	if(GC.getGame().isFinalInitialized())
 	{
-		// If the notification is for the 'active' player and that active player actually has his turn active or its not hotseat, then show the notification, else wait
-		// The 'active' player is only set to a human and during the AI turn, the 'active' player is the last human to do their turn.
+
+
 		if(newNotification.m_ePlayerID == GC.getGame().getActivePlayer() && (!CvPreGame::isHotSeatGame() || GET_PLAYER(GC.getGame().getActivePlayer()).isTurnActive()))
 		{
 			GC.GetEngineUserInterface()->AddNotification(newNotification.m_iLookupIndex, newNotification.m_eNotificationType, newNotification.m_strMessage.c_str(), newNotification.m_strSummary.c_str(), newNotification.m_iGameDataIndex, newNotification.m_iExtraGameData, m_ePlayer, iX, iY);
 
-			// Don't show effect with production notification
+
 			if(eNotificationType != NOTIFICATION_PRODUCTION)
 			{
 				CvPlot* pPlot = GC.getMap().plot(iX, iY);
@@ -471,7 +471,7 @@ int CvNotifications::Add(NotificationTypes eNotificationType, const char* strMes
 			m_aNotifications[m_iNotificationsEndIndex].m_bNeedsBroadcast = false;
 		}
 
-		gDLL->GameplayMinimapNotification(iX, iY, m_iCurrentLookupIndex+1);	// The index is used to uniquely identify each flashing dot on the minimap. We're adding 1 since the selected unit is always 0. It ain't pretty, but it'll work
+		gDLL->GameplayMinimapNotification(iX, iY, m_iCurrentLookupIndex+1);
 	}
 
 	IncrementEndIndex();
@@ -481,7 +481,7 @@ int CvNotifications::Add(NotificationTypes eNotificationType, const char* strMes
 	return newNotification.m_iLookupIndex;
 }
 
-//	---------------------------------------------------------------------------
+
 void CvNotifications::Activate(int iLookupIndex)
 {
 	int iIndex = m_iNotificationsBeginIndex;
@@ -500,7 +500,7 @@ void CvNotifications::Activate(int iLookupIndex)
 	}
 }
 
-//	---------------------------------------------------------------------------
+
 void CvNotifications::Dismiss(int iLookupIndex, bool bUserInvoked)
 {
 	int iIndex = m_iNotificationsBeginIndex;
@@ -535,7 +535,7 @@ void CvNotifications::Dismiss(int iLookupIndex, bool bUserInvoked)
 	}
 }
 
-//	---------------------------------------------------------------------------
+
 bool CvNotifications::MayUserDismiss(int iLookupIndex)
 {
 	int iIndex = m_iNotificationsBeginIndex;
@@ -599,7 +599,7 @@ bool CvNotifications::MayUserDismiss(int iLookupIndex)
 	return false;
 }
 
-//	---------------------------------------------------------------------------
+
 void CvNotifications::Rebroadcast(void)
 {
 	int iIndex = m_iNotificationsBeginIndex;
@@ -617,7 +617,7 @@ void CvNotifications::Rebroadcast(void)
 		}
 	}
 }
-//	---------------------------------------------------------------------------
+
 bool CvNotifications::GetEndTurnBlockedType(EndTurnBlockingTypes& eBlockingType, int& iNotificationIndex)
 {
 	eBlockingType = NO_ENDTURN_BLOCKING_TYPE;
@@ -634,7 +634,7 @@ bool CvNotifications::GetEndTurnBlockedType(EndTurnBlockingTypes& eBlockingType,
 			{
 				bool automaticallyEndTurns = GC.getGame().isGameMultiPlayer() ? GC.GetEngineUserInterface()->IsMPAutoEndTurnEnabled() : GC.GetEngineUserInterface()->IsSPAutoEndTurnEnabled();
 				if(automaticallyEndTurns)
-				{//City range attacks only block turns if the player is using auto end turn.
+				{
 					eBlockingType = ENDTURN_BLOCKING_CITY_RANGE_ATTACK;
 					iNotificationIndex = m_aNotifications[iIndex].m_iLookupIndex;
 					return true;
@@ -751,7 +751,7 @@ bool CvNotifications::GetEndTurnBlockedType(EndTurnBlockingTypes& eBlockingType,
 				break;
 
 			default:
-				// these notifications don't block, so don't return a blocking type
+
 				break;
 			}
 		}
@@ -766,7 +766,7 @@ bool CvNotifications::GetEndTurnBlockedType(EndTurnBlockingTypes& eBlockingType,
 	return false;
 }
 
-//	---------------------------------------------------------------------------
+
 int CvNotifications::GetNumNotifications(void)
 {
 	if(m_iNotificationsEndIndex >= m_iNotificationsBeginIndex)
@@ -779,7 +779,7 @@ int CvNotifications::GetNumNotifications(void)
 	return iValue;
 }
 
-CvString CvNotifications::GetNotificationStr(int iZeroBasedIndex)  // ignores the begin/end values
+CvString CvNotifications::GetNotificationStr(int iZeroBasedIndex)
 {
 	int iRealIndex = (m_iNotificationsBeginIndex + iZeroBasedIndex) % m_aNotifications.size();
 	return m_aNotifications[iRealIndex].m_strMessage;
@@ -792,7 +792,7 @@ CvString CvNotifications::GetNotificationSummary(int iZeroBasedIndex)
 }
 
 
-int CvNotifications::GetNotificationID(int iZeroBasedIndex)  // ignores begin/end values
+int CvNotifications::GetNotificationID(int iZeroBasedIndex)
 {
 	int iRealIndex = (m_iNotificationsBeginIndex + iZeroBasedIndex) % m_aNotifications.size();
 	return m_aNotifications[iRealIndex].m_iLookupIndex;
@@ -815,7 +815,7 @@ void CvNotifications::Activate(Notification& notification)
 {
 	GC.GetEngineUserInterface()->ActivateNotification(notification.m_iLookupIndex, notification.m_eNotificationType, notification.m_strMessage, notification.m_iX, notification.m_iY, notification.m_iGameDataIndex, notification.m_iExtraGameData, m_ePlayer);
 
-	gDLL->GameplayMinimapNotification(notification.m_iX, notification.m_iY, notification.m_iLookupIndex+1);	// The index is used to uniquely identify each flashing dot on the minimap. We're adding 1 since the selected unit is always 0. It ain't pretty, but it'll work
+	gDLL->GameplayMinimapNotification(notification.m_iX, notification.m_iY, notification.m_iLookupIndex+1);
 
 	switch(notification.m_eNotificationType)
 	{
@@ -833,7 +833,7 @@ void CvNotifications::Activate(Notification& notification)
 		break;
 	case NOTIFICATION_BUY_TILE:
 	{
-		// Jon say - do like Sid would!
+
 		CvCity* pCity = GET_PLAYER(m_ePlayer).getCapitalCity();
 		if(pCity)
 		{
@@ -895,7 +895,7 @@ void CvNotifications::Activate(Notification& notification)
 	break;
 	case NOTIFICATION_PRODUCTION:
 	{
-		CvCity* pCity = GC.getMap().plot(notification.m_iX, notification.m_iY)->getPlotCity();//GET_PLAYER(m_ePlayer).getCity(notification.m_iGameDataIndex);
+		CvCity* pCity = GC.getMap().plot(notification.m_iX, notification.m_iY)->getPlotCity();
 		if(!pCity)
 		{
 			return;
@@ -905,10 +905,10 @@ void CvNotifications::Activate(Notification& notification)
 
 		kPopupInfo.iData1 = pCity->GetID();
 
-		kPopupInfo.bOption2 = false;	// Not in purchase mode
+		kPopupInfo.bOption2 = false;
 
-		// slewis - do we need the stuff below?
-		//kPopupInfo.setOption1(false);
+
+
 
 		OrderTypes eOrder = (OrderTypes) notification.m_iGameDataIndex;
 		int iItemID = notification.m_iExtraGameData;
@@ -957,14 +957,14 @@ void CvNotifications::Activate(Notification& notification)
 	break;
 	case NOTIFICATION_FOUND_PANTHEON:
 	{
-		CvPopupInfo kPopup(BUTTONPOPUP_FOUND_PANTHEON, m_ePlayer, true /*bPantheonBelief*/);
+		CvPopupInfo kPopup(BUTTONPOPUP_FOUND_PANTHEON, m_ePlayer, true                    );
 		GC.GetEngineUserInterface()->AddPopup(kPopup);
 	}
 	break;
 
 	case NOTIFICATION_ADD_REFORMATION_BELIEF:
 	{
-		CvPopupInfo kPopup(BUTTONPOPUP_FOUND_PANTHEON, m_ePlayer, false /*bPantheonBelief*/);
+		CvPopupInfo kPopup(BUTTONPOPUP_FOUND_PANTHEON, m_ePlayer, false                    );
 		GC.GetEngineUserInterface()->AddPopup(kPopup);
 	}
 	break;
@@ -1038,7 +1038,7 @@ void CvNotifications::Activate(Notification& notification)
 			}
 
 			GC.GetEngineUserInterface()->RemoveNotification(notification.m_iLookupIndex, m_ePlayer);
-			notification.m_iExtraGameData = 1; // slewis hack to mark notification as seen so we don't re-enter diplomacy
+			notification.m_iExtraGameData = 1;
 		}
 	}
 	break;
@@ -1083,7 +1083,7 @@ void CvNotifications::Activate(Notification& notification)
 		if (notification.m_iGameDataIndex >= 0)
 		{
 			CvPopupInfo kPopup(BUTTONPOPUP_CULTURE_OVERVIEW);
-			kPopup.iData2 = 3; // Tab to select
+			kPopup.iData2 = 3;
 			GC.GetEngineUserInterface()->AddPopup(kPopup);
 		}
 		break;
@@ -1137,7 +1137,7 @@ void CvNotifications::Activate(Notification& notification)
 		break;
 #endif
 
-	default:	// Default behavior is to move the camera to the X,Y passed in
+	default:
 	{
 		CvPlot* pPlot = GC.getMap().plot(notification.m_iX, notification.m_iY);
 		if(pPlot)
@@ -1152,7 +1152,7 @@ void CvNotifications::Activate(Notification& notification)
 	}
 }
 
-//	---------------------------------------------------------------------------
+
 bool CvNotifications::IsNotificationRedundant(Notification& notification)
 {
 	switch(notification.m_eNotificationType)
@@ -1172,7 +1172,7 @@ bool CvNotifications::IsNotificationRedundant(Notification& notification)
 							return true;
 					}
 					else
-						// We already added this kind of notification so we don't need another
+
 						return true;
 				}
 			}
@@ -1198,7 +1198,7 @@ bool CvNotifications::IsNotificationRedundant(Notification& notification)
 			{
 				if(!notification.m_bDismissed && !m_aNotifications[iIndex].m_bDismissed)
 				{
-					// we've already added a free tech notification, don't need another
+
 					return true;
 				}
 			}
@@ -1224,7 +1224,7 @@ bool CvNotifications::IsNotificationRedundant(Notification& notification)
 			{
 				if(!notification.m_bDismissed && !m_aNotifications[iIndex].m_bDismissed)
 				{
-					// we've already added a policy notification, don't need another
+
 					return true;
 				}
 			}
@@ -1250,7 +1250,7 @@ bool CvNotifications::IsNotificationRedundant(Notification& notification)
 			{
 				if(!notification.m_bDismissed && !m_aNotifications[iIndex].m_bDismissed)
 				{
-					// we've already added a tech notification, don't need another
+
 					return true;
 				}
 			}
@@ -1278,7 +1278,7 @@ bool CvNotifications::IsNotificationRedundant(Notification& notification)
 			{
 				if(!notification.m_bDismissed && !m_aNotifications[iIndex].m_bDismissed)
 				{
-					// we've already added a notification for this city to the notification system, so don't add another one
+
 					return true;
 				}
 			}
@@ -1299,7 +1299,7 @@ bool CvNotifications::IsNotificationRedundant(Notification& notification)
 		int iIndex = m_iNotificationsBeginIndex;
 		while(iIndex != m_iNotificationsEndIndex)
 		{
-			// Only one "enemy in territory" notification at a time
+
 			if(notification.m_eNotificationType == m_aNotifications[iIndex].m_eNotificationType)
 			{
 				if(!notification.m_bDismissed && !m_aNotifications[iIndex].m_bDismissed)
@@ -1330,7 +1330,7 @@ bool CvNotifications::IsNotificationRedundant(Notification& notification)
 				{
 					if(!notification.m_bDismissed && !m_aNotifications[iIndex].m_bDismissed)
 					{
-						// we've already added a notification for this unit to the notification system, so don't add another one
+
 						return true;
 					}
 				}
@@ -1352,7 +1352,7 @@ bool CvNotifications::IsNotificationRedundant(Notification& notification)
 		PlayerTypes eOurPlayer1 = (PlayerTypes) notification.m_iGameDataIndex;
 		PlayerTypes eOurPlayer2 = (PlayerTypes) notification.m_iExtraGameData;
 
-		// Notification is NOT being used to inform of a DoF or Denouncement (otherwise there would be valid players in these slots)
+
 		if(eOurPlayer1 == -1 || eOurPlayer2 == -1)
 			return false;
 
@@ -1366,7 +1366,7 @@ bool CvNotifications::IsNotificationRedundant(Notification& notification)
 				eCheckingPlayer1 = (PlayerTypes) m_aNotifications[iIndex].m_iGameDataIndex;
 				eCheckingPlayer2 = (PlayerTypes) m_aNotifications[iIndex].m_iExtraGameData;
 
-				// Players match - we already have a notification with this player combo
+
 				if((eOurPlayer1 == eCheckingPlayer1 && eOurPlayer2 == eCheckingPlayer2) ||
 				        (eOurPlayer1 == eCheckingPlayer2 && eOurPlayer2 == eCheckingPlayer1))
 				{
@@ -1397,7 +1397,7 @@ bool CvNotifications::IsNotificationRedundant(Notification& notification)
 			{
 				if(!notification.m_bDismissed && !m_aNotifications[iIndex].m_bDismissed)
 				{
-					// we've already added a pantheon notification, don't need another
+
 					return true;
 				}
 			}
@@ -1425,7 +1425,7 @@ bool CvNotifications::IsNotificationRedundant(Notification& notification)
 			{
 				if(!notification.m_bDismissed && !m_aNotifications[iIndex].m_bDismissed)
 				{
-					// we've already added one of this notification type, don't need another
+
 					return true;
 				}
 			}
@@ -1452,10 +1452,10 @@ bool CvNotifications::IsNotificationRedundant(Notification& notification)
 				{
 					if(!notification.m_bDismissed && !m_aNotifications[iIndex].m_bDismissed)
 					{
-						// Same League ID
+
 						if (notification.m_iGameDataIndex == m_aNotifications[iIndex].m_iGameDataIndex)
 						{
-							// Same Project type
+
 							if (notification.m_iExtraGameData == m_aNotifications[iIndex].m_iExtraGameData)
 							{
 								return true;
@@ -1555,7 +1555,7 @@ bool CvNotifications::IsNotificationExpired(int iIndex)
 			}
 		}
 
-		//Expire this notification if there are no more techs that can be researched at this time.
+
 		return pkPlayerTechs->GetNumTechsCanBeResearched() == 0;
 	}
 	break;
@@ -1568,7 +1568,7 @@ bool CvNotifications::IsNotificationExpired(int iIndex)
 		}
 		else
 		{
-			//Expire this notification if there are no more techs that can be researched at this time.
+
 			return kPlayer.GetPlayerTechs()->GetNumTechsCanBeResearched() == 0;
 		}
 	}
@@ -1637,10 +1637,10 @@ bool CvNotifications::IsNotificationExpired(int iIndex)
 	break;
 	case NOTIFICATION_PRODUCTION:
 	{
-		//CvCity* pCity = GET_PLAYER(m_ePlayer).getCity(m_aNotifications[iIndex].m_iGameDataIndex);
-		CvCity* pCity = GC.getMap().plot(m_aNotifications[iIndex].m_iX, m_aNotifications[iIndex].m_iY)->getPlotCity();//GET_PLAYER(m_ePlayer).getCity(notification.m_iGameDataIndex);
 
-		// if the city no longer exists
+		CvCity* pCity = GC.getMap().plot(m_aNotifications[iIndex].m_iX, m_aNotifications[iIndex].m_iY)->getPlotCity();
+
+
 		if(!pCity)
 		{
 			return true;
@@ -1657,14 +1657,14 @@ bool CvNotifications::IsNotificationExpired(int iIndex)
 			return true;
 		}
 #else
-		// if the city is a puppet
+
 		if(pCity->IsPuppet())
 		{
 			return true;
 		}
 #endif
 
-		// City has chosen something
+
 		if(pCity->getOrderQueueLength() > 0)
 		{
 			return true;
@@ -1675,14 +1675,14 @@ bool CvNotifications::IsNotificationExpired(int iIndex)
 	{
 		TeamTypes eTeam = GET_PLAYER(m_ePlayer).getTeam();
 
-		// Vote from this team registered
+
 		if(GC.getGame().GetVoteCast(eTeam) != NO_TEAM)
 		{
 			return true;
 		}
 
-		// Votes from ALL teams registered. This is necessary in addition to the above if block, because if this player is the last to vote
-		// then everything gets reset immediately, and it'll be NO_TEAM by the time this function is tested again
+
+
 		if(GC.getGame().GetNumVictoryVotesExpected() == 0)
 		{
 			return true;
@@ -1722,8 +1722,8 @@ bool CvNotifications::IsNotificationExpired(int iIndex)
 	break;
 	case NOTIFICATION_DEMAND_RESOURCE:
 	{
-		// if this is a "you ran out of this resource" demand resource.
-		// I did this so not to break the save format
+
+
 		if(m_aNotifications[iIndex].m_iX == -1 && m_aNotifications[iIndex].m_iY == -1)
 		{
 			if(GET_PLAYER(m_ePlayer).getNumResourceAvailable((ResourceTypes)m_aNotifications[iIndex].m_iGameDataIndex, true) >= 0)
@@ -1753,7 +1753,7 @@ bool CvNotifications::IsNotificationExpired(int iIndex)
 		CvGame& kGame(GC.getGame());
 		CvGameReligions* pkReligions(kGame.GetGameReligions());
 		if (pkReligions->GetNumReligionsStillToFound() <= 0)
-			return true;	// None left, dismiss the notification
+			return true;
 
 		return pkReligions->HasCreatedReligion(m_ePlayer);
 	}
@@ -1764,9 +1764,9 @@ bool CvNotifications::IsNotificationExpired(int iIndex)
 		CvGame& kGame(GC.getGame());
 		CvGameReligions* pkReligions(kGame.GetGameReligions());
 		if (pkReligions->GetAvailableEnhancerBeliefs().size() == 0)
-			return true;	// None left, dismiss the notification.
+			return true;
 		if (pkReligions->GetAvailableFollowerBeliefs().size() == 0)
-			return true;	// None left, dismiss the notification.		
+			return true;
 
 		ReligionTypes eReligion = pkReligions->GetReligionCreatedByPlayer(m_ePlayer);
 		const CvReligion* pReligion = pkReligions->GetReligion(eReligion, m_ePlayer);
@@ -1853,7 +1853,7 @@ bool CvNotifications::IsNotificationExpired(int iIndex)
 	case NOTIFICATION_PLAYER_CONNECTING:
 	{
 		if(!gDLL->IsPlayerHotJoining(m_aNotifications[iIndex].m_iGameDataIndex)){
-			//Player has finished hot joining.  Remove this notification, we'll add a NOTIFICATION_PLAYER_RECONNECTED in NetProxy::OnHotJoinComplete().
+
 			return true;
 		}
 	}
@@ -1873,7 +1873,7 @@ bool CvNotifications::IsNotificationExpired(int iIndex)
 	break;
 #endif
 
-	default:	// don't expire
+	default:
 	{
 		return false;
 	}
@@ -1883,8 +1883,8 @@ bool CvNotifications::IsNotificationExpired(int iIndex)
 	return false;
 }
 
-//	---------------------------------------------------------------------------
-bool CvNotifications::IsNotificationTypeEndOfTurnExpired(NotificationTypes eNotificationType, int iForSpecificEntry /*= -1*/)
+
+bool CvNotifications::IsNotificationTypeEndOfTurnExpired(NotificationTypes eNotificationType, int iForSpecificEntry         )
 {
 	switch(eNotificationType)
 	{
@@ -1911,21 +1911,21 @@ bool CvNotifications::IsNotificationTypeEndOfTurnExpired(NotificationTypes eNoti
 		return false;
 		break;
 
-	// These multiplayer notifications expire at the end of the next turn.
+
 	case NOTIFICATION_PLAYER_RECONNECTED:
 	case NOTIFICATION_PLAYER_DISCONNECTED:
 	case NOTIFICATION_HOST_MIGRATION:
 	case NOTIFICATION_PLAYER_CONNECTING:
-		if(iForSpecificEntry != -1 && m_aNotifications[iForSpecificEntry].m_iTurn == GC.getGame().getGameTurn()) //same turn as creation.
+		if(iForSpecificEntry != -1 && m_aNotifications[iForSpecificEntry].m_iTurn == GC.getGame().getGameTurn())
 		{
 			return false;
 		}
 		break;
 
-	// In multiplayer, these notifications expire once they've been broadcast for the player and
-	// it is at least the end of the next turn.
-	// These are notifications that can occur mid-turn and are important enough that they shouldn't
-	// expire until the player has seen them.
+
+
+
+
 	case NOTIFICATION_UNIT_PROMOTION:
 	case NOTIFICATION_CAPITAL_LOST_ACTIVE_PLAYER:
 	case NOTIFICATION_CAPITAL_LOST:
@@ -1948,19 +1948,19 @@ bool CvNotifications::IsNotificationTypeEndOfTurnExpired(NotificationTypes eNoti
 	case NOTIFICATION_PLAYER_KICKED:
 #endif
 
-	//XP1
+
 	case NOTIFICATION_RELIGION_FOUNDED_ACTIVE_PLAYER:
 	case NOTIFICATION_RELIGION_FOUNDED:
 	case NOTIFICATION_PANTHEON_FOUNDED_ACTIVE_PLAYER:
 	case NOTIFICATION_PANTHEON_FOUNDED:
 
-	//XP2
+
 	case NOTIFICATION_TRADE_ROUTE_BROKEN:
 	case NOTIFICATION_REFORMATION_BELIEF_ADDED_ACTIVE_PLAYER:
 	case NOTIFICATION_REFORMATION_BELIEF_ADDED:
 		if(iForSpecificEntry != -1 && GC.getGame().isGameMultiPlayer() 
-			&& (m_aNotifications[iForSpecificEntry].m_bNeedsBroadcast //not broadcast yet.
-				|| m_aNotifications[iForSpecificEntry].m_iTurn == GC.getGame().getGameTurn())) //same turn as creation.
+			&& (m_aNotifications[iForSpecificEntry].m_bNeedsBroadcast
+				|| m_aNotifications[iForSpecificEntry].m_iTurn == GC.getGame().getGameTurn()))
 		{
 			return false;
 		}
@@ -1974,13 +1974,13 @@ bool CvNotifications::IsNotificationTypeEndOfTurnExpired(NotificationTypes eNoti
 	return true;
 }
 
-//	---------------------------------------------------------------------------
+
 bool CvNotifications::IsNotificationEndOfTurnExpired(int iIndex)
 {
 	return IsNotificationTypeEndOfTurnExpired( m_aNotifications[iIndex].m_eNotificationType, iIndex );
 }
 
-//	---------------------------------------------------------------------------
+
 bool CvNotifications::IsArrayFull()
 {
 	int iAdjustedEndIndex = m_iNotificationsEndIndex + 1;
@@ -1999,13 +1999,13 @@ bool CvNotifications::IsArrayFull()
 	}
 }
 
-//	---------------------------------------------------------------------------
+
 void CvNotifications::RemoveOldestNotification()
 {
-	// if the notification is somehow active, dismiss it
+
 	if(!m_aNotifications[m_iNotificationsBeginIndex].m_bDismissed)
 	{
-		Dismiss(m_aNotifications[m_iNotificationsBeginIndex].m_iLookupIndex, /*bUserInvoked*/ false);
+		Dismiss(m_aNotifications[m_iNotificationsBeginIndex].m_iLookupIndex,                  false);
 	}
 	m_aNotifications[m_iNotificationsBeginIndex].Clear();
 	IncrementBeginIndex();
@@ -2029,9 +2029,9 @@ void CvNotifications::IncrementEndIndex()
 	}
 }
 
-//	---------------------------------------------------------------------------
-// static
-void CvNotifications::AddToPlayer(PlayerTypes ePlayer, NotificationTypes eNotificationType, const char* strMessage, const char* strSummary, int iX/*=-1*/, int iY/*=-1*/, int iGameDataIndex/*=-1*/, int iExtraGameData/*=-1*/)
+
+
+void CvNotifications::AddToPlayer(PlayerTypes ePlayer, NotificationTypes eNotificationType, const char* strMessage, const char* strSummary, int iX       , int iY       , int iGameDataIndex       , int iExtraGameData       )
 {
 	if(ePlayer != NO_PLAYER)
 	{

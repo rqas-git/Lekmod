@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvReplayInfo.h"
 #include "CvInfos.h"
@@ -18,22 +18,22 @@
 #include "FStlContainerSerialization.h"
 #include "CvGameCoreUtils.h"
 
-// include this after all other headers!
+
 #include "LintFree.h"
 
 int CvReplayInfo::REPLAY_VERSION = 1;
 
-//Replay Version History
-//
-// * Version 3
-//		Storing per-plot PlotTypes.
-//		FeatureTypes are now stored per turn.
-//
-// * Version 2
-//		Replaced fixed score tracking w/ dynamic one based on database
-//
-// * Version 1
-//		First Version
+
+
+
+
+
+
+
+
+
+
+
 
 CvReplayInfo::CvReplayInfo() :
 	m_iActivePlayer(0),
@@ -110,7 +110,7 @@ void CvReplayInfo::createInfo()
 		m_iNormalizedScore = player.GetScore(true, player.getTeam() == game.getWinner());
 	}
 
-	//m_eGameType = CvPreGame::getGameType();
+
 
 	m_iInitialTurn = game.getStartTurn();
 	m_iStartYear = game.getStartYear();
@@ -127,7 +127,7 @@ void CvReplayInfo::createInfo()
 #endif
 
 	std::map<int, int> mapPlayers;
-	mapPlayers[-1] = -1;	//account for NO_PLAYER.
+	mapPlayers[-1] = -1;
 
 	m_iActivePlayer = -1;
 	int iPlayerIndex = 0;
@@ -136,7 +136,7 @@ void CvReplayInfo::createInfo()
 		CvPlayer& player = GET_PLAYER((PlayerTypes)iPlayer);
 		if(player.isEverAlive())
 		{
-			//Ensure that final turn is stored.
+
 			player.GatherPerTurnReplayStats(m_iFinalTurn);
 
 			mapPlayers[iPlayer] = iPlayerIndex;
@@ -163,7 +163,7 @@ void CvReplayInfo::createInfo()
 			unsigned int uiNumDataSets = player.getNumReplayDataSets();
 			for(unsigned int uiPlayerDataSet = 0; uiPlayerDataSet < uiNumDataSets; ++uiPlayerDataSet)
 			{
-				// First, Locate the index of the dataset
+
 				std::string playerDataSetName = player.getReplayDataSetName(uiPlayerDataSet);
 				unsigned int uiDataSet = 0;
 				bool bFound = false;
@@ -177,7 +177,7 @@ void CvReplayInfo::createInfo()
 					}
 				}
 
-				// Add a new index if one doesn't exist.
+
 				if(!bFound)
 				{
 					m_dataSetMap.push_back(playerDataSetName);

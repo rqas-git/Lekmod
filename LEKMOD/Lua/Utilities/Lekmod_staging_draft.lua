@@ -1,21 +1,21 @@
-------------------------------------------------------------------------------
--- Staging Room civ draft / ban UI + #LDRAFT# sync
--- Included by StagingRoom.lua (shares Controls / Matchmaking / PreGame).
-------------------------------------------------------------------------------
+
+
+
+
 include("Lekmod_drafter.lua");
 
 local DRAFT_PREFIX = "#LDRAFT#";
-local SLOT_ROW_HEIGHT = 122; -- ~14% taller than vanilla 107 for draft-row spacing
+local SLOT_ROW_HEIGHT = 122;
 
--- Wide lobby = player + ban + summary (1275). Compact = player + ban only (~960),
--- used when the screen cannot fit the wide layout (e.g. 1280x720). No proportional
--- scaling of columns — that caused clipping; we just hide the summary strip.
+
+
+
 local LOBBY_WIDE_W = 1275;
 local LOBBY_COMPACT_W = 960;
-local LOBBY_COMPACT_MAX_SCREEN = 1320; -- below this, use compact
+local LOBBY_COMPACT_MAX_SCREEN = 1320;
 g_LobbyCompact = g_LobbyCompact or false;
-g_CompactSecondary = g_CompactSecondary or "draft"; -- shared top tab: "draft" | "options"
-g_CompactRightPane = g_CompactRightPane or "bans"; -- right column: "bans" | "summary"
+g_CompactSecondary = g_CompactSecondary or "draft";
+g_CompactRightPane = g_CompactRightPane or "bans";
 
 function Draft_IsLobbyCompact()
 	return g_LobbyCompact == true;
@@ -33,31 +33,31 @@ function Draft_GetHostColumnWidth()
 	return 610;
 end
 
--- Page mode: "players" | "draft" | "options"
+
 g_DraftPageMode = g_DraftPageMode or "players";
 
 g_DraftRules = g_DraftRules or LekmodDrafter.DefaultRules();
-g_DraftBans = g_DraftBans or {};          -- [playerID] = { civID or -1, ... }
-g_DraftBanReady = g_DraftBanReady or {};  -- [playerID] = true/false
--- True only after we locally check ban-ready, until PreGame confirms our R_* bit.
--- Must NOT keep ready forever — that blocked host clears on rules change.
-g_DraftBanReadyPendingLocal = g_DraftBanReadyPendingLocal or false;
-g_DraftPools = g_DraftPools or {};        -- [playerID] = { civID, ... }
-g_DraftLocked = g_DraftLocked or false;
-g_DraftSwapDesire = g_DraftSwapDesire or {}; -- [playerID] = otherPlayerID they want to swap drafts with
-g_DraftSwapFirst = nil; -- legacy unused
-g_DraftParticipantKey = g_DraftParticipantKey or nil; -- legacy; prefer g_DraftParticipantCount
-g_DraftParticipantCount = g_DraftParticipantCount or nil; -- draft deal size at create; clear only if count grows
-g_PreviousDraftSnapshot = g_PreviousDraftSnapshot or nil; -- last successful Create Draft (for Restore)
+g_DraftBans = g_DraftBans or {};
+g_DraftBanReady = g_DraftBanReady or {};
 
-g_DraftBanHostControl = g_DraftBanHostControl or {}; -- [playerID] = true if they let the host edit their bans
-g_BanSlotInstances = g_BanSlotInstances or {}; -- [selectionIndex] = BanSlot instance (1..MAX)
-g_BanIconIMs = g_BanIconIMs or {};             -- [stackControl] = InstanceManager
-g_BanIconControls = g_BanIconControls or {};   -- [stackControl] = { BanIconInstance, ... }
-g_DraftIconIMs = g_DraftIconIMs or {};         -- [stackControl] = InstanceManager
-g_PendingBan = g_PendingBan or nil;            -- { playerID, slotIndex }
-g_SkipStagingFullRefresh = g_SkipStagingFullRefresh or false; -- set when opening Civilopedia
--- Once true, Draft_Init must not re-load PreGame over live chat-synced ban-ready.
+
+g_DraftBanReadyPendingLocal = g_DraftBanReadyPendingLocal or false;
+g_DraftPools = g_DraftPools or {};
+g_DraftLocked = g_DraftLocked or false;
+g_DraftSwapDesire = g_DraftSwapDesire or {};
+g_DraftSwapFirst = nil;
+g_DraftParticipantKey = g_DraftParticipantKey or nil;
+g_DraftParticipantCount = g_DraftParticipantCount or nil;
+g_PreviousDraftSnapshot = g_PreviousDraftSnapshot or nil;
+
+g_DraftBanHostControl = g_DraftBanHostControl or {};
+g_BanSlotInstances = g_BanSlotInstances or {};
+g_BanIconIMs = g_BanIconIMs or {};
+g_BanIconControls = g_BanIconControls or {};
+g_DraftIconIMs = g_DraftIconIMs or {};
+g_PendingBan = g_PendingBan or nil;
+g_SkipStagingFullRefresh = g_SkipStagingFullRefresh or false;
+
 g_DraftLiveSession = g_DraftLiveSession or false;
 
 local function IsHumanSlot(playerID)
@@ -75,7 +75,7 @@ local function IsAISlot(playerID)
 	return PreGame.GetSlotStatus(playerID) == SlotStatus.SS_COMPUTER;
 end
 
--- Empty "Human Required" slots: show ban UI as if occupied (solo-test friendly).
+
 local function IsHumanRequiredSlot(playerID)
 	if playerID == nil or playerID < 0 then
 		return false;
@@ -84,7 +84,7 @@ local function IsHumanRequiredSlot(playerID)
 		and PreGame.GetSlotClaim(playerID) == SlotClaim.SLOTCLAIM_RESERVED;
 end
 
--- Draft participants: humans, human-required stand-ins, and AI (host-controlled).
+
 local function IsBanParticipantSlot(playerID)
 	return IsHumanSlot(playerID) or IsHumanRequiredSlot(playerID) or IsAISlot(playerID);
 end
@@ -96,8 +96,8 @@ local function IsGameReady(playerID)
 	return PreGame.IsReady(playerID) == true;
 end
 
--- True only when every taken human is ready-to-start (countdown about to run / running).
--- A single player greening up must NOT freeze draft edits for everyone else.
+
+
 local function IsDraftLockedByGameReady()
 	if PreGame == nil or PreGame.IsReady == nil then
 		return false;
@@ -115,8 +115,8 @@ local function IsDraftLockedByGameReady()
 	return foundHuman;
 end
 
--- Host may edit AI bans the same way they pick AI civs — until ban-ready or game-ready.
--- Humans may temporarily cede ban control to the host (g_DraftBanHostControl).
+
+
 local function CanEditBansForPlayer(playerID)
 	if playerID == nil or g_DraftLocked then
 		return false;
@@ -124,43 +124,43 @@ local function CanEditBansForPlayer(playerID)
 	if Draft_IsHistoryOnly ~= nil and Draft_IsHistoryOnly() then
 		return false;
 	end
-	-- All humans ready-to-start (countdown) freezes ban edits (own + AI).
+
 	if IsDraftLockedByGameReady() then
 		return false;
 	end
 	local localID = Matchmaking.GetLocalID();
-	-- Ban-ready locks your own bans and (for host) AI / ceded bans until you unready.
+
 	if g_DraftBanReady[localID] == true then
 		return false;
 	end
 	if playerID == localID then
-		-- You gave control to the host — wait until you reclaim it.
+
 		return g_DraftBanHostControl[localID] ~= true;
 	end
 	if not Matchmaking.IsHost() then
 		return false;
 	end
-	-- Even if ceded, a human who readied their bans is locked.
+
 	if g_DraftBanReady[playerID] == true and not IsAISlot(playerID) then
 		return false;
 	end
 	return IsAISlot(playerID) or g_DraftBanHostControl[playerID] == true;
 end
 
-----------------------------------------------------------------
--- Persist draft into PreGame game-options (survives lobby config / game saves)
-----------------------------------------------------------------
+
+
+
 local DRAFT_OPT_VER = "GAMEOPTION_LEKMOD_DRAFT_V";
 local DRAFT_OPT_RULES = "GAMEOPTION_LEKMOD_DRAFT_RULES";
-local DRAFT_OPT_READY = "GAMEOPTION_LEKMOD_DRAFT_READY"; -- host aggregate mask (save / fallback)
+local DRAFT_OPT_READY = "GAMEOPTION_LEKMOD_DRAFT_READY";
 local DRAFT_OPT_HOSTCTRL = "GAMEOPTION_LEKMOD_DRAFT_HOSTCTRL";
 local DRAFT_OPT_LAUNCHED = "GAMEOPTION_LEKMOD_DRAFT_LAUNCHED";
 local DRAFT_SAVE_VERSION = 1;
 local DRAFT_MAX_BANS_STORE = 5;
 local DRAFT_MAX_PICKS_STORE = 10;
 
--- Per-player ban-ready bit (mirrors PreGame.SetReady / IsReady).
--- Each client only writes their own slot so they cannot clobber others' ready state.
+
+
 local function Draft_ReadyOptName(pid)
 	return string.format("GAMEOPTION_LEKMOD_DRAFT_R_%d", pid);
 end
@@ -177,9 +177,9 @@ local function Draft_OptSet(name, value)
 	PreGame.SetGameOption(name, math.floor(tonumber(value) or 0));
 end
 
--- Ongoing / continue-game lobby: show draft history (no create/edit/swap).
--- Pre-start lobby config saves stay editable. Turn 0 is a valid started turn, so we
--- cannot use TurnNumber / GetLoadFileName; we persist LAUNCHED when the game starts.
+
+
+
 function Draft_IsHistoryOnly()
 	if PreGame.GameStarted() == true then
 		return true;
@@ -187,7 +187,7 @@ function Draft_IsHistoryOnly()
 	return Draft_OptGet(DRAFT_OPT_LAUNCHED) == 1;
 end
 
--- Stamp PreGame so later loads of this save are draft history-only (incl. turn 0).
+
 function Draft_MarkGameLaunched()
 	if PreGame == nil or PreGame.SetGameOption == nil then
 		return;
@@ -260,26 +260,26 @@ function Draft_ClearPreGamePersist()
 	end
 end
 
--- Write current draft Lua state into PreGame (included in lobby/game saves).
+
 function Draft_PersistToPreGame()
 	if PreGame == nil or PreGame.SetGameOption == nil then
 		return;
 	end
 	Draft_OptSet(DRAFT_OPT_VER, DRAFT_SAVE_VERSION);
-	-- Rules are host-authoritative (same as MPGameOptions). Clients must not
-	-- overwrite GAMEOPTION_LEKMOD_DRAFT_RULES with a stale local pack.
+
+
 	if Matchmaking.IsHost() then
 		Draft_OptSet(DRAFT_OPT_RULES, Draft_PackRules());
 	end
 
 	local maxP = GameDefines.MAX_MAJOR_CIVS;
-	-- Each player writes only their own ban-ready slot (same idea as PreGame.SetReady).
-	-- Never let the host mass-overwrite others' R_* bits here — that caused ready desyncs.
+
+
 	local localID = Matchmaking.GetLocalID();
 	if localID ~= nil and localID >= 0 then
 		Draft_OptSet(Draft_ReadyOptName(localID), (g_DraftBanReady[localID] == true) and 1 or 0);
 	end
-	-- Host aggregates the legacy mask + host-ctrl for lobby saves / older clients.
+
 	if Matchmaking.IsHost() then
 		local readyMask = 0;
 		for pid = 0, maxP - 1 do
@@ -322,7 +322,7 @@ function Draft_PersistToPreGame()
 	end
 end
 
--- Load draft state from PreGame if a prior save wrote it. Returns true if restored.
+
 function Draft_RestoreFromPreGame()
 	if PreGame == nil or PreGame.GetGameOption == nil then
 		return false;
@@ -388,11 +388,11 @@ function Draft_RestoreFromPreGame()
 		end
 	end
 
-	g_DraftParticipantKey = nil; -- set by Draft_Init after locals are available
+	g_DraftParticipantKey = nil;
 	return true;
 end
 
--- Real humans only (must ban-ready before Create Draft). AI are auto-ready.
+
 local function GetHumanPlayerOrder()
 	local order = {};
 	local max = GameDefines.MAX_MAJOR_CIVS;
@@ -404,7 +404,7 @@ local function GetHumanPlayerOrder()
 	return order;
 end
 
--- Draft deal order: humans + human-required + AI.
+
 local function GetDraftPlayerOrder()
 	local order = {};
 	local max = GameDefines.MAX_MAJOR_CIVS;
@@ -483,7 +483,7 @@ local function CanSelectDraftCivForPlayer(playerID)
 		end
 		return playerID == localID;
 	end
-	-- Host may pick for AI / Human Required the same way as the civ pulldown.
+
 	if not Matchmaking.IsHost() then
 		return false;
 	end
@@ -539,7 +539,7 @@ local function Draft_ApplyReadyMask(mask, preserveLocalOptimistic)
 	mask = tonumber(mask) or 0;
 	local localID = Matchmaking.GetLocalID();
 	local localBitSet = localID ~= nil and (math.floor(mask / Draft_Pow2(localID)) % 2 == 1);
-	-- Only keep an unconfirmed local ready click — never ignore a host clear after rules reset.
+
 	local keepLocal = preserveLocalOptimistic
 		and g_DraftBanReadyPendingLocal
 		and not Matchmaking.IsHost()
@@ -560,8 +560,8 @@ local function Draft_ApplyReadyMask(mask, preserveLocalOptimistic)
 	end
 end
 
--- Host echo so every client converges on the same green-up / Create Draft gate.
--- Event-driven only (toggle / kick / restore) — do not spam chat on a timer.
+
+
 function Draft_BroadcastReadyMask()
 	if not Matchmaking.IsHost() or PreGame.IsHotSeatGame() or Draft_IsHistoryOnly() then
 		return;
@@ -569,11 +569,11 @@ function Draft_BroadcastReadyMask()
 	SendDraftChat("READYMASK|" .. tostring(Draft_PackReadyMask()));
 end
 
--- Pull ban-ready like PreGame.IsReady(): each player's own GameOption bit.
--- Returns true if g_DraftBanReady changed (caller may refresh UI).
--- Host reads per-player R_* (players own their bits). Clients prefer the host
--- aggregate DRAFT_OPT_READY mask so a rules-reset (mask 0) is not undone by
--- stale remote R_* bits the host cannot reliably clear.
+
+
+
+
+
 function Draft_PullBanReadyFromPreGame()
 	if PreGame == nil or PreGame.GetGameOption == nil or PreGame.IsHotSeatGame() then
 		return false;
@@ -591,7 +591,7 @@ function Draft_PullBanReadyFromPreGame()
 		else
 			ready = math.floor(mask / Draft_Pow2(pid)) % 2 == 1;
 		end
-		-- Keep only a pending local ready click until host mask / our bit lands.
+
 		if pid == localID and g_DraftBanReadyPendingLocal and g_DraftBanReady[localID] == true and not ready then
 			ready = true;
 		elseif pid == localID and ready then
@@ -633,10 +633,10 @@ function Draft_IsDraftLocked()
 	return g_DraftLocked == true;
 end
 
--- Wipe all draft lobby state. Only call when the host voids the lobby
--- (backs out) or the local client leaves their session / launches.
--- clearPersist: also wipe PreGame-saved draft (leave-lobby). Do NOT clear on
--- game launch � mid-game / hotjoin lobbies still need the saved draft history.
+
+
+
+
 function Draft_ResetState(clearPersist)
 	g_DraftPageMode = "players";
 	g_DraftRules = LekmodDrafter.DefaultRules();
@@ -659,12 +659,12 @@ function Draft_ResetState(clearPersist)
 	if clearPersist then
 		Draft_ClearPreGamePersist();
 	end
-	-- Restore Name@Team / hide draft rows (g_DraftLocked already false).
+
 	Draft_RefreshDraftIconsAll();
 end
 
--- Host-only: clear a kicked player's bans/ready/pool. Normal disconnects and
--- slot replacements must NOT call this (bans stay with the slot).
+
+
 function Draft_OnPlayerKicked(playerID)
 	if playerID == nil or playerID < 0 then
 		return;
@@ -707,7 +707,7 @@ function Draft_CivAllowedForPlayer(playerID, civID)
 		return true;
 	end
 	if civID == nil or civID < 0 then
-		return false; -- no Random while draft-locked
+		return false;
 	end
 	for _, id in ipairs(pool) do
 		if id == civID then
@@ -717,22 +717,22 @@ function Draft_CivAllowedForPlayer(playerID, civID)
 	return false;
 end
 
-----------------------------------------------------------------
--- Ban icon rendering + temporary picker under the clicked icon
-----------------------------------------------------------------
-local g_BanPickerIM = nil;
-g_BanPickerScrollPos = g_BanPickerScrollPos or 0; -- remember vertical picker scroll across opens
-g_BanHostIconCount = g_BanHostIconCount or nil;   -- reset H-scroll only when ban-slot count changes
-g_BanSlotIconCount = g_BanSlotIconCount or {};    -- [selectionIndex] = last ban count
 
-local g_HScrollOffset = g_HScrollOffset or {}; -- [scrollKey] = pixel offset from left
+
+
+local g_BanPickerIM = nil;
+g_BanPickerScrollPos = g_BanPickerScrollPos or 0;
+g_BanHostIconCount = g_BanHostIconCount or nil;
+g_BanSlotIconCount = g_BanSlotIconCount or {};
+
+local g_HScrollOffset = g_HScrollOffset or {};
 
 local function HScrollKey(scrollControl)
 	return tostring(scrollControl);
 end
 
--- Ban icon strip is a Container (nested ScrollPanel broke vertical list clipping),
--- so it does not clip horizontally. Hide visuals that sit outside the view width.
+
+
 local BAN_ICON_W = 64;
 local BAN_ICON_PAD = 6;
 local function ClipBanIconsToView(scrollControl, stackControl)
@@ -748,9 +748,9 @@ local function ClipBanIconsToView(scrollControl, stackControl)
 	for _, inst in ipairs(ctrls) do
 		local left = x;
 		local right = x + BAN_ICON_W;
-		-- Fully inside only — partial icons would paint past the ban box edges.
+
 		local visible = (left >= -0.5) and (right <= viewW + 0.5);
-		-- Keep Root sized in the Stack; hide drawables only.
+
 		if inst.BanFrame ~= nil then inst.BanFrame:SetHide(not visible); end
 		if inst.BanLeaderIcon ~= nil then inst.BanLeaderIcon:SetHide(not visible); end
 		if inst.BanCivFrame ~= nil then inst.BanCivFrame:SetHide(not visible); end
@@ -760,19 +760,19 @@ local function ClipBanIconsToView(scrollControl, stackControl)
 	end
 end
 
--- Pixel-based horizontal scroll (Civ5 horizontal ScrollPanel SetScrollValue is unreliable).
--- alignLeft: draft icons under names stay left-aligned; ban boxes stay centered when they fit.
+
+
 local function FinalizeHorizontalIconScroll(scrollControl, stackControl, leftBtn, rightBtn, alignLeft)
 	if scrollControl == nil or stackControl == nil then
 		return;
 	end
 	pcall(function()
-		-- Always measure from offset 0. Leftover SetOffsetX after ban-count
-		-- changes makes contentW/maxScroll wrong and sticks the left arrow on.
+
+
 		stackControl:SetOffsetX(0);
 		stackControl:CalculateSize();
 		stackControl:ReprocessAnchoring();
-		-- Ban icon rows use a Container (not ScrollPanel) so parent list clipping works.
+
 		pcall(function() scrollControl:CalculateInternalSize(); end);
 
 		local contentW = stackControl:GetSizeX() or 0;
@@ -804,14 +804,14 @@ local function FinalizeHorizontalIconScroll(scrollControl, stackControl, leftBtn
 		g_HScrollOffset[key] = off;
 		stackControl:SetOffsetX(-off);
 
-		-- Only show an arrow if that direction still has content to reveal.
+
 		if leftBtn ~= nil then leftBtn:SetHide(off <= 0); end
 		if rightBtn ~= nil then rightBtn:SetHide(off >= maxScroll - 1); end
 		ClipBanIconsToView(scrollControl, stackControl);
 	end);
 end
 
--- Wipe stored offsets + visible arrow state (used when bans-per-player changes).
+
 local function ResetHorizontalBanScrolls()
 	g_HScrollOffset = {};
 	local function clearRow(scroll, stack, leftBtn, rightBtn)
@@ -891,7 +891,7 @@ local function GetLeaderForCivID(civID)
 	return civ, GameInfo.Leaders[link.LeaderheadType];
 end
 
--- UA + UU/UB/UI tooltips (trait-style: colored name + full Help/Description text).
+
 function Draft_GetCivBonusTooltip(civID)
 	local civ, leader = GetLeaderForCivID(civID);
 	if civ == nil then
@@ -922,7 +922,7 @@ function Draft_GetCivBonusTooltip(civID)
 		local help = nil;
 		if helpKey ~= nil then
 			help = Locale.ConvertTextKey(helpKey);
-			-- ConvertTextKey returns the key itself when missing — treat as empty.
+
 			if help == nil or help == "" or help == helpKey then
 				help = Locale.Lookup(helpKey);
 				if help == helpKey then
@@ -988,8 +988,8 @@ function Draft_GetCivBonusTooltip(civID)
 end
 
 function Draft_OpenCivilopedia(searchString)
-	-- FrontEnd Other/Civilopedia is often never loaded in MP lobby, so Events alone
-	-- does nothing. Prefer the StagingRoom-embedded instance; fall back to FrontEnd.
+
+
 	local pedia = Controls.Civilopedia;
 	if pedia == nil then
 		pcall(function()
@@ -1000,16 +1000,16 @@ function Draft_OpenCivilopedia(searchString)
 		return;
 	end
 
-	-- Tell StagingRoom ShowHideHandler to skip Draft_Init / ActivateDLC on return.
+
 	g_SkipStagingFullRefresh = true;
 
 	searchString = searchString or "";
 	UIManager:QueuePopup(pedia, PopupPriority.eUtmost);
 
 	if searchString ~= "" then
-		-- Navigate to article (each loaded CivilopediaScreen listens).
+
 		Events.SearchForPediaEntry(searchString);
-		-- If FrontEnd also opened, close it so we don't stack two pedias.
+
 		pcall(function()
 			local fe = LookUpControl("/FrontEnd/MainMenu/Other/Civilopedia");
 			if fe ~= nil and Controls.Civilopedia ~= nil and fe ~= Controls.Civilopedia and not fe:IsHidden() then
@@ -1028,7 +1028,7 @@ function Draft_CloseCivilopedia()
 		end
 		return false;
 	end
-	-- Prefer embedded lobby instance first.
+
 	closed = tryClose(Controls.Civilopedia);
 	if not closed then
 		pcall(function()
@@ -1078,10 +1078,10 @@ function Draft_ApplyLeaderPortraitHelp(portraitButton, civID, hoverAnim)
 		portraitButton:SetVoid1(civID);
 		portraitButton:SetDisabled(false);
 		portraitButton:SetHide(false);
-		-- SetDisabled does not suppress ShowOnMouseOver; hide the glow anim instead.
+
 		if hoverAnim ~= nil then hoverAnim:SetHide(false); end
 	else
-		-- Random / no civ: no hover, tooltip, or pedia.
+
 		portraitButton:SetToolTipString("");
 		portraitButton:SetVoid1(-1);
 		portraitButton:SetDisabled(true);
@@ -1101,7 +1101,7 @@ function Draft_WireLeaderPortraitButton(portraitButton)
 	end);
 end
 
--- Leader portrait + corner civ symbol (empty slot = random / question).
+
 local function SetBanLeaderCivIcons(inst, civID)
 	if inst == nil then
 		return;
@@ -1141,7 +1141,7 @@ function Draft_HideBanPicker()
 			Controls.BanPickerPanel:SetOffsetVal(640, 200);
 		end);
 	end
-	-- Re-enable ban ready when picker closes (unless draft/game-ready locked).
+
 	if Controls.BanHostReadyCheck ~= nil
 		and not g_DraftLocked
 		and not IsDraftLockedByGameReady()
@@ -1150,7 +1150,7 @@ function Draft_HideBanPicker()
 	end
 end
 
--- ESC / click-elsewhere dismiss (wired from StagingRoom InputHandler + BanPickerDismiss).
+
 function Draft_HandleInput(uiMsg, wParam, lParam)
 	if uiMsg == KeyEvents.KeyDown and wParam == Keys.VK_ESCAPE then
 		if Draft_CloseCivilopedia ~= nil and Draft_CloseCivilopedia() then
@@ -1177,19 +1177,19 @@ local function Draft_PlaceBanPicker(playerID, banRoot)
 	if Controls.BanPickerPanel == nil then
 		return;
 	end
-	-- Dismiss catcher behind the picker (same click-elsewhere behavior as civ PullDown).
+
 	if Controls.BanPickerDismiss ~= nil then
 		Controls.BanPickerDismiss:ChangeParent(Controls.MainGrid);
 		Controls.BanPickerDismiss:SetHide(false);
 	end
-	-- Always parent to MainGrid so the picker draws above slots/scroll clipping.
+
 	Controls.BanPickerPanel:ChangeParent(Controls.MainGrid);
 
 	local x = 635;
 	local y = 150;
 	local localID = Matchmaking.GetLocalID();
 	if playerID == localID then
-		y = 150; -- just below BanHost
+		y = 150;
 	elseif m_SlotInstances ~= nil then
 		local row = 0;
 		local found = false;
@@ -1197,7 +1197,7 @@ local function Draft_PlaceBanPicker(playerID, banRoot)
 			local slot = m_SlotInstances[i];
 			if slot ~= nil and slot.Root ~= nil and not slot.Root:IsHidden() then
 				if slot.playerID == localID then
-					-- local sits in Host row, not in listing
+
 				elseif slot.playerID == playerID then
 					found = true;
 					break;
@@ -1209,7 +1209,7 @@ local function Draft_PlaceBanPicker(playerID, banRoot)
 		if found then
 			local scrollPx = 0;
 			pcall(function()
-				-- Ban column mirrors the player list scroll (no ban ScrollPanel).
+
 				local sv = Controls.ListingScrollPanel:GetScrollValue() or 0;
 				local contentH = Controls.SlotStack:GetSizeY() or 0;
 				local viewH = Controls.ListingScrollPanel:GetSizeY() or 0;
@@ -1245,13 +1245,13 @@ function Draft_ApplyBanSelection(civID)
 	EnsureBanArray(playerID);
 	civID = civID or -1;
 
-	-- Reject civs already banned by anyone (including your other slots).
+
 	if civID >= 0 then
-		local taken = Draft_GetTakenBans(nil); -- all players
-		-- Allow keeping the same civ if THIS slot already has it
+		local taken = Draft_GetTakenBans(nil);
+
 		local current = g_DraftBans[playerID][slotIndex];
 		if taken[civID] ~= nil and current ~= civID then
-			-- Conflict while picker was open: reset this slot
+
 			g_DraftBans[playerID][slotIndex] = -1;
 			Draft_BroadcastBans(playerID);
 			Draft_RefreshBanUI();
@@ -1266,9 +1266,9 @@ function Draft_ApplyBanSelection(civID)
 	Draft_PersistToPreGame();
 end
 
--- Returns map civID -> playerID for bans already taken.
--- excludePlayerID: ignore that player's bans (nil = include everyone).
--- excludeSlot: optional {playerID, slotIndex} to ignore one of your own slots.
+
+
+
 function Draft_GetTakenBans(excludePlayerID, excludeSlot)
 	local taken = {};
 	for pid, list in pairs(g_DraftBans) do
@@ -1298,7 +1298,7 @@ function Draft_PopulateBanPicker()
 	end
 
 	local excludeSlot = g_PendingBan;
-	-- Exclude bans from everyone except the slot we're currently editing
+
 	local taken = {};
 	for pid, list in pairs(g_DraftBans) do
 		for idx, civID in ipairs(list) do
@@ -1343,7 +1343,7 @@ function Draft_PopulateBanPicker()
 	Controls.BanPickerStack:ReprocessAnchoring();
 	if Controls.BanPickerScroll ~= nil then
 		Controls.BanPickerScroll:CalculateInternalSize();
-		-- Keep prior scroll position (do not jump back to the top after each pick).
+
 		local pos = g_BanPickerScrollPos or 0;
 		if pos < 0 then pos = 0; end
 		if pos > 1 then pos = 1; end
@@ -1356,8 +1356,8 @@ local function RefreshBanIconsForPlayer(playerID, stackControl)
 		return;
 	end
 	EnsureBanArray(playerID);
-	-- Key IMs by stack control (not playerID) so BanHost / BanSlot never collide and
-	-- lobby recreate + ban-count changes don't leave orphan icons.
+
+
 	local im = g_BanIconIMs[stackControl];
 	if im == nil then
 		im = InstanceManager:new("BanIconInstance", "Root", stackControl);
@@ -1387,7 +1387,7 @@ local function RefreshBanIconsForPlayer(playerID, stackControl)
 			tip = canEdit and "Click to ban a civilization" or "No ban selected";
 		end
 		inst.BanButton:SetToolTipString(tip);
-		-- Glow is ShowOnMouseOver (SetDisabled does not suppress it). Only editable bans glow.
+
 		local allowHover = canEdit;
 		inst.BanButton:SetDisabled(not allowHover);
 		if inst.BanHoverAnim ~= nil then
@@ -1416,7 +1416,7 @@ function Draft_OnBanIconClicked(playerID, slotIndex, banRoot)
 	if not CanEditBansForPlayer(playerID) then
 		return;
 	end
-	-- Toggle closed if clicking the same slot again
+
 	if g_PendingBan ~= nil
 		and g_PendingBan.playerID == playerID
 		and g_PendingBan.slotIndex == slotIndex
@@ -1439,9 +1439,9 @@ function Draft_OnBanCivSelected(civID, _)
 	Draft_ApplyBanSelection(civID);
 end
 
-----------------------------------------------------------------
--- Draft icons under player names
-----------------------------------------------------------------
+
+
+
 function Draft_OnDraftCivIconClicked(playerID, civID)
 	if not CanSelectDraftCivForPlayer(playerID) then
 		return;
@@ -1518,9 +1518,9 @@ local function RefreshDraftIcons(playerID, stackControl)
 	stackControl:ReprocessAnchoring();
 end
 
-----------------------------------------------------------------
--- Ban column slot instances
-----------------------------------------------------------------
+
+
+
 function Draft_CreateBanSlots()
 	for i = 1, GameDefines.MAX_MAJOR_CIVS do
 		if g_BanSlotInstances[i] == nil and Controls.BanSlotStack ~= nil then
@@ -1541,7 +1541,7 @@ function Draft_CreateBanSlots()
 end
 
 function Draft_RefreshBanUI()
-	-- Never resurface ban UI while on Draft Rules / Game Options.
+
 	if g_DraftPageMode ~= nil and g_DraftPageMode ~= "players" then
 		if Controls.BanHost ~= nil then Controls.BanHost:SetHide(true); end
 		Draft_HideBanPicker();
@@ -1557,14 +1557,14 @@ function Draft_RefreshBanUI()
 	local pickerOpen = g_PendingBan ~= nil
 		and Controls.BanPickerPanel ~= nil
 		and not Controls.BanPickerPanel:IsHidden();
-	-- Close ban picker when anyone is ready-to-start (bans are frozen).
+
 	if gameReadyLock and pickerOpen then
 		g_PendingBan = nil;
 		Draft_HideBanPicker();
 		pickerOpen = false;
 	end
 
-	-- Local row (fixed at top, mirrors Host player row)
+
 	if Controls.BanHost ~= nil then
 		Controls.BanHost:SetHide(false);
 		if Controls.BanHostPlayerLabel ~= nil then
@@ -1572,7 +1572,7 @@ function Draft_RefreshBanUI()
 		end
 		EnsureBanArray(localID);
 		RefreshBanIconsForPlayer(localID, Controls.BanHostIconStack);
-		-- Only rewind horizontal ban scroll when the number of ban slots changes.
+
 		local banCount = #(g_DraftBans[localID] or {});
 		local hostKey = HScrollKey(Controls.BanHostIconScroll);
 		if g_BanHostIconCount ~= banCount then
@@ -1599,8 +1599,8 @@ function Draft_RefreshBanUI()
 				Controls.BanHostStatusLabel:SetText("Select bans, then ready");
 			end
 		end
-		-- Pre-draft: non-host can cede ban control to host (same corner as swap).
-		-- Post-draft: swap button (own row stays display-only / disabled).
+
+
 		local showDelegate = (not isHost) and (not g_DraftLocked) and (not Draft_IsHistoryOnly())
 			and (not gameReadyLock) and (not PreGame.IsHotSeatGame());
 		if Controls.BanHostDelegateButton ~= nil then
@@ -1633,22 +1633,22 @@ function Draft_RefreshBanUI()
 		end
 	end
 
-	-- Collapse every ban row first. Hidden rows must not keep 107px height or they
-	-- leave a blank gap under BanHost while SlotStack collapses the local slot.
+
+
 	for i = 1, GameDefines.MAX_MAJOR_CIVS do
 		local banInst = g_BanSlotInstances[i];
 		if banInst ~= nil and banInst.Root ~= nil then
 			banInst.Root:SetHide(true);
 			banInst.Root:SetSizeVal(0, 0);
-			-- Clear icons on collapsed rows so lobby recreate can't leave orphans.
+
 			if banInst.BanIconStack ~= nil and g_BanIconIMs[banInst.BanIconStack] ~= nil then
 				pcall(function() g_BanIconIMs[banInst.BanIconStack]:ResetInstances(); end);
 			end
 		end
 	end
 
-	-- Align ban rows with visible SlotStack rows (same indices as RefreshPlayerList).
-	-- Local player sits in BanHost; every other visible slot gets a ban box.
+
+
 	if m_SlotInstances ~= nil then
 		for i = 1, GameDefines.MAX_MAJOR_CIVS do
 			local banInst = g_BanSlotInstances[i];
@@ -1669,8 +1669,8 @@ function Draft_RefreshBanUI()
 					end
 				end
 				banInst.BanPlayerLabel:SetText(name);
-				-- Other players never show a ready checkbox (display-only for humans;
-				-- host edits AI bans directly via icons).
+
+
 				banInst.BanReadyCheck:SetCheck(false);
 				banInst.BanReadyCheck:SetHide(true);
 				banInst.BanReadyCheck:SetDisabled(true);
@@ -1706,7 +1706,7 @@ function Draft_RefreshBanUI()
 						banInst.BanStatusLabel:SetText("Selecting bans...");
 					end
 					if banInst.DraftSwapButton ~= nil then
-						-- Visible after draft; disabled when game-ready / history (same idea as own row).
+
 						local showSwap = showDraftSwap and IsBanParticipantSlot(playerID);
 						local canClickSwap = showSwap and not gameReadyLock;
 						banInst.DraftSwapButton:SetHide(not showSwap);
@@ -1752,8 +1752,8 @@ function Draft_RefreshBanUI()
 end
 
 function Draft_SyncBanScroll()
-	-- BanSlotStack is inside ListingScrollPanel (engine scrolls both columns).
-	-- Keep Y at 0; X aligns with BanHost.
+
+
 	if Controls.BanSlotStack ~= nil then
 		pcall(function()
 			Controls.BanSlotStack:SetOffsetY(0);
@@ -1765,9 +1765,9 @@ end
 function Draft_RefreshDraftIconsAll()
 	local show = g_DraftLocked == true;
 
-	-- Host and other slots: Name → Draft icons → Civ/leader in one stack.
-	-- DraftIconRow is height 0 when hidden, so civ/leader sits on the SlotType row
-	-- until a draft is showing (then it drops to the Handicap/difficulty row).
+
+
+
 	local function ApplyDraftRow(row, scroll, stack, leftBtn, rightBtn, playerID, leftStack)
 		if stack ~= nil and playerID ~= nil then
 			RefreshDraftIcons(playerID, stack);
@@ -1801,9 +1801,9 @@ function Draft_RefreshDraftIconsAll()
 		for i = 1, GameDefines.MAX_MAJOR_CIVS do
 			local slot = m_SlotInstances[i];
 			if slot ~= nil then
-				-- Humans show Team + SlotType + Handicap (3 rows). Start higher so handicap
-				-- fits in the box. AI (no handicap) keep Team@36 / SlotType@67.
-				-- Left stack stays at topY so Name is always the top row.
+
+
+
 				local humanLayout = slot.playerID ~= nil and IsHumanSlot(slot.playerID);
 				local topY = humanLayout and 20 or 36;
 				if slot.RightInfoStack ~= nil then
@@ -1819,9 +1819,9 @@ function Draft_RefreshDraftIconsAll()
 	end
 end
 
-----------------------------------------------------------------
--- Ready / create / swap / reset
-----------------------------------------------------------------
+
+
+
 function Draft_AllHumansBanReady()
 	local order = GetHumanPlayerOrder();
 	if #order == 0 then
@@ -1854,7 +1854,7 @@ function Draft_UpdateActionButtons()
 		local snap = g_PreviousDraftSnapshot;
 		local hasSnap = snap ~= nil and snap.pools ~= nil;
 		local countOk = hasSnap and GetDraftParticipantCount() <= (tonumber(snap.participantCount) or 0);
-		-- Useful after Clear / accidental wipe; host-only. Hide until a draft has been created once.
+
 		local showRestore = isHost and hasSnap and not hotseat and showPlayers and not history;
 		local canRestore = showRestore and countOk and not gameReadyLock;
 		Controls.RestoreDraftButton:SetHide(not showRestore);
@@ -1874,7 +1874,7 @@ function Draft_UpdateActionButtons()
 	Draft_RefreshBottomButtonBar();
 end
 
--- Re-measure Create Draft / Save / etc. strip after show/hide or resize.
+
 function Draft_RefreshBottomButtonScroll()
 	FinalizeHorizontalIconScroll(
 		Controls.BottomButtonScroll,
@@ -1885,8 +1885,8 @@ function Draft_RefreshBottomButtonScroll()
 	);
 end
 
--- Back stays left. When Launch / Game Starting is on the right, shrink the
--- remaining buttons into a horizontal scroll so they are not drawn under it.
+
+
 function Draft_RefreshBottomButtonBar()
 	if Controls.BottomButtonBar == nil then
 		return;
@@ -1934,7 +1934,7 @@ function Draft_RefreshBottomButtonBar()
 	setSize(Controls.BottomButtonBar, bottomBarW, 70);
 	setOffset(Controls.BottomButtonBar, barLeft, 54);
 
-	-- Keep Launch / countdown in the same bottom-right slot (not in the chat).
+
 	setOffset(Controls.LaunchButton, startBtnRight, 54);
 	setOffset(Controls.CountdownButton, startBtnRight, 54);
 
@@ -1970,7 +1970,7 @@ function Draft_OnBanSwapClick(playerID)
 	Draft_RefreshBanUI();
 end
 
--- Non-host only: toggle letting the host edit your bans (pre-draft).
+
 function Draft_OnDelegateBanControl()
 	if Matchmaking.IsHost() or PreGame.IsHotSeatGame() then
 		return;
@@ -1986,12 +1986,12 @@ function Draft_OnDelegateBanControl()
 	Draft_RefreshBanUI();
 end
 
--- After a pool swap the previous civ pick may no longer be in-pool.
+
 local function Draft_ClearSelectedCiv(playerID)
 	if playerID == nil or playerID < 0 then
 		return;
 	end
-	-- In MP only the local human (or host for AI) can actually change that slot's civ.
+
 	local localID = Matchmaking.GetLocalID();
 	local isAI = IsAISlot(playerID);
 	if playerID ~= localID and not (Matchmaking.IsHost() and isAI) then
@@ -2005,14 +2005,14 @@ local function Draft_ClearSelectedCiv(playerID)
 		PreGame.SetCivilizationShortDescription(playerID, "");
 		PreGame.SetCivilizationAdjective(playerID, "");
 	end);
-	-- Ready locks civ changes on some paths — drop ready so Random sticks.
+
 	if playerID == localID and PreGame.IsReady(localID) then
 		PreGame.SetReady(localID, false);
 	end
 	Network.BroadcastPlayerInfo();
 end
 
--- Clear a player's civ pick unless it is still in their draft pool.
+
 local function Draft_ValidateCivAgainstPool(playerID)
 	if playerID == nil or playerID < 0 then
 		return;
@@ -2025,7 +2025,7 @@ local function Draft_ValidateCivAgainstPool(playerID)
 	if pool ~= nil then
 		for _, id in ipairs(pool) do
 			if id == civ then
-				return; -- still valid
+				return;
 			end
 		end
 	end
@@ -2052,7 +2052,7 @@ local function Draft_ApplyPoolSwap(a, b, broadcast)
 	g_DraftSwapDesire[a] = nil;
 	g_DraftSwapDesire[b] = nil;
 	g_DraftSwapFirst = nil;
-	-- Keep pick only if it still exists in the pool you just received.
+
 	Draft_ValidateCivAgainstPool(a);
 	Draft_ValidateCivAgainstPool(b);
 	Draft_RefreshDraftIconsAll();
@@ -2076,7 +2076,7 @@ local function Draft_ApplyPoolSwap(a, b, broadcast)
 	if UpdateDisplay ~= nil then
 		UpdateDisplay();
 	end
-	-- Re-check after UI/network refresh in case a bounce restored an out-of-pool civ.
+
 	Draft_ValidateCivAgainstPool(a);
 	Draft_ValidateCivAgainstPool(b);
 	if UpdateDisplay ~= nil then
@@ -2109,7 +2109,7 @@ function Draft_OnLocalBanReady(bChecked)
 		end
 		return;
 	end
-	-- Don't allow ban-ready while the ban picker is open.
+
 	if g_PendingBan ~= nil
 		and Controls.BanPickerPanel ~= nil
 		and not Controls.BanPickerPanel:IsHidden() then
@@ -2121,13 +2121,13 @@ function Draft_OnLocalBanReady(bChecked)
 	g_DraftBanReady[localID] = bChecked and true or false;
 	g_DraftBanReadyPendingLocal = bChecked and true or false;
 	if bChecked then
-		-- Close any open picker so ready state can't be bypassed mid-edit.
+
 		g_PendingBan = nil;
 		Draft_HideBanPicker();
 	end
-	-- Engine-synced per-player bit (same role as PreGame.SetReady for the player box).
+
 	Draft_WriteLocalBanReadyOption(bChecked);
-	-- One chat notify for immediate UI; no periodic reannounce (that caused lobby lag).
+
 	SendDraftChat("BANREADY|" .. tostring(localID) .. "|" .. (bChecked and "1" or "0"));
 	if Matchmaking.IsHost() then
 		Draft_BroadcastReadyMask();
@@ -2142,8 +2142,8 @@ function Draft_BroadcastBans(playerID)
 	SendDraftChat("BAN|" .. tostring(playerID) .. "|" .. encoded);
 end
 
--- Same path as MPGameOptions.SendGameOptionChanged: write PreGame then broadcast.
--- Chat RULES is kept as a thin backup for clients that miss a settings packet.
+
+
 function Draft_BroadcastRules()
 	if not Matchmaking.IsHost() then
 		return;
@@ -2168,13 +2168,13 @@ function Draft_BroadcastRules()
 	SendDraftChat(body);
 end
 
--- Clients apply host draft rules from PreGame (like reading other game options).
--- Returns true if local rules changed.
+
+
 function Draft_PullRulesFromPreGame()
 	if PreGame == nil or PreGame.GetGameOption == nil then
 		return false;
 	end
-	-- Host is the writer; never pull over in-progress local edits.
+
 	if Matchmaking.IsHost() then
 		return false;
 	end
@@ -2188,7 +2188,7 @@ function Draft_PullRulesFromPreGame()
 	end
 
 	Draft_UnpackRules(packed);
-	-- Host cleared ban-ready with the rules write; drop local ready UI too.
+
 	g_DraftBanReady = {};
 	g_DraftBanReadyPendingLocal = false;
 	Draft_WriteLocalBanReadyOption(false);
@@ -2207,7 +2207,7 @@ function Draft_BroadcastPools()
 	if not Matchmaking.IsHost() then
 		return;
 	end
-	-- DRAFT|pid|id,id,id  (one message per player to stay under 255)
+
 	for pid, pool in pairs(g_DraftPools) do
 		SendDraftChat("DRAFT|" .. tostring(pid) .. "|" .. LekmodDrafter.EncodeCivList(pool));
 	end
@@ -2226,7 +2226,7 @@ function Draft_OnCreateDraft()
 		return;
 	end
 	local order = GetDraftPlayerOrder();
-	-- Ensure empty ban arrays exist for human-required test slots.
+
 	for _, pid in ipairs(order) do
 		EnsureBanArray(pid);
 	end
@@ -2238,7 +2238,7 @@ function Draft_OnCreateDraft()
 	g_DraftPools = result.drafts or {};
 	g_DraftLocked = true;
 	g_DraftSwapFirst = nil;
-	g_DraftBanHostControl = {}; -- delegate button gone; bans are locked anyway
+	g_DraftBanHostControl = {};
 	g_DraftParticipantKey = GetDraftParticipantKey();
 	g_DraftParticipantCount = GetDraftParticipantCount();
 	Draft_SavePreviousSnapshot();
@@ -2251,9 +2251,9 @@ function Draft_OnCreateDraft()
 	Draft_RefreshBanUI();
 	Draft_RefreshDraftIconsAll();
 	Draft_UpdateActionButtons();
-	-- Repopulate civ pulldowns with filtered lists
+
 	if BuildSlots ~= nil then
-		-- Only refresh civ pulldowns
+
 		PopulateCivPulldown(Controls.CivPulldown, 0);
 		for i = 1, GameDefines.MAX_MAJOR_CIVS do
 			local inst = m_SlotInstances[i];
@@ -2293,7 +2293,7 @@ function Draft_OnRestorePreviousDraft()
 	g_DraftBanHostControl = {};
 	g_DraftParticipantKey = GetDraftParticipantKey();
 	g_DraftParticipantCount = snapCount;
-	-- Restore ban-ready (green highlight) for slots that still exist in the deal.
+
 	g_DraftBanReady = {};
 	g_DraftBanReadyPendingLocal = false;
 	local snapReady = snap.banReady or {};
@@ -2343,12 +2343,12 @@ function Draft_OnResetDraft()
 	g_DraftSwapDesire = {};
 	g_DraftParticipantKey = nil;
 	g_DraftParticipantCount = nil;
-	-- Clear per-player ready bits so Create Draft doesn't see stale PreGame ready.
+
 	local maxP = GameDefines.MAX_MAJOR_CIVS;
 	for pid = 0, maxP - 1 do
 		Draft_OptSet(Draft_ReadyOptName(pid), 0);
 	end
-	-- Keep bans + g_PreviousDraftSnapshot so Restore Draft can undo this.
+
 	SendDraftChat("RESET|1");
 	Draft_BroadcastReadyMask();
 	AnnounceGame("Draft reset. Players may change bans and ready again.");
@@ -2370,7 +2370,7 @@ function Draft_OnResetDraft()
 end
 
 function Draft_OnSwapDraftsButton()
-	-- Legacy no-op; swap is mutual via DraftSwapButton on each ban box.
+
 	local localID = Matchmaking.GetLocalID();
 	if g_DraftSwapDesire[localID] ~= nil then
 		g_DraftSwapDesire[localID] = nil;
@@ -2379,8 +2379,8 @@ function Draft_OnSwapDraftsButton()
 	end
 end
 
--- Mutual draft-pool swap (same idea as seat SwapButton / DesiredSlot).
--- Click another player's ban-box swap to request; they click yours to accept.
+
+
 function Draft_TrySelectSwapPlayer(playerID)
 	if Draft_IsHistoryOnly() or not g_DraftLocked then
 		return false;
@@ -2393,14 +2393,14 @@ function Draft_TrySelectSwapPlayer(playerID)
 		return true;
 	end
 
-	-- Human Required has nobody to click back � instant swap for solo testing.
-	-- Human Required / AI have nobody to click back � instant swap.
+
+
 	if IsHumanRequiredSlot(playerID) or IsAISlot(playerID) then
 		Draft_ApplyPoolSwap(localID, playerID, true);
 		return true;
 	end
 
-	-- Toggle off if clicking the same target again.
+
 	if g_DraftSwapDesire[localID] == playerID then
 		g_DraftSwapDesire[localID] = nil;
 		SendDraftChat("SWAPREQ|" .. tostring(localID) .. "|-1");
@@ -2413,9 +2413,9 @@ function Draft_TrySelectSwapPlayer(playerID)
 	return true;
 end
 
-----------------------------------------------------------------
--- Incoming protocol
-----------------------------------------------------------------
+
+
+
 function Draft_HandleProtocol(fromPlayer, text)
 	local body = string.sub(text, #DRAFT_PREFIX + 1);
 	local op, rest = string.match(body, "^([^|]+)|(.*)$");
@@ -2433,11 +2433,11 @@ function Draft_HandleProtocol(fromPlayer, text)
 			g_DraftRules.guaranteedInlands = tonumber(inland);
 			g_DraftRules.vanillaOnly = tonumber(vanilla) == 1;
 			g_DraftRules.seasonalBans = tonumber(seasonal) == 1;
-			-- Host rules change clears everyone's ban-ready (see OnRulesChanged).
+
 			g_DraftBanReady = {};
 			g_DraftBanReadyPendingLocal = false;
 			Draft_WriteLocalBanReadyOption(false);
-			-- Resize ban arrays (all draft participants, including AI).
+
 			for _, pid in ipairs(GetDraftPlayerOrder()) do
 				EnsureBanArray(pid);
 			end
@@ -2464,12 +2464,12 @@ function Draft_HandleProtocol(fromPlayer, text)
 		pid = tonumber(pid);
 		if pid ~= nil then
 			local hostID = Matchmaking.GetHostID();
-			-- Own ready announce, or host correcting (kick / restore / echo).
+
 			if fromPlayer == pid or fromPlayer == hostID then
 				local ready = (tonumber(flag) == 1);
 				g_DraftBanReady[pid] = ready and true or nil;
-				-- Host mirrors into that player's PreGame ready slot so others can
-				-- poll it like PreGame.IsReady (without chat reannounce spam).
+
+
 				if Matchmaking.IsHost() then
 					Draft_OptSet(Draft_ReadyOptName(pid), ready and 1 or 0);
 					Draft_BroadcastReadyMask();
@@ -2480,7 +2480,7 @@ function Draft_HandleProtocol(fromPlayer, text)
 		end
 		return true;
 	elseif op == "READYMASK" then
-		-- Host-authoritative ready bits (green-up + Create Draft gate).
+
 		if fromPlayer == Matchmaking.GetHostID() then
 			local mask = tonumber(rest);
 			if mask ~= nil then
@@ -2492,11 +2492,11 @@ function Draft_HandleProtocol(fromPlayer, text)
 		end
 		return true;
 	elseif op == "BANCTRL" then
-		-- BANCTRL|pid|0/1 — player ceded (or reclaimed) ban edit rights to the host.
+
 		local pid, flag = string.match(rest, "^(%d+)|(%d+)$");
 		pid = tonumber(pid);
 		if pid ~= nil then
-			-- Owning player toggles; host may clear (kick/reset).
+
 			if fromPlayer == pid or fromPlayer == Matchmaking.GetHostID() then
 				g_DraftBanHostControl[pid] = (tonumber(flag) == 1);
 				Draft_RefreshBanUI();
@@ -2550,7 +2550,7 @@ function Draft_HandleProtocol(fromPlayer, text)
 			else
 				g_DraftSwapDesire[fromID] = toID;
 			end
-			-- Do not complete here - only the accepting click completes (avoids double-swap).
+
 			Draft_RefreshBanUI();
 		end
 		return true;
@@ -2558,7 +2558,7 @@ function Draft_HandleProtocol(fromPlayer, text)
 		if Draft_IsHistoryOnly() then
 			return true;
 		end
-		-- SWAP|a|b|poolA|poolB  (absolute post-swap pools)
+
 		local a, b, listA, listB = string.match(rest, "^(%d+)|(%d+)|([^|]*)|(.*)$");
 		a, b = tonumber(a), tonumber(b);
 		if a ~= nil and b ~= nil then
@@ -2618,9 +2618,9 @@ function Draft_HandleProtocol(fromPlayer, text)
 	return true;
 end
 
-----------------------------------------------------------------
--- Draft Rules UI
-----------------------------------------------------------------
+
+
+
 local function FillNumberPull(pull, minV, maxV, includeRandom, selected)
 	if pull == nil then
 		return;
@@ -2639,7 +2639,7 @@ local function FillNumberPull(pull, minV, maxV, includeRandom, selected)
 		ct.Button:SetVoid1(v);
 	end
 	pull:CalculateInternals();
-	-- Set label roughly
+
 	local label = "Random";
 	if selected ~= nil and selected >= 0 then
 		label = tostring(selected);
@@ -2689,27 +2689,27 @@ local function OnRulesChanged()
 		Draft_PopulateRulesUI();
 		return;
 	end
-	-- Clear ban-ready when rules change (host clears PreGame ready bits too).
+
 	g_DraftBanReady = {};
 	g_DraftBanReadyPendingLocal = false;
 	local maxP = GameDefines.MAX_MAJOR_CIVS;
 	for pid = 0, maxP - 1 do
 		Draft_OptSet(Draft_ReadyOptName(pid), 0);
 	end
-	-- Resize ban arrays in place. Do NOT destroy InstanceManagers here — abandoning
-	-- them and creating new ones on the same stacks leaves orphan icons / bad widths
-	-- on BanHost horizontal scroll after bans-per-player changes.
+
+
+
 	for _, pid in ipairs(GetDraftPlayerOrder()) do
 		EnsureBanArray(pid);
 	end
 	EnsureBanArray(Matchmaking.GetLocalID());
-	-- Persist full draft state, then broadcast like other lobby game options.
+
 	Draft_PersistToPreGame();
 	Draft_BroadcastRules();
 	Draft_BroadcastReadyMask();
-	-- May no-op while on Draft Rules tab; Players tab refresh rebuilds icons.
+
 	Draft_RefreshBanUI();
-	-- After rebuild (or immediately if still on Draft Rules), reset horizontal scroll.
+
 	ResetHorizontalBanScrolls();
 	Draft_PopulateRulesUI();
 end
@@ -2755,9 +2755,9 @@ function Draft_OnSeasonalCheck(bChecked)
 	OnRulesChanged();
 end
 
-----------------------------------------------------------------
--- Page tab integration
-----------------------------------------------------------------
+
+
+
 local function Draft_ApplyCompactRightPane()
 	local compact = Draft_IsLobbyCompact();
 	local showPlayers = (g_DraftPageMode == nil or g_DraftPageMode == "players");
@@ -2790,7 +2790,7 @@ local function Draft_ApplyCompactRightPane()
 	end
 
 	if Controls.VerticalTrim2 ~= nil then
-		-- Only between ban + summary in wide layout.
+
 		Controls.VerticalTrim2:SetHide(compact or not showSummary);
 	end
 	if Controls.GameOptionsSummary ~= nil then
@@ -2802,7 +2802,7 @@ local function Draft_ApplyCompactRightPane()
 end
 
 local function Draft_ApplyCompactSecondaryTabs()
-	-- Always show Draft Rules + Game Options tabs (no compact shared-slot / arrow cycle).
+
 	if Controls.CompactSecondaryPrev ~= nil then Controls.CompactSecondaryPrev:SetHide(true); end
 	if Controls.CompactSecondaryNext ~= nil then Controls.CompactSecondaryNext:SetHide(true); end
 	if Controls.DraftRulesPageTab ~= nil then Controls.DraftRulesPageTab:SetHide(false); end
@@ -2815,7 +2815,7 @@ function Draft_UpdatePageTabView()
 	local showDraft = (mode == "draft");
 	local showOptions = (mode == "options");
 
-	-- Reuse m_bEditOptions for options compatibility with existing code paths
+
 	m_bEditOptions = showOptions;
 
 	if Controls.Host ~= nil then Controls.Host:SetHide(not showPlayers); end
@@ -2844,8 +2844,8 @@ function Draft_UpdatePageTabView()
 	Draft_ApplyCompactRightPane();
 
 	if showPlayers then
-		-- Rebuild ban/draft icons after rules changes done on other tabs
-		-- (OnRulesChanged clears IMs while Ban UI refresh is skipped off-page).
+
+
 		if (not Draft_IsLobbyCompact()) or g_CompactRightPane == "bans" then
 			Draft_RefreshBanUI();
 		end
@@ -2872,7 +2872,7 @@ function Draft_OnOptionsTab()
 	g_DraftPageMode = "options";
 	Draft_UpdatePageTabView();
 	if UpdatePageTabView ~= nil then
-		-- Call original options populate path
+
 		m_bEditOptions = true;
 		if Controls.OptionsScrollPanel ~= nil then
 			Controls.OptionsScrollPanel:SetSizeY(Controls.VerticalTrim:GetSizeY() - 2);
@@ -2890,7 +2890,7 @@ function Draft_OnCompactRightToggle()
 	if not Draft_IsLobbyCompact() then
 		return;
 	end
-	-- Only meaningful on the players page (bans / summary column).
+
 	if g_DraftPageMode ~= nil and g_DraftPageMode ~= "players" then
 		return;
 	end
@@ -2907,13 +2907,13 @@ function Draft_OnCompactRightToggle()
 	end
 end
 
-----------------------------------------------------------------
--- Init / hooks
-----------------------------------------------------------------
+
+
+
 function Draft_AdjustScreenSize()
 	local screenX, screenY = UIManager:GetScreenSizeVal();
-	-- Compact = hide right-hand summary so player+ban fit like vanilla 960.
-	-- Wide (1366+) keeps the full 1275 layout. No column scaling.
+
+
 	g_LobbyCompact = (screenX < LOBBY_COMPACT_MAX_SCREEN);
 	local compact = g_LobbyCompact;
 	local mainW = compact and LOBBY_COMPACT_W or LOBBY_WIDE_W;
@@ -2947,7 +2947,7 @@ function Draft_AdjustScreenSize()
 		Controls.MainGrid:SetSizeY(mainH);
 	end
 
-	-- Fixed player + ban geometry (same in both modes).
+
 	if Controls.ListingScrollPanel ~= nil then
 		setSize(Controls.ListingScrollPanel, 926, listH);
 		setOffset(Controls.ListingScrollPanel, 18, 201);
@@ -2975,14 +2975,14 @@ function Draft_AdjustScreenSize()
 		Controls.VerticalTrim:SetSizeY(trimH);
 	end
 
-	-- Summary column geometry (visibility handled by Draft_ApplyCompactRightPane).
+
 	if Controls.VerticalTrim2 ~= nil then
 		setOffset(Controls.VerticalTrim2, 948, 75);
 		Controls.VerticalTrim2:SetSizeY(trimH);
 	end
 	if Controls.GameOptionsSummary ~= nil then
 		if compact then
-			-- Sit in the ban column slot when toggled to Settings; leave a strip above chat for the toggle.
+
 			setSize(Controls.GameOptionsSummary, 310, math.max(80, trimH - 48));
 			setOffset(Controls.GameOptionsSummary, 635, 80);
 		else
@@ -2995,19 +2995,19 @@ function Draft_AdjustScreenSize()
 		Controls.GameOptionsSummaryTitle:SetHide(true);
 	end
 	if Controls.CompactRightToggle ~= nil then
-		-- Just above chat in the right column (Anchor R,B). Not over Draft Rules tabs.
+
 		setOffset(Controls.CompactRightToggle, 25, CHAT_TOP_FROM_BOTTOM + 2);
-		-- Visibility is owned by Draft_ApplyCompactRightPane (players page only).
+
 	end
 
-	-- Chrome that must match MainGrid width.
+
 	local barW = compact and 920 or 1240;
 	local fullInner = compact and 920 or 1220;
 	local chatW = compact and (mainW - 40) or 1240;
 	if Controls.PageTabBar ~= nil then
 		setSize(Controls.PageTabBar, barW, 32);
 		if compact then
-			-- Three tabs across the compact bar (no shared-slot arrows).
+
 			local tabW = math.floor((barW - 40) / 3);
 			setOffset(Controls.PlayersPageTab, 10, 2);
 			setSize(Controls.PlayersPageTab, tabW, 24);
@@ -3024,7 +3024,7 @@ function Draft_AdjustScreenSize()
 			setSize(Controls.OptionsPageTab, 300, 24);
 		end
 	end
-	-- Horizontal dividers: SetSizeVal (SetSizeX alone fails on "W.H" Image sizes).
+
 	local function setTrimW(ctrl, w)
 		if ctrl == nil then return; end
 		pcall(function()
@@ -3056,7 +3056,7 @@ function Draft_AdjustScreenSize()
 	end
 	if Controls.ChatBox ~= nil then
 		setSize(Controls.ChatBox, chatW, 164);
-		-- Keep chat inside MainGrid on compact (was clipping the bottom gold line).
+
 		if compact then
 			setOffset(Controls.ChatBox, 20, 110);
 		else
@@ -3067,14 +3067,14 @@ function Draft_AdjustScreenSize()
 			setSize(Controls.ChatScroll, math.max(200, chatW - 30), 123);
 			Controls.ChatScroll:CalculateInternalSize();
 		end
-		-- Chat entry row / field must shrink with chatW or the gold line sticks out.
+
 		local entryFieldW = math.max(120, chatW - 105);
 		if Controls.ChatEntryRow ~= nil then setSize(Controls.ChatEntryRow, math.max(200, chatW - 2), 36); end
 		if Controls.ChatEntryFieldBox ~= nil then setSize(Controls.ChatEntryFieldBox, entryFieldW, 27); end
 		if Controls.ChatEntry ~= nil then setSize(Controls.ChatEntry, entryFieldW, 23); end
 	end
 
-	-- Restore fixed slot widths.
+
 	if m_SlotInstances ~= nil then
 		for i = 1, GameDefines.MAX_MAJOR_CIVS do
 			local slot = m_SlotInstances[i];
@@ -3100,8 +3100,8 @@ function Draft_AdjustScreenSize()
 end
 
 function Draft_OnUpdateDisplay()
-	-- Only invalidate when the draft deal grows (new human/AI/human-required slot).
-	-- Slot type swaps that keep the same count (e.g. Human <-> AI) leave the draft alone.
+
+
 	if g_DraftLocked and Matchmaking.IsHost() and not Draft_IsHistoryOnly() then
 		local count = GetDraftParticipantCount();
 		if g_DraftParticipantCount ~= nil and count > g_DraftParticipantCount then
@@ -3113,7 +3113,7 @@ function Draft_OnUpdateDisplay()
 	if g_DraftLocked and not Draft_IsHistoryOnly() then
 		Draft_ValidateAllCivsAgainstPools();
 	end
-	-- Rules first: a host rules reset clears ready before we re-pull bits/mask.
+
 	Draft_PullRulesFromPreGame();
 	Draft_PullBanReadyFromPreGame();
 	Draft_RefreshBanUI();
@@ -3124,19 +3124,19 @@ end
 function Draft_Init()
 	math.randomseed(os.time());
 	g_DraftRules = g_DraftRules or LekmodDrafter.DefaultRules();
-	-- Mid-game / hotjoin lobby: ensure launched flag is set for this save going forward.
+
 	if PreGame.GameStarted() == true then
 		Draft_MarkGameLaunched();
 	end
-	-- Restore bans/rules/pools from a loaded lobby/game save (PreGame options).
-	-- Skip on repeat Draft_Init in the same lobby visit — that wipe was erasing
-	-- chat-synced ban-ready and blocking Create Draft on the host.
+
+
+
 	if not g_DraftLiveSession then
 		if Draft_RestoreFromPreGame() then
 			if g_DraftLocked then
 				g_DraftParticipantKey = GetDraftParticipantKey();
 				g_DraftParticipantCount = GetDraftParticipantCount();
-				-- Treat restored draft as restorable if host clears it later.
+
 				if g_PreviousDraftSnapshot == nil then
 					Draft_SavePreviousSnapshot();
 				end
@@ -3193,7 +3193,7 @@ function Draft_Init()
 	if Controls.DraftRulesPageTab ~= nil then
 		Controls.DraftRulesPageTab:RegisterCallback(Mouse.eLClick, Draft_OnDraftRulesTab);
 	end
-	-- Override players/options tabs to use three-mode page
+
 	if Controls.PlayersPageTab ~= nil then
 		Controls.PlayersPageTab:RegisterCallback(Mouse.eLClick, Draft_OnPlayersTab);
 	end
@@ -3225,7 +3225,7 @@ function Draft_Init()
 
 	if Matchmaking.IsHost() then
 		Draft_BroadcastRules();
-		-- Re-sync restored draft to clients joining a loaded lobby config.
+
 		for _, pid in ipairs(GetDraftPlayerOrder()) do
 			if g_DraftBans[pid] ~= nil then
 				Draft_BroadcastBans(pid);
@@ -3242,7 +3242,7 @@ function Draft_Init()
 		end
 		Draft_BroadcastReadyMask();
 	else
-		-- Publish our ban-ready bit into PreGame (like SetReady) after lobby UI rebuild.
+
 		local localID = Matchmaking.GetLocalID();
 		if localID ~= nil and g_DraftBanReady[localID] == true then
 			Draft_WriteLocalBanReadyOption(true);
@@ -3253,7 +3253,7 @@ function Draft_Init()
 	Draft_RefreshBanUI();
 	g_DraftPageMode = "players";
 	Draft_UpdatePageTabView();
-	-- Keep OnStagingUpdate running so ban column scroll stays synced with players.
+
 	if EnsureStagingUpdate ~= nil then
 		EnsureStagingUpdate();
 	end

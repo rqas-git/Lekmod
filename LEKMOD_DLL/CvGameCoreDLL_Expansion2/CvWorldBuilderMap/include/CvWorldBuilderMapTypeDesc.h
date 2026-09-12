@@ -1,16 +1,16 @@
-//---------------------------------------------------------------------------------------
-//
-//  *****************   CIV 5 World Builder Map   ********************
-//
-//  FILE:    CvWorldBuilderMapTypeDesc.h
-//
-//  AUTHOR:  Eric Jordan  --  4/5/2010
-//
-//  PURPOSE: Describes what the type IDs used in a world build save represent.
-//
-//---------------------------------------------------------------------------------------
-//  Copyright (c) 2009 Firaxis Games, Inc. All rights reserved.
-//---------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #pragma once
 #ifndef CvWorldBuilderMapTypeDesc_h
@@ -21,9 +21,9 @@ class CvWorldBuilderMapTypeDesc
 public:
 	CvWorldBuilderMapTypeDesc();
 
-	// This special string type ensures that all strings used in
-	// CvWorldBuilderMapTypeDesc come from the same string palette.
-	// This makes for fast string compares and better memory usage.
+
+
+
 	class String
 	{
 	public:
@@ -34,7 +34,7 @@ public:
 		_Ret_opt_z_ operator const char*() const { return m_sz; }
 		_Ret_opt_z_ const char *operator =(_In_opt_z_ const char *sz);
 
-		// This pointer compare is possible because the strings come from the same palette
+
 		const bool operator ==(const String &sRhs) const { return (m_sz == sRhs.m_sz); }
 		const bool operator ==(_In_z_ const char *szRhs) const { return (strcmp(m_sz, szRhs) == 0); }
 
@@ -59,8 +59,8 @@ public:
 		uint Add(const char* szType);
 		uint Add(const String &szType);
 
-		// Obviously, the calling code is responsible for ensuring the buffer
-		// is large enough.  GetSerializedSize() should be sufficient for this.
+
+
 		void Serialize(void *pvBuffer) const;
 
 		void Deserialize(void *pvBuffer, size_t stSize);
@@ -99,7 +99,7 @@ public:
 	typedef std::vector<uint> LookupTable;
 	static bool BuildLookupTable(const TypeMap &kFrom, const TypeMap &kTo, LookupTable& auiLookupTable)
 	{
-		// Initialize the lookup table
+
 		uint uiMaxSize = MAX(kFrom.Size(), kTo.Size());
 		auiLookupTable.resize(uiMaxSize);
 		for( uint i = 0; i < uiMaxSize; ++i )
@@ -108,17 +108,17 @@ public:
 		bool bDifferencesFound = kFrom.Size() != kTo.Size();
 		for( uint uiFrom = 0; uiFrom < kFrom.Size(); ++uiFrom )
 		{
-			// I know this looks like a string copy but it's just a string pointer copy
+
 			const String sFrom = kFrom.Get(uiFrom);
 
-			// Note: NULL and empty strings are considered to represent invalid types and are never allowed to have a match.
+
 			const char *szFrom = sFrom;
 			if( szFrom && *szFrom )
 			{
 				for( uint uiTo = 0; uiTo < kTo.Size(); ++uiTo )
 				{
-					// I know this looks like a string compare but since they're tabled
-					// strings it's just a pointer comparison which is pretty fast.
+
+
 					if( sFrom == kTo.Get(uiTo) )
 					{
 						auiLookupTable[uiFrom] = uiTo;
@@ -129,7 +129,7 @@ public:
 			}
 			else
 			{
-				// If from was NULL or empty but to is not then a difference has been found.
+
 				const char *szTo = kTo.Get(uiFrom);
 				if( szTo && *szTo )
 					bDifferencesFound = true;
@@ -140,4 +140,4 @@ public:
 	}
 };
 
-#endif // CvWorldBuilderMapTypeDesc_h
+#endif

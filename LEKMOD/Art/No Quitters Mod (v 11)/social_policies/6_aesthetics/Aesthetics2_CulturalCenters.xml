@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/11/2015 11:59:20 PM -->
+
 <GameData>
 
-	<!-- Cultural Centers -->
-	<!-- Policy_BuildingClassYieldChanges doesn't work for YIELD_CULTURE. Check CvPlayer.cpp LINE 8421 - it skips culture output because it's "handled above" -->
-	<!-- Probably I just need to delete the "case YIELD_CULTURE:" case and the rest of them that deal with the same functions (there's multiple places) -->
+
+
+
 	<Policy_BuildingClassProductionModifiers>
 		<Update>
 			<Set ProductionModifier="100" />

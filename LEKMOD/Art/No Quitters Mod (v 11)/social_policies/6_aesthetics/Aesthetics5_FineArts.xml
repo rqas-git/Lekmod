@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 4/19/2015 12:35:24 PM -->
+
 <GameData>
 
-	<!-- Fine Arts -->
+
 	<Policies>
 		<Update>
 			<Set HappinessToCulture="0" NumCitiesFreeAestheticsSchools="4" />
@@ -57,7 +57,7 @@
 	</Language_RU_RU>
 
 
-	<!-- Fine Arts: Scriptorium -->
+
 	<BuildingClasses>
 		<Row>
 			<Type>BUILDINGCLASS_SCRIPTORIUM</Type>
@@ -125,7 +125,7 @@
 	</Language_RU_RU>
 
 
-	<!-- Fine Arts: Gallery -->
+
 	<BuildingClasses>
 		<Row>
 			<Type>BUILDINGCLASS_GALLERY</Type>
@@ -187,7 +187,7 @@
 	</Language_RU_RU>
 
 
-	<!-- Fine Arts: Conservatory -->
+
 	<BuildingClasses>
 		<Row>
 			<Type>BUILDINGCLASS_CONSERVATORY</Type>

@@ -1,6 +1,6 @@
--------------------------------
--- TopPanel.lua
--------------------------------
+
+
+
 
 function UpdateData()
 
@@ -22,9 +22,9 @@ function UpdateData()
 				Controls.MenuButton:SetText(Locale.ToUpper(Locale.ConvertTextKey("TXT_KEY_MENU")));
 				Controls.MenuButton:SetToolTipString(Locale.ConvertTextKey("TXT_KEY_MENU_TOOLTIP"));
 			end
-			-----------------------------
-			-- Update science stats
-			-----------------------------
+
+
+
 			local strScienceText;
 			
 			if (Game.IsOption(GameOptionTypes.GAMEOPTION_NO_SCIENCE)) then
@@ -33,19 +33,19 @@ function UpdateData()
 			
 				local sciencePerTurn = pPlayer:GetScience();
 			
-				-- No Science
+
 				if (sciencePerTurn <= 0) then
 					strScienceText = string.format("[COLOR:255:60:60:255]" .. Locale.ConvertTextKey("TXT_KEY_NO_SCIENCE") .. "[/COLOR]");
-				-- We have science
+
 				else
 					strScienceText = string.format("+%i", sciencePerTurn);
 
 					local iGoldPerTurn = pPlayer:CalculateGoldRate();
 					
-					-- Gold being deducted from our Science
+
 					if (pPlayer:GetGold() + iGoldPerTurn < 0) then
 						strScienceText = "[COLOR:255:60:0:255]" .. strScienceText .. "[/COLOR]";
-					-- Normal Science state
+
 					else
 						strScienceText = "[COLOR:33:190:247:255]" .. strScienceText .. "[/COLOR]";
 					end
@@ -56,38 +56,38 @@ function UpdateData()
 			
 			Controls.SciencePerTurn:SetText(strScienceText);
 			
-			-----------------------------
-			-- Update gold stats
-			-----------------------------
+
+
+
 			local iTotalGold = pPlayer:GetGold();
 			local iGoldPerTurn = pPlayer:CalculateGoldRate();
 			
-			-- Accounting for positive or negative GPT - there's obviously a better way to do this.  If you see this comment and know how, it's up to you ;)
-			-- Text is White when you can buy a Plot
-			--if (iTotalGold >= pPlayer:GetBuyPlotCost(-1,-1)) then
-				--if (iGoldPerTurn >= 0) then
-					--strGoldStr = string.format("[COLOR:255:255:255:255]%i (+%i)[/COLOR]", iTotalGold, iGoldPerTurn)
-				--else
-					--strGoldStr = string.format("[COLOR:255:255:255:255]%i (%i)[/COLOR]", iTotalGold, iGoldPerTurn)
-				--end
-			---- Text is Yellow or Red when you can't buy a Plot
-			--else
+
+
+
+
+
+
+
+
+
+
 			local strGoldStr = Locale.ConvertTextKey("TXT_KEY_TOP_PANEL_GOLD", iTotalGold, iGoldPerTurn);
-			--end
+
 			
 			Controls.GoldPerTurn:SetText(strGoldStr);
 
-			-----------------------------
-			-- Update international trade routes
-			-----------------------------
+
+
+
 			local iUsedTradeRoutes = pPlayer:GetNumInternationalTradeRoutesUsed();
 			local iAvailableTradeRoutes = pPlayer:GetNumInternationalTradeRoutesAvailable();
 			local strInternationalTradeRoutes = Locale.ConvertTextKey("TXT_KEY_TOP_PANEL_INTERNATIONAL_TRADE_ROUTES", iUsedTradeRoutes, iAvailableTradeRoutes);
 			Controls.InternationalTradeRoutes:SetText(strInternationalTradeRoutes);
 			
-			-----------------------------
-			-- Update Happiness
-			-----------------------------
+
+
+
 			local strHappiness;
 			
 			if (Game.IsOption(GameOptionTypes.GAMEOPTION_NO_HAPPINESS)) then
@@ -96,15 +96,15 @@ function UpdateData()
 				local iHappiness = pPlayer:GetExcessHappiness();
 				local tHappinessTextColor;
 
-				-- Empire is Happiness
+
 				if (not pPlayer:IsEmpireUnhappy()) then
 					strHappiness = string.format("[ICON_HAPPINESS_1][COLOR:60:255:60:255]%i[/COLOR]", iHappiness);
 				
-				-- Empire Really Unhappy
+
 				elseif (pPlayer:IsEmpireVeryUnhappy()) then
 					strHappiness = string.format("[ICON_HAPPINESS_4][COLOR:255:60:60:255]%i[/COLOR]", -iHappiness);
 				
-				-- Empire Unhappy
+
 				else
 					strHappiness = string.format("[ICON_HAPPINESS_3][COLOR:255:60:60:255]%i[/COLOR]", -iHappiness);
 				end
@@ -112,13 +112,13 @@ function UpdateData()
 			
 			Controls.HappinessString:SetText(strHappiness);
 			
-			-----------------------------
-			-- Update Golden Age Info altered for v34
-			-----------------------------
+
+
+
 			local strGoldenAgeStr;
 			local iGoldenAgeProgress = pPlayer:GetGoldenAgeProgressMeter();
 			local iGoldenAgeThreshold = pPlayer:GetGoldenAgeProgressThreshold();
-			local iTotalGoldenAgePointsPerTurn = pPlayer:GetTotalGoldenAgePointsInEmpire(); -- This grabs both Excess Happiness and GAP-as-a-yield
+			local iTotalGoldenAgePointsPerTurn = pPlayer:GetTotalGoldenAgePointsInEmpire();
 
 			if (Game.IsOption(GameOptionTypes.GAMEOPTION_NO_HAPPINESS)) then
 				strGoldenAgeStr = Locale.ConvertTextKey("TXT_KEY_TOP_PANEL_GOLDEN_AGES_OFF");
@@ -130,7 +130,7 @@ function UpdateData()
 						strGoldenAgeStr = string.format(Locale.ToUpper(Locale.ConvertTextKey("TXT_KEY_GOLDEN_AGE_ANNOUNCE")) .. " (%i)", pPlayer:GetGoldenAgeTurns());
 					end
 				else
-					-- Transformed into a TXT_KEY with 3 parameters 1_GoldenAgeProgress 2_GoldenAgeThreshold and 3_GoldenAgePointsPerTurn GoldenAgePointsPerTurn changes color if it is negative
+
 					strGoldenAgeStr = Locale.ConvertTextKey("TXT_KEY_TOP_PANEL_GOLDEN_AGE", iGoldenAgeProgress, iGoldenAgeThreshold, iTotalGoldenAgePointsPerTurn);
 				end	
 				strGoldenAgeStr = "[ICON_GOLDEN_AGE]" .. strGoldenAgeStr;
@@ -138,9 +138,9 @@ function UpdateData()
 			
 			Controls.GoldenAgeString:SetText(strGoldenAgeStr);
 			
-			-----------------------------
-			-- Update Culture
-			-----------------------------
+
+
+
 
 			local strCultureStr;
 			
@@ -159,16 +159,16 @@ function UpdateData()
 			
 			Controls.CultureString:SetText(strCultureStr);
 			
-			-----------------------------
-			-- Update Tourism
-			-----------------------------
+
+
+
 			local strTourism;
 			strTourism = string.format("[ICON_TOURISM] +%i", pPlayer:GetTourism());
 			Controls.TourismString:SetText(strTourism);
 			
-			-----------------------------
-			-- Update Faith
-			-----------------------------
+
+
+
 			local strFaithStr;
 			if (Game.IsOption(GameOptionTypes.GAMEOPTION_NO_RELIGION)) then
 				strFaithStr = Locale.ConvertTextKey("TXT_KEY_TOP_PANEL_RELIGION_OFF");
@@ -178,9 +178,9 @@ function UpdateData()
 			end
 			Controls.FaithString:SetText(strFaithStr);
 	
-			-----------------------------
-			-- Update Resources
-			-----------------------------
+
+
+
 			local pResource;
 			local bShowResource;
 			local iNumAvailable;
@@ -215,7 +215,7 @@ function UpdateData()
 						local text = Locale.ConvertTextKey(pResource.IconString);
 						strTempText = string.format("%i %s   ", iNumAvailable, text);
 						
-						-- Colorize for amount available
+
 						if (iNumAvailable > 0) then
 							strTempText = "[COLOR_POSITIVE_TEXT]" .. strTempText .. "[ENDCOLOR]";
 						elseif (iNumAvailable < 0) then
@@ -229,18 +229,18 @@ function UpdateData()
 			
 			Controls.ResourceString:SetText(strResourceText);
 			
-		-- No Cities, so hide science
+
 		else
 			
 			Controls.TopPanelInfoStack:SetHide(true);
 			
 		end
 		
-		-- Update turn counter
+
 		local turn = Locale.ConvertTextKey("TXT_KEY_TP_TURN_COUNTER", Game.GetGameTurn());
 		Controls.CurrentTurn:SetText(turn);
 		
-		-- Update Unit Supply
+
 		local iUnitSupplyMod = pPlayer:GetUnitProductionMaintenanceMod();
 		if (iUnitSupplyMod ~= 0) then
 			local iUnitsSupplied = pPlayer:GetNumUnitsSupplied();
@@ -253,7 +253,7 @@ function UpdateData()
 			Controls.UnitSupplyString:SetHide(true);
 		end
 		
-		-- Update date
+
 		local date;
 		local traditionalDate = Game.GetTurnString();
 		
@@ -273,29 +273,29 @@ function OnTopPanelDirty()
 	UpdateData();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnCivilopedia()	
-	-- In City View, return to main game
-	--if (UI.GetHeadSelectedCity() ~= nil) then
-		--Events.SerialEventExitCityScreen();
-	--end
-	--
-	-- opens the Civilopedia without changing its current state
+
+
+
+
+
+
 	Events.SearchForPediaEntry("");
 end
 Controls.CivilopediaButton:RegisterCallback( Mouse.eLClick, OnCivilopedia );
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnMenu()
 	
-	-- In City View, return to main game
+
 	if (UI.GetHeadSelectedCity() ~= nil) then
 		Events.SerialEventExitCityScreen();
-		--UI.SetInterfaceMode(InterfaceModeTypes.INTERFACEMODE_SELECTION);
-	-- In Main View, open Menu Popup
+
+
 	else
 	    UIManager:QueuePopup( LookUpControl( "/InGame/GameMenu" ), PopupPriority.InGameMenu );
 	end
@@ -303,8 +303,8 @@ end
 Controls.MenuButton:RegisterCallback( Mouse.eLClick, OnMenu );
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnCultureClicked()
 	
 	Events.SerialEventGameMessagePopup( { Type = ButtonPopupTypes.BUTTONPOPUP_CHOOSEPOLICY } );
@@ -313,8 +313,8 @@ end
 Controls.CultureString:RegisterCallback( Mouse.eLClick, OnCultureClicked );
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnTechClicked()
 	
 	Events.SerialEventGameMessagePopup( { Type = ButtonPopupTypes.BUTTONPOPUP_TECH_TREE, Data2 = -1} );
@@ -322,8 +322,8 @@ function OnTechClicked()
 end
 Controls.SciencePerTurn:RegisterCallback( Mouse.eLClick, OnTechClicked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnTourismClicked()
 	
 	Events.SerialEventGameMessagePopup( { Type = ButtonPopupTypes.BUTTONPOPUP_CULTURE_OVERVIEW, Data2 = 4 } );
@@ -332,8 +332,8 @@ end
 Controls.TourismString:RegisterCallback( Mouse.eLClick, OnTourismClicked );
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnFaithClicked()
 	
 	Events.SerialEventGameMessagePopup( { Type = ButtonPopupTypes.BUTTONPOPUP_RELIGION_OVERVIEW } );
@@ -341,8 +341,8 @@ function OnFaithClicked()
 end
 Controls.FaithString:RegisterCallback( Mouse.eLClick, OnFaithClicked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnGoldClicked()
 	
 	Events.SerialEventGameMessagePopup( { Type = ButtonPopupTypes.BUTTONPOPUP_ECONOMIC_OVERVIEW } );
@@ -350,8 +350,8 @@ function OnGoldClicked()
 end
 Controls.GoldPerTurn:RegisterCallback( Mouse.eLClick, OnGoldClicked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnTradeRouteClicked()
 	
 	Events.SerialEventGameMessagePopup( { Type = ButtonPopupTypes.BUTTONPOPUP_TRADE_ROUTE_OVERVIEW } );
@@ -360,12 +360,12 @@ end
 Controls.InternationalTradeRoutes:RegisterCallback( Mouse.eLClick, OnTradeRouteClicked );
 
 
--------------------------------------------------
--- TOOLTIPS
--------------------------------------------------
 
 
--- Tooltip init
+
+
+
+
 function DoInitTooltips()
 	Controls.SciencePerTurn:SetToolTipCallback( ScienceTipHandler );
 	Controls.GoldPerTurn:SetToolTipCallback( GoldTipHandler );
@@ -378,7 +378,7 @@ function DoInitTooltips()
 	Controls.InternationalTradeRoutes:SetToolTipCallback( InternationalTradeRoutesTipHandler );
 end
 
--- Science Tooltip
+
 local tipControlTable = {};
 TTManager:GetTypeControlTable( "TooltipTypeTopPanel", tipControlTable );
 function ScienceTipHandler( control )
@@ -401,7 +401,7 @@ function ScienceTipHandler( control )
 			strText = strText .. "[NEWLINE][NEWLINE]";
 		end
 	
-		-- Science
+
 		if (not OptionsManager.IsNoBasicHelp()) then
 			strText = strText .. Locale.ConvertTextKey("TXT_KEY_TP_SCIENCE", iSciencePerTurn);
 		
@@ -410,7 +410,7 @@ function ScienceTipHandler( control )
 			end
 		end
 	
-		-- Standardized science breakdown (sums to GetScience()); one generic key per source + [ICON_RESEARCH]
+
 		local bFirstEntry = true;
 		local function addLine(strKey, iT100, ...)
 			if (iT100 ~= 0) then
@@ -445,7 +445,7 @@ function ScienceTipHandler( control )
 		addLine("TXT_KEY_TP_YIELD_FROM_MINORS", iSciMinors);
 		addLine("TXT_KEY_TP_YIELD_FROM_RESEARCH_AGREEMENTS", iSciRA);
 
-		-- Let people know that building more cities makes techs harder to get
+
 		if (not OptionsManager.IsNoBasicHelp()) then
 			strText = strText .. "[NEWLINE][NEWLINE]";
 			strText = strText .. Locale.ConvertTextKey("TXT_KEY_TP_TECH_CITY_COST", Game.GetNumCitiesTechCostMod());
@@ -455,12 +455,12 @@ function ScienceTipHandler( control )
 	tipControlTable.TooltipLabel:SetText( strText );
 	tipControlTable.TopPanelMouseover:SetHide(false);
     
-    -- Autosize tooltip
+
     tipControlTable.TopPanelMouseover:DoAutoSize();
 	
 end
 
--- Gold Tooltip
+
 function GoldTipHandler( control )
 
 	local strText = "";
@@ -483,7 +483,7 @@ function GoldTipHandler( control )
 	local fTradeRouteGold = (pPlayer:GetGoldFromCitiesTimes100() - pPlayer:GetGoldFromCitiesMinusTradeRoutesTimes100()) / 100;
 	local fGoldPerTurnFromCities = pPlayer:GetGoldFromCitiesMinusTradeRoutesTimes100() / 100;
 	local fCityConnectionGold = pPlayer:GetCityConnectionGoldTimes100() / 100;
-	--local fInternationalTradeRouteGold = pPlayer:GetGoldPerTurnFromTradeRoutesTimes100() / 100;
+
 	local fTraitGold = pPlayer:GetGoldPerTurnFromTraits();
 	local fTotalIncome = fGoldPerTurnFromCities + iGoldPerTurnFromOtherPlayers + fCityConnectionGold + iGoldPerTurnFromReligion + fTradeRouteGold + fTraitGold;
 	
@@ -543,23 +543,23 @@ function GoldTipHandler( control )
 		strText = strText .. "[NEWLINE][COLOR:255:60:60:255]" .. Locale.ConvertTextKey("TXT_KEY_TP_LOSING_SCIENCE_FROM_DEFICIT") .. "[/COLOR]";
 	end
 	
-	-- Basic explanation of Happiness
+
 	if (not OptionsManager.IsNoBasicHelp()) then
 		strText = strText .. "[NEWLINE][NEWLINE]";
 		strText = strText ..  Locale.ConvertTextKey("TXT_KEY_TP_GOLD_EXPLANATION");
 	end
 	
-	--Controls.GoldPerTurn:SetToolTipString(strText);
+
 	
 	tipControlTable.TooltipLabel:SetText( strText );
 	tipControlTable.TopPanelMouseover:SetHide(false);
     
-    -- Autosize tooltip
+
     tipControlTable.TopPanelMouseover:DoAutoSize();
 	
 end
 
--- Happiness Tooltip
+
 function HappinessTipHandler( control )
 
 	local strText;
@@ -620,7 +620,7 @@ function HappinessTipHandler( control )
 		strText = strText .. "[NEWLINE]";
 		strText = strText .. "  [ICON_BULLET]" .. Locale.ConvertTextKey("TXT_KEY_TP_HAPPINESS_FROM_RESOURCES", iResourcesHappiness);
 	
-		-- Individual Resource Info
+
 	
 		local iBaseHappinessFromResources = 0;
 		local iNumHappinessResources = 0;
@@ -636,20 +636,20 @@ function HappinessTipHandler( control )
 			end
 		end
 	
-		-- Happiness from Luxury Variety
+
 		local iHappinessFromExtraResources = pPlayer:GetHappinessFromResourceVariety();
 		if (iHappinessFromExtraResources > 0) then
 			strText = strText .. "[NEWLINE]";
 			strText = strText .. "          +" .. Locale.ConvertTextKey("TXT_KEY_TP_HAPPINESS_RESOURCE_VARIETY", iHappinessFromExtraResources);
 		end
 	
-		-- Extra Happiness from each Luxury
+
 		if (iExtraLuxuryHappiness >= 1) then
 			strText = strText .. "[NEWLINE]";
 			strText = strText .. "          +" .. Locale.ConvertTextKey("TXT_KEY_TP_HAPPINESS_EXTRA_PER_RESOURCE", iExtraLuxuryHappiness, iNumHappinessResources);
 		end
 	
-		-- Misc Happiness from Resources
+
 		local iMiscHappiness = iResourcesHappiness - iBaseHappinessFromResources - iHappinessFromExtraResources - (iExtraLuxuryHappiness * iNumHappinessResources);
 		if (iMiscHappiness > 0) then
 			strText = strText .. "[NEWLINE]";
@@ -692,7 +692,7 @@ function HappinessTipHandler( control )
 		strText = strText .. "  [ICON_BULLET]" .. Locale.ConvertTextKey("TXT_KEY_TP_HAPPINESS_DIFFICULTY_LEVEL", iHandicapHappiness);
 		strText = strText .. "[/COLOR]";
 	
-		-- Unhappiness
+
 		local iTotalUnhappiness = pPlayer:GetUnhappiness();
 		local iUnhappinessFromUnits = Locale.ToNumber( pPlayer:GetUnhappinessFromUnits() / 100, "#.##" );
 		local iUnhappinessFromCityCount = Locale.ToNumber( pPlayer:GetUnhappinessFromCityCount() / 100, "#.##" );
@@ -745,7 +745,7 @@ function HappinessTipHandler( control )
 		end		
 		strText = strText .. "[/COLOR]";
 	
-		-- Basic explanation of Happiness
+
 		if (not OptionsManager.IsNoBasicHelp()) then
 			strText = strText .. "[NEWLINE][NEWLINE]";
 			strText = strText ..  Locale.ConvertTextKey("TXT_KEY_TP_HAPPINESS_EXPLANATION");
@@ -755,12 +755,12 @@ function HappinessTipHandler( control )
 	tipControlTable.TooltipLabel:SetText( strText );
 	tipControlTable.TopPanelMouseover:SetHide(false);
     
-    -- Autosize tooltip
+
     tipControlTable.TopPanelMouseover:DoAutoSize();
 	
 end
 
--- Golden Age Tooltip altered for v34
+
 function GoldenAgeTipHandler( control )
 
 	local strText;
@@ -778,7 +778,7 @@ function GoldenAgeTipHandler( control )
 		end
 		
 		local iHappiness = pPlayer:GetExcessHappiness();
-		local iGoldenAgePointsFromCities = pPlayer:GetGoldenAgePointsFromCities(); -- v34
+		local iGoldenAgePointsFromCities = pPlayer:GetGoldenAgePointsFromCities();
 
 		strText = Locale.ConvertTextKey("TXT_KEY_TP_GOLDEN_AGE_PROGRESS", pPlayer:GetGoldenAgeProgressMeter(), pPlayer:GetGoldenAgeProgressThreshold());
 		strText = strText .. "[NEWLINE]";
@@ -789,7 +789,7 @@ function GoldenAgeTipHandler( control )
 			strText = strText .. "[COLOR_WARNING_TEXT]" .. Locale.ConvertTextKey("TXT_KEY_TP_GOLDEN_AGE_LOSS_UNHAPPINESS", -iHappiness) .. "[ENDCOLOR]";
 		end
 
-		if (iGoldenAgePointsFromCities >= 0) then -- v34
+		if (iGoldenAgePointsFromCities >= 0) then
 			strText = strText .. "[NEWLINE]";
 			strText = strText .. Locale.ConvertTextKey("TXT_KEY_TP_GOLDEN_AGE_ADDITION_CITIES", iGoldenAgePointsFromCities);
 		else 
@@ -813,12 +813,12 @@ function GoldenAgeTipHandler( control )
 	tipControlTable.TooltipLabel:SetText( strText );
 	tipControlTable.TopPanelMouseover:SetHide(false);
     
-    -- Autosize tooltip
+
     tipControlTable.TopPanelMouseover:DoAutoSize();
 	
 end
 
--- Culture Tooltip
+
 function CultureTipHandler( control )
 
 	local strText = "";
@@ -866,7 +866,7 @@ function CultureTipHandler( control )
 			return;
 		end
 
-		-- Standardized culture breakdown (sums to GetYield(YIELD_CULTURE)); one generic key per source + [ICON_CULTURE]
+
 		local bFirstEntry = true;
 		local function addLine(strKey, iT100, ...)
 			if (iT100 ~= 0) then
@@ -892,7 +892,7 @@ function CultureTipHandler( control )
 		addLine("TXT_KEY_TP_YIELD_FROM_RELIGION", iCultReligion);
 		addLine("TXT_KEY_TP_YIELD_FROM_UNCATEGORIZED", iCultMisc);
 
-		-- World's Fair multiplier is baked into GetYield() under STANDARDIZE_YIELDS; derive it here.
+
 		local iCultWF = 0;
 		if (pPlayer:GetCultureBonusTurns() > 0) then
 			local iCultWFBase = iCultCities + iCultOther + iCultHappiness + iCultTraits + iCultMisc + iCultReligion;
@@ -900,14 +900,14 @@ function CultureTipHandler( control )
 			addLine("TXT_KEY_TP_YIELD_FROM_BONUS_TURNS", iCultWF, pPlayer:GetCultureBonusTurns());
 		end
 
-		-- Golden Age line as a residual so the breakdown always sums to the headline total
+
 		local iCultShown = iCultCities + iCultOther + iCultHappiness + iCultTraits + iCultMisc + iCultReligion + iCultWF + iCultPenalties + iCultMinors;
 		addLine("TXT_KEY_TP_YIELD_FROM_GOLDEN_AGE", pPlayer:GetYieldTimes100(iCultYield, false) - iCultShown);
 
 		addLine("TXT_KEY_TP_YIELD_FROM_PENALTIES", iCultPenalties);
 		addLine("TXT_KEY_TP_YIELD_FROM_MINORS", iCultMinors);
 
-		-- Let people know that building more cities makes policies harder to get
+
 		if (not OptionsManager.IsNoBasicHelp()) then
 			strText = strText .. "[NEWLINE][NEWLINE]";
 			strText = strText .. Locale.ConvertTextKey("TXT_KEY_TP_CULTURE_CITY_COST", Game.GetNumCitiesPolicyCostMod());
@@ -917,12 +917,12 @@ function CultureTipHandler( control )
 	tipControlTable.TooltipLabel:SetText( strText );
 	tipControlTable.TopPanelMouseover:SetHide(false);
     
-    -- Autosize tooltip
+
     tipControlTable.TopPanelMouseover:DoAutoSize();
 	
 end
 
--- Tourism Tooltip
+
 function TourismTipHandler( control )
 
 	local iPlayerID = Game.GetActivePlayer();
@@ -950,12 +950,12 @@ function TourismTipHandler( control )
 	tipControlTable.TooltipLabel:SetText( strText );
 	tipControlTable.TopPanelMouseover:SetHide(false);
     
-    -- Autosize tooltip
+
     tipControlTable.TopPanelMouseover:DoAutoSize();
 	
 end
 
--- FaithTooltip
+
 function FaithTipHandler( control )
 
 	local strText = "";
@@ -976,7 +976,7 @@ function FaithTipHandler( control )
 		strText = strText .. Locale.ConvertTextKey("TXT_KEY_TP_FAITH_ACCUMULATED", pPlayer:GetFaith());
 		strText = strText .. "[NEWLINE]";
 	
-		-- Standardized faith breakdown (sums to GetYield(YIELD_FAITH))
+
 		local iFaithYield = YieldTypes.YIELD_FAITH;
 		local kFaithInfo  = GameInfo.Yields[iFaithYield];
 		local iFaithCities    = pPlayer:GetYieldFromCitiesTimes100(iFaithYield, false);
@@ -1066,12 +1066,12 @@ function FaithTipHandler( control )
 	tipControlTable.TooltipLabel:SetText( strText );
 	tipControlTable.TopPanelMouseover:SetHide(false);
     
-    -- Autosize tooltip
+
     tipControlTable.TopPanelMouseover:DoAutoSize();
 	
 end
 
--- Resources Tooltip
+
 function ResourcesTipHandler( control )
 
 	local strText;
@@ -1107,7 +1107,7 @@ function ResourcesTipHandler( control )
 				iNumUsed = pPlayer:GetNumResourceUsed(iResourceLoop);
 				iNumTotal = pPlayer:GetNumResourceTotal(iResourceLoop, true);
 				
-				-- Add newline to the front of all entries that AREN'T the first
+
 				if (bThisIsFirstResourceShown) then
 					strText = "";
 					bThisIsFirstResourceShown = false;
@@ -1117,7 +1117,7 @@ function ResourcesTipHandler( control )
 				
 				strText = strText .. iNumAvailable .. " " .. pResource.IconString .. " " .. Locale.ConvertTextKey(pResource.Description);
 				
-				-- Details
+
 				if (iNumUsed ~= 0 or iNumTotal ~= 0) then
 					strText = strText .. ": ";
 					strText = strText .. Locale.ConvertTextKey("TXT_KEY_TP_RESOURCE_INFO", iNumTotal, iNumUsed);
@@ -1134,12 +1134,12 @@ function ResourcesTipHandler( control )
 		tipControlTable.TopPanelMouseover:SetHide(true);
 	end
     
-    -- Autosize tooltip
+
     tipControlTable.TopPanelMouseover:DoAutoSize();
 	
 end
 
--- International Trade Route Tooltip
+
 function InternationalTradeRoutesTipHandler( control )
 
 	local iPlayerID = Game.GetActivePlayer();
@@ -1187,7 +1187,7 @@ function InternationalTradeRoutesTipHandler( control )
 		strTT = strTT .. strToYouTradeRoutes;
 	end
 	
-	--print(strText);
+
 	if(strText ~= "") then
 		tipControlTable.TopPanelMouseover:SetHide(false);
 		tipControlTable.TooltipLabel:SetText( strTT );
@@ -1195,24 +1195,24 @@ function InternationalTradeRoutesTipHandler( control )
 		tipControlTable.TopPanelMouseover:SetHide(true);
 	end
     
-    -- Autosize tooltip
+
     tipControlTable.TopPanelMouseover:DoAutoSize();
 end
 
--------------------------------------------------
--- On Top Panel mouseover exited
--------------------------------------------------
---function HelpClose()
-	---- Hide the help text box
-	--Controls.HelpTextBox:SetHide( true );
---end
 
 
--- Register Events
+
+
+
+
+
+
+
+
 Events.SerialEventGameDataDirty.Add(OnTopPanelDirty);
 Events.SerialEventTurnTimerDirty.Add(OnTopPanelDirty);
 Events.SerialEventCityInfoDirty.Add(OnTopPanelDirty);
 
--- Update data at initialization
+
 UpdateData();
 DoInitTooltips();

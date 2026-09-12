@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #include "CvDllInterfaces.h"
@@ -20,9 +20,9 @@ public:
 	static void operator delete(void* p);
 	static void* operator new(size_t bytes);
 
-	/************************************************************************/
-	/* ICvPreGame1 Interface Methods                                        */
-	/************************************************************************/
+
+
+
 
 	PlayerTypes DLLCALL activePlayer();
 	int DLLCALL advancedStartPoints();
@@ -236,9 +236,9 @@ public:
 	ICvEnumerator* DLLCALL GetDLCAvailable(PlayerTypes p);
 	void DLLCALL SetDLCAvailable(PlayerTypes p, ICvEnumerator* pList);
 
-	/************************************************************************/
-	/* ICvPreGame2 Interface Methods                                        */
-	/************************************************************************/
+
+
+
 	int DLLCALL pitBossTurnTime();
 	void DLLCALL setPitBossTurnTime(int turnTime);
 
@@ -257,5 +257,3 @@ public:
 private:
 	void DLLCALL Destroy();
 };
-
-

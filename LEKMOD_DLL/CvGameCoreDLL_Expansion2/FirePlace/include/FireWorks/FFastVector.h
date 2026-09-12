@@ -1,28 +1,28 @@
-/*
-Fast vector class designed to be as simple as possible
-while retaining the basic behavior of std::vector.  This class 
-should really only be used for very simple classes and structures,
-since the only benefit is speed for handling large numbers of elements.
-It supports standard iterators through pointer functionality.
 
-The first template parameter, T, is the type to store in the vector.
 
-The second template parameter, L, is the number of elements to reserve in
-the class.  This allows the first L elements to be stored in the class without
-an extra memory allocation, and is nice for situations where you are pretty sure
-that the size will not get bigger than L, but cannot be sure.
 
-The third template parameter tells the template whether to call the copy 
-constructor or simply memcpy data.  This is useful if you have a structure
-which is a simple data container but has a constructor defined, since the 
-compiler will want to call the constructor but it is correct to memcpy.
 
-Author: John Kloetzli
-9/9/2008
 
-version 1.3
 
-*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #pragma once
 
@@ -31,10 +31,10 @@ version 1.3
 #include "new"
 #include "iterator"
 
-//#define BREAK_ON_REPEATED_RESIZE 4
-//#define BREAK_ON_STATIC_RESIZE 1
 
-//Disable some warnings
+
+
+
 #if defined(_WIN32) || defined(_WIN64)
 #pragma warning( push )
 #pragma warning( disable : 4100)
@@ -42,9 +42,9 @@ version 1.3
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-//Pre-declarations
-/////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 template< 
 	class T, 
@@ -68,16 +68,16 @@ template<
 > class FStaticVector;
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-// Base vector class - Not meant to be initialized directly
-/////////////////////////////////////////////////////////////////////////////////////
+
+
+
 template< class T, bool bPODType > class BaseVector
 {
 public:
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	// Default allocator
-	/////////////////////////////////////////////////////////////////////////////////////
+
+
+
 	struct FDefaultFastVectorAllocator
 	{
 		static void* AllocAligned( unsigned int nBytes, unsigned int nAlign, unsigned int nAllocPool, unsigned int nAllocSubID )
@@ -110,9 +110,9 @@ public:
 
 	~BaseVector(){};
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	// Functions to delete
-	/////////////////////////////////////////////////////////////////////////////////////
+
+
+
 	void pop_back(){
 		FAssert(m_uiCurrSize > 0);
 		Destroy(&m_pData[--m_uiCurrSize], 1);
@@ -122,9 +122,9 @@ public:
 		m_uiCurrSize = 0;
 	};
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	//Getters/setters
-	/////////////////////////////////////////////////////////////////////////////////////
+
+
+
 	T& operator[](unsigned int ui) {
 		FAssert(ui < m_uiCurrSize);
 		return m_pData[ui];
@@ -172,11 +172,11 @@ public:
 		return m_uiCurrMaxSize;
 	};
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	//Get the pointer iterators for the class.
-	/////////////////////////////////////////////////////////////////////////////////////
 
-	//DEPRECATED
+
+
+
+
 	T* iter(unsigned int ui) const{
 		FAssert(ui < m_uiCurrSize);
 		return m_pData+ui;
@@ -215,7 +215,7 @@ public:
 protected:
 	BaseVector() : m_uiCurrSize(0), m_uiCurrMaxSize(0), m_pData(NULL) {};
 
-	//Call destructor for each element
+
 	void Destroy(T* pVal, unsigned int uiNumElements)
 	{
 		if( !bPODType){
@@ -225,7 +225,7 @@ protected:
 		}
 	};
 
-	//Copy list of elements, calling copy constructor for each element
+
 	void Copy(const THIS_TYPE& RHS){
 		m_uiCurrSize = RHS.m_uiCurrSize;
 		if( bPODType ){
@@ -237,9 +237,9 @@ protected:
 		}
 	};
 
-	T* m_pData;						//The main data store.  May point to the local memory store.
-	unsigned int m_uiCurrSize;		//The current number of elements in the vector
-	unsigned int m_uiCurrMaxSize;	//The maximum number of elements which can be stored in the current memory store.
+	T* m_pData;
+	unsigned int m_uiCurrSize;
+	unsigned int m_uiCurrMaxSize;
 
 #if defined(LEKMOD_MACOS)
 	template< class U, bool POD, unsigned int Pool, unsigned int SubID, class Allocator >
@@ -258,22 +258,22 @@ protected:
 #endif
 };
 
-/////////////////////////////////////////////////////////////////////////////////////
-// Vector class which allocates memory according to a particular memory pool.
-//
-//T - the template class to store in the vector.
-//
-//bPODType - Set this to true if the data you are working on is a native type or just
-// "plain-old-data," in which case faster memory copy and no constructor/destructor
-// can be used internally.  Use with caution, since it will hose objects which do have
-// non-trivial constructors.
-//
-//AllocPool - The memory pool to allocate from.
-//
-//nSubID - The memory sub ID to tag allocations with
-//
-//buseTempHeap - If true, allocations will be sent to the temp heap, using FMALLOC as a fallback
-////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 template< 
 	class T, 
 	bool bPODType,
@@ -306,9 +306,9 @@ public:
 
 
 
-    /////////////////////////////////////////////////////////////////////////////////////
-	// Default constructor, copy constructor, destructor and operator=
-	/////////////////////////////////////////////////////////////////////////////////////
+
+
+
 	FFastVector(const THIS_TYPE& RHS)
 	{
 		m_uiCurrSize = RHS.m_uiCurrSize;
@@ -346,29 +346,29 @@ public:
 		Copy(RHS);
 	};
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	//Reserve space for up to N elements inside the vector
-	/////////////////////////////////////////////////////////////////////////////////////
+
+
+
 	void reserve(unsigned int uiResSize )
 	{
 		GrowSizeToFit(uiResSize);
 	};
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	// Resize the vector to exactly N elements
-	// Note: This does not call constructors on new elements created by this call OR call
-	// destructors on elements removed!  Use with caution!
-	/////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 	void setsize( unsigned int uiNewSize ){
 		SetSize(uiNewSize);
 		m_uiCurrSize = MIN(uiNewSize, m_uiCurrMaxSize);
 	}
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	// Resize the vector to at least N elements
-	// Note: This does not call constructors on new elements created by this call OR call
-	// destructors on elements removed!  Use with caution!
-	/////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 	void resize( unsigned int uiNewSize )
 	{
 		if( m_uiCurrMaxSize < uiNewSize ){
@@ -378,9 +378,9 @@ public:
 	};
 
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	//Add/remove elements without needing a copy constructor
-	/////////////////////////////////////////////////////////////////////////////////////
+
+
+
 	unsigned int push_back()
 	{
 		if( m_uiCurrSize == m_uiCurrMaxSize )
@@ -389,9 +389,9 @@ public:
 		return m_uiCurrSize++;
 	};
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	//Add/remove elements
-	/////////////////////////////////////////////////////////////////////////////////////
+
+
+
 	unsigned int push_back(const T& element)
 	{
 		if( m_uiCurrSize == m_uiCurrMaxSize )
@@ -400,7 +400,7 @@ public:
 		return m_uiCurrSize++;
 	};
 
-	//Add n elements to the end of the vector
+
 	void push_back( const T* pElements,  unsigned int uiNum)
 	{
 		unsigned int uNewSize = uiNum + m_uiCurrSize;
@@ -423,7 +423,7 @@ public:
 		m_uiCurrSize = uNewSize;
 	}
 
-	//Add uiNum copies of element to the end of the vector.
+
 	void push_back_copy( const T& element, unsigned int uiNum  )
 	{
 		uiNum += m_uiCurrSize;
@@ -437,23 +437,23 @@ public:
 
 protected:
 
-	//Grow the size of the internal data store by a factor of two
+
 	void GrowSize(unsigned int uiFit)
 	{
 		unsigned int nOld = m_uiCurrMaxSize;
 		if( m_uiCurrMaxSize == 0 ) m_uiCurrMaxSize = 1;
 		while( uiFit >= m_uiCurrMaxSize ){
 
-			//Try to double size...
+
 			UINT uiNewSize = m_uiCurrMaxSize<<1;
 
-			//...on overflow bail and set to exact size
+
 			if( uiNewSize < m_uiCurrMaxSize ){
 				m_uiCurrMaxSize = uiFit;
 				break;
 			}
 
-			//...otherwise use the doubled size
+
 			m_uiCurrMaxSize = uiNewSize;
 		}
 
@@ -476,7 +476,7 @@ protected:
 		}
 	};
 
-	//Grow the internal data store to fit N elements compactly
+
 	void GrowSizeToFit(unsigned int uiFit)
 	{
 		if( uiFit <= m_uiCurrMaxSize )
@@ -519,7 +519,7 @@ protected:
 		m_pData = pTemp;
 	};
 
-	//Allocate memory as bytes
+
 	T* Alloc( unsigned int uiSize ){
 		if( uiSize > 0 ){
             
@@ -530,7 +530,7 @@ protected:
 		return NULL;
 	};
 
-	//Free the memory store.
+
 	void Free(T* pVal, unsigned int uiNumElements)
 	{
 		if( !bPODType) 
@@ -552,12 +552,12 @@ protected:
 #endif
 };
 
-// Placement new on a FFastVector allows you to call a constructor directly on memory internal to the vector.
-// This operation will place the new object on the end resizing the vector by 1.  Just like push_back.
+
+
 template< class T, bool bPODType, unsigned int AllocPool, unsigned int nSubID, class FAST_VEC_ALLOC >
 void* operator new(size_t uiSize, FFastVector< T, bPODType, AllocPool, nSubID, FAST_VEC_ALLOC >& kVector)
 {
-	// Make sure the type is of the correct size to fit into the vector
+
 	FAssertMsg(uiSize == sizeof T, "Using placement new on FFastVector with the wrong type!");
 
 	unsigned int nSize = kVector.size();
@@ -569,24 +569,24 @@ void* operator new(size_t uiSize, FFastVector< T, bPODType, AllocPool, nSubID, F
 	return &(kVector[nSize]);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
-// Static vector class which reserves a certain amount of space within the class, only
-// allocating when you overflow that space.  After allocation, the internal space is not
-// used.
-//
-//T - the template class to store in the vector.
-//
-//L - the number of elements in local storage before allocating memory.
-//
-//bPODType - Set this to true if the data you are working on is a native type or just
-// "plain-old-data," in which case faster memory copy and no constructor/destructor
-// can be used internally.  Use with caution, since it will hose objects which do have
-// non-trivial constructors.
-//
-//AllocPool - The memory pool to allocate from.
-//
-//nSubID - The memory sub ID to tag allocations with
-////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 template< 
 	class T, 
 	unsigned int L, 
@@ -616,9 +616,9 @@ public:
     typedef T* pointer;
     typedef const T* const_pointer;
 
-    /////////////////////////////////////////////////////////////////////////////////////
-	// Default constructor, copy constructor, destructor and operator=
-	/////////////////////////////////////////////////////////////////////////////////////
+
+
+
 	FStaticVector(const THIS_TYPE& RHS)
 	{
 		m_uiCurrSize = RHS.m_uiCurrSize;
@@ -689,18 +689,18 @@ Cleanup:
 
 	};
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	//Reserve space for up to N elements inside the vector
-	/////////////////////////////////////////////////////////////////////////////////////
+
+
+
 	void reserve(unsigned int uiResSize )
 	{
 		GrowSizeToFit(uiResSize);
 	};
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	// Resize the vector to at least N elements - note that this might create garbage in unused
-	// element positions!
-	/////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 	void resize(unsigned int uiNewSize )
 	{
 		if( m_uiCurrMaxSize < uiNewSize ){
@@ -709,9 +709,9 @@ Cleanup:
 		m_uiCurrSize = uiNewSize;
 	};
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	//Add/remove elements
-	/////////////////////////////////////////////////////////////////////////////////////
+
+
+
 	unsigned int push_back(const T& element){
 		m_bIsResized = false;
 		if( m_uiCurrSize == m_uiCurrMaxSize )
@@ -720,7 +720,7 @@ Cleanup:
 		return m_uiCurrSize++;
 	};
 
-	//Add n elements to the end of the vector
+
 	void push_back( const T* pElements,  unsigned int uiNum)
 	{
 		m_bIsResized = false;
@@ -736,7 +736,7 @@ Cleanup:
 		
 		m_uiCurrSize = uNewSize;
 	}
-    // remove the element pointed to by 'it' and shrink the list
+
     void erase( iterator it )
 	{
 		m_bIsResized = false;
@@ -751,7 +751,7 @@ Cleanup:
 		--m_uiCurrSize;
 	}
 
-	//Add uiNum copies of element to the end of the vector.
+
 	void push_back_copy( const T& element, unsigned int uiNum  )
 	{
 		m_bIsResized = false;
@@ -769,31 +769,31 @@ Cleanup:
 		m_uiCurrSize = uiNum;
 	};
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	//Returns false if the vector has grown larger than the local memory store
-	/////////////////////////////////////////////////////////////////////////////////////
+
+
+
 	bool is_local_only() const{
 		return (m_pData == m_aData);
 	};
 
 protected:
 
-	//Grow the size of the internal data store by a factor of two
+
 	void GrowSize(unsigned int uiFit)
 	{
 		if( m_uiCurrMaxSize == 0 ) m_uiCurrMaxSize = 1;
 		while( uiFit >= m_uiCurrMaxSize ){
 
-			//Try to double size...
+
 			UINT uiNewSize = m_uiCurrMaxSize<<1;
 
-			//...on overflow bail and set to exact size
+
 			if( uiNewSize < m_uiCurrMaxSize ){
 				m_uiCurrMaxSize = uiFit;
 				break;
 			}
 
-			//...otherwise use the doubled size
+
 			m_uiCurrMaxSize = uiNewSize;
 		}
 
@@ -810,7 +810,7 @@ protected:
 		m_bIsResized = true;
 	};
 
-	//Grow the internal data store to fit N elements compactly
+
 	void GrowSizeToFit(unsigned int uiFit)
 	{
 		if( uiFit <= m_uiCurrMaxSize )
@@ -830,7 +830,7 @@ protected:
 		m_bIsResized = true;
 	};
 
-	//Allocate memory as bytes
+
 	T* Alloc(unsigned int uiSize){
 		T* pRet;
 		if( uiSize > L ){
@@ -843,7 +843,7 @@ protected:
 		return pRet;
 	};
 
-	//Free the memory store.
+
 	void Free(T* pVal, unsigned int uiNumElements)
 	{
 		if( !bPODType) Destroy(pVal, uiNumElements);
@@ -851,8 +851,8 @@ protected:
 			FFREEALIGNED( (unsigned char*)pVal );
 	};
 
-	unsigned char m_aData[L*sizeof(T)]; //Local memory store, used until the data will not fit inside any more.
-	bool m_bIsResized;					//Whether the last call to push_back called the memory store to resize.
+	unsigned char m_aData[L*sizeof(T)];
+	bool m_bIsResized;
 
 #ifdef BREAK_ON_STATIC_RESIZE
 	unsigned char m_iNumResized;
@@ -867,12 +867,12 @@ protected:
 #endif
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Temporary class for a simple, fixed based list.
-//  NOTE: Going over the list size will AV
-//
-//////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
 template< 
 	class T, 
 	unsigned int L, 
@@ -1143,7 +1143,7 @@ public:
             mVec[ uIdx ] = mVec[ uIdx + 1 ];
         }
 
-        //  List shrinks by 1
+
         mVec.resize( mVec.size() - 1 );
 
         if( uDeletePos < mVec.size() )
@@ -1162,12 +1162,12 @@ private:
  
 };
 
-// Placement new on a FStaticVector allows you to call a constructor directly on memory internal to the vector.
-// This operation will place the new object on the end resizing the vector by 1.  Just like push_back.
+
+
 template< class T, unsigned int L, bool bPODType, unsigned int AllocPool, unsigned int nSubID >
 void* operator new(size_t uiSize, FStaticVector< T, L, bPODType, AllocPool, nSubID >& kVector)
 {
-	// Make sure the type is of the correct size to fit into the vector
+
 	FAssertMsg(uiSize == sizeof T, "Using placement new on FFastVector with the wrong type!");
 
 	unsigned int nSize = kVector.size();
@@ -1179,25 +1179,25 @@ void* operator new(size_t uiSize, FStaticVector< T, L, bPODType, AllocPool, nSub
 	return &(kVector[nSize]);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
-// Fixed vector class allocates a pre-determined (runtime) size and does not allocate
-// any additional space.  This is somewhat similar to FStaticVector, but difference, beyond
-// the ability to grow is that there is no copy constructor call for resizing which is
-// helpful if the copy constructor is private.
-//
-//T - the template class to store in the vector.
-//
-//L - the number of elements in local storage before allocating memory.
-//
-//bPODType - Set this to true if the data you are working on is a native type or just
-// "plain-old-data," in which case faster memory copy and no constructor/destructor
-// can be used internally.  Use with caution, since it will hose objects which do have
-// non-trivial constructors.
-//
-//AllocPool - The memory pool to allocate from.
-//
-//nSubID - The memory sub ID to tag allocations with
-////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 template< 
 	class T, 
 	bool bPODType,
@@ -1226,9 +1226,9 @@ public:
     typedef T* pointer;
     typedef const T* const_pointer;
 
-    /////////////////////////////////////////////////////////////////////////////////////
-	// Default constructor, copy constructor, destructor and operator=
-	/////////////////////////////////////////////////////////////////////////////////////
+
+
+
 	FFixedVector(const THIS_TYPE& RHS)
 	{
 		m_uiCurrSize = MIN(RHS.m_uiCurrSize, m_uiCurrMaxSize);
@@ -1290,9 +1290,9 @@ Cleanup:
 
 	};
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	//Reserve space for up to N elements inside the vector
-	/////////////////////////////////////////////////////////////////////////////////////
+
+
+
 	void reserve(unsigned int uiResSize )
 	{
 		if (m_uiCurrMaxSize == 0)
@@ -1302,9 +1302,9 @@ Cleanup:
 		}
 	};
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	// Resize the vector to at least N elements
-	/////////////////////////////////////////////////////////////////////////////////////
+
+
+
 	void resize(unsigned int uiNewSize )
 	{
 		reserve(uiNewSize);
@@ -1318,9 +1318,9 @@ Cleanup:
 		}
 	};
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	//Add/remove elements
-	/////////////////////////////////////////////////////////////////////////////////////
+
+
+
 	unsigned int push_back(const T& element){
 		if( m_uiCurrSize < m_uiCurrMaxSize )
 		{
@@ -1337,7 +1337,7 @@ Cleanup:
 		return m_uiCurrSize;
 	};
 
-	//Add n elements to the end of the vector
+
 	void push_back( const T* pElements,  unsigned int uiNum)
 	{
 		unsigned int uNewSize = uiNum + m_uiCurrSize;
@@ -1353,7 +1353,7 @@ Cleanup:
 			m_uiCurrSize = uNewSize;
 		}
 	}
-    // remove the element pointed to by 'it' and shrink the list
+
     void erase( iterator it )
 	{
 #ifdef AUI_FIX_FFASTVECTOR_OPTIMIZATIONS
@@ -1370,7 +1370,7 @@ Cleanup:
 		--m_uiCurrSize;
 	}
 
-	//Add uiNum copies of element to the end of the vector.
+
 	void push_back_copy( const T& element, unsigned int uiNum  )
 	{
 		uiNum += m_uiCurrSize;
@@ -1386,7 +1386,7 @@ Cleanup:
 
 protected:
 
-	//Copy list of elements, calling copy constructor for each element
+
 	void CopyMin(const THIS_TYPE& RHS){
 		m_uiCurrSize = MIN(RHS.m_uiCurrSize, m_uiCurrMaxSize);
 		if( bPODType ){
@@ -1398,7 +1398,7 @@ protected:
 		}
 	};
 
-	//Allocate memory as bytes
+
 	T* Alloc(unsigned int uiSize){
 		if (uiSize > 0)
 		{
@@ -1409,7 +1409,7 @@ protected:
 		return NULL;
 	};
 
-	//Free the memory store.
+
 	void Free(T* pVal, unsigned int uiNumElements)
 	{
 		if( !bPODType) Destroy(pVal, uiNumElements);

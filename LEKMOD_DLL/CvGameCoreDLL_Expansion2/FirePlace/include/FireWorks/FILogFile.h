@@ -1,9 +1,9 @@
 #ifndef _FILOGFILE_H_
 #define _FILOGFILE_H_
 
-//
-// log file object
-//
+
+
+
 class FILogFile
 {
 public:
@@ -31,9 +31,9 @@ protected:
 	virtual ~FILogFile() =0 {};
 };
 
-//
-// log file manager
-//
+
+
+
 class FILogFileMgr 
 {
 public:
@@ -43,8 +43,8 @@ public:
 
 	virtual void		EnableLogging( void ) = 0;
 	virtual void		DisableLogging( void ) = 0;
-	virtual FILogFile*	GetLog(LPCWSTR wszFileName, uint uiFlags, const TCHAR* szTitleString = NULL) = 0;		// create if necessary
-	virtual FILogFile*	GetLog(LPCSTR szFileName, uint uiFlags, const TCHAR* szTitleString = NULL) = 0;		// create if necessary
+	virtual FILogFile*	GetLog(LPCWSTR wszFileName, uint uiFlags, const TCHAR* szTitleString = NULL) = 0;
+	virtual FILogFile*	GetLog(LPCSTR szFileName, uint uiFlags, const TCHAR* szTitleString = NULL) = 0;
 
 	virtual bool		DeleteLog(FILogFile* pLog) = 0;
 	virtual bool		DeleteLog(LPCWSTR wszFileName) = 0;
@@ -63,4 +63,4 @@ protected:
 #define LOGFILEMGR FLogFileMgr::GetInstance()
 #endif
 
-#endif // _FILOGFILE_H_
+#endif

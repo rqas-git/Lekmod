@@ -1,4 +1,4 @@
--- Author: EnormousApplePie
+
 
 include("Lekmod_utilities.lua")
 include("FLuaVector.lua")
@@ -6,9 +6,9 @@ include("FLuaVector.lua")
 local this_civ = GameInfoTypes["CIVILIZATION_OTTOMAN"]
 local is_active = LekmodUtilities:is_civilization_active(this_civ)
 
-------------------------------------------------------------------------------------------------------------------------
--- Ottoman UA. Gain faith when a unit is promoted.
-------------------------------------------------------------------------------------------------------------------------
+
+
+
 function lekmod_ottoman_ua_promotion_faith(player_id, unit_id)
 
    local player = Players[player_id]
@@ -26,7 +26,7 @@ function lekmod_ottoman_ua_promotion_faith(player_id, unit_id)
 	end
 
 end
-------------------------------------------------------------------------------------------------------------------------
+
 if is_active then
    GameEvents.UnitPromoted.Add(lekmod_ottoman_ua_promotion_faith)
 end

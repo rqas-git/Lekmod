@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/9/2015 11:33:25 PM -->
+
 <GameData>
 
-	<!-- WARRIOR CODE -->
+
 	<Policies>
 		<Update>
 			<Set BaseFreeUnits="4" GoldFromKills="100" GreatGeneralRateModifier="0" />

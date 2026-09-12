@@ -6,8 +6,8 @@ template< class Function > void FDebugHelper::WalkStack( const CONTEXT& context,
 	memset( &sf, 0, sizeof(sf) );
 
 #ifdef _M_IX86
-	// Initialize the STACKFRAME structure for the first call.  This is only
-	// necessary for Intel CPUs, and isn't mentioned in the documentation.
+
+
 	sf.AddrPC.Offset       = context.Eip;
 	sf.AddrPC.Mode         = AddrModeFlat;
 	sf.AddrStack.Offset    = context.Esp;
@@ -29,9 +29,9 @@ template< class Function > void FDebugHelper::WalkStack( const CONTEXT& context,
 
 	while( StackWalk64( dwMachineType,
 		hCurrentProcess,
-		GetCurrentThread(), // Assume current thread, this could easily be a parameter
+		GetCurrentThread(),
 		&sf,
-		0,					// They recommend passing in a valid context, but NULL will work
+		0,
 		0,
 		SymFunctionTableAccess64,
 		SymGetModuleBase64,

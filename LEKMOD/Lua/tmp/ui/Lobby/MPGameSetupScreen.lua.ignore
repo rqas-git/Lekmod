@@ -1,42 +1,42 @@
 
--------------------------------------------------
--- Multiplayer Game Setup Screen
--------------------------------------------------
+
+
+
 include( "IconSupport" );
 include( "UniqueBonuses" );
 include( "InstanceManager" );
 
--------------------------------------------------
--- The common Game Options handler code is in
--- MPGameOptions, which is used by the StagingRoom
--- as well as this UI
--------------------------------------------------
+
+
+
+
+
 
 include( "MPGameOptions" );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function ShowHideExitButton()
 	local bShow = Network.IsDedicatedServer();
 	Controls.ExitButton:SetHide( not bShow );
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnExitGame()
 	Events.UserRequestClose();
 end
 Controls.ExitButton:RegisterCallback( Mouse.eLClick, OnExitGame );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function ShowHideBackButton()
 	local bShow = not Network.IsDedicatedServer();
 	Controls.BackButton:SetHide( not bShow );
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnBack()
 	if (not Network.IsDedicatedServer()) then
 		if (not PreGame.IsHotSeatGame() ) then
@@ -52,10 +52,10 @@ end
 Controls.BackButton:RegisterCallback( Mouse.eLClick, OnBack );
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnStart()
-	PreGame.SetPersistSettings(false); -- Do not save these settings out for the "Play Now" option.
+	PreGame.SetPersistSettings(false);
 	
 	if( bIsModding and IsWBMap(PreGame.GetMapScript()) ) then
 		PreGame.SetRandomMapScript(false);
@@ -69,12 +69,12 @@ function OnStart()
 
 	local strGameName = Controls.NameBox:GetText();
 
-	-- MOD.EAP : Start
+
 	local lekmod_version = Locale.ConvertTextKey("TXT_KEY_LEKMOD_VERSION");
 	if not string.find(strGameName, lekmod_version) then
 		strGameName = strGameName .. lekmod_version;
 	end
-	-- MOD.EAP : End
+
 
 	local worldInfo = GameInfo.Worlds[ PreGame.GetWorldSize() ];
 	if (Network.IsDedicatedServer()) then
@@ -94,12 +94,12 @@ function OnStart()
 end
 Controls.LaunchButton:RegisterCallback( Mouse.eLClick, OnStart );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnDefaultButton() 
 	ResetMultiplayerOptions();
 	
-	-- Uncheck Everything
+
 	RefreshGameOptions();
 	RefreshDropDownOptions();
 
@@ -107,8 +107,8 @@ function OnDefaultButton()
 end
 Controls.DefaultButton:RegisterCallback( Mouse.eLClick, OnDefaultButton );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnLoadGame()
 
     UIManager:QueuePopup( Controls.MPLoadGameScreen, PopupPriority.MPLoadGameScreen );
@@ -116,8 +116,8 @@ end
 Controls.LoadGameButton:RegisterCallback( Mouse.eLClick, OnLoadGame );
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnPrivateGame()
 
 	local bChecked = Controls.PrivateGameCheckbox:IsChecked();
@@ -127,19 +127,19 @@ end
 Controls.PrivateGameCheckbox:RegisterCallback( Mouse.eLClick, OnPrivateGame );
 
 
--------------------------------------------------
---UpdateDisplay()
--- This method refreshes UI elements based on PreGame Data.
--- This function should only read from PreGame and not set items.
--- The one exception is the hack for ensuring all Civs are valid.
--------------------------------------------------
+
+
+
+
+
+
 function UpdateDisplay()
 
 	UpdateGameOptionsDisplay(true);
 	ShowHideExitButton();
 	ShowHideBackButton();
 
-	-- Update private game checkbox
+
 	Controls.PrivateGameCheckbox:SetHide( not PreGame.IsInternetGame() );
 	Controls.PrivateGameCheckbox:SetCheck( PreGame.IsPrivateGame() );
 	
@@ -153,10 +153,10 @@ function UpdateDisplay()
 	end	
 end
 
-----------------------------------------------------------------        
-----------------------------------------------------------------        
+
+
 function ShowHideHandler( isHide, bInit )
-	-- Check to make sure we are not launching, this menu can briefly get unhidden as the game launches
+
 	if not Matchmaking.IsLaunchingGame() and not isHide then 
 		bIsModding = (ContextPtr:LookUpControl("../.."):GetID() == "ModMultiplayerSelectScreen");
 		if(bIsModding) then
@@ -170,8 +170,8 @@ function ShowHideHandler( isHide, bInit )
 		SetInLobby( false );
 		
 		if PreGame.GetLoadFileName() == "" then
-			-- Default these to their state in the options manager (new lobby only).
-			-- Write BOTH stores — Game Options UI uses GetGameOption, runtime/DLL uses GetQuick*.
+
+
 			local qc = OptionsManager.GetMultiplayerQuickCombatEnabled();
 			local qm = OptionsManager.GetMultiplayerQuickMovementEnabled();
 			PreGame.SetQuickCombat( qc );
@@ -182,8 +182,8 @@ function ShowHideHandler( isHide, bInit )
 				PreGame.SetGameOption("GAMEOPTION_PITBOSS", true);
 			end
 		else
-			-- Loaded lobby/save: push GameOption → Quick* so a prior lobby toggle that
-			-- only wrote SetGameOption still applies after reload.
+
+
 			local qc = PreGame.GetGameOption("GAMEOPTION_QUICK_COMBAT");
 			local qm = PreGame.GetGameOption("GAMEOPTION_QUICK_MOVEMENT");
 			if qc ~= nil and PreGame.SetQuickCombat ~= nil then
@@ -197,16 +197,16 @@ function ShowHideHandler( isHide, bInit )
 		PopulateMapSizePulldown();
 
 		RefreshMapScripts();	
-		PreGame.SetRandomMapScript(false);	-- Random map scripts is not supported in multiplayer
+		PreGame.SetRandomMapScript(false);
 		UpdateDisplay();	
 	end
 end
 ContextPtr:SetShowHideHandler( ShowHideHandler );
 
 
-----------------------------------------------------------------        
--- Input processing
-----------------------------------------------------------------        
+
+
+
 function InputHandler( uiMsg, wParam, lParam )
 	if uiMsg == KeyEvents.KeyDown then
         if wParam == Keys.VK_ESCAPE then
@@ -217,9 +217,9 @@ function InputHandler( uiMsg, wParam, lParam )
 end
 ContextPtr:SetInputHandler( InputHandler );
 
------------------------------------------------------------------
--- Adjust for resolution
------------------------------------------------------------------
+
+
+
 function AdjustScreenSize()
     local _, screenY = UIManager:GetScreenSizeVal();
     
@@ -237,8 +237,8 @@ function AdjustScreenSize()
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnUpdateUI( type )
     if( type == SystemUpdateUIType.ScreenResize ) then
         AdjustScreenSize();

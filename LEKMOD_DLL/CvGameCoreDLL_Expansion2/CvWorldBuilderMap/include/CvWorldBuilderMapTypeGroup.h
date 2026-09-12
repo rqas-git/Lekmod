@@ -1,18 +1,18 @@
-//---------------------------------------------------------------------------------------
-//
-//  *****************   CIV 5 World Builder Map   ********************
-//
-//  FILE:    CvWorldBuilderMapTypeGroup.h
-//
-//  AUTHOR:  Eric Jordan  --  5/24/2010
-//
-//  PURPOSE:
-//		This little monstrosity was created to support the Civ 5 World Builder map format.
-//		It's designed to store a group of related type strings.
-//
-//---------------------------------------------------------------------------------------
-//  Copyright (c) 2010 Firaxis Games, Inc. All rights reserved.
-//---------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #pragma once
 #ifndef CvWorldBuilderMapTypeGroup_h
@@ -42,4 +42,4 @@ private:
 	uint m_uiBufferSize;
 };
 
-#endif // CvWorldBuilderMapTypeGroup_h
+#endif

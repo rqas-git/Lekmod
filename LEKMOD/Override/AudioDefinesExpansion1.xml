@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?> 
-<!-- carved into tree bark by murena2 -->
+
 <AudioDefinesFile> 
 	<SoundDatas>
-		<!-- Main Menu Theme -->
+
 		<SoundData>
 			<SoundID>SND_MUSIC_MAIN_MENU_LEK</SoundID>
 			<Filename>ScrambleForAfricaMusic</Filename>
@@ -13,7 +13,7 @@
 			<Filename>OpeningMenu_Exp2</Filename>
 			<LoadType>STREAMED</LoadType>
 		</SoundData>
-		<!-- Civilization Music -->
+
 		<SoundData>
 			<SoundID>SND_LEADER_MUSIC_VENEZ_PEACE</SoundID>
 			<Filename>Dandolo_Peace</Filename>
@@ -168,4 +168,3 @@
 		</SoundData>
 	</SoundDatas>
 </AudioDefinesFile> 
-

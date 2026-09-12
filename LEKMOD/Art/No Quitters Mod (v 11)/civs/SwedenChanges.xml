@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 8/20/2016 2:43:04 PM -->
+
 <GameData>
 
-	<!-- [Updated UA] Nobel Prize: +20% Great Person points in all Cities. Gain Science whenever a Great Person is born. -->
+
 	<Traits>
 		<Update>
 			<Set GreatPersonGiftInfluence="0" DOFGreatPersonModifier="0" GreatPeopleRateModifier="20" SciencePerGreatPersonBorn="0" />
@@ -10,7 +10,7 @@
 		</Update>
 	</Traits>
 	
-	<!-- remove Hakkapeliitta and Carolean, add Great Humanitarian and Falu Gruva -->
+
 	<Civilization_UnitClassOverrides>
 		<Delete UnitType="UNIT_SWEDISH_HAKKAPELIITTA" />
 	</Civilization_UnitClassOverrides>
@@ -23,7 +23,7 @@
 	</Civilization_BuildingClassOverrides>
 
 
-	<!-- localization -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_TRAIT_DIPLOMACY_GREAT_PEOPLE" />
 		<Row Tag="TXT_KEY_TRAIT_DIPLOMACY_GREAT_PEOPLE">

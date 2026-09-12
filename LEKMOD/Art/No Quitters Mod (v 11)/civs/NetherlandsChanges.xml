@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by HellBlazer on 7/18/2015 9:53:11 PM -->
+
 <GameData>
 	
-	<!-- Give Netherlands a Wetlands Bias for Hellblazer's map scripts -->
+
 	<Civilization_Start_Region_Priority>
 		<Update>
 			<Where CivilizationType="CIVILIZATION_NETHERLANDS"/>
@@ -10,7 +10,7 @@
 		</Update>
 	</Civilization_Start_Region_Priority>
 	
-	<!-- New Dutch UA gives +1 Happiness per Luxury and +1 Gold per Luxury Resource -->
+
 	<Table name="Trait_YieldChangesLuxuryResources">
 		<Column name="TraitType" type="text" reference="Traits(Type)"/>
 		<Column name="YieldType" type="text" reference="Yields(Type)"/>

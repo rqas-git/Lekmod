@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2/15/2016 2:20:03 PM -->
+
 <GameData>
 
-	<!-- Elite Forces now gives flat +10% combat boost and makes units heal twice as fast -->
+
 	<Policies>
 		<Update>
 			<Set WoundedUnitDamageMod="0" />
@@ -35,7 +35,7 @@
 	</Language_RU_RU>
 
 
-	<!-- new promotion -->
+
 	<UnitPromotions>
 		<Row>
 			<Type>PROMOTION_ELITE_FORCES</Type>
@@ -123,7 +123,7 @@
 		</Row>
 	</UnitPromotions_UnitCombats>
 
-	<!-- Promotion tooltips -->
+
 	<Language_en_US>
 		<Row Tag="TXT_KEY_PROMOTION_ELITE_FORCES">
 			<Text>Elite Forces</Text>

@@ -1,17 +1,17 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
-//
-//  AUTHOR:  Casey O'Toole  --  8/21/2002
-//
-//  PURPOSE: A* Pathfinding - based off of A* Explorer from "AI Game Programming Wisdom"
-//
+
+
+
+
+
 
 #ifndef		CVASTAR_H
 #define		CVASTAR_H
@@ -33,62 +33,62 @@ typedef int(*CvAGetExtraChild)(CvAStarNode*, int, int&, int&, CvAStar*);
 typedef void(*CvABegin)(const void*, CvAStar*);
 typedef void(*CvAEnd)(const void*, CvAStar*);
 
-// PATHFINDER FLAGS
-// WARNING: Some of these flags are passed into the unit mission and stored in the missions iFlags member.
-//          Because the mission's iFlags are sharing space with the pathfinder flags, we currently have mission
-//			modifier flags listed below that really don't have anything to do with the pathfinder.
-//			A fix for this would be to have the mission contain separate pathfinder and modifier flags.
-// These flags determine plots that can be entered
+
+
+
+
+
+
 #define MOVE_TERRITORY_NO_UNEXPLORED		(0x00000001)
 #define MOVE_TERRITORY_NO_ENEMY				(0x00000002)
 #define MOVE_IGNORE_STACKING                (0x00000004)
-// These two tell about presence of enemy units
+
 #define MOVE_UNITS_IGNORE_DANGER			(0x00000008)
 #define MOVE_UNITS_THROUGH_ENEMY			(0x00000010)
-// Used for human player movement
+
 #define MOVE_DECLARE_WAR					(0x00000020)
-// Used for AI group attacks (??). Not really a pathfinder flag
+
 #define MISSION_MODIFIER_DIRECT_ATTACK		(0x00000040)
 #define MISSION_MODIFIER_NO_DEFENSIVE_SUPPORT (0x00000100)
 
 #define MOVE_MAXIMIZE_EXPLORE				(0x00000080)
-//
-// Used for route information
-#define MOVE_ANY_ROUTE					    (0x80000000) // because we're passing in the player number as well as the route flag
-#define MOVE_ROUTE_ALLOW_UNEXPLORED			(0x40000000) // When searching for a route, allow the search to use unrevealed plots
-//#define MOVE_NON_WAR_ROUTE				 // we're passing the player id and other flags in as well. This flag checks to see if it can get from point to point without going into territory with a team we're at war with
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  CLASS:      CvAStar
-//
-//  DESC:       CvAStar pathfinding class
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#define MOVE_ANY_ROUTE					    (0x80000000)
+#define MOVE_ROUTE_ALLOW_UNEXPLORED			(0x40000000)
+
+
+
+
+
+
+
+
+
 class CvAStar
 {
 
-	//--------------------------------------- PUBLIC METHODS -------------------------------------------
+
 public:
 	enum RANGES
 	{
 		SCRATCH_BUFFER_SIZE = 512
 	};
-	// Constructor
+
 	CvAStar();
 
-	// Destructor
+
 	~CvAStar();
 
-	// Initializes the CvAStar class. iSize = Dimensions of Pathing Grid(ie. [iSize][iSize]
+
 	void Initialize(int iColumns, int iRows, bool bWrapX, bool bWrapY, CvAPointFunc IsPathDestFunc, CvAPointFunc DestValidFunc, CvAHeuristic HeuristicFunc, CvAStarFunc CostFunc, CvAStarFunc ValidFunc, CvAStarFunc NotifyChildFunc, CvAStarFunc NotifyListFunc, CvANumExtraChildren NumExtraChildrenFunc, CvAGetExtraChild GetExtraChildFunc, CvABegin InitializeFunc, CvAEnd UninitializeFunc, const void* pData);
 
-	void DeInit();		// free memory
+	void DeInit();
 
-	// Generates a path
+
 	bool GeneratePath(int iXstart, int iYstart, int iXdest, int iYdest, int iInfo = 0, bool bReuse = false);
 
-	// Gets the last node in the path (from the origin) - Traverse the parents to get full path (linked list starts at destination)
+
 #ifdef AUI_CONSTIFY
 	inline CvAStarNode* GetLastNode() const
 #else
@@ -99,7 +99,7 @@ public:
 	}
 
 #ifdef AUI_ASTAR_GET_PENULTIMATE_NODE
-	// Gets the node before the last node in the path (from the origin)
+
 	inline CvAStarNode* GetPenultimateNode() const
 	{
 		return (m_pBest ? m_pBest->m_pParent : NULL);
@@ -366,8 +366,8 @@ public:
 
 	void AddToOpen(CvAStarNode* addnode);
 
-	// Copy the supplied node and its parent nodes into an array of simpler path nodes for caching purposes.
-	// It is ok to pass in NULL, the resulting array will contain zero elements
+
+
 	static void CopyPath(const CvAStarNode* pkEndNode, CvPathNodeArray& kPathArray);
 
 #ifndef AUI_ASTAR_MINOR_OPTIMIZATION
@@ -381,7 +381,7 @@ public:
 	const void* CvAStar::GetScratchBuffer() const { return &m_ScratchBuffer[0]; }
 #endif
 	void* GetScratchBuffer() { return &m_ScratchBuffer[0]; }
-	//--------------------------------------- PROTECTED FUNCTIONS -------------------------------------------
+
 protected:
 
 	int     Step();
@@ -393,7 +393,7 @@ protected:
 	CvAStarNode*	GetBest();
 
 #ifdef AUI_ASTAR_PRECALCULATE_NEIGHBORS_ON_INITIALIZE
-	void PrecalcNeighbors(CvAStarNode* node) const;
+	void PrecalcNeighbors(CvAStarNode* node);
 #endif
 	void CreateChildren(CvAStarNode* node);
 	void LinkChild(CvAStarNode* node, CvAStarNode* check);
@@ -415,29 +415,29 @@ protected:
 
 	inline int udFunc(CvAStarFunc func, CvAStarNode* param1, CvAStarNode* param2, int data, const void* cb);
 
-	//--------------------------------------- PROTECTED DATA -------------------------------------------
+
 protected:
-	CvAPointFunc udIsPathDest;					// Determines if this node is the destination of the path
-	CvAPointFunc udDestValid;				    // Determines destination is valid
-	CvAHeuristic udHeuristic;				    // Determines heuristic cost
-	CvAStarFunc udCost;						    // Called when cost value is need
-	CvAStarFunc udValid;					    // Called to check validity of a coordinate
-	CvAStarFunc udNotifyChild;				    // Called when child is added/checked (LinkChild)
-	CvAStarFunc udNotifyList;				    // Called when node is added to Open/Closed list
-	CvANumExtraChildren udNumExtraChildrenFunc; // Determines if CreateChildren should consider any additional nodes
-	CvAGetExtraChild udGetExtraChildFunc;	    // Get the extra children nodes
-	CvABegin udInitializeFunc;					// Called at the start, to initialize any run specific data
-	CvAEnd udUninitializeFunc;					// Called at the end to uninitialize any run specific data
+	CvAPointFunc udIsPathDest;
+	CvAPointFunc udDestValid;
+	CvAHeuristic udHeuristic;
+	CvAStarFunc udCost;
+	CvAStarFunc udValid;
+	CvAStarFunc udNotifyChild;
+	CvAStarFunc udNotifyList;
+	CvANumExtraChildren udNumExtraChildrenFunc;
+	CvAGetExtraChild udGetExtraChildFunc;
+	CvABegin udInitializeFunc;
+	CvAEnd udUninitializeFunc;
 
 
-	const void* m_pData;			// Data passed back to functions
+	const void* m_pData;
 
 #ifdef AUI_ASTAR_TURN_LIMITER
-	int m_iMaxTurns;				// Pathfinder never lets a path's turn cost become higher than this number
+	int m_iMaxTurns;
 #endif
 
-	int m_iColumns;					// Used to calculate node->number
-	int m_iRows;					// Used to calculate node->number
+	int m_iColumns;
+	int m_iRows;
 	int m_iXstart;
 	int m_iYstart;
 	int m_iXdest;
@@ -453,21 +453,21 @@ protected:
 	bool m_bIsMultiplayer;
 #endif
 
-	CvAStarNode* m_pOpen;            // The open list
-	CvAStarNode* m_pOpenTail;        // The open list tail pointer (to speed up inserts)
-	CvAStarNode* m_pClosed;          // The closed list
-	CvAStarNode* m_pBest;            // The best node
-	CvAStarNode* m_pStackHead;		// The Push/Pop stack head
+	CvAStarNode* m_pOpen;
+	CvAStarNode* m_pOpenTail;
+	CvAStarNode* m_pClosed;
+	CvAStarNode* m_pBest;
+	CvAStarNode* m_pStackHead;
 
 	CvAStarNode** m_ppaaNodes;
 
 #ifndef AUI_ASTAR_MINOR_OPTIMIZATION
-	// Scratch buffers
-	void* m_pScratchPtr1;						// Will be cleared to NULL before each GeneratePath call
-	void* m_pScratchPtr2;						// Will be cleared to NULL before each GeneratePath call
+
+	void* m_pScratchPtr1;
+	void* m_pScratchPtr2;
 #endif
 
-	char  m_ScratchBuffer[SCRATCH_BUFFER_SIZE];	// Will NOT be modified directly by CvAStar
+	char  m_ScratchBuffer[SCRATCH_BUFFER_SIZE];
 };
 
 
@@ -552,7 +552,7 @@ inline int CvAStar::udFunc(CvAStarFunc func, CvAStarNode* param1, CvAStarNode* p
 	return (func) ? func(param1, param2, data, cb, this) : 1;
 }
 
-// C-style non-member functions (used by path finder)
+
 int PathAdd(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder);
 int PathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder);
 #ifdef AUI_CONSTIFY
@@ -645,7 +645,7 @@ void IncreaseMoveRangeForRoads(const CvUnit* pUnit, int& iRange);
 int GetIncreasedMoveRangeForRoads(const CvUnit* pUnit, int iRange);
 #endif
 
-// Derived classes (for more convenient access to pathfinding)
+
 class CvTwoLayerPathFinder: public CvAStar
 {
 public:
@@ -708,4 +708,4 @@ private:
 	CvAStarNode* m_pCurNode;
 };
 
-#endif	//CVASTAR_H
+#endif

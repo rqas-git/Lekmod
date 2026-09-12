@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""JSON-lines service for the native Lekmod launcher."""
+
 import argparse
-from contextlib import redirect_stdout
+from concurrent.futures import ThreadPoolExecutor
+from contextlib import ExitStack, redirect_stdout
 import io
 import json
 import os
@@ -31,7 +32,7 @@ REQUIRED_DLC = ('Expansion', 'Expansion2', 'DLC_Deluxe',
 
 
 def connection_status(text, started):
-    """Use only connection events from the currently running Steam session."""
+
     for line in reversed(text.splitlines()):
         match = re.match(r'\[([^]]+)\] \[([^],]+)', line)
         if not match:
@@ -81,7 +82,7 @@ def emit(event, **data):
 
 
 def steam_ready(app):
-    """The Steam URL must refer to this installed game, not a detached app copy."""
+
     steamapps = app.parent.parent.parent
     if steamapps.name != 'steamapps' or app.parent.parent.name != 'common':
         raise RuntimeError('Choose Civilization V inside a Steam library; detached app copies cannot launch through Steam.')
@@ -104,6 +105,14 @@ def verify_signature(app):
 
 
 def inspect(app, desired, log=lambda _: None, desired_eui=None):
+
+
+
+    with ThreadPoolExecutor(max_workers=1) as worker:
+        return _inspect(app, desired, log, worker, desired_eui)
+
+
+def _inspect(app, desired, log, worker, desired_eui):
     checks = []
     def add(key, title, state, detail):
         checks.append(dict(id=key, title=title, state=state, detail=detail))
@@ -124,6 +133,7 @@ def inspect(app, desired, log=lambda _: None, desired_eui=None):
     if not checked('game', 'Civilization V', lambda: validate_app(app), 'Game files found'):
         result.update(ready=False, repairable=False)
         return result
+    signature = worker.submit(verify_signature, app)
     try:
         ensure_closed()
     except RuntimeError as error:
@@ -160,8 +170,11 @@ def inspect(app, desired, log=lambda _: None, desired_eui=None):
         checks.pop()
         checked('eui', 'EUI', lambda: eui.check(app, state, desired_eui),
                 'EUI 1.28g verified' if desired_eui else 'Standard UI · EUI is optional', 'repair')
-    known = checked('core', 'Native Lekmod library', lambda: validate_core(app), 'Installed library recognized')
-    digest = sha256(app / CORE)
+    digest = None
+    def core():
+        nonlocal digest
+        digest = validate_core(app)
+    known = checked('core', 'Native Lekmod library', core, 'Installed library recognized')
     if known and (digest == STOCK_CORE_SHA256 or not state.get('lekmod')):
         checks[-1].update(state='repair', detail='Steam restored the original library, or Lekmod has not been installed yet.')
     elif known:
@@ -204,7 +217,7 @@ def inspect(app, desired, log=lambda _: None, desired_eui=None):
             raise RuntimeError('The cross-play setting needs to be removed before launch.')
     checked('crossplay', 'Windows cross-play', crossplay_setting,
             'Experimental mode enabled' if desired else 'Disabled · original Mac registration', 'repair')
-    checked('signature', 'App integrity', lambda: verify_signature(app), 'App signature verified', 'repair')
+    checked('signature', 'App integrity', signature.result, 'App signature verified', 'repair')
     blocked = any(check['state'] == 'blocked' for check in checks)
     repairs = any(check['state'] == 'repair' for check in checks)
     result.update(ready=not blocked and not repairs and not result['running'],
@@ -213,53 +226,56 @@ def inspect(app, desired, log=lambda _: None, desired_eui=None):
 
 
 def run_action(app, desired, action, log=lambda _: None, desired_eui=None, eui_archive=None):
-    report = inspect(app, desired, log, desired_eui=desired_eui)
-    if action == 'status':
-        return report
-    if report['running']:
-        raise RuntimeError(report['running_message'])
-    if not report['repairable']:
-        raise RuntimeError('Resolve the checks marked “Needs attention”, then check again.')
-    if action.startswith(('install-', 'uninstall-')):
-        operation, component = action.split('-', 1)
-        if component not in ('lekmod', 'lekmap', 'eui'):
-            raise ValueError('Unknown launcher component')
-        if component == 'eui':
-            enabled = operation == 'install'
-            if enabled and eui_archive is not None:
-                eui.import_archive(eui_archive)
-            installer.install(app, component='eui', eui_enabled=enabled, log=log)
-            preferences(app, eui=enabled)
-            desired_eui = enabled
-        elif operation == 'install':
-            installer.install(app, component=component, crossplay_enabled=desired,
-                              eui_enabled=desired_eui, log=log)
-        else:
-            uninstall(app, component, log=log)
-        return inspect(app, desired, log, desired_eui=desired_eui)
-    if action == 'repair' or not report['ready']:
-        log('Installing and repairing Lekmod. The previous game app will be kept as a backup…')
-        installer.install(app, component='lekmod' if installed_state(app).get('lekmap') is False else 'both',
-                          crossplay_enabled=desired, eui_enabled=desired_eui, log=log)
+    with ExitStack() as locks:
+        if action == 'launch':
+
+            locks.enter_context(installation_lock(app))
         report = inspect(app, desired, log, desired_eui=desired_eui)
-    if not report['ready']:
-        raise RuntimeError('Validation did not pass after repair. The game was not launched.')
-    if action == 'launch':
-        # Recheck under the same lock used by the installer, just before Steam handoff.
-        with installation_lock(app):
+        if action == 'status':
+            return report
+        if report['running']:
+            raise RuntimeError(report['running_message'])
+        if not report['repairable']:
+            raise RuntimeError('Resolve the checks marked “Needs attention”, then check again.')
+        if action.startswith(('install-', 'uninstall-')):
+            operation, component = action.split('-', 1)
+            if component not in ('lekmod', 'lekmap', 'eui'):
+                raise ValueError('Unknown launcher component')
+            if component == 'eui':
+                enabled = operation == 'install'
+                if enabled and eui_archive is not None:
+                    eui.import_archive(eui_archive)
+                installer.install(app, component='eui', eui_enabled=enabled, log=log)
+                preferences(app, eui=enabled)
+                desired_eui = enabled
+            elif operation == 'install':
+                installer.install(app, component=component, crossplay_enabled=desired, eui_enabled=desired_eui, log=log)
+            else:
+                uninstall(app, component, log=log)
+            return inspect(app, desired, log, desired_eui=desired_eui)
+        if action == 'repair' or not report['ready']:
+
+
+            locks.close()
+            log('Installing and repairing Lekmod. The previous game app will be kept as a backup…')
+            installer.install(app, component='lekmod' if installed_state(app).get('lekmap') is False else 'both',
+                              crossplay_enabled=desired, eui_enabled=desired_eui, log=log)
+            if action == 'launch':
+                locks.enter_context(installation_lock(app))
             report = inspect(app, desired, log, desired_eui=desired_eui)
-            if not report['ready']:
-                raise RuntimeError('The installation changed before launch. Check it again.')
+        if not report['ready']:
+            raise RuntimeError('Validation did not pass after repair. The game was not launched.')
+        if action == 'launch':
             ensure_closed()
             subprocess.run(['/usr/bin/open', 'steam://rungameid/8930'], check=True, timeout=30)
-        report['launched'] = True
-    return report
+            report['launched'] = True
+        return report
 
 
 class Progress(io.TextIOBase):
     def write(self, text):
         if text.strip():
-            # Installer helpers write to stdout; reserve it for structured messages.
+
             sys.__stdout__.write(json.dumps(dict(event='progress', message=text.strip())) + '\n')
             sys.__stdout__.flush()
         return len(text)

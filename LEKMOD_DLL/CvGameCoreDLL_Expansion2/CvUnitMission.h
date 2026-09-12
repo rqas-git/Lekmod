@@ -1,21 +1,21 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
-// CvUnitMission.h
+
 
 #ifndef CIV_UNIT_MISSION_H
 #define CIV_UNIT_MISSION_H
 
 #include "CvUnit.h"
 
-// Mission controller code for a CvUnit.
-// Static class (used to namespace)
+
+
 class CvUnitMission
 {
 public:
@@ -33,7 +33,7 @@ public:
 	static const MissionData* IsHeadMission(UnitHandle hUnit, int iMission);
 	static const MissionData* GetHeadMissionData(UnitHandle hUnit);
 	static const MissionData* GetMissionData(UnitHandle hUnit, int iNode);
-	/// Have a unit wait for another units missions to complete
+
 	static void WaitFor(UnitHandle hUnit, UnitHandle hWaitForUnit);
 	static bool HasCompletedMoveMission(UnitHandle hUnit);
 
@@ -53,4 +53,4 @@ private:
 	static int						GetLengthMissionQueue(const MissionQueue& kQueue);
 };
 
-#endif // CIV_UNIT_MISSION_H
+#endif

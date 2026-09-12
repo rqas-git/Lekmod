@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/11/2015 10:54:42 PM -->
+
 <GameData>
 
-	<!-- REFORMATION -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_POLICY_REFORMATION_HELP" />
 		<Row Tag="TXT_KEY_POLICY_REFORMATION_HELP">

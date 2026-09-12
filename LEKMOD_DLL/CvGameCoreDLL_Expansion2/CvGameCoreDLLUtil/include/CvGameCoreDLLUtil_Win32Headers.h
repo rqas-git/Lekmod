@@ -1,14 +1,14 @@
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//!	 \file		CvGameCoreDLLUtil.h
-//!  \brief     Public header for Civilization's use of the Win32 API.
-//!
-//!		Basic Win32 headers w/ necessary preprocessor defines.
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
 #pragma once 
 #ifndef CVGAMECOREDLLUTIL_WIN32HEADERS_H
 #define CVGAMECOREDLLUTIL_Win32HEADERS_H
 
-//Defines to reduce the amount included by the standard Windows.h
+
 #define WIN32_LEAN_AND_MEAN
 #define NOGDICAPMASKS    
 #define NOVIRTUALKEYCODES
@@ -49,7 +49,7 @@
 #define NODEFERWINDOWPOS 
 #define NOMCX   
 
-//Now to include Windows.h
+
 #include <Windows.h>
 
-#endif //CVGAMECOREDLLUTIL_Win32HEADERS_H
+#endif

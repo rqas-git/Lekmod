@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/6/2015 4:51:27 PM -->
+
 <GameData>
 
-	<!-- Opener allows training of Conquistadors and unlocks Chichen Itza. -->
-	<!-- Finisher gives +2 Happiness per Luxury, free Great Admiral, +100% Great Admiral points, and ability to Faith purchase Great Admirals. -->
 
-	<!-- Tooltips -->
+
+
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_POLICY_BRANCH_EXPLORATION_HELP" />
 		<Row Tag="TXT_KEY_POLICY_BRANCH_EXPLORATION_HELP">
@@ -32,7 +32,7 @@
 	</Language_RU_RU>
 	
 
-	<!-- Unlock Conquistadors -->
+
 	<Units>
 		<Update>
 			<Set PolicyType="POLICY_EXPLORATION" />
@@ -40,8 +40,8 @@
 		</Update>
 	</Units>
 	
-	<!-- Finisher now gives +1 Happiness per luxury, free Great Admiral and doubles points earned towards them -->
-	<!-- Hidden Antiquity Sites now revealed by Aesthetics -->
+
+
 	<Policies>
 		<Update>
 			<Set ExtraHappinessPerLuxury="1" IncludesOneShotFreeUnits="true" GreatAdmiralRateModifier="100" />

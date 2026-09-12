@@ -14,8 +14,8 @@ public:
 	static void OnCityDestroyed(CvCity* pkCity);
 
 	typedef std::vector<CvCity*> CityList;
-	// Returns a list of nearby cities, sorted by distance, closest to furthest.
+
 	static const CityList& GetNearbyCities(CvCity* pkCity);
 };
 
-#endif // CVCITYMANAGER_H
+#endif

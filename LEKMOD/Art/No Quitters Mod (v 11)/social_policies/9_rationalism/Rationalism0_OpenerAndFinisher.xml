@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/12/2015 4:16:04 AM -->
+
 <GameData>
 
-	<!-- Branch Tooltip -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_POLICY_BRANCH_RATIONALISM_HELP" />
 		<Row Tag="TXT_KEY_POLICY_BRANCH_RATIONALISM_HELP">
@@ -29,7 +29,7 @@
 	</Language_RU_RU>
 
 
-	<!-- RATIONALISM OPENER -->
+
 	<Policies>
 		<Update>
 			<Set HappinessToScience="0" GreatScientistRateModifier="25" />
@@ -38,8 +38,8 @@
 	</Policies>
 	
 
-	<!-- RATIONALISM FINISHER -->
-	<!-- Note: Tooltip updated in the opener. -->
+
+
 	<Policies>
 		<Update>
 			<Set NumFreeTechs="0" HappinessToScience="10" />

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/2/2015 9:36:44 PM -->
+
 <GameData>
 	
-	<!-- Meritocracy now also provides +15% Gold from City Connections. -->
+
 	
-	<!-- Gameplay -->
+
 	<Policies>
 		<Update>
 			<Set CityConnectionTradeRouteGoldModifier="15" />
@@ -14,7 +14,7 @@
 
 
 
-	<!-- Localization -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_POLICY_MERITOCRACY_HELP" />
 		<Row Tag="TXT_KEY_POLICY_MERITOCRACY_HELP">

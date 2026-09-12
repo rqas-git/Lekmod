@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 1/19/2016 11:58:49 PM -->
+
 <GameData>
 	
-	<!-- Move Iron from Bronze Working to Mining -->
+
 	<Resources>
 		<Update>
 			<Set TechReveal="TECH_MINING" TechCityTrade="TECH_MINING" />
@@ -10,7 +10,7 @@
 		</Update>
 	</Resources>
 	
-	<!-- TXT_KEY_TECH_BRONZE_WORKING_HELP -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_TECH_BRONZE_WORKING_HELP" />
 		<Row Tag="TXT_KEY_TECH_BRONZE_WORKING_HELP">
@@ -36,7 +36,7 @@
 		</Row>
 	</Language_RU_RU>
 
-	<!-- TXT_KEY_TECH_MINING_HELP -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_TECH_MINING_HELP" />
 		<Row Tag="TXT_KEY_TECH_MINING_HELP">

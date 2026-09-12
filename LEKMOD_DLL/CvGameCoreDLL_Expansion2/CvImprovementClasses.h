@@ -1,19 +1,19 @@
-/*	-------------------------------------------------------------------------------------------------------
-	ù 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_IMPROVEMENT_CLASSES_H
 #define CIV5_IMPROVEMENT_CLASSES_H
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  class : CvImprovementResourceInfo
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 class CvImprovementResourceInfo
 {
 	friend class CvImprovementEntry;
@@ -32,18 +32,18 @@ protected:
 	bool m_bResourceMakesValid;
 	bool m_bResourceTrade;
 
-	// Arrays
+
 	int* m_piYieldChange;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvImprovementEntry
-//!  \brief		A single improvement available in the game
-//
-//!  Key Attributes:
-//!  - Used to be called CvImprovementInfo
-//!  - Populated from XML\Terrain\CIV5Improvements.xml
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvImprovementEntry: public CvBaseInfo
 {
 public:
@@ -133,7 +133,7 @@ public:
 
 	int GetWorldSoundscapeScriptId() const;
 
-	// Arrays
+
 
 	int GetResourceQuantityRequirement(int i) const;
 
@@ -149,9 +149,9 @@ public:
 	int GetHillsYieldChange(int i) const;
 	int* GetHillsYieldChangeArray();
 	int GetNoFreshWaterYieldChange(int i) const;
-	int* GetNoFreshWaterYieldChangeArray();				// For Moose - CvWidgetData XXX
+	int* GetNoFreshWaterYieldChangeArray();
 	int GetFreshWaterYieldChange(int i) const;
-	int* GetFreshWaterYieldChangeArray();				// For Moose - CvWidgetData XXX
+	int* GetFreshWaterYieldChangeArray();
 	int GetAdjacentCityYieldChange(int i) const;
 	int* GetAdjacentCityYieldChangeArray();
 	int GetAdjacentMountainYieldChange(int i) const;
@@ -172,6 +172,7 @@ public:
 	int GetImprovementAdjacentBonusCivilizationNoAmount(int i, int j) const;
 	int GetImprovementAdjacentBonusCivilization(int i, int j) const;
 	int GetImprovementAdjacentAmount(int i, int j) const;
+	void CacheAdjacencyYieldBonus();
 	bool HasAnyAdjacencyYieldBonus() const;
 #endif
 	int GetTechNoFreshWaterYieldChanges(int i, int j) const;
@@ -179,7 +180,7 @@ public:
 	int GetTechFreshWaterYieldChanges(int i, int j) const;
 	int* GetTechFreshWaterYieldChangesArray(int i);
 	int GetRouteYieldChanges(int i, int j) const;
-	int* GetRouteYieldChangesArray(int i);				// For Moose - CvWidgetData XXX
+	int* GetRouteYieldChangesArray(int i);
 
 	int  GetImprovementResourceYield(int i, int j) const;
 	bool IsImprovementResourceMakesValid(int i) const;
@@ -188,7 +189,7 @@ public:
 
 	int  GetFlavorValue(int i) const;
 
-	//---------------------------------------PROTECTED MEMBER VARIABLES---------------------------------
+
 protected:
 #ifndef NQM_PRUNING
 	void InitImprovementResourceList(CvImprovementResourceInfo** ppImprovementResource, int iListLen);
@@ -267,7 +268,7 @@ protected:
 
 	int m_iWorldSoundscapeScriptId;
 
-	// Arrays
+
 	int* m_piResourceQuantityRequirements;
 
 	int* m_piPrereqNatureYield;
@@ -300,33 +301,39 @@ protected:
 	int** m_ppiRouteYieldChanges;
 #endif
 #ifdef LEKMOD_ADJACENT_IMPROVEMENT_YIELD
-	// 
+
 	int** m_ppiImprovementAdjacentBonus;
 	int** m_ppiImprovementAdjacentCivilizationAmount;
 	int** m_ppiImprovementAdjacentBonusCivilizationNoAmount;
 	int** m_piImprovementAdjacentBonusCivilization;
 	int** m_ppiImprovementAdjacentAmount;
+	bool m_bHasAnyAdjacencyYieldBonus;
 #endif
 	CvImprovementResourceInfo* m_paImprovementResource;
+
+private:
+#ifdef LEKMOD_ADJACENT_IMPROVEMENT_YIELD
+	bool ComputeHasAnyAdjacencyYieldBonus() const;
+#endif
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvImprovementXMLEntries
-//!  \brief		Game-wide information about improvements
-//
-//! Key Attributes:
-//! - Plan is it will be contained in CvGameRules object within CvGame class
-//! - Populated from XML\Terrain\CIV5ImprovementInfo.xml
-//! - Contains an array of CvImprovementEntry from the above XML file
-//! - One instance for the entire game
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
 class CvImprovementXMLEntries
 {
 public:
 	CvImprovementXMLEntries(void);
 	~CvImprovementXMLEntries(void);
 
-	// Accessor functions
+
 	std::vector<CvImprovementEntry*>& GetImprovementEntries();
 #ifdef AUI_WARNING_FIXES
 	uint GetNumImprovements() const;
@@ -337,16 +344,16 @@ public:
 #endif
 	CvImprovementEntry* GetImprovementForResource(int eResource);
 
-	// Binary cache functions
+
 	void DeleteArray();
 
 private:
 	std::vector<CvImprovementEntry*> m_paImprovementEntries;
 };
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Helper Functions to serialize arrays of variable length (based on number of improvements defined in game)
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 namespace ImprovementArrayHelpers
 {
 void Read(FDataStream& kStream, int* paiImprovementArray);
@@ -355,4 +362,4 @@ void ReadYieldArray(FDataStream& kStream, int** ppaaiImprovementYieldArray, int 
 void WriteYieldArray(FDataStream& kStream, int** ppaaiImprovementYieldArray, int iArraySize);
 }
 
-#endif //CIV5_IMPROVEMENT_CLASSES_H
+#endif

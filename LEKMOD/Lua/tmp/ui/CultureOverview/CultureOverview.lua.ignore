@@ -10,25 +10,25 @@ for _, mod in pairs(Modding.GetActivatedMods()) do
 end
 
 function dprint(...)
-	--print(...);
+
 end
 
--------------------------------------------------
--- Culture Overview Popup
--------------------------------------------------
+
+
+
 include( "IconSupport" );
 include( "InstanceManager" );
 
 local g_PopupInfo = nil;
 local g_IconSize = 45;
 
---If Culture Overview UI is disabled, just exit!
+
 if(Game.IsOption("GAMEOPTION_NO_CULTURE_OVERVIEW_UI")) then
 	return;
 end
--------------------------------------------------
--- Global Constants
--------------------------------------------------
+
+
+
 g_Tabs = {
 	["YourCulture"] = {
 		Panel = Controls.YourCulturePanel,
@@ -51,21 +51,21 @@ g_Tabs = {
 	},
 }
 
--------------------------------------------------
--- Global Variables
--------------------------------------------------
-g_CurrentTab = nil;		-- The currently selected Tab.
+
+
+
+g_CurrentTab = nil;
 g_iSelectedPlayerID = Game.GetActivePlayer();
 
 
-g_YourCulture = nil;			-- The data model for the "Your Culture" tab.
-g_CultureVictory = nil;			-- The data model for the "Culture Victory" tab.
-g_InfluenceByPlayer = nil;		-- The data model for the "Influence by Player" tab.
+g_YourCulture = nil;
+g_CultureVictory = nil;
+g_InfluenceByPlayer = nil;
 
-g_YourCultureSelectionMode = "ClickToMove";	-- Determines whether to use "click to move" or "click to view".
+g_YourCultureSelectionMode = "ClickToMove";
 
-g_CurrentGreatWorkSlot = nil;	-- The selected great work slot.
-g_GreatWorkSlots	= {};		-- A list of all great work slots.
+g_CurrentGreatWorkSlot = nil;
+g_GreatWorkSlots	= {};
 
 
 g_YourCultureSortOptions = {
@@ -98,7 +98,7 @@ g_YourCultureSortOptions = {
 	}
 };
 
--- Kyte
+
 g_MaxColumns = 13;
 g_ColumnTypes = { "Single", "Double", "Triple" };
 for i = 1, g_MaxColumns do
@@ -114,7 +114,7 @@ for i = 1, g_MaxColumns do
 		table.insert(g_YourCultureSortOptions, sortOption);
 	end
 end
--- Kyte end	
+
 
 g_CultureVictorySortOptions = {
 	{
@@ -217,9 +217,9 @@ g_CultureVictorySortFunction = nil;
 g_InfluenceByPlayerSortFunction = nil;
 
 
--------------------------------------------------------------------------------
--- Sorting Support
--------------------------------------------------------------------------------
+
+
+
 function AlphabeticalSortFunction(field, direction, secondarySort)
 	if(direction == "asc") then
 		return function(a,b)
@@ -272,7 +272,7 @@ function NumericSortFunction(field, direction, secondarySort)
 	end
 end
 
--- Registers the sort option controls click events
+
 function RegisterSortOptions()
 	
 	for i,v in ipairs(g_YourCultureSortOptions) do
@@ -322,12 +322,12 @@ function GetSortFunction(sortOptions)
 	return nil;
 end
 
--- Updates the sort option structure
+
 function UpdateSortOptionState(sortOptions, selectedOption)
-	-- Current behavior is to only have 1 sort option enabled at a time 
-	-- though the rest of the structure is built to support multiple in the future.
-	-- If a sort option was selected that wasn't already selected, use the default 
-	-- direction.  Otherwise, toggle to the other direction.
+
+
+
+
 	for i,v in ipairs(sortOptions) do
 		if(v == selectedOption) then
 			if(v.CurrentDirection == nil) then			
@@ -345,7 +345,7 @@ function UpdateSortOptionState(sortOptions, selectedOption)
 	end
 end
 
--- Callback for when sort options are selected.
+
 function YourCultureSortOptionSelected(option)
 	local sortOptions = g_YourCultureSortOptions;
 	UpdateSortOptionState(sortOptions, option);
@@ -354,7 +354,7 @@ function YourCultureSortOptionSelected(option)
 	SortAndDisplayYourCulture();
 end
 
--- Callback for when sort options are selected.
+
 function CultureVictorySortOptionSelected(option)
 	local sortOptions = g_CultureVictorySortOptions;
 	UpdateSortOptionState(sortOptions, option);
@@ -363,7 +363,7 @@ function CultureVictorySortOptionSelected(option)
 	SortAndDisplayCultureVictory();
 end
 
--- Callback for when sort options are selected.
+
 function InfluenceByPlayerSortOptionSelected(option)
 	local sortOptions = g_InfluenceByPlayerSortOptions;
 	UpdateSortOptionState(sortOptions, option);
@@ -373,8 +373,8 @@ function InfluenceByPlayerSortOptionSelected(option)
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnPopupMessage(popupInfo)
 	
 	local popupType = popupInfo.Type;
@@ -384,7 +384,7 @@ function OnPopupMessage(popupInfo)
 	
 	g_PopupInfo = popupInfo;
 	
-	-- Data 2 parameter holds desired tab to open on
+
 	if (g_PopupInfo.Data2 == 2) then
 		TabSelect("SwapGreatWorks");
 	elseif (g_PopupInfo.Data2 == 3) then
@@ -407,27 +407,27 @@ function OnPopupMessage(popupInfo)
 end
 Events.SerialEventGameMessagePopup.Add( OnPopupMessage );
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function InputHandler( uiMsg, wParam, lParam )
-    ----------------------------------------------------------------        
-    -- Key Down Processing
-    ----------------------------------------------------------------        
+
+
+
     if(uiMsg == KeyEvents.KeyDown) then
         if (wParam == Keys.VK_ESCAPE) then
 			OnClose();
 			return true;
         end
         
-        -- Do Nothing.
+
         if(wParam == Keys.VK_RETURN) then
 			return true;
         end
     end
 end
 ContextPtr:SetInputHandler( InputHandler );
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function OnClose()
 	if(g_PopupInfo ~= nil) then
 		Events.SerialEventGameMessagePopupProcessed.CallImmediate(g_PopupInfo.Type, 0);
@@ -436,12 +436,12 @@ function OnClose()
 	UIManager:DequeuePopup(ContextPtr);
 end
 Controls.CloseButton:RegisterCallback(Mouse.eLClick, OnClose);
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
 
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
+
+
 function TabSelect(tab)
 
 	for i,v in pairs(g_Tabs) do
@@ -457,11 +457,11 @@ Controls.TabButtonSwapGreatWorks:RegisterCallback( Mouse.eLClick, function() Tab
 Controls.TabButtonCultureVictory:RegisterCallback( Mouse.eLClick, function() TabSelect("CultureVictory"); end );
 Controls.TabButtonPlayerInfluence:RegisterCallback( Mouse.eLClick, function() TabSelect("PlayerInfluence"); end );
 
---Kyte
+
 function getBuildings()
 	local gwBuildings = {};
 	
-	-- Get all non-override, non-Wonder buildings with at least 1 Great Work slot.
+
 
 	for row in DB.Query([[
 							SELECT b.Id AS Id, bc.Type AS BuildingClass, b.Type AS BuildingType, GreatWorkCount, 
@@ -486,7 +486,7 @@ function getBuildings()
 		dprint(row.BuildingType);
 	end
 	
-	-- If you get overrides after normal buildings it'll effectively replace the previous buildings so it all works out pretty nicely.
+
 	for row in DB.Query([[
 							SELECT b.Id AS Id, bc.Type AS BuildingClass, b.Type AS BuildingType, GreatWorkCount,
 							CivilizationType, t.GridX, t.GridY, 
@@ -537,7 +537,7 @@ function getBuildings()
 	return sorted;
 end
 
--- Cache these to avoid constant DB queries (also sorting).
+
 g_GreatWorkBuildings = getBuildings();
 
 print("Non-Wonder Great Work buildings");
@@ -555,7 +555,7 @@ g_ColumnSizes = {
 	[2] = Controls.DoubleColumn1Background:GetSizeX(), 
 	[3] = Controls.TripleColumn1Background:GetSizeX()
 };
--- Kyte End
+
 
 function RefreshYourCulture()
 	g_YourCulture = nil;
@@ -573,7 +573,7 @@ function RefreshYourCulture()
 		Controls.HiddenSites:SetHide(false);
 	end
 
-    -- Precache Slot Types
+
     local greatWorkSlotIcons = {};
     local selectedIcons = {
 		GREAT_WORK_SLOT_ART_ARTIFACT = "GreatWorks_Art_HL_34.dds",
@@ -614,7 +614,7 @@ function RefreshYourCulture()
 		local entry = {
 			BuildingID = building.ID,
 			BuildingClassID = buildingClass.ID,
-			BuildingClassType = buildingClass.Type, -- Kyte
+			BuildingClassType = buildingClass.Type,
 			GreatWorkSlotType = building.GreatWorkSlotType,
 			GreatWorkSlotIcons = greatWorkSlotIcons[building.GreatWorkSlotType],
 			GreatWorkSlotCount = building.GreatWorkCount,
@@ -632,16 +632,16 @@ function RefreshYourCulture()
 		return entry;
     end
 
-	-- Kyte
-	-- The magic numbers are the widths of MainStack and the columns we aren't touching. See XML.
-	-- MainStack CityName Culture Tourism GreatWorks ScrollBar
+
+
+
 	local availablePixelSpace = 937 - 221 - 61 - 51 - 41 - 18;
 	local columnIndex = 1;
 	
 	function AssignBuildingToColumn(building, buildings)
-		-- The +1 is for the divider.
+
 		local estimatedColumnSize = g_ColumnSizes[building.GreatWorkCount] + 1;
-		-- Magic number 23: The width of the theme bonus text (assuming 0-9).
+
 		if (building.GreatWorkCount > 1 and building.HasThemeBonusInt == 0) then estimatedColumnSize = estimatedColumnSize - 23; end
 
 		dprint("Space left: " .. availablePixelSpace);
@@ -728,12 +728,12 @@ function RefreshYourCulture()
 
 		return false;
 	end
-	--Kyte end
+
 	
 	local WorldWonders = {};
 	for building in GameInfo.Buildings() do
 		local buildingClass = GameInfo.BuildingClasses[building.BuildingClass];
-		-- Kyte
+
 		if(building.GreatWorkCount > 0 
 			and not BuildingClassIsAColumn(buildingClass.Type, buildings)) then
 			table.insert(WorldWonders, {
@@ -828,7 +828,7 @@ function RefreshYourCulture()
 			buildingData.GreatWorkIconControlNames = v.GreatWorkIconControlNames;
 			buildingData.GreatWorkHighlightIconControlNames = v.GreatWorkHighlightIconControlNames;
 			buildingData.GreatWorkGhostIconControlNames = v.GreatWorkGhostIconControlNames;
-			buildingData.ColumnName = v.ColumnName; --Kyte
+			buildingData.ColumnName = v.ColumnName;
 			
 			table.insert(cityData.Buildings, buildingData);
         end
@@ -900,14 +900,14 @@ function SortAndDisplayYourCulture()
 	
 	table.sort(model, g_YourCultureSortFunction);
 
-	-- Reset list of selection points.
+
 	local previousGreatWorkSelection = g_CurrentGreatWorkSlot;
     g_CurrentGreatWorkSlot = nil;
     g_GreatWorkSlots = {};  
     
     Controls.MainStack:DestroyAllChildren();
         
-    -- Utility function to determine best highlight texture
+
     function GetHighlightTexture(data)
 		local currentGreatWorkSlot = g_CurrentGreatWorkSlot;
     
@@ -918,7 +918,7 @@ function SortAndDisplayYourCulture()
 				
 				return data.Icons.SelectedIcon;
 			else
-				--Design Note: This is where we could alter icon based on potential theme bonus.
+
 				return "GreatWorks_Yellow_HL_34.dds";
 			end
 		else
@@ -958,11 +958,11 @@ function SortAndDisplayYourCulture()
        
               
         for buildingIndex, buildingData in ipairs(cityData.Buildings) do
-			-- Kyte
+
 			if (buildingData.ColumnName ~= nil) then
 				instance[buildingData.ColumnName .. "Container"]:SetHide(false);
 			end
-			-- Kyte end
+
                  
             local themeBonusControl = instance[buildingData.ThemeBonusControlName];
 			local greatWorkIconControls = {};
@@ -1034,16 +1034,16 @@ function SortAndDisplayYourCulture()
 				
 				if(themeBonusControl ~= nil) then
 					themeBonusControl:SetHide(buildingData.HideThemeBonus);
-					-- Kyte
+
 					if (buildingData.HideThemeBonus and buildingData.ColumnName ~= nil) then
-						-- Magic number 23, the size of the theme bonus text.
+
 						local newSize = g_ColumnSizes[buildingData.GreatWorkSlotCount] - 23;
 
 						instance[buildingData.ColumnName .. "Container"]:SetSizeX(newSize);
 						Controls[buildingData.ColumnName .. "Background"]:SetSizeX(newSize);
 						Controls[buildingData.ColumnName .. "Button"]:SetSizeX(newSize);
 					end
-					-- Kyte end
+
 					themeBonusControl:SetText(buildingData.ThemeBonus);
 					themeBonusControl:SetToolTipString(buildingData.ThemeBonusToolTip);
 				end				
@@ -1065,7 +1065,7 @@ function SortAndDisplayYourCulture()
 				if(themeBonusControl ~= nil) then
 					themeBonusControl:SetHide(true);
 
-					-- Kyte
+
 					if (buildingData.HideThemeBonus and buildingData.ColumnName ~= nil) then
 						local newSize = g_ColumnSizes[buildingData.GreatWorkSlotCount] - 23;
 
@@ -1073,14 +1073,14 @@ function SortAndDisplayYourCulture()
 						Controls[buildingData.ColumnName .. "Background"]:SetSizeX(newSize);
 						Controls[buildingData.ColumnName .. "Button"]:SetSizeX(newSize);
 					end
-					-- Kyte end
+
 				end
 
 			end
         
         end
         				
-		-- Count wonders with Great Work slots in this city		
+
 		local wonderCount = #cityData.Wonders;
 		instance.Divider:SetHide(wonderCount > 0);
 		
@@ -1177,7 +1177,7 @@ function SortAndDisplayYourCulture()
 		end
     end
     
-    -- Sync selection and register click handler
+
     for _, selectionPoint in ipairs(g_GreatWorkSlots) do
 		if(	previousGreatWorkSelection ~= nil and
 			previousGreatWorkSelection.CityID == selectionPoint.CityID and
@@ -1224,13 +1224,13 @@ function SortAndDisplayYourCulture()
 													g_CurrentGreatWorkSlot.CityID, g_CurrentGreatWorkSlot.BuildingClassID, g_CurrentGreatWorkSlot.GreatWorkSlotIndex, 
 													selectionPoint.CityID, selectionPoint.BuildingClassID, selectionPoint.GreatWorkSlotIndex);
 					end												
-					-- Clear Selection
+
 					g_CurrentGreatWorkSlot = nil;	
 				else
 					g_CurrentGreatWorkSlot = selectionPoint;
 				end
 				
-				--Update Highlights	
+
 				for _,v in ipairs(g_GreatWorkSlots) do
 					local highlightControl = v.HighlightControl;
 					local texture = GetHighlightTexture(v);
@@ -1246,7 +1246,7 @@ function SortAndDisplayYourCulture()
 		end	
     end
        
-    --Update Highlights	
+
 	for i,v in ipairs(g_GreatWorkSlots) do
 		local highlightControl = v.HighlightControl;
 		local texture = GetHighlightTexture(v);
@@ -1262,20 +1262,20 @@ function SortAndDisplayYourCulture()
     Controls.MainStack:ReprocessAnchoring();
     Controls.MainScroll:CalculateInternalSize();
 
-    -- Kyte
-	--[[
-	Nested scroll panels look terrible. :(
-	It's not impossible per se, but the vertical scrollbar will move with the rest of the panel,
-	making navigation awkward.
-	
-	Window resizing is also a no go, there's waaaaaaaaaay too many controls to resize,
-	making the whole thing extremely fiddly. Really not worth it.
 
-	So, Firaxis: Why the hell is your UI so static. There's not even the most basic "fit to parent"
-	and "fit to contents" options, which would enable 90% of everything one could ever need or want
-	out of your UI. Or just allow scrollpanels work in both directions.
-	]]
-	-- Kyte end
+
+
+
+
+	
+
+
+
+
+
+
+
+
 end
 
 Controls.radClickToMove:RegisterCheckHandler(function(checked)
@@ -1300,7 +1300,7 @@ end
 
 
 
--- Refresh great work info if dirty (SerialEventCityInfoDirty & SerialEventGreatWorksScreenDirty is called when great works are swapped).
+
 function RefreshGreatWorkInfo()
 	if (not ContextPtr:IsHidden()) then
 		g_Tabs["YourCulture"].RefreshContent();
@@ -1309,16 +1309,16 @@ end
 Events.SerialEventGreatWorksScreenDirty.Add(RefreshGreatWorkInfo);
 
 
--------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------
----- Begin ---
 
--- Globals
+
+
+
+
+
+
+
+
+
 local g_iTheirItem = -1;
 local g_iYourItem = -1;
 local g_iTradingPartner = -1;
@@ -1327,37 +1327,37 @@ function CheckAvailableSwap ()
 	local activePlayerID = Game.GetActivePlayer();
 	local activePlayer = Players[activePlayerID];	
 
-	--print("CheckAvailableSwap");
 
-	-- if their item is selected
-	--  if we have selected an item of that type
-	--   fill in the slot
+
+
+
+
 	if (g_iTheirItem ~= -1) then
-		-- get item type
+
 		local iTheirClass = Game.GetGreatWorkClass(g_iTheirItem);
 		local iYourItem = -1;
 		if (iTheirClass == 1) then
-			-- art(?)
+
 			iYourItem = activePlayer:GetSwappableGreatArt();
 		elseif (iTheirClass == 2) then
-			-- artifact(?)
+
 			iYourItem = activePlayer:GetSwappableGreatArtifact();
 		elseif (iTheirClass == 3) then
-			-- writing
+
 			iYourItem = activePlayer:GetSwappableGreatWriting();
 		elseif (iTheirClass == 4) then
-			-- music
+
 			iYourItem = activePlayer:GetSwappableGreatMusic();
 		end
 		
 		if (g_iYourItem ~= iYourItem) then
 			if (iYourItem ~= -1) then
-				--print("Selecting your Item");
+
 				SelectYourWork(iYourItem);	
 				Controls.SwapButton:SetDisabled(false);
 				Controls.SwapButton:SetToolTipString(Locale.Lookup("TXT_KEY_SWAP_BUTTON_TT"));
 			else
-				--print("Clearing Your Item");
+
 				SelectYourWork(-1);
 				Controls.SwapButton:SetDisabled(true);
 				Controls.SwapButton:SetToolTipString(Locale.Lookup("TXT_KEY_SWAP_BUTTON_DISABLED_TT"));
@@ -1375,14 +1375,14 @@ function SelectYourWork (iIndex)
 	
 		Controls.SwapYourIconStack:SetHide(true);
 	
-		-- set great works to dotted box
+
 		Controls.SwapOursIcon:SetTexture("GreatWorks_DottedFrame_32.dds");
-		-- hide icon
+
 		Controls.SwapOursCivIcon:SetHide(true);
 		Controls.SwapOursCivIconBG:SetHide(true);
 		Controls.SwapOursCivIconShadow:SetHide(true);		
 		Controls.SwapOursCivIconHighlight:SetHide(true);
-		-- hide era
+
 		Controls.SwapOursEra:SetHide(true);
 		
 		Controls.SwapOursIcon:SetToolTipString("");
@@ -1425,7 +1425,7 @@ function SelectYourWork (iIndex)
 		Controls.SwapYourIconStack:CalculateSize();
 		Controls.SwapYourIconStack:ReprocessAnchoring();
 	
-		-- Tooltips
+
 		local strTT = Game.GetGreatWorkTooltip(iIndex, activePlayerID)
 		Controls.SwapOursIcon:SetToolTipString(strTT);
 		Controls.SwapOursCivIcon:SetToolTipString(strTT);
@@ -1439,7 +1439,7 @@ function SelectYourWork (iIndex)
 end
 
 function SelectOthersWork (iIndex) 
-	--print("SelectOthersWork. iIndex: " .. iIndex);
+
 	g_iTheirItem = iIndex;
 	g_iTradingPartner = -1;
 	
@@ -1447,17 +1447,17 @@ function SelectOthersWork (iIndex)
 	
 		Controls.SwapTheirIconStack:SetHide(true);
 	
-		-- set great works to dotted box
+
 		Controls.SwapTheirsIcon:SetTexture("GreatWorks_DottedFrame_32.dds");
-		-- hide name		
+
 		Controls.SwapTheirsOwnerName:SetHide(true);
 		
-		-- hide icon
+
 		Controls.SwapTheirsCivIcon:SetHide(true);
 		Controls.SwapTheirsCivIconBG:SetHide(true);
 		Controls.SwapTheirsCivIconShadow:SetHide(true);
 		Controls.SwapTheirsCivIconHighlight:SetHide(true);
-		-- hide era
+
 		Controls.SwapTheirsEra:SetHide(true);
 		
 		Controls.SwapTheirsIcon:SetToolTipString("");
@@ -1505,7 +1505,7 @@ function SelectOthersWork (iIndex)
 		Controls.SwapTheirIconStack:ReprocessAnchoring();
 		
 		
-		-- Tooltips
+
 		local strTT = Game.GetGreatWorkTooltip(iIndex, activePlayerID)
 		Controls.SwapTheirsIcon:SetToolTipString(strTT);
 		Controls.SwapTheirsCivIcon:SetToolTipString(strTT);
@@ -1668,31 +1668,31 @@ function RefreshSwappingItems()
 	pullDown:GetButton():SetToolTipString(strTT);
 	PopulatePullDown(pullDown, 2)
 	
-	--local strTT = Locale.Lookup("TXT_KEY_MUSIC_SLOT_TT");
-	--local iMusicSwapIndex = activePlayer:GetSwappableGreatMusic();
-	--if (iMusicSwapIndex == -1) then
-		--Controls.YourSwapMusicIcon:SetTexture("GreatWorks_Music_Empty.dds");
-		--Controls.YourSwapMusicEra:SetHide(true);
-		--Controls.YourSwapMusicCivIcon:SetHide(true);
-		--Controls.YourSwapMusicCivIconBG:SetHide(true);
-		--Controls.YourSwapMusicCivIconShadow:SetHide(true);
-		--Controls.YourSwapMusicCivIconHilite:SetHide(true);
-	--else
-		--Controls.YourSwapMusicIcon:SetTexture("GreatWorks_Music.dds");
-		----Controls.YourSwapMusicEra:SetText(Locale.Lookup(Game.GetGreatWorkEraAbbreviation(iMusicSwapIndex)));
-		--Controls.YourSwapMusicEra:SetText(Locale.Lookup(Game.GetGreatWorkEraShort(iMusicSwapIndex)));
-		--Controls.YourSwapMusicEra:SetHide(false);
-		--Controls.YourSwapMusicCivIcon:SetHide(false);
-		--Controls.YourSwapMusicCivIconBG:SetHide(false);
-		--Controls.YourSwapMusicCivIconShadow:SetHide(false);
-		--Controls.YourSwapMusicCivIconHilite:SetHide(false);
-		--CivIconHookup(Game.GetGreatWorkCreator(iMusicSwapIndex), 32, Controls.YourSwapMusicCivIcon, Controls.YourSwapMusicCivIconBG, Controls.YourSwapMusicCivIconShadow, false, true, Controls.YourSwapMusicCivIconHilite);
-		--strTT = strTT .. "[NEWLINE][NEWLINE]";
-		--strTT = strTT .. Game.GetGreatWorkTooltip(iMusicSwapIndex, activePlayerID);
-	--end
-	--local pullDown = Controls.YourMusicPullDown;
-	--pullDown:GetButton():SetToolTipString(strTT);
-	--PopulatePullDown(pullDown, 4);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	CheckAvailableSwap(); 
 end
@@ -1718,36 +1718,36 @@ function DisplayOthersWorks ()
 		SwapWorkLineInstance.IconFrame:SetToolTipString(player:GetCivilizationShortDescription());
 		
 		
-		-- Writing
-		--  WritingIndex
-		--  WritingCreator
-		--  WritingEra
+
+
+
+
 		local strGreatWorkToolTip;
 		if (v.WritingIndex == -1) then
-			-- show empty art outline
+
 			SwapWorkLineInstance.WonderGreatWritingWork:SetTexture("GreatWorks_Book_Empty.dds");
-			-- hide civ symbol
+
 			SwapWorkLineInstance.WritingCivIconBG:SetHide(true);
 			SwapWorkLineInstance.WritingCivIconShadow:SetHide(true);
 			SwapWorkLineInstance.WritingCivIcon:SetHide(true);
 			SwapWorkLineInstance.WritingCivIconHighlight:SetHide(true);
-			-- empty text string
+
 			SwapWorkLineInstance.WritingEra:SetHide(true);
 			
 			strGreatWorkToolTip = Locale.Lookup("TXT_KEY_WRITING_OTHERS_SLOT_EMPTY", player:GetCivilizationShortDescriptionKey());
 		else
-			-- show correct art image
+
 			SwapWorkLineInstance.WonderGreatWritingWork:SetTexture("GreatWorks_Book.dds");
-			-- display civ symbol
+
 			SwapWorkLineInstance.WritingCivIconBG:SetHide(false);
 			SwapWorkLineInstance.WritingCivIconShadow:SetHide(false);
 			SwapWorkLineInstance.WritingCivIcon:SetHide(false);
 			SwapWorkLineInstance.WritingCivIconHighlight:SetHide(false);
 			CivIconHookup(v.WritingCreator, 32, SwapWorkLineInstance.WritingCivIcon, SwapWorkLineInstance.WritingCivIconBG, SwapWorkLineInstance.WritingCivIconShadow, false, true, SwapWorkLineInstance.WritingCivIconHighlight);
 			
-			-- display era string
+
 			SwapWorkLineInstance.WritingEra:SetHide(false);
-			--SwapWorkLineInstance.WritingEra:SetText(Locale.Lookup(Game.GetGreatWorkEraAbbreviation(v.WritingIndex)));
+
 			SwapWorkLineInstance.WritingEra:SetText(Locale.Lookup(Game.GetGreatWorkEraShort(v.WritingIndex)));
 			
 			SwapWorkLineInstance.WritingWorkButton:RegisterCallback(Mouse.eLClick, function()
@@ -1758,39 +1758,39 @@ function DisplayOthersWorks ()
 			strGreatWorkToolTip = strGreatWorkToolTip .. "[NEWLINE][NEWLINE]"
 			strGreatWorkToolTip = strGreatWorkToolTip .. Game.GetGreatWorkTooltip(v.WritingIndex, v.iPlayer);
 		end
-		-- setting up tooltips
+
 		SwapWorkLineInstance.WritingWorkButton:SetToolTipString(strGreatWorkToolTip);
 
-		-- Art
-		--  iArtWorkIndex
-		--  eArtWorkPlayer
-		--  eArtWorkEra
-		--  GreatWorks_Empty.dds
+
+
+
+
+
 		if (v.ArtIndex == -1) then
-			-- show empty art outline
+
 			SwapWorkLineInstance.WonderGreatArtWork:SetTexture("GreatWorks_Empty.dds");
-			-- hide civ symbol
+
 			SwapWorkLineInstance.ArtCivIconBG:SetHide(true);
 			SwapWorkLineInstance.ArtCivIconShadow:SetHide(true);
 			SwapWorkLineInstance.ArtCivIcon:SetHide(true);
 			SwapWorkLineInstance.ArtCivIconHighlight:SetHide(true);
-			-- empty text string
+
 			SwapWorkLineInstance.ArtEra:SetHide(true);
 			
 			strGreatWorkToolTip = Locale.Lookup("TXT_KEY_ART_OTHERS_SLOT_EMPTY", Players[v.iPlayer]:GetCivilizationShortDescriptionKey());
 		else
-			-- show correct art image
+
 			SwapWorkLineInstance.WonderGreatArtWork:SetTexture("GreatWorks.dds");
-			-- display civ symbol
+
 			SwapWorkLineInstance.ArtCivIconBG:SetHide(false);
 			SwapWorkLineInstance.ArtCivIconShadow:SetHide(false);
 			SwapWorkLineInstance.ArtCivIcon:SetHide(false);
 			SwapWorkLineInstance.ArtCivIconHighlight:SetHide(false);
 			CivIconHookup(v.ArtCreator, 32, SwapWorkLineInstance.ArtCivIcon, SwapWorkLineInstance.ArtCivIconBG, SwapWorkLineInstance.ArtCivIconShadow, false, true, SwapWorkLineInstance.ArtCivIconHighlight);
 			
-			-- display era string
+
 			SwapWorkLineInstance.ArtEra:SetHide(false);
-			--SwapWorkLineInstance.ArtEra:SetText(Locale.Lookup(Game.GetGreatWorkEraAbbreviation(v.ArtIndex)));
+
 			SwapWorkLineInstance.ArtEra:SetText(Locale.Lookup(Game.GetGreatWorkEraShort(v.ArtIndex)));
 			
 			SwapWorkLineInstance.ArtWorkButton:RegisterCallback(Mouse.eLClick, function()
@@ -1801,39 +1801,39 @@ function DisplayOthersWorks ()
 			strGreatWorkToolTip = strGreatWorkToolTip .. "[NEWLINE][NEWLINE]"
 			strGreatWorkToolTip = strGreatWorkToolTip .. Game.GetGreatWorkTooltip(v.ArtIndex, v.iPlayer);
 		end
-		-- setting up tooltips
+
 		SwapWorkLineInstance.ArtWorkButton:SetToolTipString(strGreatWorkToolTip);
 		
-		-- Artifact
-		--  ArtifactIndex
-		--  ArtifactCreator
-		--  ArtifactEra
-		--  GreatWorks_Empty.dds
+
+
+
+
+
 		if (v.ArtifactIndex == -1) then
-			-- show empty art outline
+
 			SwapWorkLineInstance.WonderGreatArtifactWork:SetTexture("GreatWorks_Empty.dds");
-			-- hide civ symbol
+
 			SwapWorkLineInstance.ArtifactCivIconBG:SetHide(true);
 			SwapWorkLineInstance.ArtifactCivIconShadow:SetHide(true);
 			SwapWorkLineInstance.ArtifactCivIcon:SetHide(true);
 			SwapWorkLineInstance.ArtifactCivIconHighlight:SetHide(true);
-			-- empty text string
+
 			SwapWorkLineInstance.ArtifactEra:SetHide(true);
 			
 			strGreatWorkToolTip = Locale.Lookup("TXT_KEY_ARTIFACT_OTHERS_SLOT_EMPTY", Players[v.iPlayer]:GetCivilizationShortDescriptionKey());
 		else
-			-- show correct art image
+
 			SwapWorkLineInstance.WonderGreatArtifactWork:SetTexture("GreatWorks.dds");
-			-- display civ symbol
+
 			SwapWorkLineInstance.ArtifactCivIconBG:SetHide(false);
 			SwapWorkLineInstance.ArtifactCivIconShadow:SetHide(false);
 			SwapWorkLineInstance.ArtifactCivIcon:SetHide(false);
 			SwapWorkLineInstance.ArtifactCivIconHighlight:SetHide(false);
 			CivIconHookup(v.ArtifactCreator, 32, SwapWorkLineInstance.ArtifactCivIcon, SwapWorkLineInstance.ArtifactCivIconBG, SwapWorkLineInstance.ArtifactCivIconShadow, false, true, SwapWorkLineInstance.ArtifactCivIconHighlight);
 			
-			-- display era string
+
 			SwapWorkLineInstance.ArtifactEra:SetHide(false);
-			--SwapWorkLineInstance.ArtifactEra:SetText(Locale.Lookup(Game.GetGreatWorkEraAbbreviation(v.ArtifactIndex)));		
+
 			SwapWorkLineInstance.ArtifactEra:SetText(Locale.Lookup(Game.GetGreatWorkEraShort(v.ArtifactIndex)));		
 			
 			SwapWorkLineInstance.ArtifactWorkButton:RegisterCallback(Mouse.eLClick, function()
@@ -1844,51 +1844,51 @@ function DisplayOthersWorks ()
 			strGreatWorkToolTip = strGreatWorkToolTip .. "[NEWLINE][NEWLINE]"
 			strGreatWorkToolTip = strGreatWorkToolTip .. Game.GetGreatWorkTooltip(v.ArtifactIndex, v.iPlayer);
 		end
-		-- setting up tooltips
+
 		SwapWorkLineInstance.ArtifactWorkButton:SetToolTipString(strGreatWorkToolTip);
 		
-		---- Music
-		----  MusicIndex
-		----  MusicCreator
-		----  MusicEra	
-		----  GreatWorks_Music_Empty.dds	
-		--if (v.MusicIndex == -1) then
-			---- show empty art outline
-			--SwapWorkLineInstance.WonderGreatMusicWork:SetTexture("GreatWorks_Music_Empty.dds");
-			---- hide civ symbol
-			--SwapWorkLineInstance.MusicCivIconBG:SetHide(true);
-			--SwapWorkLineInstance.MusicCivIconShadow:SetHide(true);
-			--SwapWorkLineInstance.MusicCivIcon:SetHide(true);
-			--SwapWorkLineInstance.MusicCivIconHighlight:SetHide(true);
-			---- empty text string
-			--SwapWorkLineInstance.MusicEra:SetHide(true);
-			--
-			--strGreatWorkToolTip = Locale.Lookup("TXT_KEY_MUSIC_OTHERS_SLOT_EMPTY", Players[v.iPlayer]:GetCivilizationShortDescription());
-		--else
-			---- show correct art image
-			--SwapWorkLineInstance.WonderGreatMusicWork:SetTexture("GreatWorks_Music.dds");
-			---- display civ symbol
-			--SwapWorkLineInstance.MusicCivIconBG:SetHide(false);
-			--SwapWorkLineInstance.MusicCivIconShadow:SetHide(false);
-			--SwapWorkLineInstance.MusicCivIcon:SetHide(false);
-			--SwapWorkLineInstance.MusicCivIconHighlight:SetHide(false);
-			--CivIconHookup(v.MusicCreator, 32, SwapWorkLineInstance.MusicCivIcon, SwapWorkLineInstance.MusicCivIconBG, SwapWorkLineInstance.MusicCivIconShadow, false, true, SwapWorkLineInstance.MusicCivIconHighlight);
-			--
-			---- display era string
-			--SwapWorkLineInstance.MusicEra:SetHide(false);
-			----SwapWorkLineInstance.MusicEra:SetText(Locale.Lookup(Game.GetGreatWorkEraAbbreviation(v.MusicIndex)));		
-			--SwapWorkLineInstance.MusicEra:SetText(Locale.Lookup(Game.GetGreatWorkEraShort(v.MusicIndex)));		
-			--
-			--SwapWorkLineInstance.MusicWorkButton:RegisterCallback(Mouse.eLClick, function()
-				--SelectOthersWork(v.MusicIndex);
-			--end);			
-			--
-			--strGreatWorkToolTip = Locale.Lookup("TXT_KEY_MUSIC_OTHERS_SLOT", Players[v.iPlayer]:GetCivilizationShortDescription());
-			--strGreatWorkToolTip = strGreatWorkToolTip .. "[NEWLINE][NEWLINE]"
-			--strGreatWorkToolTip = strGreatWorkToolTip .. Game.GetGreatWorkTooltip(v.MusicIndex, v.iPlayer);
-		--end
-		---- setting up tooltips
-		--SwapWorkLineInstance.MusicWorkButton:SetToolTipString(strGreatWorkToolTip);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		
 	end
 		
@@ -1903,7 +1903,7 @@ function DisplaySwapGreatWorks()
 end
 
 function RefreshSwapGreatWorks()
-	CheckSwappedItems(); -- For if they've already been swapped
+	CheckSwappedItems();
 	DisplaySwapGreatWorks();
 end
 Events.SerialEventGreatWorksScreenDirty.Add(RefreshSwapGreatWorks);
@@ -1912,13 +1912,13 @@ g_Tabs["SwapGreatWorks"].RefreshContent = function()
 	DisplaySwapGreatWorks();
 end
 
----- END ----
--------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
 function RefreshCultureVictory()
 
 	local activePlayer = Players[Game.GetActivePlayer()];
@@ -2066,7 +2066,7 @@ function RefreshPlayerInfluence()
 		
 	g_InfluenceByPlayer.Players = {};
 	
-	-- Add pulldown options	
+
 	for iPlayer = 0, GameDefines.MAX_CIV_PLAYERS - 1 do	
 		local pPlayer = Players[iPlayer];
 		if (pPlayer:IsAlive() and not pPlayer:IsMinorCiv() and activeTeam:IsHasMet(pPlayer:GetTeam())) then
@@ -2251,7 +2251,7 @@ function SortAndDisplayPlayerInfluence()
         
     	local influencePercent = playerInfluence.InfluencePercent;	
 			
-		-- Set Civ Icon
+
 		CivIconHookup(playerInfluence.PlayerId, 64, instance.Icon, instance.IconBG, instance.IconShadow, true, true);
 		
 		CivIconHookup(g_iSelectedPlayerID, 32, instance.MyIcon, instance.MyIconBG, instance.MyIconShadow, true, true);
@@ -2260,8 +2260,8 @@ function SortAndDisplayPlayerInfluence()
 		local influencePercent = math.min(1, influencePercent);
 		local width, height = 64,64;	
 		
-		-- Rather than use the entire size of the control to display percentage, we're only using the area inside the icon frame.
-		-- So instead of 0-64, we're using 12-54.
+
+
 		local newHeight = 42 * (1 - influencePercent) + 12;
 		instance.IconDark:SetSizeVal(width, newHeight );
 		instance.IconDark:SetTextureSizeVal(width, newHeight);
@@ -2327,11 +2327,11 @@ g_Tabs["PlayerInfluence"].RefreshContent = function()
 	SortAndDisplayPlayerInfluence();
 end;
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
+
+
 function ShowHideHandler( bIsHide, bInitState )
 
-	-- Set Civ Icon
+
 	CivIconHookup( Game.GetActivePlayer(), 64, Controls.CivIcon, Controls.CivIconBG, Controls.CivIconShadow, false, true );
   
     if( not bInitState ) then

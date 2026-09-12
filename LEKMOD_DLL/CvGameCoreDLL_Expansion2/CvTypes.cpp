@@ -1,16 +1,16 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvTypes.h"
 
-//Static variables for types
 
-//ArtifactClasses
+
+
 GreatWorkArtifactClass s_eARTIFACT_ANCIENT_RUIN = NO_GREAT_WORK_ARTIFACT_CLASS;
 GreatWorkArtifactClass s_eARTIFACT_BARBARIAN_CAMP = NO_GREAT_WORK_ARTIFACT_CLASS;
 GreatWorkArtifactClass s_eARTIFACT_BATTLE_RANGED = NO_GREAT_WORK_ARTIFACT_CLASS;
@@ -18,12 +18,12 @@ GreatWorkArtifactClass s_eARTIFACT_BATTLE_MELEE = NO_GREAT_WORK_ARTIFACT_CLASS;
 GreatWorkArtifactClass s_eARTIFACT_RAZED_CITY = NO_GREAT_WORK_ARTIFACT_CLASS;
 GreatWorkArtifactClass s_eARTIFACT_WRITING = NO_GREAT_WORK_ARTIFACT_CLASS;
 
-//GreatWorkSlots
+
 GreatWorkSlotType s_eGREAT_WORK_SLOT_ART_ARTIFACT = NO_GREAT_WORK_SLOT;
 GreatWorkSlotType s_eGREAT_WORK_SLOT_LITERATURE = NO_GREAT_WORK_SLOT;
 GreatWorkSlotType s_eGREAT_WORK_SLOT_MUSIC = NO_GREAT_WORK_SLOT;
 
-//MissionTypes
+
 MissionTypes s_eMISSION_MOVE_TO = NO_MISSION;
 MissionTypes s_eMISSION_ROUTE_TO = NO_MISSION;
 MissionTypes s_eMISSION_MOVE_TO_UNIT = NO_MISSION;
@@ -94,7 +94,7 @@ unsigned int s_uiNUM_MISSION_TYPES = 0;
 void CvTypes::AcquireTypes(Database::Connection& db)
 {
 
-	//ArtifactType
+
 	{
 		typedef std::tr1::unordered_map<std::string, GreatWorkArtifactClass*> LookupTable;
 		LookupTable kArtifactTypeLookupTable;
@@ -132,7 +132,7 @@ void CvTypes::AcquireTypes(Database::Connection& db)
 		}
 	}
 
-	//GreatWorkSlots
+
 	{
 		typedef std::tr1::unordered_map<std::string, GreatWorkSlotType*> LookupTable;
 		LookupTable kTypeLookupTable;
@@ -167,7 +167,7 @@ void CvTypes::AcquireTypes(Database::Connection& db)
 		}
 	}
 
-	//MissionTypes
+
 	{
 		typedef std::tr1::unordered_map<std::string, MissionTypes*> LookupTable;
 		LookupTable kMissionTypesLookupTable;
@@ -272,58 +272,58 @@ void CvTypes::AcquireTypes(Database::Connection& db)
 }
 
 
-//ArtifactType
-//-------------------------------------------------------------------------
+
+
 const GreatWorkArtifactClass CvTypes::getARTIFACT_ANCIENT_RUIN()
 {
 	return s_eARTIFACT_ANCIENT_RUIN;
 }
-//-------------------------------------------------------------------------
+
 const GreatWorkArtifactClass CvTypes::getARTIFACT_BARBARIAN_CAMP()
 {
 	return s_eARTIFACT_BARBARIAN_CAMP;
 }
-//-------------------------------------------------------------------------
+
 const GreatWorkArtifactClass CvTypes::getARTIFACT_BATTLE_RANGED()
 {
 	return s_eARTIFACT_BATTLE_RANGED;
 }
-//-------------------------------------------------------------------------
+
 const GreatWorkArtifactClass CvTypes::getARTIFACT_BATTLE_MELEE()
 {
 	return s_eARTIFACT_BATTLE_MELEE;
 }
-//-------------------------------------------------------------------------
+
 const GreatWorkArtifactClass CvTypes::getARTIFACT_RAZED_CITY()
 {
 	return s_eARTIFACT_RAZED_CITY;
 }
-//-------------------------------------------------------------------------
+
 const GreatWorkArtifactClass CvTypes::getARTIFACT_WRITING()
 {
 	return s_eARTIFACT_WRITING;
 }
-//-------------------------------------------------------------------------
 
-//GreatWorkClass
+
+
 
 const GreatWorkSlotType CvTypes::getGREAT_WORK_SLOT_ART_ARTIFACT()
 {
 	return s_eGREAT_WORK_SLOT_ART_ARTIFACT;
 }
-//--------------------------------------------------------------------------
+
 const GreatWorkSlotType CvTypes::getGREAT_WORK_SLOT_LITERATURE()
 {
 	return s_eGREAT_WORK_SLOT_LITERATURE;
 }
-//--------------------------------------------------------------------------
+
 const GreatWorkSlotType CvTypes::getGREAT_WORK_SLOT_MUSIC()
 {
 	return s_eGREAT_WORK_SLOT_MUSIC;
 }
-//--------------------------------------------------------------------------
 
-//MissionTypes
+
+
 const MissionTypes CvTypes::getMISSION_MOVE_TO()
 {
 	return s_eMISSION_MOVE_TO;
@@ -576,4 +576,3 @@ const MissionTypes CvTypes::getMISSION_RETRAIN()
 	return s_eMISSION_RETRAIN;
 }
 #endif
-//-------------------------------------------------------------------------

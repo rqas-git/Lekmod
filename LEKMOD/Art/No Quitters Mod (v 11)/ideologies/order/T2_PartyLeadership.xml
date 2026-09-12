@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2/14/2016 11:18:17 PM -->
+
 <GameData>
 
-	<!-- change all Party Leadership yeilds from +1 to +3 -->
+
 	<Policy_CityYieldChanges>
 		<Update>
 			<Set Yield="2" />

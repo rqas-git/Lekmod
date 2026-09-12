@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 5/5/2016 8:24:28 AM -->
+
 <GameData>
 	
-	<!-- Remove Norwegian Ski Infantry -->
+
 	<Civilization_UnitClassOverrides>
 		<Delete UnitType="UNIT_DANISH_SKI_INFANTRY" />
 	</Civilization_UnitClassOverrides>
 	
-	<!-- New UU for Denmark: Longship (replaces Trireme) - Gets +2 Movement and transfers movement to embarked units on its tile at turn start. -->
+
 	<Units>
 		<Row>
 			<Class>UNITCLASS_TRIREME</Class>
@@ -146,7 +146,7 @@
 	</Language_RU_RU>
 	
 
-	<!-- Add Longship as new unique Danish unit -->
+
 	<Civilization_UnitClassOverrides>
 		<Row>
 			<CivilizationType>CIVILIZATION_DENMARK</CivilizationType>
@@ -155,7 +155,7 @@
 		</Row>
 	</Civilization_UnitClassOverrides>
 
-	<!-- New Promotion that transfers movement to embarked units -->
+
 	<UnitPromotions>
 		<Row>
 			<Type>PROMOTION_MOVEMENT_TO_EMBARKED</Type>
@@ -203,7 +203,7 @@
 		</Row>
 	</Language_RU_RU>
 	
-	<!-- Give Embarked Unit movement transfer promotion to Longship and prevent it from entering Deep Ocean -->
+
 	<Unit_FreePromotions>
 		<Row>
 			<UnitType>UNIT_DANISH_LONGSHIP</UnitType>

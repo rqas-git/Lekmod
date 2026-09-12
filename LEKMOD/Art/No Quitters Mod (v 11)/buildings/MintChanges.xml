@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/13/2015 6:39:25 PM -->
+
 <GameData>
 	
-	<!-- Mint now works with Copper as well. -->
+
 	<Building_LocalResourceOrs>
 		<Row>
 			<BuildingType>BUILDING_MINT</BuildingType>

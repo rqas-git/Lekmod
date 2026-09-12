@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 3/29/2015 12:00:08 PM -->
+
 <GameData>
 
-	<!-- Create new unit type -->
+
 	<UnitCombatInfos>
 		<Row>
 			<Type>UNITCOMBAT_MOUNTED_RANGED</Type>
@@ -30,7 +30,7 @@
 		</Row>
 	</Language_RU_RU>
 
-	<!-- Update all Mounted Ranged units to the new type -->
+
 	<Units>
 		<Update>
 			<Set CombatClass="UNITCOMBAT_MOUNTED_RANGED" />
@@ -58,7 +58,7 @@
 		</Update>
 	</Units>
 
-	<!-- Add Ranged promotion line to this unit type -->
+
 	<UnitPromotions_UnitCombats>
 		<Row>
 			<PromotionType>PROMOTION_EMBARKATION</PromotionType>
@@ -148,15 +148,15 @@
 			<PromotionType>PROMOTION_STATUE_ZEUS</PromotionType>
 			<UnitCombatType>UNITCOMBAT_MOUNTED_RANGED</UnitCombatType>
 		</Row>
-		<!-- This is the promotion from the Discipline policy in Honor -->
+
 		<Row>
 			<PromotionType>PROMOTION_ADJACENT_BONUS</PromotionType>
 			<UnitCombatType>UNITCOMBAT_MOUNTED_RANGED</UnitCombatType>
 		</Row>
 	</UnitPromotions_UnitCombats>
 
-	<!-- Apply VS-Mounted promotion effect -->
-	<!-- NOTE: Formation and Ambush are merged in /unit_promotions/MergeAmbushAndFormation.xml and loaded before this file. -->
+
+
 	<UnitPromotions_UnitCombatMods>
 		<Row>
 			<PromotionType>PROMOTION_FORMATION_1</PromotionType>
@@ -168,7 +168,7 @@
 			<UnitCombatType>UNITCOMBAT_MOUNTED_RANGED</UnitCombatType>
 			<Modifier>33</Modifier>
 		</Row>
-		<!-- Remove the two Ambush Formation promotion adjustments below if that promotion is removed from the game. -->
+
 		<Row>
 			<PromotionType>PROMOTION_AMBUSH_FORMATION_1</PromotionType>
 			<UnitCombatType>UNITCOMBAT_MOUNTED_RANGED</UnitCombatType>
@@ -179,7 +179,7 @@
 			<UnitCombatType>UNITCOMBAT_MOUNTED_RANGED</UnitCombatType>
 			<Modifier>33</Modifier>
 		</Row>
-		<!-- End Ambush Formation promotions. -->
+
 		<Row>
 			<PromotionType>PROMOTION_ANTI_MOUNTED_I</PromotionType>
 			<UnitCombatType>UNITCOMBAT_MOUNTED_RANGED</UnitCombatType>
@@ -197,7 +197,7 @@
 		</Row>
 	</UnitPromotions_UnitCombatMods>
 	
-	<!-- Apply Temple of Artemis / Stables production modifier -->
+
 	<Building_UnitCombatProductionModifiers>
 		<Row>
 			<BuildingType>BUILDING_STABLE</BuildingType>
@@ -216,7 +216,7 @@
 		</Row>
 	</Building_UnitCombatProductionModifiers>
 
-	<!-- Apply Ducal Stable experience boost -->
+
 	<Building_UnitCombatFreeExperiences>
 		<Row>
 			<BuildingType>BUILDING_DUCAL_STABLE</BuildingType>
@@ -225,7 +225,7 @@
 		</Row>
 	</Building_UnitCombatFreeExperiences>
 
-	<!-- Apply American/Songhai/Shoshone/Mongol/new China traits -->
+
 	<Trait_FreePromotionUnitCombats>
 		<Row>
 			<TraitType>TRAIT_RIVER_EXPANSION</TraitType>

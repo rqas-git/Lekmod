@@ -1,27 +1,27 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
  
 #ifndef CIV5_POLICY_CLASSES_H
 #define CIV5_POLICY_CLASSES_H
 
-// Forward definitions
+
 class CvPolicyAI;
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvPolicyEntry
-//!  \brief		A single entry in the policy tree
-//
-//!  Key Attributes:
-//!  - Used to be called CvPolicyInfo
-//!  - Populated from XML\GameInfo\CIV5PolicyInfos.xml
-//!  - Array of these contained in CvPolicyXMLEntries class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvPolicyEntry: public CvBaseInfo
 {
 public:
@@ -30,7 +30,7 @@ public:
 
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
 
-	// Accessor Functions (Non-Arrays)
+
 	int GetCultureCost() const;
 	int GetGridX() const;
 	int GetGridY() const;
@@ -47,7 +47,7 @@ public:
 	int GetCultureFromKills() const;
 	int GetCultureFromBarbarianKills() const;
 	int GetGoldFromKills() const;
-	int GetScienceFromKills() const; // NQMP GJS - Honor Finisher
+	int GetScienceFromKills() const;
 	int GetEmbarkedExtraMoves() const;
 #ifdef LEKMOD_POLICIES_GLOBAL_MOVE_CHANGE
 	int GetGlobalMoveChange() const;
@@ -64,7 +64,7 @@ public:
 #ifdef NQ_EXTRA_SPIES_FROM_POLICIES
 	int GetNumExtraSpies() const;
 #endif
-#if defined(MISC_CHANGES) // Extra League Votes
+#if defined(MISC_CHANGES)
 	int GetNumExtraLeagueVotes() const;
 	int GetNumTradeRouteBonus() const;
 #endif
@@ -113,7 +113,7 @@ public:
 	int GetPlotCultureCostModifier() const;
 	int GetPlotCultureExponentModifier() const;
 	int GetNumCitiesPolicyCostDiscount() const;
-	int GetNumCitiesResearchCostDiscount() const; // NQMP GJS - new Dictatorship of the Proletariat i.e. Communism
+	int GetNumCitiesResearchCostDiscount() const;
 	int GetGarrisonedCityRangeStrikeModifier() const;
 	int GetUnitPurchaseCostModifier() const;
 	int GetBuildingPurchaseCostModifier() const;
@@ -154,7 +154,7 @@ public:
 	int GetSharedIdeologyTourismModifier() const;
 	int GetLandTradeRouteGoldChange() const;
 	int GetSeaTradeRouteGoldChange() const;
-	int GetInternalTradeRouteGoldChange() const; // NQMP GJS - Silk Road
+	int GetInternalTradeRouteGoldChange() const;
 	int GetSharedIdeologyTradeGoldChange() const;
 	int GetRiggingElectionModifier() const;
 	int GetMilitaryUnitGiftExtraInfluence() const;
@@ -211,18 +211,18 @@ public:
 	bool IsMinorGreatPeopleAllies() const;
 	bool IsMinorScienceAllies() const;
 	bool IsMinorResourceBonus() const;
-	int GetMinorMilitaryNumExtraUnitsToGift() const; // NQMP GJS - Patronage Finisher
-	int GetCityStateBonusModifier() const; // NQMP GJS - Patronage Finisher
-	int GetExtraTerritoryClaim() const; // NQMP GJS - Colonialism
-	int GetExtraTourismPerGreatWork() const; // NQMP GJS - Cultural Exchange
-	int GetTourismPerWonder() const; // NQMP GJS - Flourishing of the Arts
+	int GetMinorMilitaryNumExtraUnitsToGift() const;
+	int GetCityStateBonusModifier() const;
+	int GetExtraTerritoryClaim() const;
+	int GetExtraTourismPerGreatWork() const;
+	int GetTourismPerWonder() const;
 #ifdef NQ_TOURISM_PER_CITY
 	int GetTourismPerCity() const;
 #endif
 #ifdef NQ_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER_FROM_POLICIES
 	int GetIdeologyPressureUnhappinessModifier() const;
 #endif
-	int GetProductionFromGarrison() const; // NQMP GJS - Military Caste
+	int GetProductionFromGarrison() const;
 	int GetPolicyBranchType() const;
 	int GetNumExtraBranches() const;
 	int GetHappinessToCulture() const;
@@ -234,9 +234,9 @@ public:
 #ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
 	int GetGoldToScience() const;
 #endif
-	int GetNumCitiesFreeAestheticsSchools() const; // NQMP GJS - add support for NumCitiesFreeAestheticsSchools
-	int GetNumCitiesFreePietyGardens() const; // LEKMOD - Piety Gardens
-	int GetNumCitiesFreeWalls() const; // NQMP GJS - New Oligarchy add support for NumCitiesFreeWalls
+	int GetNumCitiesFreeAestheticsSchools() const;
+	int GetNumCitiesFreePietyGardens() const;
+	int GetNumCitiesFreeWalls() const;
 	int GetNumCitiesFreeCultureBuilding() const;
 	int GetNumCitiesFreeFoodBuilding() const;
 	bool IsHalfSpecialistUnhappiness() const;
@@ -281,7 +281,7 @@ public:
 	const char* GetWeLoveTheKing();
 	void SetWeLoveTheKingKey(const char* szVal);
 
-	// Accessor Functions (Arrays)
+
 	int GetPrereqOrPolicies(int i) const;
 	int GetPrereqAndPolicies(int i) const;
 	int GetPolicyDisables(int i) const;
@@ -375,7 +375,7 @@ private:
 	int m_iCultureFromKills;
 	int m_iCultureFromBarbarianKills;
 	int m_iGoldFromKills;
-	int m_iScienceFromKills; // NQMP GJS - Honor Finisher	
+	int m_iScienceFromKills;
 	int m_iEmbarkedExtraMoves;
 #ifdef LEKMOD_POLICIES_GLOBAL_MOVE_CHANGE
 	int m_iGlobalMoveChange;
@@ -392,7 +392,7 @@ private:
 #ifdef NQ_EXTRA_SPIES_FROM_POLICIES
 	int m_iNumExtraSpies;
 #endif
-#if defined(MISC_CHANGES) // Private member variables
+#if defined(MISC_CHANGES)
 	int m_iNumExtraLeagueVotes;
 	int m_iNumTradeRouteBonus;
 #endif
@@ -441,7 +441,7 @@ private:
 	int m_iPlotCultureCostModifier;
 	int m_iPlotCultureExponentModifier;
 	int m_iNumCitiesPolicyCostDiscount;
-	int m_iNumCitiesResearchCostDiscount; // NQMP GJS - new Dictatorship of the Proletariat i.e. Communism
+	int m_iNumCitiesResearchCostDiscount;
 	int m_iGarrisonedCityRangeStrikeModifier;
 	int m_iUnitPurchaseCostModifier;
 	int m_iBuildingPurchaseCostModifier;
@@ -479,7 +479,7 @@ private:
 	int m_iSharedIdeologyTourismModifier;
 	int m_iLandTradeRouteGoldChange;
 	int m_iSeaTradeRouteGoldChange;
-	int m_iInternalTradeRouteGoldChange; // NQMP GJS - Silk Road
+	int m_iInternalTradeRouteGoldChange;
 	int m_iSharedIdeologyTradeGoldChange;
 	int m_iRiggingElectionModifier;
 	int m_iMilitaryUnitGiftExtraInfluence;
@@ -535,11 +535,11 @@ private:
 	bool m_bMinorGreatPeopleAllies;
 	bool m_bMinorScienceAllies;
 	bool m_bMinorResourceBonus;
-	int m_iMinorMilitaryNumExtraUnitsToGift; // NQMP GJS - Patronage Finisher
-	int m_iCityStateBonusModifier; // NQMP GJS - Patronage Finisher
-	int m_iExtraTerritoryClaim; // NQMP GJS - Colonialism
-	int m_iExtraTourismPerGreatWork; // NQMP GJS - Cultural Exchange
-	int m_iTourismPerWonder; // NQMP GJS - Flourishing of the Arts
+	int m_iMinorMilitaryNumExtraUnitsToGift;
+	int m_iCityStateBonusModifier;
+	int m_iExtraTerritoryClaim;
+	int m_iExtraTourismPerGreatWork;
+	int m_iTourismPerWonder;
 #ifdef NQ_TOURISM_PER_CITY
 	int m_iTourismPerCity;
 #endif
@@ -547,7 +547,7 @@ private:
 	int m_iIdeologyPressureUnhappinessModifier;
 #endif
 
-	int m_iProductionFromGarrison; // NQMP GJS - Military Caste
+	int m_iProductionFromGarrison;
 	int m_iFreeSpecialist;
 	int m_iMaxConscript;
 	int m_iPolicyBranchType;
@@ -564,9 +564,9 @@ private:
 #ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
 	int m_iGoldToScience;
 #endif
-	int m_iNumCitiesFreeAestheticsSchools; // NQMP GJS - add support for NumCitiesFreeAestheticsSchools
+	int m_iNumCitiesFreeAestheticsSchools;
 	int m_iNumCitiesFreePietyGardens;
-	int m_iNumCitiesFreeWalls; // NQMP GJS - New Oligarchy add support for NumCitiesFreeWalls
+	int m_iNumCitiesFreeWalls;
 	int m_iNumCitiesFreeCultureBuilding;
 	int m_iNumCitiesFreeFoodBuilding;
 
@@ -610,7 +610,7 @@ private:
 
 	BuildingTypes m_eFreeBuildingOnConquest;
 
-	// Arrays
+
 #ifdef LEKMOD_UNITCOMBAT_FREE_PROMOTION
 	int** m_FreePromotionUnitCombats;
 #else
@@ -661,7 +661,7 @@ private:
 #if defined(LEKMOD_EXPERIMENTAL_CHANGES)
 	int* m_piWorldWonderYieldChanges;
 #endif
-//	bool* m_pabHurry;
+
 	bool* m_pabSpecialistValid;
 #ifdef AUI_DATABASE_UTILITY_PROPER_2D_ALLOCATION_AND_DESTRUCTION
 	std::pair<int**, size_t> m_ppiImprovementYieldChanges;
@@ -713,11 +713,11 @@ private:
 	int* m_piFlavorValue;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvPolicyBranchEntry
-//!  \brief		A branch that encompasses Policies
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
 class CvPolicyBranchEntry: public CvBaseInfo
 {
 public:
@@ -726,7 +726,7 @@ public:
 
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
 
-	// Accessor Functions (Non-Arrays)
+
 	int GetEraPrereq() const;
 	int GetFreePolicy() const;
 	int GetFreeFinishingPolicy() const;
@@ -740,7 +740,7 @@ public:
 	bool IsDelayWhenNoCityStates() const;
 	bool IsDelayWhenNoScience() const;
 	CvString GetIconString() const { return m_szIconString; }
-	// Accessor Functions (Arrays)
+
 	int GetPolicyBranchDisables(int i) const;
 
 private:
@@ -757,28 +757,28 @@ private:
 	bool m_bDelayWhenNoCityStates;
 	bool m_bDelayWhenNoScience;
 	CvString m_szIconString;
-	// Arrays
+
 	int* m_piPolicyBranchDisables;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvPolicyXMLEntries
-//!  \brief		Game-wide information about the policy tree
-//
-//! Key Attributes:
-//! - Plan is it will be contained in CvGameRules object within CvGame class
-//! - Populated from XML\GameInfo\CIV5PolicyInfos.xml
-//! - Contains an array of CvPolicyEntry from the above XML file
-//! - One instance for the entire game
-//! - Accessed heavily by CvPlayerPolicies class (which stores the policy state for 1 player)
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
 class CvPolicyXMLEntries
 {
 public:
 	CvPolicyXMLEntries(void);
 	~CvPolicyXMLEntries(void);
 
-	// Policy functions
+
 	std::vector<CvPolicyEntry*>& GetPolicyEntries();
 #ifdef AUI_WARNING_FIXES
 	uint GetNumPolicies() const;
@@ -790,7 +790,7 @@ public:
 
 	void DeletePoliciesArray();
 
-	// Policy Branch functions
+
 	std::vector<CvPolicyBranchEntry*>& GetPolicyBranchEntries();
 #ifdef AUI_WARNING_FIXES
 	uint GetNumPolicyBranches() const;
@@ -896,23 +896,23 @@ enum PolicyModifierType
     POLICYMOD_SHARED_RELIGION_TOURISM_MODIFIER,
     POLICYMOD_TRADE_ROUTE_TOURISM_MODIFIER,
 	POLICYMOD_OPEN_BORDERS_TOURISM_MODIFIER,
-	POLICYMOD_SCIENCE_FROM_KILLS, // NQMP GJS - Honor Finisher
-	POLICYMOD_MINOR_MILITARY_NUM_EXTRA_UNITS_TO_GIFT, // NQMP GJS - Patronage Finisher
+	POLICYMOD_SCIENCE_FROM_KILLS,
+	POLICYMOD_MINOR_MILITARY_NUM_EXTRA_UNITS_TO_GIFT,
 #if !defined(LEKMOD_FIX_PATRO_FOOD)
-	POLICYMOD_CITY_STATE_BONUS_MODIFIER, // NQMP GJS - Patronage Finisher
+	POLICYMOD_CITY_STATE_BONUS_MODIFIER,
 #endif
-	POLICYMOD_EXTRA_TERRITORY_CLAIM, // NQMP GJS - Colonialism
-	POLICYMOD_PRODUCTION_FROM_GARRISON, // NQMP GJS - Military Caste
-	POLICYMOD_EXTRA_TOURISM_PER_GREAT_WORK, // NQMP GJS - Cultural Exchange
-	POLICYMOD_TOURISM_PER_WONDER, // NQMP GJS - Flourishing of the Arts
+	POLICYMOD_EXTRA_TERRITORY_CLAIM,
+	POLICYMOD_PRODUCTION_FROM_GARRISON,
+	POLICYMOD_EXTRA_TOURISM_PER_GREAT_WORK,
+	POLICYMOD_TOURISM_PER_WONDER,
 #ifdef NQ_TOURISM_PER_CITY
 	POLICYMOD_TOURISM_PER_CITY,
 #endif
 #ifdef NQ_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER_FROM_POLICIES
 	POLICYMOD_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER,
 #endif
-	POLICYMOD_INTERNAL_TRADE_GOLD_CHANGE, // NQMP GJS - Silk Road
-#if defined(MISC_CHANGES) // POLICYMOD enum
+	POLICYMOD_INTERNAL_TRADE_GOLD_CHANGE,
+#if defined(MISC_CHANGES)
 	POLICYMOD_NUM_TRADE_ROUTES_BONUS,
 #endif
 #ifdef LEKMOD_POLICIES_GLOBAL_MOVE_CHANGE
@@ -922,15 +922,15 @@ enum PolicyModifierType
 #endif
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvPlayerPolicies
-//!  \brief		Information about the policies of a single player
-//
-//!  Key Attributes:
-//!  - Plan is it will be contained in CvPlayerState object within CvPlayer class
-//!  - One instance for each civ (player or AI)
-//!  - Accessed by any class that needs to check policy state
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvPlayerPolicies: public CvFlavorRecipient
 {
 public:
@@ -942,12 +942,12 @@ public:
 	void Read(FDataStream& kStream);
 	void Write(FDataStream& kStream) const;
 
-	// Flavor recipient required function
+
 	void FlavorUpdate();
 
 	CvPlayer* GetPlayer();
 
-	// Accessor functions
+
 	bool HasPolicy(PolicyTypes eIndex) const;
 #ifdef LEKMOD_NEW_LUA_METHODS
 	bool HasPolicyBranch(PolicyBranchTypes eIndex) const;
@@ -957,7 +957,7 @@ public:
 	int GetNumPoliciesOwnedInBranch(PolicyBranchTypes eBranch) const;
 	CvPolicyXMLEntries* GetPolicies() const;
 
-	// Functions to return benefits from policies
+
 	int GetNumericModifier(PolicyModifierType eType);
 #ifdef NQ_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER_FROM_POLICIES
 	int GetIdeologyPressureUnhappinessMultiplierTimes100();
@@ -1011,12 +1011,12 @@ public:
 	int GetWorldWonderYieldChange(YieldTypes eYield) const;
 #endif
 
-	// Functions to give current player status with respect to policies
+
 	int GetNextPolicyCost();
 	bool CanAdoptPolicy(PolicyTypes eIndex, bool bIgnoreCost = false) const;
 	int GetNumPoliciesCanBeAdopted();
 
-	// Policy Branch Stuff
+
 	void DoUnlockPolicyBranch(PolicyBranchTypes eBranchType);
 	bool CanUnlockPolicyBranch(PolicyBranchTypes eBranchType);
 
@@ -1027,17 +1027,17 @@ public:
 	void SetPolicyBranchUnlocked(PolicyBranchTypes eBranchType, bool bNewValue, bool bRevolution);
 	int GetNumPolicyBranchesUnlocked() const;
 
-	// Blocked branches (because of other branch choices)
+
 	void DoSwitchToPolicyBranch(PolicyBranchTypes eBranchType);
 	void SetPolicyBranchBlocked(PolicyBranchTypes eBranchType, bool bValue);
 	bool IsPolicyBranchBlocked(PolicyBranchTypes eBranchType) const;
 	bool IsPolicyBlocked(PolicyTypes eType) const;
 
-	// Ideology change
+
 	void DoSwitchIdeologies(PolicyBranchTypes eBranchType);
 	void ClearPolicyBranch(PolicyBranchTypes eBranchType);
 
-	// Finished branches
+
 	int GetNumPolicyBranchesFinished() const;
 	void SetPolicyBranchFinished(PolicyBranchTypes eBranchType, bool bValue);
 	bool IsPolicyBranchFinished(PolicyBranchTypes eBranchType) const;
@@ -1050,7 +1050,7 @@ public:
 	int GetNumExtraBranches() const;
 	void ChangeNumExtraBranches(int iChange);
 
-	// Below is used to determine the "title" for the player
+
 	void DoNewPolicyPickedForHistory(PolicyTypes ePolicy);
 	PolicyBranchTypes GetDominantPolicyBranchForTitle() const;
 
@@ -1061,13 +1061,13 @@ public:
 	PolicyBranchTypes GetBranchPicked3() const;
 	void SetBranchPicked3(PolicyBranchTypes eBranch);
 
-	// functions to deal with one-shot effects
+
 	bool HasOneShotPolicyFired(PolicyTypes eIndex) const;
 	void SetOneShotPolicyFired(PolicyTypes eIndex, bool bFired);
 	bool HaveOneShotFreeUnitsFired(PolicyTypes eIndex) const;
 	void SetOneShotFreeUnitsFired(PolicyTypes eIndex, bool bFired);
 
-	// IDEOLOGY
+
 	PolicyBranchTypes GetLateGamePolicyTree() const;
 	bool IsTimeToChooseIdeology() const;
 	std::vector<PolicyTypes> GetAvailableTenets(PolicyBranchTypes eBranch, int iLevel);
@@ -1075,14 +1075,14 @@ public:
 	int GetNumTenetsOfLevel(PolicyBranchTypes eBranch, int iLevel) const;
 	bool CanGetAdvancedTenet() const;
 
-	// Functions to process AI each turn
+
 	void DoPolicyAI();
 	void DoChooseIdeology();
 
 private:
 	void AddFlavorAsStrategies(int iPropagatePercent);
 
-	// Logging functions
+
 	void LogFlavors(FlavorTypes eFlavor = NO_FLAVOR);
 
 	bool* m_pabHasPolicy;
@@ -1118,4 +1118,4 @@ namespace PolicyHelpers
 	int GetNumFreePolicies(PolicyBranchTypes eBranch);
 }
 
-#endif //CIV5_POLICY_CLASSES_H
+#endif

@@ -1,13 +1,13 @@
--- Author: EnormousApplePie
+
 include("Lekmod_utilities.lua")
 include("PlotIterators.lua")
 
 local this_civ = GameInfoTypes["CIVILIZATION_TONGA"]
 local is_active = LekmodUtilities:is_civilization_active(this_civ)
 
-------------------------------------------------------------------------------------------------------------------------
--- Tonga UA. Reveal nearby islands and explore nearby coastline at the start of the game.
-------------------------------------------------------------------------------------------------------------------------
+
+
+
 function lekmod_tonga_explore(player)
 
    local team = player:GetTeam()
@@ -57,7 +57,7 @@ function lekmod_tonga_ua()
    end
 
 end
-------------------------------------------------------------------------------------------------------------------------
+
 if is_active then
    Events.SequenceGameInitComplete.Add(lekmod_tonga_ua)
 end

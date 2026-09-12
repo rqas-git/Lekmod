@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- edited with XMLSPY v2004 rel. 2 U (http://www.xmlspy.com) by Anton Strenger (Firaxis Games) -->
-<!-- edit: MP voting system for vanilla UI -->
+
+
 <Context>
-	<!--=======================================================================================================================-->
-	<!-- CityState Instance -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="CityStateItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="CityStateContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -25,9 +25,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Meet A City State  -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="MetCityStateItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="MetCityStateContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -44,9 +44,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- CityStateRequest -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="CityStateRequestItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="CityStateRequestContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -66,9 +66,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Someone else MADE PEACE with someone  -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="PeaceOtherItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="PeaceOtherContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -97,9 +97,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Someone else DECLARED WAR with someone  -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="WarOtherItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="WarOtherContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -128,9 +128,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- EnemyInTerritory -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="EnemyInTerritoryItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="EnemyInTerritoryContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -148,9 +148,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Generic Notification Item -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="GenericItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="GenericContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -166,9 +166,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Pantheon Notification Item -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="PantheonFoundedItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="PantheonFoundedContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -184,9 +184,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Religion Notification Item -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="ReligionFoundedItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="ReligionFoundedContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -292,9 +292,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Found Ancient Ruins 005-->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="AncientRuinsItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="AncientRuinsContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -311,9 +311,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!--Found a Barbarian Encampment 006-->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="BarbarianItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="BarbarianContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -330,9 +330,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Buy a New Tile -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="BuyTileItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="BuyTileContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -347,9 +347,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- City is has lost 1 Citizen-->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="CityGrowthContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -366,9 +366,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- City is Starving-->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="StarvingItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="StarvingContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -385,9 +385,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- City Has Grown 003-->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="CityGrowthItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="CityGrowthContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -404,9 +404,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- City Name: Acquired a New Tile -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="CityTileItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="CityTileContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -420,9 +420,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Wonder Built -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="WonderConstructedItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="WonderConstructedContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -443,9 +443,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Great Work Built -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="GreatWorkItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="GreatWorkContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -465,9 +465,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Culture Victory Positive Notification -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="CultureVictoryPositiveItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="CultureVictoryPositiveContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -483,9 +483,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Culture Victory Negative Notification -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="CultureVictoryNegativeItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="CultureVictoryNegativeContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -501,9 +501,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Ideology Chosen -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="IdeologyChosenItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="IdeologyChosenContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -519,9 +519,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Diplomat Ejected  -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="DiplomatItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="DiplomatContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -537,9 +537,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Project Built -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="ProjectConstructedItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="ProjectConstructedContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -560,9 +560,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Golden Age -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="GoldenAgeItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="GoldenAgeContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -579,9 +579,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Golden Age Complete -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="GoldenAgeComplete">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="GoldenAgeCompleteContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -599,9 +599,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- PEACE -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="PeaceItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="PeaceContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -620,9 +620,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- War -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="WarItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="WarContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -638,15 +638,15 @@
 					<FlipAnim Size="64,64" Offset="0,0" Anchor="C,C" Columns="8" Speed="20" Pause="0" StepSize="64,64" FrameCount="31" Texture="assets\UI\Art\Notification\UnitAttackAnimation.dds"/>
 					<Label Anchor="C,C" Offset="0,0" String="" Font="TwCenMT20" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="WarCount"/>
 				</Button>
-				<!--
-    <FlipAnim Size="64,64" Offset="0,0" Anchor="C,C" Columns="8" Speed="20" Pause="0" StepSize="64,64" FrameCount="31" Texture="assets\UI\Art\Notification\NotificationWar.dds" />
-    -->
+
+
+
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Victory Trophy -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="VictoryItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="VictoryContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -664,9 +664,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Unit to be Promoted  -->
-	<!--=======================================================================================================================-->\
+
+
+	                                                                                                                              \
 
 	<Instance Name="UnitPromotedItem">
 		<Container ID="UnitPromotedContainer" Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ConsumeMouseButton="1">
@@ -684,9 +684,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Unit Killed -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="UnitDiedItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="UnitDiedContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -703,9 +703,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Discovered Happy Resource  -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="LuxuryResourceItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="LuxuryResourceContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -723,9 +723,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Discovered Strategic Resource  -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="StrategicResourceItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="StrategicResourceContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -743,9 +743,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Discovered Tech  -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="TechAwardItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="TechAwardContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -761,9 +761,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- New Era: AI Player  -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="OtherPlayerNewEraItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="OtherPlayerNewEraContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -779,9 +779,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- New Trade Route  -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="TradeRouteItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="TradeRouteContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -797,9 +797,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Trade Route Broken -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="TradeRouteBrokenItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="TradeRouteBrokenContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -815,9 +815,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- City Can Bombard  -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="CityCanBombardItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="CityCanBombardContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -833,9 +833,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Discovered Bonus Resource  -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="BonusResourceItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="BonusResourceContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -852,9 +852,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Capital Recovered  -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="CapitalRecoveredItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="CapitalRecoveredContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -872,9 +872,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Capital Lost  -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="CapitalLostItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="CapitalLostContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -892,9 +892,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Great Person  -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="GreatPersonItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="GreatPersonContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -910,9 +910,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- DiplomacyVote  -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="DiplomacyVoteItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="DiplomacyVoteContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -930,9 +930,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Diplomacy  -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="DiplomacyItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="DiplomacyContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -949,9 +949,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Diplomacy Check -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="DiplomacyCheckItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="DiplomacyCheckContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -969,9 +969,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Diplomacy X -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="DiplomacyXItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="DiplomacyXContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -989,9 +989,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Natural Wonder -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="NaturalWonderItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="NaturalWonderContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -1007,9 +1007,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Spy-->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="SpyItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="SpyContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -1025,9 +1025,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- New Spy-->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="NewSpyItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="NewSpyContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -1043,9 +1043,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Spy Cannot Steal -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="SpyCannotStealItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="SpyCannotStealContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -1062,9 +1062,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Spy Killed A Spy-->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="SpyKilledASpyItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="SpyKilledASpyContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -1080,9 +1080,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Spy Was Killed-->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="SpyWasKilledItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="SpyWasKilledContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -1098,9 +1098,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- New Social Policy-->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="SocialPolicyItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="SocialPolicyContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -1117,9 +1117,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- CityStateBuyout-->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="CityStateBuyoutItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="CityStateBuyoutContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -1135,9 +1135,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- League Voting Done-->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="LeagueVotingDoneItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="LeagueVotingDoneContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -1153,9 +1153,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- League Voting Soon-->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="LeagueVotingSoonItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="LeagueVotingSoonContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -1171,9 +1171,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Player Reconnected -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="PlayerReconnectedItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="PlayerReconnectedContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -1189,9 +1189,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Player Disconnected -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="PlayerDisconnectedItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="PlayerDisconnectedContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -1207,9 +1207,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Sequential Turns -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="SequentialTurnsItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="SequentialTurnsContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -1225,9 +1225,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Simultaneous Turns -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="SimultaneousTurnsItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="SimultaneousTurnsContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -1243,9 +1243,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Host Migration -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="HostMigrationItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="HostMigrationContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -1261,9 +1261,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Player Connecting -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="PlayerConnectingItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="PlayerConnectingContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -1279,9 +1279,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- Player Kicked -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="PlayerKickedItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="PlayerKickedContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -1297,9 +1297,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- League Project Complete-->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="LeagueProjectCompleteItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="LeagueProjectCompleteContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -1315,9 +1315,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- League Project Progress-->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="LeagueProjectProgressItem">
 		<Container Anchor="R,C" Size="80,80" Offset="0,0" Hidden="0" ID="LeagueProjectProgressContainer" ConsumeMouseButton="1">
 			<SlideAnim Anchor="L,T" Style="NotificationSlide" ID="NotificationSlide">
@@ -1333,9 +1333,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- MP irr/cc/scrap proposal -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="MPVotingSystemProposalItem">
 		<Container ID="MPVotingSystemProposalContainer" Anchor="R,C" Size="80,80" ConsumeMouseButton="1">
 			<SlideAnim ID="NotificationSlide" Anchor="L,T" Style="NotificationSlide">
@@ -1356,9 +1356,9 @@
 			</SlideAnim>
 		</Container>
 	</Instance>
-	<!--=======================================================================================================================-->
-	<!-- MP proposal result -->
-	<!--=======================================================================================================================-->
+
+
+
 	<Instance Name="MPVotingSystemResultItem">
 		<Container ID="MPVotingSystemResultContainer" Anchor="R,C" Size="80,80" ConsumeMouseButton="1">
 			<SlideAnim ID="NotificationSlide" Anchor="L,T" Style="NotificationSlide">
@@ -1377,7 +1377,7 @@
 	
 	<Stack Anchor="R,B" StackGrowth="Top" Padding="0" Offset="0,246" ID="OuterStack">
 		<Stack Anchor="R,B" StackGrowth="Top" ID="BigStack">
-			<!-- Notification Production  NotificationClearBase-->
+
 			<Button Anchor="R,C" Offset="0,0" Size="100,100" StateOffsetIncrement="0,0" Texture="assets\UI\Art\Notification\NotificationIconsFrame.dds" ID="ProductionButton" Hidden="1" ConsumeMouseOver="1">
 				<Image Anchor="C,C" Size="128,128" Texture="assets\UI\Art\Notification\NotificationIconsProduction.dds"/>
 				<AlphaAnim Offset="0,0" Anchor="C,C" Size="128.128" Texture="assets\UI\Art\Notification\NotificationProductionGlow2.dds" Pause="0" Cycle="Bounce" Speed=".75" AlphaStart="0.6" AlphaEnd="0"/>
@@ -1386,7 +1386,7 @@
 				</ShowOnMouseOver>
 				<Label Anchor="C,C" Offset="0,0" String="" Font="TwCenMT20" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="ProductionCount"/>
 			</Button>
-			<!-- Notification Science -->
+
 			<Button Anchor="R,C" Offset="0,0" Size="100,100" StateOffsetIncrement="0,0" Texture="assets\UI\Art\Notification\NotificationIconsFrame.dds" ID="TechButton" Hidden="1" ConsumeMouseOver="1">
 				<ShowOnMouseOver>
 					<Image Anchor="C,C" Size="128,128" Texture="assets\UI\Art\Notification\NotificationScienceGlow.dds"/>
@@ -1396,7 +1396,7 @@
 				<ScrollAnim Offset="0,0" Size="100.100" Speed=".3" Texture="assets\UI\Art\Notification\NotificationScienceBubbles.dds" MaskTexture="assets\UI\Art\Notification\NotificationScienceMask.dds"/>
 				<Label Anchor="C,C" Offset="0,0" String="" Font="TwCenMT20" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="ScienceCount"/>
 			</Button>
-			<!-- Notification Free Tech -->
+
 			<Button Anchor="R,C" Offset="0,0" Size="100,100" Texture="assets\UI\Art\Notification\NotificationIconsFrame.dds" ID="FreeTechButton" Hidden="1" ConsumeMouseOver="1">
 				<ShowOnMouseOver>
 					<Image Anchor="C,C" Size="128,128" Texture="assets\UI\Art\Notification\NotificationScienceGlow.dds"/>
@@ -1406,7 +1406,7 @@
 				<ScrollAnim Offset="0,0" Size="100.100" Speed=".3" Texture="assets\UI\Art\Notification\Bubbles256Orange.dds" MaskTexture="assets\UI\Art\Notification\NotificationScienceMask.dds"/>
 				<Label Anchor="C,C" Offset="0,0" String="" Font="TwCenMT20" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="FreeTechCount"/>
 			</Button>
-			<!-- Notification Steal Tech -->
+
 			<Button Anchor="R,C" Offset="0,0" Size="100,100" Texture="assets\UI\Art\Notification\NotificationIconsFrame.dds" ID="StealTechButton" Hidden="1" ConsumeMouseOver="1">
 				<ShowOnMouseOver>
 					<Image Anchor="C,C" Size="128,128" Texture="assets\UI\Art\Notification\NotificationScienceGlow.dds"/>
@@ -1414,7 +1414,7 @@
 				<Image Anchor="C,C" Size="128,128" Texture="assets\UI\Art\Notification\NotificationIconsGoldSpySteelTech.dds"/>
 				<AlphaAnim Offset="0,0" Anchor="C,C" Size="128.128" TextureOffset="0.0" Texture="assets\UI\Art\Notification\NotificationIconsGoldSpySteelTechGlow2.dds" Pause="0" Cycle="Bounce" Speed=".75" AlphaStart="0.6" AlphaEnd="0"/>
 			</Button>
-			<!-- Notification Free Policy -->
+
 			<Button Anchor="R,C" Offset="0,0" Size="100,100" Texture="assets\UI\Art\Notification\NotificationIconsFrame.dds" ID="FreePolicyButton" Hidden="1" ConsumeMouseOver="1">
 				<ShowOnMouseOver>
 					<Image Anchor="C,C" Size="128,128" Texture="assets\UI\Art\Notification\NotificationScienceGlow.dds"/>
@@ -1422,7 +1422,7 @@
 				<Image Anchor="C,C" Size="128,128" Texture="assets\UI\Art\Notification\NotificationIconsFreeSocialPolicy.dds"/>
 				<AlphaAnim Offset="0,0" Anchor="C,C" Size="128.128" TextureOffset="0.0" Texture="assets\UI\Art\Notification\NotificationIconsFreeSocialPolicyGlow2.dds" Pause="0" Cycle="Bounce" Speed=".75" AlphaStart="0.6" AlphaEnd="0"/>
 			</Button>
-			<!-- Notification Free Great Person -->
+
 			<Button Anchor="R,C" Offset="0,0" Size="100,100" Texture="assets\UI\Art\Notification\NotificationIconsFrame.dds" ID="FreeGreatPersonButton" Hidden="1" ConsumeMouseOver="1">
 				<ShowOnMouseOver>
 					<Image Anchor="C,C" Size="128,128" Texture="assets\UI\Art\Notification\NotificationScienceGlow.dds"/>
@@ -1430,7 +1430,7 @@
 				<Image Anchor="C,C" Size="128,128" Texture="assets\UI\Art\Notification\NotificationIconsFreeGreatPerson.dds"/>
 				<AlphaAnim Offset="0,0" Anchor="C,C" Size="128.128" TextureOffset="0.0" Texture="assets\UI\Art\Notification\NotificationIconsFreeGreatPersonGlow2.dds" Pause="0" Cycle="Bounce" Speed=".75" AlphaStart="0.6" AlphaEnd="0"/>
 			</Button>
-			<!-- Notification Found Pantheon -->
+
 			<Button Anchor="R,C" Offset="0,0" Size="100,100" Texture="assets\UI\Art\Notification\NotificationIconsFrame.dds" ID="FoundPantheonButton" Hidden="1" ConsumeMouseOver="1">
 				<ShowOnMouseOver>
 					<Image Anchor="C,C" Size="128,128" Texture="assets\UI\Art\Notification\NotificationScienceGlow.dds"/>
@@ -1438,7 +1438,7 @@
 				<Image Anchor="C,C" Size="128,128" Texture="Assets/DLC/Expansion/UI/Art/Notification/NotificationIconsFreePantheon.dds"/>
 				<AlphaAnim Offset="0,0" Anchor="C,C" Size="128.128" TextureOffset="0.0" Texture="Assets/DLC/Expansion/UI/Art/Notification/NotificationIconsFreePantheonGlow2.dds" Pause="0" Cycle="Bounce" Speed=".75" AlphaStart="0.6" AlphaEnd="0"/>
 			</Button>
-			<!-- Notification Found Religion -->
+
 			<Button Anchor="R,C" Offset="0,0" Size="100,100" Texture="assets\UI\Art\Notification\NotificationIconsFrame.dds" ID="FoundReligionButton" Hidden="1" ConsumeMouseOver="1">
 				<ShowOnMouseOver>
 					<Image Anchor="C,C" Size="128,128" Texture="assets\UI\Art\Notification\NotificationScienceGlow.dds"/>
@@ -1446,7 +1446,7 @@
 				<Image Anchor="C,C" Size="128,128" Texture="Assets/DLC/Expansion/UI/Art/Notification/NotificationIconsFreeFoundReligion.dds"/>
 				<AlphaAnim Offset="0,0" Anchor="C,C" Size="128.128" TextureOffset="0.0" Texture="Assets/DLC/Expansion/UI/Art/Notification/NotificationIconsFreeFoundReligionGlow2.dds" Pause="0" Cycle="Bounce" Speed=".75" AlphaStart="0.6" AlphaEnd="0"/>
 			</Button>
-			<!-- Notification Enhance Religion -->
+
 			<Button Anchor="R,C" Offset="0,0" Size="100,100" Texture="assets\UI\Art\Notification\NotificationIconsFrame.dds" ID="EnhanceReligionButton" Hidden="1" ConsumeMouseOver="1">
 				<ShowOnMouseOver>
 					<Image Anchor="C,C" Size="128,128" Texture="assets\UI\Art\Notification\NotificationScienceGlow.dds"/>
@@ -1454,7 +1454,7 @@
 				<Image Anchor="C,C" Size="128,128" Texture="Assets/DLC/Expansion/UI/Art/Notification/NotificationIconsFreeEnhanceReligion.dds"/>
 				<AlphaAnim Offset="0,0" Anchor="C,C" Size="128.128" TextureOffset="0.0" Texture="Assets/DLC/Expansion/UI/Art/Notification/NotificationIconsFreeEnhanceReligionGlow2.dds" Pause="0" Cycle="Bounce" Speed=".75" AlphaStart="0.6" AlphaEnd="0"/>
 			</Button>
-			<!-- Add Reformation Belief -->
+
 			<Button Anchor="R,C" Offset="0,0" Size="100,100" Texture="assets\UI\Art\Notification\NotificationIconsFrame.dds" ID="AddReformationBeliefButton" Hidden="1" ConsumeMouseOver="1">
 				<ShowOnMouseOver>
 					<Image Anchor="C,C" Size="128,128" Texture="assets\UI\Art\Notification\NotificationScienceGlow.dds"/>
@@ -1462,7 +1462,7 @@
 				<Image Anchor="C,C" Size="128,128" Texture="Assets/DLC/Expansion/UI/Art/Notification/NotificationIconsReformationBeliefAdded.dds"/>
 				<AlphaAnim Offset="0,0" Anchor="C,C" Size="128.128" TextureOffset="0.0" Texture="Assets/DLC/Expansion/UI/Art/Notification/NotificationIconsReformationBeliefAddedGlow2.dds" Pause="0" Cycle="Bounce" Speed=".75" AlphaStart="0.6" AlphaEnd="0"/>
 			</Button>
-			<!-- Notification League Call For Proposals-->
+
 			<Button Anchor="R,C" Offset="0,0" Size="100,100" Texture="assets\UI\Art\Notification\NotificationIconsFrame.dds" ID="LeagueCallForProposalsButton" Hidden="1" ConsumeMouseOver="1">
 				<ShowOnMouseOver>
 					<Image Anchor="C,C" Size="128,128" Texture="assets\UI\Art\Notification\NotificationIconsWCVoteGlow_128.dds"/>
@@ -1470,7 +1470,7 @@
 				<Image Anchor="C,C" Size="128,128" Texture="assets\UI\Art\Notification\NotificationIconsWCMakeProposal.dds"/>
 				<AlphaAnim Offset="0,0" Anchor="C,C" Size="128.128" TextureOffset="0.0" Texture="assets\UI\Art\Notification\NotificationIconsWCMakeProposalGlow2.dds" Pause="0" Cycle="Bounce" Speed=".75" AlphaStart="0.6" AlphaEnd="0"/>
 			</Button>
-			<!-- Choose Archaeology -->
+
 			<Button Anchor="R,C" Offset="0,0" Size="100,100" Texture="assets\UI\Art\Notification\NotificationIconsFrame.dds" ID="ChooseArchaeologyButton" Hidden="1" ConsumeMouseOver="1">
 				<ShowOnMouseOver>
 					<Image Anchor="C,C" Size="128,128" Texture="assets\UI\Art\Notification\NotificationScienceGlow.dds"/>
@@ -1478,7 +1478,7 @@
 				<Image Anchor="C,C" Size="128,128" Texture="Assets/DLC/Expansion/UI/Art/Notification/NotificationIconsArchaeologicalDig.dds"/>
 				<AlphaAnim Offset="0,0" Anchor="C,C" Size="128.128" TextureOffset="0.0" Texture="Assets/DLC/Expansion/UI/Art/Notification/NotificationIconsArchaeologicalDigGlow2.dds" Pause="0" Cycle="Bounce" Speed=".75" AlphaStart="0.6" AlphaEnd="0"/>
 			</Button>
-			<!-- Notification League Call For Votes-->
+
 			<Button Anchor="R,C" Offset="0,0" Size="100,100" Texture="assets\UI\Art\Notification\NotificationIconsFrame.dds" ID="LeagueCallForVotesButton" Hidden="1" ConsumeMouseOver="1">
 				<ShowOnMouseOver>
 					<Image Anchor="C,C" Size="128,128" Texture="assets\UI\Art\Notification\NotificationIconsWCVoteGlow_128.dds"/>
@@ -1486,7 +1486,7 @@
 				<Image Anchor="C,C" Size="128,128" Texture="assets\UI\Art\Notification\NotificationIconsWCVote128.dds"/>
 				<AlphaAnim Offset="0,0" Anchor="C,C" Size="128.128" TextureOffset="0.0" Texture="assets\UI\Art\Notification\NotificationIconsWCVoteGlow2_128.dds" Pause="0" Cycle="Bounce" Speed=".75" AlphaStart="0.6" AlphaEnd="0"/>
 			</Button>
-			<!-- Choose Ideology -->
+
 			<Button Anchor="R,C" Offset="0,0" Size="100,100" Texture="assets\UI\Art\Notification\NotificationIconsFrame.dds" ID="ChooseIdeologyButton" Hidden="1" ConsumeMouseOver="1">
 				<ShowOnMouseOver>
 					<Image Anchor="C,C" Size="128,128" Texture="assets\UI\Art\Notification\NotificationScienceGlow.dds"/>

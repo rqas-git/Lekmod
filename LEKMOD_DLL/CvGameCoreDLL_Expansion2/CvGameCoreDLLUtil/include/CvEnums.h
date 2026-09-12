@@ -1,27 +1,27 @@
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//!	 \file		CvEnums.h
-//!  \brief     Public header common Civ5 enumerations
-//!
-//!		This header includes all enumerations shared by both exe and dll.
-//!
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 #pragma once 
 #ifndef CVENUMS_H
 #define CVENUMS_H
 #pragma message("Compiling: " __FILE__)
-// Mem Allocation Tags
+
 enum eCiv5GameCoreMPoolType
 {
-	c_eCiv5GameplayDLL = c_eMPoolTypeUserStart + 0x100,		// Adding 0x100 because we don't want to collide with the app's IDs
+	c_eCiv5GameplayDLL = c_eMPoolTypeUserStart + 0x100,
 };
 
-//! An enumeration for indexing units within a CvBattleDefinition
+
 enum BattleUnitTypes
 {
-	BATTLE_UNIT_ATTACKER,		//!< Index referencing the attacking unit
-	BATTLE_UNIT_DEFENDER,		//!< Index referencing the defending unit
-	BATTLE_UNIT_INTERCEPTOR,	//!< Index referencing the defending unit
-	BATTLE_UNIT_COUNT			//!< The number of unit index references
+	BATTLE_UNIT_ATTACKER,
+	BATTLE_UNIT_DEFENDER,
+	BATTLE_UNIT_INTERCEPTOR,
+	BATTLE_UNIT_COUNT
 };
 
 enum DiploStatementTypes
@@ -111,14 +111,14 @@ enum DiploStatementTypes
 
 	DIPLO_STATEMENT_STOP_DIGGING,
 
-	// League statements
+
 	DIPLO_STATEMENT_WE_LIKED_THEIR_PROPOSAL,
 	DIPLO_STATEMENT_WE_DISLIKED_THEIR_PROPOSAL,
 	DIPLO_STATEMENT_THEY_SUPPORTED_OUR_PROPOSAL,
 	DIPLO_STATEMENT_THEY_FOILED_OUR_PROPOSAL,
 	DIPLO_STATEMENT_THEY_SUPPORTED_OUR_HOSTING,
 
-	// Ideological statements
+
 	DIPLO_STATEMENT_YOUR_IDEOLOGY_CAUSING_CIVIL_UNREST_FREEDOM,
 	DIPLO_STATEMENT_YOUR_IDEOLOGY_CAUSING_CIVIL_UNREST_ORDER,
 	DIPLO_STATEMENT_YOUR_IDEOLOGY_CAUSING_CIVIL_UNREST_AUTOCRACY,
@@ -138,7 +138,7 @@ enum DiploMessageTypes
 {
 	NO_DIPLO_MESSAGE_TYPE = -1,
 
-	// AI greeting messages
+
 	DIPLO_MESSAGE_INTRO,
 	DIPLO_MESSAGE_DEFEATED,
 	DIPLO_MESSAGE_GREETING_REPEAT_TOO_MUCH,
@@ -172,7 +172,7 @@ enum DiploMessageTypes
 	DIPLO_MESSAGE_GREETING_HOSTILE_HUMAN_SMALL_ARMY,
 	DIPLO_MESSAGE_GREETING_HOSTILE_HUMAN_IS_WARMONGER,
 
-	// AI has a trade offer for the human
+
 	DIPLO_MESSAGE_DOT_DOT_DOT,
 	DIPLO_MESSAGE_LETS_HEAR_IT,
 	DIPLO_MESSAGE_PEACE_OFFER,
@@ -188,7 +188,7 @@ enum DiploMessageTypes
 	DIPLO_MESSAGE_RENEW_DEAL,
 	DIPLO_MESSAGE_WANT_MORE_RENEW_DEAL,
 
-	// Generic AI messages to another player; some friendship, some warnings, etc.
+
 	DIPLO_MESSAGE_HOSTILE_AGGRESSIVE_MILITARY_WARNING,
 	DIPLO_MESSAGE_AGGRESSIVE_MILITARY_WARNING,
 	DIPLO_MESSAGE_EXPANSION_SERIOUS_WARNING,
@@ -220,7 +220,7 @@ enum DiploMessageTypes
 	DIPLO_MESSAGE_RETURNED_CIVILIAN,
 	DIPLO_MESSAGE_CULTURE_BOMBED,
 
-	// Insults
+
 	DIPLO_MESSAGE_INSULT_ROOT,
 	DIPLO_MESSAGE_INSULT_GENERIC,
 	DIPLO_MESSAGE_INSULT_MILITARY,
@@ -230,11 +230,11 @@ enum DiploMessageTypes
 	DIPLO_MESSAGE_INSULT_POPULATION,
 	DIPLO_MESSAGE_INSULT_CULTURE,
 
-	// AI has a public declaration to make to the world
+
 	DIPLO_MESSAGE_DECLARATION_PROTECT_CITY_STATE,
 	DIPLO_MESSAGE_DECLARATION_ABANDON_CITY_STATE,
 
-	// Human is asking the AI for something
+
 	DIPLO_MESSAGE_REPEAT_NO,
 	DIPLO_MESSAGE_DONT_SETTLE_YES,
 	DIPLO_MESSAGE_DONT_SETTLE_NO,
@@ -251,7 +251,7 @@ enum DiploMessageTypes
 	DIPLO_MESSAGE_HUMAN_DEMAND_REFUSE_TOO_MUCH,
 	DIPLO_MESSAGE_HUMAN_DEMAND_REFUSE_TOO_SOON,
 
-	// AI popped up to tell the human something, human responded and now we're responding back
+
 	DIPLO_MESSAGE_HUMAN_HOSTILE_AGGRESSIVE_MILITARY_WARNING_BAD,
 	DIPLO_MESSAGE_HUMAN_HOSTILE_AGGRESSIVE_MILITARY_WARNING_GOOD,
 	DIPLO_MESSAGE_HUMAN_AGGRESSIVE_MILITARY_WARNING_BAD,
@@ -286,13 +286,13 @@ enum DiploMessageTypes
 	DIPLO_MESSAGE_HUMAN_PLOT_BUYING_WARNING_BAD,
 	DIPLO_MESSAGE_HUMAN_PLOT_BUYING_WARNING_GOOD,
 
-	// Peace messages
+
 	DIPLO_MESSAGE_PEACE_WHAT_WILL_HUMAN_OFFER,
 	DIPLO_MESSAGE_PEACE_MADE_BY_HUMAN_GRACIOUS,
 	DIPLO_MESSAGE_NO_PEACE,
 	DIPLO_MESSAGE_TOO_SOON_NO_PEACE,
 
-	// Trade responses
+
 	DIPLO_MESSAGE_REPEAT_TRADE_TOO_MUCH,
 	DIPLO_MESSAGE_REPEAT_TRADE,
 	DIPLO_MESSAGE_TRADE_ACCEPT_GENEROUS,
@@ -306,7 +306,7 @@ enum DiploMessageTypes
 	DIPLO_MESSAGE_TRADE_NO_DEAL_POSSIBLE,
 	DIPLO_MESSAGE_TRADE_CANT_MATCH_OFFER,
 
-	// Human declared war on AI, what is the AI's response?
+
 	DIPLO_MESSAGE_ATTACKED_ROOT,
 	DIPLO_MESSAGE_ATTACKED_HOSTILE,
 	DIPLO_MESSAGE_ATTACKED_WEAK_HOSTILE,
@@ -318,7 +318,7 @@ enum DiploMessageTypes
 	DIPLO_MESSAGE_ATTACKED_BETRAYED,
 	DIPLO_MESSAGE_ATTACKED_MILITARY_PROMISE_BROKEN,
 
-	// AI is declaring war on human, what does he say?
+
 	DIPLO_MESSAGE_DOW_ROOT,
 	DIPLO_MESSAGE_DOW_GENERIC,
 	DIPLO_MESSAGE_DOW_LAND,
@@ -330,7 +330,7 @@ enum DiploMessageTypes
 	DIPLO_MESSAGE_DOW_REGRET,
 	DIPLO_MESSAGE_WAR_DEMAND_REFUSED,
 
-	// Messages added post-Civ5 Gold
+
 	DIPLO_MESSAGE_DOF_AI_DENOUNCE_REQUEST,
 	DIPLO_MESSAGE_DOF_AI_WAR_REQUEST,
 	DIPLO_MESSAGE_DOF_NOT_HONORED,
@@ -356,21 +356,21 @@ enum DiploMessageTypes
 	DIPLO_MESSAGE_SAME_POLICIES_ORDER,
 	DIPLO_MESSAGE_SAME_POLICIES_AUTOCRACY,
 
-	// Espionage messages
+
 	DIPLO_MESSAGE_CAUGHT_YOUR_SPY,
 	DIPLO_MESSAGE_KILLED_YOUR_SPY,
 	DIPLO_MESSAGE_KILLED_MY_SPY,
 	DIPLO_MESSAGE_CONFRONT_YOU_KILLED_MY_SPY,
 
-	// Espionage responses
+
 	DIPLO_MESSAGE_HUMAN_CAUGHT_YOUR_SPY_GOOD,
 	DIPLO_MESSAGE_HUMAN_CAUGHT_YOUR_SPY_BAD,
 
 	DIPLO_MESSAGE_STOP_SPYING_YES,
 	DIPLO_MESSAGE_STOP_SPYING_NO,
 
-	DIPLO_MESSAGE_WARNED_ABOUT_INTRIGUE, // player shares intrigue with AI
-	DIPLO_MESSAGE_SHARE_INTRIGUE, // AI shares intrigue to player
+	DIPLO_MESSAGE_WARNED_ABOUT_INTRIGUE,
+	DIPLO_MESSAGE_SHARE_INTRIGUE,
 	DIPLO_MESSAGE_SHARE_INTRIGUE_ARMY_SNEAK_ATTACK_KNOWN_CITY,
 	DIPLO_MESSAGE_SHARE_INTRIGUE_ARMY_SNEAK_ATTACK_UNKNOWN_CITY,
 	DIPLO_MESSAGE_SHARE_INTRIGUE_AMPHIBIOUS_SNEAK_ATTACK_KNOWN_CITY,
@@ -379,28 +379,28 @@ enum DiploMessageTypes
 	DIPLO_MESSAGE_HUMAN_KILLED_MY_SPY_UNFORGIVEN,
 	DIPLO_MESSAGE_HUMAN_KILLED_MY_SPY_FORGIVEN,
 
-	// Religion messages
+
 	DIPLO_MESSAGE_STOP_CONVERSIONS,
 	DIPLO_MESSAGE_HUMAN_STOP_CONVERSIONS_GOOD,
 	DIPLO_MESSAGE_HUMAN_STOP_CONVERSIONS_BAD,
-	DIPLO_MESSAGE_STOP_CONVERSIONS_AGREE, // the AI's response when the player asks to stop spreading religion through missionaries and prophets
-	DIPLO_MESSAGE_STOP_CONVERSIONS_DISAGREE, // the AI's response when the player asks to stop spreading religion through missionaries and prophets
+	DIPLO_MESSAGE_STOP_CONVERSIONS_AGREE,
+	DIPLO_MESSAGE_STOP_CONVERSIONS_DISAGREE,
 
-	// Archeology messages
+
 	DIPLO_MESSAGE_STOP_DIGGING,
 	DIPLO_MESSAGE_HUMAN_STOP_DIGGING_GOOD,
 	DIPLO_MESSAGE_HUMAN_STOP_DIGGING_BAD,
-	DIPLO_MESSAGE_STOP_DIGGING_AGREE, // the AI's response when the player asks to stop looting his stuff
-	DIPLO_MESSAGE_STOP_DIGGING_DISAGREE, // the AI's response when the player asks to stop looting his stuff
+	DIPLO_MESSAGE_STOP_DIGGING_AGREE,
+	DIPLO_MESSAGE_STOP_DIGGING_DISAGREE,
 
-	// League messages
+
 	DIPLO_MESSAGE_WE_LIKED_THEIR_PROPOSAL,
 	DIPLO_MESSAGE_WE_DISLIKED_THEIR_PROPOSAL,
 	DIPLO_MESSAGE_THEY_SUPPORTED_OUR_PROPOSAL,
 	DIPLO_MESSAGE_THEY_FOILED_OUR_PROPOSAL,
 	DIPLO_MESSAGE_THEY_SUPPORTED_OUR_HOSTING,
 
-	// Ideological messages
+
 	DIPLO_MESSAGE_YOUR_IDEOLOGY_CAUSING_CIVIL_UNREST_FREEDOM,
 	DIPLO_MESSAGE_YOUR_IDEOLOGY_CAUSING_CIVIL_UNREST_ORDER,
 	DIPLO_MESSAGE_YOUR_IDEOLOGY_CAUSING_CIVIL_UNREST_AUTOCRACY,
@@ -448,17 +448,17 @@ enum DirectionTypes
 
 	NUM_DIRECTION_TYPES,
 
-	DIRECTION_NORTH = DIRECTION_NORTHEAST, // deprecated
-	DIRECTION_SOUTH = DIRECTION_SOUTHWEST, // deprecated
+	DIRECTION_NORTH = DIRECTION_NORTHEAST,
+	DIRECTION_SOUTH = DIRECTION_SOUTHWEST,
 
-	DIRECTION_NORTH_MASK = 1 << 0,							// DIRECTION_NORTH,
-	DIRECTION_NORTHEAST_MASK = 1 << 1,						// DIRECTION_NORTHEAST,
-	DIRECTION_EAST_MASK = 1 << 2,							// DIRECTION_EAST,
-	DIRECTION_SOUTHEAST_MASK = 1 << 3,						// DIRECTION_SOUTHEAST,
-	DIRECTION_SOUTH_MASK = 1 << 4,							// DIRECTION_SOUTH, 
-	DIRECTION_SOUTHWEST_MASK = 1 << 5,						// DIRECTION_SOUTHWEST,
-	DIRECTION_WEST_MASK = 1 << 6,							// DIRECTION_WEST,
-	DIRECTION_NORTHWEST_MASK = 1 << 7,						// DIRECTION_NORTHWEST,
+	DIRECTION_NORTH_MASK = 1 << 0,
+	DIRECTION_NORTHEAST_MASK = 1 << 1,
+	DIRECTION_EAST_MASK = 1 << 2,
+	DIRECTION_SOUTHEAST_MASK = 1 << 3,
+	DIRECTION_SOUTH_MASK = 1 << 4,
+	DIRECTION_SOUTHWEST_MASK = 1 << 5,
+	DIRECTION_WEST_MASK = 1 << 6,
+	DIRECTION_NORTHWEST_MASK = 1 << 7,
 };
 
 enum FlowDirectionTypes					
@@ -474,12 +474,12 @@ enum FlowDirectionTypes
 
 	NUM_FLOWDIRECTION_TYPES,
 
-	FLOWDIRECTION_NORTH_MASK = 1 << 0,							// FLOWDIRECTION_NORTH,
-	FLOWDIRECTION_SOUTH_MASK = 1 << 1,							// FLOWDIRECTION_SOUTH, 
-	FLOWDIRECTION_SOUTHEAST_MASK = 1 << 2,						// FLOWDIRECTION_SOUTHEAST,
-	FLOWDIRECTION_NORTHWEST_MASK = 1 << 3,						// FLOWDIRECTION_NORTHWEST,
-	FLOWDIRECTION_SOUTHWEST_MASK = 1 << 4,						// FLOWDIRECTION_SOUTHWEST,
-	FLOWDIRECTION_NORTHEAST_MASK = 1 << 5,						// FLOWDIRECTION_NORTHEAST,
+	FLOWDIRECTION_NORTH_MASK = 1 << 0,
+	FLOWDIRECTION_SOUTH_MASK = 1 << 1,
+	FLOWDIRECTION_SOUTHEAST_MASK = 1 << 2,
+	FLOWDIRECTION_NORTHWEST_MASK = 1 << 3,
+	FLOWDIRECTION_SOUTHWEST_MASK = 1 << 4,
+	FLOWDIRECTION_NORTHEAST_MASK = 1 << 5,
 };
 
 
@@ -498,7 +498,7 @@ enum RotationTypes
 	ROTATE_270CW_MASK	= 1 << ROTATE_270CW,
 };
 
-// camera wrap helper
+
 enum WrapDirection
 {
 	WRAP_SAVE,
@@ -575,19 +575,19 @@ enum InterfaceMessageTypes
 };
 
 
-//  !!!!!!!!!!!!!!!!!!!!!!! 
-//  IMPORTANT - NotificationTypes enum contains hash values, not an index!
-//  It is not required to add a new enum for a new notification, you can just use the hash (FString::Hash) of the name
-//	as defined in the Notifications.xml or equivalent.  The enum is just a helper so that the has generation is done
-//	at compile time.  e.g.  the enum NOTIFICATION_TECH is equivalent to FString::Hash("NOTIFICATION_TECH")
-//
-//  MODDERS:
-//		If you add a new notification, you do NOT have to add it to this helper list, you can just make a define
-//		with the desired hash ID on the DLL side and just cast the value to a NotificationTypes value when passing it
-//		to the notification system.
 
-//	When adding Notifications, please remember to add an entry in the sound notifications file using the same name.
-//  !!!!!!!!!!!!!!!!!!!!!!! 
+
+
+
+
+
+
+
+
+
+
+
+
 
 enum NotificationTypes	
 {
@@ -611,17 +611,17 @@ enum NotificationTypes
 	NOTIFICATION_CITY_TILE								= 0x66532408,
 	NOTIFICATION_DEMAND_RESOURCE						= 0x250F2E27, 
 	NOTIFICATION_UNIT_PROMOTION							= 0x5ED9C509,
-	//	NOTIFICATION_WONDER_STARTED,
+
 
 	NOTIFICATION_WONDER_COMPLETED_ACTIVE_PLAYER			= 0x9B741B7F,
 	NOTIFICATION_WONDER_COMPLETED						= 0x7CACC6FF,
 	NOTIFICATION_WONDER_BEATEN							= 0x5FCF949D,
 	NOTIFICATION_GOLDEN_AGE_BEGUN_ACTIVE_PLAYER			= 0x3B74383C,
-	//	NOTIFICATION_GOLDEN_AGE_BEGUN,
+
 	NOTIFICATION_GOLDEN_AGE_ENDED_ACTIVE_PLAYER			= 0x5E2FD815,
-	//	NOTIFICATION_GOLDEN_AGE_ENDED,
+
 	NOTIFICATION_GREAT_PERSON_ACTIVE_PLAYER				= 0x83CD0016,
-	//	NOTIFICATION_GREAT_PERSON,
+
 	NOTIFICATION_STARVING								= 0xBA039C65,
 	NOTIFICATION_WAR_ACTIVE_PLAYER						= 0xF4A99B85,
 	NOTIFICATION_WAR									= 0xC6E3B719,
@@ -638,7 +638,7 @@ enum NotificationTypes
 	NOTIFICATION_DISCOVERED_LUXURY_RESOURCE				= 0xB6EB90D6,
 	NOTIFICATION_DISCOVERED_STRATEGIC_RESOURCE			= 0x7CD306AC,
 	NOTIFICATION_DISCOVERED_BONUS_RESOURCE				= 0x7E312F61,
-	//	NOTIFICATION_POLICY_ADOPTION,
+
 	NOTIFICATION_DIPLO_VOTE								= 0x769821E9,
 	NOTIFICATION_RELIGION_RACE							= 0xA9E7CC17,
 
@@ -722,12 +722,12 @@ enum NotificationTypes
 
 	NOTIFICATION_MINOR_BUYOUT							= 0x5F0813CF,
 
-	NOTIFICATION_REQUEST_RESOURCE						= 0x2B7BDAB6, // for when cities request luxury resources for WLTK days
+	NOTIFICATION_REQUEST_RESOURCE						= 0x2B7BDAB6,
 
 	NOTIFICATION_LIBERATED_MAJOR_CITY					= 0x4E8A36A4,
 	NOTIFICATION_RESURRECTED_MAJOR_CIV					= 0x7500CA03,
 
-	// XP2
+
 	NOTIFICATION_ADD_REFORMATION_BELIEF					= 0x050B6287,
 	NOTIFICATION_LEAGUE_CALL_FOR_PROPOSALS				= 0x2D0E554C,
 	NOTIFICATION_CHOOSE_ARCHAEOLOGY						= 0x84B7E406,
@@ -736,7 +736,7 @@ enum NotificationTypes
 	NOTIFICATION_IDEOLOGY_CHOSEN						= 0x9074BDEE,
 	NOTIFICATION_DIPLOMAT_EJECTED						= 0x850E0773,
 
-	// Trade notifications
+
 	NOTIFICATION_INTERNATIONAL_TRADE_UNIT_PLUNDERED_TRADER	= 0xF1F3E098,
 	NOTIFICATION_INTERNATIONAL_TRADE_UNIT_PLUNDERED_TRADEE	= 0x7220655F,
 
@@ -755,10 +755,10 @@ enum NotificationTypes
 	NOTIFICATION_CULTURE_VICTORY_WITHIN_ONE_ACTIVE_PLAYER= 0x6656E513,
 	NOTIFICATION_CULTURE_VICTORY_NO_LONGER_INFLUENTIAL	= 0xFE331E2B,
 
-	NOTIFICATION_PLAYER_RECONNECTED						= 0x1538D3A8,	//network player connecting to the game.
-	NOTIFICATION_PLAYER_DISCONNECTED					= 0x6110AC7A,	//network player disconnecting from the game.
-	NOTIFICATION_TURN_MODE_SEQUENTIAL					= 0x2A32BEE8,	//Active player transitioned to sequential turn mode.
-	NOTIFICATION_TURN_MODE_SIMULTANEOUS					= 0x08A6293E,	//Active player transitioned to simultaneous turn mode.
+	NOTIFICATION_PLAYER_RECONNECTED						= 0x1538D3A8,
+	NOTIFICATION_PLAYER_DISCONNECTED					= 0x6110AC7A,
+	NOTIFICATION_TURN_MODE_SEQUENTIAL					= 0x2A32BEE8,
+	NOTIFICATION_TURN_MODE_SIMULTANEOUS					= 0x08A6293E,
 	NOTIFICATION_HOST_MIGRATION							= 0xB6299D35,
 	NOTIFICATION_PLAYER_CONNECTING						= 0xAB88859D,
 
@@ -834,7 +834,7 @@ enum InterfaceDirtyBits
 	NUM_INTERFACE_DIRTY_BITS
 };
 
-// These are the different types of things that can be updated in the Interface for a City
+
 enum CityUpdateTypes
 {
 	NO_CITY_UPDATE_TYPE = -1,
@@ -848,19 +848,19 @@ enum CityUpdateTypes
 	NUM_CITY_UPDATE_TYPES
 };
 
-//////////////////////////////////////////
-//    /\   | |    |  ____|  __ \__   __| |
-//   /  \  | |    | |__  | |__) | | |  | |
-//  / /\ \ | |    |  __| |  _  /  | |  | |
-// / ____ \| |____| |____| | \ \  | |  |_|
-///_/    \_\______|______|_|  \_\ |_|  (_)
-//////////////////////////////////////////
 
 
-// If you want the game to work correctly, be careful when you modify ButtonPopupTypes.
-// They are directly tied into playing sounds, so if you add, remove, or (God forbid) replace one of these,
-// please make sure if you want a sound to play, modify Assets\\Sounds\\ButtonPopupSounds.xml.  You also need to
-// modify cvAudioSimMainGame::BuildButtonPopupSoundTable to register the link between the enum and the sound ID (the text hash of the enum name).
+
+
+
+
+
+
+
+
+
+
+
 
 enum ButtonPopupTypes			
 {
@@ -878,7 +878,7 @@ enum ButtonPopupTypes
 	BUTTONPOPUP_CHOOSETECH,
 	BUTTONPOPUP_CITY_CAPTURED,
 	BUTTONPOPUP_ANNEX_CITY,
-	BUTTONPOPUP_LIBERATE_MINOR,  // DON'T BE AN IDIOT!!!
+	BUTTONPOPUP_LIBERATE_MINOR,
 	BUTTONPOPUP_DISBANDCITY,
 	BUTTONPOPUP_CHOOSEPRODUCTION,
 	BUTTONPOPUP_CHOOSEPOLICY,
@@ -894,7 +894,7 @@ enum ButtonPopupTypes
 	BUTTONPOPUP_ADMIN_PASSWORD,
 	BUTTONPOPUP_EXTENDED_GAME,
 	BUTTONPOPUP_DIPLOMACY,
-	BUTTONPOPUP_ADDBUDDY,		// BE SMART, NOT DUMB! DON'T MESS WITH THIS!
+	BUTTONPOPUP_ADDBUDDY,
 	BUTTONPOPUP_FORCED_DISCONNECT,
 	BUTTONPOPUP_PITBOSS_DISCONNECT,
 	BUTTONPOPUP_KICKED,
@@ -908,12 +908,12 @@ enum ButtonPopupTypes
 	BUTTONPOPUP_BARBARIAN_RANSOM,
 	BUTTONPOPUP_MINOR_CIV_ENTER_TERRITORY,
 	BUTTONPOPUP_TEMP_SPECIALISTS,
-	BUTTONPOPUP_NOTIFICATION_LOG,	// DANGER DANGER DANGER!!!!!
-	BUTTONPOPUP_ECONOMIC_OVERVIEW,	// DANGER DANGER DANGER!!!!!
-	BUTTONPOPUP_MILITARY_OVERVIEW,	// DANGER DANGER DANGER!!!!!
-	BUTTONPOPUP_DIPLOMATIC_OVERVIEW,	// DANGER DANGER DANGER!!!!!
-	BUTTONPOPUP_DEMOGRAPHICS,	// DANGER DANGER DANGER!!!!!
-	BUTTONPOPUP_VICTORY_INFO,	// DANGER DANGER DANGER!!!!!
+	BUTTONPOPUP_NOTIFICATION_LOG,
+	BUTTONPOPUP_ECONOMIC_OVERVIEW,
+	BUTTONPOPUP_MILITARY_OVERVIEW,
+	BUTTONPOPUP_DIPLOMATIC_OVERVIEW,
+	BUTTONPOPUP_DEMOGRAPHICS,
+	BUTTONPOPUP_VICTORY_INFO,
 	BUTTONPOPUP_MINOR_CIVS_LIST,
 	BUTTONPOPUP_GIFT_CONFIRM,
 	BUTTONPOPUP_RETURN_CIVILIAN,
@@ -931,7 +931,7 @@ enum ButtonPopupTypes
 	BUTTONPOPUP_CITY_PLOT_MANAGEMENT,
 	BUTTONPOPUP_DIPLO_VOTE,
 	BUTTONPOPUP_VOTE_RESULTS,
-	BUTTONPOPUP_TECH_TREE,		// FOR THE LOVE OF GOD AND ALL THAT IS HOLY, BE CAREFUL WHEN MODIFYING THIS ENUM
+	BUTTONPOPUP_TECH_TREE,
 	BUTTONPOPUP_TECH_AWARD,
 	BUTTONPOPUP_WONDER_COMPLETED_ACTIVE_PLAYER,
 	BUTTONPOPUP_ADVISOR_INFO,
@@ -946,9 +946,9 @@ enum ButtonPopupTypes
 	BUTTONPOPUP_RELIGION_OVERVIEW,
 	BUTTONPOPUP_CHOOSE_TECH_TO_STEAL,
 	BUTTONPOPUP_CHOOSE_MAYA_BONUS,
-	BUTTONPOPUP_CHOOSE_FAITH_GREAT_PERSON,	// Do not add any more sequential enums!  Use hash values!
+	BUTTONPOPUP_CHOOSE_FAITH_GREAT_PERSON,
 
-	// Do not add any more sequential enums!  Use hash values!
+
 
 	BUTTONPOPUP_MODDER_0,
 	BUTTONPOPUP_MODDER_1,
@@ -963,18 +963,18 @@ enum ButtonPopupTypes
 	BUTTONPOPUP_MODDER_10,
 	BUTTONPOPUP_MODDER_11,
 
-	NUM_FIXED_BUTTONPOPUP_TYPES,		// Do not add any more sequential enums!  Use hash values!
+	NUM_FIXED_BUTTONPOPUP_TYPES,
 };
 
-//////////////////////////////////////////
-//    /\   | |    |  ____|  __ \__   __| |
-//   /  \  | |    | |__  | |__) | | |  | |
-//  / /\ \ | |    |  __| |  _  /  | |  | |
-// / ____ \| |____| |____| | \ \  | |  |_|
-///_/    \_\______|______|_|  \_\ |_|  (_)
-//////////////////////////////////////////
 
-// you can stop freaking out now. It's ok.
+
+
+
+
+
+
+
+
 enum ClimateTypes					
 {
 	NO_CLIMATE = -1,
@@ -1000,8 +1000,8 @@ enum WorldSizeTypes
 	NUM_WORLDSIZE_TYPES
 };
 
-// This is our current relationship with each 
-// one of our connected network peers
+
+
 enum InitStates
 {
 	INIT_INACTIVE,
@@ -1062,8 +1062,8 @@ enum GameOptionTypes
 {
 	NO_GAMEOPTION = -1,
 
-	// WARNING: Do not use these enums to index into the GameOptionInfo table, they will not line up!
-	//          Nor should use use the index of a GameOptionInfo entry as a GameOptionTypes enum for use with SetGameOptions!
+
+
 	GAMEOPTION_NO_CITY_RAZING,
 	GAMEOPTION_NO_BARBARIANS,
 	GAMEOPTION_RAGING_BARBARIANS,
@@ -1087,8 +1087,8 @@ enum GameOptionTypes
 	GAMEOPTION_NO_TUTORIAL,
 	GAMEOPTION_NO_RELIGION,
 
-	// KWG: Please do add anymore enums.  Use the CvPreGame::GetGameOption which uses a text key.
-	//      These enums are shared between DLLs and would diverge if each added their own.
+
+
 	NUM_GAMEOPTION_TYPES
 };
 
@@ -1138,7 +1138,7 @@ enum PlayerOptionTypes
 	PLAYEROPTION_MODDER_2,
 	PLAYEROPTION_MODDER_3,
 
-	NUM_PLAYEROPTION_TYPES,		// Do not add anymore sequential enums!
+	NUM_PLAYEROPTION_TYPES,
 
 	PLAYEROPTION_WAIT_END_TURN_HASH		= 0xF1493CD2,
 	PLAYEROPTION_SHOW_FRIENDLY_MOVES_HASH= 0xBF6E16AA,
@@ -1273,7 +1273,7 @@ enum LeaderHeadTypes
 	NO_LEADER = -1,
 };
 
-// Used for managing Art Differences based on nationality
+
 enum ArtStyleTypes				
 {
 	NO_ARTSTYLE = -1,
@@ -1431,12 +1431,12 @@ enum TaskTypes
 	NUM_TASK_TYPES
 };
 
-// Results from requesting a city task
+
 enum CityTaskResult
 {
-	TASK_ABORTED	= 0,			// The task operation was aborted
-	TASK_COMPLETED	= 1,			// The task operation is complete
-	TASK_QUEUED		= 2				// The task operation cannot be done immediately and is queued
+	TASK_ABORTED	= 0,
+	TASK_COMPLETED	= 1,
+	TASK_QUEUED		= 2
 };
 
 enum BuildingClassTypes				 
@@ -1523,48 +1523,48 @@ enum UnitAITypes
 {
 	NO_UNITAI = -1,
 
-	UNITAI_UNKNOWN,					// we don't know what to do with these units
-	UNITAI_SETTLE,					// these are Settlers
-	UNITAI_WORKER,					// these are Builders
-	UNITAI_ATTACK,					// use these to attack other units
-	UNITAI_CITY_BOMBARD,			// use these to attack cities
-	UNITAI_FAST_ATTACK,				// use these to pillage enemy improvements and attack barbarians
-	UNITAI_DEFENSE,					// these are units that are mainly in the floating defense force
-	UNITAI_COUNTER,					// these are counter-units to specific other units - these will likely need more logic in building and using
-	UNITAI_RANGED,					// units with ranged attacks
-	UNITAI_CITY_SPECIAL,			// more AA???
-	UNITAI_EXPLORE,					// scouts, etc.
-	UNITAI_ARTIST,					// great person
-	UNITAI_SCIENTIST,				// great person
-	UNITAI_GENERAL,					// great person
-	UNITAI_MERCHANT,				// great person
-	UNITAI_ENGINEER,				// great person
-	UNITAI_ICBM,					// nuke
-	UNITAI_WORKER_SEA,				// work boats
-	UNITAI_ATTACK_SEA,				// naval melee units
-	UNITAI_RESERVE_SEA,				// naval units used defensively
-	UNITAI_ESCORT_SEA,				// naval units tasked to defend embarked units
-	UNITAI_EXPLORE_SEA,				// naval units used for scouting
-	UNITAI_ASSAULT_SEA,				// naval ranged units
-	UNITAI_SETTLER_SEA,				// UNUSED in Civ 5
-	UNITAI_CARRIER_SEA,				// aircraft carrier
-	UNITAI_MISSILE_CARRIER_SEA,		// missile carrier
-	UNITAI_PIRATE_SEA,				// avast, ye
-	UNITAI_ATTACK_AIR,				// bombers
-	UNITAI_DEFENSE_AIR,				// fighters
-	UNITAI_CARRIER_AIR,				// planes on boats
-	UNITAI_MISSILE_AIR,				// cruise missiles
-	UNITAI_PARADROP,				// paratrooper
-	UNITAI_SPACESHIP_PART,			// spaceship part that needs to be taken to capital
-	UNITAI_TREASURE,				// treasure to return to your capital
-	UNITAI_PROPHET,					// great person
-	UNITAI_MISSIONARY,				// missionary
-	UNITAI_INQUISITOR,				// inquisitor
-	UNITAI_ADMIRAL,					// admiral
-	UNITAI_TRADE_UNIT,				// international trade unit
-	UNITAI_ARCHAEOLOGIST,			// archaeologist
-	UNITAI_WRITER,					// great person
-	UNITAI_MUSICIAN,				// great person
+	UNITAI_UNKNOWN,
+	UNITAI_SETTLE,
+	UNITAI_WORKER,
+	UNITAI_ATTACK,
+	UNITAI_CITY_BOMBARD,
+	UNITAI_FAST_ATTACK,
+	UNITAI_DEFENSE,
+	UNITAI_COUNTER,
+	UNITAI_RANGED,
+	UNITAI_CITY_SPECIAL,
+	UNITAI_EXPLORE,
+	UNITAI_ARTIST,
+	UNITAI_SCIENTIST,
+	UNITAI_GENERAL,
+	UNITAI_MERCHANT,
+	UNITAI_ENGINEER,
+	UNITAI_ICBM,
+	UNITAI_WORKER_SEA,
+	UNITAI_ATTACK_SEA,
+	UNITAI_RESERVE_SEA,
+	UNITAI_ESCORT_SEA,
+	UNITAI_EXPLORE_SEA,
+	UNITAI_ASSAULT_SEA,
+	UNITAI_SETTLER_SEA,
+	UNITAI_CARRIER_SEA,
+	UNITAI_MISSILE_CARRIER_SEA,
+	UNITAI_PIRATE_SEA,
+	UNITAI_ATTACK_AIR,
+	UNITAI_DEFENSE_AIR,
+	UNITAI_CARRIER_AIR,
+	UNITAI_MISSILE_AIR,
+	UNITAI_PARADROP,
+	UNITAI_SPACESHIP_PART,
+	UNITAI_TREASURE,
+	UNITAI_PROPHET,
+	UNITAI_MISSIONARY,
+	UNITAI_INQUISITOR,
+	UNITAI_ADMIRAL,
+	UNITAI_TRADE_UNIT,
+	UNITAI_ARCHAEOLOGIST,
+	UNITAI_WRITER,
+	UNITAI_MUSICIAN,
 
 	NUM_UNITAI_TYPES
 };
@@ -1601,13 +1601,13 @@ enum AutomateTypes
 	AUTOMATE_BUILD		= 0,
 	AUTOMATE_EXPLORE	= 1,
 
-	// Do not add any more sequential enums, add explicit key values (hash of text key)
 
-	AUTOMATE_TRADE		= 0x4bdc68d8,	// FString::Hash("AUTOMATE_TRADE");
+
+	AUTOMATE_TRADE		= 0x4bdc68d8,
 
 };
 
-// any additions need to be reflected in GlobalTypes.xml
+
 enum MissionTypes				
 {
 	NO_MISSION = -1,
@@ -1643,7 +1643,7 @@ enum MissionAITypes
 	NUM_MISSIONAI_TYPES
 };
 
-// any additions need to be reflected in GlobalTypes.xml
+
 enum CommandTypes					
 {
 	NO_COMMAND = -1,
@@ -1788,44 +1788,44 @@ enum FogOfWarModeTypes
 
 enum EntityEventTypes		
 {
-	ENTITY_EVENT_NONE = -1,			//!< Invalid event
+	ENTITY_EVENT_NONE = -1,
 };
 
 enum AnimationPathTypes	
 {
 	ANIMATIONPATH_NONE = -1,
 
-	// Default animation paths
+
 	ANIMATIONPATH_IDLE,
 	ANIMATIONPATH_MOVE,
-	ANIMATIONPATH_DAMAGE,				//!< Updates the damage state for the unit
+	ANIMATIONPATH_DAMAGE,
 
-	// Combat related animation paths
+
 	ANIMATIONPATH_RANDOMIZE_ANIMATION_SET,
 	ANIMATIONPATH_NUKE_STRIKE,
 	ANIMATIONPATH_MELEE_STRIKE,
 	ANIMATIONPATH_MELEE_HURT,
 	ANIMATIONPATH_MELEE_DIE,
 	ANIMATIONPATH_MELEE_FORTIFIED,
-	ANIMATIONPATH_MELEE_DIE_FADE,		//!< Used only in combat. The collateral damage die should have a fade integrated.
-	ANIMATIONPATH_MELEE_FLEE,			//!< Used only by settler children, so they don't die in combat
+	ANIMATIONPATH_MELEE_DIE_FADE,
+	ANIMATIONPATH_MELEE_FLEE,
 
-	// Ranged combat related animation paths
+
 	ANIMATIONPATH_RANGED_STRIKE,
 	ANIMATIONPATH_RANGED_DIE,
 	ANIMATIONPATH_RANGED_FORTIFIED,
 	ANIMATIONPATH_RANGED_RUNHIT,
 	ANIMATIONPATH_RANGED_RUNDIE,
-	ANIMATIONPATH_RANGED_DIE_FADE,		//!< Used only in combat. The collateral damage die should have a fade integrated.
+	ANIMATIONPATH_RANGED_DIE_FADE,
 	ANIMATIONPATH_LEADER_COMMAND,
 
-	// Air Units animation paths
+
 	ANIMATIONPATH_AIRFADEIN,
 	ANIMATIONPATH_AIRFADEOUT,
 	ANIMATIONPATH_AIRSTRIKE,
 	ANIMATIONPATH_AIRBOMB,
 
-	//mission related animation paths
+
 	ANIMATIONPATH_HEAL,
 	ANIMATIONPATH_SLEEP,
 	ANIMATIONPATH_FORTIFY,
@@ -1890,26 +1890,26 @@ enum SaveGameTypes
 	NUM_SAVEGAME_TYPES
 };
 
-// The mutually exclusive game types
+
 enum GameTypes
 {
 	GAME_TYPE_NONE	 = -1,
-	GAME_SINGLE_PLAYER,			// Single human on local machine
-	GAME_NETWORK_MULTIPLAYER,	// Single human on local machine, other human players connected over LAN/Internet
-	GAME_HOTSEAT_MULTIPLAYER,	// Multiple humans on local machine.
-	GAME_EMAIL_MULTIPLAYER,		// Single human on local machine, other humans connected though email messages.
+	GAME_SINGLE_PLAYER,
+	GAME_NETWORK_MULTIPLAYER,
+	GAME_HOTSEAT_MULTIPLAYER,
+	GAME_EMAIL_MULTIPLAYER,
 };
 
 enum GameStartTypes
 {
-	GAME_NEW,					// The game was created from seed parameters
-	GAME_LOADED,				// The game was loaded from a save
+	GAME_NEW,
+	GAME_LOADED,
 };
 
 enum GameMapTypes
 {
-	GAME_USER_PARAMETERS,		// The game was created from user parameters
-	GAME_SCENARIO,				// The game was created from a scenario definition
+	GAME_USER_PARAMETERS,
+	GAME_SCENARIO,
 };
 
 
@@ -1926,9 +1926,9 @@ enum GameMode
 enum SlotClaim
 {
 	SLOTCLAIM_UNASSIGNED,
-	SLOTCLAIM_RESERVED,			//Reserved status occurs during load game initialization 
-													//and in the multiplayer staging room when the host indicates that a slot must be occupied by a human 
-													//before the game can start. 
+	SLOTCLAIM_RESERVED,
+
+
 	SLOTCLAIM_ASSIGNED,
 
 	NUM_SLOTCLAIMS
@@ -1945,7 +1945,7 @@ enum SlotStatus
 	SS_MAX_SLOT_STATUS,
 };
 
-// Different types of load
+
 enum LoadType										
 {
 	LOAD_NORMAL,
@@ -1966,10 +1966,10 @@ enum CivLoginStates
 	LOGIN_CIV_HAS_ID,
 };
    
-/*------------------------------------------------------------------------------------
-Enum:		EAudioTag
-  Purpose:	To enumerate all of the tag strings loaded from the csv or xml files
-------------------------------------------------------------------------------------*/
+
+
+
+
 enum AudioTag							
 {
 	AUDIOTAG_NONE = -1,
@@ -2224,7 +2224,7 @@ enum BandwidthType
 	NO_BANDWIDTH
 };
 
-// Make sure that this is in synch with both CIV5MultiunitFormationTypeInfo.xml and CIV5MultiunitFormationInfo.xml
+
 enum MultiunitFormationTypes	
 {
 	NO_MUFORMATION = -1,
@@ -2305,7 +2305,7 @@ enum TacticalAIMoveTypes
 {
 	NO_TACTICAL_MOVE = -1,
 
-	// Types are now loaded from TacticalMoves XML file
+
 };
 
 enum AIBarbarianTacticalMove
@@ -2376,12 +2376,12 @@ enum PlayerProximityTypes
 {
 	NO_PLAYER_PROXIMITY = -1,
 
-	// WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
 	PLAYER_PROXIMITY_DISTANT,
 	PLAYER_PROXIMITY_FAR,
 	PLAYER_PROXIMITY_CLOSE,
 	PLAYER_PROXIMITY_NEIGHBORS,
-	// WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
 
 	NUM_PLAYER_PROXIMITIES,
 };
@@ -2441,10 +2441,10 @@ enum DiploUIStateTypes
 
 	DIPLO_UI_STATE_DISCUSS_PLAN_RESEARCH_AGREEMENT,
 
-	// Post Civ 5 release stuff
+
 	DIPLO_UI_STATE_DISCUSS_AI_REQUEST_DENOUNCE,
 
-	// Espionage
+
 	DIPLO_UI_STATE_CAUGHT_YOUR_SPY,
 	DIPLO_UI_STATE_KILLED_YOUR_SPY,
 	DIPLO_UI_STATE_KILLED_MY_SPY,
@@ -2498,10 +2498,10 @@ enum FromUIDiploEventTypes
 
 	FROM_UI_DIPLO_EVENT_PLAN_RA_RESPONSE,
 
-	// Post Civ 5 release
+
 	FROM_UI_DIPLO_EVENT_AI_REQUEST_DENOUNCE_RESPONSE,
 	FROM_UI_DIPLO_EVENT_CAUGHT_YOUR_SPY_RESPONSE,
-	FROM_UI_DIPLO_EVENT_KILLED_MY_SPY_RESPONSE, // We killed one of their spies and they're apologizing
+	FROM_UI_DIPLO_EVENT_KILLED_MY_SPY_RESPONSE,
 	FROM_UI_DIPLO_EVENT_HUMAN_DISCUSSION_STOP_SPYING,
 	FROM_UI_DIPLO_EVENT_HUMAN_DISCUSSION_SHARE_INTRIGUE,
 	FROM_UI_DIPLO_EVENT_HUMAN_DISCUSSION_STOP_SPREADING_RELIGION,
@@ -2518,13 +2518,13 @@ enum LeaderheadAnimationTypes
 {
 	NO_LEADERHEAD_ANIM = -1,
 
-    // The numeric values of these enums correspond to magic numbers embedded in the leaderhead assets
-    // Changing them will lead to discord and confusion
+
+
 
     LEADERHEAD_ANIM_INTRO           =   1,    
     LEADERHEAD_ANIM_NEUTRAL_HELLO   =   2,    
     LEADERHEAD_ANIM_PEACEFUL        =   3,
-    LEADERHEAD_ANIM_OPENING_GLOAT   =   4,  // gloats, then transitions to neutral
+    LEADERHEAD_ANIM_OPENING_GLOAT   =   4,
     LEADERHEAD_ANIM_DECLARE_WAR     =   5,
     LEADERHEAD_ANIM_ATTACKED        =   6,
     LEADERHEAD_ANIM_HATE_HELLO      =   7,
@@ -2568,7 +2568,7 @@ enum EndTurnBlockingTypes
 	ENDTURN_BLOCKING_MAYA_LONG_COUNT,
 	ENDTURN_BLOCKING_FAITH_GREAT_PERSON,
 	
-	// XP2
+
 	ENDTURN_BLOCKING_ADD_REFORMATION_BELIEF,
 	ENDTURN_BLOCKING_LEAGUE_CALL_FOR_PROPOSALS,
 	ENDTURN_BLOCKING_CHOOSE_ARCHAEOLOGY,
@@ -2741,10 +2741,10 @@ enum EAchievement
 	ACHIEVEMENT_REALLY_SUCK,
 	ACHIEVEMENT_PSG,
 
-	//DLC_DELUXE
+
 	ACHIEVEMENT_WIN_NEBUCHADNEZZAR,
 	
-	//DLC_01
+
 	ACHIEVEMENT_WIN_GENGHIS,
 	ACHIEVEMENT_WIN_SCENARIO_01_PRINCE_OR_BELOW,
 	ACHIEVEMENT_WIN_SCENARIO_01_KING,
@@ -2753,7 +2753,7 @@ enum EAchievement
 	ACHIEVEMENT_WIN_SCENARIO_01_DEITY,
 	ACHIEVEMENT_LOSE_SCENARIO_01,
 
-	//DLC_02
+
 	ACHIEVEMENT_WIN_ISABELLA,
 	ACHIEVEMENT_WIN_PACHACUTI,
 	ACHIEVEMENT_SCENARIO_02_WIN_SPAIN,
@@ -2767,7 +2767,7 @@ enum EAchievement
 	ACHIEVEMENT_SCENARIO_02_DISCOVER_EL_DORADO,
 	ACHIEVEMENT_SCENARIO_02_RETURN_TREASURE,
 	
-	//DLC_03
+
 	ACHIEVEMENT_WIN_KAMEHAMEHA,
 	ACHIEVEMENT_SCENARIO_03_WIN_HIVA,
 	ACHIEVEMENT_SCENARIO_03_WIN_TAHITI,
@@ -2779,7 +2779,7 @@ enum EAchievement
 	ACHIEVEMENT_SCENARIO_03_FIND_AUSTRALIA,
 	ACHIEVEMENT_SCENARIO_03_FIND_NEW_ZEALAND,
 
-	//DLC_04
+
 	ACHIEVEMENT_WIN_BLUETOOTH,
 	ACHIEVEMENT_SCENARIO_04_BIATHLON,
 	ACHIEVEMENT_SCENARIO_04_PILLAGE,
@@ -2792,7 +2792,7 @@ enum EAchievement
 	ACHIEVEMENT_SCENARIO_04_WIN_IMMORTAL,
 	ACHIEVEMENT_SCENARIO_04_WIN_DEITY,
 
-	//DLC_05
+
 	ACHIEVEMENT_WIN_SEJONG,
 	ACHIEVEMENT_SPECIAL_IRONCLAD_TURTLE,
 	ACHIEVEMENT_SPECIAL_HWATCH_OUT,
@@ -2807,7 +2807,7 @@ enum EAchievement
 	ACHIEVEMENT_SCENARIO_05_WIN_100TURNS,
 	ACHIEVEMENT_SCENARIO_05_QING_TAKES_MING,
 
-	//DLC_06
+
 	ACHIEVEMENT_SPECIAL_ROME_GETS_ZEUS,
 	ACHIEVEMENT_SPECIAL_ZEUS_AND_ARTEMIS,
 	ACHIEVEMENT_SPECIAL_HALICARNASSUS_GOLD,
@@ -2826,7 +2826,7 @@ enum EAchievement
 	ACHIEVEMENT_SCENARIO_06_WONDER_CONQUEST,
 	ACHIEVEMENT_SCENARIO_06_ORACLE_CONSULT,
 
-	//Expansion 1
+
 	ACHIEVEMENT_XP1_01,
 	ACHIEVEMENT_XP1_02,
 	ACHIEVEMENT_XP1_03,
@@ -2880,7 +2880,7 @@ enum EAchievement
 	ACHIEVEMENT_XP1_51,
 	ACHIEVEMENT_XP1_52,
 
-	//Expansion 2
+
 	ACHIEVEMENT_XP2_01,
 	ACHIEVEMENT_XP2_02,
 	ACHIEVEMENT_XP2_03,
@@ -3086,16 +3086,16 @@ enum ESteamStat
 	ESTEAMSTAT_BRITISHNAVY,
 	ESTEAMSTAT_BARBSNAVALCONVERTED,
 
-	//DLC_05
+
 	ESTEAMSTAT_HWACHAKILLS,
 	
-	//DLC_06
+
 	ESTEAMSTAT_STATUEOFZEUS,
 	ESTEAMSTAT_TEMPLEOFARTEMIS,
 	ESTEAMSTAT_MAUSOLEUMOFHALICARNASSUS,
 	ESTEAMSTAT_HALICARNASSUSGOLDEARNED,
 
-	//Expansion 1
+
 	ESTEAMSTAT_BULLIEDGOLD,
 
 	NUM_STEAM_STATS
@@ -3229,4 +3229,4 @@ enum GreatWorkSlotType
 	NO_GREAT_WORK_SLOT = -1,
 };
 
-#endif //CVENUMS_H
+#endif

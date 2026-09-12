@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Launch the isolated game executable and retain its diagnostic output."""
+
 from pathlib import Path
 import os
 import subprocess
@@ -16,7 +16,7 @@ executable=DEST/'Contents/MacOS/Civilization V'
 log=HERE/'build/runtime.log'
 with log.open('wb') as output:
     environment=os.environ.copy()
-    # Aspyr's localization loader fails with the inherited C.UTF-8 locale.
+
     for name in ('LANG', 'LC_ALL', 'LC_CTYPE'):
         if environment.get(name) == 'C.UTF-8':
             environment[name] = 'en_US.UTF-8'

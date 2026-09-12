@@ -1,9 +1,9 @@
 include( "IconSupport" );
-----------------------------------------------------------------
--------------------------------------------------
--- edit: Do not show AI in Demographics
--- edit: Add replay stats
--------------------------------------------------
+
+
+
+
+
 local m_PopulationTable = {};
 local m_FoodTable = {};
 local m_ProductionTable = {};
@@ -16,8 +16,8 @@ local m_LiteracyTable = {};
 local m_bIsEndGame = (ContextPtr:GetID() == "EndGameDemographics");
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function BuildTables()
     for i = 0, GameDefines.MAX_MAJOR_CIVS do
         m_PopulationTable[ i ] = 0;
@@ -41,14 +41,14 @@ function BuildTables()
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function GetBest( table, iPlayer )
     local highest = nil;
     local highestID = iPlayer;
     for i = 0, GameDefines.MAX_MAJOR_CIVS do
 		local pPlayer = Players[i];
-        -- exclude AI from Demographics
+
         if Game.IsOption("GAMEOPTION_AI_GIMP_NO_DEMOGRAPHICS") then
             if((pPlayer:IsAlive() and not Game.IsNetworkMultiPlayer() or pPlayer:IsHuman()) and not pPlayer:IsMinorCiv()) then
                 if( highest == nil or table[i] > highest ) then
@@ -70,15 +70,15 @@ function GetBest( table, iPlayer )
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function GetAverage( table, iPlayer )
     local accum = 0;
     local count = 0;
     
     for i = 0, GameDefines.MAX_MAJOR_CIVS do
        	local pPlayer = Players[i];
-        -- exclude AI from Demographics
+
         if Game.IsOption("GAMEOPTION_AI_GIMP_NO_DEMOGRAPHICS") then
             if((pPlayer:IsAlive() and not Game.IsNetworkMultiPlayer() or pPlayer:IsHuman()) and not pPlayer:IsMinorCiv()) then
                 count = count + 1;
@@ -96,14 +96,14 @@ function GetAverage( table, iPlayer )
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function GetWorst( table, iPlayer )
     local lowest = nil;
     local lowestID = iPlayer;
     for i = 0, GameDefines.MAX_MAJOR_CIVS do
         local pPlayer = Players[i];
-        -- exclude AI from Demographics
+
         if Game.IsOption("GAMEOPTION_AI_GIMP_NO_DEMOGRAPHICS") then
             if((pPlayer:IsAlive() and not Game.IsNetworkMultiPlayer() or pPlayer:IsHuman()) and not pPlayer:IsMinorCiv()) then
                 if( lowest == nil or table[i] <= lowest ) then
@@ -125,15 +125,15 @@ function GetWorst( table, iPlayer )
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function GetRank( table, iPlayer )
     local playerVal = table[iPlayer];
     local rank = 1;
     
     for i = 0, GameDefines.MAX_MAJOR_CIVS do
         local pPlayer = Players[i];
-        -- exclude AI from Demographics
+
         if Game.IsOption("GAMEOPTION_AI_GIMP_NO_DEMOGRAPHICS") then
             if((pPlayer:IsAlive() and not Game.IsNetworkMultiPlayer() or pPlayer:IsHuman()) and not pPlayer:IsMinorCiv()) then
                 if( table[i] > playerVal ) then
@@ -153,15 +153,15 @@ function GetRank( table, iPlayer )
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function GetPopulationValue( iPlayer )
     return Players[iPlayer]:GetRealPopulation();
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function BuildPopulationEntry( iPlayer )
     local instance = {};
     ContextPtr:BuildInstanceForControl( "Entry", instance, Controls.MainStack );
@@ -188,15 +188,15 @@ function BuildPopulationEntry( iPlayer )
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function GetFoodValue( iPlayer )
     return Players[iPlayer]:CalculateTotalYield(YieldTypes.YIELD_FOOD);
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function BuildFoodEntry( iPlayer )
     local instance = {};
     ContextPtr:BuildInstanceForControl( "Entry", instance, Controls.MainStack );
@@ -223,15 +223,15 @@ function BuildFoodEntry( iPlayer )
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function GetProductionValue( iPlayer )
     return Players[iPlayer]:CalculateTotalYield(YieldTypes.YIELD_PRODUCTION);
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function BuildProductionEntry( iPlayer )
     local instance = {};
     ContextPtr:BuildInstanceForControl( "Entry", instance, Controls.MainStack );
@@ -259,15 +259,15 @@ function BuildProductionEntry( iPlayer )
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function GetGoldValue( iPlayer )
     return Players[iPlayer]:CalculateGrossGold();
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function BuildGoldEntry( iPlayer )
     local instance = {};
     ContextPtr:BuildInstanceForControl( "Entry", instance, Controls.MainStack );
@@ -294,15 +294,15 @@ function BuildGoldEntry( iPlayer )
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function GetLandValue( iPlayer )
     return Players[iPlayer]:GetNumPlots() * 10000;
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function BuildLandEntry( iPlayer )
     local instance = {};
     ContextPtr:BuildInstanceForControl( "Entry", instance, Controls.MainStack );
@@ -329,15 +329,15 @@ function BuildLandEntry( iPlayer )
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function GetArmyValue( iPlayer )
     return math.sqrt( Players[iPlayer]:GetMilitaryMight() ) * 2000;
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function BuildArmyEntry( iPlayer )
     local instance = {};
     ContextPtr:BuildInstanceForControl( "Entry", instance, Controls.MainStack );
@@ -369,20 +369,20 @@ function SetIcon(iPlayerID, control, controlBG, controlShadow)
 	local iTeam = pPlayer:GetTeam();
 	local pTeam = Teams[iTeam];
 
-    -- Active player
+
 	if (pPlayer:GetID() == Game.GetActivePlayer()) then
 		CivIconHookup( iPlayerID, 32, control, controlBG, controlShadow, false, true);  
-	-- Haven't yet met this player
+
 	elseif (not pTeam:IsHasMet(Game.GetActiveTeam())) then
 		CivIconHookup( -1, 32, control, controlBG, controlShadow, false, true); 
-	-- Met players
+
 	else
 		CivIconHookup( iPlayerID, 32, control, controlBG, controlShadow, false, true);  
 	end  
 end
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function GetApprovalValue( iPlayer )
     local value = 60 + (Players[iPlayer]:GetExcessHappiness() * 3);
     if( value < 0 ) then
@@ -394,8 +394,8 @@ function GetApprovalValue( iPlayer )
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function BuildApprovalEntry( iPlayer )
     local instance = {};
     ContextPtr:BuildInstanceForControl( "Entry", instance, Controls.MainStack );
@@ -418,8 +418,8 @@ function BuildApprovalEntry( iPlayer )
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function GetLiteracyValue( iPlayer )
 
     local pTeamTechs = Teams[ Players[ iPlayer ]:GetTeam() ]:GetTeamTechs();
@@ -441,8 +441,8 @@ function GetLiteracyValue( iPlayer )
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function BuildLiteracyEntry( iPlayer )
     local instance = {};
     ContextPtr:BuildInstanceForControl( "Entry", instance, Controls.MainStack );
@@ -465,8 +465,8 @@ function BuildLiteracyEntry( iPlayer )
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function BuildList( iPlayer )
     Controls.MainStack:DestroyAllChildren();
 
@@ -487,16 +487,16 @@ function BuildList( iPlayer )
 end
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnPlayerPulldown( iPlayerID )
     BuildList( iPlayerID );
 end
--- Controls.PlayerPulldown:RegisterSelectionCallback( OnPlayerPulldown );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
+
 function ShowHideHandler( bIsHide, bIsInit )
 
     if( not bIsInit ) then
@@ -528,12 +528,12 @@ if( m_bIsEndGame ) then
 end
     
 
--------------------------------------------------
--- On Popup
--------------------------------------------------
+
+
+
 function OnPopup( popupInfo )
 	
-	-- End game is its own deal that shouldn't come up when we hit a hotkey or something
+
 	if (m_bIsEndGame) then
 		return
 	end
@@ -544,12 +544,12 @@ function OnPopup( popupInfo )
         	if( ContextPtr:IsHidden() == false ) then
         	    OnBack();
             else
-                -- NEW: add replay stats
+
                 Network.SendGiftUnit(-1, -8);
             	UIManager:QueuePopup( ContextPtr, PopupPriority.InGameUtmost );
         	end
     	else
-            -- NEW: add replay stats
+
             Network.SendGiftUnit(-1, -8);
         	UIManager:QueuePopup( ContextPtr, PopupPriority.Demographics );
     	end
@@ -557,8 +557,8 @@ function OnPopup( popupInfo )
 end
 Events.SerialEventGameMessagePopup.Add( OnPopup );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnBack()
 	print("Dequeuing demographics");
 	UIManager:DequeuePopup( ContextPtr );
@@ -566,9 +566,9 @@ end
 Controls.BackButton:RegisterCallback( Mouse.eLClick, OnBack );
     
 
-----------------------------------------------------------------
--- Key Down Processing
-----------------------------------------------------------------
+
+
+
 function InputHandler( uiMsg, wParam, lParam )
     if( uiMsg == KeyEvents.KeyDown ) then
         if( wParam == Keys.VK_RETURN or wParam == Keys.VK_ESCAPE ) then
@@ -581,7 +581,7 @@ if( not m_bIsEndGame ) then
 	ContextPtr:SetInputHandler( InputHandler );
 end
 
-----------------------------------------------------------------
--- 'Active' (local human) player has changed
-----------------------------------------------------------------
+
+
+
 Events.GameplaySetActivePlayer.Add(OnBack);

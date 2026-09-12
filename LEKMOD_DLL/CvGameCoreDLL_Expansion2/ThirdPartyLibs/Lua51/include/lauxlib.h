@@ -1,8 +1,8 @@
-/*
-** $Id: lauxlib.h,v 1.88.1.1 2007/12/27 13:02:25 roberto Exp $
-** Auxiliary functions for building Lua libraries
-** See Copyright Notice in lua.h
-*/
+
+
+
+
+
 
 
 #ifndef lauxlib_h
@@ -20,7 +20,7 @@ LUALIB_API int (luaL_getn) (lua_State *L, int t);
 LUALIB_API void (luaL_setn) (lua_State *L, int t, int n);
 #else
 #define luaL_getn(L,i)          ((int)lua_objlen(L, i))
-#define luaL_setn(L,i,j)        ((void)0)  /* no op! */
+#define luaL_setn(L,i,j)        ((void)0)
 #endif
 
 #if defined(LUA_COMPAT_OPENLIB)
@@ -28,7 +28,7 @@ LUALIB_API void (luaL_setn) (lua_State *L, int t, int n);
 #endif
 
 
-/* extra error code for `luaL_load' */
+
 #define LUA_ERRFILE     (LUA_ERRERR+1)
 
 
@@ -91,11 +91,11 @@ LUALIB_API const char *(luaL_findtable) (lua_State *L, int idx,
 
 
 
-/*
-** ===============================================================
-** some useful macros
-** ===============================================================
-*/
+
+
+
+
+
 
 #define luaL_argcheck(L, cond,numarg,extramsg)	\
 		((void)((cond) || luaL_argerror(L, (numarg), (extramsg))))
@@ -118,17 +118,17 @@ LUALIB_API const char *(luaL_findtable) (lua_State *L, int idx,
 
 #define luaL_opt(L,f,n,d)	(lua_isnoneornil(L,(n)) ? (d) : f(L,(n)))
 
-/*
-** {======================================================
-** Generic Buffer manipulation
-** =======================================================
-*/
+
+
+
+
+
 
 
 
 typedef struct luaL_Buffer {
-  char *p;			/* current position in buffer */
-  int lvl;  /* number of strings in the stack (level) */
+  char *p;
+  int lvl;
   lua_State *L;
   char buffer[LUAL_BUFFERSIZE];
 } luaL_Buffer;
@@ -137,7 +137,7 @@ typedef struct luaL_Buffer {
   ((void)((B)->p < ((B)->buffer+LUAL_BUFFERSIZE) || luaL_prepbuffer(B)), \
    (*(B)->p++ = (char)(c)))
 
-/* compatibility only */
+
 #define luaL_putchar(B,c)	luaL_addchar(B,c)
 
 #define luaL_addsize(B,n)	((B)->p += (n))
@@ -150,12 +150,12 @@ LUALIB_API void (luaL_addvalue) (luaL_Buffer *B);
 LUALIB_API void (luaL_pushresult) (luaL_Buffer *B);
 
 
-/* }====================================================== */
 
 
-/* compatibility with ref system */
 
-/* pre-defined references */
+
+
+
 #define LUA_NOREF       (-2)
 #define LUA_REFNIL      (-1)
 
@@ -170,5 +170,3 @@ LUALIB_API void (luaL_pushresult) (luaL_Buffer *B);
 #define luaL_reg	luaL_Reg
 
 #endif
-
-

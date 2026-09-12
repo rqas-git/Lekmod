@@ -1,4 +1,4 @@
-"""Remove selected components transactionally, retaining the previous game app."""
+
 import json
 import shutil
 

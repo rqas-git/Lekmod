@@ -1,0 +1,128 @@
+#include <algorithm>
+#include <cassert>
+#include <climits>
+#include <ctime>
+#include <iostream>
+#include <random>
+#include <vector>
+#define MAX_INT INT_MAX
+#define CvAssertMsg(a,b) ((void)0)
+typedef unsigned int uint;
+static long long sortComparisons=0, heapComparisons=0;
+struct BuilderDirective {
+    int m_sX, m_sY, payload;
+    bool operator==(const BuilderDirective& b)const {return m_sX==b.m_sX && m_sY==b.m_sY && payload==b.payload;}
+};
+struct Item {
+    BuilderDirective value; int weight;
+    bool operator<(const Item& b)const {++sortComparisons; return weight>b.weight;}
+};
+struct Directives {
+    std::vector<Item> items;
+    int size(){return static_cast<int>(items.size());}
+    void StableSortItems(){std::stable_sort(items.begin(),items.end());}
+    BuilderDirective GetElement(int i){return items.at(i).value;}
+    int GetWeight(int i){return items.at(i).weight;}
+};
+struct CvPlot {int id; bool reachable;};
+struct Map {
+    std::vector<CvPlot> plots; std::vector<bool> valid; std::vector<int> visits;
+    CvPlot* plot(int x,int){visits.push_back(x);return valid.at(x)?&plots.at(x):NULL;}
+};
+struct Globals {Map map; Map& getMap(){return map;}} GC;
+struct CvUnit {};
+@HEAP_ENTRY@;
+struct Worker {
+    Directives m_aDirectives; bool m_bLogging=false;
+    std::vector<int> attempts;
+    int TurnsToReachTarget(CvUnit*, CvPlot* p){attempts.push_back(p->id);return p->reachable?0:MAX_INT;}
+    int baseline(CvUnit* pUnit, BuilderDirective* paDirectives, uint uaDirectives, bool bOnlyKeepBest) {
+@BASELINE@
+        return iAssignIndex;
+    }
+    int current(CvUnit* pUnit, BuilderDirective* paDirectives, uint uaDirectives, bool bOnlyKeepBest) {
+@CURRENT@
+        return iAssignIndex;
+    }
+};
+int main(){
+    std::mt19937 rng(73591);
+    long long cases=0, attempted=0, copiesOld=0,copiesNew=0;
+    long long oldCmp[3]={},newCmp[3]={};
+    const int sizes[]={0,1,31,32,33,128,1024};
+    for(int n:sizes) for(int trial=0;trial<30;++trial) for(int reject=0;reject<3;++reject)
+    for(int logging=0;logging<2;++logging) for(int onlyBest=0;onlyBest<2;++onlyBest) for(int requested:{1,4}) {
+        Worker a,b; a.m_bLogging=b.m_bLogging=logging;
+        GC.map.plots.clear();GC.map.valid.clear();GC.map.visits.clear();
+        for(int i=0;i<n;++i){
+            a.m_aDirectives.items.push_back({{i,i%9,static_cast<int>(rng())},static_cast<int>(rng()%15)-5});
+            GC.map.plots.push_back({i,reject==0 || (reject==1 && rng()%10==0)});
+            GC.map.valid.push_back(trial%3 || rng()%5!=0);
+        }
+        b.m_aDirectives=a.m_aDirectives;
+        CvUnit unit; BuilderDirective x[4],y[4];
+        sortComparisons=heapComparisons=0;
+        int nx=a.baseline(&unit,x,requested,onlyBest);
+        const long long before=sortComparisons;
+        const std::vector<int> visits=GC.map.visits;
+        GC.map.visits.clear();sortComparisons=heapComparisons=0;
+        int ny=b.current(&unit,y,requested,onlyBest);
+        assert(nx==ny && a.attempts==b.attempts && visits==GC.map.visits);
+        for(int i=0;i<nx;++i)assert(x[i]==y[i]);
+        if(logging)for(int i=0;i<n;++i)assert(a.m_aDirectives.GetElement(i)==b.m_aDirectives.GetElement(i));
+        if(!logging && requested==1 && n>32){oldCmp[reject]+=before;newCmp[reject]+=sortComparisons+heapComparisons;}
+        ++cases; attempted+=a.attempts.size();
+    }
+
+
+    typedef std::vector<int> CvPlotsVector;
+    struct Player {CvPlotsVector plots; const CvPlotsVector& GetPlots(){return plots;}} player;
+    Player* m_pPlayer=&player;
+    for(int capacity:{0,1,5,1000})for(int used=0;used<=capacity;++used){
+        player.plots.assign(capacity,-1);for(int i=0;i<used;++i)player.plots[i]=i;
+        CvPlotsVector m_aiPlots;
+@SNAPSHOT@
+        CvPlotsVector original=player.plots;
+        copiesOld+=original.size();copiesNew+=m_aiPlots.size();
+        original.push_back(9876);m_aiPlots.push_back(9876);
+        std::vector<int> oldVisited,newVisited;
+        for(int p:original){if(p==-1)break;oldVisited.push_back(p);}
+        for(int p:m_aiPlots){if(p==-1)break;newVisited.push_back(p);}
+        assert(oldVisited==newVisited);
+    }
+    assert(newCmp[0]<oldCmp[0]);
+    std::cout<<"{\"cases\":"<<cases<<",\"path_attempts\":"<<attempted
+        <<",\"snapshot_copies\":["<<copiesOld<<","<<copiesNew<<"],\"selection_comparisons\":[";
+    for(int i=0;i<3;++i){if(i)std::cout<<",";std::cout<<"["<<oldCmp[i]<<","<<newCmp[i]<<"]";}
+    std::cout<<"]";
+#ifdef PERF_BENCHMARK
+    std::cout<<",\"timings\":[";bool first=true;
+    for(int n:{128,1024,8192})for(int reject=0;reject<3;++reject){
+        Worker initial;
+        GC.map.plots.clear();GC.map.valid.assign(n,true);
+        for(int i=0;i<n;++i){
+            initial.m_aDirectives.items.push_back({{i,i%9,i},static_cast<int>(rng()%100)});
+            GC.map.plots.push_back({i,reject==0 || (reject==1 && rng()%10==0)});
+        }
+        double elapsed[2]={};
+        for(int version=0;version<2;++version){
+            std::vector<double> samples;
+            for(int sample=0;sample<5;++sample){
+                const std::clock_t start=std::clock();
+                for(int repeat=0;repeat<100;++repeat){
+                    Worker worker=initial;GC.map.visits.clear();
+                    BuilderDirective out[1];CvUnit unit;
+                    if(version)worker.current(&unit,out,1,true);else worker.baseline(&unit,out,1,true);
+                }
+                samples.push_back(double(std::clock()-start)/CLOCKS_PER_SEC/100);
+            }
+            std::sort(samples.begin(),samples.end());elapsed[version]=samples[2];
+        }
+        if(!first)std::cout<<",";first=false;
+        std::cout<<"{\"directives\":"<<n<<",\"rejection_mode\":"<<reject
+            <<",\"before_seconds\":"<<elapsed[0]<<",\"after_seconds\":"<<elapsed[1]<<"}";
+    }
+    std::cout<<"]";
+#endif
+    std::cout<<"}";
+}

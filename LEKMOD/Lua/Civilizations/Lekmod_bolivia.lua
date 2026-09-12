@@ -1,11 +1,11 @@
--- Author: EnormousApplePie
+
 
 include("Lekmod_utilities.lua")
 
 local this_civ = GameInfoTypes["CIVILIZATION_BOLIVIA"]
 local is_active = LekmodUtilities:is_civilization_active(this_civ)
 
--- Write to the save file for remembering the last expended great person
+
 Lek_SaveData = Modding.OpenSaveData()
 
 Lek_Properties = {}
@@ -24,16 +24,16 @@ function lekmod_bolivia_set_persistent_data(name, value)
 end
 
 
-------------------------------------------------------------------------------------------------------------------------
--- Bolivia UA. Add a dummy building that either gives +1 production or +1 food to mines globally when
--- either a writer or artist is expended. Save this data to the save file so that it can be remembered
-------------------------------------------------------------------------------------------------------------------------
+
+
+
+
 function lekmod_bolivia_is_person_expended(player_id, unit_id, arg3, arg4, new_player_id)
 
    local artist_unit_id = GameInfoTypes["UNIT_ARTIST"]
    local writer_unit_id = GameInfoTypes["UNIT_WRITER"]
 
-   -- CityCaptureComplete passes different arguments than the other events so we need to check for that
+
    local player = Players[player_id]
    local new_player
    if new_player_id ~= nil then
@@ -50,7 +50,7 @@ function lekmod_bolivia_is_person_expended(player_id, unit_id, arg3, arg4, new_p
       end
    end
 
-   -- Great Person expended event only has 2 arguments.
+
    if (unit_id == artist_unit_id or unit_id == writer_unit_id) then
       lekmod_bolivia_set_persistent_data("bolivia_last_expended", unit_id .. player_id)
    end
@@ -73,7 +73,7 @@ function lekmod_bolivia_is_person_expended(player_id, unit_id, arg3, arg4, new_p
       end
    end
 
-   -- Make sure to delete the building in anything other than the capital to avoid stacking effects
+
    if new_player ~= nil then
       lekmod_bolivia_retain_building_capture(new_player_id)
    else
@@ -95,10 +95,10 @@ function lekmod_bolivia_retain_building_capture(player_id)
    end
 
 end
-------------------------------------------------------------------------------------------------------------------------
--- Bolivia UU. Colorado. Add a combat strength bonus to the Colorado unit based on excess happiness.
-------------------------------------------------------------------------------------------------------------------------
--- Note: Might want to make a lua hook for when a player's happiness changes to update the combat strength better
+
+
+
+
 function lekmod_bolivia_uu_combat_strength(player_id, unit_id)
 
 
@@ -119,15 +119,14 @@ function lekmod_bolivia_uu_combat_strength(player_id, unit_id)
 		end
 	end
 end
-------------------------------------------------------------------------------------------------------------------------
+
 if is_active then
-	--GameEvents.PlayerDoTurn.Add(bolivia_uu_combat_strength)
-   -- Note: PlayerHappinessChanged is a Lekmod specific event
-	
+
+
+
 	GameEvents.GreatPersonExpended.Add(lekmod_bolivia_is_person_expended)
    GameEvents.CityCaptureComplete.Add(lekmod_bolivia_is_person_expended)
    GameEvents.PlayerCityFounded.Add(lekmod_bolivia_is_person_expended)
 end
 GameEvents.PlayerHappinessChanged.Add(lekmod_bolivia_uu_combat_strength)
 GameEvents.UnitCreated.Add(lekmod_bolivia_uu_combat_strength)
-------------------------------------------------------------------------------------------------------------------------

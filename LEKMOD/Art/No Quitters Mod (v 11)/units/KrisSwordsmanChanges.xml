@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 10/2/2015 3:44:21 PM -->
+
 <GameData>
 
-	<!-- Increase combat strength to 15 and eliminate Enemy Sword and Evil Spirits promotion possibilties -->
+
 	<Units>
 		<Update>
 			<Set Combat="15" />

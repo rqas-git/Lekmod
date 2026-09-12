@@ -1,17 +1,17 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//!	 \file		CvDatabaseUtility.h
-//!  \brief		Helper utility for GameDatabase.
-//!
-//!		This file the class definition of CvDatabaseUtility.
-//!
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #pragma once
 #ifndef CVDATABASEUTILITY_H
 
@@ -21,22 +21,25 @@ public:
 	CvDatabaseUtility();
 	~CvDatabaseUtility();
 
-	//! Clear stored results
+
 	void ClearResults();
 	void ClearResults(const std::string& strKey);
 
-	//! Retrieves a cached result given an arbitrary string key
+
 	Database::Results* GetResults(const std::string& strKey);
 
-	//! Prepares a cached result given an arbitrary string key
+
+	Database::Results* GetOrPrepareResults(const std::string& strKey, const char* szStmt);
+
+
 	Database::Results* PrepareResults(const std::string& strKey, const char* szStmt);
 
 #ifdef LEKMOD_POST_DLC_DATA_LOADING
-	//! Fallback method to refresh language text tables
+
 	void RefreshLanguageTextFallback();
 #endif
 
-	//!Allocates an array to count and zero's memory.
+
 	void InitializeArray(int*& pArray, const size_t count, int iDefault = 0);
 	void InitializeArray(bool*& pArray, const size_t count, bool bDefault = false);
 	void InitializeArray(float*& pArray, const size_t count, float fDefault = 0.0f);
@@ -46,7 +49,7 @@ public:
 	void Initialize2DArray(int**& ppArray, const size_t iCount1, const size_t iCount2, int iDefault = 0);
 #endif
 
-	//!Allocates an array to Count(szTableName) and zero's memory.
+
 	template<typename T>
 #if defined(LEKMOD_MACOS)
 void InitializeArray(T*& pArray, const char* szTableName, T defaultValue = (T)0);
@@ -63,24 +66,24 @@ void InitializeArray(T*& pArray, const char* szTableName, T default = (T)0);
 #endif
 
 
-	//!Allocates an array to Count(szTypeTableName) and initializes to false.
-	//!Then assigns pArray[Type.ID] = true for all resulting rows.
+
+
 	bool PopulateArrayByExistence(bool*& pArray,	const char* szTypeTableName,
 	                              const char* szDataTableName,
 	                              const char* szTypeColumn,
 	                              const char* szFilterColumn,
 	                              const char* szFilterValue);
 
-	//!Allocates an array to Count(szTypeTableName) and initializes to false.
-	//!Then assigns pArray[i++] = Type.ID for all resulting rows.
+
+
 	bool PopulateArrayByExistence(int*& pArray,	const char* szTypeTableName,
 	                              const char* szDataTableName,
 	                              const char* szTypeColumn,
 	                              const char* szFilterColumn,
 	                              const char* szFilterValue);
 
-	//!Allocates an array to Count(szTypeTableName) and initializes to 0
-	//!Then assigns pArray[Type.ID] = value for all resulting rows.
+
+
 	bool PopulateArrayByValue(int*& pArray, const char* szTypeTableName,
 	                          const char* szDataTableName,
 	                          const char* szTypeColumn,
@@ -91,30 +94,34 @@ void InitializeArray(T*& pArray, const char* szTableName, T default = (T)0);
 							  int iMinArraySize = 0);
 
 
-	//------------------------------------------------------------------------------
-	// Tables in Civ5 commonly have a Flavors array.
-	// This method fetches that flavor data into an integer array.
-	// CONDITIONS:
-	//	*'Flavors' table must exist.
-	//	*FlavorTable must have a 'FlavorType' column.
-	// RETURNS:
-	//	True on success.
+
+
+
+
+
+
+
+
 	bool SetFlavors(int*& pFlavorsArray, const char* szTableName, const char* szFilterColumn, const char* szFilterValue, int iDefaultValue = 0);
 
-	//------------------------------------------------------------------------------
-	// Tables in Civ5 commonly have a Yields array.
-	// This method fetches that yield data into an integer array.
-	// CONDITIONS:
-	//	*'Yields' table must exist.
-	//	*YieldTable must have a 'YieldType' column.
-	// RETURNS:
-	//	True on success.
+
+
+
+
+
+
+
+
 	bool SetYields(int*& pYieldsArray, const char* szTableName, const char* szFilterColumn, const char* szFilterValue);
 
-	//! Retrieves the maximum number of a given column for a given table.
+
+	void SetYieldMatrix(int**& pYieldsArray, const char* szDimensionTable, const char* szKey,
+	                    const char* szQuery, const char* szFilterValue);
+
+
 	int MaxRows(const char* szTableName);
 
-	//! Returns the most recent database error message.
+
 	const char* GetErrorMessage() const;
 
 private:
@@ -122,9 +129,9 @@ private:
 	ResultsMap m_storedResults;
 };
 
-//------------------------------------------------------------------------------
-// inline and template members
-//------------------------------------------------------------------------------
+
+
+
 inline void CvDatabaseUtility::InitializeArray(int*& pArray, const size_t count, int iDefault)
 {
 	CvAssertMsg(count > 0, "Initializing array to 0 or less items.");
@@ -142,7 +149,7 @@ inline void CvDatabaseUtility::InitializeArray(int*& pArray, const size_t count,
 			pArray[i] = iDefault;
 	}
 }
-//------------------------------------------------------------------------------
+
 inline void CvDatabaseUtility::InitializeArray(bool*& pArray, const size_t count, bool bDefault)
 {
 	CvAssertMsg(count > 0, "Initializing array to 0 or less items.");
@@ -164,7 +171,7 @@ inline void CvDatabaseUtility::InitializeArray(bool*& pArray, const size_t count
 			pArray[i] = bDefault;
 	}
 }
-//------------------------------------------------------------------------------
+
 inline void CvDatabaseUtility::InitializeArray(float*& pArray, const size_t count, float fDefault)
 {
 	CvAssertMsg(count > 0, "Initializing array to 0 or less items.");
@@ -182,7 +189,7 @@ inline void CvDatabaseUtility::InitializeArray(float*& pArray, const size_t coun
 			pArray[i] = fDefault;
 	}
 }
-//------------------------------------------------------------------------------
+
 template<typename T>
 #if defined(LEKMOD_MACOS)
 inline void CvDatabaseUtility::InitializeArray(T*& pArray, const char* szTableName, T defaultValue)
@@ -192,12 +199,12 @@ inline void CvDatabaseUtility::InitializeArray(T*& pArray, const char* szTableNa
 {
 	size_t count = MaxRows(szTableName);
 
-	//This is a bit of a hack to support empty tables.
-	//For example, the "Automates" table will be empty during a tutorial.
-	//We cannot simply NULL out the array because WAY too much code blindly assumes SOMETHING will be there..
-	//Instead we allocate room for 1 element and just roll with it.
 
-	//CvAssertMsg(count > 0, DB.ErrorMessage());
+
+
+
+
+
 	if(count == 0)
 		count = 1;
 
@@ -208,4 +215,4 @@ inline void CvDatabaseUtility::InitializeArray(T*& pArray, const char* szTableNa
 #endif
 }
 
-#endif //CVDATABASEUTILITY_H
+#endif

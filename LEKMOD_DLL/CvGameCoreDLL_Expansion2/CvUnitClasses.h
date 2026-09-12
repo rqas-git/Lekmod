@@ -1,24 +1,24 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_UNIT_CLASSES_H
 #define CIV5_UNIT_CLASSES_H
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvUnitEntry
-//!  \brief		A single entry from the UnitInfo XML file
-//
-//!  Key Attributes:
-//!  - Used to be called CvUnitInfo
-//!  - Populated from XML\GameInfo\CIV5UnitInfos.xml
-//!  - Array of these contained in CvUnitXMLEntries class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 class CvUnitEntry: public CvBaseInfo
 {
 public:
@@ -27,7 +27,7 @@ public:
 
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
 
-	// Accessor Functions (Non-Arrays)
+
 	int GetProductionCost() const;
 #ifdef NQ_UNIT_FINAL_PRODUCTION_COST_MODIFIER
 	int GetFinalProductionCostModifier() const;
@@ -90,13 +90,13 @@ public:
 	int GetObsoleteTech() const;
 	int GetEra() const;
 	int GetPolicyType() const;
-#if defined(MISC_CHANGES) // Getters
+#if defined(MISC_CHANGES)
 	int GetPolicyBranchType() const;
 	bool IsAnyIdeologyUnlock() const;
 #endif
 	int GetGoodyHutUpgradeUnitClass() const;
-	int GetGroupSize() const;			// the initial number of individuals in the unit group
-	int GetGroupDefinitions() const;	// the number of UnitMeshGroups for this unit
+	int GetGroupSize() const;
+	int GetGroupDefinitions() const;
 	int GetMeleeWaveSize() const;
 	int GetRangedWaveSize() const;
 	int GetNumUnitNames() const;
@@ -151,7 +151,7 @@ public:
 	const char* GetUnitNames(int i) const;
 	GreatWorkType GetGreatWorks(int i) const;
 
-	// Accessor Functions (Arrays)
+
 	int GetPrereqAndTechs(int i) const;
 	int GetResourceQuantityRequirement(int i) const;
 	int GetBuildingProductionModifier(BuildingTypes eBuilding) const;
@@ -177,8 +177,8 @@ public:
 	bool IsFreePromotionEra(int iPromotion, int iEra) const;
 #endif
 
-	// Derived fields (not in XML)
-	int GetCargoSpace() const;  // (from free promotions)
+
+	int GetCargoSpace() const;
 	int GetPower() const;
 	int DoUpdatePower(int iMeleeStrength, int iRangedStrength) const;
 
@@ -245,7 +245,7 @@ private:
 	int m_iPrereqAndTech;
 	int m_iObsoleteTech;
 	int m_iPolicyType;
-#if defined(MISC_CHANGES) // Member variables
+#if defined(MISC_CHANGES)
 	int m_iPolicyBranchType;
 	bool m_bAnyIdeologyUnlock;
 #endif
@@ -303,7 +303,7 @@ private:
 
 	UnitMoveRate m_unitMoveRate[12];
 
-	// Arrays
+
 	int* m_piPrereqAndTechs;
 	int* m_piResourceQuantityRequirements;
 	int* m_piProductionTraits;
@@ -336,23 +336,23 @@ private:
 	GreatWorkType* m_paeGreatWorks;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvUnitXMLEntries
-//!  \brief		Game-wide information about units
-//
-//! Key Attributes:
-//! - Plan is it will be contained in CvGameRules object within CvGame class
-//! - Populated from XML\GameInfo\CIV5UnitInfos.xml
-//! - Contains an array of CvUnitEntry from the above XML file
-//! - One instance for the entire game
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
 class CvUnitXMLEntries
 {
 public:
 	CvUnitXMLEntries(void);
 	~CvUnitXMLEntries(void);
 
-	// Accessor functions
+
 	std::vector<CvUnitEntry*>& GetUnitEntries();
 #ifdef AUI_WARNING_FIXES
 	uint GetNumUnits() const;
@@ -368,13 +368,13 @@ private:
 	std::vector<CvUnitEntry*> m_paUnitEntries;
 };
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Helper Functions to serialize arrays of variable length (based on number of units defined in game)
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 namespace UnitArrayHelpers
 {
 void Read(FDataStream& kStream, int* paiUnitArray);
 void Write(FDataStream& kStream, int* paiUnitArray, int iArraySize);
 }
 
-#endif //CIV5_UNIT_CLASSES_H
+#endif

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-09 17:56:05 -->
+
 <GameData>
 
-	<!-- Great Lighthouse now also provides +1 Gold from coast/ocean tiles and a free Great Admiral -->
+
 	<Building_TerrainYieldChanges>
 		<Row>
 			<BuildingType>BUILDING_GREAT_LIGHTHOUSE</BuildingType>
@@ -18,7 +18,7 @@
 		</Row>
 	</Building_TerrainYieldChanges>
 
-	<!-- localization -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_WONDER_GREAT_LIGHTHOUSE_HELP" />
 		<Row Tag="TXT_KEY_WONDER_GREAT_LIGHTHOUSE_HELP">

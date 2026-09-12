@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build and open the native launcher; the gameplay checkout stays beside it."""
+
 import argparse
 import hashlib
 from pathlib import Path

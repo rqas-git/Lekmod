@@ -1,13 +1,13 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
-// playerAI.h
+
 
 #ifndef CIV5_PLAYER_AI_H
 #define CIV5_PLAYER_AI_H
@@ -22,7 +22,7 @@ public:
 	CvPlayerAI();
 	virtual ~CvPlayerAI();
 
-	// inlined for performance reasons
+
 	static CvPlayerAI& getPlayer(PlayerTypes ePlayer)
 	{
 		CvAssertMsg(ePlayer != NO_PLAYER, "Player is not assigned a valid value");
@@ -82,7 +82,7 @@ public:
 	CvPlot* FindBestArtistTargetPlot(CvUnit* pGreatArtist, int& iScore);
 	CvPlot* FindBestMusicianTargetPlot(CvUnit* pGreatMerchant, bool bOnlySafePaths);
 
-	// this are used by a city AI to signal that it is committing to build a unit for one of my operations
+
 	virtual OperationSlot PeekAtNextUnitToBuildForOperationSlot(int iAreaID);
 	virtual OperationSlot CityCommitToBuildUnitForOperationSlot(int iAreaID, int iTurns, CvCity* pCity);
 #ifdef AUI_WARNING_FIXES
@@ -94,7 +94,7 @@ public:
 #endif
 	virtual int GetNumUnitsNeededToBeBuilt();
 
-	// for serialization
+
 	virtual void Read(FDataStream& kStream);
 	virtual void Write(FDataStream& kStream) const;
 
@@ -105,7 +105,7 @@ protected:
 	void AI_doResearch();
 };
 
-// helper for accessing static functions
+
 #define GET_PLAYER CvPlayerAI::getPlayer
 
 #endif

@@ -1,20 +1,20 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
-// random.h
+
 
 #ifndef CIV5_RANDOM_H
 #define CIV5_RANDOM_H
 
 #ifdef _DEBUG
 #include <vector>
-#endif//_DEBUG
+#endif
 
 #ifdef AUI_USE_SFMT_RNG
 #include "SFMT\SFMT.h"
@@ -40,13 +40,13 @@ public:
 #endif
 
 #if defined(AUI_USE_SFMT_RNG) || defined(AUI_WARNING_FIXES)
-	unsigned int get(unsigned int uiNum, const char* pszLog = NULL);  //  Returns value from 0 to num-1 inclusive.
+	unsigned int get(unsigned int uiNum, const char* pszLog = NULL);
 #else
-	unsigned short get(unsigned short usNum, const char* pszLog = NULL);  //  Returns value from 0 to num-1 inclusive.
+	unsigned short get(unsigned short usNum, const char* pszLog = NULL);
 #endif
 
 #ifdef AUI_BINOM_RNG
-	unsigned int getBinom(unsigned int uiNum, const char* pszLog = NULL); // Returns value from 0 to num-1 inclusive in binomial distribution
+	unsigned int getBinom(unsigned int uiNum, const char* pszLog = NULL);
 #endif
 
 	float getFloat();
@@ -61,7 +61,7 @@ public:
 	unsigned long getCallCount() const;
 	unsigned long getResetCount() const;
 
-	// for serialization
+
 	void read(FDataStream& Stream);
 	void write(FDataStream& Stream) const;
 
@@ -71,7 +71,7 @@ public:
 	void syncInternals(const CvRandom& rhs);
 #endif
 
-	// for OOS debugging
+
 	const std::vector<std::string>& getResolvedCallStacks() const;
 	const std::vector<unsigned long>& getSeedHistory() const;
 	void resolveCallStacks() const;
@@ -88,15 +88,15 @@ protected:
 	SFMersenneTwister m_MersenneTwister;
 #endif
 #if defined(LEKMOD_MACOS)
-	// Aspyr serializes these values as 32 bits even on its LP64 host.
-	// Keep the LCG state bounded so a local sync round trip remains equal.
+
+
 	typedef uint32_t RandomWord;
 	RandomWord m_ulRandomSeed;
 #else
 	unsigned long m_ulRandomSeed;
 #endif
 
-	// for OOS checks/debugging
+
 #if defined(LEKMOD_MACOS)
 	RandomWord m_ulCallCount;
 	RandomWord m_ulResetCount;
@@ -104,17 +104,17 @@ protected:
 	unsigned long m_ulCallCount;
 	unsigned long m_ulResetCount;
 #endif
-	bool m_bSynchronous;		// If true, the instance is marked as being one that should be synchronous across multi-player games.
+	bool m_bSynchronous;
 
 #ifdef _DEBUG
 	bool m_bExtendedCallStackDebugging;
-	// something awful is happening with synchronization, log call stacks
+
 	mutable std::vector<FCallStack> m_kCallStacks;
 	mutable std::vector<unsigned long> m_seedHistory;
-	// just in case addresses don't match up, resolve symbols on send
-	// and compare on the remote for somewhat meaningful output
+
+
 	mutable std::vector<std::string>  m_resolvedCallStacks;
-#endif//_DEBUG
+#endif
 
 };
 

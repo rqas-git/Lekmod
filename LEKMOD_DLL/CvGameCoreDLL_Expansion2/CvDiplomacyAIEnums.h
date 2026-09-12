@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef DIPLOMACY_AI_ENUMS_H
@@ -68,14 +68,14 @@ enum WarStateTypes
 {
     NO_WAR_STATE_TYPE = -1,
 
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
     WAR_STATE_NEARLY_DEFEATED,
     WAR_STATE_DEFENSIVE,
     WAR_STATE_STALEMATE,
     WAR_STATE_CALM,
     WAR_STATE_OFFENSIVE,
     WAR_STATE_NEARLY_WON,
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
 
     NUM_WAR_STATES,
 };
@@ -84,14 +84,14 @@ enum WarProjectionTypes
 {
     NO_WAR_PROJECTION_TYPE = -1,
 
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
     WAR_PROJECTION_DESTRUCTION,
     WAR_PROJECTION_DEFEAT,
     WAR_PROJECTION_STALEMATE,
     WAR_PROJECTION_UNKNOWN,
     WAR_PROJECTION_GOOD,
     WAR_PROJECTION_VERY_GOOD,
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
 
     NUM_WAR_PROJECTION_TYPES,
 };
@@ -100,13 +100,13 @@ enum WarGoalTypes
 {
     NO_WAR_GOAL_TYPE = -1,
 
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
     WAR_GOAL_DEMAND,
     WAR_GOAL_PREPARE,
     WAR_GOAL_CONQUEST,
     WAR_GOAL_DAMAGE,
     WAR_GOAL_PEACE,
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
 
     NUM_WAR_GOALS,
 };
@@ -115,7 +115,7 @@ enum StrengthTypes
 {
     NO_STRENGTH_VALUE = -1,
 
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
     STRENGTH_PATHETIC,
     STRENGTH_WEAK,
     STRENGTH_POOR,
@@ -123,7 +123,7 @@ enum StrengthTypes
     STRENGTH_STRONG,
     STRENGTH_POWERFUL,
     STRENGTH_IMMENSE,
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
 
     NUM_STRENGTH_VALUES,
 };
@@ -132,13 +132,13 @@ enum TargetValueTypes
 {
     NO_TARGET_VALUE = -1,
 
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
     TARGET_VALUE_IMPOSSIBLE,
     TARGET_VALUE_BAD,
     TARGET_VALUE_AVERAGE,
     TARGET_VALUE_FAVORABLE,
     TARGET_VALUE_SOFT,
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
 
     NUM_TARGET_VALUES,
 };
@@ -147,13 +147,13 @@ enum WarDamageLevelTypes
 {
     NO_WAR_DAMAGE_LEVEL_VALUE = -1,
 
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
     WAR_DAMAGE_LEVEL_NONE,
     WAR_DAMAGE_LEVEL_MINOR,
     WAR_DAMAGE_LEVEL_MAJOR,
     WAR_DAMAGE_LEVEL_SERIOUS,
     WAR_DAMAGE_LEVEL_CRIPPLED,
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
 
     NUM_WAR_DAMAGE_LEVEL_TYPES,
 };
@@ -162,13 +162,13 @@ enum AggressivePostureTypes
 {
     NO_AGGRESSIVE_POSTURE_TYPE = -1,
 
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
     AGGRESSIVE_POSTURE_NONE,
     AGGRESSIVE_POSTURE_LOW,
     AGGRESSIVE_POSTURE_MEDIUM,
     AGGRESSIVE_POSTURE_HIGH,
     AGGRESSIVE_POSTURE_INCREDIBLE,
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
 
     NUM_AGGRESSIVE_POSTURE_TYPES,
 };
@@ -190,12 +190,12 @@ enum DisputeLevelTypes
 {
     NO_DISPUTE_LEVEL = -1,
 
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
     DISPUTE_LEVEL_NONE,
     DISPUTE_LEVEL_WEAK,
     DISPUTE_LEVEL_STRONG,
     DISPUTE_LEVEL_FIERCE,
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
 
     NUM_DISPUTE_LEVELS,
 };
@@ -249,7 +249,7 @@ enum PeaceTreatyTypes
 {
     NO_PEACE_TREATY_TYPE = -1,
 
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
     PEACE_TREATY_WHITE_PEACE,
     PEACE_TREATY_ARMISTICE,
 	PEACE_TREATY_SETTLEMENT,
@@ -259,7 +259,7 @@ enum PeaceTreatyTypes
 	PEACE_TREATY_CESSION,
     PEACE_TREATY_CAPITULATION,
     PEACE_TREATY_UNCONDITIONAL_SURRENDER,
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
 
     NUM_PEACE_TREATY_TYPES,
 };
@@ -294,12 +294,12 @@ enum DealOfferResponseTypes
 {
     NO_DEAL_RESPONSE_TYPE = -1,
 
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
     DEAL_RESPONSE_GENEROUS,
     DEAL_RESPONSE_ACCEPTABLE,
     DEAL_RESPONSE_UNACCEPTABLE,
     DEAL_RESPONSE_INSULTING,
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
 
     NUM_DEAL_RESPONSES,
 };
@@ -344,11 +344,11 @@ enum CoopWarStates
 {
     NO_COOP_WAR_STATE = -1,
 
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
     COOP_WAR_STATE_REJECTED,
     COOP_WAR_STATE_SOON,
     COOP_WAR_STATE_ACCEPTED,
-    // WARNING: the order of these values is very important, do not change unless you know what you're doing!
+
 
     NUM_COOP_WAR_STATES,
 };
@@ -366,4 +366,4 @@ inline FDataStream& operator>>(FDataStream& loadFrom, CoopWarStates& writeTo)
 	return loadFrom;
 }
 
-#endif	// DIPLOMACY_AI_ENUMS_H
+#endif

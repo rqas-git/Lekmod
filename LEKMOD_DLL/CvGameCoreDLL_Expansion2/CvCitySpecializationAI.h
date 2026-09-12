@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_CITY_SPECIALIZATION_AI_H
@@ -20,16 +20,16 @@ enum ProductionSpecializationSubtypes
     NUM_PRODUCTION_SPECIALIZATION_SUBTYPES
 };
 
-// Thru science (YIELD_SCIENCE+1) plus one more for general economics
+
 #define NUM_SPECIALIZATION_YIELDS (YIELD_SCIENCE+2)
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvCitySpecializationXMLEntry
-//!  \brief		A single entry in the city specialization XML file
-//
-//!  Key Attributes:
-//!  - Populated from XML\AI\CIV5CitySpecializations.xml
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 class CvCitySpecializationXMLEntry: public CvBaseInfo
 {
 public:
@@ -38,7 +38,7 @@ public:
 
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
 
-	// Accessor Functions
+
 	int GetFlavorValue(int i) const;
 	YieldTypes GetYieldType() const;
 	int GetYieldTargetTimes100(YieldTypes eYield) const;
@@ -59,23 +59,23 @@ private:
 	int* m_piYieldTargetTimes100;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvCitySpecializationXMLEntries
-//!  \brief		Game-wide information about possible AI strategies
-//
-//! Key Attributes:
-//! - Populated from XML\AI\Civ5CitySpecializationInfos.xml
-//! - Contains an array of CvCitySpecializationXMLEntry from the above XML file
-//! - One instance for the entire game
-//! - Accessed heavily by CvCitySpecializationAI class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
 class CvCitySpecializationXMLEntries
 {
 public:
 	CvCitySpecializationXMLEntries(void);
 	~CvCitySpecializationXMLEntries(void);
 
-	// Accessor functions
+
 	std::vector<CvCitySpecializationXMLEntry*>& GetCitySpecializationEntries();
 	int GetNumCitySpecializations();
 	CvCitySpecializationXMLEntry* GetEntry(int index);
@@ -111,15 +111,15 @@ public:
 	int m_iWeight[NUM_SPECIALIZATION_YIELDS];
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvCitySpecializationAI
-//!  \brief		Decides which cities are assigned special roles
-//
-//!  Key Attributes:
-//!  - Plan is it will be contained in CvPlayerState object within CvPlayer class
-//!  - One instance for each civ (player or AI)
-//!  - Accessed by any class that needs to ask about or update city specializations
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 
 class CvCitySpecializationAI
 {
@@ -147,7 +147,7 @@ public:
 	};
 	CvCity* GetWonderBuildCity() const;
 
-	// Public since WonderProductionAI also writes to this file
+
 	CvString GetLogFileName(CvString& playerName) const;
 
 	CitySpecializationTypes GetWonderSpecialization() const;
@@ -167,7 +167,7 @@ private:
 	int AdjustValueBasedOnBuildings(CvCity* pCity, YieldTypes eYield, int iInitialValue);
 	bool CanBuildSpaceshipParts();
 
-	// Logging functions
+
 	void LogSpecializationWeights();
 	void LogSpecializationAssignment(CvCity* pCity, CitySpecializationTypes eType, bool bWonderCity=false);
 	void LogSpecializationUpdate(CitySpecializationUpdateType eUpdate);
@@ -186,12 +186,12 @@ private:
 	list<CitySpecializationTypes> m_SpecializationsNeeded;
 	int m_iBestValue[YIELD_SCIENCE+1];
 	CvWeightedVector<YieldTypes, NUM_SPECIALIZATION_YIELDS, true> m_YieldWeights;
-	int m_iNumSpecializationsForThisYield[NUM_SPECIALIZATION_YIELDS];  // Array is offset by 1 so NO_YIELD = 0, YIELD_FOOD = 1
+	int m_iNumSpecializationsForThisYield[NUM_SPECIALIZATION_YIELDS];
 	CvWeightedVector<ProductionSpecializationSubtypes, 4, true> m_ProductionSubtypeWeights;
 	int m_iNumSpecializationsForThisSubtype[NUM_PRODUCTION_SPECIALIZATION_SUBTYPES];
 	int m_iLastTurnEvaluated;
 
-	// Wonder builds
+
 	bool m_bInterruptWonders;
 	BuildingTypes m_eNextWonderDesired;
 	int m_iWonderCityID;
@@ -199,4 +199,4 @@ private:
 	bool m_bWonderChosen;
 };
 
-#endif //CIV5_CITY_SPECIALIZATION_AI_H
+#endif

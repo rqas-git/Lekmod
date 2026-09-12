@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/2/2015 11:43:13 PM -->
+
 <GameData>
 	
-	<!-- Consulates now creates a building in your Capital that gives you votes based on Era (1 vote + 1 vote per era after Renaissance. -->
+
 	<Policies>
 		<Update>
 			<Set MinorFriendshipMinimum="0" />
@@ -10,7 +10,7 @@
 		</Update>
 	</Policies>
 	
-	<!-- Consulats Localization -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_POLICY_CONSULATES_HELP" />
 		<Row Tag="TXT_KEY_POLICY_CONSULATES_HELP">
@@ -156,7 +156,7 @@
 		</Row>
 	</Language_RU_RU>
 
-	<!-- BuildingClasses for Consulates -->
+
 	<BuildingClasses>
 		<Row>
 			<Type>BUILDINGCLASS_RENAISSANCE_CONSULATE</Type>
@@ -185,7 +185,7 @@
 		</Row>
 	</BuildingClasses>
 	
-	<!-- Building Entries for Consulates -->
+
 	<Buildings>
 		<Row>
 			<Type>BUILDING_RENAISSANCE_CONSULATE</Type>

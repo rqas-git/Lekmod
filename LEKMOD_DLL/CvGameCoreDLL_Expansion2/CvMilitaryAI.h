@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_MILITARY_AI_H
@@ -26,14 +26,14 @@ enum ArmyType
     ARMY_TYPE_NAVAL_INVASION,
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvMilitaryAIStrategyXMLEntry
-//!  \brief		A single entry in the AI strategy XML file
-//
-//!  Key Attributes:
-//!  - Populated from XML\???? (not sure what path/name you want)
-//!  - Array of these contained in CvAIStretegies class
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvMilitaryAIStrategyXMLEntry: public CvBaseInfo
 {
 public:
@@ -42,7 +42,7 @@ public:
 
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
 
-	// Accessor Functions
+
 	int GetPlayerFlavorValue(int i) const;
 	int GetCityFlavorValue(int i) const;
 
@@ -86,24 +86,24 @@ private:
 	int m_iAdvisorCounselImportance;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvMilitaryAIStrategyXMLEntries
-//!  \brief		Game-wide information about possible AI strategies
-//
-//! Key Attributes:
-//! - Plan is it will be contained in CvGameRules object within CvGame class
-//! - Populated from XML\???? (not sure what path/name you want)
-//! - Contains an array of CvAIStrategyXMLEntry from the above XML file
-//! - One instance for the entire game
-//! - Accessed heavily by CvPlayerAIStrategy class (which stores the AI strategy state for 1 player)
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
 class CvMilitaryAIStrategyXMLEntries
 {
 public:
 	CvMilitaryAIStrategyXMLEntries(void);
 	~CvMilitaryAIStrategyXMLEntries(void);
 
-	// Accessor functions
+
 	std::vector<CvMilitaryAIStrategyXMLEntry*>& GetMilitaryAIStrategyEntries();
 	int GetNumMilitaryAIStrategies();
 	_Ret_maybenull_ CvMilitaryAIStrategyXMLEntry* GetEntry(int index);
@@ -114,10 +114,10 @@ private:
 	std::vector<CvMilitaryAIStrategyXMLEntry*> m_paAIStrategyEntries;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  STRUCT:     CvMilitaryTarget
-//!  \brief		A possible operation target (and muster city) for evaluation
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 struct CvMilitaryTarget
 {
 	CvMilitaryTarget() :
@@ -138,15 +138,15 @@ struct CvMilitaryTarget
 	bool m_bAttackBySea;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvMilitaryAI
-//!  \brief		Information about the AI military strategies of a single player
-//
-//!  Key Attributes:
-//!  - Plan is it will be contained in CvPlayerState object within CvPlayer class
-//!  - One instance for each civ (player or AI)
-//!  - Accessed by any class that needs to check a civ's AI strategy state
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 enum CityAttackApproaches
 {
     ATTACK_APPROACH_NONE,
@@ -193,7 +193,7 @@ public:
 		return m_eNavalDefenseState;
 	};
 
-	// Requests for military operations
+
 	bool RequestSneakAttack(PlayerTypes eEnemy);
 	bool RequestShowOfForce(PlayerTypes eEnemy);
 	bool RequestBasicAttack(PlayerTypes eEnemy, int iNumUnitsWillingBuild);
@@ -209,11 +209,11 @@ public:
 	CvAIOperation* GetNukeAttackOperation(PlayerTypes eEnemy);
 	CvAIOperation* GetPureNavalAttackOperation(PlayerTypes eEnemy);
 
-	// Emergency purchases
+
 	CvUnit* BuyEmergencyUnit(UnitAITypes eUnitType, CvCity* pCity);
 	bool BuyEmergencyBuilding(CvCity* pCity);
 
-	// Finding best cities to target
+
 	CvMilitaryTarget FindBestAttackTarget(AIOperationTypes eAIOperationType, PlayerTypes eEnemy, int* piWinningScore = NULL);
 	void ShouldAttackBySea(PlayerTypes eEnemy, CvMilitaryTarget& target);
 	int ScoreTarget(CvMilitaryTarget& target, AIOperationTypes eAIOperationType);
@@ -221,7 +221,7 @@ public:
 	CvCity* GetNearestCoastalCity(PlayerTypes eEnemy) const;
 	CvPlot* GetCoastalPlotAdjacentToTarget(CvPlot *pTarget, CvArmyAI *pArmy) const;
 
-	// Accessors to provide military data to other AI subsystems
+
 	ThreatTypes GetHighestThreat();
 	int GetThreatTotal() const
 	{
@@ -242,7 +242,7 @@ public:
 	{
 		return (m_iNumLandUnits - m_iNumLandUnitsInArmies - GetMandatoryReserveSize());
 	};
-	CvCity* GetMostThreatenedCity(int iIndex = 0); // pass in 0 for the most threatened city, 1 for the second most threatened, 2 for the third, etc.
+	CvCity* GetMostThreatenedCity(int iIndex = 0);
 	int GetPercentOfRecommendedMilitarySize() const;
 	int GetPowerOfStrongestBuildableUnit(DomainTypes eDomain);
 	bool HasAirforce() const
@@ -272,7 +272,7 @@ public:
 		m_iNumberOfTimesOpsBuildSkippedOver = 0;
 	}
 
-	// Public logging functions
+
 	void LogDeclarationOfWar(PlayerTypes eOpponent);
 	void LogCivilizationDestroyed();
 	void LogCityCaptured(CvCity* pCity, PlayerTypes eOldOwner);
@@ -284,7 +284,7 @@ public:
 
 private:
 
-	// Functions to process a turn
+
 	void UpdateBaseData();
 	void ScanForBarbarians();
 	void UpdateThreats();
@@ -301,7 +301,7 @@ private:
 	void DisbandObsoleteUnits();
 	bool IsAttackReady(MultiunitFormationTypes eFormation, AIOperationTypes eOperationType) const;
 
-	// Logging functions
+
 	void LogStrategy(MilitaryAIStrategyTypes eStrategy, bool bValue);
 	void LogWarStateChange(PlayerTypes ePlayer, WarStateTypes eNewWarState, WarStateTypes eOldWarState);
 	void LogMilitaryStatus();
@@ -318,18 +318,18 @@ private:
 	int* m_paiTurnStrategyAdopted;
 	int* m_aiTempFlavors;
 
-	// Archived state of threats/wars from last turn
+
 	int* m_paeLastTurnWarState;
 	int* m_paeLastTurnMilitaryThreat;
 	int* m_paeLastTurnMilitaryStrength;
 	int* m_paeLastTurnTargetValue;
 
-	// Internal calculated values - must be serialized
+
 	int m_iTotalThreatWeight;
 	ArmyType m_eArmyTypeBeingBuilt;
 	int m_iNumberOfTimesOpsBuildSkippedOver;
 
-	// Data recomputed each turn (no need to serialize)
+
 	int m_iNumLandUnits;
 	int m_iNumRangedLandUnits;
 	int m_iNumMobileLandUnits;
@@ -353,7 +353,7 @@ namespace MilitaryAIHelpers
 {
 int GetWeightThresholdModifier(MilitaryAIStrategyTypes eStrategy, CvPlayer* pPlayer);
 
-// Functions that check triggers to see if a strategy should be adopted/continued
+
 bool IsTestStrategy_EnoughMilitaryUnits(CvPlayer* pPlayer);
 bool IsTestStrategy_EmpireDefense(CvPlayer* pPlayer);
 bool IsTestStrategy_EmpireDefenseCritical(CvPlayer* pPlayer);
@@ -380,10 +380,10 @@ bool IsTestStrategy_EnoughAntiAirUnits(CvPlayer* pPlayer, int iNumAA, int iNumMe
 bool IsTestStrategy_NeedAntiAirUnits(CvPlayer* pPlayer, int iNumAA, int iNumMelee);
 bool IsTestStrategy_NeedAirCarriers(CvPlayer* pPlayer);
 
-// Functions that evaluate which operation to launch
+
 int ComputeRecommendedNavySize(CvPlayer* pPlayer);
 int NumberOfFillableSlots(CvPlayer* pPlayer, MultiunitFormationTypes formation, bool bRequiresNavalMoves=false, int* piNumberSlotsRequired=NULL, int* piNumberLandReservesUsed=NULL);
 UnitAITypes FirstSlotCityCanFill(CvPlayer* pPlayer, MultiunitFormationTypes formation, bool bRequiresNavalMoves, bool bAtCoastalCity, bool bSecondaryUnit);
 }
 
-#endif //CIV5_MILITARY_AI_H
+#endif

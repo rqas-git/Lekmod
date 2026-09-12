@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 
 #pragma once
 #ifndef CVLUAUNIT_H
@@ -15,13 +15,13 @@
 class CvLuaUnit : public CvLuaScopedInstance<CvLuaUnit, CvUnit>
 {
 public:
-	//! Push CvUnit methods into table t
+
 	static void PushMethods(lua_State* L, int t);
 
-	//! Error handle for missing instances
+
 	static void HandleMissingInstance(lua_State* L);
 
-	//! Gets the type name
+
 	static const char* GetTypeName();
 
 protected:
@@ -493,7 +493,7 @@ protected:
 
 	static int lGetGreatWorkSlotType(lua_State* L);
 
-	// Helper Functions
+
 	static int lRangeStrike(lua_State* L);
 
 	static int lPushMission(lua_State* L);
@@ -520,4 +520,4 @@ protected:
 };
 
 
-#endif //CVLUAUNIT_H
+#endif

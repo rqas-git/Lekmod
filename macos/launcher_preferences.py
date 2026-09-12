@@ -1,4 +1,4 @@
-"""Launcher preferences live outside the Steam game installation."""
+
 import json
 from pathlib import Path
 import tempfile
@@ -9,7 +9,7 @@ SUPPORT = Path.home() / 'Library/Application Support/Lekmod Launcher'
 
 
 def preferences(app=None, desired=None, directory=SUPPORT, eui=None):
-    """Remember intent outside the game bundle, including after Steam restores it."""
+
     path = directory / 'settings.json'
     state = json.loads(path.read_text()) if path.is_file() else {}
     if not isinstance(state, dict) or not isinstance(state.get('installations', {}), dict):

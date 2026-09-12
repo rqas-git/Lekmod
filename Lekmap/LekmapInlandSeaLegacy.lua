@@ -1,11 +1,11 @@
-------------------------------------------------------------------------------
---	FILE:	 Lekmapv2.2.lua (Modified Pangaea_Plus.lua)
---	AUTHOR:  Original Bob Thomas, Changes HellBlazer, lek10, EnormousApplePie, Cirra, Meota
---	PURPOSE: Global map script - Simulates a Pan-Earth Supercontinent, with
---           numerous tectonic island chains.
-------------------------------------------------------------------------------
---	Copyright (c) 2011 Firaxis Games, Inc. All rights reserved.
-------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 
 include("HBMapGenerator");
 include("HBFractalWorld");
@@ -14,7 +14,9 @@ include("HBTerrainGenerator");
 include("IslandMaker");
 include("MultilayeredFractal");
 
-------------------------------------------------------------------------------
+
+include("HBMapOptions");
+
 function GetMapScriptInfo()
 	local world_age, temperature, rainfall, sea_level, resources = GetCoreMapOptions()
 	return {
@@ -24,286 +26,41 @@ function GetMapScriptInfo()
 		IconIndex = 12,
 		SortIndex = 2,
 		SupportsMultiplayer = true,
-	CustomOptions = {
-			{
-				Name = "TXT_KEY_MAP_OPTION_WORLD_AGE", -- 1
-				Values = {
-					"TXT_KEY_MAP_OPTION_THREE_BILLION_YEARS",
-					"TXT_KEY_MAP_OPTION_FOUR_BILLION_YEARS",
-					"TXT_KEY_MAP_OPTION_FIVE_BILLION_YEARS",
-					"No Mountains",
-					"TXT_KEY_MAP_OPTION_RANDOM",
-				},
-				DefaultValue = 2,
-				SortPriority = -99,
-			},
-
-			{
-				Name = "TXT_KEY_MAP_OPTION_TEMPERATURE",	-- 2 add temperature defaults to random
-				Values = {
-					"TXT_KEY_MAP_OPTION_COOL",
-					"TXT_KEY_MAP_OPTION_TEMPERATE",
-					"TXT_KEY_MAP_OPTION_HOT",
-					"TXT_KEY_MAP_OPTION_RANDOM",
-				},
-				DefaultValue = 2,
-				SortPriority = -98,
-			},
-
-			{
-				Name = "TXT_KEY_MAP_OPTION_RAINFALL",	-- 3 add rainfall defaults to random
-				Values = {
-					"TXT_KEY_MAP_OPTION_ARID",
-					"TXT_KEY_MAP_OPTION_NORMAL",
-					"TXT_KEY_MAP_OPTION_WET",
-					"TXT_KEY_MAP_OPTION_RANDOM",
-				},
-				DefaultValue = 2,
-				SortPriority = -97,
-			},
-
-			{
-				Name = "TXT_KEY_MAP_OPTION_SEA_LEVEL",	-- 4 add sea level defaults to random.
-				Values = {
-					"TXT_KEY_MAP_OPTION_LOW",
-					"TXT_KEY_MAP_OPTION_MEDIUM",
-					"TXT_KEY_MAP_OPTION_HIGH",
-					"TXT_KEY_MAP_OPTION_RANDOM",
-				},
-				DefaultValue = 2,
-				SortPriority = -96,
-			},
-
-			{
-				Name = "Start Quality",	-- 5 add resources defaults to random
-				Values = {
-					"Legendary Start - Strat Balance",
-					"Legendary - Strat Balance + Uranium",
-					"TXT_KEY_MAP_OPTION_STRATEGIC_BALANCE",
-					"Strategic Balance With Coal",
-					"Strategic Balance With Aluminum",
-					"Strategic Balance With Coal & Aluminum",
-					"TXT_KEY_MAP_OPTION_RANDOM",
-				},
-				DefaultValue = 2,
-				SortPriority = -95,
-			},
-
-			{
-				Name = "Start Distance",	-- 6 add resources defaults to random
-				Values = {
-					"Close",
-					"Normal",
-					"Far - Warning: May sometimes crash during map generation",
-				},
-				DefaultValue = 2,
-				SortPriority = -94,
-			},
-
-			{
-				Name = "Natural Wonders", -- 7 number of natural wonders to spawn
-				Values = {
-					"0",
-					"1",
-					"2",
-					"3",
-					"4",
-					"5",
-					"6",
-					"7",
-					"8",
-					"9",
-					"10",
-					"11",
-					"12",
-					"Random",
-					"Default",
-				},
-				DefaultValue = 15,
-				SortPriority = -93,
-			},
-
-			{
-				Name = "Grass Moisture",	-- add setting for grassland mositure (8)
-				Values = {
-					"Wet",
-					"Normal",
-					"Dry",
-				},
-
-				DefaultValue = 2,
-				SortPriority = -92,
-			},
-
-			{
-				Name = "Rivers",	-- add setting for rivers (9)
-				Values = {
-					"Sparse",
-					"Average",
-					"Plentiful",
-				},
-
-				DefaultValue = 2,
-				SortPriority = -91,
-			},
-
-			{
-				Name = "Tundra",	-- add setting for tundra (10)
-				Values = {
-					"Sparse",
-					"Average",
-					"Plentiful",
-				},
-
-				DefaultValue = 2,
-				SortPriority = -90,
-			},
-
-			{
-				Name = "Land Size X",	-- add setting for land type (11) +22
-				Values = {
-					"24",
-					"26",
-					"28",
-					"30",
-					"32",
-					"34",
-					"36",
-					"38",
-					"40",
-					"42",
-					"44",
-					"46",
-					"48",
-					"50",
-					"52",
-					"54",
-					"56",
-					"58",
-					"60",
-					"62",
-					"64",
-					"66",
-					"68",
-					"70",
-					"72",
-					"74",
-					"76",
-					"78",
-					"80",
-					"82",
-					"84",
-					"86",
-					"88",
-					"90",
-					"92",
-					"94",
-					"96",
-					"98",
-					"100",
-					"102",
-					"104",
-				},
-
+		CustomOptions = LekmapOptions.Create({
+			[11] = {
+				Values = LekmapOptions.NumberValues(24, 104, 2),
 				DefaultValue = 9,
-				SortPriority = -89,
 			},
-
-			{
-				Name = "Land Size Y",	-- add setting for land type (12) +14
-				Values = {
-					"16",
-					"18",
-					"20",
-					"22",
-					"24",
-					"26",
-					"28",
-					"30",
-					"32",
-					"34",
-					"36",
-					"38",
-					"40",
-					"42",
-					"44",
-					"46",
-					"48",
-					"50",
-					"52",
-					"54",
-					"56",
-					"58",
-					"60",
-					"62",
-					"64",
-					"66",
-					"68",
-					"70",
-				},
-
+			[12] = {
+				Values = LekmapOptions.NumberValues(16, 70, 2),
 				DefaultValue = 5,
-				SortPriority = -88,
 			},
-
+		}, {
 			{
-				Name = "TXT_KEY_MAP_OPTION_RESOURCES",	-- add setting for resources (13)
-				Values = {
-					"1 -- Nearly Nothing",
-					"2",
-					"3",
-					"4",
-					"5 -- Default",
-					"6",
-					"7",
-					"8",
-					"9",
-					"10 -- Almost no normal tiles left",
-				},
-
-				DefaultValue = 5,
-				SortPriority = -87,
-			},
-
-			{
-				Name = "Balanced Regionals",	-- add setting for removing OP luxes from regional pool (14)
-				Values = {
-					"Yes",
-					"No",
-				},
-
-				DefaultValue = 1,
-				SortPriority = -90,
-			},
-
-			{
-				Name = "Coastal Spawns",	-- Can inland civ spawn on the coast (15)
+				Name = "Coastal Spawns",
 				Values = {
 					"Coastal Civs Only",
 					"Random",
 					"Random+ (~2 coastals)",
 				},
-
 				DefaultValue = 1,
 				SortPriority = -85,
 			},
-
 			{
-				Name = "Coastal Luxes",	-- Can coast spawns have non-coastal luxes (16)
+				Name = "Coastal Luxes",
 				Values = {
 					"Guaranteed",
 					"Random",
 				},
-
 				DefaultValue = 1,
 				SortPriority = -84,
 			},
-		},
+		}),
 	};
 end
-------------------------------------------------------------------------------
+
 function GetMapInitData(worldSize)
-	
+
 	local LandSizeX = 22 + (Map.GetCustomOption(11) * 2);
 	local LandSizeY = 14 + (Map.GetCustomOption(12) * 2);
 
@@ -311,40 +68,40 @@ function GetMapInitData(worldSize)
 
 	worldsizes = {
 
-		[GameInfo.Worlds.WORLDSIZE_DUEL.ID] = {LandSizeX, LandSizeY}, -- 720
-		[GameInfo.Worlds.WORLDSIZE_TINY.ID] = {LandSizeX, LandSizeY}, -- 1664
-		[GameInfo.Worlds.WORLDSIZE_SMALL.ID] = {LandSizeX, LandSizeY}, -- 2480
-		[GameInfo.Worlds.WORLDSIZE_STANDARD.ID] = {LandSizeX, LandSizeY}, -- 3900
-		[GameInfo.Worlds.WORLDSIZE_LARGE.ID] = {LandSizeX, LandSizeY}, -- 6076
-		[GameInfo.Worlds.WORLDSIZE_HUGE.ID] = {LandSizeX, LandSizeY} -- 9424
+		[GameInfo.Worlds.WORLDSIZE_DUEL.ID] = {LandSizeX, LandSizeY},
+		[GameInfo.Worlds.WORLDSIZE_TINY.ID] = {LandSizeX, LandSizeY},
+		[GameInfo.Worlds.WORLDSIZE_SMALL.ID] = {LandSizeX, LandSizeY},
+		[GameInfo.Worlds.WORLDSIZE_STANDARD.ID] = {LandSizeX, LandSizeY},
+		[GameInfo.Worlds.WORLDSIZE_LARGE.ID] = {LandSizeX, LandSizeY},
+		[GameInfo.Worlds.WORLDSIZE_HUGE.ID] = {LandSizeX, LandSizeY}
 		}
-		
+
 	local grid_size = worldsizes[worldSize];
-	--
+
 	local world = GameInfo.Worlds[worldSize];
 	if (world ~= nil) then
 		return {
 			Width = grid_size[1],
 			Height = grid_size[2],
 			WrapX = false,
-		}; 
+		};
 	end
 
 end
-------------------------------------------------------------------------------
 
--------------------------------------------------------------------------------
+
+
 function MultilayeredFractal:GeneratePlotsByRegion()
-	-- Sirian's MultilayeredFractal controlling function.
-	-- You -MUST- customize this function for each script using MultilayeredFractal.
-	--
-	-- This implementation is specific to Inland Sea.
+
+
+
+
 	local iW, iH = Map.GetGridSize();
 
-	-- Fill all rows with land plots.
+
 	self.wholeworldPlotTypes = table.fill(PlotTypes.PLOT_LAND, iW * iH);
 
-	-- Generate the inland sea.
+
 	local iWestX = math.floor(iW * 0.18) - 1;
 	local iEastX = math.ceil(iW * 0.82) - 1;
 	local iWidth = iEastX - iWestX;
@@ -355,20 +112,20 @@ function MultilayeredFractal:GeneratePlotsByRegion()
 	local grain = 1 + Map.Rand(2, "Inland Sea ocean grain - LUA");
 	local seaFrac = Fractal.Create(iWidth, iHeight, grain, fracFlags, -1, -1)
 	local seaThreshold = seaFrac:GetHeight(47);
-	
+
 	for region_y = 0, iHeight - 1 do
 		for region_x = 0, iWidth - 1 do
 			local val = seaFrac:GetHeight(region_x, region_y);
 			if val >= seaThreshold then
 				local x = region_x + iWestX;
 				local y = region_y + iSouthY;
-				local i = y * iW + x + 1; -- add one because Lua arrays start at 1
+				local i = y * iW + x + 1;
 				self.wholeworldPlotTypes[i] = PlotTypes.PLOT_OCEAN;
 			end
 		end
 	end
 
-	-- Second, oval layer to ensure one main body of water.
+
 	local centerX = (iW / 2) - 1;
 	local centerY = (iH / 2) - 1;
 	local xAxis = centerX / 2;
@@ -389,7 +146,7 @@ function MultilayeredFractal:GeneratePlotsByRegion()
 		end
 	end
 
-	-- Land and water are set. Now apply hills and mountains.
+
 	local world_age = Map.GetCustomOption(1)
 	if world_age == 4 then
 		world_age = 1 + Map.Rand(3, "Random World Age - Lua");
@@ -397,38 +154,38 @@ function MultilayeredFractal:GeneratePlotsByRegion()
 	local args = {world_age = world_age};
 	self:ApplyTectonics(args)
 
-	-- Plot Type generation completed. Return global plot array.
+
 	return self.wholeworldPlotTypes
 end
-------------------------------------------------------------------------------
 
-------------------------------------------------------------------------------
+
+
 function GeneratePlotTypes()
 	print("Setting Plot Types (Lua Inland Sea) ...");
 
 	local layered_world = MultilayeredFractal.Create();
 	local plotsIS = layered_world:GeneratePlotsByRegion();
-	
+
 	SetPlotTypes(plotsIS);
 
 	GenerateCoasts();
 end
-----------------------------------------------------------------------------------
+
 function TerrainGenerator:GetLatitudeAtPlot(iX, iY)
 	local lat = math.abs((self.iHeight / 2) - iY) / (self.iHeight / 2);
 	lat = lat + (128 - self.variation:GetHeight(iX, iY))/(255.0 * 5.0);
 	lat = math.clamp(lat, 0, 1);
 
-	-- For Inland Sea only, adjust latitude to cut out Tundra and most Jungle.
+
 	local adjusted_lat = 0.07 + 0.52 * lat;
-	
+
 	return adjusted_lat;
 end
-------------------------------------------------------------------------------
+
 function GenerateTerrain()
 	print("Generating Terrain (Lua Inland Sea) ...");
-	
-	-- Get Temperature setting input by user.
+
+
 	local temp = Map.GetCustomOption(2)
 	if temp == 4 then
 		temp = 1 + Map.Rand(3, "Random Temperature - Lua");
@@ -438,14 +195,14 @@ function GenerateTerrain()
 	local terraingen = TerrainGenerator.Create(args);
 
 	terrainTypes = terraingen:GenerateTerrain();
-	
+
 	SetTerrainTypes(terrainTypes);
 end
-------------------------------------------------------------------------------
 
-------------------------------------------------------------------------------
+
+
 function GetRiverValueAtPlot(plot)
-	-- Custom method to force rivers to flow toward the map center.
+
 	local iW, iH = Map.GetGridSize()
 	local x = plot:GetX()
 	local y = plot:GetY()
@@ -468,26 +225,26 @@ function GetRiverValueAtPlot(plot)
 
 	return sum;
 end
-------------------------------------------------------------------------------
+
 function AddRivers()
-	-- Customization for Inland Sea, to keep river starts away from map edges and set river "original flow direction".
+
 	local iW, iH = Map.GetGridSize()
 	print("Inland Sea - Adding Rivers");
 	local passConditions = {
 		function(plot)
 			return plot:IsHills() or plot:IsMountain();
 		end,
-		
+
 		function(plot)
 			return (not plot:IsCoastalLand()) and (Map.Rand(8, "MapGenerator AddRivers") == 0);
 		end,
-		
+
 		function(plot)
 			local area = plot:Area();
 			local plotsPerRiverEdge = GameDefines["PLOTS_PER_RIVER_EDGE"];
 			return (plot:IsHills() or plot:IsMountain()) and (area:GetNumRiverEdges() <	((area:GetNumTiles() / plotsPerRiverEdge) + 1));
 		end,
-		
+
 		function(plot)
 			local area = plot:Area();
 			local plotsPerRiverEdge = GameDefines["PLOTS_PER_RIVER_EDGE"];
@@ -508,7 +265,7 @@ function AddRivers()
 			local current_x = plot:GetX()
 			local current_y = plot:GetY()
 			if current_x < 1 or current_x >= iW - 2 or current_y < 2 or current_y >= iH - 1 then
-				-- Plot too close to edge, ignore it.
+
 			elseif(not plot:IsWater()) then
 				if(passCondition(plot)) then
 					if (not Map.FindWater(plot, riverSourceRange, true)) then
@@ -518,20 +275,20 @@ function AddRivers()
 								local start_x = inlandCorner:GetX()
 								local start_y = inlandCorner:GetY()
 								local orig_direction;
-								if start_y < iH / 2 then -- South half of map
-									if start_x < iW / 3 then -- SW Corner
+								if start_y < iH / 2 then
+									if start_x < iW / 3 then
 										orig_direction = FlowDirectionTypes.FLOWDIRECTION_NORTHEAST;
-									elseif start_x > iW * 0.66 then -- SE Corner
+									elseif start_x > iW * 0.66 then
 										orig_direction = FlowDirectionTypes.FLOWDIRECTION_NORTHWEST;
-									else -- South, middle
+									else
 										orig_direction = FlowDirectionTypes.FLOWDIRECTION_NORTH;
 									end
-								else -- North half of map
-									if start_x < iW / 3 then -- NW corner
+								else
+									if start_x < iW / 3 then
 										orig_direction = FlowDirectionTypes.FLOWDIRECTION_SOUTHEAST;
-									elseif start_x > iW * 0.66 then -- NE corner
+									elseif start_x > iW * 0.66 then
 										orig_direction = FlowDirectionTypes.FLOWDIRECTION_SOUTHWEST;
-									else -- North, middle
+									else
 										orig_direction = FlowDirectionTypes.FLOWDIRECTION_SOUTH;
 									end
 								end
@@ -539,57 +296,57 @@ function AddRivers()
 							end
 						end
 					end
-				end			
+				end
 			end
 		end
-	end		
+	end
 end
-------------------------------------------------------------------------------
 
-------------------------------------------------------------------------------
+
+
 function FeatureGenerator:GetLatitudeAtPlot(iX, iY)
 	local lat = math.abs((self.iGridH/2) - iY)/(self.iGridH/2);
 
-	-- For Inland Sea only, adjust latitude to cut out Tundra and most Jungle.
+
 	local adjusted_lat = 0.07 + 0.52 * lat;
-	
+
 	return adjusted_lat
 end
-------------------------------------------------------------------------------
+
 function FeatureGenerator:AddIceAtPlot(plot, iX, iY, lat)
 	return
 end
-------------------------------------------------------------------------------
+
 function AddFeatures()
 	print("Adding Features (Lua Inland Sea) ...");
 
-	-- Get Rainfall setting input by user.
+
 	local rain = Map.GetCustomOption(3)
 	if rain == 4 then
 		rain = 1 + Map.Rand(3, "Random Rainfall - Lua");
 	end
-	
+
 	local args = {rainfall = rain}
 	local featuregen = FeatureGenerator.Create(args);
 
-	-- False parameter removes mountains from coastlines.
+
 	featuregen:AddFeatures(false);
 end
-------------------------------------------------------------------------------
 
-------------------------------------------------------------------------------
+
+
 function AssignStartingPlots:CanPlaceCityStateAt(x, y, area_ID, force_it, ignore_collisions)
-	-- Overriding default city state placement to prevent city states from being placed too close to map edges.
+
 	local iW, iH = Map.GetGridSize();
 	local plot = Map.GetPlot(x, y)
 	local area = plot:GetArea()
-	
-	-- Adding this check for Inland Sea
+
+
 	if x < 1 or x >= iW - 1 or y < 1 or y >= iH - 1 then
 		return false
 	end
-	--
-	
+
+
 	if area ~= area_ID and area_ID ~= -1 then
 		return false
 	end
@@ -613,34 +370,34 @@ function AssignStartingPlots:CanPlaceCityStateAt(x, y, area_ID, force_it, ignore
 	return true
 end
 
-------------------------------------------------------------------------------
+
 function StartPlotSystem()
 
 	local RegionalMethod = 1;
 
-	-- Get Resources setting input by user.
+
 	local res = Map.GetCustomOption(13)
 	local starts = Map.GetCustomOption(5)
-	--if starts == 7 then
-		--starts = 1 + Map.Rand(8, "Random Resources Option - Lua");
-	--end
 
-	-- Handle coastal spawns and start bias
+
+
+
+
 	MixedBias = false;
 	if Map.GetCustomOption(15) == 1 then
 		OnlyCoastal = true;
 		BalancedCoastal = false;
-	end	
+	end
 	if Map.GetCustomOption(15) == 2 then
 		BalancedCoastal = false;
 		OnlyCoastal = false;
 	end
-	
+
 	if Map.GetCustomOption(15) == 3 then
 		OnlyCoastal = true;
 		BalancedCoastal = true;
 	end
-	
+
 	if Map.GetCustomOption(16) == 1 then
 	CoastLux = true
 	end
@@ -651,9 +408,9 @@ function StartPlotSystem()
 
 	print("Creating start plot database.");
 	local start_plot_database = AssignStartingPlots.Create()
-	
+
 	print("Dividing the map in to Regions.");
-	-- Regional Division Method 1: Biggest Landmass
+
 	local args = {
 		method = RegionalMethod,
 		start_locations = starts,
@@ -667,7 +424,7 @@ function StartPlotSystem()
 
 	print("Choosing start locations for civilizations.");
 	start_plot_database:ChooseLocations()
-	
+
 	print("Normalizing start locations and assigning them to Players.");
 	start_plot_database:BalanceAndAssign(args)
 
@@ -689,4 +446,3 @@ function StartPlotSystem()
 	print("Placing Resources and City States.");
 	start_plot_database:PlaceResourcesAndCityStates()
 end
-------------------------------------------------------------------------------

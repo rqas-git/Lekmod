@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Install this checkout's native Lekmod and/or Lekmap into Civilization V."""
+
 import argparse
 from contextlib import nullcontext
 from datetime import datetime, timezone
@@ -28,7 +28,7 @@ def preflight(app, component):
     if component in ('lekmod', 'both', 'eui'):
         validate_core(app)
         eui.guard(app, installed_state(app))
-        if not (ROOT / 'LEKMOD/ui_check.bat').is_file():
+        if not (ROOT / 'LEKMOD/ui_manifest.json').is_file():
             raise RuntimeError('The checkout is missing LEKMOD assets.')
     if component in ('lekmap', 'both') and not any((ROOT / 'Lekmap').glob('Lekmap*.lua')):
         raise RuntimeError('The checkout is missing Lekmap scripts.')
@@ -75,7 +75,7 @@ def install(app, component='both', jobs=4, skip_build=False, log=print,
                 raise RuntimeError('Native library missing. Run without --skip-build to build it.')
             check_imports(library, app)
         ensure_closed()
-        # Revalidate after the build in case Steam changed the installation.
+
         preflight(app, component)
         before_core = sha256(app / CORE)
         before_host = sha256(app / 'Contents/MacOS/Civilization V')
@@ -85,14 +85,14 @@ def install(app, component='both', jobs=4, skip_build=False, log=print,
             state = installed_state(staged)
             if (not mod and before_core != STOCK_CORE_SHA256
                     and state.get('core_sha256') != before_core):
-                # A maps-only update must not bless an independently replaced core.
+
                 state.pop('stock_core_sha256', None)
                 state.pop('lekmod', None)
             eui_folder = None
             if mod or ui_only:
                 eui_folder = eui.prepare(staged, state, enabled, archive)
             if assets:
-                # Only modify the staged bundle; the previous packages remain in the backup.
+
                 for package in (staged / ASSETS / 'DLC').iterdir():
                     if package.name.upper().startswith('LEKMOD'):
                         if package.is_symlink() or package.is_file():
@@ -126,7 +126,7 @@ def install(app, component='both', jobs=4, skip_build=False, log=print,
                                   ui='eui' if enabled else 'standard',
                                   lekmod_sha256=tree_digest(staged / ASSETS / 'DLC/LEKMOD'))
                 if mod:
-                    # A UI-only switch must not mark an older native library up to date.
+
                     validation['source_sha256'] = before_source
             if maps:
                 if tree_digest(ROOT / 'Lekmap') != before_maps:

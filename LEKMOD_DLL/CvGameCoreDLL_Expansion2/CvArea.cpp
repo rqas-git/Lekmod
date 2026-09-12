@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 
 #include "CvGameCoreDLLPCH.h"
 #include "CvArea.h"
@@ -20,11 +20,11 @@
 #include "CvEnumSerialization.h"
 
 #include "CvInfosSerializationHelper.h"
-// include after all other headers
+
 #include "LintFree.h"
 
-// Public Functions...
-//	--------------------------------------------------------------------------------
+
+
 CvArea::CvArea()
 {
 	m_paiNumResources = NULL;
@@ -33,29 +33,29 @@ CvArea::CvArea()
 }
 
 
-//	--------------------------------------------------------------------------------
+
 CvArea::~CvArea()
 {
 	uninit();
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvArea::init(int iID, bool bWater)
 {
-	//--------------------------------
-	// Init saved data
+
+
 	reset(iID, bWater);
 
-	//--------------------------------
-	// Init non-saved data
 
-	//--------------------------------
-	// Init other game data
+
+
+
+
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvArea::uninit()
 {
 	SAFE_DELETE_ARRAY(m_paiNumResources);
@@ -63,15 +63,15 @@ void CvArea::uninit()
 }
 
 
-//	--------------------------------------------------------------------------------
-// FUNCTION: reset()
-// Initializes data members that are serialized.
+
+
+
 void CvArea::reset(int iID, bool bWater, bool bConstructorCall)
 {
 	int iI, iJ;
 
-	//--------------------------------
-	// Uninit class
+
+
 	uninit();
 
 	m_iID = iID;
@@ -141,13 +141,13 @@ void CvArea::reset(int iID, bool bWater, bool bConstructorCall)
 	}
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvArea::SetID(int iID)
 {
 	m_iID = iID;
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvArea::calculateTotalBestNatureYield() const
 {
 	CvPlot* pLoopPlot;
@@ -172,7 +172,7 @@ int CvArea::calculateTotalBestNatureYield() const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvArea::countCoastalLand() const
 {
 	CvPlot* pLoopPlot;
@@ -204,7 +204,7 @@ int CvArea::countCoastalLand() const
 	return iCount;
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvArea::countNumUniqueResourceTypes() const
 {
 	int iCount = 0;
@@ -222,13 +222,13 @@ int CvArea::countNumUniqueResourceTypes() const
 	return iCount;
 }
 
-//	--------------------------------------------------------------------------------
+
 int CvArea::getNumTiles() const
 {
 	return m_iNumTiles;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvArea::changeNumTiles(int iChange)
 {
 	m_iNumTiles = (m_iNumTiles + iChange);
@@ -236,21 +236,21 @@ void CvArea::changeNumTiles(int iChange)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvArea::getNumOwnedTiles() const
 {
 	return m_iNumOwnedTiles;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvArea::getNumUnownedTiles() const
 {
 	return (m_iNumTiles - getNumOwnedTiles());
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvArea::changeNumOwnedTiles(int iChange)
 {
 	m_iNumOwnedTiles = (m_iNumOwnedTiles + iChange);
@@ -259,14 +259,14 @@ void CvArea::changeNumOwnedTiles(int iChange)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvArea::getNumRiverEdges() const
 {
 	return m_iNumRiverEdges;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvArea::changeNumRiverEdges(int iChange)
 {
 	m_iNumRiverEdges = (m_iNumRiverEdges + iChange);
@@ -274,35 +274,35 @@ void CvArea::changeNumRiverEdges(int iChange)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvArea::getNumUnits() const
 {
 	return m_iNumUnits;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvArea::getNumCities() const
 {
 	return m_iNumCities;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvArea::getTotalPopulation() const
 {
 	return m_iTotalPopulation;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvArea::getNumStartingPlots() const
 {
 	return m_iNumStartingPlots;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvArea::changeNumStartingPlots(int iChange)
 {
 	m_iNumStartingPlots = m_iNumStartingPlots + iChange;
@@ -310,35 +310,35 @@ void CvArea::changeNumStartingPlots(int iChange)
 }
 
 
-//	--------------------------------------------------------------------------------
-/// How many Natural Wonders are there in the world?
+
+
 int CvArea::GetNumNaturalWonders() const
 {
 	return m_iNumNaturalWonders;
 }
 
-//	--------------------------------------------------------------------------------
-/// Changes count on how many Natural Wonders are there in the world
+
+
 void CvArea::ChangeNumNaturalWonders(int iChange)
 {
 	m_iNumNaturalWonders += iChange;
 }
 
-//	--------------------------------------------------------------------------------
-//	Is the area made up of water plots?
+
+
 bool CvArea::isWater() const
 {
 	return m_bWater;
 }
 
-//	--------------------------------------------------------------------------------
-//	Is the area made up of mountain plots?
+
+
 bool CvArea::IsMountains() const
 {
 	return m_bMountains;
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvArea::SetMountains(bool bValue)
 {
 	if(m_bMountains != bValue)
@@ -348,19 +348,19 @@ void CvArea::SetMountains(bool bValue)
 }
 
 
-//	--------------------------------------------------------------------------------
-//	How many units for the specified player are in the area?
+
+
 int CvArea::getUnitsPerPlayer(PlayerTypes eIndex) const
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be >= 0");
 	CvAssertMsg(eIndex < MAX_PLAYERS, "eIndex is expected to be < MAX_PLAYERS");
-	if(eIndex < 0 || eIndex >= MAX_PLAYERS) return 0; // as set during reset()
+	if(eIndex < 0 || eIndex >= MAX_PLAYERS) return 0;
 
 	return m_aiUnitsPerPlayer[eIndex];
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvArea::changeUnitsPerPlayer(PlayerTypes eIndex, int iChange)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be >= 0");
@@ -372,8 +372,8 @@ void CvArea::changeUnitsPerPlayer(PlayerTypes eIndex, int iChange)
 	CvAssert(getUnitsPerPlayer(eIndex) >= 0);
 }
 
-//	--------------------------------------------------------------------------------
-//	How many units that are the enemy of the specified player area in the area?
+
+
 int CvArea::getEnemyUnits(PlayerTypes eIndex) const
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be >= 0");
@@ -382,7 +382,7 @@ int CvArea::getEnemyUnits(PlayerTypes eIndex) const
 
 	TeamTypes eTeam = GET_PLAYER(eIndex).getTeam();
 
-	// Loop through each player
+
 	for(int iI = 0; iI < MAX_PLAYERS; iI++)
 	{
 		CvPlayer& kPlayer = GET_PLAYER((PlayerTypes)iI);
@@ -395,8 +395,8 @@ int CvArea::getEnemyUnits(PlayerTypes eIndex) const
 	return iRtnValue;
 }
 
-//	--------------------------------------------------------------------------------
-//	Get the number of cities for the specified player in the area
+
+
 int CvArea::getCitiesPerPlayer(PlayerTypes eIndex) const
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be >= 0");
@@ -407,7 +407,7 @@ int CvArea::getCitiesPerPlayer(PlayerTypes eIndex) const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvArea::changeCitiesPerPlayer(PlayerTypes eIndex, int iChange)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be >= 0");
@@ -421,8 +421,8 @@ void CvArea::changeCitiesPerPlayer(PlayerTypes eIndex, int iChange)
 }
 
 
-//	--------------------------------------------------------------------------------
-//	What is the population for the specified player in the area?
+
+
 int CvArea::getPopulationPerPlayer(PlayerTypes eIndex) const
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be >= 0");
@@ -433,7 +433,7 @@ int CvArea::getPopulationPerPlayer(PlayerTypes eIndex) const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvArea::changePopulationPerPlayer(PlayerTypes eIndex, int iChange)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be >= 0");
@@ -447,8 +447,8 @@ void CvArea::changePopulationPerPlayer(PlayerTypes eIndex, int iChange)
 }
 
 
-//	--------------------------------------------------------------------------------
-//	What is the number of free specialist in the area for the specified player?
+
+
 int CvArea::getFreeSpecialist(PlayerTypes eIndex) const
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be >= 0");
@@ -459,7 +459,7 @@ int CvArea::getFreeSpecialist(PlayerTypes eIndex) const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvArea::changeFreeSpecialist(PlayerTypes eIndex, int iChange)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be >= 0");
@@ -473,24 +473,24 @@ void CvArea::changeFreeSpecialist(PlayerTypes eIndex, int iChange)
 	}
 }
 
-//	---------------------------------------------------------------------------
-//	Get the total 'found' value for the area.  This is the desirability of
-//	an area for settlement.
+
+
+
 int CvArea::getTotalFoundValue() const
 {
 	return m_iTotalFoundValue;
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvArea::setTotalFoundValue(int iNewValue)
 {
 	m_iTotalFoundValue = iNewValue;
 	CvAssert(m_iTotalFoundValue >= 0);
 }
 
-//	--------------------------------------------------------------------------------
-//	Get the number of revealed tiles (plots) for the specified team
+
+
 int CvArea::getNumRevealedTiles(TeamTypes eIndex) const
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be >= 0");
@@ -500,15 +500,15 @@ int CvArea::getNumRevealedTiles(TeamTypes eIndex) const
 	return m_aiNumRevealedTiles[eIndex];
 }
 
-//	---------------------------------------------------------------------------
-//	Get the number of un-revealed tiles (plots) for the specified team
+
+
 int CvArea::getNumUnrevealedTiles(TeamTypes eIndex) const
 {
 	return (m_iNumTiles - getNumRevealedTiles(eIndex));
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvArea::changeNumRevealedTiles(TeamTypes eIndex, int iChange)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be >= 0");
@@ -520,7 +520,7 @@ void CvArea::changeNumRevealedTiles(TeamTypes eIndex, int iChange)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 CvCity* CvArea::getTargetCity(PlayerTypes eIndex) const
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be >= 0");
@@ -531,7 +531,7 @@ CvCity* CvArea::getTargetCity(PlayerTypes eIndex) const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvArea::setTargetCity(PlayerTypes eIndex, CvCity* pNewValue)
 {
 	CvAssertMsg(eIndex >= 0, "eIndex is expected to be >= 0");
@@ -549,7 +549,7 @@ void CvArea::setTargetCity(PlayerTypes eIndex, CvCity* pNewValue)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 int CvArea::getYieldRateModifier(PlayerTypes eIndex1, YieldTypes eIndex2) const
 {
 	CvAssertMsg(eIndex1 >= 0, "eIndex1 is expected to be >= 0");
@@ -564,7 +564,7 @@ int CvArea::getYieldRateModifier(PlayerTypes eIndex1, YieldTypes eIndex2) const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvArea::changeYieldRateModifier(PlayerTypes eIndex1, YieldTypes eIndex2, int iChange)
 {
 	CvAssertMsg(eIndex1 >= 0, "eIndex1 is expected to be >= 0");
@@ -620,8 +620,8 @@ void CvArea::changeCityYieldChange(PlayerTypes ePlayer, YieldTypes eYield, int i
 	setCityYieldChange(ePlayer, eYield, (getCityYieldChange(ePlayer, eYield) + iChange));
 }
 #endif
-//	--------------------------------------------------------------------------------
-//	Get the number of resources of the specified type in the area.
+
+
 int CvArea::getNumResources(ResourceTypes eResource) const
 {
 	CvAssertMsg(eResource >= 0, "eResource expected to be >= 0");
@@ -630,8 +630,8 @@ int CvArea::getNumResources(ResourceTypes eResource) const
 }
 
 
-//	---------------------------------------------------------------------------
-//	Get the total number of resources in the specified area.
+
+
 int CvArea::getNumTotalResources() const
 {
 	int iTotal = 0;
@@ -646,7 +646,7 @@ int CvArea::getNumTotalResources() const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvArea::changeNumResources(ResourceTypes eResource, int iChange)
 {
 	CvAssertMsg(eResource >= 0, "eResource expected to be >= 0");
@@ -656,8 +656,8 @@ void CvArea::changeNumResources(ResourceTypes eResource, int iChange)
 }
 
 
-//	--------------------------------------------------------------------------------
-//	Get the number of the specified improvements in the area
+
+
 int CvArea::getNumImprovements(ImprovementTypes eImprovement) const
 {
 	CvAssertMsg(eImprovement >= 0, "eImprovement expected to be >= 0");
@@ -666,7 +666,7 @@ int CvArea::getNumImprovements(ImprovementTypes eImprovement) const
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvArea::changeNumImprovements(ImprovementTypes eImprovement, int iChange)
 {
 	CvAssertMsg(eImprovement >= 0, "eImprovement expected to be >= 0");
@@ -675,13 +675,13 @@ void CvArea::changeNumImprovements(ImprovementTypes eImprovement, int iChange)
 	CvAssert(getNumImprovements(eImprovement) >= 0);
 }
 
-//	--------------------------------------------------------------------------------
+
 CvAreaBoundaries CvArea::getAreaBoundaries() const
 {
 	return m_Boundaries;
 }
 
-//	--------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 void CvArea::setAreaBoundaries(const CvAreaBoundaries& newBoundaries)
 #else
@@ -691,8 +691,8 @@ void CvArea::setAreaBoundaries(CvAreaBoundaries newBoundaries)
 	m_Boundaries = newBoundaries;
 }
 
-//	--------------------------------------------------------------------------------
-/// What are the top and bottom latitudes of this Area (passed by reference)
+
+
 void CvArea::GetTopAndBottomLatitudes(int& iTopLatitude, int& iBottomLatitude)
 {
 	int iGridHeight = GC.getMap().getGridHeight();
@@ -717,8 +717,8 @@ void CvArea::GetTopAndBottomLatitudes(int& iTopLatitude, int& iBottomLatitude)
 	iBottomLatitude = abs(iBottomLatitude + iMapBottom);
 }
 
-//	--------------------------------------------------------------------------------
-/// What is the largest latitude value of this Area?
+
+
 int CvArea::GetAreaMaxLatitude()
 {
 	int iTopLatitude, iBottomLatitude;
@@ -727,8 +727,8 @@ int CvArea::GetAreaMaxLatitude()
 	return max(iTopLatitude, iBottomLatitude);
 }
 
-//	--------------------------------------------------------------------------------
-/// What is the smallest latitude value of this Area?
+
+
 int CvArea::GetAreaMinLatitude()
 {
 	int iTopLatitude, iBottomLatitude;
@@ -737,15 +737,15 @@ int CvArea::GetAreaMinLatitude()
 	return min(iTopLatitude, iBottomLatitude);
 }
 
-//	--------------------------------------------------------------------------------
+
 void CvArea::read(FDataStream& kStream)
 {
 	int iI;
 
-	// Init saved data
+
 	reset();
 
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion;
 	kStream >> uiVersion;
 
@@ -790,12 +790,12 @@ void CvArea::read(FDataStream& kStream)
 }
 
 
-//	--------------------------------------------------------------------------------
+
 void CvArea::write(FDataStream& kStream) const
 {
 	int iI;
 
-	// Current version number
+
 	uint uiVersion = 1;
 	kStream << uiVersion;
 
@@ -838,14 +838,14 @@ void CvArea::write(FDataStream& kStream) const
 	ImprovementArrayHelpers::Write(kStream, m_paiNumImprovements, GC.getNumImprovementInfos());
 }
 
-//	--------------------------------------------------------------------------------
+
 FDataStream& operator<<(FDataStream& saveTo, const CvArea& readFrom)
 {
 	readFrom.write(saveTo);
 	return saveTo;
 }
 
-//	--------------------------------------------------------------------------------
+
 FDataStream& operator>>(FDataStream& loadFrom, CvArea& writeTo)
 {
 	writeTo.read(loadFrom);

@@ -1,9 +1,9 @@
--- Edit:
---     show defeat screen
---     don't force exit to menu
--- for EUI & vanilla UI
 
--- KICKED POPUP
+
+
+
+
+
 PopupLayouts[ButtonPopupTypes.BUTTONPOPUP_KICKED] = function(popupInfo)
 	local eReason		= popupInfo.Data1;
 	
@@ -18,7 +18,7 @@ PopupLayouts[ButtonPopupTypes.BUTTONPOPUP_KICKED] = function(popupInfo)
 	SetPopupText(popupText);
 	Events.EndGameShow(EndGameTypes.Loss, -1)
 		
-	-- Initialize 'OK' button.
+
 	local OnOK = function()
 		UIManager:DequeuePopup(ContextPtr)
 	end
@@ -29,9 +29,9 @@ PopupLayouts[ButtonPopupTypes.BUTTONPOPUP_KICKED] = function(popupInfo)
 	Controls.CloseButton:SetHide( true );
 end
 
-----------------------------------------------------------------        
--- Key Down Processing
-----------------------------------------------------------------        
+
+
+
 PopupInputHandlers[ButtonPopupTypes.BUTTONPOPUP_KICKED] = function( uiMsg, wParam, lParam )
     if uiMsg == KeyEvents.KeyDown then
         if( wParam == Keys.VK_ESCAPE or wParam == Keys.VK_RETURN ) then
@@ -41,7 +41,7 @@ PopupInputHandlers[ButtonPopupTypes.BUTTONPOPUP_KICKED] = function( uiMsg, wPara
     end
 end
 
-----------------------------------------------------------------
--- 'Active' (local human) player has changed
-----------------------------------------------------------------
+
+
+
 Events.GameplaySetActivePlayer.Add(HideWindow);

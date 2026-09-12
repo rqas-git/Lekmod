@@ -1,9 +1,9 @@
--- edit:
--- expandable Info Panel size
--- for EUI & vanilla UI
--------------------------------------------------
--- UnitList
--------------------------------------------------
+
+
+
+
+
+
 include( "InstanceManager" );
 include( "SupportFunctions" );
 local m_MilitaryIM = InstanceManager:new( "UnitInstance", "Root", Controls.MilitaryStack );
@@ -18,8 +18,8 @@ local m_SortMode = eName;
 local m_bSortReverse = true;
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function ShowHideHandler( bIsHide )
     if( not bIsHide ) then
         UpdateDisplay();
@@ -28,8 +28,8 @@ end
 ContextPtr:SetShowHideHandler( ShowHideHandler );
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnClose( )
     ContextPtr:SetHide( true );
     Events.OpenInfoCorner( InfoCornerID.None );
@@ -38,12 +38,12 @@ end
 Controls.CloseButton:RegisterCallback( Mouse.eLClick, OnClose );
 
 
-----------------------------------------------------------------
--- Key Down Processing
-----------------------------------------------------------------
+
+
+
 function InputHandler( uiMsg, wParam, lParam )
 	if uiMsg == KeyEvents.KeyDown then
-		if wParam == Keys.VK_ESCAPE then --or wParam == Keys.VK_RETURN then
+		if wParam == Keys.VK_ESCAPE then
 			OnClose();
 			return true;
 		end
@@ -52,8 +52,8 @@ end
 ContextPtr:SetInputHandler( InputHandler );
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function UnitClicked( unitID )
     local pSelectedUnit = UI:GetHeadSelectedUnit();
     if( pSelectedUnit ~= nil and
@@ -65,16 +65,16 @@ function UnitClicked( unitID )
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OpenOverview()
 	Events.SerialEventGameMessagePopup( { Type = ButtonPopupTypes.BUTTONPOPUP_MILITARY_OVERVIEW } );
 end
 Controls.OpenOverviewButton:RegisterCallback( Mouse.eLClick, OpenOverview );
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnChangeEvent()
     if( ContextPtr:IsHidden() == false ) then
         UpdateDisplay();
@@ -94,8 +94,8 @@ Events.SerialEventUnitMove.Add( OnChangeEvent );
 Events.SerialEventUnitTeleportedToHex.Add( OnChangeEvent );
 Events.GameplaySetActivePlayer.Add(OnChangeEvent);
 
--------------------------------------------------
--------------------------------------------------
+
+
 function UpdateDisplay()
 
     m_SortTable = {};
@@ -139,15 +139,15 @@ function UpdateDisplay()
         else
             if iHealth >= 66 then
                 sortEntry.name = "[COLOR_GREEN]" .. Locale.ConvertTextKey( unit:GetNameKey() ) .. "[ENDCOLOR]";
-                --green
+
     
             elseif iHealth >= 33 then
                 sortEntry.name = "[COLOR_YELLOW]" .. Locale.ConvertTextKey( unit:GetNameKey() ) .. "[ENDCOLOR]";
-                --yellow
+
 
             else
                 sortEntry.name = "[COLOR_RED]" .. Locale.ConvertTextKey( unit:GetNameKey() ) .. "[ENDCOLOR]";
-                --red
+
             end
         end
         sortEntry.name = Locale.ConvertTextKey( unit:GetNameKey() );
@@ -164,8 +164,8 @@ function UpdateDisplay()
         sortEntry.hasPromotion = unit:CanPromote(); 
         instance.PromotionIndicator:SetHide( not sortEntry.hasPromotion );
 
-        ---------------------------------------------------------
-        -- Status field
+
+
         local buildType = unit:GetBuildType();
         local activityType = unit:GetActivityType();
         local pCity = unit:GetPlot():GetPlotCity();
@@ -213,7 +213,7 @@ function UpdateDisplay()
 			sortEntry.status = "TXT_KEY_MISSION_SLEEP";
 			instance.Status:SetHide( false );
 			
-        elseif( buildType ~= -1) then -- this is a worker who is actively building something
+        elseif( buildType ~= -1) then
     		local thisBuild = GameInfo.Builds[buildType];
     		local civilianUnitStr = Locale.ConvertTextKey(thisBuild.Description);
     		local iTurnsLeft = unit:GetPlot():GetBuildTurnsLeft(buildType, 0, 0);	
@@ -237,7 +237,7 @@ function UpdateDisplay()
 	    
 	    local statusY = instance.Status:GetSizeY();
 	    statusY = statusY + 10;
-	    --print(statusY);
+
 	    if(statusY > 24)then
 		   instance.StatusBox:SetSizeY(statusY); 
 		   instance.SelectionFrame:SetSizeY(statusY);
@@ -252,15 +252,15 @@ function UpdateDisplay()
         else
             if iHealth >= 66 then
                 sortEntry.health = "[COLOR_GREEN]" .. tostring(iHealth) .. "[ENDCOLOR]";
-                --green
+
     
             elseif iHealth >= 33 then
                 sortEntry.health = "[COLOR_YELLOW]" .. tostring(iHealth) .. "[ENDCOLOR]";
-                --yellow
+
 
             else
                 sortEntry.health = "[COLOR_RED]" .. tostring(iHealth) .. "[ENDCOLOR]";
-                --red
+
             end
         end
         instance.HP:LocalizeAndSetText( sortEntry.health );
@@ -294,8 +294,8 @@ function UpdateDisplay()
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SortFunction( a, b )
     local valueA, valueB, valueC, valueD;
     local healthA, healthB = 100, 100;
@@ -309,9 +309,9 @@ function SortFunction( a, b )
 			return true;
 		else
 			if( m_bSortReverse ) then
-				return tostring(a) > tostring(b); -- gotta do something deterministic
+				return tostring(a) > tostring(b);
 			else
-				return tostring(a) < tostring(b); -- gotta do something deterministic
+				return tostring(a) < tostring(b);
 			end
         end;
     else
@@ -325,7 +325,7 @@ function SortFunction( a, b )
 		elseif( m_SortMode == eStatus ) then
 			valueA = entryA.status;
 			valueB = entryB.status;
-		else -- health
+		else
 			valueA = 100 - entryA.health;
 			valueB = 100 - entryB.health;
 		end
@@ -385,8 +385,8 @@ function SortFunction( a, b )
 end
 
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnSort( type )
     if( m_SortMode == type ) then
         m_bSortReverse = not m_bSortReverse;
@@ -406,8 +406,8 @@ Controls.SortStatus:SetVoid1( eStatus );
 Controls.SortHealth:SetVoid1( eHealth );
 
 	
--------------------------------------------------
--------------------------------------------------
+
+
 function OnOpenInfoCorner( iInfoType )
     if( iInfoType == InfoCornerID.Units ) then
         ContextPtr:SetHide( false );
@@ -419,9 +419,9 @@ end
 Events.OpenInfoCorner.Add( OnOpenInfoCorner );
 
     
--------------------------------------------------
--- NEW: expandable Info Panel size
--------------------------------------------------
+
+
+
 local EUI_options = Modding.OpenUserData( "Enhanced User Interface Options", 1);
 local iUnitListSizeY = EUI_options.GetValue( "DB_iInfoPanelSizeY" );
 if iUnitListSizeY ~= nil then
@@ -447,7 +447,7 @@ function OnEditVerticalSize(v)
         local w, h = UIManager:GetScreenSizeVal();
         local dx, dy = UIManager:GetMouseDelta();
         local y1 = math.max( math.min( Controls.MainGrid:GetSizeY() - dy, h - 200 ), 200 );
-        if os.clock() - timeSinceLastDBWrite > 0.1 then  -- 0.1s cooldown for DB access
+        if os.clock() - timeSinceLastDBWrite > 0.1 then
             EUI_options.SetValue( "DB_iInfoPanelSizeY", y1 );
             timeSinceLastDBWrite = os.clock();
         end

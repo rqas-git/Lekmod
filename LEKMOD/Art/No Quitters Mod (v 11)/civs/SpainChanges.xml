@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/7/2015 3:49:05 AM -->
+
 <GameData>
 	
-	<!-- Spain now gets 100 gold per Natural Wonder discovered, regardless if whether or not it's the first discovery. -->
+
 	<Traits>
 		<Update>
 			<Set NaturalWonderFirstFinderGold="100" />
@@ -35,8 +35,8 @@
 	</Language_RU_RU>
 	
 	
-	<!-- Replace Conquistador for Spain with New Unique -->
-	<!-- PLAZA DE TOROS (Unique Building): Replaces Circus. Provides an additional +2 Culture and can also be constructed with an improved source of Cows. -->
+
+
 	<Civilization_UnitClassOverrides>
 		<Delete UnitType="UNIT_SPANISH_CONQUISTADOR" />
 	</Civilization_UnitClassOverrides>

@@ -8,10 +8,10 @@
 #include <FireWorks/FMemoryStream.h>
 
 #include "CvDllInterfaces.h"
-//
-// abstract interface for utility functions used by DLL
-// Copyright 2010 Firaxis Games
-//
+
+
+
+
 class ICvEngineScriptSystem1;
 class CvDLLInterfaceIFaceBase;
 
@@ -26,19 +26,19 @@ class CvUnit;
 class CvReplayInfo;
 
 
-// {B044BCED-E001-42ef-9A42-03A8B09C1362}
+
 static const GUID guidICvEngineUtility1 = 
 { 0xb044bced, 0xe001, 0x42ef, { 0x9a, 0x42, 0x3, 0xa8, 0xb0, 0x9c, 0x13, 0x62 } };
 
-// {B4F5594D-BBA4-4a4c-9BBD-CEDF4CD10F2D}
+
 static const GUID guidICvEngineUtility2 = 
 { 0xb4f5594d, 0xbba4, 0x4a4c, { 0x9b, 0xbd, 0xce, 0xdf, 0x4c, 0xd1, 0xf, 0x2d } };
 
-// {F95CB893-6D19-4584-A741-6F64B855C7E9}
+
 static const GUID guidICvEngineUtility3 = 
 { 0xf95cb893, 0x6d19, 0x4584, { 0xa7, 0x41, 0x6f, 0x64, 0xb8, 0x55, 0xc7, 0xe9 } };
 
-// {DD8A29A2-E752-4bf7-9EE0-42B8155F175F}
+
 static const GUID guidICvEngineUtility4 = 
 { 0xdd8a29a2, 0xe752, 0x4bf7, { 0x9e, 0xe0, 0x42, 0xb8, 0x15, 0x5f, 0x17, 0x5f } };
 
@@ -50,8 +50,8 @@ class ICvEngineUtility1 : public ICvUnknown
 public:
 	static GUID DLLCALL GetInterfaceId() { return guidICvEngineUtility1; }
 
-	//This method has been deprecated due to the interface not being versioned.
-	//You should use GC.GetEngineUserInterface() instead to obtain a pointer to ICvUserInterface.
+
+
 	virtual DECLSPEC_DEPRECATED CvDLLInterfaceIFaceBase* getInterfaceIFace() = 0;
 
 	virtual ICvEngineScriptSystem1* GetScriptSystem() = 0;
@@ -110,7 +110,7 @@ public:
 	virtual void sendPause(int iPauseID = -1) = 0;
 	virtual void sendChangeWar(TeamTypes iRivalTeam, bool bWar) = 0;
 	virtual void sendIgnoreWarning(TeamTypes iRivalTeam) = 0;
-	virtual void SendPledgeMinorProtection(PlayerTypes eMinor, bool bValue) = 0; //antonjs: DEPRECATED, use CvLuaGame::lDoMinorPledgeProtection instead
+	virtual void SendPledgeMinorProtection(PlayerTypes eMinor, bool bValue) = 0;
 	virtual void SendMinorNoUnitSpawning(PlayerTypes eMinor, bool bValue) = 0;
 	virtual void SendLiberateMinor(PlayerTypes eMinor, int iCityID) = 0;
 	virtual void sendUpdatePolicies(bool bNOTPolicyBranch, int iID, bool bValue) = 0;
@@ -255,7 +255,7 @@ public:
 
 	virtual void GameplayFeatureChanged(_In_ ICvPlot1* pThisPlot, FeatureTypes newFeature) = 0;
 
-	// the last set of functions will shortly be deprecated, this is the replacement
+
 	virtual void GameplayPlotStateChange(_In_ const ICvPlot1* pThisPlot, const ResourceTypes eRevealedResource, const ImprovementTypes eRevealedImprovement, 
         const int iRevealedImprovementState, const RouteTypes eRevealedRoute, const int iRouteState) = 0;
     virtual void GameplayPlotIconStateChange(_In_ const ICvPlot1* pThisPlot, const ResourceTypes eRevealedResource, 
@@ -331,8 +331,8 @@ public:
 
 	virtual bool TunerConnected() = 0;
 
-	// Returns true if the tuner has been connected during this game session.
-	// Use the CvGame version of this function to check the save as well.
+
+
 	virtual bool TunerEverConnected() = 0;
 
     virtual void PublishEraChanges() = 0;
@@ -403,4 +403,4 @@ public:
 	virtual bool DLLCALL GetEvaluatedMapScriptPath(_In_z_ const char* szPath, _Inout_z_cap_(szEvaluatedPathSize) char* szEvaluatedPath, unsigned int szEvaluatedPathSize) const = 0;
 };
 
-#endif	// ICvDLLUtility_h
+#endif

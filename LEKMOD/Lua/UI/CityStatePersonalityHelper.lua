@@ -1,8 +1,8 @@
-------------------------------------------------------------------------------
--- CityStatePersonalityHelper.lua
--- Data-driven city-state personality display helpers (LEKMOD_MINOR_CIV_PERSONALITIES)
--- Shared by vanilla UI and EUI; lives in Lua/UI (not ui_check.bat tmp copies).
-------------------------------------------------------------------------------
+
+
+
+
+
 
 local g_PersonalityColorPositiveTypes = {
 	MINOR_CIV_PERSONALITY_FRIENDLY = true,

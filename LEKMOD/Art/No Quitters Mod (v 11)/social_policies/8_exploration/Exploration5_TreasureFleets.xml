@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/6/2015 4:51:27 PM -->
+
 <GameData>
 
-	<!-- Treasure Fleets: +1 Food, +1 Production, and +1 Gold from all Coast and Ocean tiles. -->
+
 	<Policies>
 		<Update>
 			<Set SeaTradeRouteGoldChange="0" />
@@ -34,7 +34,7 @@
 		</Row>
 	</Language_RU_RU>
 
-	<!-- Treasury building -->
+
 	<BuildingClasses>
 		<Row>
 			<Type>BUILDINGCLASS_TREASURE_FLEETS</Type>

@@ -1,0 +1,141 @@
+#include <algorithm>
+#include <array>
+#include <cassert>
+#include <iostream>
+#include <memory>
+#include <random>
+#include <vector>
+enum { NUM_YIELD_TYPES=6, NUM_DIRECTION_TYPES=6 };
+typedef int DirectionTypes;
+typedef int ImprovementTypes;
+struct CvImprovementEntry;
+struct CvLandmass { int tiles=0; int getNumTiles(){return tiles;} };
+struct Map {
+    std::array<CvLandmass,6> water;
+    CvLandmass* getLandmass(int i){return i<0?nullptr:&water.at(i);}
+};
+struct Globals {
+    int num=6; std::vector<CvImprovementEntry*> entries; Map map;
+    int getNumImprovementInfos(){return num;}
+    CvImprovementEntry* getImprovementInfo(int i){return i<int(entries.size())?entries[i]:nullptr;}
+    int getMIN_WATER_SIZE_FOR_OCEAN(){return 10;}
+    Map& getMap(){return map;}
+} GC;
+long reads=0, coastCalls=0, neighborCalls=0;
+#define CvAssertMsg(a,b) assert(a)
+
+struct Matrix {
+    struct Row {
+        std::vector<int> v;
+        explicit Row(int n):v(n){}
+        int& operator[](int i){return v.at(i);}
+        int operator[](int i)const{return v.at(i);}
+    };
+    std::vector<Row> rows;
+    Matrix(int r,int c){for(int i=0;i<r;++i)rows.emplace_back(c);}
+    Row& operator[](int i){return rows.at(i);}
+    const Row& operator[](int i)const{return rows.at(i);}
+};
+struct CvImprovementEntry {
+    Matrix m_ppiImprovementAdjacentBonus;
+    Matrix m_piImprovementAdjacentBonusCivilization;
+    Matrix m_ppiImprovementAdjacentBonusCivilizationNoAmount;
+    Matrix m_ppiImprovementAdjacentAmount;
+    Matrix m_ppiImprovementAdjacentCivilizationAmount;
+    bool m_bHasAnyAdjacencyYieldBonus=false;
+    int coastal=0;
+    explicit CvImprovementEntry(int n):m_ppiImprovementAdjacentBonus(n,6),
+      m_piImprovementAdjacentBonusCivilization(200,n),
+      m_ppiImprovementAdjacentBonusCivilizationNoAmount(n,6),
+      m_ppiImprovementAdjacentAmount(n,7),m_ppiImprovementAdjacentCivilizationAmount(6,7){}
+    int GetImprovementAdjacentBonus(int,int)const;
+    int GetImprovementAdjacentBonusCivilization(int,int)const;
+    int GetImprovementAdjacentBonusCivilizationNoAmount(int,int)const;
+    int GetImprovementAdjacentAmount(int,int)const;
+    int GetImprovementAdjacentCivilizationAmount(int,int)const;
+    bool HasAnyAdjacencyYieldBonus()const;
+    bool HasAnyAdjacencyYieldBonusBaseline()const;
+    bool ComputeHasAnyAdjacencyYieldBonus()const;
+    void CacheAdjacencyYieldBonus();
+    void ResetCache(){ @RESET@ }
+    int GetCoastalLandYieldChange(int)const{return coastal;}
+};
+@ACCESSORS@
+@PREDICATES@
+void prefetchComplete(){ @PREFETCH@ }
+
+struct CvPlot {
+    bool water=false; int landmass=0;
+    bool isWater()const{return water;}
+    int getX()const{return 0;} int getY()const{return 0;}
+    int getLandmass()const{return landmass;}
+    bool isCoastalLand(int iMinWaterSize=-1)const;
+    int coastalBaseline(CvImprovementEntry* pImprovement)const {
+        int iYield=50,eYield=0; @COAST_BASELINE@ return iYield;
+    }
+    int coastalCurrent(CvImprovementEntry* pImprovement)const {
+        int iYield=50,eYield=0; @COAST_CURRENT@ return iYield;
+    }
+};
+std::array<CvPlot*,6> neighbors;
+CvPlot* plotDirection(int,int,DirectionTypes d){++neighborCalls;return neighbors.at(d);}
+@COAST_METHOD@
+
+int main(){
+    std::mt19937 random(113809);
+    int metadataCases=0;
+    long oldReads=0,newReads=0,initializationReads=0;
+    for(int n:{6,20,80,160,200}){
+        GC.num=n;
+        for(int scenario=0;scenario<80;++scenario){
+            CvImprovementEntry entry(n);
+            GC.entries.assign(n,nullptr);GC.entries[n-1]=&entry;
+            assert(!entry.HasAnyAdjacencyYieldBonus());
+            int value=(scenario%3)-1;
+            switch(scenario%5){
+            case 0:entry.m_ppiImprovementAdjacentBonus[n-1][5]=value;break;
+            case 1:entry.m_piImprovementAdjacentBonusCivilization[n-1][5]=value;break;
+            case 2:entry.m_ppiImprovementAdjacentBonusCivilizationNoAmount[n-1][5]=value;break;
+            case 3:entry.m_ppiImprovementAdjacentAmount[5][scenario%7]=value;break;
+            case 4:entry.m_ppiImprovementAdjacentCivilizationAmount[5][scenario%7]=value;break;
+            }
+            reads=0;prefetchComplete();initializationReads+=reads;
+            for(int i=0;i<100;++i){
+                reads=0;bool old=entry.HasAnyAdjacencyYieldBonusBaseline();oldReads+=reads;
+                reads=0;bool now=entry.HasAnyAdjacencyYieldBonus();newReads+=reads;
+                assert(old==now);++metadataCases;
+            }
+
+            entry.ResetCache();assert(!entry.HasAnyAdjacencyYieldBonus());
+            entry.m_ppiImprovementAdjacentBonus[n-1][5]=1;
+            prefetchComplete();assert(entry.HasAnyAdjacencyYieldBonus());
+            entry.m_ppiImprovementAdjacentBonus[n-1][5]=0;
+            entry.ResetCache();prefetchComplete();
+            assert(entry.HasAnyAdjacencyYieldBonus()==entry.HasAnyAdjacencyYieldBonusBaseline());
+        }
+    }
+    assert(oldReads>0&&newReads==0);
+    int coastalCases=0;long oldCoast=0,newCoast=0,oldNeighbors=0,newNeighbors=0;
+    CvImprovementEntry entry(20);
+    for(int scenario=0;scenario<200;++scenario){
+        CvPlot center;center.water=scenario%5==0;
+        std::array<CvPlot,6> ring;
+        for(int i=0;i<6;++i){
+            ring[i].water=random()%2;ring[i].landmass=random()%7==0?-1:i;
+            GC.map.water[i].tiles=random()%20;
+            neighbors[i]=random()%8==0?nullptr:&ring[i];
+        }
+        for(int yield=-5;yield<=5;++yield){
+            entry.coastal=yield;coastCalls=neighborCalls=0;
+            int before=center.coastalBaseline(&entry);oldCoast+=coastCalls;oldNeighbors+=neighborCalls;
+            coastCalls=neighborCalls=0;
+            int after=center.coastalCurrent(&entry);newCoast+=coastCalls;newNeighbors+=neighborCalls;
+            assert(before==after);if(yield==0)assert(coastCalls==0&&neighborCalls==0);
+            ++coastalCases;
+        }
+    }
+    std::cout<<"{\"metadata_comparisons\":"<<metadataCases<<",\"metadata_getter_calls\":["<<oldReads<<","<<newReads
+             <<"],\"cache_initialization_getter_calls\":"<<initializationReads
+             <<",\"coastal_cases\":"<<coastalCases<<",\"coast_calls\":["<<oldCoast<<","<<newCoast
+             <<"],\"neighbor_visits\":["<<oldNeighbors<<","<<newNeighbors<<"]}\n";
+}

@@ -3,7 +3,7 @@
 <GameData>
 	
 	<ArtDefine_Landmarks>
-		<!-- COFFEE - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
 		<Row>
 			<Era>Any</Era>
 			<State>Any</State>
@@ -74,7 +74,7 @@
 			<Model>pl_plantation_ind_coffee.fxsxml</Model>
 			<TerrainContour>1</TerrainContour>
 		</Row>
-		<!-- TEA - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
 		<Row>
 			<Era>Any</Era>
 			<State>Any</State>
@@ -145,7 +145,7 @@
 			<Model>pl_plantation_ind_tea.fxsxml</Model>
 			<TerrainContour>1</TerrainContour>
 		</Row>
-		<!-- TOBACCO - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
 		<Row>
 			<Era>Any</Era>
 			<State>Any</State>
@@ -216,7 +216,7 @@
 			<Model>pl_plantation_ind_tobacco.fxsxml</Model>
 			<TerrainContour>1</TerrainContour>
 		</Row>
-		<!-- AMBER - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
 		<Row>
 			<Era>Any</Era>
 			<State>Any</State>
@@ -287,7 +287,7 @@
 			<Model>pl_ind_mine_amber.fxsxml</Model>
 			<TerrainContour>1</TerrainContour>
 		</Row>
-		<!-- JADE - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
 		<Row>
 			<Era>Any</Era>
 			<State>Any</State>
@@ -358,7 +358,7 @@
 			<Model>pl_ind_mine_jade.fxsxml</Model>
 			<TerrainContour>1</TerrainContour>
 		</Row>
-		<!-- OLIVE - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
 		<Row>
 			<Era>Any</Era>
 			<State>Any</State>
@@ -429,7 +429,7 @@
 			<Model>plantation_ind_olive_pil.fxsxml</Model>
 			<TerrainContour>1</TerrainContour>
 		</Row>
-		<!-- PERFUME - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
 		<Row>
 			<Era>Any</Era>
 			<State>Any</State>
@@ -500,7 +500,7 @@
 			<Model>pl_plantation_ind_perfume.fxsxml</Model>
 			<TerrainContour>1</TerrainContour>
 		</Row>
-		<!-- CORAL - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
 		<Row>
 			<Era>Ancient</Era>
 			<State>Any</State>
@@ -541,7 +541,7 @@
 			<Model>coral_industrial.fxsxml</Model>
 			<TerrainContour>1</TerrainContour>
 		</Row>
-		<!-- LAPIS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
 		<Row>
 			<Era>Ancient</Era>
 			<State>UnderConstruction</State>
@@ -612,7 +612,7 @@
 			<Model>lapis.fxsxml</Model>
 			<TerrainContour>1</TerrainContour>
 		</Row>
-		<!-- SUGAR - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
 		<Row>
 			<Era>Any</Era>
 			<State>Any</State>

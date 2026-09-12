@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/2/2015 11:22:00 PM -->
+
 <GameData>
 
-	<!-- New Policy Tree
+
 	
-			             Cultural Centers
-			           _________|___________
-			          | 			        |
-	            Cultural Exchange	  Artistic Genius
-			          |    |________________|
-                      |				  |
-	            Flourishing of     Fine Arts
-	              the Arts
+
+
+
+
+
+
+
+
 	   
-	-->
+
 
 	<Policies>
 		<Update>

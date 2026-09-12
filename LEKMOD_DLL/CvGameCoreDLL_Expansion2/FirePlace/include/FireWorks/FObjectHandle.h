@@ -1,31 +1,31 @@
-//------------------------------------------------------------------------------------------------
-//
-//  *****************   FIRAXIS GAME ENGINE   ********************
-//
-//  FILE:    FObjectHandle.h
-//
-//  AUTHOR:  Justin Randall  --  4/13/2007
-//
-//  PURPOSE: Provides pointer-like access to objects in ways that can be easily checked for object
-//           validity
-//
-//------------------------------------------------------------------------------------------------
-//  Copyright (c) 2007 Firaxis Games, Inc. All rights reserved.
-//------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #ifndef _INCLUDED_FObjectHandle_H
 #define _INCLUDED_FObjectHandle_H
 
-// JAR - uncomment this if a stale handle assert is thrown and you don't know
-// where the object handle was allocated
-// #define TRACK_HANDLE_STACKS 1
-//#define TRACK_DESTRUCTION_NOTIFICATION 1
+
+
+
+
 
 #if defined(TRACK_HANDLE_STACKS)
 #	define OBJECT_HANDLE_STACK recordCallstack()
 #	ifdef _WINPC
 #		include "Win32/FDebugHelper.h"
-#	endif//_WINPC
+#	endif
 #else
 #	define OBJECT_HANDLE_STACK
 #endif
@@ -48,7 +48,7 @@ struct DestructionNotification
 	}
 
 #if defined(AUI_WARNING_FIXES) && !defined(TRACK_DESTRUCTION_NOTIFICATION)
-	void addTarget(const NotificationTarget & /*target*/)
+	void addTarget(const NotificationTarget &           )
 #else
 	void addTarget(const NotificationTarget & target)
 #endif
@@ -59,7 +59,7 @@ struct DestructionNotification
 	}
 
 #if defined(AUI_WARNING_FIXES) && !defined(TRACK_DESTRUCTION_NOTIFICATION)
-	void removeTarget(const NotificationTarget & /*target*/)
+	void removeTarget(const NotificationTarget &           )
 #else
 	void removeTarget(const NotificationTarget & target)
 #endif
@@ -142,7 +142,7 @@ public:
 		FAssertMsg(m_ignoreDestruction, msg.c_str());
 #else
 		FAssertMsg(m_ignoreDestruction, "An object is being destroyed while a handle for it still exists. The handle is no longer valid. If this is acceptable, invoke handle.ignoreDestruction() before use and this assert will not trigger.");
-#endif//TRACK_OBJECT_STACKS
+#endif
 		const_cast<FObjectHandle *>(this)->m_target = 0;
 	}
 
@@ -239,13 +239,13 @@ private:
 		debugHelper.GetCallStack(&m_ownerCallstack, 2);
 	}
 
-#endif//TRACK_HANDLE_STACKS
+#endif
 private:
 	PointingTo *  m_target;
 	bool          m_ignoreDestruction;
 #if defined(TRACK_HANDLE_STACKS)
 	mutable FCallStack   m_ownerCallstack;
-#endif//TRACK_HANDLE_STACKS
+#endif
 };
 
 template<class PointingTo>
@@ -256,4 +256,4 @@ const FObjectHandle<PointingTo> ConstHandle(const PointingTo * target)
 	return result;
 }
 
-#endif//_INCLUDED_FObjectHandle_H
+#endif

@@ -1,8 +1,8 @@
 INSERT OR REPLACE INTO Language_en_US (Tag, Text) 
 VALUES
---==========================================================================================================================
--- MC_MHA Empire
---==========================================================================================================================
+
+
+
 	(
 		'TXT_KEY_MC_ZIMBABWE_DESC',
 		'Zimbabwean Empire'
@@ -79,9 +79,9 @@ VALUES
 		'TXT_KEY_CIV5_MC_ZIMBABWE_TEXT_7',
 		'The Changamire dynasty of rulers emerged from the Shona people who had founded the state of Mutapa around 1500. Named after its founder Changa (also known as Changamir), Changamire had been a province of Mutapa but with the rise of civil wars and the Portuguese occupation of Mutapa''s capital, the Changamir seized the opportunity to establish a new state called Rozwi which later became known as Changamire. Changamir broke free of Mutapa and led a mass migration to the area in modern Zimbabwe near Bulawayo.  Changamir and his successors conquered the indigenous people and ruled the region between the Zambezi and Limpopo Rivers (now modern Zimbabwe) until 1830.'
 	),
---==========================================================================================================================
--- City Names
---==========================================================================================================================
+
+
+
 	(
 		'TXT_KEY_CITY_NAME_CIVILIZATION_MC_ZIMBABWE_1',
 		'Great Zimbabwe'
@@ -206,9 +206,9 @@ VALUES
 		'TXT_KEY_CITY_NAME_CIVILIZATION_MC_ZIMBABWE_31',
 		'Shurugwi'
 	);
---==========================================================================================================================
--- Spies
---==========================================================================================================================
+
+
+
 INSERT OR REPLACE INTO Language_en_US (Tag, Text) 
 VALUES
 	(
@@ -255,9 +255,9 @@ VALUES
 UPDATE Language_en_US
 SET Gender = 'feminine'
 WHERE Tag IN ('TXT_KEY_SPY_NAME_MC_ZIMBABWE_4', 'TXT_KEY_SPY_NAME_MC_ZIMBABWE_3', 'TXT_KEY_SPY_NAME_MC_ZIMBABWE_2', 'TXT_KEY_SPY_NAME_MC_ZIMBABWE_1', 'TXT_KEY_SPY_NAME_MC_ZIMBABWE_0');
---==========================================================================================================================
--- Jayavarman VII
---==========================================================================================================================
+
+
+
 INSERT OR REPLACE INTO Language_en_US (Tag, Text) 
 VALUES
 	(
@@ -292,9 +292,9 @@ VALUES
 		'TXT_KEY_CIV5_DOM_MC_ZIMBABWE_TEXT',
 		'Greetings, mighty Nyatsimba Mutota - proud and noble leader of Zimbabwe! Your people bow before your presence! Your people have ruled over the African interior since time immemorial, when your kingdom was naught but a legend to the outside world. Zimbabwe grew rich off trading the bountiful resources of her lands with myriad foreign kingdoms, with which it became the sole power of the region. You built great cities which would astonish the world for centuries to come, and stood proudly to defend your lands from those who would attempt to take them until your last breath.[NEWLINE][NEWLINE]O'' great king! Your kingdom has fallen, your lands plundered and divided by foreign powers. Yet your people retain hope, and call for a great leader to restore Zimbabwe to greatness. Can you don the mantle, and lead Zimbabwe once more? Can you make your kingdom the envy of the world? Can you build a civilisation that will stand the test of time?'
 	),
---==========================================================================================================================
--- Diplomacy
---==========================================================================================================================
+
+
+
 	(
 		'TXT_KEY_LEADER_MC_NYATSIMBA_MUTOTA_FIRSTGREETING_1',
 		'I am Nyatsimba Mutota. King of Zimbabwe, come forth and pay me the respect that is due.'
@@ -311,9 +311,9 @@ VALUES
 		'TXT_KEY_LEADER_MC_NYATSIMBA_MUTOTA_DEFEATED_2',
 		'When you least expect it, our Rozwi will one day return and crush you all! I swear it! This is not over!'
 	),
---==========================================================================================================================
--- Great Barays of Angkor
---==========================================================================================================================
+
+
+
 	(
 		'TXT_KEY_TRAIT_TOTEMIC_LINEAGE_SHORT',
 		'Totemic Lineage'
@@ -322,9 +322,9 @@ VALUES
 		'TXT_KEY_TRAIT_TOTEMIC_LINEAGE',
 		'[ICON_PRODUCTION] Production spent on Buildings and Wonders contribute towards the establishment of a new Clan Lineage when the Building is completed. Each Clan Lineage provides a Trade Slot and a cumulative bonus.'
 	),
---==========================================================================================================================
--- Black Mouth
---==========================================================================================================================
+
+
+
 	(
 		'TXT_KEY_UNIT_MC_GANO',
 		'Gano Axeman'
@@ -341,9 +341,9 @@ VALUES
 		'TXT_KEY_UNIT_MC_GANO_STRATEGY',
 		'The Gano Axeman is the Zimbabwean Longswordsman. Slightly more expensive than the Longswordsman it replaces. The Gano Axeman gains experience whenever a City grows or claims a new Tile.' 
 	),
---==========================================================================================================================
--- Earth Lodge
---==========================================================================================================================
+
+
+
 	(
 		'TXT_KEY_BUILDING_MC_DZIMBABWE',
 		'Dzimbabwe'

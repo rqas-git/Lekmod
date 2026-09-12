@@ -1,17 +1,17 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//!	 \file		CvLuaTeam.h
-//!  \brief     Public interface to CvLuaTeam.
-//!
-//!		This includes the public interface to CvLuaTeam.
-//!
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #pragma once
 #ifndef CVLUATEAM_H
 #define CVLUATEAM_H
@@ -21,21 +21,21 @@
 class CvLuaTeam : public CvLuaScopedInstance<CvLuaTeam, CvTeam>
 {
 public:
-	//! Push all player instances to Lua
+
 	static void Register(lua_State* L);
 
-	//! Push CvTeam methods into table t
+
 	static void PushMethods(lua_State* L, int t);
 
-	//! Required by CvLuaScopedInstance.
+
 	static void HandleMissingInstance(lua_State* L);
 
-	//! Required by CvLuaScopedInstance.
+
 	static const char* GetTypeName();
 
 protected:
 
-	//! Protected Lua call to register all team instances.
+
 	static int pRegister(lua_State* L);
 
 	static int lIsNone(lua_State* L);
@@ -58,14 +58,14 @@ protected:
 	static int lGetDefensivePower(lua_State* L);
 	static int lGetNumNukeUnits(lua_State* L);
 
-	// DEPRECATED
+
 	static int lGetTeamVotingForInDiplo(lua_State* L);
 	static int lGetProjectedVotesFromMinorAllies(lua_State* L);
 	static int lGetProjectedVotesFromLiberatedMinors(lua_State* L);
 	static int lGetProjectedVotesFromCivs(lua_State* L);
 	static int lGetTotalProjectedVotes(lua_State* L);
 	static int lGetTotalSecuredVotes(lua_State* L);
-	// End DEPRECATED
+
 
 	static int lGetAtWarCount(lua_State* L);
 	static int lGetHasMetCivCount(lua_State* L);
@@ -203,7 +203,7 @@ protected:
 	static int lGetImprovementYieldChange(lua_State* L);
 	static int lChangeImprovementYieldChange(lua_State* L);
 
-	static int lIsHomeOfUnitedNations(lua_State* L); // DEPRECATED
+	static int lIsHomeOfUnitedNations(lua_State* L);
 
 	static int lGetVictoryCountdown(lua_State* L);
 	static int lGetVictoryDelay(lua_State* L);
@@ -218,4 +218,4 @@ protected:
 	static int lUpdateEmbarkGraphics(lua_State* L);
 };
 
-#endif //CVLUATEAM_H
+#endif

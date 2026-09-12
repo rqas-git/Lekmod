@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Enable the experimental Windows registration identity in a native Mac install.
 
-This enables an adaptation in the native pre-game registration boundary. It does not claim packet or
-simulation compatibility; the first Windows session is an integration test.
-"""
+
+
+
+
 import argparse
 from datetime import datetime, timezone
 import json
@@ -27,7 +27,7 @@ CORE_MARKER = b'LEKMOD_MACOS_REGISTRATION_V2'
 HOST_SHA256 = 'd56d6bfbc0ef517fcb7cbaff46c42d1bdfab809c084684045761bd9d85807ee9'
 MAC_BUILD = '180925'
 WINDOWS_BUILD = '403694'
-DIAGNOSTIC_MARKER = '-- LEKMOD_MACOS_CROSSPLAY_DIAGNOSTICS'
+DIAGNOSTIC_MARKER = 'do local LEKMOD_MACOS_CROSSPLAY_DIAGNOSTICS = true end'
 EVENTS = {
     'OnHostConnect': 'connected-to-host',
     'OnNetRegistered': 'registered; waiting-for-gamestate',
@@ -37,7 +37,7 @@ EVENTS = {
 
 
 def configure_staged(app, state, enabled, repair=False):
-    """Only call on a staged bundle. Preserve all unrelated plist/manifest keys."""
+
     if sha256(app / HOST) != HOST_SHA256:
         raise RuntimeError('Cross-play prototype requires the inspected Aspyr 180925 executable.')
     if enabled and CORE_MARKER not in (app / CORE).read_bytes():
@@ -53,8 +53,8 @@ def configure_staged(app, state, enabled, repair=False):
     expected = WINDOWS_BUILD if legacy else MAC_BUILD
     if info.get('CFBundleVersion') != expected:
         raise RuntimeError('Bundle version differs from its installation record.')
-    # The bundle version is not used by the network engine. Undo the earlier
-    # metadata experiment when upgrading an existing prototype installation.
+
+
     info['CFBundleVersion'] = MAC_BUILD
     strings = app / APP_STRINGS
     if not strings.resolve().is_relative_to(app.resolve()):
@@ -82,7 +82,7 @@ def configure_staged(app, state, enabled, repair=False):
     if not joining.resolve().is_relative_to(app.resolve()):
         raise RuntimeError('JoiningRoom.lua points outside the app bundle.')
     text = joining.read_text()
-    # Strip only our own single-line diagnostics, making toggles idempotent.
+
     text = '\n'.join(line for line in text.split('\n') if DIAGNOSTIC_MARKER not in line)
     if enabled:
         for function, event in EVENTS.items():
@@ -94,7 +94,7 @@ def configure_staged(app, state, enabled, repair=False):
             if count != 1:
                 raise RuntimeError(f'Missing or ambiguous multiplayer event: {function}')
         text += f'\nprint("[Lekmod crossplay] Windows registration prototype enabled; target {WINDOWS_BUILD} FINAL_RELEASE"); {DIAGNOSTIC_MARKER}\n'
-    # Validate every input before changing the staged files.
+
     plist.write_bytes(plistlib.dumps(info, fmt=plistlib.FMT_BINARY, sort_keys=False))
     strings.write_text(app_text)
     joining.write_text(text)

@@ -1,16 +1,16 @@
-//------------------------------------------------------------------------------------------------
-//
-//  *****************   FIRAXIS GAME ENGINE   ********************
-//
-//  FILE:    FAStarNode.h
-//
-//  AUTHOR:  Casey O'Toole  --  8/21/2002
-//
-//  PURPOSE: A* Pathfinding - based off of A* Explorer from "AI Game Programming Wisdom"
-//
-//------------------------------------------------------------------------------------------------
-//  Copyright (c) 2007 Firaxis Games, Inc. All rights reserved.
-//------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #ifndef		FASTARNODE_H
 #define		FASTARNODE_H
@@ -38,13 +38,13 @@ enum FAStarListType
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  CLASS:      FAStarNode
-//
-//  DESC:       Used by FAStar pathfinding class
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
 class FAStarNode
 {
 public:
@@ -80,10 +80,10 @@ public:
 		}
 	}
 
-	int m_iX, m_iY;         // Coordinate position
-	int m_iTotalCost;		// Fitness (f)
-	int m_iKnownCost;		// Goal (g)
-	int m_iHeuristicCost;   // Heuristic (h)
+	int m_iX, m_iY;
+	int m_iTotalCost;
+	int m_iKnownCost;
+	int m_iHeuristicCost;
 	int m_iNumChildren;
 	int m_iData1;
 	int m_iData2;
@@ -94,12 +94,12 @@ public:
 	FAStarListType m_eFAStarListType;
 
 	FAStarNode* m_pParent;
-	FAStarNode* m_pNext;					// For Open and Closed lists
-	FAStarNode* m_pPrev;					// For Open and Closed lists
-	FAStarNode* m_pStack;					// For Push/Pop Stack
+	FAStarNode* m_pNext;
+	FAStarNode* m_pPrev;
+	FAStarNode* m_pStack;
 
 	FAStarNode* m_apChildren[8];
 };
 
 
-#endif	//FASTARNODE_H
+#endif

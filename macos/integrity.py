@@ -1,4 +1,4 @@
-"""Content fingerprints used by the launcher and transactional installer."""
+
 import hashlib
 from pathlib import Path
 
@@ -31,7 +31,7 @@ def tree_digest(root):
 
 
 def source_digest(root):
-    """Track build inputs and packaged assets, independent of Git commit state."""
+
     files = []
     for directory in ('LEKMOD', 'LEKMOD_DLL/CvGameCoreDLL_Expansion2', 'macos/include'):
         base = root / directory
@@ -51,6 +51,6 @@ def source_digest(root):
     for name in ('build.py', 'package_assets.py', 'crossplay.py', 'integrity.py', 'eui.py'):
         path = root / 'macos' / name
         files.append(('macos/' + name, path))
-    path = root / 'LekmodInstaller/ui_manager.py'
-    files.append(('LekmodInstaller/ui_manager.py', path))
+
+    files.append(('LekmodInstaller/ui_assets.py', root / 'LekmodInstaller/ui_assets.py'))
     return _fingerprint(files)

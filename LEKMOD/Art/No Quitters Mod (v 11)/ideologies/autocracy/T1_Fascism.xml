@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-21 13:09:50 -->
+
 <GameData>
 
-	<!-- Old policy - Fortified Borders: Removed. -->
-	<!-- New policy - Fascism: +12 Happiness in the Empire. -->
+
+
 	<Policies>
 		<Update>
 			<Set ExtraHappiness="12" />
@@ -19,7 +19,7 @@
 		<Delete PolicyType="POLICY_FORTIFIED_BORDERS" FlavorType="FLAVOR_CITY_DEFENSE" Flavor="8" />
 	</Policy_Flavors>
 	
-	<!-- localization -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_POLICY_FORTIFIED_BORDERS" />
 		<Row Tag="TXT_KEY_POLICY_FORTIFIED_BORDERS">

@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvGameCoreUtils.h"
 #include "CvInternalGameCoreUtils.h"
@@ -23,7 +23,7 @@
 
 #include "ICvDLLUserInterface.h"
 
-// must be included after all other headers
+
 #include "LintFree.h"
 #ifdef AI_WORKER_EMBARKED_FIX
 int RING_PLOTS[6] = {RING0_PLOTS,RING1_PLOTS,RING2_PLOTS,RING3_PLOTS,RING4_PLOTS,RING5_PLOTS};
@@ -32,19 +32,19 @@ int RING_PLOTS[6] = {RING0_PLOTS,RING1_PLOTS,RING2_PLOTS,RING3_PLOTS,RING4_PLOTS
 
 
 
-/// This function will return the CvPlot associated with the Index (0 to 36) of a City at iX,iY.  The lower the Index the closer the Plot is to the City (roughly)
+
 CvPlot* plotCity(int iX, int iY, int iIndex)
 {
 	int iDeltaHexX = 0;
 	int iDeltaHexY = 0;
 	if(iIndex < NUM_CITY_PLOTS)
 	{
-		iDeltaHexX = GC.getCityPlotX()[iIndex]; // getCityPlotX now uses hex-space coords
+		iDeltaHexX = GC.getCityPlotX()[iIndex];
 		iDeltaHexY = GC.getCityPlotY()[iIndex];
 	}
 	else
 	{
-		// loop till we find the ring this is on
+
 		int iThisRing = 0;
 		int iHighestValueOnThisRing = 0;
 		int iLowestValueOnThisRing = 0;
@@ -54,7 +54,7 @@ CvPlot* plotCity(int iX, int iY, int iIndex)
 			iLowestValueOnThisRing = iHighestValueOnThisRing + 1;
 			iHighestValueOnThisRing += iThisRing*6;
 		}
-		// determine what side of the hex we are on
+
 		int iDiff = (iIndex - iLowestValueOnThisRing);
 		int iSide = iDiff / iThisRing;
 		int iOffset = iDiff % iThisRing;
@@ -90,13 +90,13 @@ CvPlot* plotCity(int iX, int iY, int iIndex)
 		}
 
 	}
-	// convert the city coord to hex-space coordinates
+
 	int iCityHexX = xToHexspaceX(iX, iY);
 
 	int iPlotHexX = iCityHexX + iDeltaHexX;
-	int iPlotY = iY + iDeltaHexY; // Y is the same in both coordinate systems
+	int iPlotY = iY + iDeltaHexY;
 
-	// convert from hex-space coordinates to the storage array
+
 	int iPlotX = hexspaceXToX(iPlotHexX, iPlotY);
 
 	return GC.getMap().plot(iPlotX , iPlotY);
@@ -111,7 +111,7 @@ int plotCityXY(const CvCity* pCity, const CvPlot* pPlot)
 	int iWrappedDY = dyWrap(pPlot->getY() - pCity->getY());
 	int iDY = iWrappedDY;
 
-	// convert to hex-space coordinates - the coordinate system axes are E and NE (not orthogonal)
+
 	int iCityHexX = xToHexspaceX(pCity->getX(), pCity->getY());
 	int iPlotHexX = xToHexspaceX(pCity->getX() + iWrappedDX, pCity->getY() + iWrappedDY);
 
@@ -130,7 +130,7 @@ int plotCityXY(const CvCity* pCity, const CvPlot* pPlot)
 DirectionTypes estimateDirection(int iDX, int iDY)
 {
 	const int displacementSize = 6;
-	//														NE				E		SE					SW					W			NW
+
 	static double displacements[displacementSize][2] = { {0.5, 0.866025}, {1, 0}, {0.5, -0.866025}, {-0.5, -0.866025}, {-1, 0}, {-0.5, -0.866025}};
 	double maximum = 0;
 	int maximumIndex = -1;
@@ -227,7 +227,7 @@ bool isBeforeUnitCycle(const CvUnit* pFirstUnit, const CvUnit* pSecondUnit)
 	return (pFirstUnit->GetID() < pSecondUnit->GetID());
 }
 
-/// Is this a valid Promotion for the UnitCombatType?
+
 bool IsPromotionValidForUnitCombatType(PromotionTypes ePromotion, UnitTypes eUnit)
 {
 	CvUnitEntry* unitInfo = GC.getUnitInfo(eUnit);
@@ -236,13 +236,13 @@ bool IsPromotionValidForUnitCombatType(PromotionTypes ePromotion, UnitTypes eUni
 	if(unitInfo == NULL || promotionInfo == NULL)
 		return false;
 
-	// No combat class (civilians)
+
 	if(unitInfo->GetUnitCombatType() == NO_UNITCOMBAT)
 	{
 		return false;
 	}
 
-	// Combat class not valid for this Promotion
+
 	if(!(promotionInfo->GetUnitCombatClass(unitInfo->GetUnitCombatType())))
 	{
 		return false;
@@ -251,7 +251,7 @@ bool IsPromotionValidForUnitCombatType(PromotionTypes ePromotion, UnitTypes eUni
 	return true;
 }
 
-/// Is this a valid Promotion for this civilian?
+
 bool IsPromotionValidForCivilianUnitType(PromotionTypes ePromotion, UnitTypes eUnit)
 {
 	CvPromotionEntry* promotionInfo = GC.getPromotionInfo(ePromotion);
@@ -275,25 +275,25 @@ bool isPromotionValid(PromotionTypes ePromotion, UnitTypes eUnit, bool bLeader, 
 	if(unitInfo == NULL || promotionInfo == NULL)
 		return false;
 
-	// Can this Promotion not be chosen through normal leveling?
+
 	if(!bTestingPrereq && promotionInfo->IsCannotBeChosen())
 	{
 		return false;
 	}
 
-	// If a Unit gets a Promotion for free then hand it out, no questions asked
+
 	if(unitInfo->GetFreePromotions(ePromotion))
 	{
 		return true;
 	}
 
-	// If this isn't a combat Unit, no Promotion
+
 	if(unitInfo->GetUnitCombatType() == NO_UNITCOMBAT)
 	{
 		return false;
 	}
 
-	// Is this a valid Promotion for the UnitCombatType?
+
 	if(!::IsPromotionValidForUnitCombatType(ePromotion, eUnit))
 	{
 		return false;
@@ -304,7 +304,7 @@ bool isPromotionValid(PromotionTypes ePromotion, UnitTypes eUnit, bool bLeader, 
 		return false;
 	}
 
-	// If the Unit only has one move then Blitz is not useful
+
 	if(unitInfo->GetMoves() == 1)
 	{
 		if(promotionInfo->IsBlitz())
@@ -313,7 +313,7 @@ bool isPromotionValid(PromotionTypes ePromotion, UnitTypes eUnit, bool bLeader, 
 		}
 	}
 #if !defined(LEKMOD_RELOCATE_PROMOTION_PREREQ_ORS)
-	// Promotion Prereqs
+
 	if(NO_PROMOTION != promotionInfo->GetPrereqPromotion())
 	{
 		if(!isPromotionValid((PromotionTypes)promotionInfo->GetPrereqPromotion(), eUnit, bLeader, true))
@@ -443,12 +443,12 @@ bool isPromotionValid(PromotionTypes ePromotion, UnitTypes eUnit, bool bLeader, 
 		for (size_t i = 0; i < Prereqs.size(); ++i)
 		{
 			int id = Prereqs[i];
-			if (id == ePromotion) // prevent self-referencing prereqs, which are non-sensical
+			if (id == ePromotion)
 				continue;
 			if (id != NO_PROMOTION && id >= 0 && id < GC.getNumPromotionInfos() && isPromotionValid((PromotionTypes)id, eUnit, bLeader, true))
 			{
 				bValid = true;
-				break; // one is enough
+				break;
 			}
 		}
 		if (!bValid)
@@ -886,14 +886,14 @@ bool PUF_isFiniteRange(const CvUnit* pUnit, int, int)
 
 int baseYieldToSymbol(int iNumYieldTypes, int iYieldStack)
 {
-	int iReturn;	// holds the return value we will be calculating
+	int iReturn;
 
-	// get the base value for the iReturn value
+
 	iReturn = iNumYieldTypes * GC.getMAX_YIELD_STACK();
-	// then add the offset to the return value
+
 	iReturn += iYieldStack;
 
-	// return the value we have calculated
+
 	return iReturn;
 }
 
@@ -950,7 +950,7 @@ int getTurnMonthForGame(int iGameTurn, int iStartYear, CalendarTypes eCalendar, 
 	CvGameSpeedInfo* pkGameSpeedInfo = GC.getGameSpeedInfo(eSpeed);
 	if(pkGameSpeedInfo == NULL)
 	{
-		//This function requires a valid game speed type!
+
 		CvAssert(pkGameSpeedInfo);
 		return 0;
 	}
@@ -1029,9 +1029,9 @@ void boolsToString(const bool* pBools, int iNumBools, CvString* szOut)
 	}
 }
 
-//
-// caller must call SAFE_DELETE_ARRAY on ppBools - caller should not be outside the DLL either
-//
+
+
+
 void stringToBools(const char* szString, int* iNumBools, bool** ppBools)
 {
 	CvAssertMsg(szString, "null string");
@@ -1047,7 +1047,7 @@ void stringToBools(const char* szString, int* iNumBools, bool** ppBools)
 	}
 }
 
-// these string functions should only be used under chipotle cheat code (not internationalized)
+
 
 void getDirectionTypeString(CvString& strString, DirectionTypes eDirectionType)
 {
@@ -1057,7 +1057,7 @@ void getDirectionTypeString(CvString& strString, DirectionTypes eDirectionType)
 		strString = "NO_DIRECTION";
 		break;
 
-		//case DIRECTION_NORTH: strString = "north"; break;
+
 	case DIRECTION_NORTHEAST:
 		strString = "northeast";
 		break;
@@ -1067,7 +1067,7 @@ void getDirectionTypeString(CvString& strString, DirectionTypes eDirectionType)
 	case DIRECTION_SOUTHEAST:
 		strString = "southeast";
 		break;
-		//case DIRECTION_SOUTH: strString = "south"; break;
+
 	case DIRECTION_SOUTHWEST:
 		strString = "southwest";
 		break;
@@ -1199,7 +1199,7 @@ void getMissionAIString(CvString& strString, MissionAITypes eMissionAI)
 
 void getUnitAIString(CvString& strString, UnitAITypes eUnitAI)
 {
-	// note, GC.getUnitAIInfo(eUnitAI).getDescription() is a international friendly way to get string (but it will be longer)
+
 
 	switch(eUnitAI)
 	{
@@ -1341,17 +1341,17 @@ void getRotatedPosition(int inHexspaceX, int inHexspaceY, DirectionTypes rotated
 	outRotatedX = inHexspaceX;
 	outRotatedY = inHexspaceY;
 
-	// early out if the facing is NE as that is the base rotation that the data is supposed to be stored in
-	// also early out if we are looking at the pivot
+
+
 	if(DIRECTION_NORTHEAST == rotatedDirection || (inHexspaceX == 0 && inHexspaceY == 0))
 	{
 		return;
 	};
 
-	// find the ring that this is on
+
 	int ring = hexDistance(inHexspaceX, inHexspaceY);
 
-	// find the nearest spike direction
+
 	DirectionTypes spikeDirection = hexspaceSpikeDirection(inHexspaceX, inHexspaceY);
 
 	int spikeX = 0;
@@ -1392,10 +1392,10 @@ void getRotatedPosition(int inHexspaceX, int inHexspaceY, DirectionTypes rotated
 	break;
 	}
 
-	// find the offset of this point from the spike
+
 	int offsetOnThisRing = hexDistance(spikeX-inHexspaceX,spikeY-inHexspaceY);
 
-	// find the rotated spike
+
 	int newSpikeX = 0;
 	int newSpikeY = 0;
 	DirectionTypes newSpikeDirection = (DirectionTypes)((spikeDirection + rotatedDirection) % (NUM_DIRECTION_TYPES));
@@ -1404,7 +1404,7 @@ void getRotatedPosition(int inHexspaceX, int inHexspaceY, DirectionTypes rotated
 	case DIRECTION_NORTHEAST:
 	{
 		newSpikeY = ring;
-		// add in the offset in the appropriate direction
+
 		outRotatedX = newSpikeX+offsetOnThisRing;
 		outRotatedY = newSpikeY-offsetOnThisRing;
 	}
@@ -1412,7 +1412,7 @@ void getRotatedPosition(int inHexspaceX, int inHexspaceY, DirectionTypes rotated
 	case DIRECTION_EAST:
 	{
 		newSpikeX = ring;
-		// add in the offset in the appropriate direction
+
 		outRotatedX = newSpikeX;
 		outRotatedY = newSpikeY-offsetOnThisRing;
 	}
@@ -1421,7 +1421,7 @@ void getRotatedPosition(int inHexspaceX, int inHexspaceY, DirectionTypes rotated
 	{
 		newSpikeX = ring;
 		newSpikeY = -ring;
-		// add in the offset in the appropriate direction
+
 		outRotatedX = newSpikeX-offsetOnThisRing;
 		outRotatedY = newSpikeY;
 	}
@@ -1429,7 +1429,7 @@ void getRotatedPosition(int inHexspaceX, int inHexspaceY, DirectionTypes rotated
 	case DIRECTION_SOUTHWEST:
 	{
 		newSpikeY = -ring;
-		// add in the offset in the appropriate direction
+
 		outRotatedX = newSpikeX-offsetOnThisRing;
 		outRotatedY = newSpikeY+offsetOnThisRing;
 	}
@@ -1437,7 +1437,7 @@ void getRotatedPosition(int inHexspaceX, int inHexspaceY, DirectionTypes rotated
 	case DIRECTION_WEST:
 	{
 		newSpikeX = -ring;
-		// add in the offset in the appropriate direction
+
 		outRotatedX = newSpikeX;
 		outRotatedY = newSpikeY+offsetOnThisRing;
 	}
@@ -1446,7 +1446,7 @@ void getRotatedPosition(int inHexspaceX, int inHexspaceY, DirectionTypes rotated
 	{
 		newSpikeX = -ring;
 		newSpikeY = ring;
-		// add in the offset in the appropriate direction
+
 		outRotatedX = newSpikeX+offsetOnThisRing;
 		outRotatedY = newSpikeY;
 	}
@@ -1454,7 +1454,7 @@ void getRotatedPosition(int inHexspaceX, int inHexspaceY, DirectionTypes rotated
 	}
 }
 
-//	---------------------------------------------------------------------------
+
 static uint SkipGUIDSeparators(const char* pszGUID, uint uiStartIndex)
 {
 	UINT uiLength = strlen(pszGUID);
@@ -1474,7 +1474,7 @@ static uint SkipGUIDSeparators(const char* pszGUID, uint uiStartIndex)
 	return uiStartIndex;
 }
 
-//	---------------------------------------------------------------------------
+
 static bool GetHexDigitValue(char ch, uint& uiValue)
 {
 	if(ch >= '0' && ch <= '9')
@@ -1488,7 +1488,7 @@ static bool GetHexDigitValue(char ch, uint& uiValue)
 
 	return true;
 }
-//	---------------------------------------------------------------------------
+
 template <class T>
 bool GetGUIDSegment(const char* pszGUID, uint* puiIndex, T& kDest)
 {
@@ -1519,8 +1519,8 @@ bool GetGUIDSegment(const char* pszGUID, uint* puiIndex, T& kDest)
 	else
 		return false;
 }
-//	---------------------------------------------------------------------------
-bool ExtractGUID(const char* pszGUID, GUID& kGUID, UINT* puiStartIndex /* = NULL */)
+
+bool ExtractGUID(const char* pszGUID, GUID& kGUID, UINT* puiStartIndex             )
 {
 	if(pszGUID)
 	{
@@ -1551,13 +1551,13 @@ bool ExtractGUID(const char* pszGUID, GUID& kGUID, UINT* puiStartIndex /* = NULL
 	return false;
 }
 
-//	---------------------------------------------------------------------------
+
 void ClearGUID(GUID& kGUID)
 {
 	memset(&kGUID, 0, sizeof(GUID));
 }
 
-//	---------------------------------------------------------------------------
+
 bool IsGUIDEmpty(const GUID& kGUID)
 {
 	return kGUID.Data1 == 0 && kGUID.Data2 == 0 && kGUID.Data3 == 0 && *(INT32*)&kGUID.Data4[0] == 0 && *(INT32*)&kGUID.Data4[4] == 0;

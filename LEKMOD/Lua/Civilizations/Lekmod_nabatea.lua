@@ -1,12 +1,12 @@
--- Author: EnormousApplePie
+
 include("Lekmod_utilities.lua")
 include("PlotIterators.lua")
 
 local this_civ = GameInfoTypes["CIVILIZATION_NABATEA"]
 local is_active = LekmodUtilities:is_civilization_active(this_civ)
-------------------------------------------------------------------------------------------------------------------------
--- Nabatea UU. Award gold for discovering cities with a Zabonah.
-------------------------------------------------------------------------------------------------------------------------
+
+
+
 function lekmod_nabatea_unit_exploration(player_id, unit, unit_x, unit_y)
 
    local nabatea_unit = GameInfoTypes["UNIT_MC_ZABONAH"]
@@ -19,7 +19,7 @@ function lekmod_nabatea_unit_exploration(player_id, unit, unit_x, unit_y)
 
 	for loop_plot in PlotAreaSweepIterator(unit_plot, unit_id:VisibilityRange() + 3, SECTOR_NORTH, DIRECTION_CLOCKWISE, DIRECTION_OUTWARDS, CENTRE_EXCLUDE) do
 		local city = loop_plot:GetPlotCity()
-		if not city then -- skip
+		if not city then
       elseif not(city:IsRevealed(unit_team)) and city:IsCapital() then
 
          loop_plot:SetRevealed(unit_team, true)
@@ -34,6 +34,6 @@ function lekmod_nabatea_unit_exploration(player_id, unit, unit_x, unit_y)
 	end
 
 end
-------------------------------------------------------------------------------------------------------------------------
-   -- A unique unit can be present in the game without the civilization being active.
+
+
    GameEvents.UnitSetXY.Add(lekmod_nabatea_unit_exploration)

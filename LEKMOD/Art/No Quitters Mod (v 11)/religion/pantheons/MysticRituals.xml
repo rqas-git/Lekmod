@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-24 14:15:24 -->
+
 <GameData>
 
-	<!-- +1 Culture and +1 Faith from Cotton, Silk, Dyes, and Incense. -->
+
 	<Beliefs>
 		<Row>
 			<Type>BELIEF_MYSTIC_RITUALS</Type>
@@ -62,7 +62,7 @@
 		</Row>
 	</Belief_ResourceYieldChanges>
 
-	<!-- localization -->
+
 	<Language_en_US>
 		<Row Tag="TXT_KEY_BELIEF_MYSTIC_RITUALS">
 			<Text>+1 [ICON_CULTURE] and +1 [ICON_PEACE] Faith from Silk, Dyes, Perfume, and Tobacco</Text>

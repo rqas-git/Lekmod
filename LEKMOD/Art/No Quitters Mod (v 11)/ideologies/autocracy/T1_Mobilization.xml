@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 9/15/2015 11:26:24 PM -->
+
 <GameData>
 
-	<!-- T1: Mobilization -->
+
 	<Policies>
 		<Update>
 			<Set UnitPurchaseCostModifier="-25" />

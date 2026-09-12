@@ -1,13 +1,13 @@
--- Author: EnormousApplePie
+
 
 include("Lekmod_utilities.lua")
 
 local this_civ = GameInfoTypes["CIVILIZATION_ITALY"]
 local is_active = LekmodUtilities:is_civilization_active(this_civ)
 
-------------------------------------------------------------------------------------------------------------------------
--- Italy UA: Enter a golden age or extend one whenever a player finishes a policy tree
-------------------------------------------------------------------------------------------------------------------------
+
+
+
 function lekmod_italy_ua_on_policy_adopt(player_id, policy_id)
 
    print("Italy UA: Policy Adopted")
@@ -20,7 +20,7 @@ function lekmod_italy_ua_on_policy_adopt(player_id, policy_id)
    or not player:IsPolicyBranchFinished(policy_branch.ID)
    or Game.GetActivePlayer() ~= player_id then return end
 
-   -- amount made for quick speed, but scales with other speeds.
+
    local golden_age_turns = 5 * (GameInfo.GameSpeeds[Game.GetGameSpeedType()].GoldenAgePercent / 100);
    local golden_age_points = 312.5 * (GameInfo.GameSpeeds[Game.GetGameSpeedType()].GoldenAgePercent / 100)
 
@@ -35,7 +35,7 @@ function lekmod_italy_ua_on_policy_adopt(player_id, policy_id)
    end
 
 end
-------------------------------------------------------------------------------------------------------------------------
+
 if is_active then
    GameEvents.PlayerAdoptPolicy.Add(lekmod_italy_ua_on_policy_adopt)
 end

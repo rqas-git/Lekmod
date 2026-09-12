@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_TACTICAL_ANALYSIS_MAP_H
@@ -12,41 +12,41 @@
 
 #include "FBitFlags.h"
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvTacticalAnalysisPlot
-//!  \brief		Per plot data stored inside CvTacticalAnalysisMap for each hex in the game
-//
-//!  Key Attributes:
-//!  - Array of these objects created by CvTacticalAnalysisMap::Init()
-//!  - Destroyed in CvTacticalAnalysisMap destructor
-//!  - Holds player-specific map data
-//!  - Filled in for each plot at the start of AI processing for a player turn
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
 enum eTacticalAnalysisFlags
 {
-    // STATIC FLAGS - don't change as we process different zones and targets
-    TACTICAL_FLAG_REVEALED					 = 0x00000001, // Is this plot revealed to this player?
-    TACTICAL_FLAG_VISIBLE                    = 0x00000002, // Is this plot visible to this player?
-    TACTICAL_FLAG_IMPASSABLE_TERRAIN         = 0x00000004, // Is this terrain impassable to this player?
-    TACTICAL_FLAG_IMPASSABLE_TERRITORY       = 0x00000008, // Is this neutral territory impassable to this player?
-    TACTICAL_FLAG_NOT_VISIBLE_TO_ENEMY       = 0x00000010, // A tile no enemy unit can see?
-    TACTICAL_FLAG_SUBJECT_TO_ENEMY_ATTACK    = 0x00000020, // Enemy can strike at a unit here
-    TACTICAL_FLAG_ENEMY_CAN_REACH_WITH_MOVES = 0x00000040, // Enemy can move to this tile and still have movement left this turn
-    TACTICAL_FLAG_FRIENDLY_TURN_END_TILE     = 0x00000080, // Is one of our friendly units ending its move here?
-    TACTICAL_FLAG_FRIENDLY_CITY              = 0x00000100, // Friendly city here?
-    TACTICAL_FLAG_ENEMY_CITY                 = 0x00000200, // Enemy city here?
-    TACTICAL_FLAG_NEUTRAL_CITY				 = 0x00000400, // Neutral city here?
-    TACTICAL_FLAG_WATER						 = 0x00000800, // Water?
-    TACTICAL_FLAG_OCEAN						 = 0x00001000, // Ocean?
-    TACTICAL_FLAG_OWN_TERRITORY				 = 0x00002000, // Territory owned by the active player
-    TACTICAL_FLAG_FRIENDLY_TERRITORY		 = 0x00004000, // Territory owned by allies
-    TACTICAL_FLAG_ENEMY_TERRITORY			 = 0x00008000, // Territory owned by enemies
-    TACTICAL_FLAG_UNCLAIMED_TERRITORY	     = 0x00010000, // Territory that is unclaimed
 
-    // DYNAMIC FLAGS - updated for each zone or target
-    TACTICAL_FLAG_WITHIN_RANGE_OF_TARGET	 = 0x00020000,	// Is this a plot we can use to bombard the target?
-    TACTICAL_FLAG_CAN_USE_TO_FLANK			 = 0x00040000,        // Does this plot help provide a flanking bonus on target?
-    TACTICAL_FLAG_SAFE_DEPLOYMENT			 = 0x00080000,         // Should be a safe spot to deploy ranged units
+    TACTICAL_FLAG_REVEALED					 = 0x00000001,
+    TACTICAL_FLAG_VISIBLE                    = 0x00000002,
+    TACTICAL_FLAG_IMPASSABLE_TERRAIN         = 0x00000004,
+    TACTICAL_FLAG_IMPASSABLE_TERRITORY       = 0x00000008,
+    TACTICAL_FLAG_NOT_VISIBLE_TO_ENEMY       = 0x00000010,
+    TACTICAL_FLAG_SUBJECT_TO_ENEMY_ATTACK    = 0x00000020,
+    TACTICAL_FLAG_ENEMY_CAN_REACH_WITH_MOVES = 0x00000040,
+    TACTICAL_FLAG_FRIENDLY_TURN_END_TILE     = 0x00000080,
+    TACTICAL_FLAG_FRIENDLY_CITY              = 0x00000100,
+    TACTICAL_FLAG_ENEMY_CITY                 = 0x00000200,
+    TACTICAL_FLAG_NEUTRAL_CITY				 = 0x00000400,
+    TACTICAL_FLAG_WATER						 = 0x00000800,
+    TACTICAL_FLAG_OCEAN						 = 0x00001000,
+    TACTICAL_FLAG_OWN_TERRITORY				 = 0x00002000,
+    TACTICAL_FLAG_FRIENDLY_TERRITORY		 = 0x00004000,
+    TACTICAL_FLAG_ENEMY_TERRITORY			 = 0x00008000,
+    TACTICAL_FLAG_UNCLAIMED_TERRITORY	     = 0x00010000,
+
+
+    TACTICAL_FLAG_WITHIN_RANGE_OF_TARGET	 = 0x00020000,
+    TACTICAL_FLAG_CAN_USE_TO_FLANK			 = 0x00040000,
+    TACTICAL_FLAG_SAFE_DEPLOYMENT			 = 0x00080000,
 };
 
 enum AITacticalTargetType
@@ -56,14 +56,14 @@ enum AITacticalTargetType
     AI_TACTICAL_TARGET_BARBARIAN_CAMP,
     AI_TACTICAL_TARGET_IMPROVEMENT,
     AI_TACTICAL_TARGET_BLOCKADE_RESOURCE_POINT,
-    AI_TACTICAL_TARGET_LOW_PRIORITY_UNIT,    // Can't attack one of our cities
-    AI_TACTICAL_TARGET_MEDIUM_PRIORITY_UNIT, // Can damage one of our cities
-    AI_TACTICAL_TARGET_HIGH_PRIORITY_UNIT,   // Can contribute to capturing one of our cities
+    AI_TACTICAL_TARGET_LOW_PRIORITY_UNIT,
+    AI_TACTICAL_TARGET_MEDIUM_PRIORITY_UNIT,
+    AI_TACTICAL_TARGET_HIGH_PRIORITY_UNIT,
     AI_TACTICAL_TARGET_CITY_TO_DEFEND,
     AI_TACTICAL_TARGET_IMPROVEMENT_TO_DEFEND,
     AI_TACTICAL_TARGET_DEFENSIVE_BASTION,
     AI_TACTICAL_TARGET_ANCIENT_RUINS,
-    AI_TACTICAL_TARGET_BOMBARDMENT_ZONE,     // Used for naval bombardment operation
+    AI_TACTICAL_TARGET_BOMBARDMENT_ZONE,
     AI_TACTICAL_TARGET_EMBARKED_MILITARY_UNIT,
     AI_TACTICAL_TARGET_EMBARKED_CIVILIAN,
     AI_TACTICAL_TARGET_VERY_HIGH_PRIORITY_CIVILIAN,
@@ -72,7 +72,7 @@ enum AITacticalTargetType
     AI_TACTICAL_TARGET_LOW_PRIORITY_CIVILIAN,
 	AI_TACTICAL_TARGET_TRADE_UNIT_SEA,
 	AI_TACTICAL_TARGET_TRADE_UNIT_LAND,
-	AI_TACTICAL_TARGET_TRADE_UNIT_SEA_PLOT, // Used for idle unit moves to plunder trade routes that go through our territory
+	AI_TACTICAL_TARGET_TRADE_UNIT_SEA_PLOT,
 	AI_TACTICAL_TARGET_TRADE_UNIT_LAND_PLOT, 
 	AI_TACTICAL_TARGET_CITADEL,
 	AI_TACTICAL_TARGET_IMPROVEMENT_RESOURCE,
@@ -352,14 +352,14 @@ private:
 	int m_iDominanceZoneID;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvTacticalDominanceZone
-//!  \brief		A tactical sector of the map (in owned territory it is divided by city)
-//
-//!  Key Attributes:
-//!  - Array of these objects created by CvTacticalAnalysisMap::Init()
-//!  - Objects refilled and sorted each turn
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 #define SAFE_ESTIMATE_NUM_DOMINANCE_ZONES (5 * MAX_MAJOR_CIVS)
 
 enum eTacticalDominanceFlags
@@ -390,7 +390,7 @@ public:
 		return (m_iZoneValue > zone.m_iZoneValue);
 	}
 
-	// Accessor functions
+
 	inline int GetDominanceZoneID() const
 	{
 		return m_iDominanceZoneID;
@@ -564,15 +564,15 @@ private:
 	CvPlot* m_pTempZoneCenter;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvTacticalAnalysisEnemy
-//!  \brief		A single enemy unit for use in tactical analysis processing
-//
-//!  Key Attributes:
-//!  - Static vector of these created by BuildEnemyUnitList()
-//!  - Referenced by MarkCellsNearEnemy() and other routines that need to check where
-//!    enemy units can reach this turn
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
 #define SAFE_ESTIMATE_NUM_ENEMIES 250
 
 class CvTacticalAnalysisEnemy
@@ -599,14 +599,14 @@ private:
 	CvUnit* m_pUnit;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvTacticalAnalysisMap
-//!  \brief		Shared spatial map used by all AI players to analyze moves when at war
-//
-//!  Key Attributes:
-//!  - Created by CvGame class
-//!  - Shared by all players; data is refreshed at start of each AI turn if player at war
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvTacticalAnalysisMap
 {
 public:
@@ -635,7 +635,7 @@ public:
 	};
 	bool IsInEnemyDominatedZone(CvPlot* pPlot);
 
-	// Properties of current player's military
+
 	int GetBestFriendlyRange() const
 	{
 		return m_iBestFriendlyRange;
@@ -653,18 +653,18 @@ public:
 		m_bIgnoreLOS = bNewValue;
 	};
 
-	// Routines to update the map
+
 	void ClearDynamicFlags();
 	void SetTargetBombardCells(CvPlot* pTarget, int iRange, bool bIgnoreLOS);
 	void SetTargetFlankBonusCells(CvPlot* pTarget);
 
-	// Get the player the map was built for
+
 	CvPlayer* GetPlayer()
 	{
 		return m_pPlayer;
 	}
 
-	// Range variable to keep dominance zones and tactical AI in sync
+
 	int GetTacticalRange() const {return m_iTacticalRange;};
 
 protected:
@@ -679,7 +679,7 @@ protected:
 	CvTacticalDominanceZone* FindExistingZone(CvPlot* pPlot);
 	eTacticalDominanceFlags ComputeDominance(CvTacticalDominanceZone* pZone);
 
-	// Cached global define values
+
 	int m_iDominancePercentage;
 	int m_iUnitStrengthMultiplier;
 	int m_iTacticalRange;
@@ -698,4 +698,4 @@ protected:
 };
 
 
-#endif //CIV5_TACTICAL_ANALYSIS_MAP_H
+#endif

@@ -1,17 +1,17 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//!	 \file		CvLuaMap.cpp
-//!  \brief     Private implementation to CvLuaMap.
-//!
-//!		This file includes the implementation for a Lua Map singleton.
-//!
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #include <CvGameCoreDLLPCH.h>
 #include "CvLuaSupport.h"
 #include "CvLuaArea.h"
@@ -24,17 +24,17 @@
 
 #define Method(func) RegisterMethod(L, l##func, #func);
 
-//------------------------------------------------------------------------------
+
 const char* CvLuaMap::GetInstanceName()
 {
 	return "Map";
 }
-//------------------------------------------------------------------------------
-CvMap* CvLuaMap::GetInstance(lua_State* /*L*/, int /*idx*/)
+
+CvMap* CvLuaMap::GetInstance(lua_State*      , int        )
 {
 	return &GC.getMap();
 }
-//------------------------------------------------------------------------------
+
 void CvLuaMap::RegisterMembers(lua_State* L)
 {
 	Method(Areas);
@@ -74,13 +74,13 @@ void CvLuaMap::RegisterMembers(lua_State* L)
 	Method(ChangeAIMapHint);
 	Method(GetAIMapHint);
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lAreas(lua_State* L)
 {
 	lua_pushcclosure(L, CvLuaMap::lAreasAux, 0);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lAreasAux(lua_State* L)
 {
 	int it = 0;
@@ -105,7 +105,7 @@ int CvLuaMap::lAreasAux(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lFindBiggestArea(lua_State* L)
 {
 	const bool bWater = lua_toboolean(L, 1);
@@ -119,7 +119,7 @@ int CvLuaMap::lFindBiggestArea(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lFindWater(lua_State* L)
 {
 	CvPlot* pkPlot = CvLuaPlot::GetInstance(L, 1);
@@ -130,13 +130,13 @@ int CvLuaMap::lFindWater(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lGetClimate(lua_State* L)
 {
 	lua_pushinteger(L, GC.getMap().getClimate());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lGetFractalFlags(lua_State* L)
 {
 	int flags = GC.getMap().getMapFractalFlags();
@@ -155,7 +155,7 @@ int CvLuaMap::lGetFractalFlags(lua_State* L)
 
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lGetGridSize(lua_State* L)
 {
 	const int width  = GC.getMap().getGridWidth();
@@ -166,13 +166,13 @@ int CvLuaMap::lGetGridSize(lua_State* L)
 	return 2;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lGetNumPlots(lua_State* L)
 {
 	lua_pushinteger(L, GC.getMap().numPlots());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lGetNumResources(lua_State* L)
 {
 	const ResourceTypes eResource = (ResourceTypes)luaL_checkinteger(L, 1);
@@ -181,7 +181,7 @@ int CvLuaMap::lGetNumResources(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lGetNumResourcesOnLand(lua_State* L)
 {
 	const ResourceTypes eResource = (ResourceTypes)luaL_checkinteger(L, 1);
@@ -190,7 +190,7 @@ int CvLuaMap::lGetNumResourcesOnLand(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lGetPlot(lua_State* L)
 {
 	const int x = lua_tointeger(L, 1);
@@ -205,7 +205,7 @@ int CvLuaMap::lGetPlot(lua_State* L)
 	return 0;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lGetPlotByIndex(lua_State* L)
 {
 	const int iIndex = lua_tointeger(L, 1);
@@ -219,8 +219,8 @@ int CvLuaMap::lGetPlotByIndex(lua_State* L)
 	return 0;
 }
 
-//------------------------------------------------------------------------------
-// plot GetPlotXY([int x], [int y], int dx, int dy)
+
+
 int CvLuaMap::lGetPlotXY(lua_State* L)
 {
 	int x, y, dx, dy;
@@ -246,7 +246,7 @@ int CvLuaMap::lGetPlotXY(lua_State* L)
 	return 1;
 }
 
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lGetArea(lua_State* L)
 {
 	const int iID = lua_tointeger(L, 1);
@@ -259,35 +259,35 @@ int CvLuaMap::lGetArea(lua_State* L)
 	}
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lGetIndexAfterLastArea(lua_State* L)
 {
 	const int iResult = GC.getMap().getIndexAfterLastArea();
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lGetLandPlots(lua_State* L)
 {
 	const int iResult = GC.getMap().getLandPlots();
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lGetNumAreas(lua_State* L)
 {
 	const int iResult = GC.getMap().getNumAreas();
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lGetNumLandAreas(lua_State* L)
 {
 	const int iResult = GC.getMap().getNumLandAreas();
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lGetRandomResourceQuantity(lua_State* L)
 {
 	const ResourceTypes eResource = (ResourceTypes)luaL_checkinteger(L, 1);
@@ -296,19 +296,19 @@ int CvLuaMap::lGetRandomResourceQuantity(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lGetSeaLevel(lua_State* L)
 {
 	lua_pushinteger(L, GC.getMap().getSeaLevel());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lGetWorldSize(lua_State* L)
 {
 	lua_pushinteger(L, GC.getMap().getWorldSize());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lIsPlot(lua_State* L)
 {
 	int x = lua_tointeger(L, 1);
@@ -319,26 +319,26 @@ int CvLuaMap::lIsPlot(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lIsWrapX(lua_State* L)
 {
 	lua_pushboolean(L, GC.getMap().isWrapX());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lIsWrapY(lua_State* L)
 {
 	lua_pushboolean(L, GC.getMap().isWrapY());
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lMaxPlotDistance(lua_State* L)
 {
 	int iResult = GC.getMap().maxPlotDistance();
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lRand(lua_State* L)
 {
 	const int max_num = luaL_checkinteger(L, 1);
@@ -348,7 +348,7 @@ int CvLuaMap::lRand(lua_State* L)
 	lua_pushinteger(L, rand_val);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 int CvLuaMap::lCalculateAreas(lua_State*)
 #else
@@ -357,7 +357,7 @@ int CvLuaMap::lCalculateAreas(lua_State* L)
 {
 	GC.getMap().calculateAreas();
 	return 0;
-}//------------------------------------------------------------------------------
+}
 #ifdef AUI_WARNING_FIXES
 int CvLuaMap::lRecalculateAreas(lua_State*)
 #else
@@ -367,7 +367,7 @@ int CvLuaMap::lRecalculateAreas(lua_State* L)
 	GC.getMap().recalculateAreas();
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lPlotDistance(lua_State* L)
 {
 	int iX1 = lua_tointeger(L, 1);
@@ -380,7 +380,7 @@ int CvLuaMap::lPlotDistance(lua_State* L)
 	lua_pushinteger(L, iRetVal);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lPlotXYWithRangeCheck(lua_State* L)
 {
 	int iX = lua_tointeger(L, 1);
@@ -392,7 +392,7 @@ int CvLuaMap::lPlotXYWithRangeCheck(lua_State* L)
 	CvLuaPlot::Push(L, pkPlot);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lPlotDirection(lua_State* L)
 {
 	int iX = lua_tointeger(L, 1);
@@ -404,7 +404,7 @@ int CvLuaMap::lPlotDirection(lua_State* L)
 	CvLuaPlot::Push(L, pkPlot);
 	return 1;
 }
-//------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 int CvLuaMap::lDefaultContinentStamper(lua_State*)
 #else
@@ -414,7 +414,7 @@ int CvLuaMap::lDefaultContinentStamper(lua_State* L)
 	GC.getMap().DefaultContinentStamper();
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 int CvLuaMap::lDoPlaceNaturalWonders(lua_State*)
 #else
@@ -424,7 +424,7 @@ int CvLuaMap::lDoPlaceNaturalWonders(lua_State* L)
 	GC.getMap().DoPlaceNaturalWonders();
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lGetCustomOption(lua_State* L)
 {
 	const char* szOptionName = luaL_checkstring(L, 1);
@@ -437,7 +437,7 @@ int CvLuaMap::lGetCustomOption(lua_State* L)
 
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 #ifdef AUI_WARNING_FIXES
 int CvLuaMap::lUpdateDeferredFog(lua_State*)
 #else
@@ -447,14 +447,14 @@ int CvLuaMap::lUpdateDeferredFog(lua_State* L)
 	GC.getMap().updateDeferredFog();
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lChangeAIMapHint(lua_State* L)
 {
 	int iHint = lua_tointeger(L, 1);
 	GC.getMap().ChangeAIMapHint(iHint);
 	return 0;
 }
-//------------------------------------------------------------------------------
+
 int CvLuaMap::lGetAIMapHint(lua_State* L)
 {
 	lua_pushinteger(L, GC.getMap().GetAIMapHint());

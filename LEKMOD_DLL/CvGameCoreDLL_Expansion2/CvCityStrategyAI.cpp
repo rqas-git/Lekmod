@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "ICvDLLUserInterface.h"
 #include "CvGameCoreUtils.h"
@@ -19,12 +19,12 @@
 #include "CvEnumSerialization.h"
 #include "CvInfosSerializationHelper.h"
 #include "cvStopWatch.h"
-// must be included after all other headers
+
 #include "LintFree.h"
 
-//=====================================
-// CvAICityStrategyEntry
-//=====================================
+
+
+
 CvAICityStrategyEntry::CvAICityStrategyEntry(void):
 	m_piFlavorValue(NULL),
 	m_iWeightThreshold(0),
@@ -39,19 +39,19 @@ CvAICityStrategyEntry::CvAICityStrategyEntry(void):
 	m_iAdvisorCounselImportance(1)
 {
 }
-//------------------------------------------------------------------------------
+
 CvAICityStrategyEntry::~CvAICityStrategyEntry(void)
 {
 	SAFE_DELETE_ARRAY(m_piFlavorValue);
 	SAFE_DELETE_ARRAY(m_piPersonalityFlavorThresholdMod);
 }
-//------------------------------------------------------------------------------
+
 bool CvAICityStrategyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
 	if(!CvBaseInfo::CacheResults(kResults, kUtility))
 		return false;
 
-	//Basic Properties
+
 	m_bNoMinorCivs				= kResults.GetBool("NoMinorCivs");
 	m_bPermanent				= kResults.GetBool("Permanent");
 	m_iCheckTriggerTurnCount	= kResults.GetInt("CheckTriggerTurnCount");
@@ -83,7 +83,7 @@ bool CvAICityStrategyEntry::CacheResults(Database::Results& kResults, CvDatabase
 	m_strAdvisorCounselText = kResults.GetText("AdvisorCounsel");
 	m_iAdvisorCounselImportance = kResults.GetInt("AdvisorCounselImportance");
 
-	//References
+
 	const char* szTextVal;
 	szTextVal = kResults.GetText("TechObsolete");
 	m_iTechObsolete = GC.getInfoTypeForString(szTextVal, true);
@@ -91,7 +91,7 @@ bool CvAICityStrategyEntry::CacheResults(Database::Results& kResults, CvDatabase
 	szTextVal = kResults.GetText("TechPrereq");
 	m_iTechPrereq = GC.getInfoTypeForString(szTextVal, true);
 
-	//Arrays
+
 	const char* szType = GetType();
 	kUtility.SetFlavors(m_piFlavorValue, "AICityStrategy_Flavors",
 	                    "AICityStrategyType", szType);
@@ -103,7 +103,7 @@ bool CvAICityStrategyEntry::CacheResults(Database::Results& kResults, CvDatabase
 	return true;
 }
 
-/// What Flavors will be added by adopting this Strategy?
+
 int CvAICityStrategyEntry::GetFlavorValue(int i) const
 {
 	CvAssertMsg(i < GC.getNumFlavorTypes(), "Index out of bounds");
@@ -111,13 +111,13 @@ int CvAICityStrategyEntry::GetFlavorValue(int i) const
 	return m_piFlavorValue ? m_piFlavorValue[i] : -1;
 }
 
-/// The amount of weight a Strategy must accumulate to be adopted (if applicable)
+
 int CvAICityStrategyEntry::GetWeightThreshold() const
 {
 	return m_iWeightThreshold;
 }
 
-/// How do a player's Personality Flavors affect the Threshold for adopting a Strategy? (if applicable)
+
 int CvAICityStrategyEntry::GetPersonalityFlavorThresholdMod(int i) const
 {
 	CvAssertMsg(i < GC.getNumFlavorTypes(), "Index out of bounds");
@@ -125,37 +125,37 @@ int CvAICityStrategyEntry::GetPersonalityFlavorThresholdMod(int i) const
 	return m_piPersonalityFlavorThresholdMod ? m_piPersonalityFlavorThresholdMod[i] : -1;
 }
 
-/// Technology prerequisite an AI Player must have to enable this Strategy
+
 int CvAICityStrategyEntry::GetTechPrereq() const
 {
 	return m_iTechPrereq;
 }
 
-/// Technology that obsoletes this Strategy for an AI Player
+
 int CvAICityStrategyEntry::GetTechObsolete() const
 {
 	return m_iTechObsolete;
 }
 
-/// Minimum # of turns this AI Strategy must be executed for - don't want the AI starting then stopping Strategies every turn
+
 int CvAICityStrategyEntry::GetMinimumNumTurnsExecuted() const
 {
 	return m_iMinimumNumTurnsExecuted;
 }
 
-/// Once this Strategy has been adopted, check the Trigger conditions every X turns to see if it's maintained
+
 int CvAICityStrategyEntry::GetCheckTriggerTurnCount() const
 {
 	return m_iCheckTriggerTurnCount;
 }
 
-/// Is this a valid CityStrategy for Minor Civs to run?
+
 bool CvAICityStrategyEntry::IsNoMinorCivs() const
 {
 	return m_bNoMinorCivs;
 }
 
-/// Will this CityStrategy be run forever after being adopted? [Overwrites whatever is present in the above 2 functions/members]
+
 bool CvAICityStrategyEntry::IsPermanent() const
 {
 	return m_bPermanent;
@@ -177,35 +177,35 @@ int CvAICityStrategyEntry::GetAdvisorCounselImportance() const
 }
 
 
-//=====================================
-// CvAICityStrategies
-//=====================================
 
-/// Constructor
+
+
+
+
 CvAICityStrategies::CvAICityStrategies(void)
 {
 
 }
 
-/// Destructor
+
 CvAICityStrategies::~CvAICityStrategies(void)
 {
 	DeleteArray();
 }
 
-/// Returns vector of AICityStrategy entries
+
 std::vector<CvAICityStrategyEntry*>& CvAICityStrategies::GetAICityStrategyEntries()
 {
 	return m_paAICityStrategyEntries;
 }
 
-/// Number of defined AICityStrategies
+
 int CvAICityStrategies::GetNumAICityStrategies()
 {
 	return m_paAICityStrategyEntries.size();
 }
 
-/// Clear AICityStrategy entries
+
 void CvAICityStrategies::DeleteArray()
 {
 	for(std::vector<CvAICityStrategyEntry*>::iterator it = m_paAICityStrategyEntries.begin(); it != m_paAICityStrategyEntries.end(); ++it)
@@ -216,24 +216,24 @@ void CvAICityStrategies::DeleteArray()
 	m_paAICityStrategyEntries.clear();
 }
 
-/// Get a specific entry
+
 CvAICityStrategyEntry* CvAICityStrategies::GetEntry(int index)
 {
 	return m_paAICityStrategyEntries[index];
 }
 
-//=====================================
-// CvCityStrategyAI
-//=====================================
 
-/// defining static
+
+
+
+
 #ifdef AUI_WARNING_FIXES
 unsigned int CvCityStrategyAI::m_acBestYields[NUM_YIELD_TYPES][NUM_CITY_PLOTS] = {};
 #else
 unsigned char  CvCityStrategyAI::m_acBestYields[NUM_YIELD_TYPES][NUM_CITY_PLOTS];
 #endif
 
-/// Constructor
+
 #ifdef AUI_CITY_FIX_COMPONENT_CONSTRUCTORS_CONTAIN_POINTERS
 CvCityStrategyAI::CvCityStrategyAI(CvCity* pCity):
 	m_pCity(pCity),
@@ -258,24 +258,24 @@ CvCityStrategyAI::CvCityStrategyAI():
 {
 }
 
-/// Destructor
+
 CvCityStrategyAI::~CvCityStrategyAI()
 {
 	Uninit();
 }
 
-/// Initialize
+
 void CvCityStrategyAI::Init(CvAICityStrategies* pAICityStrategies, CvCity* pCity, bool bIsCity)
 {
-	// Init base class
+
 	CvFlavorRecipient::Init();
 
-	// Store off the pointers passed in to this object
+
 	m_bIsCity = bIsCity;
 	m_pAICityStrategies = pAICityStrategies;
 	m_pCity = pCity;
 
-	// Initialize arrays
+
 	CvAssertMsg(m_pabUsingCityStrategy==NULL, "about to leak memory, CvCityAIStrategies::m_pabUsingCityStrategy");
 	m_pabUsingCityStrategy = FNEW(bool[m_pAICityStrategies->GetNumAICityStrategies()], c_eCiv5GameplayDLL, 0);
 
@@ -285,23 +285,23 @@ void CvCityStrategyAI::Init(CvAICityStrategies* pAICityStrategies, CvCity* pCity
 	CvAssertMsg(m_aiTempFlavors==NULL, "about to leak memory, CvCityAIStrategies::m_aiTempFlavors");
 	m_aiTempFlavors = FNEW(int[GC.getNumFlavorTypes()], c_eCiv5GameplayDLL, 0);
 
-	// Create AI subobjects
+
 	m_pBuildingProductionAI = FNEW(CvBuildingProductionAI(pCity, pCity->GetCityBuildings()), c_eCiv5GameplayDLL, 0);
 	m_pUnitProductionAI = FNEW(CvUnitProductionAI(pCity, GC.GetGameUnits()), c_eCiv5GameplayDLL, 0);
 	m_pProjectProductionAI = FNEW(CvProjectProductionAI(pCity), c_eCiv5GameplayDLL, 0);
 	m_pProcessProductionAI = FNEW(CvProcessProductionAI(pCity), c_eCiv5GameplayDLL, 0);
 
-	// Clear variables
+
 	Reset();
 }
 
-/// Deallocate memory created in initialize
+
 void CvCityStrategyAI::Uninit()
 {
-	// Uninit base class
+
 	CvFlavorRecipient::Uninit();
 
-	// Deallocate member variables
+
 	SAFE_DELETE_ARRAY(m_pabUsingCityStrategy);
 	SAFE_DELETE_ARRAY(m_paiTurnCityStrategyAdopted);
 	SAFE_DELETE_ARRAY(m_aiTempFlavors);
@@ -311,7 +311,7 @@ void CvCityStrategyAI::Uninit()
 	SAFE_DELETE(m_pProcessProductionAI);
 }
 
-/// Reset member variables
+
 void CvCityStrategyAI::Reset()
 {
 	int iI;
@@ -326,17 +326,17 @@ void CvCityStrategyAI::Reset()
 	m_eDefaultSpecialization = NO_CITY_SPECIALIZATION;
 	m_eFocusYield = (YieldTypes)NO_YIELD;
 
-	// Reset sub AI objects
+
 	m_pBuildingProductionAI->Reset();
 	m_pUnitProductionAI->Reset();
 	m_pProjectProductionAI->Reset();
 	m_pProcessProductionAI->Reset();
 }
 
-/// Serialization read
+
 void CvCityStrategyAI::Read(FDataStream& kStream)
 {
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion;
 	kStream >> uiVersion;
 
@@ -352,7 +352,7 @@ void CvCityStrategyAI::Read(FDataStream& kStream)
 
 	kStream >> m_eSpecialization;
 	kStream >> m_eDefaultSpecialization;
-	m_eFocusYield = (YieldTypes)NO_YIELD;	//force yield to default since we don't serialize it.
+	m_eFocusYield = (YieldTypes)NO_YIELD;
 
 	m_pBuildingProductionAI->Read(kStream);
 	m_pUnitProductionAI->Read(kStream);
@@ -360,10 +360,10 @@ void CvCityStrategyAI::Read(FDataStream& kStream)
 	m_pProcessProductionAI->Read(kStream);
 }
 
-/// Serialization write
+
 void CvCityStrategyAI::Write(FDataStream& kStream)
 {
-	// Current version number
+
 	uint uiVersion = 1;
 	kStream << uiVersion;
 
@@ -386,23 +386,23 @@ void CvCityStrategyAI::Write(FDataStream& kStream)
 	m_pProcessProductionAI->Write(kStream);
 }
 
-/// Respond to a new set of flavor values
+
 void CvCityStrategyAI::FlavorUpdate()
 {
-	// Reset our sub AI objects
+
 	m_pBuildingProductionAI->Reset();
 	m_pUnitProductionAI->Reset();
 	m_pProjectProductionAI->Reset();
 	m_pProcessProductionAI->Reset();
 
-	// Broadcast to our sub AI objects
+
 	for(int iFlavor = 0; iFlavor < GC.getNumFlavorTypes(); iFlavor++)
 	{
 #ifdef AUI_CITYSTRATEGY_FIX_CHOOSE_PRODUCTION_PUPPETS_NULLIFY_BARRACKS
 		if (GetCity()->IsPuppet() && (FlavorTypes)iFlavor == (FlavorTypes)GC.getInfoTypeForString("FLAVOR_MILITARY_TRAINING"))
 			continue;
 #endif
-		int iFlavorValue = GetLatestFlavorValue((FlavorTypes)iFlavor);// m_piLatestFlavorValues[iFlavor];
+		int iFlavorValue = GetLatestFlavorValue((FlavorTypes)iFlavor);
 
 #ifdef AUI_BUILDING_PRODUCTION_AI_CONSIDER_FREE_STUFF
 		m_pUnitProductionAI->AddFlavorWeights((FlavorTypes)iFlavor, iFlavorValue);
@@ -416,18 +416,18 @@ void CvCityStrategyAI::FlavorUpdate()
 	}
 }
 
-/// Runs through all active player strategies and propagates Flavors down to this City
+
 void CvCityStrategyAI::UpdateFlavorsForNewCity()
 {
 	int iFlavorLoop;
 
-	// Clear out Temp array
+
 	for(iFlavorLoop = 0; iFlavorLoop < GC.getNumFlavorTypes(); iFlavorLoop++)
 	{
 		m_aiTempFlavors[iFlavorLoop] = 0;
 	}
 
-	// Go through all Player strategies and for the active ones apply the Flavors
+
 #ifdef AUI_WARNING_FIXES
 	for (uint iStrategyLoop = 0; iStrategyLoop < GC.getNumEconomicAIStrategyInfos(); iStrategyLoop++)
 #else
@@ -439,7 +439,7 @@ void CvCityStrategyAI::UpdateFlavorsForNewCity()
 
 		if(pStrategy)
 		{
-			// Active?
+
 			if(GET_PLAYER(m_pCity->getOwner()).GetEconomicAI()->IsUsingStrategy(eStrategy))
 			{
 				for(iFlavorLoop = 0; iFlavorLoop < GC.getNumFlavorTypes(); iFlavorLoop++)
@@ -460,7 +460,7 @@ void CvCityStrategyAI::UpdateFlavorsForNewCity()
 
 		if(pStrategy)
 		{
-			// Active?
+
 			if(GET_PLAYER(m_pCity->getOwner()).GetMilitaryAI()->IsUsingStrategy(eStrategy))
 			{
 				for(iFlavorLoop = 0; iFlavorLoop < GC.getNumFlavorTypes(); iFlavorLoop++)
@@ -476,18 +476,18 @@ void CvCityStrategyAI::UpdateFlavorsForNewCity()
 	LogFlavors();
 }
 
-/// Set special production emphasis for this city
+
 bool CvCityStrategyAI::SetSpecialization(CitySpecializationTypes eSpecialization)
 {
 	if(eSpecialization != m_eSpecialization)
 	{
 		LogSpecializationChange(eSpecialization);
 
-		// Turn off old specialization
-		SpecializationFlavorChange(false /*Don't turn on */, m_eSpecialization);
 
-		// Turn on new specialization
-		SpecializationFlavorChange(true /* Do turn on */, eSpecialization);
+		SpecializationFlavorChange(false                   , m_eSpecialization);
+
+
+		SpecializationFlavorChange(true                 , eSpecialization);
 
 		m_eSpecialization = eSpecialization;
 
@@ -497,7 +497,7 @@ bool CvCityStrategyAI::SetSpecialization(CitySpecializationTypes eSpecialization
 	return false;
 }
 
-/// Set preferred production emphasis for this city
+
 bool CvCityStrategyAI::SetDefaultSpecialization(CitySpecializationTypes eDefaultSpecialization)
 {
 	if(eDefaultSpecialization != m_eDefaultSpecialization)
@@ -509,7 +509,7 @@ bool CvCityStrategyAI::SetDefaultSpecialization(CitySpecializationTypes eDefault
 	return false;
 }
 
-/// Turn on or off the flavors for a city specialization
+
 void CvCityStrategyAI::SpecializationFlavorChange(bool bTurnOn, CitySpecializationTypes eSpecialization)
 {
 	if(eSpecialization != NO_CITY_SPECIALIZATION)
@@ -519,7 +519,7 @@ void CvCityStrategyAI::SpecializationFlavorChange(bool bTurnOn, CitySpecializati
 		{
 			int iFlavorLoop;
 
-			// Clear out Temp array
+
 			for(iFlavorLoop = 0; iFlavorLoop < GC.getNumFlavorTypes(); iFlavorLoop++)
 			{
 				m_aiTempFlavors[iFlavorLoop] = 0;
@@ -544,27 +544,27 @@ void CvCityStrategyAI::SpecializationFlavorChange(bool bTurnOn, CitySpecializati
 	}
 }
 
-// ACCESSOR FUNCTIONS
 
-/// Returns the City object the Strategies are associated with
+
+
 CvCity* CvCityStrategyAI::GetCity()
 {
 	return m_pCity;
 }
 
-/// Returns AICityStrategies object stored in this class
+
 CvAICityStrategies* CvCityStrategyAI::GetAICityStrategies()
 {
 	return m_pAICityStrategies;
 }
 
-/// Returns whether or not a player has adopted this CityStrategy
+
 bool CvCityStrategyAI::IsUsingCityStrategy(AICityStrategyTypes eStrategy)
 {
 	return m_pabUsingCityStrategy[(int) eStrategy];
 }
 
-/// Signifies that eStrategy is now being utilized by this AI Player
+
 void CvCityStrategyAI::SetUsingCityStrategy(AICityStrategyTypes eStrategy, bool bValue)
 {
 	if(m_pabUsingCityStrategy[eStrategy] != bValue)
@@ -584,13 +584,13 @@ void CvCityStrategyAI::SetUsingCityStrategy(AICityStrategyTypes eStrategy, bool 
 	}
 }
 
-/// Returns the turn on which a CityStrategy was adopted (-1 if it hasn't been)
+
 int CvCityStrategyAI::GetTurnCityStrategyAdopted(AICityStrategyTypes eStrategy)
 {
 	return m_paiTurnCityStrategyAdopted[(int) eStrategy];
 }
 
-/// Sets the turn number eStrategy was most recently adopted
+
 void CvCityStrategyAI::SetTurnCityStrategyAdopted(AICityStrategyTypes eStrategy, int iValue)
 {
 	if(m_paiTurnCityStrategyAdopted[(int) eStrategy] != iValue)
@@ -599,19 +599,19 @@ void CvCityStrategyAI::SetTurnCityStrategyAdopted(AICityStrategyTypes eStrategy,
 	}
 }
 
-/// Get the sub-object tracking building production
+
 CvBuildingProductionAI* CvCityStrategyAI::GetBuildingProductionAI()
 {
 	return m_pBuildingProductionAI;
 }
 
-/// Get the sub-object tracking unit production
+
 CvUnitProductionAI* CvCityStrategyAI::GetUnitProductionAI()
 {
 	return m_pUnitProductionAI;
 }
 
-/// Get the sub-object tracking project production
+
 CvProjectProductionAI* CvCityStrategyAI::GetProjectProductionAI()
 {
 	return m_pProjectProductionAI;
@@ -622,12 +622,12 @@ CvProcessProductionAI* CvCityStrategyAI::GetProcessProductionAI()
 	return m_pProcessProductionAI;
 }
 
-/// Build log filename
+
 CvString CvCityStrategyAI::GetLogFileName(CvString& playerName, CvString& cityName) const
 {
 	CvString strLogName;
 
-	// Open the log file
+
 	if(GC.getPlayerAndCityAILogSplit())
 	{
 		strLogName = "CityStrategyAILog_" + playerName + "_" + cityName + ".csv";
@@ -640,13 +640,13 @@ CvString CvCityStrategyAI::GetLogFileName(CvString& playerName, CvString& cityNa
 	return strLogName;
 }
 
-//Helper functions to round
+
 static double citystrategyround(double x)
 {
 	return (x >= 0) ? floor(x + .5) : ceil(x - .5);
 };
 
-/// Determines if the yield is below a sustainable amount
+
 bool CvCityStrategyAI::IsYieldDeficient(YieldTypes eYieldType)
 {
 	double fDesiredYield = GetDeficientYieldValue(eYieldType);
@@ -665,7 +665,7 @@ bool CvCityStrategyAI::IsYieldDeficient(YieldTypes eYieldType)
 	}
 }
 
-// Determines what yield type is in a deficient state. If none, then NO_YIELD is returned
+
 YieldTypes CvCityStrategyAI::GetDeficientYield(void)
 {
 	if(IsYieldDeficient(YIELD_FOOD))
@@ -691,7 +691,7 @@ YieldTypes CvCityStrategyAI::GetDeficientYield(void)
 	return NO_YIELD;
 }
 
-/// Get the average value of the yield for this city
+
 double CvCityStrategyAI::GetYieldAverage(YieldTypes eYieldType)
 {
 	CvPlayer* pPlayer = &GET_PLAYER(m_pCity->getOwner());
@@ -701,7 +701,7 @@ double CvCityStrategyAI::GetYieldAverage(YieldTypes eYieldType)
 	int iYieldAmount = 0;
 	for(uint ui = 0; ui < aiPlots.size(); ui++)
 	{
-		// at the end of the plot list
+
 		if(aiPlots[ui] == -1)
 		{
 			break;
@@ -726,7 +726,7 @@ double CvCityStrategyAI::GetYieldAverage(YieldTypes eYieldType)
 	return fRatio;
 }
 
-/// Get the deficient value of the yield for this city
+
 double CvCityStrategyAI::GetDeficientYieldValue(YieldTypes eYieldType)
 {
 	double fDesiredYield = -999.0;
@@ -745,7 +745,7 @@ double CvCityStrategyAI::GetDeficientYieldValue(YieldTypes eYieldType)
 	case YIELD_GOLD:
 		fDesiredYield = GC.getAI_CITYSTRATEGY_YIELD_DEFICIENT_GOLD();
 		break;
-		// OK if deficient in the newer (bonus) yields
+
 	case YIELD_CULTURE:
 		break;
 	case YIELD_FAITH:
@@ -758,8 +758,8 @@ double CvCityStrategyAI::GetDeficientYieldValue(YieldTypes eYieldType)
 	return fDesiredYield;
 }
 
-/// Pick the next build for a city (unit, building or wonder)
-void CvCityStrategyAI::ChooseProduction(bool bUseAsyncRandom, BuildingTypes eIgnoreBldg /* = NO_BUILDING */, UnitTypes eIgnoreUnit/*  = NO_UNIT */)
+
+void CvCityStrategyAI::ChooseProduction(bool bUseAsyncRandom, BuildingTypes eIgnoreBldg                    , UnitTypes eIgnoreUnit                )
 {
 	RandomNumberDelegate fcn;
 #ifdef AUI_WARNING_FIXES
@@ -776,9 +776,9 @@ void CvCityStrategyAI::ChooseProduction(bool bUseAsyncRandom, BuildingTypes eIgn
 	CvPlayerAI& kPlayer = GET_PLAYER(m_pCity->getOwner());
 	CvDiplomacyAI* pDiploAI = kPlayer.GetDiplomacyAI();
 
-	//int iSettlersOnMap = kPlayer.GetNumUnitsWithUnitAI(UNITAI_SETTLE, true);
 
-	// Use the asynchronous random number generate if "no random" is set
+
+
 	if(bUseAsyncRandom)
 	{
 		fcn = MakeDelegate(&GC.getGame(), &CvGame::getAsyncRandNum);
@@ -788,13 +788,13 @@ void CvCityStrategyAI::ChooseProduction(bool bUseAsyncRandom, BuildingTypes eIgn
 		fcn = MakeDelegate(&GC.getGame(), &CvGame::getJonRandNum);
 	}
 
-	// Reset vector holding items we can currently build
+
 	m_Buildables.clear();
 
 	EconomicAIStrategyTypes eStrategyEnoughSettlers = (EconomicAIStrategyTypes) GC.getInfoTypeForString("ECONOMICAISTRATEGY_ENOUGH_EXPANSION");
 	bool bEnoughSettlers = kPlayer.GetEconomicAI()->IsUsingStrategy(eStrategyEnoughSettlers);
 
-	// Check units for operations first
+
 	eUnitForOperation = m_pCity->GetUnitForOperation();
 	if(eUnitForOperation != NO_UNIT)
 	{
@@ -810,7 +810,7 @@ void CvCityStrategyAI::ChooseProduction(bool bUseAsyncRandom, BuildingTypes eIgn
 			iTempWeight *= 5;
 		}
 
-		// add in the weight of this unit as if I were deciding to build it without having a reason
+
 		iTempWeight += m_pUnitProductionAI->GetWeight(eUnitForOperation);
 
 		CvUnitEntry* pkUnitEntry = GC.getUnitInfo(eUnitForOperation);
@@ -839,7 +839,7 @@ void CvCityStrategyAI::ChooseProduction(bool bUseAsyncRandom, BuildingTypes eIgn
 
 	}
 
-	// Next units for sneak attack armies
+
 	eUnitForArmy = kPlayer.GetMilitaryAI()->GetUnitForArmy(GetCity());
 	if(eUnitForArmy != NO_UNIT)
 	{
@@ -848,9 +848,9 @@ void CvCityStrategyAI::ChooseProduction(bool bUseAsyncRandom, BuildingTypes eIgn
 		buildable.m_iTurnsToConstruct = GetCity()->getProductionTurnsLeft(eUnitForArmy, 0);
 		iTempWeight = GC.getAI_CITYSTRATEGY_ARMY_UNIT_BASE_WEIGHT();
 		int iOffenseFlavor = kPlayer.GetGrandStrategyAI()->GetPersonalityAndGrandStrategy((FlavorTypes)GC.getInfoTypeForString("FLAVOR_OFFENSE"));
-		int iBonusMultiplier = max(1,GC.getGame().getHandicapInfo().GetID() - 5); // more at the higher difficulties
+		int iBonusMultiplier = max(1,GC.getGame().getHandicapInfo().GetID() - 5);
 		iTempWeight += (GC.getAI_CITYSTRATEGY_OPERATION_UNIT_FLAVOR_MULTIPLIER() * iOffenseFlavor * iBonusMultiplier);
-		// add in the weight of this unit as if I were deciding to build it without having a reason
+
 		iTempWeight += m_pUnitProductionAI->GetWeight(eUnitForArmy);
 
 		if (iTempWeight > 0)
@@ -886,17 +886,17 @@ void CvCityStrategyAI::ChooseProduction(bool bUseAsyncRandom, BuildingTypes eIgn
 EndHarborLoop:;
 #endif
 
-	// Loop through adding the available buildings
+
 	for(iBldgLoop = 0; iBldgLoop < GC.GetGameBuildings()->GetNumBuildings(); iBldgLoop++)
 	{
 		const BuildingTypes eLoopBuilding = static_cast<BuildingTypes>(iBldgLoop);
 		CvBuildingEntry* pkBuildingInfo = GC.getBuildingInfo(eLoopBuilding);
 
-		//Skip if null
+
 		if(pkBuildingInfo == NULL)
 			continue;
 
-		// Make sure this building can be built now
+
 #ifdef AUI_WARNING_FIXES
 		if (iBldgLoop != uint(eIgnoreBldg) && m_pCity->canConstruct(eLoopBuilding))
 #else
@@ -909,7 +909,7 @@ EndHarborLoop:;
 
 			iTempWeight = m_pBuildingProductionAI->GetWeight(eLoopBuilding);
 
-			// Don't build the UN if you aren't going for the diplo victory
+
 			if(pkBuildingInfo->IsDiplomaticVoting())
 			{
 				int iVotesNeededToWin = GC.getGame().GetVotesNeededForDiploVictory();
@@ -917,7 +917,7 @@ EndHarborLoop:;
 				TeamTypes myTeamID = kPlayer.getTeam();
 				PlayerTypes myPlayerID = kPlayer.GetID();
 
-				// Loop through Players to see if they'll vote for this player
+
 				PlayerTypes eLoopPlayer;
 				TeamTypes eLoopTeam;
 				for(int iPlayerLoop = 0; iPlayerLoop < MAX_CIV_PLAYERS; iPlayerLoop++)
@@ -928,16 +928,16 @@ EndHarborLoop:;
 					{
 						eLoopTeam = GET_PLAYER(eLoopPlayer).getTeam();
 
-						// Liberated?
+
 						if(GET_TEAM(eLoopTeam).GetLiberatedByTeam() == myTeamID)
 						{
 							iSecuredVotes++;
 						}
 
-						// Minor civ?
+
 						else if(GET_PLAYER(eLoopPlayer).isMinorCiv())
 						{
-							// Best Relations?
+
 							if(GET_PLAYER(eLoopPlayer).GetMinorCivAI()->GetAlly() == myPlayerID)
 							{
 								iSecuredVotes++;
@@ -965,7 +965,7 @@ EndHarborLoop:;
 			}
 #endif
 
-			// If the City is a puppet, it avoids Wonders (because the human can't change it if he wants to build it somewhere else!)
+
 			if(GetCity()->IsPuppet())
 			{
 				const CvBuildingClassInfo& kBuildingClassInfo = pkBuildingInfo->GetBuildingClassInfo();
@@ -978,7 +978,7 @@ EndHarborLoop:;
 #endif
 				}
 #ifndef AUI_CITYSTRATEGY_FIX_CHOOSE_PRODUCTION_PUPPETS_NULLIFY_BARRACKS
-				// it also avoids military training buildings - since it can't build units
+
 				if(pkBuildingInfo->GetDomainFreeExperience(DOMAIN_LAND))
 				{
 					iTempWeight = 0;
@@ -1004,13 +1004,13 @@ EndHarborLoop:;
 				
 				iTempWeight *= int(2.0 / (1.0 + exp(double(iEffectiveMaintenanceT100) / 200.0)) + 0.5);
 #else
-				// they also like stuff that won't burden the empire with maintenance costs
+
 				if(pkBuildingInfo->GetGoldMaintenance() == 0)
 				{
 					iTempWeight *= 2;
 				}
 #endif
-				// and they avoid any buildings that require resources
+
 				int iNumResources = GC.getNumResourceInfos();
 				for(int iResourceLoop = 0; iResourceLoop < iNumResources; iResourceLoop++)
 				{
@@ -1031,19 +1031,19 @@ EndHarborLoop:;
 		}
 	}
 
-	// If the City is a puppet, it avoids training Units and projects
+
 	if(!GetCity()->IsPuppet())
 	{
-		// Loop through adding the available units
+
 		for(iUnitLoop = 0; iUnitLoop < GC.GetGameUnits()->GetNumUnits(); iUnitLoop++)
 		{
-			// Make sure this unit can be built now
+
 #ifdef AUI_WARNING_FIXES
 			if (iUnitLoop != uint(eIgnoreUnit) &&
 #else
 			if(iUnitLoop != eIgnoreUnit &&
 #endif
-			        //GC.GetGameBuildings()->GetEntry(iUnitLoop)->GetAdvisorType() != eIgnoreAdvisor &&
+
 			        m_pCity->canTrain((UnitTypes)iUnitLoop))
 			{
 				buildable.m_eBuildableType = CITY_BUILDABLE_UNIT;
@@ -1070,11 +1070,11 @@ EndHarborLoop:;
 					}
 				}
 
-				// sanity check for building ships on small inland seas (not lakes)
+
 				if (pkUnitEntry)
 				{
 					DomainTypes eDomain = (DomainTypes) pkUnitEntry->GetDomainType();
-					if (eDomain == DOMAIN_SEA && pkUnitEntry->GetDefaultUnitAIType() != UNITAI_WORKER_SEA) // if needed allow workboats...
+					if (eDomain == DOMAIN_SEA && pkUnitEntry->GetDefaultUnitAIType() != UNITAI_WORKER_SEA)
 					{
 						CvArea* pBiggestNearbyBodyOfWater = m_pCity->waterArea();
 						if (pBiggestNearbyBodyOfWater)
@@ -1086,7 +1086,7 @@ EndHarborLoop:;
 								iTempWeight = 0;
 							}
 						}
-						else // this should never happen, but...
+						else
 						{
 							iTempWeight = 0;
 						}
@@ -1099,7 +1099,7 @@ EndHarborLoop:;
 			}
 		}
 
-		// Loop through adding the available projects
+
 		for(iProjectLoop = 0; iProjectLoop < GC.GetGameProjects()->GetNumProjects(); iProjectLoop++)
 		{
 #ifdef NQM_AI_GIMP_NO_WORLD_WONDERS
@@ -1116,14 +1116,14 @@ EndHarborLoop:;
 		}
 	}
 
-	// Normally, a puppeted city cannot run processes, but as Venice they are allowed to.
+
 	bool bIsVenice = kPlayer.GetPlayerTraits()->IsNoAnnexing();
 	if (!GetCity()->IsPuppet() || bIsVenice)
 	{	
-		// Loop through adding available processes
+
 		if (!GET_PLAYER(m_pCity->getOwner()).isMinorCiv())
 		{
-			//I cannot use the yield rate since it adds in set process yield, which is what I am trying to set...
+
 			int iBaseYield = GetCity()->getBaseYieldRate(YIELD_PRODUCTION) * 100;
 			iBaseYield += (GetCity()->GetYieldPerPopTimes100(YIELD_PRODUCTION) * GetCity()->getPopulation());
 			int iModifiedYield = iBaseYield * GetCity()->getBaseYieldRateModifier(YIELD_PRODUCTION);
@@ -1155,7 +1155,7 @@ EndHarborLoop:;
 
 	if(m_Buildables.GetTotalWeight() > 0)
 	{
-		// Choose from the best options (currently 2)
+
 		int iNumChoices = GC.getGame().getHandicapInfo().GetCityProductionNumOptions();
 		selection = m_Buildables.ChooseFromTopChoices(iNumChoices, &fcn, "Choosing city build from Top Choices");
 		int iRushIfMoreThanXTurns = GC.getAI_ATTEMPT_RUSH_OVER_X_TURNS_TO_BUILD();
@@ -1200,7 +1200,7 @@ EndHarborLoop:;
 		case CITY_BUILDABLE_PROCESS:
 		{
 			ProcessTypes eProcessType = (ProcessTypes)selection.m_iIndex;
-			GetCity()->pushOrder(ORDER_MAINTAIN, eProcessType, -1, false, true, false, false); // ignoring rush because we can't rush a process
+			GetCity()->pushOrder(ORDER_MAINTAIN, eProcessType, -1, false, true, false, false);
 		}
 
 		case CITY_BUILDABLE_UNIT_FOR_OPERATION:
@@ -1216,20 +1216,20 @@ EndHarborLoop:;
 	return;
 }
 
-/// Called every turn to see what CityStrategies this City should using (or not)
+
 void CvCityStrategyAI::DoTurn()
 {
 	AI_PERF_FORMAT("City-AI-perf.csv", ("CvCityStrategyAI::DoTurn, Turn %03d, %s, %s", GC.getGame().getElapsedGameTurns(), m_pCity->GetPlayer()->getCivilizationShortDescription(), m_pCity->getName().c_str()) );
 
 	int iCityStrategiesLoop = 0;
 
-	// Loop through all CityStrategies
+
 	for(iCityStrategiesLoop = 0; iCityStrategiesLoop < GetAICityStrategies()->GetNumAICityStrategies(); iCityStrategiesLoop++)
 	{
 		AICityStrategyTypes eCityStrategy = (AICityStrategyTypes) iCityStrategiesLoop;
 		CvAICityStrategyEntry* pCityStrategy = GetAICityStrategies()->GetEntry(iCityStrategiesLoop);
 
-		// Minor Civs can't run some Strategies
+
 		if(GET_PLAYER(GetCity()->getOwner()).isMinorCiv() && pCityStrategy->IsNoMinorCivs())
 		{
 			continue;
@@ -1237,20 +1237,20 @@ void CvCityStrategyAI::DoTurn()
 
 		bool bTestCityStrategyStart = true;
 
-		// Do we already have this CityStrategy adopted?
+
 		if(IsUsingCityStrategy(eCityStrategy))
 		{
 			bTestCityStrategyStart = false;
 		}
 		else
 		{
-			// Has the prereq Tech necessary?
+
 			if(pCityStrategy->GetTechPrereq() != NO_TECH && !GET_TEAM(GetCity()->getTeam()).GetTeamTechs()->HasTech((TechTypes) pCityStrategy->GetTechPrereq()))
 			{
 				bTestCityStrategyStart = false;
 			}
 
-			// Has the Tech which obsoletes this Strategy?
+
 			if(bTestCityStrategyStart && pCityStrategy->GetTechObsolete() != NO_TECH && GET_TEAM(GetCity()->getTeam()).GetTeamTechs()->HasTech((TechTypes) pCityStrategy->GetTechObsolete()))
 			{
 				bTestCityStrategyStart = false;
@@ -1259,15 +1259,15 @@ void CvCityStrategyAI::DoTurn()
 
 		bool bTestCityStrategyEnd = false;
 
-		// CityStrategy is active, check to see if we should even try to disable it
+
 		if(IsUsingCityStrategy(eCityStrategy))
 		{
-			// If Strategy is Permanent we can't ever turn it off
+
 			if(!pCityStrategy->IsPermanent())
 			{
 				if(pCityStrategy->GetCheckTriggerTurnCount() > 0)
 				{
-					// Is it a turn where we want to check to see if this Strategy is maintained?
+
 					if((GC.getGame().getGameTurn() - GetTurnCityStrategyAdopted(eCityStrategy)) % pCityStrategy->GetCheckTriggerTurnCount() == 0)
 					{
 						bTestCityStrategyEnd = true;
@@ -1276,7 +1276,7 @@ void CvCityStrategyAI::DoTurn()
 
 				if(bTestCityStrategyEnd && pCityStrategy->GetMinimumNumTurnsExecuted() > 0)
 				{
-					// Has the minimum # of turns passed for this Strategy?
+
 					if(GC.getGame().getGameTurn() < GetTurnCityStrategyAdopted(eCityStrategy) + pCityStrategy->GetMinimumNumTurnsExecuted())
 					{
 						bTestCityStrategyEnd = false;
@@ -1285,24 +1285,24 @@ void CvCityStrategyAI::DoTurn()
 			}
 		}
 
-		// Check CityStrategy Triggers
-		// Functionality and existence of specific CityStrategies is hardcoded here, but data is stored in XML so it's easier to modify
+
+
 
 		if(bTestCityStrategyStart || bTestCityStrategyEnd)
 		{
 			bool bStrategyShouldBeActive = false;
 
-			// Has the Tech which obsoletes this Strategy? If so, Strategy should be deactivated regardless of other factors
+
 			if(pCityStrategy->GetTechObsolete() != NO_TECH && GET_TEAM(GetCity()->getTeam()).GetTeamTechs()->HasTech((TechTypes) pCityStrategy->GetTechObsolete()))
 			{
 				bStrategyShouldBeActive = false;
 			}
-			// Strategy isn't obsolete, so test triggers as normal
+
 			else
 			{
 				CvString strStrategyName = (CvString) pCityStrategy->GetType();
 
-				// Check all of the CityStrategy Triggers
+
 				if(strStrategyName == "AICITYSTRATEGY_TINY_CITY")
 					bStrategyShouldBeActive = CityStrategyAIHelpers::IsTestCityStrategy_TinyCity(GetCity());
 				else if(strStrategyName == "AICITYSTRATEGY_SMALL_CITY")
@@ -1393,7 +1393,7 @@ void CvCityStrategyAI::DoTurn()
 				else if(strStrategyName == "AICITYSTRATEGY_GOOD_AIRLIFT_CITY")
 					bStrategyShouldBeActive = CityStrategyAIHelpers::IsTestCityStrategy_GoodAirliftCity(GetCity());
 
-				// Check Lua hook
+
 				ICvEngineScriptSystem1* pkScriptSystem = gDLL->GetScriptSystem();
 				if(pkScriptSystem && bStrategyShouldBeActive)
 				{
@@ -1402,12 +1402,12 @@ void CvCityStrategyAI::DoTurn()
 					args->Push(GetCity()->getOwner());
 					args->Push(GetCity()->GetID());
 
-					// Attempt to execute the game events.
-					// Will return false if there are no registered listeners.
+
+
 					bool bResult = false;
 					if(LuaSupport::CallTestAll(pkScriptSystem, "CityStrategyCanActivate", args.get(), bResult))
 					{
-						// Check the result.
+
 						if(bResult == false)
 						{
 							bStrategyShouldBeActive = false;
@@ -1416,10 +1416,10 @@ void CvCityStrategyAI::DoTurn()
 				}
 			}
 
-			// This variable keeps track of whether or not we should be doing something (i.e. Strategy is active now but should be turned off, OR Strategy is inactive and should be enabled)
+
 			bool bAdoptOrEndStrategy = false;
 
-			// Strategy should be on, and if it's not, turn it on
+
 			if(bStrategyShouldBeActive)
 			{
 				if(bTestCityStrategyStart)
@@ -1431,7 +1431,7 @@ void CvCityStrategyAI::DoTurn()
 					bAdoptOrEndStrategy = false;
 				}
 			}
-			// Strategy should be off, and if it's not, turn it off
+
 			else
 			{
 				if(bTestCityStrategyStart)
@@ -1444,18 +1444,18 @@ void CvCityStrategyAI::DoTurn()
 				}
 			}
 
-			// Flavor propagation
+
 			if(bAdoptOrEndStrategy)
 			{
 				int iFlavorLoop;
 
-				// We should adopt this CityStrategy
+
 				if(bTestCityStrategyStart)
 				{
 					SetUsingCityStrategy(eCityStrategy, true);
 
-					const int iFlavorMinValue = /*-1000*/ GC.getFLAVOR_MIN_VALUE();
-					const int iFlavorMaxValue = /*1000*/ GC.getFLAVOR_MAX_VALUE();
+					const int iFlavorMinValue =           GC.getFLAVOR_MIN_VALUE();
+					const int iFlavorMaxValue =          GC.getFLAVOR_MAX_VALUE();
 
 					const int iNumFlavors = GC.getNumFlavorTypes();
 					for(iFlavorLoop = 0; iFlavorLoop < iNumFlavors; iFlavorLoop++)
@@ -1479,13 +1479,13 @@ void CvCityStrategyAI::DoTurn()
 
 					FlavorUpdate();
 				}
-				// End the CityStrategy
+
 				else if(bTestCityStrategyEnd)
 				{
 					SetUsingCityStrategy(eCityStrategy, false);
 
-					const int iFlavorMinValue = /*-1000*/ GC.getFLAVOR_MIN_VALUE();
-					const int iFlavorMaxValue = /*1000*/ GC.getFLAVOR_MAX_VALUE();
+					const int iFlavorMinValue =           GC.getFLAVOR_MIN_VALUE();
+					const int iFlavorMaxValue =          GC.getFLAVOR_MAX_VALUE();
 
 					const int iNumFlavors = GC.getNumFlavorTypes();
 					for(iFlavorLoop = 0; iFlavorLoop < iNumFlavors; iFlavorLoop++)
@@ -1547,11 +1547,11 @@ void CvCityStrategyAI::UpdateBestYields()
 
 	for(int iPlotLoop = 0; iPlotLoop < NUM_CITY_PLOTS; iPlotLoop++)
 	{
-		// we want to evaluate the city plot
-		//if (iPlotLoop == CITY_HOME_PLOT)
-		//{
-		//	continue;
-		//}
+
+
+
+
+
 
 		pPlot = m_pCity->GetCityCitizens()->GetCityPlotFromIndex(iPlotLoop);
 		if(!pPlot)
@@ -1595,7 +1595,7 @@ void CvCityStrategyAI::UpdateBestYields()
 			iYieldSum += (m_acBestYields[iYield][iSlot] * 100);
 		}
 
-		// add in additional food from the city plot and the city buildings that provide food
+
 		if(iYield == YIELD_FOOD)
 		{
 			int iCityYieldSum = 0;
@@ -1638,7 +1638,7 @@ void CvCityStrategyAI::UpdateBestYields()
 	{
 		if(m_pCity->GetPlayer()->isHuman())
 		{
-			// find a specialization type according to the citizen focus type
+
 			CityAIFocusTypes eCityAIFocusTypes = m_pCity->GetCityCitizens()->GetFocusType();
 
 			CvString strLookup;
@@ -1667,7 +1667,7 @@ void CvCityStrategyAI::UpdateBestYields()
 			}
 		}
 
-		// if the human did not have a city ai specialization
+
 		if(eSpecialization == NO_CITY_SPECIALIZATION)
 		{
 			std::vector<CvCitySpecializationXMLEntry*> m_aCitySpecializations;
@@ -1736,15 +1736,15 @@ void CvCityStrategyAI::LogHurry(HurryTypes iHurryType, int iHurryAmount, int iHu
 		CvString cityName;
 		CvString strDesc;
 
-		// Find the name of this civ and city
+
 		playerName = GET_PLAYER(m_pCity->getOwner()).getCivilizationShortDescription();
 		cityName = m_pCity->getName();
 
-		// Open the log file
+
 		FILogFile* pLog;
 		pLog = LOGFILEMGR.GetLog(GetLogFileName(playerName, cityName), FILogFile::kDontTimeStamp);
 
-		// Get the leading info for this line
+
 		strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 		strBaseString += playerName + ", " + cityName + ", ";
 
@@ -1763,9 +1763,9 @@ void CvCityStrategyAI::LogHurry(HurryTypes iHurryType, int iHurryAmount, int iHu
 }
 
 
-// PRIVATE METHODS
 
-/// Recompute weights taking into account Production cost
+
+
 void CvCityStrategyAI::ReweightByCost()
 {
 	CvCityBuildable buildable;
@@ -1774,13 +1774,13 @@ void CvCityStrategyAI::ReweightByCost()
 	{
 		buildable = m_Buildables.GetElement(iI);
 
-		// Compute the new weight and change it
+
 		int iNewWeight = CityStrategyAIHelpers::ReweightByTurnsLeft(m_Buildables.GetWeight(iI), buildable.m_iTurnsToConstruct);
 		m_Buildables.SetWeight(iI, iNewWeight);
 	}
 }
 
-/// Log new flavor settings
+
 void CvCityStrategyAI::LogFlavors(FlavorTypes eFlavor)
 {
 	if(GC.getLogging() && GC.getAILogging())
@@ -1792,25 +1792,25 @@ void CvCityStrategyAI::LogFlavors(FlavorTypes eFlavor)
 		CvString cityName;
 		CvString strDesc;
 
-		// Find the name of this civ and city
+
 		playerName = GET_PLAYER(m_pCity->getOwner()).getCivilizationShortDescription();
 		cityName = m_pCity->getName();
 
-		// Open the log file
+
 		FILogFile* pLog;
 		pLog = LOGFILEMGR.GetLog(GetLogFileName(playerName, cityName), FILogFile::kDontTimeStamp);
 
-		// Get the leading info for this line
+
 		strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 		strBaseString += playerName + ", " + cityName + ", ";
 
-		// Dump out the setting for each flavor
+
 		if(eFlavor == NO_FLAVOR)
 		{
 			for(int iI = 0; iI < GC.getNumFlavorTypes(); iI++)
 			{
-				// Only dump if non-zero
-				//		if (m_piLatestFlavorValues[iI] > 0)
+
+
 				{
 					strTemp.Format("Flavor, %s, %d", GC.getFlavorTypes((FlavorTypes)iI).GetCString(), m_piLatestFlavorValues[iI]);
 					strOutBuf = strBaseString + strTemp;
@@ -1827,7 +1827,7 @@ void CvCityStrategyAI::LogFlavors(FlavorTypes eFlavor)
 	}
 }
 
-/// Log a city strategy
+
 void CvCityStrategyAI::LogStrategy(AICityStrategyTypes eStrategy, bool bValue)
 {
 	if(GC.getLogging() && GC.getAILogging())
@@ -1835,20 +1835,20 @@ void CvCityStrategyAI::LogStrategy(AICityStrategyTypes eStrategy, bool bValue)
 		CvString strOutBuf;
 		CvString strBaseString;
 
-		// Find the name of this civ and city
+
 		CvString playerName = GET_PLAYER(m_pCity->getOwner()).getCivilizationShortDescription();
 		CvString cityName = m_pCity->getName();
 
-		// Open the log file
+
 		FILogFile* pLog = LOGFILEMGR.GetLog(GetLogFileName(playerName, cityName), FILogFile::kDontTimeStamp);
 
-		// Get the leading info for this line
+
 		strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 		strBaseString += playerName + ", " + cityName + ", ";
 
 		strOutBuf = strBaseString;
 
-		// Strategy Info
+
 		CvAICityStrategyEntry* pStrategyEntry = GC.getAICityStrategyInfo(eStrategy);
 		if(pStrategyEntry != NULL)
 		{
@@ -1861,7 +1861,7 @@ void CvCityStrategyAI::LogStrategy(AICityStrategyTypes eStrategy, bool bValue)
 	}
 }
 
-/// Log all potential builds
+
 void CvCityStrategyAI::LogPossibleBuilds()
 {
 	if(GC.getLogging() && GC.getAILogging())
@@ -1873,19 +1873,19 @@ void CvCityStrategyAI::LogPossibleBuilds()
 		CvString cityName;
 		CvString strDesc;
 
-		// Find the name of this civ and city
+
 		playerName = GET_PLAYER(m_pCity->getOwner()).getCivilizationShortDescription();
 		cityName = m_pCity->getName();
 
-		// Open the log file
+
 		FILogFile* pLog;
 		pLog = LOGFILEMGR.GetLog(GetLogFileName(playerName, cityName), FILogFile::kDontTimeStamp);
 
-		// Get the leading info for this line
+
 		strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 		strBaseString += playerName + ", " + cityName + ", ";
 
-		// Dump out the weight of each buildable item
+
 		for(int iI = 0; iI < m_Buildables.size(); iI++)
 		{
 			CvCityBuildable buildable = m_Buildables.GetElement(iI);
@@ -1959,7 +1959,7 @@ void CvCityStrategyAI::LogPossibleBuilds()
 	}
 }
 
-/// Log the chosen item to build
+
 #ifdef AUI_WARNING_FIXES
 void CvCityStrategyAI::LogCityProduction(const CvCityBuildable& buildable, bool bRush)
 #else
@@ -1975,14 +1975,14 @@ void CvCityStrategyAI::LogCityProduction(CvCityBuildable buildable, bool bRush)
 		CvString cityName;
 		CvString strDesc;
 
-		// Find the name of this civ and city
+
 		playerName = GET_PLAYER(m_pCity->getOwner()).getCivilizationShortDescription();
 		cityName = m_pCity->getName();
 
 		FILogFile* pLog;
 		pLog = LOGFILEMGR.GetLog(GetLogFileName(playerName, cityName), FILogFile::kDontTimeStamp);
 
-		// Get the leading info for this line
+
 		strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 		strBaseString += playerName + ", " + cityName + ", ";
 
@@ -2048,13 +2048,13 @@ void CvCityStrategyAI::LogSpecializationChange(CitySpecializationTypes eSpeciali
 {
 	if(GC.getLogging() && GC.getAILogging())
 	{
-		// Find the name of this civ and city
+
 		CvString playerName = GET_PLAYER(m_pCity->getOwner()).getCivilizationShortDescription();
 		CvString cityName = m_pCity->getName();
 
 		FILogFile* pLog = LOGFILEMGR.GetLog(GetLogFileName(playerName, cityName), FILogFile::kDontTimeStamp);
 
-		// Get the leading info for this line
+
 		CvString strBaseString;
 		strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 		strBaseString += playerName + ", " + cityName + ", ";
@@ -2088,52 +2088,52 @@ void CvCityStrategyAI::LogSpecializationChange(CitySpecializationTypes eSpeciali
 	}
 }
 
-// NON-MEMBER FUNCTIONS
-//
-// These are functions that do not need access to the internals of the CvCityStrategyAI class.
-// Keep them as non-member functions to:
-// a) simplify the class (improving encapsulation, reducing coupling)
-// b) allow their general use by other classes
 
-/// Routine to reweight a city buildable based on time to build
+
+
+
+
+
+
+
 int CityStrategyAIHelpers::ReweightByTurnsLeft(int iOriginalWeight, int iTurnsLeft)
 {
-	// 10 turns will add 0.02; 80 turns will add 0.16
-	double fAdditionalTurnCostFactor = GC.getAI_PRODUCTION_WEIGHT_MOD_PER_TURN_LEFT() * iTurnsLeft;	// 0.004
-	double fTotalCostFactor = GC.getAI_PRODUCTION_WEIGHT_BASE_MOD() + fAdditionalTurnCostFactor;	// 0.15
+
+	double fAdditionalTurnCostFactor = GC.getAI_PRODUCTION_WEIGHT_MOD_PER_TURN_LEFT() * iTurnsLeft;
+	double fTotalCostFactor = GC.getAI_PRODUCTION_WEIGHT_BASE_MOD() + fAdditionalTurnCostFactor;
 	double fWeightDivisor = pow((double) iTurnsLeft, fTotalCostFactor);
 
-	/* Commented out for now: useful debug code for tweaking the exact effect of this function
 
-	iTurnsLeft = 10;
-	fAdditionalTurnCostFactor = 0.004f * iTurnsLeft;
-	fTotalCostFactor = 0.15f + fAdditionalTurnCostFactor;
-	fWeightDivisor = pow((double) iTurnsLeft, fTotalCostFactor);
 
-	iTurnsLeft = 20;
-	fAdditionalTurnCostFactor = 0.004f * iTurnsLeft;
-	fTotalCostFactor = 0.15f + fAdditionalTurnCostFactor;
-	fWeightDivisor = pow((double) iTurnsLeft, fTotalCostFactor);
 
-	iTurnsLeft = 40;
-	fAdditionalTurnCostFactor = 0.004f * iTurnsLeft;
-	fTotalCostFactor = 0.15f + fAdditionalTurnCostFactor;
-	fWeightDivisor = pow((double) iTurnsLeft, fTotalCostFactor);
 
-	iTurnsLeft = 80;
-	fAdditionalTurnCostFactor = 0.004f * iTurnsLeft;
-	fTotalCostFactor = 0.15f + fAdditionalTurnCostFactor;
-	fWeightDivisor = pow((double) iTurnsLeft, fTotalCostFactor);*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	return int(double(iOriginalWeight) / fWeightDivisor);
 }
 
-// Figure out what the WeightThreshold Mod should be by looking at the Flavors for this player & the Strategy
+
 int CityStrategyAIHelpers::GetWeightThresholdModifier(AICityStrategyTypes eStrategy, CvCity* pCity)
 {
 	int iWeightThresholdModifier = 0;
 
-	// Look at all Flavors for the Player & this Strategy
+
 	for(int iFlavorLoop = 0; iFlavorLoop < GC.getNumFlavorTypes(); iFlavorLoop++)
 	{
 		FlavorTypes eFlavor = (FlavorTypes) iFlavorLoop;
@@ -2146,11 +2146,11 @@ int CityStrategyAIHelpers::GetWeightThresholdModifier(AICityStrategyTypes eStrat
 	return iWeightThresholdModifier;
 }
 
-/// "Tiny City" City Strategy: If a City is under 2 Population tweak a number of different Flavors
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_TinyCity(CvCity* pCity)
 {
-	// City Population is too low, don't build Settlers yet
-	if(pCity->getPopulation() < GC.getAI_CITYSTRATEGY_SMALL_CITY_POP_THRESHOLD())	// Just size 1
+
+	if(pCity->getPopulation() < GC.getAI_CITYSTRATEGY_SMALL_CITY_POP_THRESHOLD())
 	{
 		return true;
 	}
@@ -2158,11 +2158,11 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_TinyCity(CvCity* pCity)
 	return false;
 }
 
-/// "Small City" City Strategy: If a City is under 3 Population tweak a number of different Flavors
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_SmallCity(CvCity* pCity)
 {
-	// City Population is too low, don't build Settlers yet
-	if(pCity->getPopulation() >= GC.getAI_CITYSTRATEGY_SMALL_CITY_POP_THRESHOLD() &&   // 2 to 4
+
+	if(pCity->getPopulation() >= GC.getAI_CITYSTRATEGY_SMALL_CITY_POP_THRESHOLD() &&
 	        pCity->getPopulation() < GC.getAI_CITYSTRATEGY_MEDIUM_CITY_POP_THRESHOLD())
 	{
 		return true;
@@ -2171,17 +2171,17 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_SmallCity(CvCity* pCity)
 	return false;
 }
 
-/// "Medium City" City Strategy: If a City is 8 or above Population boost science
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_MediumCity(CvCity* pCity)
 {
-	// Never consider the capital to be a medium city (so with late game starts at least one city retains high flavors for SPACESHIP, etc.)
+
 	if (pCity->isCapital())
 	{
 		return false;
 	}
 
-	// City Population is getting larger, increase science
-	if(pCity->getPopulation() >= GC.getAI_CITYSTRATEGY_MEDIUM_CITY_POP_THRESHOLD() &&   // 5 to 11
+
+	if(pCity->getPopulation() >= GC.getAI_CITYSTRATEGY_MEDIUM_CITY_POP_THRESHOLD() &&
 	        pCity->getPopulation() < GC.getAI_CITYSTRATEGY_LARGE_CITY_POP_THRESHOLD())
 	{
 		return true;
@@ -2190,11 +2190,11 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_MediumCity(CvCity* pCity)
 	return false;
 }
 
-/// "Small City" City Strategy: If a City is 15 or above, boost science a LOT
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_LargeCity(CvCity* pCity)
 {
-	// City Population is very large, really boost science
-	if(pCity->getPopulation() >= GC.getAI_CITYSTRATEGY_LARGE_CITY_POP_THRESHOLD())	// 12+
+
+	if(pCity->getPopulation() >= GC.getAI_CITYSTRATEGY_LARGE_CITY_POP_THRESHOLD())
 	{
 		return true;
 	}
@@ -2202,10 +2202,10 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_LargeCity(CvCity* pCity)
 	return false;
 }
 
-/// "Landlocked" City Strategy: If a City has no access to the Ocean then nullify all water-based Flavors
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_Landlocked(CvCity* pCity)
 {
-	// If this City isn't adjacent to a body of water big enough to be "Ocean" then we consider it landlocked
+
 	if(!pCity->isCoastal())
 	{
 		return true;
@@ -2214,7 +2214,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_Landlocked(CvCity* pCity)
 	return false;
 }
 
-/// "Need Tile Improvers" City Strategy: Do we REALLY need to train some Workers?
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_NeedTileImprovers(AICityStrategyTypes eStrategy, CvCity* pCity)
 {
 	CvPlayer& kPlayer = GET_PLAYER(pCity->getOwner());
@@ -2237,7 +2237,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_NeedTileImprovers(AICityStrategyT
 	}
 
 	int iNumWorkers = kPlayer.GetNumUnitsWithUnitAI(UNITAI_WORKER, true, false);
-	// If it's a minor with at least 1 worker per city, always return false
+
 	if(kPlayer.isMinorCiv())
 	{
 		if(iNumWorkers >= iCurrentNumCities)
@@ -2248,12 +2248,12 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_NeedTileImprovers(AICityStrategyT
 		int iNumCities = max(1, (iCurrentNumCities * 3) / 4);
 		if(iNumWorkers >= iNumCities)
 			return false;
-		// If we're losing at war, return false
+
 		if(kPlayer.GetDiplomacyAI()->GetStateAllWars() == STATE_ALL_WARS_LOSING)
 			return false;
 	}
 
-	// If we're under attack from Barbs and have 1 or fewer Cities and no credible defense then training more Workers will only hurt us
+
 	if(iCurrentNumCities <= 1)
 	{
 		CvMilitaryAI* pMilitaryAI =kPlayer.GetMilitaryAI();
@@ -2269,14 +2269,14 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_NeedTileImprovers(AICityStrategyT
 
 	CvAICityStrategyEntry* pCityStrategy = pCity->GetCityStrategyAI()->GetAICityStrategies()->GetEntry(eStrategy);
 
-	int iModdedNumWorkers = iNumWorkers* /*67*/ pCityStrategy->GetWeightThreshold() / 100;
+	int iModdedNumWorkers = iNumWorkers*        pCityStrategy->GetWeightThreshold() / 100;
 	int iModdedNumCities = iCurrentNumCities + kPlayer.countCitiesFeatureSurrounded();
 
-	// We have fewer than we think we should, or we have none at all
+
 	if(iModdedNumWorkers <= iModdedNumCities || iModdedNumWorkers == 0)
 	{
-		// If we don't have any Workers by turn 30 we really need to get moving
-		int iDesperateTurn = /*30*/ GC.getAI_CITYSTRATEGY_NEED_TILE_IMPROVERS_DESPERATE_TURN();
+
+		int iDesperateTurn =        GC.getAI_CITYSTRATEGY_NEED_TILE_IMPROVERS_DESPERATE_TURN();
 
 		iDesperateTurn *= GC.getGame().getGameSpeedInfo().getTrainPercent();
 		iDesperateTurn /= 100;
@@ -2288,7 +2288,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_NeedTileImprovers(AICityStrategyT
 	return false;
 }
 
-/// "Want Tile Improvers" City Strategy: Looks at how many Builders are available empire-wide.  This is not a Player Strategy because it's only worried about training new Builders in Cities, and not Techs, Policies, etc.
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_WantTileImprovers(AICityStrategyTypes eStrategy, CvCity* pCity)
 {
 	CvPlayer& kPlayer = GET_PLAYER(pCity->getOwner());
@@ -2310,7 +2310,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_WantTileImprovers(AICityStrategyT
 
 	if(!GET_PLAYER(pCity->getOwner()).isMinorCiv())
 	{
-		// If we're losing at war, return false
+
 		if(GET_PLAYER(pCity->getOwner()).GetDiplomacyAI()->GetStateAllWars() == STATE_ALL_WARS_LOSING)
 			return false;
 	}
@@ -2319,23 +2319,23 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_WantTileImprovers(AICityStrategyT
 	if(iNumWorkers >= ((kPlayer.getNumCities() *  3) / 2) + 1)
 		return false;
 
-	// If we're under attack from Barbs and have 1 or fewer cities then training more Workers will only hurt us
-	//if (kPlayer.getNumCities() <= 1)
-	//{
-	//	MilitaryAIStrategyTypes eStrategyKillBarbs = (MilitaryAIStrategyTypes) GC.getInfoTypeForString("MILITARYAISTRATEGY_ERADICATE_BARBARIANS");
-	//	if (eStrategyKillBarbs != NO_MILITARYAISTRATEGY)
-	//	{
-	//		if (GET_PLAYER(pCity->getOwner()).GetMilitaryAI()->IsUsingStrategy(eStrategyKillBarbs))
-	//			return false;
-	//	}
-	//}
 
-	// Don't get desperate for training a Builder here unless the City is at least of a certain size
-	if(pCity->getPopulation() >= /*2*/ GC.getAI_CITYSTRATEGY_WANT_TILE_IMPROVERS_MINIMUM_SIZE())
+
+
+
+
+
+
+
+
+
+
+
+	if(pCity->getPopulation() >=       GC.getAI_CITYSTRATEGY_WANT_TILE_IMPROVERS_MINIMUM_SIZE())
 	{
 		int iNumBuilders = kPlayer.GetNumUnitsWithUnitAI(UNITAI_WORKER, true, false);
 
-		// If we don't even have 1 builder on map or in a queue, turn this on immediately
+
 		if(iNumBuilders < 1)
 		{
 			return true;
@@ -2343,10 +2343,10 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_WantTileImprovers(AICityStrategyT
 
 		CvAICityStrategyEntry* pCityStrategy = pCity->GetCityStrategyAI()->GetAICityStrategies()->GetEntry(eStrategy);
 
-		int iWeightThresholdModifier = CityStrategyAIHelpers::GetWeightThresholdModifier(eStrategy, pCity);	// 2 Extra Weight per TILE_IMPROVEMENT Flavor
-		int iPerCityThreshold = pCityStrategy->GetWeightThreshold() + iWeightThresholdModifier;	// 40
+		int iWeightThresholdModifier = CityStrategyAIHelpers::GetWeightThresholdModifier(eStrategy, pCity);
+		int iPerCityThreshold = pCityStrategy->GetWeightThreshold() + iWeightThresholdModifier;
 
-		// Look at all Tiles this City could potentially work to see if there are any Water Resources that could be improved
+
 		CvPlot* pLoopPlot;
 		int iNumResources = 0;
 		int iNumImprovedResources = 0;
@@ -2367,7 +2367,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_WantTileImprovers(AICityStrategyT
 							continue;
 						}
 
-						// loop through the build types to find one that we can use
+
 						ImprovementTypes eCorrectImprovement = NO_IMPROVEMENT;
 						BuildTypes eCorrectBuild = NO_BUILD;
 #ifdef AUI_WARNING_FIXES
@@ -2383,7 +2383,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_WantTileImprovers(AICityStrategyT
 							{
 								const ImprovementTypes eImprovement = (ImprovementTypes)pkBuildInfo->getImprovement();
 
-								// if this is the improvement we're looking for
+
 								if(eImprovement != NO_IMPROVEMENT)
 								{
 									CvImprovementEntry* pkImprovementInfo = GC.getImprovementInfo(eImprovement);
@@ -2401,14 +2401,14 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_WantTileImprovers(AICityStrategyT
 
 						}
 
-						// no valid build found
+
 						if(eCorrectBuild == NO_BUILD || eCorrectImprovement == NO_IMPROVEMENT)
 						{
 							continue;
 						}
 
 
-						// if we can't build the improvement for the resource, continue!
+
 						if(!kPlayer.canBuild(pLoopPlot, eCorrectBuild, false, false))
 						{
 							if(pLoopPlot->getImprovementType() == eCorrectImprovement)
@@ -2437,41 +2437,41 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_WantTileImprovers(AICityStrategyT
 
 		int iWeightThreshold = (iPerCityThreshold * iMultiplier);
 
-		//Do we want more Builders?
+
 		if((iNumBuilders * 100) < iWeightThreshold)
 		{
-			// slewis - need to check to see if training another worker will put us below the -10 threshold.
-			// slewis - todo: move -10 to a xml value
+
+
 			return (kPlayer.calculateGoldRate() > -10);
 
-			// Also want to check and see if we have enough happiness to support another builder
-			//int iBuilderUnhappiness = 0;
-			//int iBuildersInGame = kPlayer.GetNumUnitsWithUnitAI(UNITAI_WORKER, false, false);
-			//if (iBuildersInGame > 0)
-			//{
-			//	CvUnit *pLoopUnit;
-			//	int iLoop;
-			//	for (pLoopUnit = kPlayer.firstUnit(&iLoop); pLoopUnit != NULL; pLoopUnit = kPlayer.nextUnit(&iLoop))
-			//	{
-			//		if (pLoopUnit->AI_getUnitAIType() == UNITAI_WORKER)
-			//		{
-			//			break;
-			//		}
-			//	}
-			//	if (pLoopUnit)
-			//	{
-			//		iBuilderUnhappiness = pLoopUnit->getUnitInfo().GetUnhappiness();
-			//	}
-			//}
 
-			//return (kPlayer.GetExcessHappiness()) >= (iNumBuilders - iBuildersInGame + 1) * iBuilderUnhappiness;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		}
 	}
 
 	return false;
 }
 
-/// "Enough Tile Improvers" City Strategy: This is not a Player Strategy because we only want to prevent the training of new Builders, not nullify new Techs or Policies, which could still be very useful
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_EnoughTileImprovers(AICityStrategyTypes eStrategy, CvCity* pCity)
 {
 	CvPlayer& kPlayer = GET_PLAYER(pCity->getOwner());
@@ -2505,7 +2505,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_EnoughTileImprovers(AICityStrateg
 
 	int iNumBuilders = kPlayer.GetNumUnitsWithUnitAI(UNITAI_WORKER, true, false);
 
-	// If it's a minor with at least 1 worker per city, always return true
+
 	if(GET_PLAYER(pCity->getOwner()).isMinorCiv())
 	{
 		if(iNumBuilders >= kPlayer.getNumCities())
@@ -2514,13 +2514,13 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_EnoughTileImprovers(AICityStrateg
 
 	CvAICityStrategyEntry* pCityStrategy = pCity->GetCityStrategyAI()->GetAICityStrategies()->GetEntry(eStrategy);
 
-	int iWeightThresholdModifier = GetWeightThresholdModifier(eStrategy, pCity);	// 10 Extra Weight per TILE_IMPROVEMENT Flavor
-	int iPerCityThreshold = pCityStrategy->GetWeightThreshold() + iWeightThresholdModifier;	// 100
+	int iWeightThresholdModifier = GetWeightThresholdModifier(eStrategy, pCity);
+	int iPerCityThreshold = pCityStrategy->GetWeightThreshold() + iWeightThresholdModifier;
 
 	int iModdedNumCities = kPlayer.getNumCities() + kPlayer.countCitiesFeatureSurrounded();
 	int iWeightThreshold = (iPerCityThreshold * iModdedNumCities);
 
-	// Average Player wants no more than 1.50 Builders per City [150 Weight is Average; range is 100 to 200]
+
 	if((iNumBuilders * 100) >= iWeightThreshold)
 	{
 		return true;
@@ -2529,7 +2529,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_EnoughTileImprovers(AICityStrateg
 	return false;
 }
 
-/// "Need Naval Growth" City Strategy: Looks at the Tiles this City can work, and if there are a lot of Ocean tiles prioritizes NAVAL_GROWTH: should give us a Harbor eventually
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_NeedNavalGrowth(AICityStrategyTypes eStrategy, CvCity* pCity)
 {
 	int iNumOceanPlots = 0;
@@ -2537,7 +2537,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_NeedNavalGrowth(AICityStrategyTyp
 
 	CvPlot* pLoopPlot;
 
-	// Look at all Tiles this City could potentially work
+
 	for(int iPlotLoop = 0; iPlotLoop < NUM_CITY_PLOTS; iPlotLoop++)
 	{
 		pLoopPlot = plotCity(pCity->getX(), pCity->getY(), iPlotLoop);
@@ -2562,11 +2562,11 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_NeedNavalGrowth(AICityStrategyTyp
 	if(iNumTotalWorkablePlots > 0)
 	{
 		CvAICityStrategyEntry* pCityStrategy = pCity->GetCityStrategyAI()->GetAICityStrategies()->GetEntry(eStrategy);
-		int iWeightThresholdModifier = GetWeightThresholdModifier(eStrategy, pCity);	// -1 Weight per NAVAL_GROWTH Flavor
-		int iWeightThreshold = pCityStrategy->GetWeightThreshold() + iWeightThresholdModifier;	// 40
+		int iWeightThresholdModifier = GetWeightThresholdModifier(eStrategy, pCity);
+		int iWeightThreshold = pCityStrategy->GetWeightThreshold() + iWeightThresholdModifier;
 
-		// If at least 35% (Average Player) of a City's workable Tiles are low-food Water then we really should be building a Harbor
-		// [35 Weight is Average; range is 30 to 40]
+
+
 		if((iNumOceanPlots * 100) / iNumTotalWorkablePlots >= iWeightThreshold)
 		{
 			return true;
@@ -2576,14 +2576,14 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_NeedNavalGrowth(AICityStrategyTyp
 	return false;
 }
 
-/// "Need Naval Tile Improvement" City Strategy: If there's an unimproved Resource in the water that we could be using, HIGHLY prioritize NAVAL_TILE_IMPROVEMENT in this City: should give us a Workboat in short order
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_NeedNavalTileImprovement(CvCity* pCity)
 {
 	int iNumUnimprovedWaterResources = 0;
 
 	CvPlot* pLoopPlot;
 
-	// Look at all Tiles this City could potentially work to see if there are any Water Resources that could be improved
+
 	for(int iPlotLoop = 0; iPlotLoop < NUM_CITY_PLOTS; iPlotLoop++)
 	{
 		pLoopPlot = plotCity(pCity->getX(), pCity->getY(), iPlotLoop);
@@ -2594,10 +2594,10 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_NeedNavalTileImprovement(CvCity* 
 			{
 				if(pLoopPlot->isWater())
 				{
-					// Only look at Tiles THIS City can use; Prevents issue where two Cities can look at the same tile the same turn and both want Workboats for it; By the time this Strategy is called for a City another City isn't guaranteed to have popped it's previous order and registered that it's now training a Workboat! :(
+
 					if(pCity->GetCityCitizens()->IsCanWork(pLoopPlot))
 					{
-						// Does this Tile already have a Resource, and if so, is it already improved?
+
 						if(pLoopPlot->getResourceType() != NO_RESOURCE && pLoopPlot->getImprovementType() == NO_IMPROVEMENT)
 						{
 							iNumUnimprovedWaterResources++;
@@ -2610,7 +2610,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_NeedNavalTileImprovement(CvCity* 
 
 	int iNumWaterTileImprovers = GET_PLAYER(pCity->getOwner()).GetNumUnitsWithUnitAI(UNITAI_WORKER_SEA, true, true);
 
-	// Are there more Water Resources we can build an Improvement on than we have Naval Tile Improvers?
+
 	if(iNumUnimprovedWaterResources > iNumWaterTileImprovers)
 	{
 #ifdef AI_WORKER_EMBARKED_FIX
@@ -2629,7 +2629,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_NeedNavalTileImprovement(CvCity* 
 	return false;
 }
 
-/// "Enough Naval Tile Improvement" City Strategy: If we're not running "Need Naval Tile Improvement" then there's no need to worry about it at all
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_EnoughNavalTileImprovement(CvCity* pCity)
 {
 	AICityStrategyTypes eStrategyNeedNavalTileImprovement = (AICityStrategyTypes) GC.getInfoTypeForString("AICITYSTRATEGY_NEED_NAVAL_TILE_IMPROVEMENT");
@@ -2654,18 +2654,18 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_EnoughNavalTileImprovement(CvCity
 	{
 		CvPlot* pLoopPlot = plotCity(iX, iY, iCityPlotLoop);
 
-		// Invalid plot or not owned by this player
+
 		if (pLoopPlot == NULL || pLoopPlot->getOwner() != pCity->getOwner())
 		{
 			continue;
 		}
-		//No improved, no impassable, water only.
+
 		if(pLoopPlot->getImprovementType() == NO_IMPROVEMENT && !pLoopPlot->isImpassable() && pLoopPlot->isWater())
 		{
 			CvUnit* pLoopUnit;
 			for(int iUnitLoop = 0; iUnitLoop < pLoopPlot->getNumUnits(); iUnitLoop++)
 			{
-				//Workers nearby?
+
 				pLoopUnit = pLoopPlot->getUnitByIndex(iUnitLoop);
 				if(pLoopUnit != NULL && pLoopUnit->getOwner() == pCity->GetID() && pLoopUnit->AI_getUnitAIType() == UNITAI_WORKER_SEA)
 				{
@@ -2687,7 +2687,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_EnoughNavalTileImprovement(CvCity
 						continue;
 				}
 
-				//Valid right now with any worker valid build?
+
 				if(GET_PLAYER(pCity->getOwner()).canBuild(pLoopPlot, (BuildTypes)iI))
 				{
 					iCanImprove++;
@@ -2696,12 +2696,12 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_EnoughNavalTileImprovement(CvCity
 			}
 		}
 	}
-	//No tiles to improve?
+
 	if(iCanImprove <= 0)
 	{
 		return true;
 	}
-	//Enough workers already here? 1:1 ratio is good ratio.
+
 	if(iNumWorkersHere > iCanImprove)
 	{
 		return true;
@@ -2711,7 +2711,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_EnoughNavalTileImprovement(CvCity
 	return false;
 }
 
-/// "Need Improvement" City Strategy: if we need to get an improvement that increases a yield amount
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_NeedImprovement(CvCity* pCity, YieldTypes yield)
 {
 	if(pCity->GetCityStrategyAI()->GetDeficientYield() == yield)
@@ -2722,7 +2722,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_NeedImprovement(CvCity* pCity, Yi
 	return false;
 }
 
-/// "Have Training Facility" City Strategy: this city should pound out military units
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_HaveTrainingFacility(CvCity* pCity)
 {
 	if(pCity->getDomainFreeExperience(DOMAIN_LAND) > 0)
@@ -2733,7 +2733,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_HaveTrainingFacility(CvCity* pCit
 	return false;
 }
 
-/// "Capital Need Settler" City Strategy: have capital build a settler ASAP
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_CapitalNeedSettler(AICityStrategyTypes eStrategy, CvCity* pCity)
 {
 	if(pCity->isCapital())
@@ -2761,13 +2761,13 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_CapitalNeedSettler(AICityStrategy
 				MilitaryAIStrategyTypes eMilStrategy = (MilitaryAIStrategyTypes) GC.getInfoTypeForString("MILITARYAISTRATEGY_WAR_MOBILIZATION");
 				if(eMilStrategy != NO_MILITARYAISTRATEGY && kPlayer.GetMilitaryAI()->IsUsingStrategy(eMilStrategy))
 				{
-					// this is very risky, if this war fails, the civ lost the entire game as they have no backup plan
+
 					return false;
 				}
 
 				CvAICityStrategyEntry* pCityStrategy = pCity->GetCityStrategyAI()->GetAICityStrategies()->GetEntry(eStrategy);
-				int iWeightThresholdModifier = GetWeightThresholdModifier(eStrategy, pCity);	// -10 per EXPANSION, +2 per DEFENSE
-				int iWeightThreshold = pCityStrategy->GetWeightThreshold() + iWeightThresholdModifier;	// 130
+				int iWeightThresholdModifier = GetWeightThresholdModifier(eStrategy, pCity);
+				int iWeightThreshold = pCityStrategy->GetWeightThreshold() + iWeightThresholdModifier;
 
 				int iGameTurn = GC.getGame().getGameTurn();
 				if((iCitiesPlusSettlers == 1 && (iGameTurn * 4) > iWeightThreshold) ||
@@ -2783,7 +2783,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_CapitalNeedSettler(AICityStrategy
 	return false;
 }
 
-/// "Capital Under Threat" City Strategy: need military units, don't build buildings!
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_CapitalUnderThreat(CvCity* pCity)
 {
 	if (pCity->isCapital())
@@ -2805,7 +2805,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_CapitalUnderThreat(CvCity* pCity)
 	return false;
 }
 
-/// "First Culture Building" City Strategy: construct a building to get some culture going in this city
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_FirstCultureBuilding(CvCity* pCity)
 {
 	if(pCity->GetJONSCulturePerTurnFromBuildings() <= 0)
@@ -2821,7 +2821,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_FirstCultureBuilding(CvCity* pCit
 	return false;
 }
 
-/// "First Culture Building Emergency" City Strategy: construct a building to get some culture going in this city BECAUSE WE ARE RUNNING OUT OF ROOM!!!
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_FirstCultureBuildingEmergency(CvCity* pCity)
 {
 	if(pCity->getPopulation() >= 5 && pCity->GetJONSCulturePerTurnFromBuildings() <= 0)
@@ -2832,7 +2832,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_FirstCultureBuildingEmergency(CvC
 	return false;
 }
 
-/// "First Science Building" City Strategy: construct a building to get some science going in this city
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_FirstScienceBuilding(CvCity* pCity)
 {
 	if(pCity->getPopulation() >= 4 && pCity->GetYieldPerPopTimes100(YIELD_SCIENCE) == 0)
@@ -2843,7 +2843,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_FirstScienceBuilding(CvCity* pCit
 	return false;
 }
 
-/// "First Gold Building" City Strategy: construct a building to get some more gold going in this city
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_FirstGoldBuilding(CvCity* pCity)
 {
 	if(pCity->getPopulation() >= 4 && pCity->getYieldRateModifier(YIELD_GOLD) == 0)
@@ -2854,7 +2854,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_FirstGoldBuilding(CvCity* pCity)
 	return false;
 }
 
-/// "First Production Building" City Strategy: construct a building to get some more hammers going in this city
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_FirstProductionBuilding(CvCity* pCity)
 {
 	if(pCity->getPopulation() >= 4 && pCity->GetBaseYieldRateFromBuildings(YIELD_PRODUCTION) == 0 && pCity->getYieldRateModifier(YIELD_PRODUCTION) == 0)
@@ -2865,7 +2865,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_FirstProductionBuilding(CvCity* p
 	return false;
 }
 
-/// "First Faith Building" City Strategy: construct a building to get some faith going in this city
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_FirstFaithBuilding(CvCity* pCity)
 {
 	CvPlayer& kPlayer = GET_PLAYER(pCity->getOwner());
@@ -2878,13 +2878,13 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_FirstFaithBuilding(CvCity* pCity)
 		return false;
 	}
 
-	// Need population of 2 before worrying about this
+
 	if(pCity->getPopulation() < 2)
 	{
 		return false;
 	}
 
-	// Turn on if high religion flavor (doesn't need to be as high if already has a pantheon)
+
 	if((iReligionFlavor > 4 && kPlayer.GetReligions()->HasCreatedPantheon()) || iReligionFlavor > 6)
 	{
 		return true;
@@ -2893,10 +2893,10 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_FirstFaithBuilding(CvCity* pCity)
 	return false;
 }
 
-/// "Under Blockade" City Strategy: build walls or archers
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_UnderBlockade(CvCity* pCity)
 {
-	if(pCity->GetCityCitizens()->IsAnyPlotBlockaded()/* && !pCity->IsHasBuildingThatAllowsRangeStrike()*/)
+	if(pCity->GetCityCitizens()->IsAnyPlotBlockaded()                                                    )
 	{
 		return true;
 	}
@@ -2904,7 +2904,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_UnderBlockade(CvCity* pCity)
 	return false;
 }
 
-/// "Is Puppet" City Strategy: build gold buildings and not military training buildings
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_IsPuppet(CvCity* pCity)
 {
 	if(pCity->IsPuppet())
@@ -2915,7 +2915,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_IsPuppet(CvCity* pCity)
 	return false;
 }
 
-/// "Medium City" City Strategy: If a City is 5 or above and we are playing at a high difficulty level
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_MediumCityHighDifficulty(CvCity* pCity)
 {
 	if(pCity->getPopulation() >= 5 && GC.getGame().getHandicapInfo().GetID() > 4)
@@ -2926,7 +2926,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_MediumCityHighDifficulty(CvCity* 
 	return false;
 }
 
-/// "Original Capital" City Strategy: If a City was the original capital for any team (or is our original capital)
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_OriginalCapital(CvCity* pCity)
 {
 	if(pCity->IsOriginalCapital())
@@ -2938,7 +2938,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_OriginalCapital(CvCity* pCity)
 }
 
 
-/// "River City" City Strategy: give a little flavor to this city
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_RiverCity(CvCity* pCity)
 {
 	if(pCity->plot()->isRiver())
@@ -2949,10 +2949,10 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_RiverCity(CvCity* pCity)
 	return false;
 }
 
-/// "Hill City" City Strategy: give a little flavor to this city
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_HillCity(CvCity* pCity)
 {
-	// scan the nearby tiles to see if there are at least two hills in the vicinity
+
 	const int iRange = 2;
 	int iNumHills = 0;
 	CvPlot* pPlot = pCity->plot();
@@ -2963,9 +2963,9 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_HillCity(CvCity* pCity)
 	for (int iDY = -iRange; iDY <= iRange; iDY++)
 	{
 		iMaxDX = iRange - MAX(0, iDY);
-		for (iDX = -iRange - MIN(0, iDY); iDX <= iMaxDX; iDX++) // MIN() and MAX() stuff is to reduce loops (hexspace!)
+		for (iDX = -iRange - MIN(0, iDY); iDX <= iMaxDX; iDX++)
 		{
-			// No need for range check because loops are set up properly
+
 			pLoopPlot = plotXY(pPlot->getX(), pPlot->getY(), iDX, iDY);
 #else
 	for(int iDX = -iRange; iDX <= iRange; iDX++)
@@ -2991,10 +2991,10 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_HillCity(CvCity* pCity)
 	return false;
 }
 
-/// "Mountain City" City Strategy: give a little flavor to this city
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_MountainCity(CvCity* pCity)
 {
-	// scan the nearby tiles to see if there is a mountain close enough to build an observatory
+
 	CvPlot* pPlot = pCity->plot();
 	for(int iDirectionLoop = 0; iDirectionLoop < NUM_DIRECTION_TYPES; iDirectionLoop++)
 	{
@@ -3012,10 +3012,10 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_MountainCity(CvCity* pCity)
 	return false;
 }
 
-/// "Forest City" City Strategy: give a little flavor to this city
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_ForestCity(CvCity* pCity)
 {
-	// scan the nearby tiles to see if there are at least two forests in the vicinity
+
 	const int iRange = 2;
 	int iNumForests = 0;
 	CvPlot* pPlot = pCity->plot();
@@ -3026,9 +3026,9 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_ForestCity(CvCity* pCity)
 	for (int iDY = -iRange; iDY <= iRange; iDY++)
 	{
 		iMaxDX = iRange - MAX(0, iDY);
-		for (iDX = -iRange - MIN(0, iDY); iDX <= iMaxDX; iDX++) // MIN() and MAX() stuff is to reduce loops (hexspace!)
+		for (iDX = -iRange - MIN(0, iDY); iDX <= iMaxDX; iDX++)
 		{
-			// No need for range check because loops are set up properly
+
 			pLoopPlot = plotXY(pPlot->getX(), pPlot->getY(), iDX, iDY);
 #else
 	for(int iDX = -iRange; iDX <= iRange; iDX++)
@@ -3039,7 +3039,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_ForestCity(CvCity* pCity)
 #endif
 			if(pLoopPlot)
 			{
-				// FEATURE_FOREST seems dubious to me...
+
 				if(pLoopPlot->getFeatureType() == FEATURE_FOREST && pLoopPlot->getOwner() == pPlot->getOwner())
 				{
 					iNumForests++;
@@ -3055,10 +3055,10 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_ForestCity(CvCity* pCity)
 	return false;
 }
 
-/// "Jungle City" City Strategy: give a little flavor to this city
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_JungleCity(CvCity* pCity)
 {
-	// scan the nearby tiles to see if there are at least two jungles in the vicinity
+
 	const int iRange = 2;
 	int iNumJungles = 0;
 	CvPlot* pPlot = pCity->plot();
@@ -3069,9 +3069,9 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_JungleCity(CvCity* pCity)
 	for (int iDY = -iRange; iDY <= iRange; iDY++)
 	{
 		iMaxDX = iRange - MAX(0, iDY);
-		for (iDX = -iRange - MIN(0, iDY); iDX <= iMaxDX; iDX++) // MIN() and MAX() stuff is to reduce loops (hexspace!)
+		for (iDX = -iRange - MIN(0, iDY); iDX <= iMaxDX; iDX++)
 		{
-			// No need for range check because loops are set up properly
+
 			pLoopPlot = plotXY(pPlot->getX(), pPlot->getY(), iDX, iDY);
 #else
 	for(int iDX = -iRange; iDX <= iRange; iDX++)
@@ -3082,7 +3082,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_JungleCity(CvCity* pCity)
 #endif
 			if(pLoopPlot)
 			{
-				// FEATURE_JUNGLE seems dubious to me...
+
 				if(pLoopPlot->getFeatureType() == FEATURE_JUNGLE && pLoopPlot->getOwner() == pPlot->getOwner())
 				{
 					iNumJungles++;
@@ -3099,7 +3099,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_JungleCity(CvCity* pCity)
 }
 
 
-/// "Coast City" City Strategy: give a little flavor to this city
+
 bool CityStrategyAIHelpers::IsTestCityStrategy_CoastCity(CvCity* pCity)
 {
 	if(pCity->plot()->isCoastalLand())
@@ -3160,7 +3160,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_KeyScienceCity(CvCity* pCity)
 	for(pLoopCity = GET_PLAYER(ePlayer).firstCity(&iLoop); pLoopCity != NULL; pLoopCity = GET_PLAYER(ePlayer).nextCity(&iLoop))
 	{
 		iNumOtherCities++;
-		// don't evaluate ourselves
+
 		if (pLoopCity == pCity)
 		{
 			continue;
@@ -3206,7 +3206,7 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_KeyScienceCity(CvCity* pCity)
 
 bool CityStrategyAIHelpers::IsTestCityStrategy_GoodGPCity(CvCity* pCity)
 {
-	// if this city is producing at least 8 GP points a turn (since most GP mod buildings increase by 25% this will yield 2 extra GP points a turn)
+
 
 	int iTotalGPPChange = 0;
 
@@ -3220,28 +3220,28 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_GoodGPCity(CvCity* pCity)
 		CvSpecialistInfo* pkSpecialistInfo = GC.getSpecialistInfo(eSpecialist);
 		if(pkSpecialistInfo)
 		{
-			// Does this Specialist spawn a GP?
+
 			if (pkSpecialistInfo->getGreatPeopleUnitClass() != NO_UNITCLASS)
 			{
 				int iCount = pCity->GetCityCitizens()->GetSpecialistCount(eSpecialist);
 
-				// GPP from Specialists
+
 				int iGPPChange = pkSpecialistInfo->getGreatPeopleRateChange() * iCount * 100;
 
-				// GPP from Buildings
+
 				iGPPChange += pCity->GetCityCitizens()->GetBuildingGreatPeopleRateChanges(eSpecialist) * 100;
 
 				if (iGPPChange > 0)
 				{
 					int iMod = 0;
 
-					// City mod
+
 					iMod += pCity->getGreatPeopleRateModifier();
 
-					// Player mod
+
 					iMod += pCity->GetPlayer()->getGreatPeopleRateModifier();
 
-					// Trait mod to this specific class
+
 					if ((UnitClassTypes)pkSpecialistInfo->getGreatPeopleUnitClass() == GC.getInfoTypeForString("UNITCLASS_SCIENTIST"))
 					{
 						iMod += pCity->GetPlayer()->GetPlayerTraits()->GetGreatScientistRateModifier();
@@ -3268,14 +3268,14 @@ bool CityStrategyAIHelpers::IsTestCityStrategy_GoodGPCity(CvCity* pCity)
 					}
 					else if((UnitClassTypes)pkSpecialistInfo->getGreatPeopleUnitClass() == GC.getInfoTypeForString("UNITCLASS_MERCHANT"))
 					{
-#if defined(TRAITIFY) // Great Merchant Rate Modifier
+#if defined(TRAITIFY)
 						iMod += pCity->GetPlayer()->GetPlayerTraits()->GetGreatMerchantRateModifier();
 #endif
 						iMod += pCity->GetPlayer()->getGreatMerchantRateModifier();
 					}
 					else if((UnitClassTypes)pkSpecialistInfo->getGreatPeopleUnitClass() == GC.getInfoTypeForString("UNITCLASS_ENGINEER"))
 					{
-#if defined(TRAITIFY) // Great Engineer Rate Modifier
+#if defined(TRAITIFY)
 						iMod += pCity->GetPlayer()->GetPlayerTraits()->GetGreatEngineerRateModifier();
 #endif
 						iMod += pCity->GetPlayer()->getGreatEngineerRateModifier();

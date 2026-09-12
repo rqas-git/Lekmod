@@ -4,7 +4,7 @@ echo Lekmod Installer Builder
 echo ========================================
 echo.
 
-REM Check if Python is available
+
 python --version >nul 2>&1
 if errorlevel 1 (
     echo ERROR: Python not found!
@@ -18,7 +18,7 @@ echo Python found:
 python --version
 echo.
 
-REM Check if dependencies are installed
+
 echo Checking dependencies...
 echo.
 
@@ -27,7 +27,7 @@ python -m pip show pyinstaller >nul 2>&1
 if %errorlevel% neq 0 (
     echo PyInstaller not found. Installing...
     python -m pip install pyinstaller
-    REM Check if PyInstaller is now installed (ignore pip exit code)
+
     python -m pip show pyinstaller >nul 2>&1
     if %errorlevel% neq 0 (
         echo ERROR: Failed to install PyInstaller!
@@ -46,7 +46,7 @@ python -m pip show Pillow >nul 2>&1
 if %errorlevel% neq 0 (
     echo Pillow not found. Installing...
     python -m pip install Pillow
-    REM Check if Pillow is now installed (ignore pip exit code)
+
     python -m pip show Pillow >nul 2>&1
     if %errorlevel% neq 0 (
         echo ERROR: Failed to install Pillow!
@@ -83,9 +83,9 @@ echo Building installer...
 echo This may take a minute...
 echo.
 
-REM Build the executable with all resources
-REM Note: Images (background.png, banner.png, icon.ico) will be bundled if they exist
-python -m PyInstaller --noconfirm --onefile --windowed --name="LekmodInstaller" --icon=icon.ico --add-data "config.json;." --hidden-import=tkinter --hidden-import=tkinter.ttk --hidden-import=tkinter.messagebox --hidden-import=tkinter.filedialog --hidden-import=tkinter.scrolledtext --hidden-import=requests --hidden-import=urllib3 --hidden-import=certifi --hidden-import=charset_normalizer --hidden-import=idna installer.py
+
+
+python -m PyInstaller --noconfirm --onefile --windowed --name="LekmodInstaller" --icon=icon.ico --add-data "config.json;." --add-data "../LEKMOD/ui_manifest.json;." --hidden-import=tkinter --hidden-import=tkinter.ttk --hidden-import=tkinter.messagebox --hidden-import=tkinter.filedialog --hidden-import=tkinter.scrolledtext --hidden-import=requests --hidden-import=urllib3 --hidden-import=certifi --hidden-import=charset_normalizer --hidden-import=idna installer.py
 
 if errorlevel 1 (
     echo.
@@ -96,7 +96,7 @@ if errorlevel 1 (
     exit /b 1
 )
 
-REM Copy image files to dist folder (if they exist)
+
 echo.
 echo Copying resources to dist folder...
 if exist icon.ico (
@@ -122,4 +122,3 @@ echo ========================================
 echo.
 
 pause
-

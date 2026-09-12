@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/12/2015 3:19:34 AM -->
+
 <GameData>
 
-	<!-- Mercenary Army -->
+
 	<Units>
 		<Update>
 			<Set Class="UNITCLASS_FOREIGNLEGION" Cost="256" PolicyType="POLICY_TRADE_UNIONS" FaithCost="0" RequiresFaithPurchaseEnabled="false" ObsoleteTech="NULL" PurchaseOnly="true"  />

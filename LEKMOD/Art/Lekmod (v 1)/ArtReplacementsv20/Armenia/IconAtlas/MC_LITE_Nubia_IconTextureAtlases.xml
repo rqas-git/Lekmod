@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by EnormousApplePie -->
+
 <GameData>
 	<IconTextureAtlases>
 		<Row>
@@ -100,13 +100,13 @@
 			<IconsPerRow>2</IconsPerRow>
 			<IconsPerColumn>2</IconsPerColumn>
 		</Row>
-		<!-- for template <Row>
-			<Atlas>MC_LITE_NUBIAN_APEDEMAK_ARCHER_FLAG</Atlas>
-			<IconSize>32</IconSize>
-			<Filename>MC_LITE_ApedemakArcherUnitFlag_32.dds</Filename>
-			<IconsPerRow>1</IconsPerRow>
-			<IconsPerColumn>1</IconsPerColumn>
-		</Row>
-		-->
+
+
+
+
+
+
+
+
 	</IconTextureAtlases>	
 </GameData>

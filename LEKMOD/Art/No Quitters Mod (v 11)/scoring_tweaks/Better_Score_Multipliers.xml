@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GameData>
 	<Defines>
-		<!-- Each of these multipliers are fairly straightforward: (amount of stuff) * (relevant multiplier) gets added to the player's score -->
+
 		<Row>
 			<Name>NEW_SCORE_CITY_MULTIPLIER</Name>
-			<Value>6</Value> <!-- Was 8 -->
+			<Value>6</Value>
 		</Row>
 		<Row>
 			<Name>NEW_SCORE_POPULATION_MULTIPLIER</Name>
-			<Value>6</Value> <!-- Was 4 -->
+			<Value>6</Value>
 		</Row>
 		<Row>
 			<Name>NEW_SCORE_WONDER_MULTIPLIER</Name>
-			<Value>10</Value> <!-- Was 25 -->
+			<Value>10</Value>
 		</Row>
 		<Row>
 			<Name>NEW_SCORE_TECH_MULTIPLIER</Name>
-			<Value>10</Value> <!-- Was 4 -->
+			<Value>10</Value>
 		</Row>
 		<Row>
 			<Name>NEW_SCORE_FUTURE_TECH_MULTIPLIER</Name>
-			<Value>5</Value> <!-- Was 10 -->
+			<Value>5</Value>
 		</Row>
 		<Row>
 			<Name>NEW_SCORE_POLICY_MULTIPLIER</Name>
-			<Value>8</Value> <!-- Was 4 -->
+			<Value>8</Value>
 		</Row>
 		<Row>
 			<Name>NEW_SCORE_GREAT_WORK_MULTIPLIER</Name>
-			<Value>1</Value> <!-- Was 4 -->
+			<Value>1</Value>
 		</Row>
 		<Row>
 			<Name>NEW_SCORE_BELIEF_MULTIPLIER</Name>
-			<Value>4</Value> <!-- Was 20 -->
+			<Value>4</Value>
 		</Row>
 	</Defines>
 	<GameOptions>

@@ -42,15 +42,15 @@ public:
 	virtual lua_State* CreateLuaThread(_In_z_ const char* szName) = 0;
 	virtual void FreeLuaThread(_In_opt_ lua_State*) = 0;
 
-	// File IO
+
 	virtual bool LoadFile(_In_ lua_State* L, _In_z_ const char* szFilename) = 0;
 
-	//Arguments
+
 	virtual __checkReturn ICvEngineScriptSystemArgs1* CreateArgs() = 0;
 	virtual __checkReturn ICvEngineScriptSystemArgs1* CreateArgs(uint uiReserve) = 0;
 	virtual void DestroyArgs(_In_opt_ ICvEngineScriptSystemArgs1* pkArgs) = 0;
 
-	// Method calling
+
 	virtual bool CallCFunction(_In_ lua_State* L, lua_CFunction func, void* args) = 0;
 	virtual bool CallFunction(_In_ lua_State* L, unsigned int nArgs, unsigned int nRet) = 0;
 
@@ -64,4 +64,4 @@ public:
 };
 
 
-#endif //ICVDLLSCRIPTSYSTEM_H
+#endif

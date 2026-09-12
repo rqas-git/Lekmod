@@ -1,20 +1,20 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #include "CvGameCoreDLLPCH.h"
 #include "CvGameCoreDLLUtil.h"
 #include "CvPolicyAI.h"
 #include "CvGrandStrategyAI.h"
 #include "CvInfosSerializationHelper.h"
 
-// Include this after all other headers.
+
 #include "LintFree.h"
 
-/// Constructor
+
 CvPolicyAI::CvPolicyAI(CvPlayerPolicies* currentPolicies):
 	m_pCurrentPolicies(currentPolicies)
 {
@@ -24,12 +24,12 @@ CvPolicyAI::CvPolicyAI(CvPlayerPolicies* currentPolicies):
 #endif	
 }
 
-/// Destructor
+
 CvPolicyAI::~CvPolicyAI(void)
 {
 }
 
-/// Clear out AI local variables
+
 void CvPolicyAI::Reset()
 {
 	m_PolicyAIWeights.clear();
@@ -43,7 +43,7 @@ void CvPolicyAI::Reset()
 		CvAssertMsg(pPolicyEntries != NULL, "Policy AI init failure: no policy data");
 		if(pPolicyEntries != NULL)
 		{
-			// Loop through reading each one and add an entry with 0 weight to our vector
+
 			const int nPolicyEntries = pPolicyEntries->GetNumPolicies();
 			for(int i = 0; i < nPolicyEntries; i++)
 			{
@@ -53,10 +53,10 @@ void CvPolicyAI::Reset()
 	}
 }
 
-/// Serialization read
+
 void CvPolicyAI::Read(FDataStream& kStream)
 {
-	// Version number to maintain backwards compatibility
+
 	uint uiVersion;
 	kStream >> uiVersion;
 
@@ -65,13 +65,13 @@ void CvPolicyAI::Read(FDataStream& kStream)
 	CvAssertMsg(m_pCurrentPolicies->GetPolicies() != NULL, "Policy AI serialization failure: no policy data");
 	CvAssertMsg(m_pCurrentPolicies->GetPolicies()->GetNumPolicies() > 0, "Policy AI serialization failure: number of policies not greater than 0");
 
-	// Reset vector
+
 	m_PolicyAIWeights.clear();
 
 	uint uiPolicyArraySize = m_pCurrentPolicies->GetPolicies()->GetNumPolicies();
-	// Must set to the final size because we might not be adding in sequentially
+
 	m_PolicyAIWeights.resize(uiPolicyArraySize);
-	// Clear the contents in case we are loading a smaller set
+
 	for(uint uiIndex = 0; uiIndex < uiPolicyArraySize; ++uiIndex)
 		m_PolicyAIWeights.SetWeight(uiIndex, 0);
 
@@ -87,17 +87,17 @@ void CvPolicyAI::Read(FDataStream& kStream)
 	}
 }
 
-/// Serialization write
+
 void CvPolicyAI::Write(FDataStream& kStream)
 {
-	// Current version number
+
 	uint uiVersion = 1;
 	kStream << uiVersion;
 
 	CvAssertMsg(m_pCurrentPolicies->GetPolicies() != NULL, "Policy AI serialization failure: no policy data");
 	CvAssertMsg(m_pCurrentPolicies->GetPolicies()->GetNumPolicies() > 0, "Policy AI serialization failure: number of policies not greater than 0");
 
-	// Loop through writing each entry
+
 	uint uiPolicyCount = m_pCurrentPolicies->GetPolicies()->GetNumPolicies();
 	kStream << uiPolicyCount;
 
@@ -112,7 +112,7 @@ void CvPolicyAI::Write(FDataStream& kStream)
 	}
 }
 
-/// Establish weights for one flavor; can be called multiple times to layer strategies
+
 void CvPolicyAI::AddFlavorWeights(FlavorTypes eFlavor, int iWeight, int iPropagationPercent)
 {
 #ifdef AUI_WARNING_FIXES
@@ -126,7 +126,7 @@ void CvPolicyAI::AddFlavorWeights(FlavorTypes eFlavor, int iWeight, int iPropaga
 #endif
 
 	CvPolicyXMLEntries* pkPolicyEntries = m_pCurrentPolicies->GetPolicies();
-	// Create a temporary array of weights
+
 #ifdef AUI_WARNING_FIXES
 	FFastVector<int, true> paiTempWeights;
 	paiTempWeights.reserve(pkPolicyEntries->GetNumPolicies());
@@ -134,12 +134,12 @@ void CvPolicyAI::AddFlavorWeights(FlavorTypes eFlavor, int iWeight, int iPropaga
 	paiTempWeights = (int*)_alloca(sizeof(int*) * pkPolicyEntries->GetNumPolicies());
 #endif
 
-	// Loop through all our policies
+
 	for(iPolicy = 0; iPolicy < pkPolicyEntries->GetNumPolicies(); iPolicy++)
 	{
 		entry = pkPolicyEntries->GetPolicyEntry(iPolicy);
 
-		// Set its weight by looking at policy's weight for this flavor and using iWeight multiplier passed in
+
 		if(entry)
 #ifdef AUI_WARNING_FIXES
 			paiTempWeights.push_back(entry->GetFlavorValue(eFlavor) * iWeight);
@@ -152,20 +152,20 @@ void CvPolicyAI::AddFlavorWeights(FlavorTypes eFlavor, int iWeight, int iPropaga
 #endif
 	}
 
-	// Propagate these values left in the tree so prereqs get bought
+
 	if(iPropagationPercent > 0)
 	{
 		WeightPrereqs(paiTempWeights, iPropagationPercent);
 	}
 
-	// Add these weights over previous ones
+
 	for(iPolicy = 0; iPolicy < m_pCurrentPolicies->GetPolicies()->GetNumPolicies(); iPolicy++)
 	{
 		m_PolicyAIWeights.IncreaseWeight(iPolicy, paiTempWeights[iPolicy]);
 	}
 }
 
-/// Choose a player's next policy purchase (could be opening a branch)
+
 #ifdef AUI_WARNING_FIXES
 uint CvPolicyAI::ChooseNextPolicy(CvPlayer* pPlayer)
 #else
@@ -185,10 +185,10 @@ int CvPolicyAI::ChooseNextPolicy(CvPlayer* pPlayer)
 
 	bool bMustChooseTenet = (pPlayer->GetNumFreeTenets() > 0);
 
-	// Create a new vector holding only policies we can currently adopt
+
 	m_AdoptablePolicies.clear();
 
-	// Loop through adding the adoptable policies
+
 	for(iPolicyLoop = 0; iPolicyLoop < m_pCurrentPolicies->GetPolicies()->GetNumPolicies(); iPolicyLoop++)
 	{
 		if(m_pCurrentPolicies->CanAdoptPolicy((PolicyTypes) iPolicyLoop) && (!bMustChooseTenet || m_pCurrentPolicies->GetPolicies()->GetPolicyEntry(iPolicyLoop)->GetLevel() > 0))
@@ -197,7 +197,7 @@ int CvPolicyAI::ChooseNextPolicy(CvPlayer* pPlayer)
 
 			iWeight += m_PolicyAIWeights.GetWeight(iPolicyLoop);
 
-			// Does this policy finish a branch for us?
+
 			if(m_pCurrentPolicies->WillFinishBranchIfAdopted((PolicyTypes) iPolicyLoop))
 			{
 				int iPolicyBranch = m_pCurrentPolicies->GetPolicies()->GetPolicyEntry(iPolicyLoop)->GetPolicyBranchType();
@@ -219,7 +219,7 @@ int CvPolicyAI::ChooseNextPolicy(CvPlayer* pPlayer)
 		}
 	}
 
-	// Did we already start a branch in the set that is mutually exclusive?
+
 	bool bStartedAMutuallyExclusiveBranch = false;
 #ifdef AUI_WARNING_FIXES
 	for (uint iBranchLoop = 0; iBranchLoop < GC.getNumPolicyBranchInfos(); iBranchLoop++)
@@ -244,7 +244,7 @@ int CvPolicyAI::ChooseNextPolicy(CvPlayer* pPlayer)
 	AIGrandStrategyTypes eCultureGrandStrategy = (AIGrandStrategyTypes) GC.getInfoTypeForString("AIGRANDSTRATEGY_CULTURE");
 	AIGrandStrategyTypes eCurrentGrandStrategy = pPlayer->GetGrandStrategyAI()->GetActiveGrandStrategy();
 
-	// Loop though the branches adding each as another possibility
+
 	if (!bMustChooseTenet)
 	{
 #ifdef AUI_WARNING_FIXES
@@ -266,7 +266,7 @@ int CvPolicyAI::ChooseNextPolicy(CvPlayer* pPlayer)
 				{
 					int iBranchWeight = 0;
 
-					// Does this branch actually help us, based on game options?
+
 					if(IsBranchEffectiveInGame(ePolicyBranch))
 					{
 						iBranchWeight += WeighBranch(ePolicyBranch);
@@ -288,7 +288,7 @@ int CvPolicyAI::ChooseNextPolicy(CvPlayer* pPlayer)
 	m_AdoptablePolicies.SortItems();
 	LogPossiblePolicies();
 
-	// If there were any Level 3 tenets found, consider going for the one that matches our victory strategy
+
 	if (aLevel3Tenets.size() > 0)
 	{
 		vector<int>::const_iterator it;
@@ -341,19 +341,19 @@ int CvPolicyAI::ChooseNextPolicy(CvPlayer* pPlayer)
 
 	CvAssertMsg(m_AdoptablePolicies.GetTotalWeight() >= 0, "Total weights of considered policies should not be negative! Please send Anton your save file and version.");
 
-	// If total weight is above 0, choose one above a threshold
+
 	if(m_AdoptablePolicies.GetTotalWeight() > 0)
 	{
 		int iNumChoices = GC.getGame().getHandicapInfo().GetPolicyNumOptions();
 		iRtnValue = m_AdoptablePolicies.ChooseFromTopChoices(iNumChoices, &fcn, "Choosing policy from Top Choices");
 	}
-	// Total weight may be 0 if the only branches and policies left are ones that are ineffective in our game, but we gotta pick something
+
 	else if(m_AdoptablePolicies.GetTotalWeight() == 0 && m_AdoptablePolicies.size() > 0)
 	{
 		iRtnValue = m_AdoptablePolicies.ChooseAtRandom(&fcn, "Choosing policy at random (no good choices)");
 	}
 
-	// Log our choice
+
 #ifdef AUI_WARNING_FIXES
 	if (iRtnValue != (uint)NO_POLICY)
 #else
@@ -389,13 +389,13 @@ void CvPolicyAI::DoChooseIdeology(CvPlayer *pPlayer)
 		return;
 	}
 
-	// First consideration is our victory type
+
 	int iConquestPriority = max(0, pPlayer->GetGrandStrategyAI()->GetConquestPriority());
 	int iDiploPriority = max(0, pPlayer->GetGrandStrategyAI()->GetUnitedNationsPriority());
 	int iTechPriority = max(0, pPlayer->GetGrandStrategyAI()->GetSpaceshipPriority());
 	int iCulturePriority = max(0, pPlayer->GetGrandStrategyAI()->GetCulturePriority());
 
-	// Rule out one ideology if we are clearly (at least 25% more priority) going for the victory this ideology doesn't support
+
 	int iClearPrefPercent = GC.getIDEOLOGY_PERCENT_CLEAR_VICTORY_PREF();
 	if (iConquestPriority > (iDiploPriority   * (100 + iClearPrefPercent) / 100) &&
 		iConquestPriority > (iTechPriority    * (100 + iClearPrefPercent) / 100) &&
@@ -432,7 +432,7 @@ void CvPolicyAI::DoChooseIdeology(CvPlayer *pPlayer)
 	CvString stage = "After Grand Strategies";
 	LogIdeologyChoice(stage, iFreedomPriority, iAutocracyPriority, iOrderPriority);
 
-	// Next look at free policies we can get
+
 	iFreedomPriority += PolicyHelpers::GetNumFreePolicies(eFreedomBranch) * GC.getIDEOLOGY_SCORE_PER_FREE_TENET();
 	iAutocracyPriority += PolicyHelpers::GetNumFreePolicies(eAutocracyBranch) * GC.getIDEOLOGY_SCORE_PER_FREE_TENET();
 	iOrderPriority += PolicyHelpers::GetNumFreePolicies(eOrderBranch) * GC.getIDEOLOGY_SCORE_PER_FREE_TENET();;
@@ -440,7 +440,7 @@ void CvPolicyAI::DoChooseIdeology(CvPlayer *pPlayer)
 	stage = "After Free Policies";
 	LogIdeologyChoice(stage, iFreedomPriority, iAutocracyPriority, iOrderPriority);
 
-	// Finally see what our friends (and enemies) have already chosen
+
 	PlayerTypes eLoopPlayer;
 	for (int iPlayerLoop = 0; iPlayerLoop < MAX_MAJOR_CIVS; iPlayerLoop++)
 	{
@@ -451,7 +451,7 @@ void CvPolicyAI::DoChooseIdeology(CvPlayer *pPlayer)
 			PolicyBranchTypes eOtherPlayerIdeology;
 			eOtherPlayerIdeology = kOtherPlayer.GetPlayerPolicies()->GetLateGamePolicyTree();
 
-			switch(pPlayer->GetDiplomacyAI()->GetMajorCivApproach(eLoopPlayer, /*bHideTrueFeelings*/ true))
+			switch(pPlayer->GetDiplomacyAI()->GetMajorCivApproach(eLoopPlayer,                       true))
 			{
 			case MAJOR_CIV_APPROACH_HOSTILE:
 				if (eOtherPlayerIdeology == eFreedomBranch)
@@ -516,7 +516,7 @@ void CvPolicyAI::DoChooseIdeology(CvPlayer *pPlayer)
 				}
 				break;
 			case MAJOR_CIV_APPROACH_NEUTRAL:
-				// No changes
+
 				break;
 			}
 		}
@@ -525,10 +525,10 @@ void CvPolicyAI::DoChooseIdeology(CvPlayer *pPlayer)
 	stage = "After Relations";
 	LogIdeologyChoice(stage, iFreedomPriority, iAutocracyPriority, iOrderPriority);
 
-	// Look at Happiness impacts
+
 	int iHappinessModifier = GC.getIDEOLOGY_SCORE_HAPPINESS();
 
-	// -- Happiness we could add through tenets
+
 	int iHappinessDelta;
 	int iHappinessPoliciesInBranch;
 	iHappinessDelta = GetBranchBuildingHappiness(pPlayer, eFreedomBranch);
@@ -553,7 +553,7 @@ void CvPolicyAI::DoChooseIdeology(CvPlayer *pPlayer)
 	stage = "After Tenet Happiness Boosts";
 	LogIdeologyChoice(stage, iFreedomPriority, iAutocracyPriority, iOrderPriority);
 
-	// -- Happiness we'd lose through Public Opinion
+
 	iHappinessDelta = max (0, 100 - pPlayer->GetCulture()->ComputeHypotheticalPublicOpinionUnhappiness(eFreedomBranch));
 	iFreedomPriority += iHappinessDelta * iHappinessModifier;
 	iHappinessDelta = max (0, 100 - pPlayer->GetCulture()->ComputeHypotheticalPublicOpinionUnhappiness(eAutocracyBranch));
@@ -564,7 +564,7 @@ void CvPolicyAI::DoChooseIdeology(CvPlayer *pPlayer)
 	stage = "After Public Opinion Happiness";
 	LogIdeologyChoice(stage, iFreedomPriority, iAutocracyPriority, iOrderPriority);
 
-	// Small random add-on
+
 	iFreedomPriority += GC.getGame().getJonRandNum(10, "Freedom random priority bump");
 	iAutocracyPriority += GC.getGame().getJonRandNum(10, "Autocracy random priority bump");
 	iOrderPriority += GC.getGame().getJonRandNum(10, "Order random priority bump");
@@ -572,7 +572,7 @@ void CvPolicyAI::DoChooseIdeology(CvPlayer *pPlayer)
 	stage = "After Random (1 to 10)";
 	LogIdeologyChoice(stage, iFreedomPriority, iAutocracyPriority, iOrderPriority);
 
-	// Rule out any branches that are totally out of consideration
+
 	iFreedomPriority = iFreedomPriority * iFreedomMultiplier;
 	iAutocracyPriority = iAutocracyPriority * iAutocracyMultiplier;
 	iOrderPriority = iOrderPriority * iOrderMultiplier;
@@ -580,7 +580,7 @@ void CvPolicyAI::DoChooseIdeology(CvPlayer *pPlayer)
 	stage = "Final (after Clear Victory Preference)";
 	LogIdeologyChoice(stage, iFreedomPriority, iAutocracyPriority, iOrderPriority);
 
-	// Pick the ideology
+
 	PolicyBranchTypes eChosenBranch;
 	if (iFreedomPriority >= iAutocracyPriority && iFreedomPriority >= iOrderPriority)
 	{
@@ -598,24 +598,24 @@ void CvPolicyAI::DoChooseIdeology(CvPlayer *pPlayer)
 	LogBranchChoice(eChosenBranch);
 }
 
-/// Should the AI look at switching ideology branches?
+
 void CvPolicyAI::DoConsiderIdeologySwitch(CvPlayer* pPlayer)
 {
-	// Gather basic Ideology info
+
 	int iCurrentHappiness = pPlayer->GetExcessHappiness();
 	int iPublicOpinionUnhappiness = pPlayer->GetCulture()->GetPublicOpinionUnhappiness();
 	PolicyBranchTypes ePreferredIdeology = pPlayer->GetCulture()->GetPublicOpinionPreferredIdeology();
 	PolicyBranchTypes eCurrentIdeology = pPlayer->GetPlayerPolicies()->GetLateGamePolicyTree();
 	PlayerTypes eMostPressure = pPlayer->GetCulture()->GetPublicOpinionBiggestInfluence();
 	
-	// Possible enough that we need to look at this in detail?
+
 	if (iCurrentHappiness <= GC.getSUPER_UNHAPPY_THRESHOLD() && iPublicOpinionUnhappiness >= 10)
 	{
-		// How much Happiness could we gain from a switch?
+
 		int iHappinessCurrentIdeology = GetBranchBuildingHappiness(pPlayer, eCurrentIdeology);
 		int iHappinessPreferredIdeology = GetBranchBuildingHappiness(pPlayer, ePreferredIdeology);
 
-		// Does the switch fight against our clearly preferred victory path?
+
 		bool bDontSwitchFreedom = false;
 		bool bDontSwitchOrder = false;
 		bool bDontSwitchAutocracy = false;
@@ -659,7 +659,7 @@ void CvPolicyAI::DoConsiderIdeologySwitch(CvPlayer* pPlayer)
 				return;
 			}
 
-			// Cleared all obstacles -- REVOLUTION!
+
 			pPlayer->SetAnarchyNumTurns(GC.getSWITCH_POLICY_BRANCHES_ANARCHY_TURNS());
 			pPlayer->GetPlayerPolicies()->DoSwitchIdeologies(ePreferredIdeology);	
 
@@ -674,10 +674,10 @@ void CvPolicyAI::DoConsiderIdeologySwitch(CvPlayer* pPlayer)
 	}
 }
 
-/// What's the total Happiness benefit we could get from all policies/tenets in the branch based on our current buildings?
+
 int CvPolicyAI::GetBranchBuildingHappiness(CvPlayer* pPlayer, PolicyBranchTypes eBranch)
 {
-	// Policy Building Mods
+
 	int iSpecialPolicyBuildingHappiness = 0;
 #ifdef AUI_WARNING_FIXES
 	uint iBuildingClassLoop;
@@ -730,7 +730,7 @@ int CvPolicyAI::GetBranchBuildingHappiness(CvPlayer* pPlayer, PolicyBranchTypes 
 	return iSpecialPolicyBuildingHappiness;
 }
 
-/// How many policies in this branch help happiness?
+
 int CvPolicyAI::GetNumHappinessPolicies(CvPlayer* pPlayer, PolicyBranchTypes eBranch)
 {
 	int iRtnValue = 0;
@@ -763,7 +763,7 @@ int CvPolicyAI::GetNumHappinessPolicies(CvPlayer* pPlayer, PolicyBranchTypes eBr
 					BuildingTypes eBuilding = (BuildingTypes)pPlayer->getCivilizationInfo().getCivilizationBuildings(eBuildingClass);
 					if (eBuilding != NO_BUILDING)
 					{
-						// Don't count a building that can only be built in conquered cities
+
 						CvBuildingEntry *pkEntry = GC.getBuildingInfo(eBuilding);
 						if (!pkEntry || pkEntry->IsNoOccupiedUnhappiness())
 						{
@@ -783,10 +783,10 @@ int CvPolicyAI::GetNumHappinessPolicies(CvPlayer* pPlayer, PolicyBranchTypes eBr
 	return iRtnValue;
 }
 
-//=====================================
-// PRIVATE METHODS
-//=====================================
-/// Add weights to policies that are prereqs for the ones already weighted in this strategy
+
+
+
+
 #ifdef AUI_WARNING_FIXES
 void CvPolicyAI::WeightPrereqs(FFastVector<int, true> paiTempWeights, int iPropagationPercent)
 {
@@ -797,10 +797,10 @@ void CvPolicyAI::WeightPrereqs(int* paiTempWeights, int iPropagationPercent)
 	int iPolicyLoop;
 #endif
 
-	// Loop through policies looking for ones that are just getting some new weight
+
 	for(iPolicyLoop = 0; iPolicyLoop < m_pCurrentPolicies->GetPolicies()->GetNumPolicies(); iPolicyLoop++)
 	{
-		// If found one, call our recursive routine to weight everything to the left in the tree
+
 		if(paiTempWeights[iPolicyLoop] > 0)
 		{
 			PropagateWeights(iPolicyLoop, paiTempWeights[iPolicyLoop], iPropagationPercent, 0);
@@ -808,26 +808,26 @@ void CvPolicyAI::WeightPrereqs(int* paiTempWeights, int iPropagationPercent)
 	}
 }
 
-/// Recursive routine to weight all prerequisite policies
+
 void CvPolicyAI::PropagateWeights(int iPolicy, int iWeight, int iPropagationPercent, int iPropagationLevel)
 {
 	if(iPropagationLevel < m_iPolicyWeightPropagationLevels)
 	{
 		int iPropagatedWeight = iWeight * iPropagationPercent / 100;
 
-		// Loop through all prerequisites
+
 		for(int iI = 0; iI < GC.getNUM_OR_TECH_PREREQS(); iI++)
 		{
-			// Did we find a prereq?
+
 			int iPrereq = m_pCurrentPolicies->GetPolicies()->GetPolicyEntry(iPolicy)->GetPrereqAndPolicies(iI);
 			if(iPrereq != NO_POLICY)
 			{
-				// Apply reduced weight here.  Note that we apply these to the master weight array, not
-				// the temporary one.  The temporary one is just used to hold the newly weighted policies
-				// (from which this weight propagation must originate).
+
+
+
 				m_PolicyAIWeights.IncreaseWeight(iPrereq, iPropagatedWeight);
 
-				// Recurse to its prereqs (assuming we have any weight left)
+
 				if(iPropagatedWeight > 0)
 				{
 					PropagateWeights(iPrereq, iPropagatedWeight, iPropagationPercent, iPropagationLevel++);
@@ -841,7 +841,7 @@ void CvPolicyAI::PropagateWeights(int iPolicy, int iWeight, int iPropagationPerc
 	}
 }
 
-/// Priority for opening up this branch
+
 int CvPolicyAI::WeighBranch(PolicyBranchTypes eBranch)
 {
 	int iWeight = 0;
@@ -859,13 +859,13 @@ int CvPolicyAI::WeighBranch(PolicyBranchTypes eBranch)
 			CvPolicyEntry* pkLoopPolicyInfo = GC.getPolicyInfo(ePolicyLoop);
 			if(pkLoopPolicyInfo)
 			{
-				// Policy we don't have?
+
 				if(!m_pCurrentPolicies->HasPolicy(ePolicyLoop))
 				{
-					// From this branch we are considering opening?
+
 					if(pkLoopPolicyInfo->GetPolicyBranchType() == eBranch)
 					{
-						// With no prereqs?
+
 						if(pkLoopPolicyInfo->GetPrereqAndPolicies(0) == NO_POLICY)
 						{
 							iWeight += m_PolicyAIWeights.GetWeight(iPolicyLoop);
@@ -875,14 +875,14 @@ int CvPolicyAI::WeighBranch(PolicyBranchTypes eBranch)
 			}
 		}
 
-		// Add weight of free policy from branch
+
 		iWeight += m_PolicyAIWeights.GetWeight(pkPolicyBranchInfo->GetFreePolicy());
 	}
 
 	return iWeight;
 }
 
-/// Based on game options (religion off, science off, etc.), would this branch do us any good?
+
 bool CvPolicyAI::IsBranchEffectiveInGame(PolicyBranchTypes eBranch)
 {
 	CvPolicyBranchEntry* pBranchInfo = GC.getPolicyBranchInfo(eBranch);
@@ -908,7 +908,7 @@ bool CvPolicyAI::IsBranchEffectiveInGame(PolicyBranchTypes eBranch)
 	return true;
 }
 
-/// Log all possible policy choices
+
 void CvPolicyAI::LogPossiblePolicies()
 {
 	if(GC.getLogging() && GC.getAILogging())
@@ -919,13 +919,13 @@ void CvPolicyAI::LogPossiblePolicies()
 		CvString playerName;
 		CvString strDesc;
 
-		// Find the name of this civ and city
+
 		playerName = m_pCurrentPolicies->GetPlayer()->getCivilizationShortDescription();
 
 		FILogFile* pLog;
 		pLog = LOGFILEMGR.GetLog(GetLogFileName(playerName), FILogFile::kDontTimeStamp);
 
-		// Get the leading info for this line
+
 		strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 		strBaseString += playerName + ", ";
 
@@ -935,7 +935,7 @@ void CvPolicyAI::LogPossiblePolicies()
 		int iNumBranches = GC.getNumPolicyBranchInfos();
 #endif
 
-		// Dump out the weight of each possible policy
+
 		for(int iI = 0; iI < m_AdoptablePolicies.size(); iI++)
 		{
 			int iWeight = m_AdoptablePolicies.GetWeight(iI);
@@ -958,7 +958,7 @@ void CvPolicyAI::LogPossiblePolicies()
 	}
 }
 
-/// Log chosen policy
+
 void CvPolicyAI::LogPolicyChoice(PolicyTypes ePolicy)
 {
 	if(GC.getLogging() && GC.getAILogging())
@@ -969,13 +969,13 @@ void CvPolicyAI::LogPolicyChoice(PolicyTypes ePolicy)
 		CvString playerName;
 		CvString strDesc;
 
-		// Find the name of this civ and city
+
 		playerName = m_pCurrentPolicies->GetPlayer()->getCivilizationShortDescription();
 
 		FILogFile* pLog;
 		pLog = LOGFILEMGR.GetLog(GetLogFileName(playerName), FILogFile::kDontTimeStamp);
 
-		// Get the leading info for this line
+
 		strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 		strBaseString += playerName + ", ";
 
@@ -988,7 +988,7 @@ void CvPolicyAI::LogPolicyChoice(PolicyTypes ePolicy)
 	}
 }
 
-/// Log chosen policy
+
 void CvPolicyAI::LogBranchChoice(PolicyBranchTypes eBranch)
 {
 	if(GC.getLogging() && GC.getAILogging())
@@ -999,13 +999,13 @@ void CvPolicyAI::LogBranchChoice(PolicyBranchTypes eBranch)
 		CvString playerName;
 		CvString strDesc;
 
-		// Find the name of this civ and city
+
 		playerName = m_pCurrentPolicies->GetPlayer()->getCivilizationShortDescription();
 
 		FILogFile* pLog;
 		pLog = LOGFILEMGR.GetLog(GetLogFileName(playerName), FILogFile::kDontTimeStamp);
 
-		// Get the leading info for this line
+
 		strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 		strBaseString += playerName + ", ";
 
@@ -1016,7 +1016,7 @@ void CvPolicyAI::LogBranchChoice(PolicyBranchTypes eBranch)
 	}
 }
 
-/// Logging function to write out info on Ideology choices
+
 void CvPolicyAI::LogIdeologyChoice(CvString &decisionState, int iWeightFreedom, int iWeightAutocracy, int iWeightOrder)
 {
 	if(GC.getLogging() && GC.getAILogging())
@@ -1026,13 +1026,13 @@ void CvPolicyAI::LogIdeologyChoice(CvString &decisionState, int iWeightFreedom, 
 		CvString strTemp;
 		CvString playerName;
 
-		// Find the name of this civ
+
 		playerName = m_pCurrentPolicies->GetPlayer()->getCivilizationShortDescription();
 
 		FILogFile* pLog;
 		pLog = LOGFILEMGR.GetLog(GetLogFileName(playerName), FILogFile::kDontTimeStamp);
 
-		// Get the leading info for this line
+
 		strBaseString.Format("%03d, ", GC.getGame().getElapsedGameTurns());
 		strBaseString += playerName + ", ";
 
@@ -1043,12 +1043,12 @@ void CvPolicyAI::LogIdeologyChoice(CvString &decisionState, int iWeightFreedom, 
 	}
 }
 
-/// Build log filename
+
 CvString CvPolicyAI::GetLogFileName(CvString& playerName) const
 {
 	CvString strLogName;
 
-	// Open the log file
+
 	if(GC.getPlayerAndCityAILogSplit())
 	{
 		strLogName = "PolicyAILog_" + playerName + ".csv";

@@ -1,12 +1,12 @@
--- Author: EnormousApplePie
+
 include("Lekmod_utilities.lua")
 
 local this_civ = GameInfoTypes["CIVILIZATION_CUBA"]
 local is_active = LekmodUtilities:is_civilization_active(this_civ)
 
-------------------------------------------------------------------------------------------------------------------------
--- Cuba UA. Add a dumy building for every 5 culture present in other players' capitals
-------------------------------------------------------------------------------------------------------------------------
+
+
+
 function lekmod_cuba_ua_culture(player_id)
 
    local player = Players[player_id]
@@ -33,9 +33,9 @@ function lekmod_cuba_ua_culture(player_id)
    end
 
 end
-------------------------------------------------------------------------------------------------------------------------
--- Cuba UU. Unlock and give 2 of the unit if the player has adopted an ideology tenet for the first time.
-------------------------------------------------------------------------------------------------------------------------
+
+
+
 function lekmod_cuba_unit_unlock(player_id, policy_id)
 	local player = Players[player_id]
 	local capital = player:GetCapitalCity()
@@ -52,7 +52,7 @@ function lekmod_cuba_unit_unlock(player_id, policy_id)
 		end
 	end
 end
-------------------------------------------------------------------------------------------------------------------------
+
 if is_active then
    GameEvents.PlayerDoTurn.Add(lekmod_cuba_ua_culture)
    GameEvents.PlayerAdoptPolicy.Add(lekmod_cuba_unit_unlock)

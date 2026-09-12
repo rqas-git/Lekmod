@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-24 14:15:24 -->
+
 <GameData>
 
-	<!-- +1 Food, +1 Production, +1 Gold, +1 Culture, +1 Faith, and +1 Science in the Capital. -->
+
 	<Belief_BuildingClassYieldChanges>
 		<Row>
 			<BeliefType>BELIEF_GOD_KING</BeliefType>
@@ -12,7 +12,7 @@
 		</Row>
 	</Belief_BuildingClassYieldChanges>
 	
-	<!-- localization -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_BELIEF_GOD_KING" />
 		<Row Tag="TXT_KEY_BELIEF_GOD_KING">

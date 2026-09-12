@@ -1,18 +1,18 @@
-/*	-------------------------------------------------------------------------------------------------------
-	? 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
 
-//
-//  FILE:    CvAStar.cpp
-//
-//  AUTHOR:  Casey O'Toole  --  8/27/2002
-//  MOD:     Brian Wade     --  5/20/2008
-//  MOD:     Ed Beach       --  4/16/2009 moved into CvGameCoreDLL
-//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #include "CvGameCoreDLLPCH.h"
 #include "CvGameCoreUtils.h"
@@ -29,7 +29,7 @@
 #else
 #define PATH_RIVER_WEIGHT										(100)
 #endif
-#define PATH_CITY_WEIGHT										(0) // slewis - reduced this to zero because we shouldn't avoid cities any more due to new garrison rules
+#define PATH_CITY_WEIGHT										(0)
 #define PATH_DEFENSE_WEIGHT										(10)
 #ifdef AUI_ASTAR_CONSIDER_DAMAGE_WHEN_ATTACKING
 #define PATH_DAMAGE_WEIGHT										(5)
@@ -40,7 +40,7 @@
 #define PATH_PARTIAL_MOVE_WEIGHT								(500)
 #define PATH_THROUGH_WATER										(1000)
 #define PATH_STACKING_WEIGHT									(1000000)
-#define PATH_CITY_AVOID_WEIGHT									(0) // slewis - reduced this to zero because we shouldn't avoid cities any more due to new garrison rules
+#define PATH_CITY_AVOID_WEIGHT									(0)
 #define	PATH_EXPLORE_NON_HILL_WEIGHT							(300)
 #ifdef AUI_ASTAR_TWEAKED_PATH_EXPLORE_NON_REVEAL_WEIGHT
 #define PATH_EXPLORE_NON_REVEAL_WEIGHT							AUI_ASTAR_TWEAKED_PATH_EXPLORE_NON_REVEAL_WEIGHT
@@ -49,7 +49,7 @@
 #endif
 #define PATH_INCORRECT_EMBARKING_WEIGHT							(1000000)
 #define PATH_BUILD_ROUTE_EXISTING_ROUTE_WEIGHT					(10)
-//#define PATH_BUILD_ROUTE_RESOURCE_WEIGHT						(2)
+
 #define PATH_BUILD_ROUTE_REMOVABLE_FEATURE_DISCOUNT				(0.8f)
 #define PATH_BUILD_ROUTE_ALREADY_FLAGGED_DISCOUNT				(0.5f)
 #define PATH_END_TURN_MOUNTAIN_WEIGHT							(1000000)
@@ -57,24 +57,24 @@
 
 #include <xmmintrin.h>
 
-// until Tim is finished with AStar optimization
+
 #define LINT_EXTRA_SUPPRESSIONS \
-	4100 /* unreferenced formal parameter */ \
-	4130 /* logical operation on address of a string constant */ \
-	4189 /* local variable is initialized but not referenced */ \
-	4239 /* nonstandard extension used */ \
-	4238 /* nonstandard extension used : class rvalue used as lvalue */ \
-	4505 /* unreferenced formal parameter */ \
-	4512 /* assignment operator could not be generated */ \
-	4702 /* unreachable code */ \
-	4706 /* assignment within conditional expression */ \
-	6001 /* Using uninitialized memory */ \
-	6011 /* dereferencing NULL pointer.  */ \
-	6246 /* Local declaration of 'variable' hides declaration of the same name in outer scope. For additional information, see previous declaration at line 'XXX'*/ \
-	6262 /* Function uses 'xxxxx' bytes of stack: exceeds /analyze:stacksize'xxxxx'. Consider moving some data to heap */ \
-	6302 /* Format string mismatch */ \
-	6385 /* invalid data: accessing <buffer name>, the readable size is <size1> bytes, but <size2> bytes may be read: Lines: x, y */ \
-	6386 /* Buffer overrun */
+	4100                                     \
+	4130                                                         \
+	4189                                                        \
+	4239                                  \
+	4238                                                                \
+	4505                                     \
+	4512                                                  \
+	4702                        \
+	4706                                                \
+	6001                                  \
+	6011                                    \
+	6246                                                                                                                                                            \
+	6262                                                                                                                  \
+	6302                              \
+	6385                                                                                                                             \
+	6386
 #include "LintFree.h"
 
 #define PREFETCH_FASTAR_NODE(x) _mm_prefetch((const char*)x,  _MM_HINT_T0 ); _mm_prefetch(((const char*)x)+64,  _MM_HINT_T0 );
@@ -89,11 +89,11 @@ static void PrefetchRegionCvAStar(const char* pHead, const uint uiSize)
 }
 
 #if !defined(FINAL_RELESE)
-//#define PATH_FINDER_LOGGING
+
 #endif
 
-//	--------------------------------------------------------------------------------
-/// Constructor
+
+
 #ifdef AUI_WARNING_FIXES
 CvAStar::CvAStar() : m_ScratchBuffer(), m_iColumns(0), m_iRows(0), m_iXstart(0), m_iYstart(0), m_iXdest(0), m_iYdest(0), m_iInfo(0),
 m_bWrapX(false), m_bWrapY(false), m_bForceReset(false)
@@ -135,15 +135,15 @@ CvAStar::CvAStar()
 #endif
 }
 
-//	--------------------------------------------------------------------------------
-/// Destructor
+
+
 CvAStar::~CvAStar()
 {
 	DeInit();
 }
 
-//	--------------------------------------------------------------------------------
-/// Frees allocated memory
+
+
 void CvAStar::DeInit()
 {
 	if(m_ppaaNodes != NULL)
@@ -165,13 +165,13 @@ void CvAStar::DeInit()
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// Initializes the AStar algorithm
+
+
 void CvAStar::Initialize(int iColumns, int iRows, bool bWrapX, bool bWrapY, CvAPointFunc IsPathDestFunc, CvAPointFunc DestValidFunc, CvAHeuristic HeuristicFunc, CvAStarFunc CostFunc, CvAStarFunc ValidFunc, CvAStarFunc NotifyChildFunc, CvAStarFunc NotifyListFunc, CvANumExtraChildren NumExtraChildrenFunc, CvAGetExtraChild GetExtraChildFunc, CvABegin InitializeFunc, CvAEnd UninitializeFunc, const void* pData)
 {
 	int iI, iJ;
 
-	DeInit();	// free old memory just in case
+	DeInit();
 
 	udIsPathDest = IsPathDestFunc;
 	udDestValid = DestValidFunc;
@@ -242,8 +242,8 @@ void CvAStar::Initialize(int iColumns, int iRows, bool bWrapX, bool bWrapY, CvAP
 #endif
 }
 
-//	--------------------------------------------------------------------------------
-/// Generates a path from iXstart,iYstart to iXdest,iYdest
+
+
 bool CvAStar::GeneratePath(int iXstart, int iYstart, int iXdest, int iYdest, int iInfo, bool bReuse)
 {
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
@@ -291,7 +291,7 @@ bool CvAStar::GeneratePath(int iXstart, int iYstart, int iXdest, int iYdest, int
 
 	if(!bReuse)
 	{
-		// XXX should we just be doing a memset here?
+
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
 		for (int iI = 0; iI < m_iColumns; iI++)
 			for (int iJ = 0; iJ < m_iRows; iJ++)
@@ -414,8 +414,8 @@ bool CvAStar::GeneratePath(int iXstart, int iYstart, int iXdest, int iYdest, int
 	return true;
 }
 
-//	--------------------------------------------------------------------------------
-/// Takes one step in the algorithm
+
+
 int CvAStar::Step()
 {
 	if((m_pBest = GetBest()) == NULL)
@@ -423,9 +423,9 @@ int CvAStar::Step()
 		return -1;
 	}
 
-	CreateChildren(m_pBest); // needs to be done, even on the last node, to allow for re-use...
+	CreateChildren(m_pBest);
 
-	if (m_pBest == NULL)	// There seems to be a case were this will come back NULL.
+	if (m_pBest == NULL)
 		return -1;
 
 	if(IsPathDest(m_pBest->m_iX, m_pBest->m_iY))
@@ -436,8 +436,8 @@ int CvAStar::Step()
 	return 0;
 }
 
-//	--------------------------------------------------------------------------------
-/// Returns best node
+
+
 CvAStarNode* CvAStar::GetBest()
 {
 #ifndef AUI_ASTAR_MINOR_OPTIMIZATION
@@ -485,9 +485,9 @@ CvAStarNode* CvAStar::GetBest()
 }
 
 #ifdef AUI_ASTAR_PRECALCULATE_NEIGHBORS_ON_INITIALIZE
-// --------------------
-/// precompute neighbors for a node
-void CvAStar::PrecalcNeighbors(CvAStarNode* node) const
+
+
+void CvAStar::PrecalcNeighbors(CvAStarNode* node)
 {
 	int x, y;
 
@@ -509,8 +509,8 @@ void CvAStar::PrecalcNeighbors(CvAStarNode* node) const
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// Creates children for the node
+
+
 void CvAStar::CreateChildren(CvAStarNode* node)
 {
 	CvAStarNode* check;
@@ -547,8 +547,8 @@ void CvAStar::CreateChildren(CvAStarNode* node)
 	}
 }
 #else
-//	--------------------------------------------------------------------------------
-/// Creates children for the node
+
+
 void CvAStar::CreateChildren(CvAStarNode* node)
 {
 	CvAStarNode* check;
@@ -601,8 +601,8 @@ void CvAStar::CreateChildren(CvAStarNode* node)
 }
 #endif
 
-//	--------------------------------------------------------------------------------
-/// Link in a child
+
+
 void CvAStar::LinkChild(CvAStarNode* node, CvAStarNode* check)
 {
 #if defined(AUI_ASTAR_MINOR_OPTIMIZATION)
@@ -677,8 +677,8 @@ void CvAStar::LinkChild(CvAStarNode* node, CvAStarNode* check)
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// Add node to open list
+
+
 void CvAStar::AddToOpen(CvAStarNode* addnode)
 {
 #ifndef AUI_ASTAR_MINOR_OPTIMIZATION
@@ -729,7 +729,7 @@ void CvAStar::AddToOpen(CvAStarNode* addnode)
 
 		udFunc(udNotifyList, addnode->m_pPrev, addnode, ASNL_ADDOPEN, m_pData);
 	}
-	else if(abs(addnode->m_iTotalCost-m_pOpenTail->m_iTotalCost) < abs(addnode->m_iTotalCost-m_pOpen->m_iTotalCost))  //(addnode->m_iTotalCost > m_iOpenListAverage) // let's start at the end and work forwards
+	else if(abs(addnode->m_iTotalCost-m_pOpenTail->m_iTotalCost) < abs(addnode->m_iTotalCost-m_pOpen->m_iTotalCost))
 	{
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
 		CvAStarNode* next = NULL;
@@ -764,7 +764,7 @@ void CvAStar::AddToOpen(CvAStarNode* addnode)
 
 					udFunc(udNotifyList, addnode->m_pPrev, addnode, ASNL_ADDOPEN, m_pData);
 				}
-				else // we should just add it to the end of the list
+				else
 				{
 					addnode->m_pPrev = m_pOpenTail;
 					m_pOpenTail->m_pNext = addnode;
@@ -777,14 +777,14 @@ void CvAStar::AddToOpen(CvAStarNode* addnode)
 			}
 		}
 
-		// we made it to the start of this list - insert it at the beginning - we shouldn't ever get here, but...
+
 		next->m_pPrev = addnode;
 		addnode->m_pNext = next;
 		m_pOpen = addnode;
 
 		udFunc(udNotifyList, m_pOpen->m_pNext, m_pOpen, ASNL_STARTOPEN, m_pData);
 	}
-	else // let's start at the beginning as it should be closer
+	else
 	{
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
 		CvAStarNode* node = m_pOpen;
@@ -836,7 +836,7 @@ void CvAStar::AddToOpen(CvAStarNode* addnode)
 			}
 		}
 
-		// we made it to the end of this list - insert it at the end - we shouldn't ever get here, but...
+
 		prev->m_pNext = addnode;
 		addnode->m_pPrev = prev;
 		m_pOpenTail = addnode;
@@ -845,8 +845,8 @@ void CvAStar::AddToOpen(CvAStarNode* addnode)
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// Connect in a node
+
+
 void CvAStar::UpdateOpenNode(CvAStarNode* node)
 {
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
@@ -860,7 +860,7 @@ void CvAStar::UpdateOpenNode(CvAStarNode* node)
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
 	if (temp && (node->m_iTotalCost < temp->m_iTotalCost))
 	{
-		// have node free float for now
+
 		temp->m_pNext = node->m_pNext;
 		if (node->m_pNext)
 		{
@@ -873,7 +873,7 @@ void CvAStar::UpdateOpenNode(CvAStarNode* node)
 #else
 	if((node->m_pPrev != NULL) && (node->m_iTotalCost < node->m_pPrev->m_iTotalCost))
 	{
-		// have node free float for now
+
 		node->m_pPrev->m_pNext = node->m_pNext;
 		if(node->m_pNext)
 		{
@@ -884,7 +884,7 @@ void CvAStar::UpdateOpenNode(CvAStarNode* node)
 			m_pOpenTail = node->m_pPrev;
 		}
 #endif
-		// scoot down the list till we find where node goes (without connecting up as we go)
+
 #ifndef AUI_ASTAR_MINOR_OPTIMIZATION
 		temp = node->m_pPrev;
 #endif
@@ -892,7 +892,7 @@ void CvAStar::UpdateOpenNode(CvAStarNode* node)
 		{
 			temp = temp->m_pPrev;
 		}
-		// connect node up
+
 		if(temp != NULL)
 		{
 			node->m_pNext = temp->m_pNext;
@@ -916,8 +916,8 @@ void CvAStar::UpdateOpenNode(CvAStarNode* node)
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// Refresh parent node (after linking in a child)
+
+
 void CvAStar::UpdateParents(CvAStarNode* node)
 {
 	CvAStarNode* kid;
@@ -963,7 +963,7 @@ void CvAStar::UpdateParents(CvAStarNode* node)
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
 				else
 				{
-					Push(kid); // Kid cannot be a parent if it's in the open list, since adding children goes through GetBest(), which adds the node to the closed list
+					Push(kid);
 				}
 #endif
 				udFunc(udNotifyChild, parent, kid, ASNC_PARENTADD_UP, m_pData);
@@ -978,8 +978,8 @@ void CvAStar::UpdateParents(CvAStarNode* node)
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// Push a node on the stack
+
+
 void CvAStar::Push(CvAStarNode* node)
 {
 	if(node->m_bOnStack)
@@ -1003,8 +1003,8 @@ void CvAStar::Push(CvAStarNode* node)
 	node->m_bOnStack = true;
 }
 
-//	--------------------------------------------------------------------------------
-/// Pop a node from the stack
+
+
 CvAStarNode* CvAStar::Pop()
 {
 #ifndef AUI_ASTAR_MINOR_OPTIMIZATION
@@ -1029,9 +1029,9 @@ CvAStarNode* CvAStar::Pop()
 	return node;
 }
 
-//C-STYLE NON-MEMBER FUNCTIONS
 
-// A structure holding some unit values that are invariant during a path plan operation
+
+
 struct UnitPathCacheData
 {
 	int m_aBaseMoves[NUM_DOMAIN_TYPES];
@@ -1067,7 +1067,7 @@ struct UnitPathCacheData
 #endif
 };
 
-//	--------------------------------------------------------------------------------
+
 void UnitPathInitialize(const void* pointer, CvAStar* finder)
 {
 	CvUnit* pUnit = ((CvUnit*)pointer);
@@ -1083,8 +1083,8 @@ void UnitPathInitialize(const void* pointer, CvAStar* finder)
 
 	pCacheData->m_ePlayerID = pUnit->getOwner();
 	pCacheData->m_eTeamID = pUnit->getTeam();
-	// DOMAIN_HOVER morphs with terrain via getDomainType(); pathfinding must treat hover as land
-	// so land?coast transitions use hover rules instead of naval embark/city rules.
+
+
 	if (pUnit->IsHoveringUnit() || pUnit->getUnitInfo().GetDomainType() == DOMAIN_HOVER)
 		pCacheData->m_eDomainType = DOMAIN_LAND;
 	else
@@ -1103,13 +1103,13 @@ void UnitPathInitialize(const void* pointer, CvAStar* finder)
 #endif
 }
 
-//	--------------------------------------------------------------------------------
+
 void UnitPathUninitialize(const void* pointer, CvAStar* finder)
 {
 
 }
 
-//	--------------------------------------------------------------------------------
+
 #ifdef AUI_CONSTIFY
 int PathDest(int iToX, int iToY, const void* pointer, const CvAStar* finder)
 #else
@@ -1135,8 +1135,8 @@ int PathDest(int iToX, int iToY, const void* pointer, CvAStar* finder)
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Standard path finder - is this end point for the path valid?
+
+
 #ifdef AUI_CONSTIFY
 int PathDestValid(int iToX, int iToY, const void* pointer, const CvAStar* finder)
 #else
@@ -1252,7 +1252,7 @@ int PathDestValid(int iToX, int iToY, const void* pointer, CvAStar* finder)
 	if(bAIControl || bToPlotRevealed)
 #endif
 	{
-		// assume that we can change our embarking state
+
 		byte bMoveFlags = CvUnit::MOVEFLAG_DESTINATION | CvUnit::MOVEFLAG_PRETEND_CORRECT_EMBARK_STATE;
 
 		if((pUnit->IsDeclareWar() || (finder->GetInfo() & MOVE_DECLARE_WAR)))
@@ -1274,15 +1274,15 @@ int PathDestValid(int iToX, int iToY, const void* pointer, CvAStar* finder)
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Standard path finder - determine heuristic cost
+
+
 int PathHeuristic(int iFromX, int iFromY, int iToX, int iToY)
 {
 	return (plotDistance(iFromX, iFromY, iToX, iToY) * PATH_MOVEMENT_WEIGHT);
 }
 
-//	--------------------------------------------------------------------------------
-/// Standard path finder - compute cost of a path
+
+
 int PathCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 	CvMap& kMap = GC.getMap();
@@ -1330,8 +1330,8 @@ int PathCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* point
 		bFromPlotIsWater = bFromPlotIsWater && pFromPlot->isWater();
 	}
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
-	// From-plot embark domain only — cache isEmbarked is the unit's start state and stays
-	// true after a virtual disembark onto walk-water, which broke military re-embark costs.
+
+
 	int iBaseMoves = pCacheData->baseMoves(bFromPlotIsWater ? DOMAIN_SEA : pCacheData->getDomainType());
 #else
 	int iBaseMoves = pCacheData->baseMoves(bFromPlotIsWater || pCacheData->isEmbarked() ? DOMAIN_SEA : pCacheData->getDomainType());
@@ -1352,9 +1352,9 @@ int PathCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* point
 #else
 		if (CvUnitMovement::ConsumesAllMoves(pUnit, pFromPlot, pToPlot) || CvUnitMovement::IsSlowedByZOC(pUnit, pFromPlot, pToPlot))
 		{
-			// The movement would consume all moves, get the moves we will forfeit based on the source plot, rather than
-			// the destination plot.  This fixes issues where a land unit that has more movement points on water than on land
-			// would have a very high cost to move onto water if their first move of the turn was at the edge of the water.
+
+
+
 			iMax = pCacheData->baseMoves((pFromPlot->isWater() && !pFromPlot->IsAllowsWalkWater())?DOMAIN_SEA:DOMAIN_LAND) * GC.getMOVE_DENOMINATOR();
 		}
 		else
@@ -1362,10 +1362,10 @@ int PathCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* point
 #endif
 	}
 
-	// Get the cost of moving to the new plot, passing in our max moves or the moves we have left, in case the movementCost 
-	// method wants to burn all our remaining moves.  This is needed because our remaining moves for this segment of the path
-	// may be larger or smaller than the baseMoves if some moves have already been used or if the starting domain (LAND/SEA)
-	// of the path segment is different from the destination plot.
+
+
+
+
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
 	int iCost = CvUnitMovement::MovementCost(pUnit, pFromPlot, pToPlot, iBaseMoves, iMaxMoves, iMax);
 #else
@@ -1384,10 +1384,10 @@ int PathCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* point
 #endif
 
 	int iMovesLeft = iMax - iCost;
-	// Is the cost greater than our max?
+
 	if (iMovesLeft < 0)
 	{
-		// Yes, we will still let the move happen, but that is the end of the turn.
+
 		iCost = iMax;
 		iMovesLeft = 0;
 	}
@@ -1425,7 +1425,7 @@ int PathCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* point
 #endif
 		}
 
-		// Damage caused by features (mods)
+
 		if(0 != GC.getPATH_DAMAGE_WEIGHT())
 		{
 			if(pToPlot->getFeatureType() != NO_FEATURE)
@@ -1443,20 +1443,20 @@ int PathCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* point
 			}
 		}
 
-		// Penalty for stacking
+
 		if(GC.getPLOT_UNIT_LIMIT() > 0 && !(finder->GetInfo() & MOVE_IGNORE_STACKING))
 		{
-			// Check to see if any units are present at this full-turn move plot... if the player can see what's there
+
 			if(pToPlot->getNumFriendlyUnitsOfType(pUnit) >= GC.getPLOT_UNIT_LIMIT())
 			{
 				iCost += PATH_STACKING_WEIGHT;
 			}
 		}
 
-		// Penalty for ending a turn on a mountain
+
 		if(pToPlot->isMountain())
 		{
-			// We want to discourage AIs and automated units from exhausting their movement on a mountain, but if the unit is manually controlled by the human, let them do what they want.
+
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
 			if (bIsAIControl)
 #else
@@ -1475,7 +1475,7 @@ int PathCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* point
 
 		if (pUnit->isHasPromotion((PromotionTypes)GC.getPROMOTION_UNWELCOME_EVANGELIST()))
 		{
-			// Avoid being in a territory that we are not welcome in, unless the human is manually controlling the unit.
+
 #ifndef AUI_ASTAR_HUMAN_UNITS_GET_DIMINISHED_AVOID_WEIGHT
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
 			if (bIsAIControl)
@@ -1484,7 +1484,7 @@ int PathCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* point
 #endif
 #endif
 			{
-				// Also, ignore the penalty if the destination of the path is in the same team's territory, no sense in avoiding a place we want to get to.				
+
 				PlayerTypes ePlotOwner = pToPlot->getOwner();
 				CvPlot* pDestPlot = (finder->GetDestX() >= 0 && finder->GetDestY() >= 0)?kMap.plotCheckInvalid(finder->GetDestX(), finder->GetDestY()):NULL;
 				if (!pDestPlot || pDestPlot->getOwner() != ePlotOwner)
@@ -1523,7 +1523,7 @@ int PathCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* point
 #if PATH_CITY_AVOID_WEIGHT != 0
 		if(pToPlot->getPlotCity() && !(pToPlot->getX() == finder->GetDestX() && pToPlot->getY() == finder->GetDestY()))
 		{
-			iCost += PATH_CITY_AVOID_WEIGHT; // slewis - this should be zeroed out currently
+			iCost += PATH_CITY_AVOID_WEIGHT;
 		}
 #endif
 	}
@@ -1547,10 +1547,10 @@ int PathCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* point
 		iCost += (7 - iUnseenPlots) * PATH_EXPLORE_NON_REVEAL_WEIGHT;
 	}
 
-	// If we are a land unit and we are moving through the water, make the cost a little higher so that
-	// we favor staying on land or getting back to land as quickly as possible because it is dangerous to
-	// be on the water.  Don't add this penalty if the unit is human controlled however, we will assume they want
-	// the best path, rather than the safest.
+
+
+
+
 #ifdef AUI_ASTAR_HUMAN_UNITS_GET_DIMINISHED_AVOID_WEIGHT
 	if (eUnitDomain == DOMAIN_LAND && bToPlotIsWater)
 	{
@@ -1623,10 +1623,10 @@ int PathCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* point
 							int iAttackerStrength = pUnit->GetMaxAttackStrength(pFromPlot, pToPlot, NULL);
 							int iDefenderStrength = pCity->getStrengthValue();
 
-							iDealtDamage = pUnit->getCombatDamage(iAttackerStrength, iDefenderStrength, pUnit->getDamage(), /*bIncludeRand*/ false, /*bAttackerIsCity*/ false, /*bDefenderIsCity*/ true);
-							iSelfDamage = pUnit->getCombatDamage(iDefenderStrength, iAttackerStrength, pCity->getDamage(), /*bIncludeRand*/ false, /*bAttackerIsCity*/ true, /*bDefenderIsCity*/ false);
+							iDealtDamage = pUnit->getCombatDamage(iAttackerStrength, iDefenderStrength, pUnit->getDamage(),                  false,                     false,                     true);
+							iSelfDamage = pUnit->getCombatDamage(iDefenderStrength, iAttackerStrength, pCity->getDamage(),                  false,                     true,                     false);
 
-							// Will both the attacker die, and the city fall? If so, the unit wins
+
 							if (iDealtDamage + pCity->getDamage() >= pCity->GetMaxHitPoints())
 							{
 								if (pUnit->isNoCapture())
@@ -1640,9 +1640,9 @@ int PathCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* point
 							CvUnit* pDefender = pToPlot->getVisibleEnemyDefender(pUnit);
 							if (pDefender && pDefender->IsCanDefend())
 							{
-								// handle the Zulu special thrown spear first attack
+
 								if (pUnit->isRangedSupportFire() && pUnit->canEverRangeStrikeAt(pToPlot->getX(), pToPlot->getY()))
-									iDealtDamage = pUnit->GetRangeCombatDamage(pDefender, /*pCity*/ NULL, /*bIncludeRand*/ false);
+									iDealtDamage = pUnit->GetRangeCombatDamage(pDefender,           NULL,                  false);
 
 								if (iDealtDamage < pDefender->GetCurrHitPoints())
 								{
@@ -1651,8 +1651,8 @@ int PathCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* point
 
 #ifdef NQ_HEAVY_CHARGE_DOWNHILL
 									bool isAttackingFromHigherElevation = 
-										((pUnit->plot()->isMountain() && !pDefender->plot()->isMountain()) || // attacking from mountain to non-mountain
-										(pUnit->plot()->isHills() && pDefender->plot()->isFlatlands())); // attacking from hills to flatlands
+										((pUnit->plot()->isMountain() && !pDefender->plot()->isMountain()) ||
+										(pUnit->plot()->isHills() && pDefender->plot()->isFlatlands()));
 									if ((pUnit->IsCanHeavyCharge() || (pUnit->GetHeavyChargeDownhill() > 0 && isAttackingFromHigherElevation))
 										&& !pDefender->CanFallBackFromMelee(*pUnit))
 #else
@@ -1660,13 +1660,13 @@ int PathCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* point
 #endif
 										iAttackerStrength = (iAttackerStrength * 150) / 100;
 
-									iSelfDamage = pDefender->getCombatDamage(iDefenderStrength, iAttackerStrength, pDefender->getDamage() + iDealtDamage, /*bIncludeRand*/ false, /*bAttackerIsCity*/ false, /*bDefenderIsCity*/ false);
-									iDealtDamage = pUnit->getCombatDamage(iAttackerStrength, iDefenderStrength, pUnit->getDamage(), /*bIncludeRand*/ false, /*bAttackerIsCity*/ false, /*bDefenderIsCity*/ false);
+									iSelfDamage = pDefender->getCombatDamage(iDefenderStrength, iAttackerStrength, pDefender->getDamage() + iDealtDamage,                  false,                     false,                     false);
+									iDealtDamage = pUnit->getCombatDamage(iAttackerStrength, iDefenderStrength, pUnit->getDamage(),                  false,                     false,                     false);
 
-									// Will both units be killed by this? :o If so, take drastic corrective measures
+
 									if (iDealtDamage >= pDefender->GetCurrHitPoints() && iSelfDamage >= pUnit->GetCurrHitPoints())
 									{
-										// He who hath the least amount of damage survives with 1 HP left
+
 										if (iDealtDamage + pDefender->getDamage() > iSelfDamage + pUnit->getDamage())
 											iSelfDamage = pUnit->GetCurrHitPoints() - 1;
 										else
@@ -1697,7 +1697,7 @@ int PathCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* point
 						iCost += (PATH_DEFENSE_WEIGHT * std::max(0, (200 - ((pUnit->noDefensiveBonus()) ? 0 : pFromPlot->defenseModifier(eUnitTeam, false)))));
 #endif
 
-						// I guess we may as well be the garrison
+
 #if PATH_CITY_WEIGHT != 0
 						if(!(pFromPlot->isCity()))
 						{
@@ -1729,8 +1729,8 @@ int PathCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* point
 	return iCost;
 }
 
-//	---------------------------------------------------------------------------
-/// Standard path finder - check validity of a coordinate
+
+
 int PathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 #ifndef AUI_ASTAR_FIX_CAN_ENTER_TERRAIN_NO_DUPLICATE_CALLS
@@ -1778,11 +1778,11 @@ int PathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 #endif
 
 #ifdef AUI_ASTAR_FIX_PARENT_NODE_ALWAYS_VALID_OPTIMIZATION
-	// If this is the first node in the path, it is always valid (starting location)
+
 	if (parent == NULL)
 	{
 #ifdef AUI_ASTAR_FIX_CAN_ENTER_TERRAIN_NO_DUPLICATE_CALLS
-		// Cache values for this node that we will use in the loop
+
 		if (!kToNodeCacheData.bIsCalculated)
 		{
 			kToNodeCacheData.bIsCalculated = true;
@@ -1816,7 +1816,7 @@ int PathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 	}
 #endif
 
-	// Cache values for this node that we will use in the loop
+
 #ifdef AUI_ASTAR_FIX_CAN_ENTER_TERRAIN_NO_DUPLICATE_CALLS
 	if (!kToNodeCacheData.bIsCalculated)
 	{
@@ -1886,7 +1886,7 @@ int PathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 #endif
 
 #ifndef AUI_ASTAR_FIX_PARENT_NODE_ALWAYS_VALID_OPTIMIZATION
-	// If this is the first node in the path, it is always valid (starting location)
+
 	if (parent == NULL)
 	{
 		return TRUE;
@@ -1902,7 +1902,7 @@ int PathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 #endif
 	PREFETCH_FASTAR_CVPLOT(reinterpret_cast<char*>(pFromPlot));
 
-	// pulling invariants out of the loop
+
 	bool bAIControl = pCacheData->IsAutomated();
 	int iUnitX = pUnit->getX();
 	int iUnitY = pUnit->getY();
@@ -1927,7 +1927,7 @@ int PathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 	}
 #endif
 
-	// We have determined that this node is not the origin above (parent == NULL)
+
 	CvAStarNode* pNode = node;
 	bool bPreviousNodeHostile = false;
 #ifndef AUI_ASTAR_FIX_CAN_ENTER_TERRAIN_NO_DUPLICATE_CALLS
@@ -1942,10 +1942,10 @@ int PathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 	int iNumTurns;
 #endif
 
-	// First run special case for checking "node" since it doesn't have a parent set yet
+
 	bool bFirstRun = true;
 
-	// Have to calculate this specially because the node passed into this function doesn't yet have data stored it in (hasn't reached pathAdd yet)
+
 	int iStartMoves = parent->m_iData1;
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
 	int iNumTurns = parent->m_iData2;
@@ -1967,23 +1967,23 @@ int PathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 	CvPlot* pPlot = NULL;
 #endif
 
-	// Get a reference to the parent node cache data
+
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
 	CvAStarNode& kFromNodeCacheData = *parent;
 #else
 	CvPathNodeCacheData& kFromNodeCacheData = parent->m_kCostCacheData;
 #endif
 
-	// Loop through the current path until we find the path origin.
-	// This validates the path with the inclusion of the new path node.  We must do this because of the rules of where a unit can finish a turn.
-	// Please note that this can be an expensive loop as the path gets longer and longer, do as little work as possible in validating each node.  
-	// If there is an invariant value that needs to be fetched from the plot or unit for the node, please do the calculation and put it in the node's data cache.
+
+
+
+
 	while(pNode != NULL)
 	{
 #ifdef AUI_ASTAR_TURN_LIMITER
 		if (iNumTurns > iMaxTurns)
 		{
-			return FALSE;  // Path is too long, terminate now
+			return FALSE;
 		}
 #endif
 		PREFETCH_FASTAR_NODE(pNode->m_pParent);
@@ -1993,7 +1993,7 @@ int PathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 #else
 		CvPathNodeCacheData& kNodeCacheData = pNode->m_kCostCacheData;
 #endif
-		// This is a safeguard against the algorithm believing a plot to be impassable before actually knowing it (mid-search)
+
 		if(iOldNumTurns != -1 || (iDestX == iNodeX && iDestY == iNodeY))
 		{
 #ifdef AUI_ASTAR_FIX_CAN_ENTER_TERRAIN_NO_DUPLICATE_CALLS
@@ -2002,14 +2002,14 @@ int PathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 				return FALSE;
 			}
 #endif
-			// This plot is of greater distance than previously, so we know the unit is ending its turn here (pNode), or it's trying to attack through a unit (and might end up on this tile if an attack fails to kill the enemy)
+
 #ifdef AUI_ASTAR_FIX_CAN_ENTER_TERRAIN_NO_DUPLICATE_CALLS
 			if (iNumTurns != iOldNumTurns || bPreviousNodeHostile)
 #else
 			if(iNumTurns != iOldNumTurns || bPreviousNodeHostile || !bPreviousVisibleToTeam)
 #endif
 			{
-				// Don't count origin, or else a unit will block its own movement!
+
 				if(iNodeX != iUnitX || iNodeY != iUnitY)
 				{
 #ifdef AUI_ASTAR_FIX_CAN_ENTER_TERRAIN_NO_DUPLICATE_CALLS
@@ -2018,7 +2018,7 @@ int PathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 					if(kNodeCacheData.bPlotVisibleToTeam)
 #endif
 					{
-						// Check to see if any units are present at this full-turn move plot... if the player can see what's there
+
 						if(kNodeCacheData.iNumFriendlyUnitsOfType >= iUnitPlotLimit && !(iFinderIgnoreStacking))
 						{
 							return FALSE;
@@ -2060,10 +2060,10 @@ int PathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 		{
 			bPreviousNodeHostile = true;
 		}
-		// Prevents units from passing through one another on its way to attack another unit
+
 		else if(kNodeCacheData.bContainsVisibleEnemy)
 		{
-			// except when attacking an unguarded civilian unit
+
 			if(kNodeCacheData.bContainsVisibleEnemyDefender)
 			{
 				bPreviousNodeHostile = true;
@@ -2073,7 +2073,7 @@ int PathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 #ifndef AUI_ASTAR_FIX_CAN_ENTER_TERRAIN_NO_DUPLICATE_CALLS
 		bPreviousVisibleToTeam = kNodeCacheData.bPlotVisibleToTeam;
 #endif
-		// JON - Special case for the original node passed into this function because it's not yet linked to any parent
+
 		if(pNode == node && bFirstRun)
 		{
 			pNode = parent;
@@ -2093,7 +2093,7 @@ int PathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 		}
 	}
 
-	// slewis - moved this up so units can't move directly into the water. Not 100% sure this is the right solution.
+
 	if(unit_domain_type == DOMAIN_LAND)
 	{
 		if(!kFromNodeCacheData.bIsWater && kToNodeCacheData.bIsWater && kToNodeCacheData.bIsRevealedToTeam && !pUnit->canEmbarkOnto(*pFromPlot, *pToPlot, true))
@@ -2119,15 +2119,15 @@ int PathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 			const CvUnit* pToPlotUnit = pToPlot->getUnitByIndex(iUnit);
 			if(pToPlotUnit != NULL && pToPlotUnit->getOwner() != eUnitPlayer)
 			{
-				return FALSE; // Plot occupied by another player
+				return FALSE;
 			}
 		}
 	}
 #endif
 
-	// slewis - Added to catch when the unit is adjacent to an enemy unit while it is stacked with a friendly unit.
-	//          The logic above (with bPreviousNodeHostile) catches this problem with a path that's longer than one step
-	//          but does not catch when the path is only one step.
+
+
+
 #ifdef AUI_ASTAR_FIX_RADAR
 	if (unit_domain_type != DOMAIN_AIR && pUnitPlot->isAdjacent(pToPlot) && kToNodeCacheData.bContainsVisibleEnemy && !(iFinderIgnoreStacking))
 #else
@@ -2144,8 +2144,8 @@ int PathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 	}
 
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
-	// Cannot melee-attack from a walk-water tile that would be land+naval stacked after arriving.
-	// Combat units only ? civilians never attack and must not be blocked by this check.
+
+
 	if (pUnit->IsCombatUnit() &&
 		(kToNodeCacheData.bContainsVisibleEnemyDefender || kToNodeCacheData.bContainsEnemyCity) &&
 		pFromPlot != NULL && pFromPlot->WouldBlockAttacksWithUnit(pUnit))
@@ -2220,7 +2220,7 @@ int PathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 		}
 	}
 #endif
-	// slewis - added AI check and embark check to prevent units from moving into unexplored areas
+
 #ifdef ASTAR_AI_CONTROL_FIX_RADAR
 	if(kFromNodeCacheData.bIsRevealedToTeam || pCacheData->isEmbarked() || !bIsHuman)
 #else
@@ -2256,8 +2256,8 @@ int PathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 
 
 
-//	--------------------------------------------------------------------------------
-/// Standard path finder - add a new path
+
+
 int PathAdd(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 	int iMoves = MAX_INT;
@@ -2307,13 +2307,13 @@ int PathAdd(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointe
 		}
 
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
-		// We can just set maxMoves to the maximum integer value and use it for increased portability and no redundant checks, iMoves gets set to 0 anyway if it's negative
+
 		iMoves = iStartMoves - CvUnitMovement::MovementCost(pUnit, pFromPlot, pToPlot, iBaseMoves, MAX_INT, iStartMoves);
 		if (iMoves < 0)
 			iMoves = 0;
 #else
-		// We can't use maxMoves, because that checks where the unit is currently, and we're plotting a path so we have to see
-		// what the max moves would be like if the unit was already at the desired location.
+
+
 		if (CvUnitMovement::ConsumesAllMoves(pUnit, pFromPlot, pToPlot) || CvUnitMovement::IsSlowedByZOC(pUnit, pFromPlot, pToPlot))
 		{
 			iMoves = 0;
@@ -2337,8 +2337,8 @@ int PathAdd(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointe
 	return 1;
 }
 
-//	--------------------------------------------------------------------------------
-/// Two layer path finder - if add a new open node with movement left, add a second one assuming stop for turn here
+
+
 int PathNodeAdd(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 #ifndef AUI_ASTAR_MINOR_OPTIMIZATION
@@ -2347,14 +2347,14 @@ int PathNodeAdd(CvAStarNode* parent, CvAStarNode* node, int data, const void* po
 
 	if(data == ASNL_ADDOPEN || data == ASNL_STARTOPEN)
 	{
-		// Are there movement points left and we're worried about stacking or mountains?
+
 #if defined(AUI_ASTAR_CACHE_PLOTS_AT_NODES)
 		if (node->m_iData1 > 0 && !finder->IsPathDest(node->m_iX, node->m_iY) && (!(finder->GetInfo() & MOVE_IGNORE_STACKING) || node->m_pPlot->isMountain()))
 #else
 		if(node->m_iData1 > 0 && !finder->IsPathDest(node->m_iX, node->m_iY) && (!(finder->GetInfo() & MOVE_IGNORE_STACKING) || GC.getMap().plotUnchecked(node->m_iX, node->m_iY)->isMountain()))
 #endif
 		{
-			// Retrieve another node
+
 #if defined(AUI_ASTAR_MINOR_OPTIMIZATION)
 			CvTwoLayerPathFinder* twoLayerFinder = static_cast<CvTwoLayerPathFinder*>(finder);
 			CvAStarNode* pNode = twoLayerFinder->GetPartialMoveNode(node->m_iX, node->m_iY);
@@ -2362,7 +2362,7 @@ int PathNodeAdd(CvAStarNode* parent, CvAStarNode* node, int data, const void* po
 			CvTwoLayerPathFinder* twoLayerFinder = static_cast<CvTwoLayerPathFinder*>(finder);
 			pNode = twoLayerFinder->GetPartialMoveNode(node->m_iX, node->m_iY);
 #endif
-			pNode->m_iData1 = 0;   // Zero out movement
+			pNode->m_iData1 = 0;
 			pNode->m_iData2 = node->m_iData2;
 			pNode->m_iHeuristicCost = node->m_iHeuristicCost;
 			pNode->m_iKnownCost = node->m_iKnownCost + (PATH_MOVEMENT_WEIGHT * node->m_iData1);
@@ -2394,8 +2394,8 @@ int PathNodeAdd(CvAStarNode* parent, CvAStarNode* node, int data, const void* po
 	return 1;
 }
 
-//	--------------------------------------------------------------------------------
-/// Ignore units path finder - is this end point for the path valid?
+
+
 #ifdef AUI_CONSTIFY
 int IgnoreUnitsDestValid(int iToX, int iToY, const void* pointer, const CvAStar* finder)
 #else
@@ -2495,8 +2495,8 @@ int IgnoreUnitsDestValid(int iToX, int iToY, const void* pointer, CvAStar* finde
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Ignore units path finder - compute cost of a path
+
+
 int IgnoreUnitsCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 #ifndef AUI_ASTAR_MINOR_OPTIMIZATION
@@ -2567,10 +2567,10 @@ int IgnoreUnitsCost(CvAStarNode* parent, CvAStarNode* node, int data, const void
 #endif
 	}
 
-	// Get the cost of moving to the new plot, passing in our max moves or the moves we have left, in case the movementCost 
-	// method wants to burn all our remaining moves.  This is needed because our remaining moves for this segment of the path
-	// may be larger or smaller than the baseMoves if some moves have already been used or if the starting domain (LAND/SEA)
-	// of the path segment is different from the destination plot.
+
+
+
+
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
 	int iCost = CvUnitMovement::MovementCostNoZOC(pUnit, pFromPlot, pToPlot, iBaseMoves, iMaxMoves, iMax);
 #else
@@ -2584,10 +2584,10 @@ int IgnoreUnitsCost(CvAStarNode* parent, CvAStarNode* node, int data, const void
 	TeamTypes eUnitTeam = pUnit->getTeam();
 
 	int iMovesLeft = iMax - iCost;
-	// Is the cost greater than our max?
+
 	if (iMovesLeft < 0)
 	{
-		// Yes, we will still let the move happen, but that is the end of the turn.
+
 		iCost = iMax;
 		iMovesLeft = 0;
 	}
@@ -2634,7 +2634,7 @@ int IgnoreUnitsCost(CvAStarNode* parent, CvAStarNode* node, int data, const void
 #endif
 		}
 
-		// Damage caused by features (mods)
+
 		if(0 != GC.getPATH_DAMAGE_WEIGHT())
 		{
 			if(pToPlot->getFeatureType() != NO_FEATURE)
@@ -2654,7 +2654,7 @@ int IgnoreUnitsCost(CvAStarNode* parent, CvAStarNode* node, int data, const void
 
 		if(pToPlot->getPlotCity() && !(pToPlot->getX() == finder->GetDestX() && pToPlot->getY() == finder->GetDestY()))
 		{
-			iCost += PATH_CITY_AVOID_WEIGHT; // slewis - this should be zeroed out currently
+			iCost += PATH_CITY_AVOID_WEIGHT;
 		}
 	}
 	else
@@ -2681,10 +2681,10 @@ int IgnoreUnitsCost(CvAStarNode* parent, CvAStarNode* node, int data, const void
 		iCost += (7 - iUnseenPlots) * PATH_EXPLORE_NON_REVEAL_WEIGHT;
 	}
 
-	// If we are a land unit and we are moving through the water, make the cost a little higher so that
-	// we favor staying on land or getting back to land as quickly as possible because it is dangerous to
-	// be on the water.  Don't add this penalty if the unit is human controlled however, we will assume they want
-	// the best path, rather than the safest.
+
+
+
+
 #ifdef AUI_ASTAR_HUMAN_UNITS_GET_DIMINISHED_AVOID_WEIGHT
 	if (pCacheData->getDomainType() == DOMAIN_LAND && (pToPlot->isWater() && !pToPlot->IsAllowsWalkWater()))
 	{
@@ -2757,10 +2757,10 @@ int IgnoreUnitsCost(CvAStarNode* parent, CvAStarNode* node, int data, const void
 							int iAttackerStrength = pUnit->GetMaxAttackStrength(pFromPlot, pToPlot, NULL);
 							int iDefenderStrength = pCity->getStrengthValue();
 
-							iDealtDamage = pUnit->getCombatDamage(iAttackerStrength, iDefenderStrength, pUnit->getDamage(), /*bIncludeRand*/ false, /*bAttackerIsCity*/ false, /*bDefenderIsCity*/ true);
-							iSelfDamage = pUnit->getCombatDamage(iDefenderStrength, iAttackerStrength, pCity->getDamage(), /*bIncludeRand*/ false, /*bAttackerIsCity*/ true, /*bDefenderIsCity*/ false);
+							iDealtDamage = pUnit->getCombatDamage(iAttackerStrength, iDefenderStrength, pUnit->getDamage(),                  false,                     false,                     true);
+							iSelfDamage = pUnit->getCombatDamage(iDefenderStrength, iAttackerStrength, pCity->getDamage(),                  false,                     true,                     false);
 
-							// Will both the attacker die, and the city fall? If so, the unit wins
+
 							if (iDealtDamage + pCity->getDamage() >= pCity->GetMaxHitPoints())
 							{
 								if (pUnit->isNoCapture())
@@ -2774,9 +2774,9 @@ int IgnoreUnitsCost(CvAStarNode* parent, CvAStarNode* node, int data, const void
 							CvUnit* pDefender = pToPlot->getVisibleEnemyDefender(pUnit);
 							if (pDefender && pDefender->IsCanDefend())
 							{
-								// handle the Zulu special thrown spear first attack
+
 								if (pUnit->isRangedSupportFire() && pUnit->canEverRangeStrikeAt(pToPlot->getX(), pToPlot->getY()))
-									iDealtDamage = pUnit->GetRangeCombatDamage(pDefender, /*pCity*/ NULL, /*bIncludeRand*/ false);
+									iDealtDamage = pUnit->GetRangeCombatDamage(pDefender,           NULL,                  false);
 
 								if (iDealtDamage < pDefender->GetCurrHitPoints())
 								{
@@ -2785,21 +2785,21 @@ int IgnoreUnitsCost(CvAStarNode* parent, CvAStarNode* node, int data, const void
 
 #ifdef NQ_HEAVY_CHARGE_DOWNHILL
 									bool isAttackingFromHigherElevation = 
-										((pUnit->plot()->isMountain() && !pDefender->plot()->isMountain()) || // attacking from mountain to non-mountain
-										(pUnit->plot()->isHills() && pDefender->plot()->isFlatlands())); // attacking from hills to flatlands
+										((pUnit->plot()->isMountain() && !pDefender->plot()->isMountain()) ||
+										(pUnit->plot()->isHills() && pDefender->plot()->isFlatlands()));
 									if ((pUnit->IsCanHeavyCharge() || (pUnit->GetHeavyChargeDownhill() > 0 && isAttackingFromHigherElevation))
 										&& !pDefender->CanFallBackFromMelee(*pUnit))
 #else
 									if (pUnit->IsCanHeavyCharge() && !pDefender->CanFallBackFromMelee(*pUnit))
 #endif
 										iAttackerStrength = (iAttackerStrength * 150) / 100;
-									iSelfDamage = pDefender->getCombatDamage(iDefenderStrength, iAttackerStrength, pDefender->getDamage() + iDealtDamage, /*bIncludeRand*/ false, /*bAttackerIsCity*/ false, /*bDefenderIsCity*/ false);
-									iDealtDamage = pUnit->getCombatDamage(iAttackerStrength, iDefenderStrength, pUnit->getDamage(), /*bIncludeRand*/ false, /*bAttackerIsCity*/ false, /*bDefenderIsCity*/ false);
+									iSelfDamage = pDefender->getCombatDamage(iDefenderStrength, iAttackerStrength, pDefender->getDamage() + iDealtDamage,                  false,                     false,                     false);
+									iDealtDamage = pUnit->getCombatDamage(iAttackerStrength, iDefenderStrength, pUnit->getDamage(),                  false,                     false,                     false);
 
-									// Will both units be killed by this? :o If so, take drastic corrective measures
+
 									if (iDealtDamage >= pDefender->GetCurrHitPoints() && iSelfDamage >= pUnit->GetCurrHitPoints())
 									{
-										// He who hath the least amount of damage survives with 1 HP left
+
 										if (iDealtDamage + pDefender->getDamage() > iSelfDamage + pUnit->getDamage())
 											iSelfDamage = pUnit->GetCurrHitPoints() - 1;
 										else
@@ -2830,7 +2830,7 @@ int IgnoreUnitsCost(CvAStarNode* parent, CvAStarNode* node, int data, const void
 						iCost += (PATH_DEFENSE_WEIGHT * std::max(0, (200 - ((pUnit->noDefensiveBonus()) ? 0 : pFromPlot->defenseModifier(eUnitTeam, false)))));
 #endif
 
-						// I guess we may as well be the garrison
+
 #if PATH_CITY_WEIGHT != 0
 						if(!(pFromPlot->isCity()))
 						{
@@ -2863,8 +2863,8 @@ int IgnoreUnitsCost(CvAStarNode* parent, CvAStarNode* node, int data, const void
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Ignore units path finder - check validity of a coordinate
+
+
 int IgnoreUnitsValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
@@ -2897,7 +2897,7 @@ int IgnoreUnitsValid(CvAStarNode* parent, CvAStarNode* node, int data, const voi
 	if(parent == NULL)
 	{
 #ifdef AUI_ASTAR_FIX_CAN_ENTER_TERRAIN_NO_DUPLICATE_CALLS
-		// Cache values for this node that we will use when the node is checked again in the future
+
 		if (!kToNodeCacheData.bIsCalculated)
 		{
 			kToNodeCacheData.bIsCalculated = true;
@@ -2919,7 +2919,7 @@ int IgnoreUnitsValid(CvAStarNode* parent, CvAStarNode* node, int data, const voi
 	}
 
 #ifdef AUI_ASTAR_FIX_CAN_ENTER_TERRAIN_NO_DUPLICATE_CALLS
-	// Cache values for this node that we will use when the node is checked again in the future
+
 	if (!kToNodeCacheData.bIsCalculated)
 	{
 		kToNodeCacheData.bIsCalculated = true;
@@ -2932,7 +2932,7 @@ int IgnoreUnitsValid(CvAStarNode* parent, CvAStarNode* node, int data, const voi
 #else
 		kToNodeCacheData.bIsWater = (pToPlot->isWater() && !pToPlot->IsAllowsWalkWater());
 #endif
-		// Recycling bIsMountain for Borders check (only for IgnoreUnits Pathfinder!)
+
 #ifdef AUI_ASTAR_FIX_IGNORE_UNITS_PATHFINDER_TERRITORY_CHECK
 		kToNodeCacheData.bIsMountain = pUnit->canEnterTerritory(pToPlot->getTeam(), false, false, pUnit->IsDeclareWar() || (finder->GetInfo() & MOVE_DECLARE_WAR));
 #else
@@ -2987,7 +2987,7 @@ int IgnoreUnitsValid(CvAStarNode* parent, CvAStarNode* node, int data, const voi
 #endif
 #endif
 
-	// slewis - moved this up so units can't move directly into the water. Not 100% sure this is the right solution.
+
 	if(pCacheData->getDomainType() == DOMAIN_LAND)
 	{
 #ifdef AUI_ASTAR_FIX_CAN_ENTER_TERRAIN_NO_DUPLICATE_CALLS
@@ -3048,7 +3048,7 @@ int IgnoreUnitsValid(CvAStarNode* parent, CvAStarNode* node, int data, const voi
 	bAIControl = pUnit->IsAutomated();
 #endif
 
-	// slewis - added AI check and embark check to prevent units from moving into unexplored areas
+
 #ifdef AUI_ASTAR_FIX_CAN_ENTER_TERRAIN_NO_DUPLICATE_CALLS
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
 	if (bIsAIControl || kFromNodeCacheData.bIsRevealedToTeam || pCacheData->isEmbarked())
@@ -3056,7 +3056,7 @@ int IgnoreUnitsValid(CvAStarNode* parent, CvAStarNode* node, int data, const voi
 	if (bAIControl || !bIsHuman || kFromNodeCacheData.bIsRevealedToTeam || pCacheData->isEmbarked())
 #endif
 	{
-		if (!kToNodeCacheData.bCanEnterTerrain || !kToNodeCacheData.bIsMountain) // Recycling bIsMountain for Borders check (only for IgnoreUnits Pathfinder!)
+		if (!kToNodeCacheData.bCanEnterTerrain || !kToNodeCacheData.bIsMountain)
 #else
 #ifdef ASTAR_AI_CONTROL_FIX_RADAR
 	if((pFromPlot->isRevealed(eUnitTeam) || pCacheData->isEmbarked()) || !pCacheData->isHuman())
@@ -3078,8 +3078,8 @@ int IgnoreUnitsValid(CvAStarNode* parent, CvAStarNode* node, int data, const voi
 	return TRUE;
 }
 
-//	--------------------------------------------------------------------------------
-/// Ignore units path finder - add a new path
+
+
 int IgnoreUnitsPathAdd(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 	int iTurns;
@@ -3128,13 +3128,13 @@ int IgnoreUnitsPathAdd(CvAStarNode* parent, CvAStarNode* node, int data, const v
 		}
 
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
-		// We can just set maxMoves to the maximum integer value and use it for increased portability and no redundant checks, iMoves gets set to 0 anyway if it's negative
+
 		iMoves = iStartMoves - CvUnitMovement::MovementCostNoZOC(pUnit, pFromPlot, pToPlot, iBaseMoves, MAX_INT, iStartMoves);
 		if (iMoves < 0)
 			iMoves = 0;
 #else
-		// We can't use maxMoves, because that checks where the unit is currently, and we're plotting a path so we have to see
-		// what the max moves would be like if the unit was already at the desired location.
+
+
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
 		iMoves = std::min(iMoves, std::max(0, iStartMoves - CvUnitMovement::MovementCostNoZOC(pUnit, pFromPlot, pToPlot, pCacheData->baseMoves((pToPlot->isWater() && !pToPlot->IsAllowsWalkWater())?DOMAIN_SEA:pCacheData->getDomainType()), pCacheData->maxMoves())));
 #else
@@ -3152,8 +3152,8 @@ int IgnoreUnitsPathAdd(CvAStarNode* parent, CvAStarNode* node, int data, const v
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Step path finder - is this end point for the path valid?
+
+
 #ifdef AUI_CONSTIFY
 int StepDestValid(int iToX, int iToY, const void* pointer, const CvAStar* finder)
 #else
@@ -3183,24 +3183,24 @@ int StepDestValid(int iToX, int iToY, const void* pointer, CvAStar* finder)
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Step path finder - determine heuristic cost
+
+
 int StepHeuristic(int iFromX, int iFromY, int iToX, int iToY)
 {
 	return plotDistance(iFromX, iFromY, iToX, iToY);
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Step path finder - compute cost of a path
+
+
 int StepCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 	return 1;
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Step path finder - check validity of a coordinate
+
+
 int StepValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 	if(parent == NULL)
@@ -3239,7 +3239,7 @@ int StepValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 		return FALSE;
 	}
 
-	// Ocean hex and team can't navigate on oceans?
+
 	if (!GET_TEAM(thisPlayer.getTeam()).getEmbarkedAllWaterPassage())
 	{
 		if (pNewPlot->getTerrainType() == TERRAIN_OCEAN)
@@ -3270,8 +3270,8 @@ int StepValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Step path finder - check validity of a coordinate (special case that allows any area)
+
+
 int StepValidAnyArea(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 	if(parent == NULL)
@@ -3295,17 +3295,17 @@ int StepValidAnyArea(CvAStarNode* parent, CvAStarNode* node, int data, const voi
 	CvPlot* pNewPlot = kMap.plotUnchecked(node->m_iX, node->m_iY);
 #endif
 
-	//if(kMap.plotUnchecked(parent->m_iX, parent->m_iY)->getArea() != pNewPlot->getArea())
-	//{
-	//	return FALSE;
-	//}
+
+
+
+
 
 	if(pNewPlot->isImpassable())
 	{
 		return FALSE;
 	}
 
-	// Ocean hex and team can't navigate on oceans?
+
 	if (!GET_TEAM(thisPlayer.getTeam()).getEmbarkedAllWaterPassage())
 	{
 		if (pNewPlot->getTerrainType() == TERRAIN_OCEAN)
@@ -3336,8 +3336,8 @@ int StepValidAnyArea(CvAStarNode* parent, CvAStarNode* node, int data, const voi
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Step path finder - add a new path
+
+
 int StepAdd(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 	if(data == ASNC_INITIALADD)
@@ -3355,8 +3355,8 @@ int StepAdd(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointe
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Influence path finder - is this end point for the path valid?
+
+
 #ifdef AUI_CONSTIFY
 int InfluenceDestValid(int iToX, int iToY, const void* pointer, const CvAStar* finder)
 #else
@@ -3390,15 +3390,15 @@ int InfluenceDestValid(int iToX, int iToY, const void* pointer, CvAStar* finder)
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Influence path finder - determine heuristic cost
+
+
 int InfluenceHeuristic(int iFromX, int iFromY, int iToX, int iToY)
 {
 	return plotDistance(iFromX, iFromY, iToX, iToY);
 }
 
-//	--------------------------------------------------------------------------------
-/// Influence path finder - compute cost of a path
+
+
 int InfluenceCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 	int iCost = 0;
@@ -3430,13 +3430,13 @@ int InfluenceCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* 
 		if(pFromPlot->isRiverCrossing(directionXY(pFromPlot, pToPlot)))
 			iCost += GC.getINFLUENCE_RIVER_COST();
 
-		// Mountain Cost
+
 		if(pToPlot->isMountain())
 			iCost += GC.getINFLUENCE_MOUNTAIN_COST();
-		// Not a mountain - use the terrain cost
+
 		else
 		{
-			// Hill cost
+
 			if(pToPlot->isHills())
 				iCost += GC.getINFLUENCE_HILL_COST();
 			iCost += GC.getTerrainInfo(pToPlot->getTerrainType())->getInfluenceCost();
@@ -3462,8 +3462,8 @@ int InfluenceCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* 
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Influence path finder - check validity of a coordinate
+
+
 int InfluenceValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 #ifndef AUI_ASTAR_MINOR_OPTIMIZATION
@@ -3494,14 +3494,14 @@ int InfluenceValid(CvAStarNode* parent, CvAStarNode* node, int data, const void*
 	}
 #endif
 
-	// todo: a check to see if we are within the theoretical influence range would be great
+
 
 	return TRUE;
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Influence path finder - add a new path
+
+
 int InfluenceAdd(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 	if(data == ASNC_INITIALADD)
@@ -3510,7 +3510,7 @@ int InfluenceAdd(CvAStarNode* parent, CvAStarNode* node, int data, const void* p
 	}
 	else
 	{
-		node->m_iData1 = (parent->m_iData1 + 1/*influenceCost(parent,node,data,pointer,finder)*/);
+		node->m_iData1 = (parent->m_iData1 + 1                                                  );
 	}
 
 	FAssertMsg(node->m_iData1 >= 0, "node->m_iData1 is expected to be non-negative (invalid Index)");
@@ -3519,8 +3519,8 @@ int InfluenceAdd(CvAStarNode* parent, CvAStarNode* node, int data, const void* p
 }
 
 
-//	--------------------------------------------------------------------------------
-// Route - Return the x, y plot of the node that we want to access
+
+
 int RouteGetExtraChild(CvAStarNode* node, int iIndex, int& iX, int& iY, CvAStar* finder)
 {
 	iX = -1;
@@ -3542,7 +3542,7 @@ int RouteGetExtraChild(CvAStarNode* node, int iIndex, int& iX, int& iY, CvAStar*
 
 	CvCity* pCity = pPlot->getPlotCity();
 
-	// if there isn't a city there or the city isn't on our team
+
 	if(!pCity || pCity->getTeam() != eTeam)
 	{
 		return 0;
@@ -3565,7 +3565,7 @@ int RouteGetExtraChild(CvAStarNode* node, int iIndex, int& iX, int& iY, CvAStar*
 			continue;
 		}
 
-		// get the two cities
+
 		CvCity* pFirstCity  = pCityConnections->GetCityFromIndex(uiFirstCityIndex);
 		CvCity* pSecondCity = pCityConnections->GetCityFromIndex(uiSecondCityIndex);
 
@@ -3589,9 +3589,9 @@ int RouteGetExtraChild(CvAStarNode* node, int iIndex, int& iX, int& iY, CvAStar*
 	return 0;
 }
 
-//	---------------------------------------------------------------------------
-/// Route path finder - check validity of a coordinate
-/// This function does not require the global Tactical Analysis Map.
+
+
+
 int RouteValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 #ifndef AUI_ASTAR_MINOR_OPTIMIZATION
@@ -3643,7 +3643,7 @@ int RouteValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poi
 		return FALSE;
 	}
 
-	// Only a real (non-improvement) pillaged route blocks; leftover pillage flags must not hide ActsAsRoute
+
 	if(pNewPlot->getRouteType() != NO_ROUTE && pNewPlot->IsRoutePillaged())
 	{
 		return FALSE;
@@ -3693,7 +3693,7 @@ int RouteValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poi
 
 	if(finder->GetInfo() & MOVE_ANY_ROUTE)
 	{
-		// if the player can't build
+
 		if(kPlayer.getBestRoute() == NO_ROUTE)
 		{
 			return FALSE;
@@ -3719,9 +3719,9 @@ int RouteValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poi
 	return FALSE;
 }
 
-//	---------------------------------------------------------------------------
-// Route - find the number of additional children. In this case, the node is at a city, push all other cities that the city has a water connection to
-// This function does not require the global Tactical Analysis Map.
+
+
+
 int RouteGetNumExtraChildren(CvAStarNode* node,  CvAStar* finder)
 {
 	PlayerTypes ePlayer = ((PlayerTypes)(finder->GetInfo() & 0xFF));
@@ -3738,7 +3738,7 @@ int RouteGetNumExtraChildren(CvAStarNode* node,  CvAStar* finder)
 		return 0;
 	}
 
-	// slewis - don't allow the minor civ to use harbors
+
 	if(kPlayer.isMinorCiv())
 	{
 		return 0;
@@ -3754,7 +3754,7 @@ int RouteGetNumExtraChildren(CvAStarNode* node,  CvAStar* finder)
 
 	CvCity* pCity = pPlot->getPlotCity();
 
-	// if there isn't a city there or the city isn't on our team
+
 	if(!pCity || pCity->getTeam() != eTeam)
 	{
 		return 0;
@@ -3780,7 +3780,7 @@ int RouteGetNumExtraChildren(CvAStarNode* node,  CvAStar* finder)
 			continue;
 		}
 
-		// get the two cities
+
 		CvCity* pFirstCity  = pCityConnections->GetCityFromIndex(uiFirstCityIndex);
 		CvCity* pSecondCity = pCityConnections->GetCityFromIndex(uiSecondCityIndex);
 
@@ -3798,8 +3798,8 @@ int RouteGetNumExtraChildren(CvAStarNode* node,  CvAStar* finder)
 	return iResultNum;
 }
 
-//	--------------------------------------------------------------------------------
-/// Water route valid finder - check the validity of a coordinate
+
+
 int WaterRouteValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 #ifndef AUI_ASTAR_MINOR_OPTIMIZATION
@@ -3847,8 +3847,8 @@ int WaterRouteValid(CvAStarNode* parent, CvAStarNode* node, int data, const void
 	return FALSE;
 }
 
-//	--------------------------------------------------------------------------------
-/// Build route cost
+
+
 int BuildRouteCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 #ifdef AUI_ASTAR_CACHE_PLOTS_AT_NODES
@@ -3877,24 +3877,24 @@ int BuildRouteCost(CvAStarNode* parent, CvAStarNode* node, int data, const void*
 
 	int iMaxValue = 1500;
 
-	// if the plot is on a removable feature, it tends to be a good idea to build a road here
+
 	int iMovementCost = ((pPlot->getFeatureType() == NO_FEATURE) ? GC.getTerrainInfo(pPlot->getTerrainType())->getMovementCost() : GC.getFeatureInfo(pPlot->getFeatureType())->getMovementCost());
 
 #ifdef AUI_ASTAR_FIX_BUILD_ROUTE_COST_CONSIDER_HILLS_MOVEMENT
-	// Hill cost, except for when a City is present here, then it just counts as flat land
+
 	if ((PlotTypes)pPlot->getPlotType() == PLOT_HILLS && !pPlot->isCity())
 	{
 		iMovementCost += GC.getHILLS_EXTRA_MOVEMENT();
 	}
 #endif
 
-	// calculate the max value based on how much of a movement increase we get
+
 	if(iMovementCost + 1 != 0)
 	{
 		iMaxValue = iMaxValue / 2 + iMaxValue / (iMovementCost + 1);
 	}
 
-	// if the tile already been tagged for building a road, then provide a discount
+
 	if(pPlot->GetBuilderAIScratchPadTurn() == GC.getGame().getGameTurn() && pPlot->GetBuilderAIScratchPadPlayer() == ePlayer)
 	{
 		iMaxValue = (int)(iMaxValue * PATH_BUILD_ROUTE_ALREADY_FLAGGED_DISCOUNT);
@@ -3910,8 +3910,8 @@ int BuildRouteCost(CvAStarNode* parent, CvAStarNode* node, int data, const void*
 	return iMaxValue;
 }
 
-//	--------------------------------------------------------------------------------
-/// Build Route path finder - check validity of a coordinate
+
+
 int BuildRouteValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 #ifndef AUI_ASTAR_MINOR_OPTIMIZATION
@@ -3992,8 +3992,8 @@ int BuildRouteValid(CvAStarNode* parent, CvAStarNode* node, int data, const void
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Area path finder - check validity of a coordinate
+
+
 int AreaValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 	if(parent == NULL)
@@ -4026,8 +4026,8 @@ int AreaValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Area path finder - callback routine when node added to open/closed list
+
+
 int JoinArea(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 	if(data == ASNL_ADDCLOSED)
@@ -4043,8 +4043,8 @@ int JoinArea(CvAStarNode* parent, CvAStarNode* node, int data, const void* point
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Area path finder - check validity of a coordinate
+
+
 int LandmassValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 	if(parent == NULL)
@@ -4061,8 +4061,8 @@ int LandmassValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* 
 }
 
 
-//	--------------------------------------------------------------------------------
-/// Area path finder - callback routine when node added to open/closed list
+
+
 int JoinLandmass(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 	if(data == ASNL_ADDCLOSED)
@@ -4078,14 +4078,14 @@ int JoinLandmass(CvAStarNode* parent, CvAStarNode* node, int data, const void* p
 }
 
 
-// DERIVED CLASSES (which have more convenient ways to access our various pathfinders)
 
-//	--------------------------------------------------------------------------------
-/// Constructor
+
+
+
 CvTwoLayerPathFinder::CvTwoLayerPathFinder()
 {
 #if defined(LEKMOD_MACOS)
-// The base constructor is called automatically before this body.
+
 #else
 #ifdef AUI_WARNING_FIXES
 	this->CvAStar::CvAStar();
@@ -4096,8 +4096,8 @@ CvTwoLayerPathFinder::CvTwoLayerPathFinder()
 	m_ppaaPartialMoveNodes = NULL;
 }
 
-//	--------------------------------------------------------------------------------
-/// Destructor
+
+
 CvTwoLayerPathFinder::~CvTwoLayerPathFinder()
 {
 	CvAStar::DeInit();
@@ -4105,8 +4105,8 @@ CvTwoLayerPathFinder::~CvTwoLayerPathFinder()
 	DeInit();
 }
 
-//	--------------------------------------------------------------------------------
-/// Allocate memory, zero variables
+
+
 void CvTwoLayerPathFinder::Initialize(int iColumns, int iRows, bool bWrapX, bool bWrapY, CvAPointFunc IsPathDestFunc, CvAPointFunc DestValidFunc, CvAHeuristic HeuristicFunc, CvAStarFunc CostFunc, CvAStarFunc ValidFunc, CvAStarFunc NotifyChildFunc, CvAStarFunc NotifyListFunc, CvABegin InitializeFunc, CvAEnd UninitializeFunc, const void* pData)
 {
 	int iI, iJ;
@@ -4130,8 +4130,8 @@ void CvTwoLayerPathFinder::Initialize(int iColumns, int iRows, bool bWrapX, bool
 	}
 };
 
-//	--------------------------------------------------------------------------------
-/// Frees allocated memory
+
+
 void CvTwoLayerPathFinder::DeInit()
 {
 	CvAStar::DeInit();
@@ -4147,8 +4147,8 @@ void CvTwoLayerPathFinder::DeInit()
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// Return a node from the second layer of A-star nodes (for the partial moves)
+
+
 #if defined(AUI_ASTAR_MINOR_OPTIMIZATION) || defined(AUI_CONSTIFY)
 CvAStarNode* CvTwoLayerPathFinder::GetPartialMoveNode(int iCol, int iRow) const
 #else
@@ -4158,8 +4158,8 @@ CvAStarNode* CvTwoLayerPathFinder::GetPartialMoveNode(int iCol, int iRow)
 	return &(m_ppaaPartialMoveNodes[iCol][iRow]);
 }
 
-//	--------------------------------------------------------------------------------
-/// Return the furthest plot we can get to this turn that is on the path
+
+
 CvPlot* CvTwoLayerPathFinder::GetPathEndTurnPlot() const
 {
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
@@ -4201,8 +4201,8 @@ CvPlot* CvTwoLayerPathFinder::GetPathEndTurnPlot() const
 	return NULL;
 }
 
-//	--------------------------------------------------------------------------------
-// Path logging
+
+
 static void LogPathGeneration(const CvUnit *pkUnit, CvString& strMsg)
 {
 	if(GC.getLogging() && GC.getAILogging() && pkUnit)
@@ -4214,19 +4214,19 @@ static void LogPathGeneration(const CvUnit *pkUnit, CvString& strMsg)
 		const char* pszPlayerName = kPlayer.getCivilizationShortDescription();
 		FILogFile* pLog = LOGFILEMGR.GetLog((gDLL->IsGameCoreThread())?"AStar_GC.log":"AStar_APP.log", FILogFile::kDontTimeStamp, "Game Turn, Player, Unit, From X, From Y, To X, To Y, Info, Checksum");
 
-		// Get the leading info for this line
+
 		strBaseString.Format("%03d, %s, UnitID: %d, ", GC.getGame().getElapsedGameTurns(), (pszPlayerName)?pszPlayerName:"?", pkUnit->GetID());
 		strOutBuf = strBaseString + strMsg;
 		pLog->Msg(strOutBuf);
 	}
 }
 
-//	--------------------------------------------------------------------------------
-/// Generate a path, using the supplied unit as the data
+
+
 #ifdef AUI_ASTAR_TURN_LIMITER
 bool CvTwoLayerPathFinder::GenerateUnitPath(const CvUnit* pkUnit, int iXstart, int iYstart, int iXdest, int iYdest, int iInfo, bool bReuse, int iTargetTurns)
 #else
-bool CvTwoLayerPathFinder::GenerateUnitPath(const CvUnit* pkUnit, int iXstart, int iYstart, int iXdest, int iYdest, int iInfo /*= 0*/, bool bReuse /*= false*/)
+bool CvTwoLayerPathFinder::GenerateUnitPath(const CvUnit* pkUnit, int iXstart, int iYstart, int iXdest, int iYdest, int iInfo        , bool bReuse            )
 #endif
 {
 	if (pkUnit)
@@ -4242,13 +4242,13 @@ bool CvTwoLayerPathFinder::GenerateUnitPath(const CvUnit* pkUnit, int iXstart, i
 		{
 			CvString strLogString;
 			uint uiChecksum = CRC_INIT;
-			// Loop through the nodes and make a checksum
+
 			CvAStarNode* pNode = GetLastNode();
 
-			// Starting at the end, loop until we find a plot from this owner
+
 			while(pNode != NULL)
 			{
-				// Just do the X/Y for now
+
 				uiChecksum = g_CRC32.Calc( &pNode->m_iX, sizeof( pNode->m_iX ), uiChecksum );
 				uiChecksum = g_CRC32.Calc( &pNode->m_iY, sizeof( pNode->m_iY ), uiChecksum );
 		
@@ -4263,12 +4263,12 @@ bool CvTwoLayerPathFinder::GenerateUnitPath(const CvUnit* pkUnit, int iXstart, i
 	return false;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// CvStepPathFinder
-//////////////////////////////////////////////////////////////////////////
 
-//	--------------------------------------------------------------------------------
-/// Get distance between two plots on same land mass (return -1 if plots are in different areas)
+
+
+
+
+
 int CvStepPathFinder::GetStepDistanceBetweenPoints(PlayerTypes ePlayer, PlayerTypes eEnemy, CvPlot* pStartPlot, CvPlot* pEndPlot)
 {
 #ifndef AUI_ASTAR_MINOR_OPTIMIZATION
@@ -4301,8 +4301,8 @@ int CvStepPathFinder::GetStepDistanceBetweenPoints(PlayerTypes ePlayer, PlayerTy
 	return -1;
 }
 
-//	--------------------------------------------------------------------------------
-/// Check for existence of step path between two points
+
+
 bool CvStepPathFinder::DoesPathExist(PlayerTypes ePlayer, PlayerTypes eEnemy, CvPlot* pStartPlot, CvPlot* pEndPlot)
 {
 	if(pStartPlot == NULL || pEndPlot == NULL || pStartPlot->getArea() != pEndPlot->getArea())
@@ -4314,8 +4314,8 @@ bool CvStepPathFinder::DoesPathExist(PlayerTypes ePlayer, PlayerTypes eEnemy, Cv
 	return GeneratePath(pStartPlot->getX(), pStartPlot->getY(), pEndPlot->getX(), pEndPlot->getY(), ePlayer, false);
 }
 
-//	--------------------------------------------------------------------------------
-/// Returns the last plot along the step path owned by a specific player
+
+
 CvPlot* CvStepPathFinder::GetLastOwnedPlot(PlayerTypes ePlayer, PlayerTypes eEnemy, CvPlot* pStartPlot, CvPlot* pEndPlot) const
 {
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
@@ -4324,7 +4324,7 @@ CvPlot* CvStepPathFinder::GetLastOwnedPlot(PlayerTypes ePlayer, PlayerTypes eEne
 	CvAStarNode* pNode;
 	int iNumSteps;
 
-	// Generate step path
+
 	iNumSteps = GC.getStepFinder().GetStepDistanceBetweenPoints(ePlayer, eEnemy, pStartPlot, pEndPlot);
 	if(iNumSteps != -1)
 #endif
@@ -4335,7 +4335,7 @@ CvPlot* CvStepPathFinder::GetLastOwnedPlot(PlayerTypes ePlayer, PlayerTypes eEne
 		pNode = GC.getStepFinder().GetLastNode();
 #endif
 
-		// Starting at the end, loop until we find a plot from this owner
+
 #ifndef AUI_ASTAR_CACHE_PLOTS_AT_NODES
 		CvMap& kMap = GC.getMap();
 #endif
@@ -4353,13 +4353,13 @@ CvPlot* CvStepPathFinder::GetLastOwnedPlot(PlayerTypes ePlayer, PlayerTypes eEne
 			currentPlot = kMap.plotUnchecked(pNode->m_iX, pNode->m_iY);
 #endif
 
-			// Check and see if this plot has the right owner
+
 			if(currentPlot->getOwner() == ePlayer)
 			{
 				return currentPlot;
 			}
 
-			// Move to the previous plot on the path
+
 			pNode = pNode->m_pParent;
 		}
 	}
@@ -4367,8 +4367,8 @@ CvPlot* CvStepPathFinder::GetLastOwnedPlot(PlayerTypes ePlayer, PlayerTypes eEne
 	return NULL;
 }
 
-//	--------------------------------------------------------------------------------
-/// Get the plot X from the end of the step path
+
+
 CvPlot* CvStepPathFinder::GetXPlotsFromEnd(PlayerTypes ePlayer, PlayerTypes eEnemy, CvPlot* pStartPlot, CvPlot* pEndPlot, int iPlotsFromEnd, bool bLeaveEnemyTerritory) const
 {
 #ifndef AUI_ASTAR_MINOR_OPTIMIZATION
@@ -4376,14 +4376,14 @@ CvPlot* CvStepPathFinder::GetXPlotsFromEnd(PlayerTypes ePlayer, PlayerTypes eEne
 #endif
 	CvPlot* currentPlot = NULL;
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
-	// Generate step path
+
 	int iPathLen = GC.getStepFinder().GetStepDistanceBetweenPoints(ePlayer, eEnemy, pStartPlot, pEndPlot);
 	int iNumSteps = MIN(iPlotsFromEnd, iPathLen);
 #else
 	int iNumSteps;
 	int iPathLen;
 
-	// Generate step path
+
 	iPathLen = GC.getStepFinder().GetStepDistanceBetweenPoints(ePlayer, eEnemy, pStartPlot, pEndPlot);
 	iNumSteps = ::min(iPlotsFromEnd, iPathLen);
 #endif
@@ -4398,12 +4398,12 @@ CvPlot* CvStepPathFinder::GetXPlotsFromEnd(PlayerTypes ePlayer, PlayerTypes eEne
 
 		if(pNode != NULL)
 		{
-			// Starting at the end, loop the correct number of times back
+
 			for(int i = 0; i < iNumSteps; i++)
 			{
 				if(pNode->m_pParent != NULL)
 				{
-					// Move to the previous plot on the path
+
 					pNode = pNode->m_pParent;
 				}
 			}
@@ -4415,15 +4415,15 @@ CvPlot* CvStepPathFinder::GetXPlotsFromEnd(PlayerTypes ePlayer, PlayerTypes eEne
 			currentPlot = kMap.plotUnchecked(pNode->m_iX, pNode->m_iY);
 #endif
 
-			// Was an enemy specified and we don't want this plot to be in enemy territory?
+
 			if (eEnemy != NO_PLAYER && bLeaveEnemyTerritory)
 			{
-				// Loop until we leave enemy territory
+
 				for (int i = 0; i < (iPathLen - iNumSteps) && currentPlot->getOwner() == eEnemy; i++)
 				{
 					if (pNode->m_pParent != NULL)
 					{
-						// Move to the previous plot on the path
+
 						pNode = pNode->m_pParent;
 #ifdef AUI_ASTAR_CACHE_PLOTS_AT_NODES
 						currentPlot = pNode->m_pPlot;
@@ -4443,8 +4443,8 @@ CvPlot* CvStepPathFinder::GetXPlotsFromEnd(PlayerTypes ePlayer, PlayerTypes eEne
 	return currentPlot;
 }
 
-//	--------------------------------------------------------------------------------
-/// Check for existence of step path between two points
+
+
 #if defined(AUI_ASTAR_TURN_LIMITER) && defined(AUI_ASTAR_MINOR_OPTIMIZATION)
 bool CvIgnoreUnitsPathFinder::DoesPathExist(const CvUnit* pUnit, const CvPlot* pStartPlot, const CvPlot* pEndPlot, const int iMaxTurns)
 #elif defined(AUI_ASTAR_TURN_LIMITER)
@@ -4471,11 +4471,11 @@ bool CvIgnoreUnitsPathFinder::DoesPathExist(CvUnit& unit, CvPlot* pStartPlot, Cv
 #else
 	SetData(&unit);
 #endif
-	return GeneratePath(pStartPlot->getX(), pStartPlot->getY(), pEndPlot->getX(), pEndPlot->getY(), 0, true /*bReuse*/);
+	return GeneratePath(pStartPlot->getX(), pStartPlot->getY(), pEndPlot->getX(), pEndPlot->getY(), 0, true           );
 }
 
-//	--------------------------------------------------------------------------------
-/// Get length of last path computed by path finder in turns [should be used after a call to DoesPathExist()]
+
+
 #ifdef AUI_CONSTIFY
 int CvIgnoreUnitsPathFinder::GetPathLength() const
 #else
@@ -4503,25 +4503,25 @@ int CvIgnoreUnitsPathFinder::GetPathLength()
 #endif
 }
 
-//	--------------------------------------------------------------------------------
-/// Returns the last plot along the step path owned by a specific player
+
+
 CvPlot* CvIgnoreUnitsPathFinder::GetLastOwnedPlot(CvPlot* pStartPlot, CvPlot* pEndPlot, PlayerTypes iOwner) const
 {
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
-	// Generate path
+
 	if (GC.getIgnoreUnitsPathFinder().GeneratePath(pStartPlot->getX(), pStartPlot->getX(), pEndPlot->getX(), pEndPlot->getX(), 0, false))
 	{
 		CvAStarNode* pNode = GC.getIgnoreUnitsPathFinder().GetLastNode();
 #else
 	CvAStarNode* pNode;
 
-	// Generate path
+
 	if(GC.getIgnoreUnitsPathFinder().GeneratePath(pStartPlot->getX(), pStartPlot->getX(), pEndPlot->getX(), pEndPlot->getX(), 0, false))
 	{
 		pNode = GC.getIgnoreUnitsPathFinder().GetLastNode();
 #endif
 
-		// Starting at the end, loop until we find a plot from this owner
+
 #ifndef AUI_ASTAR_CACHE_PLOTS_AT_NODES
 		CvMap& kMap = GC.getMap();
 #endif
@@ -4539,13 +4539,13 @@ CvPlot* CvIgnoreUnitsPathFinder::GetLastOwnedPlot(CvPlot* pStartPlot, CvPlot* pE
 			currentPlot = kMap.plotUnchecked(pNode->m_iX, pNode->m_iY);
 #endif
 
-			// Check and see if this plot has the right owner
+
 			if(currentPlot->getOwner() == iOwner)
 			{
 				return currentPlot;
 			}
 
-			// Move to the previous plot on the path
+
 			pNode = pNode->m_pParent;
 		}
 	}
@@ -4553,8 +4553,8 @@ CvPlot* CvIgnoreUnitsPathFinder::GetLastOwnedPlot(CvPlot* pStartPlot, CvPlot* pE
 	return NULL;
 }
 
-//	--------------------------------------------------------------------------------
-/// Retrieve first node of path
+
+
 CvPlot* CvIgnoreUnitsPathFinder::GetPathFirstPlot() const
 {
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
@@ -4596,8 +4596,8 @@ CvPlot* CvIgnoreUnitsPathFinder::GetPathFirstPlot() const
 	return NULL;
 }
 
-//	--------------------------------------------------------------------------------
-/// Return the furthest plot we can get to this turn that is on the path
+
+
 CvPlot* CvIgnoreUnitsPathFinder::GetPathEndTurnPlot() const
 {
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
@@ -4642,15 +4642,15 @@ CvPlot* CvIgnoreUnitsPathFinder::GetPathEndTurnPlot() const
 	return NULL;
 }
 
-//	--------------------------------------------------------------------------------
-/// Get final plot on path [should be used after a call to DoesPathExist()]
+
+
 CvPlot* CvIgnoreUnitsPathFinder::GetLastPlot()
 {
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
 	CvAStarNode* pNode = GetLastNode();
 	if (pNode != NULL)
 	{
-		// Save off node for future calls to GetPreviousPlot()
+
 		m_pCurNode = pNode;
 
 #ifdef AUI_ASTAR_CACHE_PLOTS_AT_NODES
@@ -4669,7 +4669,7 @@ CvPlot* CvIgnoreUnitsPathFinder::GetLastPlot()
 	{
 		pPlot = GC.getMap().plot(pNode->m_iX, pNode->m_iY);
 
-		// Save off node for future calls to GetPreviousPlot()
+
 		m_pCurNode = pNode;
 	}
 
@@ -4677,8 +4677,8 @@ CvPlot* CvIgnoreUnitsPathFinder::GetLastPlot()
 #endif
 }
 
-//	--------------------------------------------------------------------------------
-/// Get final plot on path [should be used after a call to DoesPathExist()]
+
+
 CvPlot* CvIgnoreUnitsPathFinder::GetPreviousPlot()
 {
 #ifndef AUI_ASTAR_MINOR_OPTIMIZATION
@@ -4710,8 +4710,8 @@ CvPlot* CvIgnoreUnitsPathFinder::GetPreviousPlot()
 #endif
 }
 
-//	--------------------------------------------------------------------------------
-/// UI path finder - check validity of a coordinate
+
+
 int UIPathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 	if (parent == NULL)
@@ -4764,19 +4764,19 @@ int UIPathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* po
 			if(!(pToPlot->isAdjacentToArea(iGroupAreaID)))
 #endif
 			{
-				// antonjs: Added for Smoky Skies scenario. Allows move range to show correctly for airships,
-				// which move over land and sea plots equally (canMoveAllTerrain)
+
+
 #ifndef AUI_UNIT_FIX_HOVERING_EMBARK		
 				if (!pUnit->canMoveAllTerrain())
 #endif
 				{
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
-					// Embark-capable units may leave their starting area (land <-> ocean).
-					// PathDestValid already allows this; UI range must match or the blue outline
-					// stays stuck on the current domain despite a valid same-turn path.
+
+
+
 					bool bAllowCrossArea = pUnit->CanEverEmbark();
-					// Walk-water also lets land units leave their starting landmass
-					// (land -> pontoon -> other land) when they cannot embark.
+
+
 					if (!bAllowCrossArea)
 					{
 #ifdef AUI_ASTAR_CACHE_PLOTS_AT_NODES
@@ -4824,8 +4824,8 @@ int UIPathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* po
 	return TRUE;
 }
 
-//	--------------------------------------------------------------------------------
-/// UI path finder - add a new path and send out a message
+
+
 int UIPathAdd(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 	PathAdd(parent, node, data, pointer, finder);
@@ -4833,7 +4833,7 @@ int UIPathAdd(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 	if(node)
 #endif
 	{
-		if(node->m_iData2 < 2 /*&& node->m_eCvAStarListType == NO_CVASTARLIST*/)
+		if(node->m_iData2 < 2                                                  )
 		{
 #ifdef AUI_ASTAR_CACHE_PLOTS_AT_NODES
 			CvPlot* pPlot = node->m_pPlot;
@@ -4851,7 +4851,7 @@ int UIPathAdd(CvAStarNode* parent, CvAStarNode* node, int data, const void* poin
 	return 1;
 }
 
-//	--------------------------------------------------------------------------------
+
 int AttackPathAdd(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 	PathAdd(parent, node, data, pointer, finder);
@@ -4876,7 +4876,7 @@ int AttackPathAdd(CvAStarNode* parent, CvAStarNode* node, int data, const void* 
 			if(pPlot->isVisible(pUnit->getTeam()) && (pPlot->isVisibleEnemyUnit(pUnit) || pPlot->isEnemyCity(*pUnit)))
 			{
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
-				// Only highlight if we can actually attack from the previous plot after arriving there
+
 				bool bCanAttackFrom = true;
 				if (parent != NULL)
 				{
@@ -4903,7 +4903,7 @@ int AttackPathAdd(CvAStarNode* parent, CvAStarNode* node, int data, const void* 
 	return 1;
 }
 
-//	--------------------------------------------------------------------------------
+
 #ifdef AUI_CONSTIFY
 int AttackPathDestEval(int iToX, int iToY, const void* pointer, const CvAStar* finder, bool bOnlyFortified, bool bOnlyCity)
 #else
@@ -4920,7 +4920,7 @@ int AttackPathDestEval(int iToX, int iToY, const void* pointer, CvAStar* finder,
 		if (pUnit->canMoveInto(*pPlot, CvUnit::MOVEFLAG_ATTACK))
 		{
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
-			// Attack-from plot is the path parent; reject if arriving there would create a combat lock
+
 			CvAStarNode* pParent = pNode->m_pParent;
 			if (pParent != NULL)
 			{
@@ -4960,8 +4960,8 @@ int AttackPathDestEval(int iToX, int iToY, const void* pointer, CvAStar* finder,
 	return FALSE;
 }
 
-//	--------------------------------------------------------------------------------
-/// Destination is valid if there is an enemy unit there
+
+
 #ifdef AUI_CONSTIFY
 int AttackPathDest(int iToX, int iToY, const void* pointer, const CvAStar* finder)
 #else
@@ -4971,8 +4971,8 @@ int AttackPathDest(int iToX, int iToY, const void* pointer, CvAStar* finder)
 	return AttackPathDestEval(iToX, iToY, pointer, finder, false, false);
 }
 
-//	--------------------------------------------------------------------------------
-/// Destination is valid if there is a fortified unit there
+
+
 #ifdef AUI_CONSTIFY
 int AttackFortifiedPathDest(int iToX, int iToY, const void* pointer, const CvAStar* finder)
 #else
@@ -4982,8 +4982,8 @@ int AttackFortifiedPathDest(int iToX, int iToY, const void* pointer, CvAStar* fi
 	return AttackPathDestEval(iToX, iToY, pointer, finder, true, false);
 }
 
-//	--------------------------------------------------------------------------------
-/// Destination is valid if there is a city there
+
+
 #ifdef AUI_CONSTIFY
 int AttackCityPathDest(int iToX, int iToY, const void* pointer, const CvAStar* finder)
 #else
@@ -4993,7 +4993,7 @@ int AttackCityPathDest(int iToX, int iToY, const void* pointer, CvAStar* finder)
 	return AttackPathDestEval(iToX, iToY, pointer, finder, false, true);
 }
 
-//	---------------------------------------------------------------------------
+
 int TacticalAnalysisMapPathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 #ifdef AUI_ASTAR_CACHE_PLOTS_AT_NODES
@@ -5026,11 +5026,11 @@ int TacticalAnalysisMapPathValid(CvAStarNode* parent, CvAStarNode* node, int dat
 	FAssert(pToPlotCell != NULL);
 
 #ifdef AUI_ASTAR_FIX_PARENT_NODE_ALWAYS_VALID_OPTIMIZATION
-	// If this is the first node in the path, it is always valid (starting location)
+
 	if (parent == NULL)
 	{
 #ifdef AUI_ASTAR_FIX_CAN_ENTER_TERRAIN_NO_DUPLICATE_CALLS
-		// Cache values for this node that we will use in the loop
+
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
 		CvAStarNode& kToNodeCacheData = *node;
 #else
@@ -5077,7 +5077,7 @@ int TacticalAnalysisMapPathValid(CvAStarNode* parent, CvAStarNode* node, int dat
 	}
 #endif
 
-	// Cache the data for the node
+
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
 	CvAStarNode& kToNodeCacheData = *node;
 #else
@@ -5152,7 +5152,7 @@ int TacticalAnalysisMapPathValid(CvAStarNode* parent, CvAStarNode* node, int dat
 #endif
 
 #ifndef AUI_ASTAR_FIX_PARENT_NODE_ALWAYS_VALID_OPTIMIZATION
-	// If this is the first node in the path, it is always valid (starting location)
+
 	if (parent == NULL)
 	{
 		return TRUE;
@@ -5173,7 +5173,7 @@ int TacticalAnalysisMapPathValid(CvAStarNode* parent, CvAStarNode* node, int dat
 
 	bool bAIControl = pUnit->IsAutomated();
 
-	// pulling invariants out of the loop
+
 	int iUnitX = pUnit->getX();
 	int iUnitY = pUnit->getY();
 	DomainTypes unit_domain_type = pCacheData->getDomainType();
@@ -5197,7 +5197,7 @@ int TacticalAnalysisMapPathValid(CvAStarNode* parent, CvAStarNode* node, int dat
 	}
 #endif
 
-	// We have determined that this node is not the origin above (parent == NULL)
+
 	CvAStarNode* pNode = node;
 	bool bPreviousNodeHostile = false;
 	int iDestX = finder->GetDestX();
@@ -5208,12 +5208,12 @@ int TacticalAnalysisMapPathValid(CvAStarNode* parent, CvAStarNode* node, int dat
 #ifndef AUI_ASTAR_MINOR_OPTIMIZATION
 	int iNumTurns;
 #endif
-	TeamTypes eTeam = eUnitTeam; // this may get modified later is eTEam == NO_TEAM
+	TeamTypes eTeam = eUnitTeam;
 
-	// First run special case for checking "node" since it doesn't have a parent set yet
+
 	bool bFirstRun = true;
 
-	// Have to calculate this specially because the node passed into this function doesn't yet have data stored it in (hasn't reached pathAdd yet)
+
 	int iStartMoves = parent->m_iData1;
 #ifdef AUI_ASTAR_MINOR_OPTIMIZATION
 	int iNumTurns = parent->m_iData2;
@@ -5236,20 +5236,20 @@ int TacticalAnalysisMapPathValid(CvAStarNode* parent, CvAStarNode* node, int dat
 #else
 	CvPlot* pPlot = NULL;
 
-	// Get a reference to the parent node cache data
+
 	CvPathNodeCacheData& kFromNodeCacheData = parent->m_kCostCacheData;
 #endif
 
-	// Loop through the current path until we find the path origin.
-	// This validates the path with the inclusion of the new path node.  We must do this because of the rules of where a unit can finish a turn.
-	// Please note that this can be an expensive loop as the path gets longer and longer, do as little work as possible in validating each node.  
-	// If there is an invariant value that needs to be fetched from the plot or unit for the node, please do the calculation and put it in the node's data cache.
+
+
+
+
 	while(pNode != NULL)
 	{
 #ifdef AUI_ASTAR_TURN_LIMITER
 		if (iNumTurns > iMaxTurns)
 		{
-			return FALSE; // Path is too long, terminate now
+			return FALSE;
 		}
 #endif
 
@@ -5260,29 +5260,29 @@ int TacticalAnalysisMapPathValid(CvAStarNode* parent, CvAStarNode* node, int dat
 #else
 		CvPathNodeCacheData& kNodeCacheData = pNode->m_kCostCacheData;
 #endif
-		// This is a safeguard against the algorithm believing a plot to be impassable before actually knowing it (mid-search)
+
 		if(iOldNumTurns != -1 || (iDestX == iNodeX && iDestY == iNodeY))
 		{
 #ifdef AUI_ASTAR_FIX_CAN_ENTER_TERRAIN_NO_DUPLICATE_CALLS
-			if (!kNodeCacheData.bCanEnterTerrain)	// since this gets cached for each node anyway during buildup, it should be used whereever possible
+			if (!kNodeCacheData.bCanEnterTerrain)
 			{
 				return FALSE;
 			}
 #endif
-			// This plot is of greater distance than previously, so we know the unit is ending its turn here (pNode), or it's trying to attack through a unit (and might end up on this tile if an attack fails to kill the enemy)
+
 			if(iNumTurns != iOldNumTurns || bPreviousNodeHostile)
 			{
-				// Don't count origin, or else a unit will block its own movement!
+
 				if(iNodeX != iUnitX || iNodeY != iUnitY)
 				{
-					// PREFETCH_FASTAR_CVPLOT(reinterpret_cast<char*>(pPlot));
+
 #ifdef AUI_ASTAR_FIX_CAN_ENTER_TERRAIN_NO_DUPLICATE_CALLS
 					if (kNodeCacheData.bIsRevealedToTeam)
 #else
 					if(kNodeCacheData.bPlotVisibleToTeam)
 #endif
 					{
-						// Check to see if any units are present at this full-turn move plot... if the player can see what's there
+
 						if(kNodeCacheData.iNumFriendlyUnitsOfType >= iUnitPlotLimit && !(iFinderIgnoreStacking))
 						{
 							return FALSE;
@@ -5296,7 +5296,7 @@ int TacticalAnalysisMapPathValid(CvAStarNode* parent, CvAStarNode* node, int dat
 #endif
 
 #ifndef AUI_ASTAR_FIX_CAN_ENTER_TERRAIN_NO_DUPLICATE_CALLS
-						if(kNodeCacheData.bIsMountain && !kNodeCacheData.bCanEnterTerrain)	// only doing canEnterTerrain on mountain plots because it is expensive, though it probably should always be called and some other checks in this loop could be removed.
+						if(kNodeCacheData.bIsMountain && !kNodeCacheData.bCanEnterTerrain)
 						{
 							return FALSE;
 						}
@@ -5324,17 +5324,17 @@ int TacticalAnalysisMapPathValid(CvAStarNode* parent, CvAStarNode* node, int dat
 		{
 			bPreviousNodeHostile = true;
 		}
-		// Prevents units from passing through one another on its way to attack another unit
+
 		else if(kNodeCacheData.bContainsVisibleEnemy)
 		{
-			// except when attacking an unguarded civilian unit
+
 			if(kNodeCacheData.bContainsVisibleEnemyDefender)
 			{
 				bPreviousNodeHostile = true;
 			}
 		}
 
-		// JON - Special case for the original node passed into this function because it's not yet linked to any parent
+
 		if(pNode == node && bFirstRun)
 		{
 			pNode = parent;
@@ -5355,7 +5355,7 @@ int TacticalAnalysisMapPathValid(CvAStarNode* parent, CvAStarNode* node, int dat
 		}
 	}
 
-	// slewis - moved this up so units can't move directly into the water. Not 100% sure this is the right solution.
+
 	if(unit_domain_type == DOMAIN_LAND)
 	{
 		if(!kFromNodeCacheData.bIsWater && kToNodeCacheData.bIsWater && kToNodeCacheData.bIsRevealedToTeam && !pUnit->canEmbarkOnto(*pFromPlot, *pToPlot, true))
@@ -5381,15 +5381,15 @@ int TacticalAnalysisMapPathValid(CvAStarNode* parent, CvAStarNode* node, int dat
 			const CvUnit* pToPlotUnit = pToPlot->getUnitByIndex(iUnit);
 			if(pToPlotUnit != NULL && pToPlotUnit->getOwner() != eUnitPlayer)
 			{
-				return FALSE; // Plot occupied by another player
+				return FALSE;
 			}
 		}
 	}
 #endif
 
-	// slewis - Added to catch when the unit is adjacent to an enemy unit while it is stacked with a friendly unit.
-	//          The logic above (with bPreviousNodeHostile) catches this problem with a path that's longer than one step
-	//          but does not catch when the path is only one step.
+
+
+
 #ifdef AUI_ASTAR_FIX_RADAR
 	if (unit_domain_type != DOMAIN_AIR && pUnitPlot->isAdjacent(pToPlot) && kToNodeCacheData.bContainsVisibleEnemy && !(iFinderIgnoreStacking))
 #else
@@ -5406,8 +5406,8 @@ int TacticalAnalysisMapPathValid(CvAStarNode* parent, CvAStarNode* node, int dat
 	}
 
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
-	// Cannot melee-attack from a walk-water tile that would be land+naval stacked after arriving.
-	// Combat units only ? civilians never attack and must not be blocked by this check.
+
+
 	if (pUnit->IsCombatUnit() &&
 		(kToNodeCacheData.bContainsVisibleEnemyDefender || kToNodeCacheData.bContainsEnemyCity) &&
 		pFromPlot != NULL && pFromPlot->WouldBlockAttacksWithUnit(pUnit))
@@ -5482,7 +5482,7 @@ int TacticalAnalysisMapPathValid(CvAStarNode* parent, CvAStarNode* node, int dat
 		}
 	}
 #endif
-	// slewis - added AI check and embark check to prevent units from moving into unexplored areas
+
 #ifdef ASTAR_AI_CONTROL_FIX_RADAR
 	if(!bIsHuman || kFromNodeCacheData.bIsRevealedToTeam || pCacheData->isEmbarked())
 #else
@@ -5516,7 +5516,7 @@ int TacticalAnalysisMapPathValid(CvAStarNode* parent, CvAStarNode* node, int dat
 	return TRUE;
 }
 
-//	---------------------------------------------------------------------------
+
 #ifdef AUI_CONSTIFY
 int FindValidDestinationDest(int iToX, int iToY, const void* pointer, const CvAStar* finder)
 #else
@@ -5544,7 +5544,7 @@ int FindValidDestinationDest(int iToX, int iToY, const void* pointer, CvAStar* f
 #endif
 	}
 
-	// can't capture the unit with a non-combat unit
+
 	if(!pUnit->IsCombatUnit() && pToPlot->isVisibleEnemyUnit(pUnit))
 	{
 #ifdef AUI_WARNING_FIXES
@@ -5560,7 +5560,7 @@ int FindValidDestinationDest(int iToX, int iToY, const void* pointer, CvAStar* f
 #endif
 }
 
-//	--------------------------------------------------------------------------------
+
 int FindValidDestinationPathValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 	CvUnit* pUnit = ((CvUnit*)pointer);
@@ -5600,28 +5600,28 @@ int FindValidDestinationPathValid(CvAStarNode* parent, CvAStarNode* node, int da
 }
 
 #ifdef AUI_ASTAR_TWEAKED_OPTIMIZED_BUT_CAN_STILL_USE_ROADS
-// If there is a valid road within the unit's base movement range, multiply range by movement modifier of best road type
-// Check is fairly fast and is good enough for most cases.
+
+
 void IncreaseMoveRangeForRoads(const CvUnit* pUnit, int& iRange)
 {
-	// Filtering out units that don't need road optimization
+
 	if (pUnit->getDomainType() != DOMAIN_LAND || pUnit->flatMovementCost())
 	{
 		return;
 	}
 
 #ifdef AUI_ASTAR_TURN_LIMITER
-	// With the turn limiter, we no longer need to worry as much about A* loops getting out of hand when calculating paths to a tile 20 turns away
+
 	iRange *= GET_TEAM(pUnit->getTeam()).GetBestRoadMovementMultiplier(pUnit);
 #else
-	// Don't want to call this on each loop, so we'll call it once out of loop and be done with it
+
 	const bool bIsIroquois = GET_PLAYER(pUnit->getOwner()).GetPlayerTraits()->IsMoveFriendlyWoodsAsRoad();
 	CvPlot* pLoopPlot;
 	FeatureTypes eFeature;
 	for (int iDY = -iRange; iDY <= iRange; iDY++)
 	{
 		int iMaxDX = iRange - MAX(0, iDY);
-		for (int iDX = -iRange - MIN(0, iDY); iDX <= iMaxDX; iDX++) // MIN() and MAX() stuff is to reduce loops (hexspace!)
+		for (int iDX = -iRange - MIN(0, iDY); iDX <= iMaxDX; iDX++)
 		{
 			pLoopPlot = plotXY(pUnit->getX(), pUnit->getY(), iDX, iDY);
 			if (pLoopPlot)
@@ -5635,7 +5635,7 @@ void IncreaseMoveRangeForRoads(const CvUnit* pUnit, int& iRange)
 				else if (pLoopPlot->isValidRoute(pUnit.pointer()))
 				{
 					CvPlot* pEvalPlot;
-					// Check for neighboring roads that would make this road usable
+
 					for (int iI = 0; iI < NUM_DIRECTION_TYPES; iI++)
 					{
 						pEvalPlot = plotDirection(pLoopPlot->getX(), pLoopPlot->getY(), (DirectionTypes)iI);
@@ -5652,7 +5652,7 @@ void IncreaseMoveRangeForRoads(const CvUnit* pUnit, int& iRange)
 #endif
 }
 
-// AdjustDistanceFilterForRoads() call for when the distance isn't being stored
+
 int GetIncreasedMoveRangeForRoads(const CvUnit* pUnit, int iRange)
 {
 	IncreaseMoveRangeForRoads(pUnit, iRange);
@@ -5660,12 +5660,12 @@ int GetIncreasedMoveRangeForRoads(const CvUnit* pUnit, int iRange)
 }
 #endif
 
-//	--------------------------------------------------------------------------------
-/// Can a unit reach this destination in "X" turns of movement (pass in 0 if need to make it in 1 turn with movement left)?
-// ***
-// *** WARNING - The optimization below (so that TurnsToReachTarget() doesn't get called too often breaks down when we get to RR.  We need to address this!
-// ***
-bool CanReachInXTurns(UnitHandle pUnit, CvPlot* pTarget, int iTurns, bool bIgnoreUnits, int* piTurns /* = NULL */)
+
+
+
+
+
+bool CanReachInXTurns(UnitHandle pUnit, CvPlot* pTarget, int iTurns, bool bIgnoreUnits, int* piTurns             )
 {
 	int iDistance;
 
@@ -5674,10 +5674,10 @@ bool CanReachInXTurns(UnitHandle pUnit, CvPlot* pTarget, int iTurns, bool bIgnor
 		return false;
 	}
 
-	// Compare distance to movement rate
+
 	iDistance = plotDistance(pUnit->getX(), pUnit->getY(), pTarget->getX(), pTarget->getY());
-	// KWG: If the unit is a land unit that can embark, baseMoves() is only going to give correct value if the starting and ending locations
-	//		are in the same domain (LAND vs. SEA) and no transition occurs.
+
+
 #ifdef AUI_ASTAR_TWEAKED_OPTIMIZED_BUT_CAN_STILL_USE_ROADS
 	int iBaseMoves = GetIncreasedMoveRangeForRoads(pUnit.pointer(), pUnit->baseMoves());
 	if (iTurns == 0 && iDistance >= iBaseMoves)
@@ -5698,13 +5698,13 @@ bool CanReachInXTurns(UnitHandle pUnit, CvPlot* pTarget, int iTurns, bool bIgnor
 		return false;
 	}
 
-	// Distance not too far, now use pathfinder
+
 	else
 	{
 #ifdef AUI_ASTAR_TURN_LIMITER
-		int iTurnsCalculated = TurnsToReachTarget(pUnit, pTarget, true /*bReusePaths*/, bIgnoreUnits, false, iTurns);
+		int iTurnsCalculated = TurnsToReachTarget(pUnit, pTarget, true                , bIgnoreUnits, false, iTurns);
 #else
-		int iTurnsCalculated = TurnsToReachTarget(pUnit, pTarget, false /*bReusePaths*/, bIgnoreUnits);
+		int iTurnsCalculated = TurnsToReachTarget(pUnit, pTarget, false                , bIgnoreUnits);
 #endif
 		if (piTurns)
 			*piTurns = iTurnsCalculated;
@@ -5713,19 +5713,19 @@ bool CanReachInXTurns(UnitHandle pUnit, CvPlot* pTarget, int iTurns, bool bIgnor
 }
 
 #if defined(AUI_ASTAR_TURN_LIMITER)
-// Delnar: if you're checking if a unit can reach a tile within X turns, set the iTargetTurns parameter to X to speed up the pathfinder
+
 int TurnsToReachTarget(UnitHandle pUnit, const CvPlot* pTarget, bool bReusePaths, bool bIgnoreUnits, bool bIgnoreStacking, int iTargetTurns)
 {
 	return TurnsToReachTargetFromPlot(pUnit, pTarget, NULL, bReusePaths, bIgnoreUnits, bIgnoreStacking, iTargetTurns);
 }
 #endif
 
-//	--------------------------------------------------------------------------------
-/// How many turns will it take a unit to get to a target plot (returns MAX_INT if can't reach at all; returns 0 if makes it in 1 turn and has movement left)
-// Should call it with bIgnoreStacking true if want foolproof way to see if can make it in 0 turns (since that way doesn't open
-// open the 2nd layer of the pathfinder)
+
+
+
+
 #if defined(AUI_ASTAR_TURN_LIMITER)
-// Delnar: if you're checking if a unit can reach a tile within X turns, set the iTargetTurns parameter to X to speed up the pathfinder
+
 int TurnsToReachTargetFromPlot(UnitHandle pUnit, const CvPlot* pTarget, const CvPlot* pFromPlot, bool bReusePaths, bool bIgnoreUnits, bool bIgnoreStacking, int iTargetTurns)
 #else
 int TurnsToReachTarget(UnitHandle pUnit, CvPlot* pTarget, bool bReusePaths, bool bIgnoreUnits, bool bIgnoreStacking)
@@ -5843,7 +5843,7 @@ int TurnsToReachTarget(UnitHandle pUnit, CvPlot* pTarget, bool bReusePaths, bool
 		}
 
 #ifdef PATH_FINDER_LOGGING
-		// NOTE: because I'm creating the string after the cvStopWatch, the time it takes to create the string will be in the timer.
+
 		strBaseString.Format("TurnsToReachTarget, Turn %03d, Player: %d, Unit: %d, From X: %d, Y: %d, To X: %d, Y: %d, reuse=%d, ignoreUnits=%d, ignoreStacking=%d, turns=%d", GC.getGame().getElapsedGameTurns(), (int)pUnit->getOwner(), pUnit->GetID(), pUnit->getX(), pUnit->getY(), pTarget->getX(), pTarget->getY(), bReusePaths?1:0, bIgnoreUnits?1:0, bIgnoreStacking?1:0, rtnValue);
 		kTimer.SetText(strBaseString);
 #endif
@@ -5852,9 +5852,9 @@ int TurnsToReachTarget(UnitHandle pUnit, CvPlot* pTarget, bool bReusePaths, bool
 	return rtnValue;
 }
 
-/// slewis's fault
 
-// A structure holding some unit values that are invariant during a path plan operation
+
+
 struct TradePathCacheData
 {
 	CvTeam* m_pTeam;
@@ -5873,7 +5873,7 @@ struct TradePathCacheData
 	inline bool IsMoveFriendlyWoodsAsRoad() const { return m_bIsMoveFriendlyWoodsAsRoad; }
 };
 
-//	--------------------------------------------------------------------------------
+
 void TradePathInitialize(const void* pointer, CvAStar* finder)
 {
 #ifdef AUI_ASTAR_TRADE_ROUTE_COST_TILE_OWNERSHIP_PREFS
@@ -5907,19 +5907,19 @@ void TradePathInitialize(const void* pointer, CvAStar* finder)
 #endif
 }
 
-//	--------------------------------------------------------------------------------
+
 void TradePathUninitialize(const void* pointer, CvAStar* finder)
 {
 
 }
 
-//	--------------------------------------------------------------------------------
+
 int TradeRouteHeuristic(int iFromX, int iFromY, int iToX, int iToY)
 {
 	return plotDistance(iFromX, iFromY, iToX, iToY) * 100;
 }
 
-//	--------------------------------------------------------------------------------
+
 int TradeRouteLandPathCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 	PlayerTypes ePlayer = (PlayerTypes)finder->GetInfo();
@@ -5944,7 +5944,7 @@ int TradeRouteLandPathCost(CvAStarNode* parent, CvAStarNode* node, int data, con
 	const TradePathCacheData* pCacheData = reinterpret_cast<const TradePathCacheData*>(finder->GetScratchBuffer());
 	FeatureTypes eFeature = pToPlot->getFeatureType();
 
-	// super duper low costs for moving along routes
+
 #if defined(LEKMOD_WATER_WALK_IMPROVEMENT_RULES)
 	const TeamTypes eOriginTeam = pCacheData->getTeam().GetID();
 	if (pFromPlot->GetEffectiveRouteType(eOriginTeam) != NO_ROUTE && pToPlot->GetEffectiveRouteType(eOriginTeam) != NO_ROUTE)
@@ -5954,12 +5954,12 @@ int TradeRouteLandPathCost(CvAStarNode* parent, CvAStarNode* node, int data, con
 	{
 		iCost = iCost / 2;
 	}
-	//// super low costs for moving along rivers
+
 	else if (pCacheData->IsRiverTradeRoad() && pFromPlot->isRiver() && pToPlot->isRiver())
 	{
 		iCost = iCost / 2;
 	}
-	// Iroquios ability
+
 	else if ((eFeature == FEATURE_FOREST || eFeature == FEATURE_JUNGLE) && pCacheData->IsMoveFriendlyWoodsAsRoad())
 	{
 		iCost = iCost / 2;
@@ -5977,7 +5977,7 @@ int TradeRouteLandPathCost(CvAStarNode* parent, CvAStarNode* node, int data, con
 			iCost += 1;
 		}
 
-		// extra cost for not going to an oasis! (this encourages routes to go through oasis)
+
 		if (eFeature != FEATURE_OASIS)
 		{
 			iCost += 1;
@@ -6004,7 +6004,7 @@ int TradeRouteLandPathCost(CvAStarNode* parent, CvAStarNode* node, int data, con
 		iCost += 1000;
 	}
 	
-	// Penalty for ending a turn on a mountain
+
 	if(pToPlot->isImpassable() || pToPlot->isMountain())
 	{
 		iCost += 1000;
@@ -6016,7 +6016,7 @@ int TradeRouteLandPathCost(CvAStarNode* parent, CvAStarNode* node, int data, con
 	return iCost;
 }
 
-//	--------------------------------------------------------------------------------
+
 int TradeRouteLandValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 	if(parent == NULL)
@@ -6072,8 +6072,8 @@ int TradeRouteLandValid(CvAStarNode* parent, CvAStarNode* node, int data, const 
 	return TRUE;
 }
 
-//	--------------------------------------------------------------------------------
-/// slewis's fault
+
+
 int TradeRouteWaterPathCost(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 #ifndef AUI_ASTAR_CACHE_PLOTS_AT_NODES
@@ -6105,11 +6105,11 @@ int TradeRouteWaterPathCost(CvAStarNode* parent, CvAStarNode* node, int data, co
 			iCost += 1;
 		}
 
-		// if is enemy tile, avoid
+
 		TeamTypes eToPlotTeam = pToPlot->getTeam();
 		if (eToPlotTeam != NO_TEAM && pCacheData->getTeam().isAtWar(eToPlotTeam))
 		{
-			iCost += 1000; // slewis - is this too prohibitive? Too cheap?
+			iCost += 1000;
 		}
 
 		if (!pToPlot->isWater())
@@ -6118,7 +6118,7 @@ int TradeRouteWaterPathCost(CvAStarNode* parent, CvAStarNode* node, int data, co
 		}
 		else
 		{
-			if (pToPlot->getTerrainType() != (TerrainTypes) GC.getSHALLOW_WATER_TERRAIN())	// Quicker isShallowWater test, since we already know the plot is water
+			if (pToPlot->getTerrainType() != (TerrainTypes) GC.getSHALLOW_WATER_TERRAIN())
 			{
 				if (!pCacheData->CanEmbarkAllWaterPassage())
 				{
@@ -6139,7 +6139,7 @@ int TradeRouteWaterPathCost(CvAStarNode* parent, CvAStarNode* node, int data, co
 	return iCost;
 }
 
-//	--------------------------------------------------------------------------------
+
 int TradeRouteWaterValid(CvAStarNode* parent, CvAStarNode* node, int data, const void* pointer, CvAStar* finder)
 {
 	if(parent == NULL)
@@ -6165,7 +6165,7 @@ int TradeRouteWaterValid(CvAStarNode* parent, CvAStarNode* node, int data, const
 			return FALSE;
 		}
 
-		if (pNewPlot->getTerrainType() != (TerrainTypes) GC.getSHALLOW_WATER_TERRAIN())	// Quicker shallow water test since we know that the plot is water already
+		if (pNewPlot->getTerrainType() != (TerrainTypes) GC.getSHALLOW_WATER_TERRAIN())
 		{
 			if (!pCacheData->CanEmbarkAllWaterPassage())
 			{
@@ -6197,17 +6197,17 @@ int TradeRouteWaterValid(CvAStarNode* parent, CvAStarNode* node, int data, const
 	return TRUE;
 }
 
-//	--------------------------------------------------------------------------------
-// Copy the supplied node and its parent nodes into an array of simpler path nodes for caching purposes.
-// It is ok to pass in NULL, the resulting array will contain zero elements
-//static
+
+
+
+
 void CvAStar::CopyPath(const CvAStarNode* pkEndNode, CvPathNodeArray& kPathArray)
 {
 	if(pkEndNode != NULL)
 	{
 		const CvAStarNode* pkNode = pkEndNode;
 
-		// Count the number of nodes
+
 		uint uiNodeCount = 1;
 
 		while(pkNode->m_pParent != NULL)
@@ -6229,10 +6229,10 @@ void CvAStar::CopyPath(const CvAStarNode* pkEndNode, CvPathNodeArray& kPathArray
 		}
 	}
 	else
-		kPathArray.setsize(0);	// Setting the size to 0 rather than clearing so that the array data is not deleted.  Helps with memory thrashing.
+		kPathArray.setsize(0);
 }
 
-//	---------------------------------------------------------------------------
+
 const CvPathNode* CvPathNodeArray::GetTurnDest(int iTurn)
 {
 	for (uint i = size(); i--; )
@@ -6240,14 +6240,14 @@ const CvPathNode* CvPathNodeArray::GetTurnDest(int iTurn)
 		const CvPathNode& kNode = at(i);
 		if (i == 0)
 		{
-			// Last node, only return it if it is the desired turn
+
 			if (kNode.m_iData2 == iTurn)
 				return &kNode;
 			return NULL;
 		}
 		else
 		{
-			// Is this node the correct turn and the next node is a turn after it?
+
 			if (kNode.m_iData2 == iTurn && at(i-1).m_iData2 > iTurn)
 				return &kNode;
 		}

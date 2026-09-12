@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 4/8/2015 2:55:29 PM -->
+
 <GameData>
 	
-	<!-- WARNING: This file needs to come before most of the other civ/unit/promotion changes since it adds a new class of units. -->
+
 	
-	<!-- Create new unit type -->
+
 	<UnitCombatInfos>
 		<Row>
 			<Type>UNITCOMBAT_PARADROPPER</Type>
@@ -32,7 +32,7 @@
 		</Row>
 	</Language_RU_RU>
 
-	<!-- Make Paradroppers and XCom Squads use the new type -->
+
 	<Units>
 		<Update>
 			<Set CombatClass="UNITCOMBAT_PARADROPPER" />
@@ -44,7 +44,7 @@
 		</Update>
 	</Units>
 	
-	<!-- Apply free American/Songhai/Shoshone/new China promotions to this new unit type -->
+
 	<Trait_FreePromotionUnitCombats>
 		<Row>
 			<TraitType>TRAIT_RIVER_EXPANSION</TraitType>
@@ -68,7 +68,7 @@
 		</Row>
 	</Trait_FreePromotionUnitCombats>
 
-	<!-- Everything in Civ5UnitPromotions_Inhereted_Expansion2.xml that already applies to UNITCOMBAT_GUN (except Blitz) should apply to this unit type as well -->
+
 	<UnitPromotions_UnitCombats>
 		<Row>
 			<PromotionType>PROMOTION_STATUE_ZEUS</PromotionType>
@@ -76,7 +76,7 @@
 		</Row>
 	</UnitPromotions_UnitCombats>
 	
-	<!-- Everything in Civ5UnitPromotions_Expansion2.xml that already applies to UNITCOMBAT_GUN (except Blitz) should apply to this unit type as well -->
+
 	<UnitPromotions_UnitCombats>
 		<Row>
 			<PromotionType>PROMOTION_ALTITUDE_TRAINING</PromotionType>
@@ -95,7 +95,7 @@
 		</Row>
 	</UnitPromotions_UnitCombatMods>
 
-	<!-- Everything in Civ5UnitPromotions.xml that already applies to UNITCOMBAT_GUN (except Blitz) should apply to this unit type as well -->
+
 	<UnitPromotions_UnitCombats>
 		<Row>
 			<PromotionType>PROMOTION_EMBARKATION</PromotionType>

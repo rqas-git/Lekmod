@@ -1,10 +1,10 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
 #ifndef CIV5_HOMELAND_AI_H
@@ -25,7 +25,7 @@ enum AIHomelandTargetType
 	AI_HOMELAND_TARGET_ANTIQUITY_SITE,
 };
 
-// Object stored in the list of move priorities (m_MovePriorityList)
+
 class CvHomelandMove
 {
 public:
@@ -44,7 +44,7 @@ public:
 	int m_iPriority;
 };
 
-// Object stored in the list of current move units (m_CurrentMoveUnits)
+
 class CvHomelandUnit
 {
 public:
@@ -55,7 +55,7 @@ public:
 		return (GetMovesToTarget() < unit.GetMovesToTarget());
 	}
 
-	// Accessors
+
 	void SetID(int iID)
 	{
 		m_iID = iID;
@@ -81,8 +81,8 @@ public:
 		return m_pTarget;
 	};
 
-	// Stores extra integer data
-	//   For potential upgradeable units stores the unit type since that's a convenient way to sort them
+
+
 	int GetAuxIntData()
 	{
 		return m_iAuxData;
@@ -100,14 +100,14 @@ private:
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvHomelandTarget
-//!  \brief		A target of opportunity for the Homeland AI this turn
-//
-//!  Key Attributes:
-//!  - Arises during processing of CvHomelandAI::FindHomelandTargets()
-//!  - Targets are reexamined each turn (so shouldn't need to be serialized)
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvHomelandTarget
 {
 public:
@@ -150,8 +150,8 @@ public:
 		m_iTargetY = iValue;
 	}
 
-	// AuxData is used for a pointer to the actual target object (CvUnit, CvCity, etc.)
-	//    (for naval improvements this is set to target plot).
+
+
 	inline void* GetAuxData()
 	{
 		return m_pAuxData;
@@ -161,10 +161,10 @@ public:
 		m_pAuxData = pAuxData;
 	}
 
-	// Used to SORT homeland targets in priority order
-	//    Set to the BuildType for improvement targets
-	//    Set to the weight for sentry points
-	//    Set to the danger for cities to be garrisoned
+
+
+
+
 	inline int GetAuxIntData()
 	{
 		return m_iAuxData;
@@ -182,14 +182,14 @@ private:
 	int m_iAuxData;
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  CLASS:      CvHomelandAI
-//!  \brief		A player's AI to control units that are in reserve protecting their lands
-//
-//!  Key Attributes:
-//!  - Handles moves for all military units not recruited by the tactical or operational AI
-//!  - Also handles moves for workers and explorers (and settlers on the first turn)
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
 class CvHomelandAI
 {
 public:
@@ -199,21 +199,21 @@ public:
 	void Uninit();
 	void Reset();
 
-	// Serialization routines
+
 	void Read(FDataStream& kStream);
 	void Write(FDataStream& kStream);
 
-	// Public turn update routines
+
 	void RecruitUnits();
 	void FindAutomatedUnits();
 	void DoTurn();
 	void Update();
 
-	// Public exploration routines
+
 	bool IsAnyValidExploreMoves(const CvUnit* pUnit) const;
 	bool ExecuteSpecialExploreMove(CvUnit* pUnit, CvPlot* pPlot);
 
-	// Public logging
+
 	void LogHomelandMessage(CvString& strMsg);
 	void LogPatrolMessage(CvString& strMsg, CvUnit* pPatrolUnit);
 
@@ -221,12 +221,12 @@ private:
 
 	typedef FStaticVector< CvHomelandUnit, 64, true, c_eCiv5GameplayDLL > MoveUnitsArray;
 
-	// Internal turn update routines - commandeered unit processing
+
 	void EstablishHomelandPriorities();
 	void FindHomelandTargets();
 	void AssignHomelandMoves();
 
-	// Routines to manage identifying and implementing homeland moves
+
 	void PlotExplorerMoves();
 	void PlotExplorerSeaMoves();
 	void PlotFirstTurnSettlerMoves();
@@ -260,7 +260,7 @@ private:
 	void PlotAirliftMoves();
 	void ReviewUnassignedUnits();
 
-	// Routines to execute homeland moves
+
 	void ExecuteFirstTurnSettlerMoves();
 	void ExecuteExplorerMoves();
 	void ExecuteWorkerMoves();
@@ -287,7 +287,7 @@ private:
 	void ExecuteTradeUnitMoves();
 	void ExecuteArchaeologistMoves();
 
-	// Internal low-level utility routines
+
 	void EliminateAdjacentSentryPoints();
 	void EliminateAdjacentHomelandRoads();
 	bool FindWorkersInSameArea(CvPlot* pTarget, BuildTypes eBuild);
@@ -307,10 +307,10 @@ private:
 	void ClearCurrentMoveUnits();
 	void ClearCurrentMoveHighPriorityUnits();
 
-	// Logging functions
+
 	CvString GetLogFileName(CvString& playerName) const;
 
-	// Class data
+
 	CvPlayer* m_pPlayer;
 	std::list<int> m_CurrentTurnUnits;
 
@@ -326,7 +326,7 @@ private:
 	CvUnit* m_CurrentBestMoveHighPriorityUnit;
 	int m_iCurrentBestMoveHighPriorityUnitTurns;
 
-	// Lists of targets for the turn
+
 	std::vector<CvHomelandTarget> m_TargetedCities;
 	std::vector<CvHomelandTarget> m_TargetedSentryPoints;
 	std::vector<CvHomelandTarget> m_TargetedForts;
@@ -335,7 +335,7 @@ private:
 	std::vector<CvHomelandTarget> m_TargetedAncientRuins;
 	std::vector<CvHomelandTarget> m_TargetedAntiquitySites;
 
-	// Targeting ranges (pulled in from GlobalAIDefines.XML)
+
 	int m_iRandomRange;
 	int m_iDefensiveMoveTurns;
 	int m_iUpgradeMoveTurns;
@@ -348,4 +348,4 @@ bool CvHomelandUnitAuxIntSort(CvHomelandUnit obj1, CvHomelandUnit obj2);
 bool CvHomelandUnitAuxIntReverseSort(CvHomelandUnit obj1, CvHomelandUnit obj2);
 }
 
-#endif //CIV5_HOMELAND_AI_H
+#endif

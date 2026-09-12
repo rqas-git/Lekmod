@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/13/2015 6:48:49 PM -->
+
 <GameData>
 
-	<!-- Granary now works on Bison as well. -->
+
 	<Building_ResourceYieldChanges>
 		<Row>
 			<BuildingType>BUILDING_GRANARY</BuildingType>

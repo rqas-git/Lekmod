@@ -1,17 +1,17 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #ifndef _CvPreGame_H
 #define _CvPreGame_H
 
 class FIGameIniParser;
 
-// There would never conceivably be more than one set of
-// pre-game data active at once.
+
+
 namespace CvPreGame
 {
 typedef std::list<GUID> PackageIDList;
@@ -21,7 +21,7 @@ enum Version
 
 };
 
-//NOTE: Should this use VARIANTs instead of ints?
+
 class CustomOption
 {
 public:
@@ -50,12 +50,12 @@ FDataStream& operator<<(FDataStream&, const CustomOption&);
 PlayerTypes                                activePlayer();
 const CvString&                            adminPassword();
 int                                        advancedStartPoints();
-const CvString&                            alias();                             // setupdata
+const CvString&                            alias();
 ArtStyleTypes                              artStyle(PlayerTypes p);
-bool                                       autorun();                           // setupdata
-float                                      autorunTurnDelay();                  // setupdata
-int                                        autorunTurnLimit();                  // setupdata
-CvString                                   bandwidthDescription();              // setupdata
+bool                                       autorun();
+float                                      autorunTurnDelay();
+int                                        autorunTurnLimit();
+CvString                                   bandwidthDescription();
 CalendarTypes                              calendar();
 bool										 canReadyLocalPlayer();
 const CvString&                            civilizationAdjective(PlayerTypes p);
@@ -76,8 +76,8 @@ const CvClimateInfo&                       climateInfo();
 void                                       closeAllSlots();
 void                                       closeInactiveSlots();
 const CvString&                            emailAddress(PlayerTypes p);
-const CvString&                            emailAddress();                      // setupdata
-float                                      endTurnTimerLength();                // setupdata
+const CvString&                            emailAddress();
+float                                      endTurnTimerLength();
 EraTypes                                   era();
 PlayerTypes                                findPlayerByNickname(const char* const name);
 void                                       ReseatConnectedPlayers();
@@ -100,7 +100,7 @@ int                                        gameTurn();
 GameTypes                                  gameType();
 GameMapTypes                               gameMapType();
 GameStartTypes                             gameStartType();
-int                                        gameUpdateTime();                    // setupdata
+int                                        gameUpdateTime();
 HandicapTypes                              handicap(PlayerTypes p);
 HandicapTypes                              lastHumanHandicap(PlayerTypes p);
 bool										 isDLCAllowed(const GUID& kDLCID);
@@ -128,8 +128,8 @@ const CvString&                            leaderNameKey(PlayerTypes p);
 const CvString& 							 leaderKey(PlayerTypes p);
 bool										 leaderKeyAvailable(PlayerTypes p);
 const GUID& 								 leaderKeyPackageID(PlayerTypes p);
-const CvString&                            loadFileName();                      // setupdata
-StorageLocation                            loadFileStorage();                   // setupdata
+const CvString&                            loadFileName();
+StorageLocation                            loadFileStorage();
 void                                       loadFromIni(FIGameIniParser& iniParser);
 bool                                       mapNoPlayers();
 unsigned int                               mapRandomSeed();
@@ -153,11 +153,11 @@ PlayerColorTypes                           playerColor(PlayerTypes p);
 bool                                       privateGame();
 bool                                       quickCombat();
 bool                                       quickCombatDefault();
-HandicapTypes                              quickHandicap();                     // setupdata
-bool                                       quickstart();                        // setupdata
+HandicapTypes                              quickHandicap();
+bool                                       quickstart();
 bool                                       quickMovement();
-bool                                       randomWorldSize();                   // setupdata
-bool                                       randomMapScript();                   // setupdata
+bool                                       randomWorldSize();
+bool                                       randomMapScript();
 void                                       read(FDataStream& loadFrom, bool bReadVersion);
 bool                                       readPlayerSlotInfo(FDataStream& loadFrom, bool bReadVersion);
 void                                       resetGame();
@@ -173,13 +173,13 @@ const CvSeaLevelInfo&                      seaLevelInfo();
 void                                       setActivePlayer(PlayerTypes p);
 void                                       setAdminPassword(const CvString& p);
 void                                       setAdvancedStartPoints(int a);
-void                                       setAlias(const CvString& a);                           // setupdata
+void                                       setAlias(const CvString& a);
 void                                       setArtStyle(PlayerTypes p, ArtStyleTypes a);
-void                                       setAutorun(bool isAutoStart);                        // setupdata
-void                                       setAutorunTurnDelay(float turnDelay);               // setupdata
-void                                       setAutorunTurnLimit(int turnLimit);               // setupdata
-void                                       setBandwidth(BandwidthType b);                      // setupdata
-void                                       setBandwidth(const CvString& b);                       // setupdata
+void                                       setAutorun(bool isAutoStart);
+void                                       setAutorunTurnDelay(float turnDelay);
+void                                       setAutorunTurnLimit(int turnLimit);
+void                                       setBandwidth(BandwidthType b);
+void                                       setBandwidth(const CvString& b);
 void                                       setCalendar(CalendarTypes c);
 void                                       setCalendar(const CvString& c);
 void                                       setCivilization(PlayerTypes p, CivilizationTypes c);
@@ -194,8 +194,8 @@ void                                       setClimate(const CvString& c);
 void                                       setCustomWorldSize(int iWidth, int iHeight, int iPlayers = 0, int iMinorCivs = 0);
 void										 setDLCAllowed(const GUID& kDLCID, bool bState);
 void                                       setEmailAddress(PlayerTypes p, const CvString& a);
-void                                       setEmailAddress(const CvString& a);                    // setupdata
-void                                       setEndTurnTimerLength(float f);             // setupdata
+void                                       setEmailAddress(const CvString& a);
+void                                       setEndTurnTimerLength(float f);
 void                                       setEra(EraTypes e);
 void                                       setEra(const CvString& e);
 void                                       setFlagDecal(PlayerTypes p, const CvString& flagDecal);
@@ -216,7 +216,7 @@ void                                       pushGameType(GameTypes g);
 void                                       popGameType();
 #endif
 void                                       setGameStartType(GameStartTypes g);
-void                                       setGameUpdateTime(int updateTime);                 // setupdata
+void                                       setGameUpdateTime(int updateTime);
 void                                       setHandicap(PlayerTypes p, HandicapTypes h);
 void																			 setLastHumanHandicap(PlayerTypes p, HandicapTypes h);
 void                                       setInternetGame(bool isInternetGame);
@@ -245,21 +245,21 @@ void                                       setMultiplayerAIEnabled(bool isEnable
 void                                       setMultiplayerOption(MultiplayerOptionTypes o, bool enabled);
 void                                       setMultiplayerOptions(const std::vector<bool>& o);
 void                                       setNetID(PlayerTypes p, int id);
-void                                       setNickname(PlayerTypes p, const CvString& n);                        // setupdata
+void                                       setNickname(PlayerTypes p, const CvString& n);
 void                                       setNumMinorCivs(int n);
 void										 setPersistSettings(bool bPersist);
 void                                       setPitBossTurnTime(int t);
 void                                       setPlayable(PlayerTypes p, bool playable);
 void                                       setPlayerColor(PlayerTypes p, PlayerColorTypes c);
 void                                       setPrivateGame(bool isPrivateGame);
-void                                       setQuickCombat(bool isQuickCombat);                    // setupdata
+void                                       setQuickCombat(bool isQuickCombat);
 void                                       setQuickCombatDefault(bool isQuickCombat);
-void                                       setQuickHandicap(HandicapTypes h);                  // setupdata
-void                                       setQuickHandicap(const CvString& h);                   // setupdata
-void                                       setQuickMovement(bool isQuickMovement);                  // setupdata
-void                                       setQuickstart(bool isQuickStart);                     // setupdata
-void                                       setRandomWorldSize(bool isRandomWorldSize);                // setupdata
-void                                       setRandomMapScript(bool isRandomWorldScript);                // setupdata
+void                                       setQuickHandicap(HandicapTypes h);
+void                                       setQuickHandicap(const CvString& h);
+void                                       setQuickMovement(bool isQuickMovement);
+void                                       setQuickstart(bool isQuickStart);
+void                                       setRandomWorldSize(bool isRandomWorldSize);
+void                                       setRandomMapScript(bool isRandomWorldScript);
 void                                       setReady(PlayerTypes p, bool bIsReady);
 void                                       setSeaLevel(SeaLevelTypes s);
 void                                       setSeaLevel(const CvString& s);
@@ -269,7 +269,7 @@ void									   setAllSlotStatus(const std::vector<SlotStatus>& vSlotStatus);
 void                                       setSyncRandomSeed(unsigned int newSeed);
 void                                       setTargetScore(int s);
 void                                       setTeamType(PlayerTypes p, TeamTypes t);
-void                                       setTransferredMap(bool transferred);                 // setupdata
+void                                       setTransferredMap(bool transferred);
 void                                       setTurnTimer(TurnTimerTypes t);
 void                                       setTurnTimer(const CvString& t);
 void										 SetCityScreenBlocked(bool bCityScreenBlocked);
@@ -287,7 +287,7 @@ SlotClaim                                  slotClaim(PlayerTypes p);
 SlotStatus                                 slotStatus(PlayerTypes eID);
 unsigned int                               syncRandomSeed();
 int                                        targetScore();
-bool                                       transferredMap();                    // setupddata
+bool                                       transferredMap();
 #ifndef AUI_WARNING_FIXES
 TeamTypes                                  teamType(PlayerTypes p);
 #endif
@@ -315,4 +315,4 @@ static TeamTypes     teamType(PlayerTypes p)
 
 };
 
-#endif//_CvPreGame_H
+#endif

@@ -1,6 +1,6 @@
--------------------------------------------------
--- edit: MP voting system for EUI & vanilla UI
--------------------------------------------------
+
+
+
 include( "MPGameDefaults" );
 
 local bIsModding = false;
@@ -12,10 +12,10 @@ g_VictoryCondtionsManager = InstanceManager:new("GameOptionInstance", "GameOptio
 g_DLCAllowedManager = InstanceManager:new("GameOptionInstance", "GameOptionRoot", Controls.DLCAllowedStack);
 
 
--- Global Variables
+
 g_MapEntries = {};
 
--- Turn Mode Pulldown
+
 local g_turnModeOptions = { "TXT_KEY_GAME_OPTION_SIMULTANEOUS_TURNS",  
 														"TXT_KEY_GAME_OPTION_SEQUENTIAL_TURNS",
 														"TXT_KEY_GAME_OPTION_DYNAMIC_TURNS" }
@@ -28,9 +28,9 @@ g_turnModeData["TXT_KEY_GAME_OPTION_DYNAMIC_TURNS"]				= { tooltip = "TXT_KEY_GA
 local hoursStr = Locale.ConvertTextKey( "TXT_KEY_HOURS" );
 local secondsStr = Locale.ConvertTextKey( "TXT_KEY_SECONDS" );
 
--------------------------------------------------
--- Return true if the play is in an active lobby
--------------------------------------------------
+
+
+
 function IsInLobby()
 	if ( PreGame.IsHotSeatGame() ) then		
 		return m_bIsInStagingRoom;
@@ -39,9 +39,9 @@ function IsInLobby()
 	return Matchmaking.GetLocalID() ~= -1;
 end
 
--------------------------------------------------
--- Set if the user is in an active lobby
--------------------------------------------------
+
+
+
 function SetInLobby(bState)
 	if ( PreGame.IsHotSeatGame() ) then		
 		m_bIsInStagingRoom = bState;
@@ -50,8 +50,8 @@ function SetInLobby(bState)
 	m_bIsInStagingRoom = (Matchmaking.GetLocalID() ~= -1);
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function GetTurnModeStr()
 	if(PreGame.GetGameOption("GAMEOPTION_DYNAMIC_TURNS") == 1) then
 		return "TXT_KEY_GAME_OPTION_DYNAMIC_TURNS";
@@ -66,21 +66,21 @@ function GetTurnModeToolTipStr(turnModeStr)
 	return g_turnModeData[turnModeStr].tooltip;
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function CanEditGameOptions()
 	return (Matchmaking.IsHost() and PreGame.GetLoadFileName() == "") or PreGame.IsHotSeatGame() or Matchmaking.GetLocalID() == -1;
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function CanEditDLCGameOptions()
-	-- Can only change DLC outside the staging room
+
 	return (PreGame.GetLoadFileName() == "" and Matchmaking.GetLocalID() == -1) or PreGame.IsHotSeatGame();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function GetMaxPlayersForCurrentMap()
 
 	if ( not PreGame.IsRandomMapScript() ) then 
@@ -108,34 +108,34 @@ function GetMaxPlayersForCurrentMap()
 	
 	return 8;
 end
--------------------------------------------------
--------------------------------------------------
+
+
 function OnSenarioCheck()
 	PreGame.SetLoadWBScenario(not PreGame.GetLoadWBScenario());
 	if(PreGame.GetLoadWBScenario()) then
---		if(Controls.PrivateGameCheckbox:IsChecked()) then
+
 			Controls.LaunchButton:LocalizeAndSetText( "TXT_KEY_HOST_SCENARIO" );
---		else
---			Controls.LaunchButton:LocalizeAndSetText( "TXT_KEY_FIND_SCENARIO" );
---		end
+
+
+
 		
 		local mapScriptFileName = PreGame.GetMapScript();
 		if(IsWBMap(mapScriptFileName)) then 
 			SetupForScenarioMap(mapScriptFileName);
 		end
 	else
---		if(Controls.PrivateGameCheckbox:IsChecked()) then
+
 			Controls.LaunchButton:LocalizeAndSetText( "TXT_KEY_HOST_GAME" );
---		else
---			Controls.LaunchButton:LocalizeAndSetText( "TXT_KEY_FIND_GAME" );
---		end
+
+
+
 	end
 end
 Controls.ScenarioCheck:RegisterCallback( Mouse.eLClick, OnSenarioCheck );
 
--------------------------------------------------
--- Update the May Type entry
--------------------------------------------------
+
+
+
 function RefreshMapTypeDisplay()
 
 	local pullDown = Controls.MapTypePullDown;
@@ -201,16 +201,16 @@ function RefreshMapTypeDisplay()
         
         if (not bFound) then
 			if(Matchmaking.GetLocalID() == -1 or Matchmaking.IsHost()) then
-				-- Must pick a valid map script, if we are the host or we are not online yet
+
 				PreGame.SetRandomMapScript(false);
 
-				-- Default the the first in the list
+
 				local foundMapEntry = nil;
 				if (table.count(g_MapEntries) > 0) then
 					foundMapEntry = g_MapEntries[1];
 				end
 				
-				-- See if the continents is available though, that one is a better default
+
 				for i, mapEntry in ipairs(g_MapEntries) do
 					if(string.find(Locale.ToLower(mapEntry.FileName), "continents") ~= nil) then
 						foundMapEntry = mapEntry;
@@ -218,7 +218,7 @@ function RefreshMapTypeDisplay()
 					end
 				end
 								
-				-- Find anything?
+
 				if (foundMapEntry ~= nil) then
 					PreGame.SetMapScript(foundMapEntry.FileName);
 								
@@ -226,7 +226,7 @@ function RefreshMapTypeDisplay()
 					pullDown:GetButton():SetToolTipString( foundMapEntry.Description or "" );
 				end
 			else
-				-- print("Cannot get info for map or map script - " .. tostring(mapScriptFileName));
+
 				local fileTitle = Path.GetFileName(PreGame.GetMapScript());
 				if (fileTitle ~= nil) then
 					pullDown:GetButton():SetText("[COLOR_RED]" .. fileTitle .. "[ENDCOLOR]");
@@ -242,17 +242,17 @@ function RefreshMapTypeDisplay()
 	end	
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SendGameOptionChanged()
 	if Matchmaking.IsHost() then
 		Network.BroadcastGameSettings();
 	end	
 end
 
--------------------------------------------------
--- Make sure the civ selections have valid civs at their locations.
--------------------------------------------------
+
+
+
 function ValidateCivSelections()
 	for i = 0, GameDefines.MAX_MAJOR_CIVS-1 do
 		local civIndex = PreGame.GetCivilization(i);
@@ -263,15 +263,15 @@ function ValidateCivSelections()
 		end
 	end
 end
--------------------------------------------------
--- UpdateGameOptionsDisplay()
--- This method refreshes UI elements based on PreGame Data.
--- This function should only read from PreGame and not set items.
--- The one exception is the hack for ensuring all Civs are valid.
--------------------------------------------------
+
+
+
+
+
+
 function UpdateGameOptionsDisplay(bUpdateOnly)
 
-	-- In theory, PreGame should do this for me, but just to be sure.
+
 	ValidateCivSelections();
 	
 	local bCanEdit = CanEditGameOptions();
@@ -283,7 +283,7 @@ function UpdateGameOptionsDisplay(bUpdateOnly)
 	
 	RefreshMapTypeDisplay();
 					
-	-- Update World Size
+
 	if (not PreGame.IsRandomWorldSize()) then
 		local info = GameInfo.Worlds[ PreGame.GetWorldSize() ];
 		Controls.MapSizePullDown:GetButton():LocalizeAndSetText( info.Description );
@@ -302,13 +302,13 @@ function UpdateGameOptionsDisplay(bUpdateOnly)
 		Controls.MinorCivsLabel:LocalizeAndSetText("TXT_KEY_AD_SETUP_CITY_STATES", PreGame.GetNumMinorCivs());
 	end
 		
-	 -- Update Game Speed
+
     local info = GameInfo.GameSpeeds[ PreGame.GetGameSpeed() ];
   	Controls.GameSpeedPullDown:GetButton():LocalizeAndSetText( info.Description );
 	Controls.GameSpeedPullDown:GetButton():LocalizeAndSetToolTip( info.Help );
 	Controls.GameSpeedPullDown:SetDisabled( not bCanEdit );
 	
-	-- Update Start Era
+
 	local info = GameInfo.Eras[ PreGame.GetEra() ];
 	if(info == nil) then
 		Controls.EraPull:GetButton():LocalizeAndSetText( "TXT_KEY_MISC_UNKNOWN" );
@@ -319,7 +319,7 @@ function UpdateGameOptionsDisplay(bUpdateOnly)
 	end
 	Controls.EraPull:SetDisabled( not bCanEdit );
 	
-	-- Update Turn Mode
+
 	local turnModeStr = GetTurnModeStr();
 	Controls.TurnModePull:GetButton():LocalizeAndSetText( turnModeStr );
 	Controls.TurnModePull:GetButton():LocalizeAndSetToolTip( g_turnModeData[turnModeStr].tooltip );
@@ -328,7 +328,7 @@ function UpdateGameOptionsDisplay(bUpdateOnly)
 
 	Controls.AIOptionsCheck:SetDisabled( not bCanEdit );
 
-	-- AI Options
+
 	if PreGame.GetGameOption("GAMEOPTION_AI_OPTIONS") <= 0 then
 		Controls.AIOptionsCheck:SetCheck( false );
 		Controls.AIAlwaysAcceptWhitePeaceBox:SetHide( true );
@@ -470,7 +470,7 @@ function UpdateGameOptionsDisplay(bUpdateOnly)
 		Controls.NoXPFromAICheck:SetCheck( true );
 	end
 
-	-- Additional Options
+
 	if PreGame.GetGameOption("GAMEOPTION_ADDITIONAL") <= 0 then
 		Controls.AdditionalOptionsCheck:SetCheck( false );
 		Controls.AllowPolicySavingBox:SetHide( true );
@@ -585,7 +585,7 @@ function UpdateGameOptionsDisplay(bUpdateOnly)
 		Controls.RandomPersonalitiesCheck:SetCheck( true );
 	end
 
-	-- Update the options panel
+
 	RefreshGameOptions();
 	RefreshDropDownOptions();		
 	
@@ -593,8 +593,8 @@ function UpdateGameOptionsDisplay(bUpdateOnly)
 		SendGameOptionChanged();	
 	end
 end
-----------------------------------------------------------------        
----------------------------------------------------------------- 
+
+
 function SetupForScenarioMap(mapScriptFileName)
 	local loadScenarioChecked = PreGame.GetLoadWBScenario();
 	Controls.LoadScenarioBox:SetHide( false );
@@ -631,26 +631,26 @@ function SetupForScenarioMap(mapScriptFileName)
 	end
 end
 
-----------------------------------------------------------------        
----------------------------------------------------------------- 
+
+
 function SetupForNonScenarioMap()
 	Controls.AdvancedButton:SetDisabled(true);
 	Controls.LoadScenarioBox:SetHide( true );
-	--Controls.ScenarioCheck:SetCheck( false );
+
 	if (not IsInLobby()) then
 		Controls.LaunchButton:LocalizeAndSetText( "TXT_KEY_HOST_GAME" );
 	end
 	PreGame.SetLoadWBScenario(false);
 end
 
-----------------------------------------------------------------        
----------------------------------------------------------------- 
+
+
 function IsWBMap(file)
 	return Path.UsesExtension(file,".Civ5Map"); 
 end
 
-----------------------------------------------------------------
--- GAME SPEED
+
+
 local gameSpeeds = {};
 for row in GameInfo.GameSpeeds() do
     table.insert(gameSpeeds, row);
@@ -677,8 +677,8 @@ end
 Controls.GameSpeedPullDown:RegisterSelectionCallback( SelectSpeed );
 
 
-----------------------------------------------------------------
--- MAP SIZE
+
+
 function PopulateMapSizePulldown()
 	local pullDown = Controls.MapSizePullDown;
 	pullDown:ClearEntries();
@@ -771,10 +771,10 @@ function PopulateMapSizePulldown()
 						
 						PreGame.SetRandomWorldSize(false);
 						PreGame.SetWorldSize(wb.MapSize);
-						--PreGame.SetEra(wb.StartEra);
-						--PreGame.SetGameSpeed(wb.DefaultSpeed);
-						--PreGame.SetMaxTurns(wb.MaxTurns);
-						--PreGame.SetNumMinorCivs(wb.CityStateCount);
+
+
+
+
 						
 						local world = GameInfo.Worlds[wb.MapSize];
 						PreGame.SetNumMinorCivs(world.DefaultMinorCivs);
@@ -803,8 +803,8 @@ function PopulateMapSizePulldown()
 			end
 			
 			if(Matchmaking.IsHost()) then
-				-- Send broadcast our player info (meaning all the player info as the host)
-				-- so that everyone can see the changed number of player slots.
+
+
 				Network.BroadcastPlayerInfo();
 			end
 		end
@@ -812,8 +812,8 @@ function PopulateMapSizePulldown()
 		UpdateGameOptionsDisplay();
 	end);
 end
-----------------------------------------------------------------
--- Put all the world builder map scripts into the passed in table
+
+
 function GetWorldBuilderMaps(mapScripts)
 
 	for row in GameInfo.Maps() do	
@@ -825,7 +825,7 @@ function GetWorldBuilderMaps(mapScripts)
 		table.insert(mapScripts, script);	
 	end
 		
-	-- Filter out map files that are part of size groups.
+
 	local worldBuilderMapsToFilter = {};
 	for row in GameInfo.Map_Sizes() do
 		table.insert(worldBuilderMapsToFilter, row.FileName);
@@ -898,8 +898,8 @@ function GetWorldBuilderMaps(mapScripts)
 		
 	end
 end
-----------------------------------------------------------------
--- Map Scripts
+
+
 function RefreshMapScripts()
 
 	local pullDown = Controls.MapTypePullDown;
@@ -910,7 +910,7 @@ function RefreshMapScripts()
 	g_MapEntries = {};
 				
 	if ( PreGame.IsHotSeatGame() ) then
-		-- And all single and multiplayer maps.	
+
 		for row in GameInfo.MapScripts{SupportsMultiplayer = 1} do
 			local script = {};
 			script.FileName = row.FileName;
@@ -921,7 +921,7 @@ function RefreshMapScripts()
 			table.insert(g_MapEntries, script);	
 		end		
 	else
-		-- Networked multiplayer
+
 		for row in GameInfo.MapScripts{SupportsMultiplayer = 1} do
 			local script = {};
 			script.FileName = row.FileName;
@@ -933,7 +933,7 @@ function RefreshMapScripts()
 		end	
 	end
 	
-	-- All the world builder scripts
+
 	GetWorldBuilderMaps(g_MapEntries);
 						
 	table.sort(g_MapEntries, function(a, b) return a.Name < b.Name end);
@@ -952,7 +952,7 @@ function RefreshMapScripts()
 	function TypeSelected( id )
 		local mapScript = g_MapEntries[id];
 	
-		-- If this is an "error" entry (invalid WB file for example), do nothing.
+
 		if(mapScript.Error) then
 			return;
 		end
@@ -963,8 +963,8 @@ function RefreshMapScripts()
 			local mapScriptFileName = mapScript.FileName;
 			local mapScriptWBMapData = mapScript.WBMapData;
 			
-			-- If just the mapType was specified, grab the correct map file based on 
-			-- type and current map size settings.
+
+
 			if(mapScript.MapType ~= nil) then
 				local mapType = mapScript.MapType;
 				local mapSizes = {};
@@ -978,10 +978,10 @@ function RefreshMapScripts()
 				local worldSize = PreGame.GetWorldSize();
 				
 				if(mapSizes[worldSize] ~= nil) then
-					--Adjust Map Size
+
 					mapScriptFileName = mapSizes[worldSize];
 				else
-					-- Not Found, pick random size and set filename to smallest world size.
+
 					for row in GameInfo.Worlds("ID >= 0 ORDER BY ID") do
 						local file = mapSizes[row.ID];
 						if(file ~= nil) then
@@ -996,7 +996,7 @@ function RefreshMapScripts()
 			PreGame.SetRandomMapScript(false);
 			PreGame.SetMapScript(mapScriptFileName);
 						
-			-- If it's a WB Map, we have more to do.
+
 			if(mapScriptWBMapData ~= nil) then
 				local wb = mapScriptWBMapData;
 				
@@ -1028,7 +1028,7 @@ function RefreshMapScripts()
 			end				
 		end
 	
-		-- Refresh Map Sizes.
+
 		PopulateMapSizePulldown();
 						
 		RefreshDropDownOptions();
@@ -1039,8 +1039,8 @@ function RefreshMapScripts()
 end
 
 
-----------------------------------------------------------------
--- STARTING ERA
+
+
 for info in GameInfo.Eras() do
 
     local controlTable = {};
@@ -1056,8 +1056,8 @@ function OnEraPull( id )
 end
 Controls.EraPull:RegisterSelectionCallback( OnEraPull );
 
-----------------------------------------------------------------
--- TURN MODE
+
+
 for i, turnMode in ipairs(g_turnModeOptions) do
 	local controlTable = {};
 	Controls.TurnModePull:BuildEntry( "InstanceOne", controlTable );
@@ -1084,12 +1084,12 @@ end
 Controls.TurnModePull:RegisterSelectionCallback( OnTurnModePull );
 
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function OnMinorCivsSlider( fValue )
 	local numMinorCivsWanted = math.floor( (fValue * #GameInfo.MinorCivilizations) + 0.5 );
     Controls.MinorCivsLabel:LocalizeAndSetText("TXT_KEY_AD_SETUP_CITY_STATES", numMinorCivsWanted);
-    -- Apply the value, but wait until the left mouse button is not being tracked (the user is through sliding)
+
     if (not Controls.MinorCivsSlider:IsTrackingLeftMouseButton()) then
 		PreGame.SetNumMinorCivs(numMinorCivsWanted);
 		SendGameOptionChanged();
@@ -1097,16 +1097,16 @@ function OnMinorCivsSlider( fValue )
 end
 Controls.MinorCivsSlider:RegisterSliderCallback( OnMinorCivsSlider );
 
-----------------------------------------------------------------        
-----------------------------------------------------------------
+
+
 function OnMaxTurnsEditBoxChange()	
 	PreGame.SetMaxTurns( Controls.MaxTurnsEdit:GetText() );
 	SendGameOptionChanged();
 end
 Controls.MaxTurnsEdit:RegisterCallback( OnMaxTurnsEditBoxChange )
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnMaxTurnsChecked()
 	if(Controls.MaxTurnsCheck:IsChecked()) then
 		Controls.MaxTurnsEditbox:SetHide(false);
@@ -1121,8 +1121,8 @@ function OnMaxTurnsChecked()
 end
 Controls.MaxTurnsCheck:RegisterCallback( Mouse.eLClick, OnMaxTurnsChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetAIOptionsOption()
 	local isChecked = Controls.AIOptionsCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_AI_OPTIONS", isChecked);
@@ -1147,16 +1147,16 @@ function SetAIOptionsOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnAIOptionsChecked()
 	SetAIOptionsOption();
 	SendGameOptionChanged();
 end
 Controls.AIOptionsCheck:RegisterCallback( Mouse.eLClick, OnAIOptionsChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetAIAlwaysAcceptWhitePeaceOption()
 	local isChecked = Controls.AIAlwaysAcceptWhitePeaceCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_AI_GIMP_ALWAYS_WHITE_PEACE", isChecked);
@@ -1164,16 +1164,16 @@ function SetAIAlwaysAcceptWhitePeaceOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnAIAlwaysAcceptWhitePeaceChecked()
 	SetAIAlwaysAcceptWhitePeaceOption();
 	SendGameOptionChanged();
 end
 Controls.AIAlwaysAcceptWhitePeaceCheck:RegisterCallback( Mouse.eLClick, OnAIAlwaysAcceptWhitePeaceChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetAICannotAccumulateCultureOption()
 	local isChecked = Controls.AICannotAccumulateCultureCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_AI_GIMP_NO_CULTURE", isChecked);
@@ -1181,16 +1181,16 @@ function SetAICannotAccumulateCultureOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnAICannotAccumulateCultureChecked()
 	SetAICannotAccumulateCultureOption();
 	SendGameOptionChanged();
 end
 Controls.AICannotAccumulateCultureCheck:RegisterCallback( Mouse.eLClick, OnAICannotAccumulateCultureChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetAICannotBuildSettlersOption()
 	local isChecked = Controls.AICannotBuildSettlersCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_AI_GIMP_NO_BUILDING_SETTLERS", isChecked);
@@ -1198,16 +1198,16 @@ function SetAICannotBuildSettlersOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnAICannotBuildSettlersChecked()
 	SetAICannotBuildSettlersOption();
 	SendGameOptionChanged();
 end
 Controls.AICannotBuildSettlersCheck:RegisterCallback( Mouse.eLClick, OnAICannotBuildSettlersChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetAICannotBuildWorldWondersOption()
 	local isChecked = Controls.AICannotBuildWorldWondersCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_AI_GIMP_NO_WORLD_WONDER", isChecked);
@@ -1215,16 +1215,16 @@ function SetAICannotBuildWorldWondersOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnAICannotCoupCityStatesChecked()
 	SetAICannotCoupCityStatesOption();
 	SendGameOptionChanged();
 end
 Controls.AICannotCoupCityStatesCheck:RegisterCallback( Mouse.eLClick, OnAICannotCoupCityStatesChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetAICannotCoupCityStatesOption()
 	local isChecked = Controls.AICannotCoupCityStatesCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_AI_GIMP_NO_COUP", isChecked);
@@ -1232,16 +1232,16 @@ function SetAICannotCoupCityStatesOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnAICannotBuildWorldWondersChecked()
 	SetAICannotBuildWorldWondersOption();
 	SendGameOptionChanged();
 end
 Controls.AICannotBuildWorldWondersCheck:RegisterCallback( Mouse.eLClick, OnAICannotBuildWorldWondersChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetAICannotFoundReligionOption()
 	local isChecked = Controls.AICannotFoundReligionCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_AI_GIMP_NO_RELIGION_FOUNDING", isChecked);
@@ -1249,16 +1249,16 @@ function SetAICannotFoundReligionOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnAICannotFoundReligionChecked()
 	SetAICannotFoundReligionOption();
 	SendGameOptionChanged();
 end
 Controls.AICannotFoundReligionCheck:RegisterCallback( Mouse.eLClick, OnAICannotFoundReligionChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetAICannotSpreadReligionCSOption()
 	local isChecked = Controls.AICannotSpreadReligionCSCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_AI_GIMP_NO_MINOR_RELIGION_SPREAD", isChecked);
@@ -1266,16 +1266,16 @@ function SetAICannotSpreadReligionCSOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnAICannotSpreadReligionCSChecked()
 	SetAICannotSpreadReligionCSOption();
 	SendGameOptionChanged();
 end
 Controls.AICannotSpreadReligionCSCheck:RegisterCallback( Mouse.eLClick, OnAICannotSpreadReligionCSChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetAICannotSpreadReligionHumansOption()
 	local isChecked = Controls.AICannotSpreadRelHumansCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_AI_GIMP_NO_RELIGION_SPREAD", isChecked);
@@ -1283,16 +1283,16 @@ function SetAICannotSpreadReligionHumansOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnAICannotSpreadRelHumansChecked()
 	SetAICannotSpreadReligionHumansOption();
 	SendGameOptionChanged();
 end
 Controls.AICannotSpreadRelHumansCheck:RegisterCallback( Mouse.eLClick, OnAICannotSpreadRelHumansChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetAICannotVoteInCongressOption()
 	local isChecked = Controls.AICannotVoteInCongressCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_AI_NO_VOTE", isChecked);
@@ -1300,16 +1300,16 @@ function SetAICannotVoteInCongressOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnAICannotVoteInCongressChecked()
 	SetAICannotVoteInCongressOption();
 	SendGameOptionChanged();
 end
 Controls.AICannotVoteInCongressCheck:RegisterCallback( Mouse.eLClick, OnAICannotVoteInCongressChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetAICannotBeLiberatedOption()
 	local isChecked = Controls.AICannotBeLiberatedCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_AI_GIMP_NO_LIBERATION", isChecked);
@@ -1317,16 +1317,16 @@ function SetAICannotBeLiberatedOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnAICannotBeLiberatedChecked()
 	SetAICannotBeLiberatedOption();
 	SendGameOptionChanged();
 end
 Controls.AICannotBeLiberatedCheck:RegisterCallback( Mouse.eLClick, OnAICannotBeLiberatedChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetAICannotHaveWealsWithHumansOption()
 	local isChecked = Controls.AICannotHaveWealsWithHumansCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_AI_GIMP_NO_DEALS", isChecked);
@@ -1334,16 +1334,16 @@ function SetAICannotHaveWealsWithHumansOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnAICannotHaveWealsWithHumansChecked()
 	SetAICannotHaveWealsWithHumansOption();
 	SendGameOptionChanged();
 end
 Controls.AICannotHaveWealsWithHumansCheck:RegisterCallback( Mouse.eLClick, OnAICannotHaveWealsWithHumansChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetDisableAIDemographicsOption()
 	local isChecked = Controls.DisableAIDemographicsCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_AI_GIMP_NO_DEMOGRAPHICS", isChecked);
@@ -1351,16 +1351,16 @@ function SetDisableAIDemographicsOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnDisableAIDemographicsChecked()
 	SetDisableAIDemographicsOption();
 	SendGameOptionChanged();
 end
 Controls.DisableAIDemographicsCheck:RegisterCallback( Mouse.eLClick, OnDisableAIDemographicsChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetNoAIStartAdvantageOption()
 	local isChecked = Controls.NoAIStartAdvantageCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_AI_HANDICAP_START", isChecked);
@@ -1368,16 +1368,16 @@ function SetNoAIStartAdvantageOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnNoAIStartAdvantageChecked()
 	SetNoAIStartAdvantageOption();
 	SendGameOptionChanged();
 end
 Controls.NoAIStartAdvantageCheck:RegisterCallback( Mouse.eLClick, OnNoAIStartAdvantageChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetNoPenaltyForExpansionOption()
 	local isChecked = Controls.NoPenaltyForExpansionCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_DISABLE_RECKLESS_EXPANDER", isChecked);
@@ -1385,16 +1385,16 @@ function SetNoPenaltyForExpansionOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnNoPenaltyForExpansionChecked()
 	SetNoPenaltyForExpansionOption();
 	SendGameOptionChanged();
 end
 Controls.NoPenaltyForExpansionCheck:RegisterCallback( Mouse.eLClick, OnNoPenaltyForExpansionChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetNoXPFromAIOption()
 	local isChecked = Controls.NoXPFromAICheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_AI_XP_CAP", isChecked);
@@ -1402,16 +1402,16 @@ function SetNoXPFromAIOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnNoXPFromAIChecked()
 	SetNoXPFromAIOption();
 	SendGameOptionChanged();
 end
 Controls.NoXPFromAICheck:RegisterCallback( Mouse.eLClick, OnNoXPFromAIChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetAdditionalOptionsOption()
 	local isChecked = Controls.AdditionalOptionsCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_ADDITIONAL", isChecked);
@@ -1433,16 +1433,16 @@ function SetAdditionalOptionsOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnAdditionalOptionsChecked()
 	SetAdditionalOptionsOption();
 	SendGameOptionChanged();
 end
 Controls.AdditionalOptionsCheck:RegisterCallback( Mouse.eLClick, OnAdditionalOptionsChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetAllowPolicySavingOption()
 	local isChecked = Controls.AllowPolicySavingCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_POLICY_SAVING", isChecked);
@@ -1450,16 +1450,16 @@ function SetAllowPolicySavingOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnAllowPolicySavingChecked()
 	SetAllowPolicySavingOption();
 	SendGameOptionChanged();
 end
 Controls.AllowPolicySavingCheck:RegisterCallback( Mouse.eLClick, OnAllowPolicySavingChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetAllowPromotionSavingOption()
 	local isChecked = Controls.AllowPromotionSavingCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_PROMOTION_SAVING", isChecked);
@@ -1467,16 +1467,16 @@ function SetAllowPromotionSavingOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnAllowPromotionSavingChecked()
 	SetAllowPromotionSavingOption();
 	SendGameOptionChanged();
 end
 Controls.AllowPromotionSavingCheck:RegisterCallback( Mouse.eLClick, OnAllowPromotionSavingChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetAlternateScoreCalculationsOption()
 	local isChecked = Controls.AlternateScoreCalculationsCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_TWEAKED_SCORING", isChecked);
@@ -1484,16 +1484,16 @@ function SetAlternateScoreCalculationsOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnAlternateScoreCalculationsChecked()
 	SetAlternateScoreCalculationsOption();
 	SendGameOptionChanged();
 end
 Controls.AlternateScoreCalculationsCheck:RegisterCallback( Mouse.eLClick, OnAlternateScoreCalculationsChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetCompleteKillsOption()
 	local isChecked = Controls.CompleteKillsCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_COMPLETE_KILLS", isChecked);
@@ -1501,16 +1501,16 @@ function SetCompleteKillsOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnCompleteKillsChecked()
 	SetCompleteKillsOption();
 	SendGameOptionChanged();
 end
 Controls.CompleteKillsCheck:RegisterCallback( Mouse.eLClick, OnCompleteKillsChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetDisableStartBiasOption()
 	local isChecked = Controls.DisableStartBiasCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_DISABLE_START_BIAS", isChecked);
@@ -1518,16 +1518,16 @@ function SetDisableStartBiasOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnDisableStartBiasChecked()
 	SetDisableStartBiasOption();
 	SendGameOptionChanged();
 end
 Controls.DisableStartBiasCheck:RegisterCallback( Mouse.eLClick, OnDisableStartBiasChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetNoAncientRuinsOption()
 	local isChecked = Controls.NoAncientRuinsCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_NO_GOODY_HUTS", isChecked);
@@ -1535,16 +1535,16 @@ function SetNoAncientRuinsOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnNoAncientRuinsChecked()
 	SetNoAncientRuinsOption();
 	SendGameOptionChanged();
 end
 Controls.NoAncientRuinsCheck:RegisterCallback( Mouse.eLClick, OnNoAncientRuinsChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetNoBarbariansOption()
 	local isChecked = Controls.NoBarbariansCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_NO_BARBARIANS", isChecked);
@@ -1552,16 +1552,16 @@ function SetNoBarbariansOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnNoBarbariansChecked()
 	SetNoBarbariansOption();
 	SendGameOptionChanged();
 end
 Controls.NoBarbariansCheck:RegisterCallback( Mouse.eLClick, OnNoBarbariansChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetNoCityRazingOption()
 	local isChecked = Controls.NoCityRazingCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_NO_CITY_RAZING", isChecked);
@@ -1569,16 +1569,16 @@ function SetNoCityRazingOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnNoCityRazingChecked()
 	SetNoCityRazingOption();
 	SendGameOptionChanged();
 end
 Controls.NoCityRazingCheck:RegisterCallback( Mouse.eLClick, OnNoCityRazingChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetNoEspionageOption()
 	local isChecked = Controls.NoEspionageCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_NO_ESPIONAGE", isChecked);
@@ -1586,16 +1586,16 @@ function SetNoEspionageOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnNoEspionageChecked()
 	SetNoEspionageOption();
 	SendGameOptionChanged();
 end
 Controls.NoEspionageCheck:RegisterCallback( Mouse.eLClick, OnNoEspionageChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetOneCityChallengeOption()
 	local isChecked = Controls.OneCityChallengeCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_ONE_CITY_CHALLENGE", isChecked);
@@ -1603,16 +1603,16 @@ function SetOneCityChallengeOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnOneCityChallengeChecked()
 	SetOneCityChallengeOption();
 	SendGameOptionChanged();
 end
 Controls.OneCityChallengeCheck:RegisterCallback( Mouse.eLClick, OnOneCityChallengeChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetRagingBarbariansCheckOption()
 	local isChecked = Controls.RagingBarbariansCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_RAGING_BARBARIANS", isChecked);
@@ -1620,16 +1620,16 @@ function SetRagingBarbariansCheckOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnRagingBarbariansChecked()
 	SetRagingBarbariansCheckOption();
 	SendGameOptionChanged();
 end
 Controls.RagingBarbariansCheck:RegisterCallback( Mouse.eLClick, OnRagingBarbariansChecked );
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetRandomPersonalitiesOption()
 	local isChecked = Controls.RandomPersonalitiesCheck:IsChecked();
 	PreGame.SetGameOption("GAMEOPTION_RANDOM_PERSONALITIES", isChecked);
@@ -1637,49 +1637,49 @@ function SetRandomPersonalitiesOption()
 	UpdateGameOptionsDisplay();
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnRandomPersonalitiesChecked()
 	SetRandomPersonalitiesOption();
 	SendGameOptionChanged();
 end
 Controls.RandomPersonalitiesCheck:RegisterCallback( Mouse.eLClick, OnRandomPersonalitiesChecked );
 
-----------------------------------------------------------------        
-----------------------------------------------------------------
+
+
 function OnTurnTimerEditBoxChange()	
 	PreGame.SetPitbossTurnTime( Controls.TurnTimerEdit:GetText() );
 	SendGameOptionChanged();
 end
 Controls.TurnTimerEdit:RegisterCallback( OnTurnTimerEditBoxChange )
 
--------------------------------------------------
--------------------------------------------------
+
+
 function SetTurnTimerOption()
 	local isChecked = Controls.TurnTimerCheck:IsChecked();
 	Controls.TurnTimerEditbox:SetHide(not isChecked);
 	PreGame.SetGameOption("GAMEOPTION_END_TURN_TIMER_ENABLED", isChecked);
 	
-	-- Update editbox text based on current turn time.
+
 	local turnTime = PreGame.GetPitbossTurnTime();
 	
-	-- Initially only display the turn time in the edit box if the turn time is not zero.
-	-- This mimics the MaxTurns option's functionality.
+
+
 	if(turnTime > 0) then
 		Controls.TurnTimerEdit:SetText( turnTime );
 	end
 end
 
--------------------------------------------------
--------------------------------------------------
+
+
 function OnTurnTimerChecked()
 	SetTurnTimerOption();
 	SendGameOptionChanged();
 end
 Controls.TurnTimerCheck:RegisterCallback( Mouse.eLClick, OnTurnTimerChecked );
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function RefreshDropDownOptions()
 	g_DropDownOptionsManager:ResetInstances();
 	
@@ -1715,7 +1715,7 @@ function RefreshDropDownOptions()
 		table.insert(sortedOptions, v);
 	end
 	 
-	-- Sort the options
+
 	table.sort(sortedOptions, function(a, b) 
 		if(a.SortPriority == b.SortPriority) then
 			return a.Name < b.Name; 
@@ -1724,7 +1724,7 @@ function RefreshDropDownOptions()
 		end
 	end);
 	
-	-- Update the UI!
+
 	for _, option in ipairs(sortedOptions) do
 	
 		local gameOption = g_DropDownOptionsManager:GetInstance();
@@ -1752,7 +1752,7 @@ function RefreshDropDownOptions()
 			end);
 		end
 		
-		--Assign the currently selected value.
+
 		local savedValue = PreGame.GetMapOption(option.ID);
 		local defaultValue;
 		if(savedValue ~= -1) then
@@ -1787,8 +1787,8 @@ function RefreshTurnTimerUnits()
 	end	
 end
 
-----------------------------------------------------------------
-----------------------------------------------------------------
+
+
 function RefreshGameOptions()
 
 	g_GameOptionsManager:ResetInstances();
@@ -1796,8 +1796,8 @@ function RefreshGameOptions()
 	g_DLCAllowedManager:ResetInstances();
 
 	local bCanEdit = CanEditGameOptions();
-	---------------------------------
-	-- Victory conditions
+
+
 	for row in GameInfo.Victories() do
 		if(row.Type ~= "VICTORY_SCRAP") then
 			local victoryCondition = g_VictoryCondtionsManager:GetInstance();
@@ -1816,10 +1816,10 @@ function RefreshGameOptions()
 		
 	end
 
-	---------------------------------
-	-- General Game Options
+
+
 	local options = {};
-	-- First, Gather a list of all options
+
 	for option in GameInfo.GameOptions{Visible = 1} do
 		local option = {
 			Type = option.Type,
@@ -1833,7 +1833,7 @@ function RefreshGameOptions()
 			SupportsMultiplayer = option.SupportsMultiplayer,
 		};
 		
-		-- Don't show several of the game options because they are handled elsewhere.
+
 		if( option.Type ~= "GAMEOPTION_END_TURN_TIMER_ENABLED" 
 				and option.Type ~= "GAMEOPTION_SIMULTANEOUS_TURNS"
 				and option.Type ~= "GAMEOPTION_DYNAMIC_TURNS") then 
@@ -1842,9 +1842,9 @@ function RefreshGameOptions()
 				option.Checked = savedValue == 1;
 			end
 
-			-- Quick Combat / Movement have TWO PreGame stores: GameOption and SetQuick*.
-			-- Lobby checkboxes only wrote GameOption; MP setup writes SetQuick* from
-			-- OptionsManager. Keep them in sync so lobby saves keep the intended value.
+
+
+
 			if option.Type == "GAMEOPTION_QUICK_COMBAT" or option.Type == "GAMEOPTION_QUICK_MOVEMENT" then
 				local apiOn = false;
 				if option.Type == "GAMEOPTION_QUICK_COMBAT" and PreGame.GetQuickCombat ~= nil then
@@ -1865,8 +1865,8 @@ function RefreshGameOptions()
 				end
 			end
 
-			-- Only show non-singleplayer options in network multiplayer 
-			-- The turn timer ends up being an exception to this because we manually add the UI for that option.
+
+
 			local DontDisplay = (PreGame.IsHotSeatGame() and not option.SupportsSinglePlayer) 
 											 or (not PreGame.IsHotSeatGame() and not option.SupportsMultiplayer);
 			if( not DontDisplay ) then
@@ -1894,7 +1894,7 @@ function RefreshGameOptions()
 		table.insert(options, option);
 	end
 	
-	-- Sort the options alphabetically
+
 	table.sort(options, function(a, b) 
 		if(a.SortPriority == b.SortPriority) then
 			return a.Name < b.Name;
@@ -1903,7 +1903,7 @@ function RefreshGameOptions()
 		end
 	end);
 	
-	-- Add Options to UI.
+
 	local sizeY = 0;
 	for _, option in ipairs(options) do
 		local gameOption = g_GameOptionsManager:GetInstance();
@@ -1915,7 +1915,7 @@ function RefreshGameOptions()
 			gameOption.GameOptionRoot:SetToolTipString(option.ToolTip);
 		end
 		
-		-- Don't allow dedicated servers to edit the pitboss option.
+
 		local bCanEditThisOption = not (option.Type == "GAMEOPTION_PITBOSS") or not Network.IsDedicatedServer();
 		
 		gameOption.GameOptionRoot:SetDisabled(option.Disabled or not bCanEdit or not bCanEditThisOption);
@@ -1924,7 +1924,7 @@ function RefreshGameOptions()
 		if(option.GameOption == true) then
 			gameOption.GameOptionRoot:RegisterCheckHandler( function(bCheck)
 				PreGame.SetGameOption(option.Type, bCheck);
-				-- Keep dedicated Quick* flags aligned (used by MP setup + runtime/DLL).
+
 				if option.Type == "GAMEOPTION_QUICK_COMBAT" and PreGame.SetQuickCombat ~= nil then
 					PreGame.SetQuickCombat(bCheck);
 				elseif option.Type == "GAMEOPTION_QUICK_MOVEMENT" and PreGame.SetQuickMovement ~= nil then
@@ -1954,17 +1954,17 @@ function RefreshGameOptions()
 	end
 	Controls.MaxTurnsCheck:SetDisabled( not bCanEdit );
 	
-	-- Configure initial turn timer setting.
+
 	Controls.TurnTimerCheck:SetCheck(PreGame.GetGameOption("GAMEOPTION_END_TURN_TIMER_ENABLED") == 1);
 	SetTurnTimerOption();
 	Controls.TurnTimerCheck:SetDisabled( not bCanEdit );
 
-	-- Set turn timer units label.
+
 	RefreshTurnTimerUnits();
 
 	local bCanEditDLC = CanEditDLCGameOptions();
-	---------------------------------
-	-- DLC Allowed
+
+
 	for row in GameInfo.DownloadableContent() do
 		if (row.IsBaseContentUpgrade == 0) then
 			local dlcEntries = g_DLCAllowedManager:GetInstance();

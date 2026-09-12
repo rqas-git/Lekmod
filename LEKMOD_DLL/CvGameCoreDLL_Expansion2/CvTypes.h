@@ -1,18 +1,18 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #pragma once
 
-//This utility caches commonly used type ID's from the database.
+
 namespace CvTypes
 {
 void AcquireTypes(Database::Connection& db);
 
-//MissionTypes
+
 const MissionTypes getMISSION_MOVE_TO();
 const MissionTypes getMISSION_ROUTE_TO();
 const MissionTypes getMISSION_MOVE_TO_UNIT();

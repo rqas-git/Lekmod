@@ -1,9 +1,9 @@
--- edit:
--- expandable MP Trade Panel size
--- for EUI & vanilla UI
--------------------------------------------------
--- Diplomacy and Advisors Buttons that float out in the screen
--------------------------------------------------
+
+
+
+
+
+
 include( "TradeLogic" );
 Events.OpenPlayerDealScreenEvent.Add( OnOpenPlayerDealScreen );
 Controls.ModifyButton:RegisterCallback( Mouse.eLClick, OnModify );
@@ -14,9 +14,9 @@ ContextPtr:SetInputHandler( InputHandler );
 
 Controls.CloseButton:RegisterCallback( Mouse.eLClick, OnBack );
 
-----------------------------------------------------------------
--- 'Active' (local human) player has changed
-----------------------------------------------------------------
+
+
+
 function OnDiploActivePlayerChanged( iActivePlayer, iPrevActivePlayer )
 	if (not ContextPtr:IsHidden()) then
 		OnBack();
@@ -25,8 +25,8 @@ end
 Events.GameplaySetActivePlayer.Add(OnDiploActivePlayerChanged);
 
 local sgPrevCursor = 0;
-----------------------------------------------------------------        
-----------------------------------------------------------------  
+
+
 function OnShowHide( bHide )
 	if(not bHide) then 
 		sgPrevCursor = UIManager:SetUICursor(0);
@@ -38,19 +38,19 @@ end
 ContextPtr:SetShowHideHandler( OnShowHide );
 
 
-----------------------------------------------------------------        
-----------------------------------------------------------------  
+
+
 function OnOpenAILeaderDiploTrade()
-	-- An AI leader trade was started while we're open, close ourselves.
+
 	if (not ContextPtr:IsHidden()) then
 		OnBack();
 	end
 end
 LuaEvents.OpenAILeaderDiploTrade.Add(OnOpenAILeaderDiploTrade);
 
--------------------------------------------------
--- NEW: expandable MP Trade Panel size
--------------------------------------------------
+
+
+
 local EUI_options = Modding.OpenUserData( "Enhanced User Interface Options", 1);
 local timeSinceLastDBWrite = 0;
 function OnEditVerticalSize(v)
@@ -59,14 +59,14 @@ function OnEditVerticalSize(v)
         local dx, dy = UIManager:GetMouseDelta();
         if Controls.Pockets:IsHidden() then
 			local y1 = math.max( math.min( Controls.MainGrid:GetSizeY() - dy, h - 500 ), 300 );
-        	if os.clock() - timeSinceLastDBWrite > 0.1 then  -- 0.1s cooldown for DB access
+            if os.clock() - timeSinceLastDBWrite > 0.1 then
         	    EUI_options.SetValue( "DB_iTradePanelSizeY2", y1 );
         	    timeSinceLastDBWrite = os.clock();
         	end
         	LuaEvents.TradePanelResize(y1, false);
         else
         	local y1 = math.max( math.min( Controls.MainGrid:GetSizeY() - 200 - dy, h - 500 ), 200 );
-        	if os.clock() - timeSinceLastDBWrite > 0.1 then  -- 0.1s cooldown for DB access
+            if os.clock() - timeSinceLastDBWrite > 0.1 then
         	    EUI_options.SetValue( "DB_iTradePanelSizeY", y1 );
         	    timeSinceLastDBWrite = os.clock();
         	end

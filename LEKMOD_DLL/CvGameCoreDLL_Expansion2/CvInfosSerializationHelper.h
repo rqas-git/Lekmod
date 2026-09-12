@@ -1,24 +1,24 @@
-/*	-------------------------------------------------------------------------------------------------------
-	© 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
 #ifndef CVINFOSSERIALIZATIONHELPER_H
 #define CVINFOSSERIALIZATIONHELPER_H
 
 #pragma once
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Helper Functions to serialize arrays that use CvInfos as member data or as implicit IDs by
-// the index in the array.
-// The index / explicit type will be mapped to either a string version of the type or its unique hash
-// This allows the info data set to change size.
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
 namespace CvInfosSerializationHelper
 {
-/// Read an array of T values and assume that the index in the array is the V0 index
+
 template<typename TData>
 void ReadV0DataArray(FDataStream& kStream, TData* paArray, int iArraySize, const char** ppszV0Tags, uint uiV0TagCount)
 {
@@ -42,7 +42,7 @@ void ReadV0DataArray(FDataStream& kStream, TData* paArray, int iArraySize, const
 	}
 }
 
-/// Read an array of T values and assume that the index in the array is the V0 index
+
 template<typename TData>
 void ReadV0DataArray(FDataStream& kStream, std::vector<TData>& aiArray, uint uiMaxSize, const char** ppszV0Tags, uint uiV0TagCount)
 {
@@ -50,7 +50,7 @@ void ReadV0DataArray(FDataStream& kStream, std::vector<TData>& aiArray, uint uiM
 		aiArray.resize(uiMaxSize);
 
 	uint uiSize;
-	kStream >> uiSize;	// Get the number written
+	kStream >> uiSize;
 
 	for(uint iI = 0; iI < uiV0TagCount && iI < uiSize; iI++)
 	{
@@ -71,7 +71,7 @@ void ReadV0DataArray(FDataStream& kStream, std::vector<TData>& aiArray, uint uiM
 	}
 }
 
-/// Read a 2 dimensional array of T values and assume that the primary index in the array is the V0 type index
+
 template<typename TData>
 void ReadV0DataArray(FDataStream& kStream, TData** ppaArray, int iSubArraySize, int iArraySize, const char** ppszV0Tags, uint uiV0TagCount)
 {
@@ -97,7 +97,7 @@ void ReadV0DataArray(FDataStream& kStream, TData** ppaArray, int iSubArraySize, 
 				GC.LogMessage(szError.GetCString());
 				CvAssertMsg(false, szError);
 
-				// Burn through the data so we can continue on a type outside the bounds
+
 				for(int iJ = 0; iJ < iSubArraySize; ++iJ)
 					kStream >> tValue;
 			}
@@ -115,7 +115,7 @@ void ReadV0DataArray(FDataStream& kStream, TData** ppaArray, int iSubArraySize, 
 	}
 }
 
-/// Read an array of T types and assume the source value is a V0 type (index)
+
 template<typename TType>
 void ReadV0TypeArray(FDataStream& kStream, std::vector<TType>& aiArray, uint uiMaxSize, const char** ppszV0Tags, uint uiV0TagCount)
 {
@@ -123,7 +123,7 @@ void ReadV0TypeArray(FDataStream& kStream, std::vector<TType>& aiArray, uint uiM
 		aiArray.resize(uiMaxSize);
 
 	uint uiSize;
-	kStream >> uiSize;	// Get the number written
+	kStream >> uiSize;
 
 	for(uint iI = 0; iI < uiSize; iI++)
 	{
@@ -155,8 +155,8 @@ void ReadV0TypeArray(FDataStream& kStream, std::vector<TType>& aiArray, uint uiM
 	}
 }
 
-/// Read an array of T types and assume the source value is a V0 type (index)
-/// Assumes there is no count written
+
+
 template<typename TType>
 void ReadV0TypeArray(FDataStream& kStream, TType* paArray, uint uiSize, const char** ppszV0Tags, uint uiV0TagCount)
 {
@@ -190,7 +190,7 @@ void ReadV0TypeArray(FDataStream& kStream, TType* paArray, uint uiSize, const ch
 	}
 }
 
-// Convert a V0 type (index) to the type index for the currently loaded data
+
 template<typename TType>
 TType ConvertV0(TType eType, const char** ppszV0Tags, uint uiV0TagCount)
 {
@@ -213,7 +213,7 @@ TType ConvertV0(TType eType, const char** ppszV0Tags, uint uiV0TagCount)
 	return (TType)-1;
 }
 
-/// Helper function to read in an array of T data that has a string'ized type ID before each entry
+
 template<typename TData>
 void ReadDataArray(FDataStream& kStream, TData* paArray, int iArraySize)
 {
@@ -242,7 +242,7 @@ void ReadDataArray(FDataStream& kStream, TData* paArray, int iArraySize)
 	}
 }
 
-/// Helper function to read in an array of T data that has a string'ized type ID before each entry
+
 template<typename TData>
 void ReadHashedDataArray(FDataStream& kStream, TData* paArray, int iArraySize)
 {
@@ -269,7 +269,7 @@ void ReadHashedDataArray(FDataStream& kStream, TData* paArray, int iArraySize)
 	}
 }
 
-/// Helper function to read in an two dimensional array of T data that has a string'ized type ID before each primary array entry
+
 template<typename TData>
 void ReadDataArray(FDataStream& kStream, TData** ppaArray, int iSubArraySize, int iArraySize)
 {
@@ -312,7 +312,7 @@ void ReadDataArray(FDataStream& kStream, TData** ppaArray, int iSubArraySize, in
 	}
 }
 
-/// Helper function to read in an two dimensional array of T data that has a string'ized type ID before each primary array entry
+
 template<typename TData>
 void ReadHashedDataArray(FDataStream& kStream, TData** ppaArray, int iSubArraySize, int iArraySize)
 {
@@ -354,7 +354,7 @@ void ReadHashedDataArray(FDataStream& kStream, TData** ppaArray, int iSubArraySi
 	}
 }
 
-/// Helper function to read in an std::vector of T data that has a string'ized type ID before each entry
+
 template<typename TData>
 void ReadDataArray(FDataStream& kStream, std::vector<TData>& aiArray)
 {
@@ -384,7 +384,7 @@ void ReadDataArray(FDataStream& kStream, std::vector<TData>& aiArray)
 	}
 }
 
-/// Helper function to read in an std::vector of T data that has a string'ized type ID before each entry
+
 template<typename TData>
 void ReadHashedDataArray(FDataStream& kStream, std::vector<TData>& aiArray)
 {
@@ -414,7 +414,7 @@ void ReadHashedDataArray(FDataStream& kStream, std::vector<TData>& aiArray)
 	}
 }
 
-/// Helper function to read in an array of hashed type entries and convert them to runtime type entries (indices)
+
 template<typename TType>
 void ReadTypeArray(FDataStream& kStream, std::vector<TType>& aArray)
 {
@@ -432,7 +432,7 @@ void ReadTypeArray(FDataStream& kStream, std::vector<TType>& aArray)
 	}
 }
 
-/// Helper function to read in an array of hashed type entries and convert them to runtime type entries (indices)
+
 template<typename TType>
 void ReadHashedTypeArray(FDataStream& kStream, std::vector<TType>& aArray)
 {
@@ -449,7 +449,7 @@ void ReadHashedTypeArray(FDataStream& kStream, std::vector<TType>& aArray)
 	}
 }
 
-/// Helper function to read in an array of hashed type entries and convert them to runtime type entries (indices)
+
 template<typename TType>
 void ReadHashedTypeArray(FDataStream& kStream, TType* paArray, uint uiArraySize)
 {
@@ -465,8 +465,8 @@ void ReadHashedTypeArray(FDataStream& kStream, TType* paArray, uint uiArraySize)
 	}
 }
 
-/// Helper function to read in an array of hashed type entries and convert them to runtime type entries (indices)
-/// This differs from the above only in that it uses the input array size, rather than reading the size
+
+
 template<typename TType>
 void ReadHashedTypeArray(FDataStream& kStream, uint uiInputArraySize, TType* paArray, uint uiOutputArraySize)
 {
@@ -478,8 +478,8 @@ void ReadHashedTypeArray(FDataStream& kStream, uint uiInputArraySize, TType* paA
 	}
 }
 
-/// Helper function to read in an array of data entries and remap them to new locations
-/// Note: This assumes the array in the stream does NOT have a lead count value.
+
+
 template<typename TType>
 bool ReadAndRemapDataArray(FDataStream& kStream, int iSrcCount, TType* pvDest, int iDestCount, const int* piaRemap)
 {
@@ -493,7 +493,7 @@ bool ReadAndRemapDataArray(FDataStream& kStream, int iSrcCount, TType* pvDest, i
 	bool bRemapSuccess = true;
 	for(int i = 0; i < iSrcCount; ++i)
 	{
-		int iDestIndex = piaRemap[i];	// The new index
+		int iDestIndex = piaRemap[i];
 		if(iDestIndex >= 0 && iDestIndex < iDestCount)
 		{
 			pvDest[iDestIndex] = pvBuffer[i];
@@ -505,7 +505,7 @@ bool ReadAndRemapDataArray(FDataStream& kStream, int iSrcCount, TType* pvDest, i
 	return bRemapSuccess;
 }
 
-/// Helper function to read in an array of hashed type entries and convert them to runtime type entries (indices)
+
 template<typename TType>
 void ReadTypeArrayDBLookup(FDataStream& kStream, std::vector<TType>& aArray, const char* szTable)
 {
@@ -523,21 +523,21 @@ void ReadTypeArrayDBLookup(FDataStream& kStream, std::vector<TType>& aArray, con
 
 
 
-/// Helper function to read a single type ID as a string and convert it to an ID
+
 int Read(FDataStream& kStream, bool* bValid = NULL);
 
-/// Helper function to read a single resource type ID as a hash and convert it to an ID
+
 int ReadHashed(FDataStream& kStream, bool* bValid = NULL);
 
-/// Helper function to read a single type ID as a string and convert it to an ID using the database (not InfoTables)
+
 int ReadDBLookup(FDataStream& kStream, const char* szTable, bool* bValid = NULL);
 
 
-//////////////////////////////////////////////////////////////////////////
-/// Writers
-//////////////////////////////////////////////////////////////////////////
 
-/// Helper function to write out an array of TData data, assuming the array index is the types runtime ID index of TType
+
+
+
+
 template<typename TType, typename TData>
 void WriteDataArray(FDataStream& kStream, TData* paArray, uint uiArraySize)
 {
@@ -553,7 +553,7 @@ void WriteDataArray(FDataStream& kStream, TData* paArray, uint uiArraySize)
 	}
 }
 
-/// Helper function to write out an array of TData data, assuming the array index is the types runtime ID index of TType
+
 template<typename TType, typename TData>
 void WriteHashedDataArray(FDataStream& kStream, TData* paArray, uint uiArraySize)
 {
@@ -569,7 +569,7 @@ void WriteHashedDataArray(FDataStream& kStream, TData* paArray, uint uiArraySize
 	}
 }
 
-/// Helper function to write out an array of data TData, assuming the array index is the types runtime ID index of TType
+
 template<typename TType, typename TData>
 void WriteDataArray(FDataStream& kStream, const std::vector<TData>& aArray)
 {
@@ -585,7 +585,7 @@ void WriteDataArray(FDataStream& kStream, const std::vector<TData>& aArray)
 	}
 }
 
-/// Helper function to write out an array of data TData, assuming the array index is the types runtime ID index of TType
+
 template<typename TType, typename TData>
 void WriteHashedDataArray(FDataStream& kStream, const std::vector<TData>& aArray)
 {
@@ -602,8 +602,8 @@ void WriteHashedDataArray(FDataStream& kStream, const std::vector<TData>& aArray
 }
 
 #ifdef LEKMOD_UNITCOMBAT_FREE_PROMOTION
-//write a hashed 2d array
-//2d template array
+
+
 template<typename TType, typename TData>
 void WriteHashed2DDataArray(FDataStream& kStream, TData** ppaArray, uint uiSubArraySize, uint uiArraySize)
 {
@@ -625,7 +625,7 @@ void WriteHashed2DDataArray(FDataStream& kStream, TData** ppaArray, uint uiSubAr
 }
 #endif
 
-/// Helper function to write out an integer array of data sized according to number of resource types
+
 template<typename TType, typename TData>
 void WriteDataArray(FDataStream& kStream, TData** ppaArray, uint uiSubArraySize, uint uiArraySize)
 {
@@ -646,7 +646,7 @@ void WriteDataArray(FDataStream& kStream, TData** ppaArray, uint uiSubArraySize,
 	}
 }
 
-/// Helper function to write out an integer array of data sized according to number of resource types
+
 template<typename TType, typename TData>
 void WriteHashedDataArray(FDataStream& kStream, TData** ppaArray, uint uiSubArraySize, uint uiArraySize)
 {
@@ -667,7 +667,7 @@ void WriteHashedDataArray(FDataStream& kStream, TData** ppaArray, uint uiSubArra
 	}
 }
 
-/// Helper function to write out an array of data of TType as string resource IDs
+
 template<typename TType>
 void WriteTypeArray(FDataStream& kStream, const std::vector<TType>& aiArray)
 {
@@ -679,7 +679,7 @@ void WriteTypeArray(FDataStream& kStream, const std::vector<TType>& aiArray)
 	}
 }
 
-/// Helper function to write out an array of data of TType as hashed resource IDs
+
 template<typename TType>
 void WriteHashedTypeArray(FDataStream& kStream, const std::vector<TType>& aiArray)
 {
@@ -691,7 +691,7 @@ void WriteHashedTypeArray(FDataStream& kStream, const std::vector<TType>& aiArra
 	}
 }
 
-/// Helper function to write out an array of data of TType as hashed resource IDs
+
 template<typename TType>
 void WriteHashedTypeArray(FDataStream& kStream, TType* paArray, uint uiArraySize)
 {
@@ -706,12 +706,12 @@ void WriteHashedTypeArray(FDataStream& kStream, TType* paArray, uint uiArraySize
 #define CVINFO_V0_TAG_COUNT(x)	(sizeof(x) / sizeof(const char*))
 #define CVINFO_V0_TAGS(x)	&x[0], sizeof(x) / sizeof(const char*)
 
-// Declare a basic serialization info helper
+
 #define DECLARE_SERIALIZATION_INFO_TYPE_HELPER(theType) \
 extern bool Write(FDataStream& kStream, const theType eType); \
 extern bool WriteHashed(FDataStream& kStream, const theType eType);
 
-// Implement a basic serialization info helper
+
 #define IMPLEMENT_SERIALIZATION_INFO_TYPE_HELPER(theType, theInfoAccess, theNoEnum) \
 bool Write(FDataStream& kStream, const theType eType) \
 { \
@@ -728,13 +728,13 @@ bool WriteHashed(FDataStream& kStream, const theType eType) \
 		return WriteHashed(kStream, (const CvBaseInfo*)NULL); \
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Start Type specific functions.
 
-// These functions convert a runtime type ID (index) to a unique type
-// string or hash
 
-// The V0 tag table for ResourceTypes
+
+
+
+
+
 extern const char* ms_V0ResourceTags[27];
 DECLARE_SERIALIZATION_INFO_TYPE_HELPER(ResourceTypes);
 extern const char* ms_V0PolicyTags[60];
@@ -767,16 +767,16 @@ DECLARE_SERIALIZATION_INFO_TYPE_HELPER(ImprovementTypes);
 #if defined(TRAITIFY)
 DECLARE_SERIALIZATION_INFO_TYPE_HELPER(BuildingClassTypes);
 #endif
-// Can't use this because nothing ever respects the values.  They are all hard-coded in the enum
-//DECLARE_SERIALIZATION_INFO_TYPE_HELPER(UnitAITypes);
 
-/// End Type specific functions
-//////////////////////////////////////////////////////////////////////////
 
-/// Helper function to write out an info type ID as string
+
+
+
+
+
 bool Write(FDataStream& kStream, const CvBaseInfo* pkInfo);
-/// Helper function to write out an info type ID as a hash
+
 bool WriteHashed(FDataStream& kStream, const CvBaseInfo* pkInfo);
 }
 
-#endif // CVINFOSSERIALIZATIONHELPER_H
+#endif

@@ -1,16 +1,16 @@
-//------------------------------------------------------------------------------------------------
-//
-//  *****************   FIRAXIS GAME ENGINE   ********************
-//
-//  FILE:    FFreeListTrashArray.h
-//
-//  AUTHOR:  Soren Johnson
-//
-//  PURPOSE: A dynamic array with a free list that keeps track of its own memory...
-//
-//------------------------------------------------------------------------------------------------
-//  Copyright (c) 2007 Firaxis Games, Inc. All rights reserved.
-//------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #ifndef		FFREELISTTRASHARRAY_H
 #define		FFREELISTTRASHARRAY_H
@@ -125,7 +125,7 @@ protected:
 
 
 
-// Public functions...
+
 
 template <class T>
 FFreeListTrashArray<T>::FFreeListTrashArray()
@@ -150,10 +150,10 @@ void FFreeListTrashArray<T>::Init(int iNumSlots)
 
 	assert(iNumSlots >= 0);
 
-	// make sure it's binary...
+
 	if ((iNumSlots > 0) && ((iNumSlots - 1) & iNumSlots) != 0)
 	{
-		// find high bit
+
 		iCount = 0;
 		while (iNumSlots != 1)
 		{
@@ -399,7 +399,7 @@ void FFreeListTrashArray<T>::Load(T* pData)
 	m_pArray[iIndex].pData = pData;
 }
 
-// Protected functions...
+
 
 template <class T>
 void FFreeListTrashArray<T>::GrowArray()
@@ -435,9 +435,9 @@ void FFreeListTrashArray<T>::GrowArray()
 	delete [] pOldArray;
 }
 
-//
-// use when list contains non-streamable types
-//
+
+
+
 template < class T >
 inline void FFreeListTrashArray< T >::Read( FDataStream* pStream )
 {
@@ -499,13 +499,13 @@ inline void FFreeListTrashArray< T >::Write( FDataStream* pStream ) const
 	}
 }
 
-//-------------------------------
-// Serialization helper templates:
-//-------------------------------
 
-//
-// use when list contains streamable types
-//
+
+
+
+
+
+
 template < class T >
 inline void ReadStreamableFFreeListTrashArray( FFreeListTrashArray< T >& flist, FDataStream* pStream )
 {
@@ -632,5 +632,4 @@ FDataStream & operator>>(FDataStream & readFrom, FFreeListTrashArray<T> & writeT
 	return readFrom;
 }
 
-#endif	//	FFREELISTTRASHARRAY_H
-
+#endif

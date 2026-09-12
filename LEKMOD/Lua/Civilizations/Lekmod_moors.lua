@@ -1,12 +1,12 @@
--- Author: EnormousApplePie
+
 include("Lekmod_utilities.lua")
 
 local this_civ = GameInfoTypes["CIVILIZATION_MOORS"]
 local is_active = LekmodUtilities:is_civilization_active(this_civ)
 
-------------------------------------------------------------------------------------------------------------------------
--- Moors UA. Give every city a dummy building that gives a production% bonus to buildings depending on the era.
-------------------------------------------------------------------------------------------------------------------------
+
+
+
 local trait_building = GameInfoTypes["BUILDING_MOORS_TRAIT2"]
 function lekmod_moors_on_era_ua(team_id, era_id)
 
@@ -16,7 +16,7 @@ function lekmod_moors_on_era_ua(team_id, era_id)
       and player:GetCivilizationType() == this_civ
       and player:GetTeam() == team_id
       then
-         -- for the desired production% amount we can simply add the building twice
+
          local amount_buildings = 0
          if era_id == GameInfoTypes["ERA_MEDIEVAL"] then
             amount_buildings = 2
@@ -47,7 +47,7 @@ function lekmod_moors_on_turn_ua(player_id)
    end
 
 end
-------------------------------------------------------------------------------------------------------------------------
+
 if is_active then
    GameEvents.TeamSetEra.Add(lekmod_moors_on_era_ua)
    GameEvents.PlayerDoTurn.Add(lekmod_moors_on_turn_ua)

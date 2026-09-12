@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-25 05:44:53 -->
+
 <GameData>
 
-	<!-- May use Faith to purchase Gurdwaras (+1 Happiness, each religion with 1 Follower provides +1 Faith / +1 Culture ) -->
+
 	<Beliefs>
 		<Row>
 			<Type>BELIEF_GURDWARAS</Type>
@@ -18,7 +18,7 @@
 		</Row>
 	</Belief_BuildingClassFaithPurchase>
 	
-	<!-- Gurdwara building -->
+
 	<BuildingClasses>
 		<Row>
 			<Type>BUILDINGCLASS_GURDWARA</Type>
@@ -70,7 +70,7 @@
 		</Row>
 	</Building_YieldChangesPerReligion>
 
-	<!-- localization -->
+
 	<Language_en_US>
 		<Row Tag="TXT_KEY_BELIEF_GURDWARAS">
 			<Text>Use 130 [ICON_PEACE] Faith to purchase Gurdwaras (+1 [ICON_HAPPINESS_1] Happiness, each Religion in the City adds +2 [ICON_PEACE] Faith)</Text>

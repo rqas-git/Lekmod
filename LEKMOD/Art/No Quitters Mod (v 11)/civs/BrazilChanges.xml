@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 1/20/2016 12:05:35 AM -->
+
 <GameData>
 	
-	<!-- Brazilwood Camp moved to Bronze Working, now provides +1 Production. Gains +2 Gold at Machinery and +2 Culture at Acoustics. -->
+
 	<Builds>
 		<Update>
 			<Set PrereqTech="TECH_BRONZE_WORKING" />
@@ -26,7 +26,7 @@
 		</Row>
 	</Improvement_TechYieldChanges>
 	
-	<!-- TXT_KEY_CIV5_IMPROVEMENTS_BRAZILWOOD_CAMP_HELP -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_CIV5_IMPROVEMENTS_BRAZILWOOD_CAMP_HELP" />
 		<Row Tag="TXT_KEY_CIV5_IMPROVEMENTS_BRAZILWOOD_CAMP_HELP">
@@ -52,7 +52,7 @@
 		</Row>
 	</Language_RU_RU>
 	
-	<!-- TXT_KEY_CIV5_IMPROVEMENTS_BRAZILWOOD_CAMP_TEXT -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_CIV5_IMPROVEMENTS_BRAZILWOOD_CAMP_TEXT" />
 		<Row Tag="TXT_KEY_CIV5_IMPROVEMENTS_BRAZILWOOD_CAMP_TEXT">
@@ -78,7 +78,7 @@
 		</Row>
 	</Language_RU_RU>
 
-	<!-- TXT_KEY_BUILD_BRAZILWOOD_CAMP_HELP -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_BUILD_BRAZILWOOD_CAMP_HELP" />
 		<Row Tag="TXT_KEY_BUILD_BRAZILWOOD_CAMP_HELP">
@@ -104,7 +104,7 @@
 		</Row>
 	</Language_RU_RU>
 	
-	<!-- TXT_KEY_BUILD_BRAZILWOOD_CAMP_REC -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_BUILD_BRAZILWOOD_CAMP_REC" />
 		<Row Tag="TXT_KEY_BUILD_BRAZILWOOD_CAMP_REC">

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 4/22/2015 10:50:33 PM -->
+
 <GameData>
 	
-	<!-- Allow Stoneworks on Plains -->
+
 	<Buildings>
 		<Update>
 			<Set ProhibitedCityTerrain="NULL" />

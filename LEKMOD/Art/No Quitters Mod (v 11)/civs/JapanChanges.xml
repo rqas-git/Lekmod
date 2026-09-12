@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-02 19:33:27 -->
+
 <GameData>
 
-	<!-- remove Zero -->
+
 	<Civilization_UnitClassOverrides>
 		<Delete UnitType="UNIT_JAPANESE_ZERO" />
 	</Civilization_UnitClassOverrides>
 
-	<!-- [New UB] Dojo (replaces Barracks): +2 Science, +10% combat for units trained here -->
+
 	<Buildings>
 		<Row>
 			<Type>BUILDING_DOJO</Type>
@@ -73,7 +73,7 @@
 		</Row>
 	</Civilization_BuildingClassOverrides>
 	
-	<!-- Way of the Warrior promotion -->
+
 	<UnitPromotions>
 		<Row>
 			<Type>PROMOTION_WAY_OF_THE_WARRIOR</Type>
@@ -127,7 +127,7 @@
 		</Row>
 	</UnitPromotions_UnitCombats>
 
-	<!-- localization -->
+
 	<Language_en_US>
 		<Row Tag="TXT_KEY_BUILDING_DOJO">
 			<Text>Dojo</Text>

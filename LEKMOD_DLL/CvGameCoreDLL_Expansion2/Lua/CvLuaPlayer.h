@@ -1,18 +1,18 @@
-/*	-------------------------------------------------------------------------------------------------------
-	� 1991-2012 Take-Two Interactive Software and its subsidiaries.  Developed by Firaxis Games.  
-	Sid Meier's Civilization V, Civ, Civilization, 2K Games, Firaxis Games, Take-Two Interactive Software 
-	and their respective logos are all trademarks of Take-Two interactive Software, Inc.  
-	All other marks and trademarks are the property of their respective owners.  
-	All rights reserved. 
-	------------------------------------------------------------------------------------------------------- */
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//!	 \file		CvLuaPlayer.h
-//!  \brief     Public interface to CvLuaPlayer.
-//!
-//!		This includes the public interface to CvLuaPlayer.
-//!		CvLuaPlayer is a Lua exposed version of CvPlayerAI instances.
-//!
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #pragma once
 #ifndef CVLUAPLAYER_H
 #define CVLUAPLAYER_H
@@ -22,21 +22,34 @@
 class CvLuaPlayer : public CvLuaScopedInstance<CvLuaPlayer, CvPlayerAI>
 {
 public:
-	//! Push all player instances to Lua
+
 	static void Register(lua_State* L);
 
-	//! Push CvPlayerAI methods into table t
+
 	static void PushMethods(lua_State* L, int t);
 
-	//! Required by CvLuaScopedInstance.
+
 	static void HandleMissingInstance(lua_State* L);
 
-	//! Required by CvLuaScopedInstance.
+
 	static const char* GetTypeName();
 
 protected:
+#if defined(LEKMOD_MACOS)
+    template<class R, class Owner, class... Args>
+    static int BasicLuaMethod(lua_State* L, R (Owner::*method)(Args...))
+    {
+        return CvLuaMethodWrapper<CvLuaPlayer, Owner>::BasicLuaMethod(L, method);
+    }
+    template<class R, class Owner, class... Args>
+    static int BasicLuaMethod(lua_State* L, R (Owner::*method)(Args...) const)
+    {
+        return CvLuaMethodWrapper<CvLuaPlayer, Owner>::BasicLuaMethod(L, method);
+    }
+#endif
 
-	//! Protected Lua call to register all player instances.
+
+
 	static int pRegister(lua_State* L);
 
 	static int lInitCity(lua_State* L);
@@ -229,8 +242,8 @@ protected:
 	static int lGetJONSCulturePerTurnForFree(lua_State* L);
 	static int lChangeJONSCulturePerTurnForFree(lua_State* L);
 
-	static int lGetJONSCulturePerTurnFromMinorCivs(lua_State* L); // DEPRECATED, use lGetCulturePerTurnFromMinorCivs instead
-	static int lChangeJONSCulturePerTurnFromMinorCivs(lua_State* L); // DEPRECATED, does nothing
+	static int lGetJONSCulturePerTurnFromMinorCivs(lua_State* L);
+	static int lChangeJONSCulturePerTurnFromMinorCivs(lua_State* L);
 	static int lGetCulturePerTurnFromMinorCivs(lua_State* L);
 	static int lGetCulturePerTurnFromMinor(lua_State* L);
 
@@ -552,7 +565,7 @@ protected:
 
 	static int lIsGoldenAgeCultureBonusDisabled(lua_State* L);
 
-	// Minor Civ stuff
+
 	static int lIsMinorCiv(lua_State* L);
 	static int lGetMinorCivType(lua_State* L);
 	static int lGetMinorCivTrait(lua_State* L);
@@ -579,7 +592,7 @@ protected:
 #if defined(LEKMOD_MERCHANT_BUYOUT_NOT_NOANNEXING)
 	static int lGetLastAllyTurnWithMajor(lua_State* L);
 #endif
-	static int lGetActiveQuestForPlayer(lua_State* L); // DEPRECATED
+	static int lGetActiveQuestForPlayer(lua_State* L);
 	static int lIsMinorCivActiveQuestForPlayer(lua_State* L);
 	static int lGetMinorCivNumActiveQuestsForPlayer(lua_State* L);
 	static int lIsMinorCivDisplayedQuestForPlayer(lua_State* L);
@@ -592,11 +605,11 @@ protected:
 	static int lGetMinorCivContestValueForPlayer(lua_State* L);
 	static int lIsMinorCivUnitSpawningDisabled(lua_State* L);
 	static int lIsMinorCivRouteEstablishedWithMajor(lua_State* L);
-	static int lIsMinorWarQuestWithMajorActive(lua_State* L); // DEPRECATED, no longer a quest
-	static int lGetMinorWarQuestWithMajorRemainingCount(lua_State* L); // DEPRECATED, no longer a quest
+	static int lIsMinorWarQuestWithMajorActive(lua_State* L);
+	static int lGetMinorWarQuestWithMajorRemainingCount(lua_State* L);
 	static int lIsProxyWarActiveForMajor(lua_State* L);
 	static int lIsThreateningBarbariansEventActiveForPlayer(lua_State* L);
-	static int lGetTurnsSinceThreatenedByBarbarians(lua_State* L); // DEPRECATED, use lGetTurnsSinceThreatenedAnnouncement instead
+	static int lGetTurnsSinceThreatenedByBarbarians(lua_State* L);
 	static int lGetTurnsSinceThreatenedAnnouncement(lua_State* L);
 	static int lGetFriendshipFromGoldGift(lua_State* L);
 #ifdef NQ_BELIEF_TOGGLE_ALLOW_FAITH_GIFTS_TO_MINORS
@@ -605,12 +618,12 @@ protected:
 #endif
 	static int lGetMinorCivFavoriteMajor(lua_State* L);
 	static int lGetMinorCivScienceFriendshipBonus(lua_State* L);
-	static int lGetMinorCivCultureFriendshipBonus(lua_State* L); // DEPRECATED
+	static int lGetMinorCivCultureFriendshipBonus(lua_State* L);
 	static int lGetMinorCivCurrentCultureFlatBonus(lua_State* L);
 	static int lGetMinorCivCurrentCulturePerBuildingBonus(lua_State* L);
-	static int lGetCurrentCultureBonus(lua_State* L); // DEPRECATED, use lGetMinorCivCurrentCultureBonus instead
+	static int lGetCurrentCultureBonus(lua_State* L);
 	static int lGetMinorCivCurrentCultureBonus(lua_State* L);
-	static int lGetMinorCivHappinessFriendshipBonus(lua_State* L); // DEPRECATED
+	static int lGetMinorCivHappinessFriendshipBonus(lua_State* L);
 	static int lGetMinorCivCurrentHappinessFlatBonus(lua_State* L);
 	static int lGetMinorCivCurrentHappinessPerLuxuryBonus(lua_State* L);
 	static int lGetMinorCivCurrentHappinessBonus(lua_State* L);
@@ -676,7 +689,7 @@ protected:
 	static int lGetCapitalYieldRateModifier(lua_State* L);
 	static int lGetExtraYieldThreshold(lua_State* L);
 
-	// Science
+
 
 	static int lGetScience(lua_State* L);
 	static int lGetScienceTimes100(lua_State* L);
@@ -693,7 +706,7 @@ protected:
 	static int lGetScienceFromResearchAgreementsTimes100(lua_State* L);
 	static int lGetScienceFromBudgetDeficitTimes100(lua_State* L);
 
-	// END Science
+
 
 	static int lGetProximityToPlayer(lua_State* L);
 	static int lDoUpdateProximityToPlayer(lua_State* L);
@@ -788,7 +801,7 @@ protected:
 	static int lGetBuyPlotCost(lua_State* L);
 	static int lGetPlotDanger(lua_State* L);
 
-	// Diplomacy Stuff
+
 
 	static int lDoBeginDiploWithHuman(lua_State* L);
 	static int lDoTradeScreenOpened(lua_State* L);
@@ -815,7 +828,7 @@ protected:
 	static int lIsFriendDeclaredWarOnUs(lua_State* L);
 	static int lGetWeDeclaredWarOnFriendCount(lua_State* L);
 	static int lGetNumRequestsRefused(lua_State* L);
-	//static int lIsWorkingAgainstPlayerAccepted(lua_State* L);
+
 	static int lGetCoopWarAcceptedState(lua_State* L);
 	static int lGetNumWarsFought(lua_State* L);
 
@@ -876,7 +889,7 @@ protected:
 	static int lDoForceDoF(lua_State* L);
 	static int lDoForceDenounce(lua_State* L);
 
-	// END Diplomacy Stuff
+
 
 	static int lGetNumNotifications(lua_State* L);
 	static int lGetNotificationStr(lua_State* L);
@@ -893,14 +906,14 @@ protected:
 	static int lIsAnyPlotImproved(lua_State* L);
 	static int lGetPlayerVisiblePlot(lua_State* L);
 
-	// slewis - tutorial functions
+
 	static int lGetEverPoppedGoody(lua_State* L);
 	static int lGetClosestGoodyPlot(lua_State* L);
 	static int lIsAnyGoodyPlotAccessible(lua_State* L);
 	static int lGetPlotHasOrder(lua_State* L);
 	static int lGetAnyUnitHasOrderToGoody(lua_State* L);
 	static int lGetEverTrainedBuilder(lua_State* L);
-	// end tutorial functions
+
 
 	static int lGetNumFreeTechs(lua_State* L);
 	static int lSetNumFreeTechs(lua_State* L);
@@ -986,7 +999,7 @@ protected:
 	static int lIsAllowPuppetPurchasing(lua_State* L);
 #endif
 
-	//Espionage Methods
+
 	static int lGetEspionageCityStatus(lua_State* L);
 	static int lGetNumSpies(lua_State* L);
 	static int lGetNumUnassignedSpies(lua_State* L);
@@ -1009,11 +1022,12 @@ protected:
 	static int lGetCoupChanceOfSuccess(lua_State* L);
 	static int lIsMyDiplomatVisitingThem(lua_State* L);
 	static int lIsOtherDiplomatVisitingMe(lua_State* L);
-	// end Espionage Methods
 
-	// International Trade
+
+
 	static int lGetTradeRouteRange(lua_State* L);
 	static int lGetInternationalTradeRoutePlotToolTip(lua_State* L);
+	static int lHasInternationalTradeRoutePlotToolTip(lua_State* L);
 	static int lGetInternationalTradeRoutePlotMouseoverToolTip(lua_State* L);
 	static int lGetNumInternationalTradeRoutesUsed(lua_State* L);
 	static int lGetNumInternationalTradeRoutesAvailable(lua_State* L);
@@ -1043,12 +1057,12 @@ protected:
 	static int lGetTradeConnectionPolicyValue(lua_State* L);
 	static int lGetTradeConnectionTraitValue(lua_State* L);
 	static int lGetTradeConnectionReligionValue(lua_State* L);
-	// Mods
+
 	static int lGetTradeConnectionPolicyValueModifier(lua_State* L);
 	static int lGetTradeConnectionTraitValueModifier(lua_State* L);
 	static int lGetTradeConnectionDomainValueModifier(lua_State* L);
 	static int lGetTradeConnectionRiverValueModifier(lua_State* L);
-	// Sum of All
+
 	static int lGetTradeConnectionTotalValue(lua_State* L);
 #endif
 	static int lGetPotentialTradeUnitNewHomeCity(lua_State* L);
@@ -1058,21 +1072,22 @@ protected:
 	static int lGetTradeYourRoutesTTString(lua_State* L);
 	static int lGetTradeToYouRoutesTTString(lua_State* L);
 	static int lGetTradeRoutes(lua_State* L);
+	static int lGetNumInternationalTradeRoutesFromCity(lua_State* L);
 	static int lGetTradeRoutesAvailable(lua_State* L);
 	static int lGetTradeRoutesToYou(lua_State* L);
 	static int lGetNumTechDifference(lua_State* L);
-	// End international trade
 
-	// culture
+
+
 	static int lGetGreatWorks (lua_State* L);
 	static int lGetOthersGreatWorks (lua_State* L);
 	static int lGetSwappableGreatWriting (lua_State* L);
 	static int lGetSwappableGreatArt (lua_State* L);
 	static int lGetSwappableGreatArtifact (lua_State* L);
 	static int lGetSwappableGreatMusic (lua_State* L);
-	// end culture
 
-	// Leagues
+
+
 	static int lCanCommitVote(lua_State* L);
 	static int lGetCommitVoteDetails(lua_State* L);
 
@@ -1081,7 +1096,7 @@ protected:
 	static int lHasTurnTimerExpired(lua_State* L);
 	static int lHasUnitOfClassType(lua_State* L);
 
-	// Warmongering
+
 	static int lGetWarmongerPreviewString(lua_State* L);
 	static int lGetLiberationPreviewString(lua_State* L);
 #ifdef ENHANCED_GRAPHS
@@ -1109,4 +1124,4 @@ protected:
 #endif
 };
 
-#endif //CVLUAPLAYER_H
+#endif

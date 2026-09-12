@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 5/4/2016 8:57:29 AM -->
+
 <GameData>
 
-	<!-- Pracinha now starts with Foreign Lands bonus. -->
+
 	<Unit_FreePromotions>
 		<Row>
 			<UnitType>UNIT_BRAZILIAN_PRACINHA</UnitType>

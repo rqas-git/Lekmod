@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/8/2015 7:12:58 PM -->
+
 <GameData>
 	
-	<!-- Great Wall: Now builds a Watch Tower in every city (duplicate of Walls) and Walls in this city. -->
+
 	<Buildings>
 		<Update>
 			<Set ObsoleteTech="NULL" />
@@ -34,7 +34,7 @@
 		</Row>
 	</Language_RU_RU>
 
-	<!-- Great Wall Watch Tower -->
+
 	<BuildingClasses>
 		<Row>
 			<Type>BUILDINGCLASS_WATCH_TOWER</Type>

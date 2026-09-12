@@ -1,16 +1,16 @@
-//---------------------------------------------------------------------------------------
-//
-//  *****************   FIRAXIS GAME ENGINE   ********************
-//
-//  FILE:    FFireTypes.h
-//
-//  AUTHOR:  David McKibbin  --  9/17/2002
-//
-//  PURPOSE: FireEngine data types and macros
-//
-//---------------------------------------------------------------------------------------
-//  Copyright (c) 2004 Firaxis Games, Inc. All rights reserved.
-//---------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #ifndef		FFIRETYPES_H
 #define		FFIRETYPES_H
@@ -20,25 +20,25 @@ typedef unsigned char		byte;
 typedef unsigned short		word;
 typedef unsigned int		uint;
 #ifdef LEKMOD_MACOS
-// Engine DWORDs and CRCs remain 32 bits on the LP64 Mac host.
+
 typedef unsigned int dword;
 #else
 typedef unsigned long		dword;
 #endif
 #if		defined(_PS3)
-// In SDK 2.0, qword is defined as vector unsigned char
-//typedef uint64_t			qword;
+
+
 typedef int64_t				__int64;
 #elif	defined(_NDS)
 typedef u64					qword;
 typedef s64					__int64;
-#else	//	_PS3,_NDS
+#else
 typedef unsigned __int64	qword;
-#endif	//	_PS3,_NDS
+#endif
 typedef wchar_t         	wchar;
 
 #ifdef		_PS3
-// Add Common Windows Types
+
 typedef char CHAR;
 typedef wchar_t WCHAR;
 
@@ -75,11 +75,11 @@ typedef int BOOL;
 
 #ifndef		FALSE
 #define		FALSE	0
-#endif	//	FALSE
+#endif
 
 #ifndef		TRUE
 #define		TRUE	1
-#endif	//	TRUE
+#endif
 
 typedef struct _POINT
 {
@@ -95,18 +95,18 @@ typedef struct tagRECT
     long bottom;
 }   RECT, *PRECT, *LPRECT;
 
-//-- Windows Message Passing Types ------------------------
 
-// Dummy Type
+
+
 typedef int HWND;
 
-// Messaging Types
+
 typedef UINT * WPARAM;
 typedef LONG * LPARAM;
 typedef LONG * LRESULT;
 
-//-- Windows Message Passing Types ------------------------
-#endif	//	_PS3
+
+#endif
 
 #ifdef		_NDS
 typedef char CHAR;
@@ -161,23 +161,23 @@ typedef struct tagRECT
     long bottom;
 }   RECT, *PRECT, *LPRECT;
 
-// TODOPS3 - This could cause endian problems.
+
 #define LOWORD(l) ((WORD)((DWORD)(l) & 0xffff))
 #define HIWORD(l) ((WORD)((DWORD)(l) >> 16))
 
-//-- Windows Message Passing Types ------------------------
 
-	// Dummy Type
+
+
 	typedef int HWND;
 
-	// Messaging Types
+
 	typedef UINT * WPARAM;
 	typedef LONG * LPARAM;
 	typedef LONG * LRESULT;
 
-//-- Windows Message Passing Types ------------------------
 
-#endif	//	_NDS
+
+#endif
 
 typedef UINT64	uint64;
 typedef UINT32	uint32;
@@ -191,20 +191,20 @@ typedef INT8	int8;
 
 #ifdef		_PS3
 typedef pthread_t	threadid_t;
-#else	//	_PS3
+#else
 typedef DWORD		threadid_t;
-#endif	//	_PS3
+#endif
 
 typedef unsigned short port_t;
 
 #ifdef		_PS3
 typedef unsigned int socklen_t;
-#else	//	_PS3
+#else
 typedef int socklen_t;
-#endif	//	_PS3
+#endif
 
-// These classes allow an STL object to compare object values instead of
-// comparing the value of the objects' pointers.
+
+
 #include <functional>
 template<class _Ty>
 struct ptr_less : std::binary_function<_Ty, _Ty, bool>
@@ -215,31 +215,31 @@ struct ptr_less : std::binary_function<_Ty, _Ty, bool>
 	}
 };
 
-//---------------------------------------------------------------------------------------
-//
-//	To enable coloring of the above keywords in MSVC:
-//
-//		In the same folder as "MsDev.exe", create a text file 
-//		("UserType.dat") with the above keywords one per line.
-//
-//	"C:\Program Files\Microsoft Visual Studio .NET\Common7\IDE\UserType.dat"
-//
-//	To customize the coloring of user defined keywords:
-//
-//		Tools / Options / Environment / Fonts and Colors / Display items: "User Keywords"
-//
-//	For help:
-//
-//		"Defining Keywords in Visual C++"
-//
-//---------------------------------------------------------------------------------------
-// Or just use CodeWright where it's built into the IDE >:P
-//---------------------------------------------------------------------------------------
 
-//
-//	NANs:  Quiet or Signaling NaNs can be either sign.
-//
-#define  QNAN	0x7FC00000	// mantissa can't be all zero
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#define  QNAN	0x7FC00000
 #define  SNAN	0x7F800001
 
 
@@ -292,19 +292,19 @@ struct ptr_less : std::binary_function<_Ty, _Ty, bool>
 #define MAX_UNSIGNED_INT                    (0xffffffff)
 #define MIN_UNSIGNED_INT                    (0x00000000)
 
-#ifndef FPAD_N // Pads the size so that its a multiple of N.
+#ifndef FPAD_N
 #define FPAD_N(size, N) (((size) + ((N)-1)) & (~((N)-1)))
 #endif
 
-#ifndef FPAD_8 // Pads the size so that its a multiple of 8.
+#ifndef FPAD_8
 #define FPAD_8(size) FPAD_N(size, 8)
 #endif
 
-#ifndef FPAD_16 // Pads the size so that its a multiple of 16.
+#ifndef FPAD_16
 #define FPAD_16(size) FPAD_N(size, 16)
 #endif
 
-//----------------------------------------- MACROS -----------------------------------------------
+
 
 template<class T> __forceinline void SAFE_DELETE( T *& pkInstance )
 {
@@ -330,7 +330,7 @@ template<class T> __forceinline void SAFE_RELEASE( T *& pkRefObject )
 
 #define SAFE_STRCPY(dest,src,len)	{ strncpy(dest,src,len); dest[len-1]=NULL; }
 
-// Use a template function to call free and set the pointer to NULL.
+
 template<typename T> __forceinline void SAFE_FREE( T ** pT )
 {
 	if ( *pT != NULL )
@@ -340,7 +340,7 @@ template<typename T> __forceinline void SAFE_FREE( T ** pT )
 	}
 }
 
-// Template functors and function for deleting all elements in a container
+
 struct FSafeDelete
 {
 	template < typename T >
@@ -389,7 +389,7 @@ void SAFE_DELETE_ALL( Container c )
 	SAFE_DELETE_ALL( c, FSafeDelete() );
 }
 
-// Size constants
+
 const uint KILOBYTE	= 1024;
 const uint MEGABYTE	= KILOBYTE * 1024;
 const uint GIGABYTE	= MEGABYTE * 1024;
@@ -406,10 +406,10 @@ const uint GIGABYTE	= MEGABYTE * 1024;
 #define		CONVERT_GB_TO_KB(gb)	(gb*MEGABYTE)
 #define		CONVERT_GB_TO_MB(gb)	(gb*KILOBYTE)
 
-//--
-//  FOURCC builder - from <DirectX/AviRiff.h>
-//
-typedef dword FOURCC;  // <DirectX/DmDls.h> & <PlatformSDK/MMSystem.h>
+
+
+
+typedef dword FOURCC;
 #define		FCC(ch4)	((((DWORD)(ch4) & 0x000000FF) << 24) |  \
             	      	(((DWORD)(ch4) & 0x0000FF00) <<  8) |   \
 		                (((DWORD)(ch4) & 0x00FF0000) >>  8) |   \
@@ -446,7 +446,7 @@ inline bool operator==( const GUID & lhs, const GUID & rhs )
 
 	return false;
 }
-#endif	//	WIN32
+#endif
 typedef GUID GameDescription;
 
-#endif	//	FFIRETYPES_H
+#endif

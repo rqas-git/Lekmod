@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 6/2/2015 11:40:37 PM -->
+
 <GameData>
 	
-	<!-- Finisher now also increases City State Food/Faith/Culture gifts by 50% and military City States gift 2 units at a time (instead of 1). -->
+
 	<Policies>
 		<Update>
 			<Set MinorMilitaryNumExtraUnitsToGift="1" CityStateBonusModifier="50" />

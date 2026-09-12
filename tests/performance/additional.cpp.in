@@ -1,0 +1,137 @@
+
+#include <cassert>
+#include <cstdio>
+#include <iostream>
+#include <map>
+#include <random>
+#include <string>
+#include <vector>
+typedef unsigned int uint;
+typedef int BuildTypes;
+typedef int ImprovementTypes;
+enum { NO_BUILD=-1 };
+struct CvBuildInfo { int improvement; int getImprovement(){return improvement;} };
+struct CvCity { int owner=0; int getOwner(){return owner;} };
+struct CvPlayer { int id=0; int GetID(){return id;} } players[3];
+struct TradeConnection {
+    int m_iOriginX=0,m_iOriginY=0,m_iDestX=1,m_iDestY=0;
+    int m_eOriginOwner=0,m_eDestOwner=1,m_eDomain=0;
+    bool empty=false;
+};
+struct CvGameTrade {
+    std::vector<TradeConnection> m_aTradeConnections;
+    bool IsTradeRouteIndexEmpty(int i){return m_aTradeConnections[i].empty;}
+    static CvCity* GetOriginCity(const TradeConnection&);
+    static CvCity* GetDestCity(const TradeConnection&);
+};
+struct Game { CvGameTrade trade; CvGameTrade* GetGameTrade(){return &trade;} };
+struct Globals {
+    Game game; CvCity* cities[4];
+    std::vector<CvBuildInfo*> builds;
+    int getNumBuildInfos(){return int(builds.size());}
+    CvBuildInfo* getBuildInfo(int i){return builds.at(i);}
+    Game& getGame(){return game;}
+} GC;
+CvCity* CvGameTrade::GetOriginCity(const TradeConnection& c){return GC.cities[c.m_iOriginX];}
+CvCity* CvGameTrade::GetDestCity(const TradeConnection& c){return GC.cities[c.m_iDestX];}
+class CvPlayerTrade {
+public:
+    CvPlayer* m_pPlayer=&players[0];
+    int GetNumInternationalTradeRoutesFromCity(CvCity*) const;
+};
+class CvBuilderTaskingAI {
+public:
+    static void ClearBuildTypeCache();
+    static void CacheBuildTypes();
+    BuildTypes GetBuildTypeFromImprovement(ImprovementTypes);
+    BuildTypes BaselineLookup(ImprovementTypes);
+};
+std::map<int, BuildTypes> s_buildTypes;
+bool s_bBuildTypesCached=false;
+@CACHE_CLEAR@
+@CACHE_BUILD@
+@LOOKUP_BASELINE@
+@LOOKUP_CURRENT@
+@ROUTE_COUNT@
+
+namespace Database {
+struct Results {
+    std::string table;
+    bool stepped=false;
+    void Reset(){stepped=false;}
+    bool Step(){if(stepped)return false;stepped=true;return true;}
+    int GetInt(int);
+};
+}
+struct Connection {
+    std::map<std::string,int> tables;
+    int prepares=0;
+    bool Execute(Database::Results& r,const char* sql){
+        ++prepares;
+        r.table=std::string(sql).substr(std::string("SELECT max(rowid) from ").size());
+        return tables.count(r.table)!=0;
+    }
+} DB;
+int Database::Results::GetInt(int){return DB.tables.at(table);}
+template<size_t N> void sprintf_s(char (&out)[N],const char* fmt,const char* arg){std::snprintf(out,N,fmt,arg);}
+class CvDatabaseUtility {
+    typedef std::map<std::string,Database::Results*> ResultsMap;
+    ResultsMap m_storedResults;
+public:
+    ~CvDatabaseUtility(){ClearResults();}
+    void ClearResults();
+    Database::Results* GetResults(const std::string&);
+    Database::Results* PrepareResults(const std::string&,const char*);
+    int MaxRows(const char*);
+    int BaselineMaxRows(const char*);
+};
+@DB_CLEAR@
+@DB_GET@
+@DB_PREPARE@
+@DB_BASELINE@
+@DB_CURRENT@
+
+int main(){
+    std::mt19937 rng(7321);
+    long lookups=0,counts=0;
+    CvPlayerTrade trade;CvBuilderTaskingAI builder;
+    for(int i=0;i<3;++i)players[i].id=i;
+    for(int fixture=0;fixture<200;++fixture){
+
+        CvBuildInfo entries[64];CvCity cities[4];GC.builds.clear();
+        for(int i=0;i<fixture%65;++i){entries[i].improvement=int(rng()%25)-1;GC.builds.push_back(i%5?&entries[i]:NULL);}
+        for(int i=0;i<4;++i)GC.cities[i]=&cities[i];
+        CvBuilderTaskingAI::ClearBuildTypeCache();
+        for(int phase=0;phase<3;++phase){
+            if(phase)CvBuilderTaskingAI::CacheBuildTypes();
+            for(int imp=-2;imp<27;++imp){assert(builder.BaselineLookup(imp)==builder.GetBuildTypeFromImprovement(imp));++lookups;}
+            for(int mutation=0;mutation<20;++mutation){
+                for(int i=0;i<4;++i)cities[i].owner=int(rng()%3);
+                GC.game.trade.m_aTradeConnections.clear();
+                TradeConnection c;
+                for(int i=0;i<32;++i){c.m_eOriginOwner=int(rng()%3);c.m_eDestOwner=int(rng()%3);c.m_iOriginX=int(rng()%4);c.m_iDestX=int(rng()%4);c.m_eDomain=int(rng()%2);c.empty=rng()%5==0;GC.game.trade.m_aTradeConnections.push_back(c);}
+                for(int owner=0;owner<3;++owner)for(int city=0;city<4;++city){
+                    trade.m_pPlayer=&players[owner];int expected=0;
+                    for(const auto& route:GC.game.trade.m_aTradeConnections)
+                        if(!route.empty&&route.m_eOriginOwner==owner&&CvGameTrade::GetOriginCity(route)==&cities[city]&&CvGameTrade::GetDestCity(route)->getOwner()!=owner)++expected;
+                    assert(trade.GetNumInternationalTradeRoutesFromCity(&cities[city])==expected);++counts;
+                }
+            }
+        }
+        GC.cities[1]=NULL;
+        assert(trade.GetNumInternationalTradeRoutesFromCity(NULL)==0);
+        trade.GetNumInternationalTradeRoutesFromCity(&cities[0]);
+        CvBuilderTaskingAI::ClearBuildTypeCache();
+    }
+    CvDatabaseUtility db;
+    DB.tables["A"]=0;DB.tables["B"]=7;
+    assert(db.MaxRows("A")==1);assert(db.MaxRows("B")==8);
+    int prepared=DB.prepares;
+    for(int i=0;i<100;++i){DB.tables["A"]=i;assert(db.MaxRows("A")==i+1);}
+    assert(DB.prepares==prepared);
+    DB.tables["A"]=-1;assert(db.MaxRows("A")==db.BaselineMaxRows("A"));
+    assert(db.MaxRows("missing")==db.BaselineMaxRows("missing"));
+    DB.tables["missing"]=23;assert(db.MaxRows("missing")==24);
+    db.ClearResults();prepared=DB.prepares;assert(db.MaxRows("B")==8);assert(DB.prepares==prepared+1);
+    std::cout<<"{\"build_lookup_comparisons\":"<<lookups<<",\"route_count_comparisons\":"<<counts<<",\"sizing_reuses\":100}";
+}

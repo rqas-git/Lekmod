@@ -5,7 +5,7 @@ a = Analysis(
     ['installer.py'],
     pathex=[],
     binaries=[],
-    datas=[('config.json', '.')],
+    datas=[('config.json', '.'), ('../LEKMOD/ui_manifest.json', '.')],
     hiddenimports=['tkinter', 'tkinter.ttk', 'tkinter.messagebox', 'tkinter.filedialog', 'tkinter.scrolledtext', 'requests', 'urllib3', 'certifi', 'charset_normalizer', 'idna'],
     hookspath=[],
     hooksconfig={},

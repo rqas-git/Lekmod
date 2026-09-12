@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by ModBuddy on 2016-09-26 23:38:28 -->
+
 <GameData>
 
-	<!-- +1 [ICON_FOOD] Food and +25% [ICON_FOOD] Growth (excess Food) in all cities. -->
+
 	<Beliefs>
 		<Update>
 			<Set Follower="false" Reformation="true" CityGrowthModifier="15" RequiresPeace="false" />
@@ -17,7 +17,7 @@
 		</Row>
 	</Belief_CityYieldChanges>
 
-	<!-- localization -->
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_BELIEF_SWORD_PLOWSHARES" />
 		<Row Tag="TXT_KEY_BELIEF_SWORD_PLOWSHARES">

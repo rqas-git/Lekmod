@@ -1,10 +1,10 @@
 
--- Author: EnormousApplePie
+
 
 
 LekmodUtilities = {}
 
-------------------------------------------------------------------------------------------------------------------------
+
 function LekmodUtilities:is_civilization_active(civilization_id)
 
    for slot = 0, GameDefines.MAX_MAJOR_CIVS - 1, 1 do
@@ -16,20 +16,20 @@ function LekmodUtilities:is_civilization_active(civilization_id)
 
 return false end
 
-------------------------------------------------------------------------------------------------------------------------
+
 function LekmodUtilities:get_random_between(lower, upper)
 
    return Game.Rand((upper + 1) - lower, "") + lower
 
 end
-------------------------------------------------------------------------------------------------------------------------
+
 function LekmodUtilities:get_round(number, idp)
 
    local mult = 10^(idp or 0)
    return math.floor(number * mult + 0.5) / mult
 
 end
-------------------------------------------------------------------------------------------------------------------------
+
 function LekmodUtilities:get_number_trade_routes_from_city(player, city, is_international, is_internal, domain)
 
 	local trade_routes = player:GetTradeRoutes()
@@ -38,7 +38,7 @@ function LekmodUtilities:get_number_trade_routes_from_city(player, city, is_inte
       local domain_type = trade_route.Domain
 		local originating_city = trade_route.FromCity
 		local target_city = trade_route.ToCity
-      if domain ~= nil and domain ~= domain_type then -- skip
+      if domain ~= nil and domain ~= domain_type then
       elseif target_city and originating_city == city then
          if is_international then
             if trade_route.ToCity:GetOwner() ~= player:GetID() then
@@ -56,7 +56,7 @@ function LekmodUtilities:get_number_trade_routes_from_city(player, city, is_inte
 	end
 
 return routes_amount end
-------------------------------------------------------------------------------------------------------------------------
+
 function LekmodUtilities:table_to_string(table)
 
    for k, v in pairs(table) do
@@ -73,11 +73,11 @@ function LekmodUtilities:table_to_string(table)
    end
 
 return string end
-------------------------------------------------------------------------------------------------------------------------
+
 function LekmodUtilities:string_to_table(string)
    
      local table = {}
-     -- Split the string into key-value pairs, account for a sub-table
+
        for key, value in string.gmatch(string, "(%w+)=(%w+),") do
          if tonumber(value) then
              table[key] = tonumber(value)
@@ -87,7 +87,7 @@ function LekmodUtilities:string_to_table(string)
        end
 
 return table end
-------------------------------------------------------------------------------------------------------------------------
+
 function LekmodUtilities:remove_from_table(table, value)
 
    for i = #table, 1, -1 do
@@ -98,7 +98,7 @@ function LekmodUtilities:remove_from_table(table, value)
    end
 
 end
-------------------------------------------------------------------------------------------------------------------------
+
 function LekmodUtilities:table_contains(table, value)
 
    for _, v in ipairs(table) do

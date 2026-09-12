@@ -1,11 +1,11 @@
 include( "FLuaVector" );
 
----------------------------------------------------------------------------------------------------------
--- Global Variables
----------------------------------------------------------------------------------------------------------
+
+
+
 g_IconAtlases = nil;
 
----------------------------------------------------------------------------------------------------------
+
 function PopulateIconAtlases()
 	g_IconAtlases = {};
 	
@@ -23,18 +23,18 @@ function PopulateIconAtlases()
 		};
 	end	
 end
----------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------
+
+
 function IconLookup( offset, iconSize, atlas )    
 
 	if (offset < 0) then
-		--print("--------------------IconLookup---------------------------")
-		--print("offset < 0 or imageControl == nil")
-		--print("offset: "..tostring(offset))
-		--print("iconSize: "..tostring(iconSize))
-		--print("atlas: "..tostring(atlas))
-		--print("---------------------------------------------------------")
-		--print("")
+
+
+
+
+
+
+
 		return nil, nil;
 	end	
 	
@@ -52,17 +52,17 @@ function IconLookup( offset, iconSize, atlas )
 			local numCols = entry[2];
 			
 			if (filename == nil or offset > (numRows * numCols) - 1) then
-				--print("--------------------IconLookup---------------------------")
-				--print("filename == nil or offset > (numRows * numCols) - 1")
-				--print("offset: "..tostring(offset))
-				--print("iconSize: "..tostring(iconSize))
-				--print("atlas: "..tostring(atlas))
-				--print("imageControl: "..tostring(imageControl))
-				--print("filename: "..tostring(filename))
-				--print("numRows: "..tostring(numRows))
-				--print("numCols: "..tostring(numCols))
-				--print("---------------------------------------------------------")
-				--print("")
+
+
+
+
+
+
+
+
+
+
+
 				return;
 			end
 			
@@ -72,21 +72,21 @@ function IconLookup( offset, iconSize, atlas )
 end
 
 
----------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------
+
+
 function IconHookup( offset, iconSize, atlas, imageControl, debugPrint )
    
 	if offset < 0 or imageControl == nil then
-		--if debugPrint then
-			--print("--------------------IconHookup---------------------------")
-			--print("offset < 0 or imageControl == nil")
-			--print("offset: "..tostring(offset))
-			--print("iconSize: "..tostring(iconSize))
-			--print("atlas: "..tostring(atlas))
-			--print("imageControl: "..tostring(imageControl))
-			--print("---------------------------------------------------------")
-			--print("")
-		--end
+
+
+
+
+
+
+
+
+
+
 		return nil;
 	end	
 	
@@ -104,19 +104,19 @@ function IconHookup( offset, iconSize, atlas, imageControl, debugPrint )
 			local numCols = entry[2];
 			
 			if (filename == nil or offset > (numRows * numCols) - 1) then
-				--if debugPrint then
-					--print("--------------------IconHookup---------------------------")
-					--print("filename == nil or offset > (numRows * numCols) - 1")
-					--print("offset: "..tostring(offset))
-					--print("iconSize: "..tostring(iconSize))
-					--print("atlas: "..tostring(atlas))
-					--print("imageControl: "..tostring(imageControl))
-					--print("filename: "..tostring(filename))
-					--print("numRows: "..tostring(numRows))
-					--print("numCols: "..tostring(numCols))
-					--print("---------------------------------------------------------")
-					--print("")
-				--end
+
+
+
+
+
+
+
+
+
+
+
+
+
 				return;
 			end
 			
@@ -128,17 +128,17 @@ function IconHookup( offset, iconSize, atlas, imageControl, debugPrint )
 	return true;
 end
 
----------------------------------------------------------------------------------------------------------
--- Art Team Color Variables
----------------------------------------------------------------------------------------------------------
+
+
+
 local teamSize80 = 64;
 local teamSize64 = 48;
 local teamSize45 = 32;
 local teamSize32 = 24;
----------------------------------------------------------------------------------------------------------
--- This is a special case hookup for civilization icons that will take into account 
--- the fact that player colors are dynamically handed out
----------------------------------------------------------------------------------------------------------
+
+
+
+
 function CivIconHookup( playerID, iconSize, iconControl, teamColorControl, shadowIconControl, alwaysUseComposite, shadowed, highlightControl )
 
     local thisCivType = PreGame.GetCivilization( playerID );
@@ -284,9 +284,9 @@ function CivIconHookup( playerID, iconSize, iconControl, teamColorControl, shado
 end
 
 
----------------------------------------------------------------------------------------------------------
--- This is a special case hookup for civilization icons that always uses the one-piece version
----------------------------------------------------------------------------------------------------------
+
+
+
 function SimpleCivIconHookup( playerID, iconSize, iconControl )
     local thisCivType = PreGame.GetCivilization( playerID );
     local thisCiv = GameInfo.Civilizations[thisCivType];
@@ -297,9 +297,9 @@ function SimpleCivIconHookup( playerID, iconSize, iconControl )
 	end
 end
 
-----------------------------------------------------------------------------------------------------------
--- These event listeners will invalidate the cache if mods are activated or deactivated.
-----------------------------------------------------------------------------------------------------------
+
+
+
 Events.AfterModsDeactivate.Add(function()
 	g_IconAtlases = nil;
 end);
