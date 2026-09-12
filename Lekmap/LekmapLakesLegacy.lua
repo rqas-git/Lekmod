@@ -15,6 +15,8 @@ include("IslandMaker");
 include("MultilayeredFractal");
 
 ------------------------------------------------------------------------------
+include("HBMapOptions");
+
 function GetMapScriptInfo()
 	local world_age, temperature, rainfall, sea_level, resources = GetCoreMapOptions()
 	return {
@@ -24,259 +26,18 @@ function GetMapScriptInfo()
 		IconIndex = 13,
 		SortIndex = 2,
 		SupportsMultiplayer = true,
-	CustomOptions = {
-			{
-				Name = "TXT_KEY_MAP_OPTION_WORLD_AGE", -- 1
-				Values = {
-					"TXT_KEY_MAP_OPTION_THREE_BILLION_YEARS",
-					"TXT_KEY_MAP_OPTION_FOUR_BILLION_YEARS",
-					"TXT_KEY_MAP_OPTION_FIVE_BILLION_YEARS",
-					"No Mountains",
-					"TXT_KEY_MAP_OPTION_RANDOM",
-				},
-				DefaultValue = 2,
-				SortPriority = -99,
-			},
-
-			{
-				Name = "TXT_KEY_MAP_OPTION_TEMPERATURE",	-- 2 add temperature defaults to random
-				Values = {
-					"TXT_KEY_MAP_OPTION_COOL",
-					"TXT_KEY_MAP_OPTION_TEMPERATE",
-					"TXT_KEY_MAP_OPTION_HOT",
-					"TXT_KEY_MAP_OPTION_RANDOM",
-				},
-				DefaultValue = 2,
-				SortPriority = -98,
-			},
-
-			{
-				Name = "TXT_KEY_MAP_OPTION_RAINFALL",	-- 3 add rainfall defaults to random
-				Values = {
-					"TXT_KEY_MAP_OPTION_ARID",
-					"TXT_KEY_MAP_OPTION_NORMAL",
-					"TXT_KEY_MAP_OPTION_WET",
-					"TXT_KEY_MAP_OPTION_RANDOM",
-				},
-				DefaultValue = 2,
-				SortPriority = -97,
-			},
-
-			{
-				Name = "TXT_KEY_MAP_OPTION_SEA_LEVEL",	-- 4 add sea level defaults to random.
-				Values = {
-					"TXT_KEY_MAP_OPTION_LOW",
-					"TXT_KEY_MAP_OPTION_MEDIUM",
-					"TXT_KEY_MAP_OPTION_HIGH",
-					"TXT_KEY_MAP_OPTION_RANDOM",
-				},
-				DefaultValue = 2,
-				SortPriority = -96,
-			},
-
-			{
-				Name = "Start Quality",	-- 5 add resources defaults to random
-				Values = {
-					"Legendary Start - Strat Balance",
-					"Legendary - Strat Balance + Uranium",
-					"TXT_KEY_MAP_OPTION_STRATEGIC_BALANCE",
-					"Strategic Balance With Coal",
-					"Strategic Balance With Aluminum",
-					"Strategic Balance With Coal & Aluminum",
-					"TXT_KEY_MAP_OPTION_RANDOM",
-				},
-				DefaultValue = 2,
-				SortPriority = -95,
-			},
-
-			{
-				Name = "Start Distance",	-- 6 add resources defaults to random
-				Values = {
-					"Close",
-					"Normal",
-					"Far - Warning: May sometimes crash during map generation",
-				},
-				DefaultValue = 2,
-				SortPriority = -94,
-			},
-
-			{
-				Name = "Natural Wonders", -- 7 number of natural wonders to spawn
-				Values = {
-					"0",
-					"1",
-					"2",
-					"3",
-					"4",
-					"5",
-					"6",
-					"7",
-					"8",
-					"9",
-					"10",
-					"11",
-					"12",
-					"Random",
-					"Default",
-				},
-				DefaultValue = 15,
-				SortPriority = -93,
-			},
-
-			{
-				Name = "Grass Moisture",	-- add setting for grassland mositure (8)
-				Values = {
-					"Wet",
-					"Normal",
-					"Dry",
-				},
-
-				DefaultValue = 2,
-				SortPriority = -92,
-			},
-
-			{
-				Name = "Rivers",	-- add setting for rivers (9)
-				Values = {
-					"Sparse",
-					"Average",
-					"Plentiful",
-				},
-
-				DefaultValue = 2,
-				SortPriority = -91,
-			},
-
-			{
-				Name = "Tundra",	-- add setting for tundra (10)
-				Values = {
-					"Sparse",
-					"Average",
-					"Plentiful",
-				},
-
-				DefaultValue = 2,
-				SortPriority = -90,
-			},
-
-			{
-				Name = "Land Size X",	-- add setting for land type (11) +22
-				Values = {
-					"24",
-					"26",
-					"28",
-					"30",
-					"32",
-					"34",
-					"36",
-					"38",
-					"40",
-					"42",
-					"44",
-					"46",
-					"48",
-					"50",
-					"52",
-					"54",
-					"56",
-					"58",
-					"60",
-					"62",
-					"64",
-					"66",
-					"68",
-					"70",
-					"72",
-					"74",
-					"76",
-					"78",
-					"80",
-					"82",
-					"84",
-					"86",
-					"88",
-					"90",
-					"92",
-					"94",
-					"96",
-					"98",
-					"100",
-					"102",
-					"104",
-				},
-
+		CustomOptions = LekmapOptions.Create({
+			[11] = { -- Land Size X
+				Values = LekmapOptions.NumberValues(24, 104, 2),
 				DefaultValue = 9,
-				SortPriority = -89,
 			},
-
-			{
-				Name = "Land Size Y",	-- add setting for land type (12) +14
-				Values = {
-					"16",
-					"18",
-					"20",
-					"22",
-					"24",
-					"26",
-					"28",
-					"30",
-					"32",
-					"34",
-					"36",
-					"38",
-					"40",
-					"42",
-					"44",
-					"46",
-					"48",
-					"50",
-					"52",
-					"54",
-					"56",
-					"58",
-					"60",
-					"62",
-					"64",
-					"66",
-					"68",
-					"70",
-				},
-
+			[12] = { -- Land Size Y
+				Values = LekmapOptions.NumberValues(16, 70, 2),
 				DefaultValue = 5,
-				SortPriority = -88,
 			},
-
-			{
-				Name = "TXT_KEY_MAP_OPTION_RESOURCES",	-- add setting for resources (13)
-				Values = {
-					"1 -- Nearly Nothing",
-					"2",
-					"3",
-					"4",
-					"5 -- Default",
-					"6",
-					"7",
-					"8",
-					"9",
-					"10 -- Almost no normal tiles left",
-				},
-
-				DefaultValue = 5,
-				SortPriority = -87,
-			},
-
-			{
-				Name = "Balanced Regionals",	-- add setting for removing OP luxes from regional pool (14)
-				Values = {
-					"Yes",
-					"No",
-				},
-
-				DefaultValue = 1,
-				SortPriority = -90,
-			},
-			{
-				Name = "TXT_KEY_MAP_OPTION_BODIES_OF_WATER", -- (15)
+		}, {
+			{ -- 15
+				Name = "TXT_KEY_MAP_OPTION_BODIES_OF_WATER",
 				Values = {
 					{"TXT_KEY_MAP_OPTION_SMALL_LAKES", "TXT_KEY_MAP_OPTION_SMALL_LAKES_HELP"},
 					{"TXT_KEY_MAP_OPTION_LARGE_LAKES", "TXT_KEY_MAP_OPTION_LARGE_LAKES_HELP"},
@@ -286,7 +47,7 @@ function GetMapScriptInfo()
 				DefaultValue = 4,
 				SortPriority = 1,
 			},
-		},
+		}),
 	};
 end
 ------------------------------------------------------------------------------

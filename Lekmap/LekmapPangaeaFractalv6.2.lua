@@ -19,6 +19,8 @@ include("IslandMaker");
 include("MultilayeredFractal");
 
 ------------------------------------------------------------------------------
+include("HBMapOptions");
+
 function GetMapScriptInfo()
 	local world_age, temperature, rainfall, sea_level, resources = GetCoreMapOptions()
 	return {
@@ -28,92 +30,16 @@ function GetMapScriptInfo()
 		IconIndex = 0,
 		SortIndex = 2,
 		SupportsMultiplayer = true,
-	CustomOptions = {
-			-- 1
-			{
-				Name = "TXT_KEY_MAP_OPTION_WORLD_AGE", -- 1
-				Values = {
-					"TXT_KEY_MAP_OPTION_THREE_BILLION_YEARS",
-					"TXT_KEY_MAP_OPTION_FOUR_BILLION_YEARS",
-					"TXT_KEY_MAP_OPTION_FIVE_BILLION_YEARS",
-					"No Mountains",
-					"TXT_KEY_MAP_OPTION_RANDOM",
-					
-				},
-				DefaultValue = 2,
-				SortPriority = -99,
-			},
-
-			-- 2
-			{
-				Name = "TXT_KEY_MAP_OPTION_TEMPERATURE",	-- 2 add temperature defaults to random
-				Values = {
-					"TXT_KEY_MAP_OPTION_COOL",
-					"TXT_KEY_MAP_OPTION_TEMPERATE",
-					"TXT_KEY_MAP_OPTION_HOT",
-					"TXT_KEY_MAP_OPTION_RANDOM",
-				},
-				DefaultValue = 2,
-				SortPriority = -98,
-			},
-
-			-- 3
-			{
-				Name = "TXT_KEY_MAP_OPTION_RAINFALL",	-- 3 add rainfall defaults to random
-				Values = {
-					"TXT_KEY_MAP_OPTION_ARID",
-					"TXT_KEY_MAP_OPTION_NORMAL",
-					"TXT_KEY_MAP_OPTION_WET",
-					"TXT_KEY_MAP_OPTION_RANDOM",
-				},
-				DefaultValue = 2,
-				SortPriority = -97,
-			},
-
-			-- 4
-			{
-				Name = "TXT_KEY_MAP_OPTION_SEA_LEVEL",	-- 4 add sea level defaults to random.
-				Values = {
-					"TXT_KEY_MAP_OPTION_LOW",
-					"TXT_KEY_MAP_OPTION_MEDIUM",
-					"TXT_KEY_MAP_OPTION_HIGH",
-					"TXT_KEY_MAP_OPTION_RANDOM",
-				},
-				DefaultValue = 2,
-				SortPriority = -96,
-			},
-
-			-- 5
-			{
-				Name = "Start Quality",	-- 5 start quality
-				Values = {
-					"Legendary Start - Strat Balance",
-					"Legendary - Strat Balance + Uranium",
-					"TXT_KEY_MAP_OPTION_STRATEGIC_BALANCE",
-					"Strategic Balance With Coal",
-					"Strategic Balance With Aluminum",
-					"Strategic Balance With Coal & Aluminum",
-					"TXT_KEY_MAP_OPTION_RANDOM",
-				},
-				DefaultValue = 2,
-				SortPriority = -95,
-			},
-
-			-- 6
-			{
-				Name = "Start Distance",	-- 6 start distance
+		CustomOptions = LekmapOptions.Create({
+			[6] = { -- Start Distance
 				Values = {
 					"Close",
 					"Normal",
 					"Far - Default",
 				},
 				DefaultValue = 3,
-				SortPriority = -94,
 			},
-
-			-- 7
-			{
-				Name = "Natural Wonders", -- 7 number of natural wonders to spawn
+			[7] = { -- Natural Wonders
 				Values = {
 					"0",
 					"1",
@@ -133,52 +59,8 @@ function GetMapScriptInfo()
 					"Between 3-5",
 					"Between 2-6",
 				},
-				DefaultValue = 15,
-				SortPriority = -93,
 			},
-
-			-- 8
-			{
-				Name = "Grass Moisture",	-- add setting for grassland moisture (8)
-				Values = {
-					"Wet",
-					"Normal",
-					"Dry",
-				},
-
-				DefaultValue = 2,
-				SortPriority = -92,
-			},
-
-			-- 9
-			{
-				Name = "Rivers",	-- add setting for rivers (9)
-				Values = {
-					"Sparse",
-					"Average",
-					"Plentiful",
-				},
-
-				DefaultValue = 2,
-				SortPriority = -91,
-			},
-
-			-- 10
-			{
-				Name = "Tundra",	-- add setting for tundra (10)
-				Values = {
-					"Sparse",
-					"Average",
-					"Plentiful",
-				},
-
-				DefaultValue = 2,
-				SortPriority = -90,
-			},
-
-			-- 11
-			{
-				Name = "Land Size X",	-- add setting for land type (11)
+			[11] = { -- Land Size X
 				Values = {
 					"Default -10 tiles",
 					"Default -8 tiles",
@@ -192,14 +74,9 @@ function GetMapScriptInfo()
 					"Default +8 tiles",
 					"Default +10 tiles",
 				},
-
 				DefaultValue = 6,
-				SortPriority = -89,
 			},
-
-			-- 12
-			{
-				Name = "Land Size Y",	-- add setting for land type (12)
+			[12] = { -- Land Size Y
 				Values = {
 					"Default -10 tiles",
 					"Default -8 tiles",
@@ -212,163 +89,40 @@ function GetMapScriptInfo()
 					"Default +6 tiles",
 					"Default +8 tiles",
 					"Default +10 tiles",
-
 				},
-
 				DefaultValue = 6,
-				SortPriority = -88,
 			},
-
-			-- 13
-			{
-				Name = "TXT_KEY_MAP_OPTION_RESOURCES",	-- add setting for resources (13)
-				Values = {
-					"1 -- Nearly Nothing",
-					"2",
-					"3",
-					"4",
-					"5 -- Default",
-					"6",
-					"7",
-					"8",
-					"9",
-					"10 -- Almost no normal tiles left",
-				},
-
-				DefaultValue = 5,
-				SortPriority = -87,
-			},
-
-			-- 14
-			{
-				Name = "Balanced Regionals",	-- add setting for removing OP luxes from regional pool (14)
-				Values = {
-					"Yes",
-					"No",
-				},
-
-				DefaultValue = 1,
-				SortPriority = -90,
-			},
-
-			-- 15
-			-- {
-			-- 	Name = "Old Islands",	-- add setting for islands (15)
-			-- 	Values = {
-			-- 		"[COLOR_POSITIVE_TEXT]No Islands[ENDCOLOR]",
-			-- 		"1",
-			-- 		"2",
-			-- 		"3",
-			-- 		"4",
-			-- 		"5",
-			-- 		"6",
-			-- 		"7",
-			-- 		"8 - Old Default",
-			-- 		"9",
-			-- 		"10",
-			-- 		"11",
-			-- 		"12",
-			-- 		"13",
-			-- 		"14",
-			-- 		"15",
-			-- 		"16",
-			-- 		"17",
-			-- 		"18",
-			-- 		"19",
-			-- 		"20",
-			-- 		"21",
-			-- 		"22",
-			-- 		"23",
-			-- 		"24",
-			-- 		"Between 6-10",
-			-- 		"Between 8-12",
-			-- 		"Between 10-14",
-			-- 	},
-
-			-- 	DefaultValue = 1,
-			-- 	SortPriority = -86,
-			-- },
-
-			-- 16
-			{
-				Name = "Coastal Spawns",	-- Can inland civ spawn on the coast (15)
+		}, {
+			{ -- 15
+				Name = "Coastal Spawns",
 				Values = {
 					"Coastal Civs Only",
 					"Random",
 					"Random+ (~2 coastals)",
 				},
-
 				DefaultValue = 1,
 				SortPriority = -85,
 			},
-
-			-- 17
-			{
-				Name = "Coastal Luxes",	-- Can coast spawns have non-coastal luxes (16)
+			{ -- 16
+				Name = "Coastal Luxes",
 				Values = {
 					"Guaranteed",
 					"Random",
 				},
-
 				DefaultValue = 1,
 				SortPriority = -84,
 			},
-
-			-- 18
-			{
-				Name = "Inland Sea Spawns",	-- Can coastal civ spawn on inland seas (17)
+			{ -- 17
+				Name = "Inland Sea Spawns",
 				Values = {
 					"Allowed",
 					"Not allowed",
 				},
-
 				DefaultValue = 2,
 				SortPriority = -83,
 			},
-			
-			-- 19
-			-- {
-			-- 	Name = "Fjord Distance",	-- Distance between fjords (19)
-			-- 	Values = {
-			-- 		"[COLOR_POSITIVE_TEXT]No fjords[ENDCOLOR]",
-			-- 		"20 tiles",
-			-- 		"15 tiles",
-			-- 		"12 tiles",
-			-- 		"10 tiles -- Old Default",
-			-- 		"8 tiles",
-			-- 		"6 tiles",
-			-- 	},
-
-			-- 	DefaultValue = 1,
-			-- 	SortPriority = -82,
-			-- },
-			
-			--20
-			-- {
-			-- 	Name = "Fjord Length",	-- Length of fjords (20)
-			-- 	Values = {
-			-- 		"2 tiles -- Default",
-			-- 		"3 tiles",
-			-- 		"4 tiles",
-			-- 		"5 tiles",
-			-- 		"6 tiles",
-			-- 	},
-
-			-- 	DefaultValue = 1,
-			-- 	SortPriority = -81,
-			-- },
-
-			-- {
-			-- 	Name = "[COLOR_POSITIVE_TEXT]Bay/Lake Rework[ENDCOLOR]", -- (22)
-			-- 	Values = {
-			-- 		"Off - Old Default",
-			-- 		"[COLOR_POSITIVE_TEXT]On[ENDCOLOR]",
-			-- 	},
-			-- 	DefaultValue = 2,
-			-- 	SortPriority = -99,
-			-- },
-			{
-				Name = "No Flat Desert Luxes", -- (18)
+			{ -- 18
+				Name = "No Flat Desert Luxes",
 				Values = {
 					"Off - Old Default",
 					"On - Default",
@@ -376,232 +130,8 @@ function GetMapScriptInfo()
 				DefaultValue = 2,
 				SortPriority = -99,
 			},
-			-- {
-			-- 	Name = "[COLOR_POSITIVE_TEXT]Coastal CS Deadzone[ENDCOLOR]", -- (24)
-			-- 	Values = {
-			-- 		"4 - Old Default",
-			-- 		"5",
-			-- 		"6",
-			-- 		"[COLOR_POSITIVE_TEXT]7[ENDCOLOR]",
-			-- 	},
-			-- 	DefaultValue = 4,
-			-- 	SortPriority = -99,
-			-- },
-			-- {
-			-- 	Name = "[COLOR_POSITIVE_TEXT]Flexible Lux Distance[ENDCOLOR]", -- (25)
-			-- 	Values = {
-			-- 		"4 - Old Default",
-			-- 		"[COLOR_POSITIVE_TEXT]3-5[ENDCOLOR]",
-			-- 		"3-4",
-			-- 		"3-4 Lower Weighted",
-			-- 	},
-			-- 	DefaultValue = 2,
-			-- 	SortPriority = -99,
-			-- },
-			-- {
-			-- 	Name = "[COLOR_POSITIVE_TEXT]Meteors[ENDCOLOR]", -- (26)   -- disable
-			-- 	Values = {
-			-- 		"0 - Old Default",
-			-- 		"[COLOR_POSITIVE_TEXT]1[ENDCOLOR]",
-			-- 		"3",
-			-- 		"5",
-			-- 		"7",
-			-- 	},
-			-- 	DefaultValue = 2,
-			-- 	SortPriority = -99,
-			-- },
-			-- {
-			-- 	Name = "[COLOR_POSITIVE_TEXT]Reworked Spawns[ENDCOLOR]", -- (26)
-			-- 	Values = {
-			-- 		"Off - Old Default",
-			-- 		"On - Weak Center Bias",
-			-- 		"[COLOR_POSITIVE_TEXT]On - Medium Center Bias[ENDCOLOR]",
-			-- 		"On - Strong Center Bias",
-			-- 	},
-			-- 	DefaultValue = 3,
-			-- 	SortPriority = -99,
-			-- },
-			-- {
-			-- 	Name = "[COLOR_POSITIVE_TEXT]Sea Side Cliffs[ENDCOLOR]", -- (27) -- adjust
-			-- 	Values = {
-			-- 		"Off - Old Default",
-			-- 		"[COLOR_POSITIVE_TEXT]On[ENDCOLOR]",
-			-- 	},
-			-- 	DefaultValue = 2,
-			-- 	SortPriority = -99,
-			-- },
-			-- {
-			-- 	Name = "[COLOR_POSITIVE_TEXT]Bad CS Boost[ENDCOLOR]", -- (29) -- disable
-			-- 	Values = {
-			-- 		"Off - Old Default",
-			-- 		"[COLOR_POSITIVE_TEXT]On[ENDCOLOR]",
-			-- 	},
-			-- 	DefaultValue = 2,
-			-- 	SortPriority = -99,
-			-- },
-			-- {
-			-- 	Name = "[COLOR_POSITIVE_TEXT]Independent Hill Reduction[ENDCOLOR]", -- (28)
-			-- 	Values = {
-			-- 		"0% - Old Default",
-			-- 		"[COLOR_POSITIVE_TEXT]5%[ENDCOLOR]",
-			-- 		"10%",
-			-- 		"20%",
-			-- 		"30%",
-			-- 		"40%",
-			-- 		"50%",
-			-- 	},
-			-- 	DefaultValue = 2,
-			-- 	SortPriority = -99,
-			-- },
-			-- {
-			-- 	Name = "[COLOR_POSITIVE_TEXT]Remove Ice[ENDCOLOR]", -- (29)
-			-- 	Values = {
-			-- 		"Off - Old Default",
-			-- 		"[COLOR_POSITIVE_TEXT]Only Shallow Ice[ENDCOLOR]",
-			-- 		"All Ice",
-			-- 		"[COLOR_NEGATIVE_TEXT]Literally Nuke It From Orbit[ENDCOLOR]",
-			-- 	},
-			-- 	DefaultValue = 2,
-			-- 	SortPriority = -99,
-			-- },
-			-- {
-			-- 	Name = "[COLOR_NEGATIVE_TEXT]Player 1 Handicap[ENDCOLOR]", -- (30)
-			-- 	Values = {
-			-- 		"Off",
-			-- 		"[COLOR_NEGATIVE_TEXT]Scout[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]Worker[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]Great Engineer[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]Great Prophet[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]6 Regional Copies[ENDCOLOR]",
-			-- 	},
-			-- 	DefaultValue = 1,
-			-- 	SortPriority = -99,
-			-- },
-			-- {
-			-- 	Name = "[COLOR_NEGATIVE_TEXT]Player 2 Handicap[ENDCOLOR]", -- (31)
-			-- 	Values = {
-			-- 		"Off",
-			-- 		"[COLOR_NEGATIVE_TEXT]Scout[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]Worker[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]Great Engineer[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]Great Prophet[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]6 Regional Copies[ENDCOLOR]",
-			-- 	},
-			-- 	DefaultValue = 1,
-			-- 	SortPriority = -99,
-			-- },
-			-- {
-			-- 	Name = "[COLOR_NEGATIVE_TEXT]Player 3 Handicap[ENDCOLOR]", -- (32)
-			-- 	Values = {
-			-- 		"Off",
-			-- 		"[COLOR_NEGATIVE_TEXT]Scout[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]Worker[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]Great Engineer[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]Great Prophet[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]6 Regional Copies[ENDCOLOR]",
-			-- 	},
-			-- 	DefaultValue = 1,
-			-- 	SortPriority = -99,
-			-- },
-			-- {
-			-- 	Name = "[COLOR_NEGATIVE_TEXT]Player 4 Handicap[ENDCOLOR]", -- (33)
-			-- 	Values = {
-			-- 		"Off",
-			-- 		"[COLOR_NEGATIVE_TEXT]Scout[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]Worker[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]Great Engineer[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]Great Prophet[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]6 Regional Copies[ENDCOLOR]",
-			-- 	},
-			-- 	DefaultValue = 1,
-			-- 	SortPriority = -99,
-			-- },
-			-- {
-			-- 	Name = "[COLOR_NEGATIVE_TEXT]Player 5 Handicap[ENDCOLOR]", -- (34)
-			-- 	Values = {
-			-- 		"Off",
-			-- 		"[COLOR_NEGATIVE_TEXT]Scout[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]Worker[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]Great Engineer[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]Great Prophet[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]6 Regional Copies[ENDCOLOR]",
-			-- 	},
-			-- 	DefaultValue = 1,
-			-- 	SortPriority = -99,
-			-- },
-			-- {
-			-- 	Name = "[COLOR_NEGATIVE_TEXT]Player 6 Handicap[ENDCOLOR]", -- (35)
-			-- 	Values = {
-			-- 		"Off",
-			-- 		"[COLOR_NEGATIVE_TEXT]Scout[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]Worker[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]Great Engineer[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]Great Prophet[ENDCOLOR]",
-			-- 		"[COLOR_NEGATIVE_TEXT]6 Regional Copies[ENDCOLOR]",
-			-- 	},
-			-- 	DefaultValue = 1,
-			-- 	SortPriority = -99,
-			-- },
-			-- {
-			-- 	Name = "[COLOR_POSITIVE_TEXT]Non-Coastal-CS Deadband[ENDCOLOR]", -- (36)
-			-- 	Values = {
-			-- 		"Off - Old Default",
-			-- 		"2 Hex",
-			-- 		"3 Hex",
-			-- 		"[COLOR_POSITIVE_TEXT]4 Hex[ENDCOLOR]",
-			-- 		"5 Hex",
-			-- 		"6 Hex",
-			-- 		"7 Hex",
-			-- 		"8 Hex",
-			-- 	},
-			-- 	DefaultValue = 4,
-			-- 	SortPriority = -99,
-			-- },
-			-- {
-			-- 	Name = "[COLOR_POSITIVE_TEXT]Lake Fish[ENDCOLOR]", -- (37)
-			-- 	Values = {
-			-- 		"Off - Old Default",
-			-- 		"[COLOR_POSITIVE_TEXT]On[ENDCOLOR]",
-			-- 	},
-			-- 	DefaultValue = 2,
-			-- 	SortPriority = -99,
-			-- },
-			-- {
-			-- Name = "[COLOR_POSITIVE_TEXT]Larger Random Lux Pool[ENDCOLOR]", -- (38)
-			-- Values = {
-			-- 	"Off - Old Default",
-			-- 	"[COLOR_POSITIVE_TEXT]On[ENDCOLOR]",
-			-- },
-			-- DefaultValue = 2,
-			-- SortPriority = -99,
-			-- },
-			-- {
-			-- Name = "[COLOR_NEGATIVE_TEXT]Extra Secondary Copies[ENDCOLOR]", -- (39)
-			-- Values = {
-			-- 	"Off",
-			-- 	"[COLOR_NEGATIVE_TEXT]1[ENDCOLOR]",
-			-- 	"[COLOR_NEGATIVE_TEXT]2[ENDCOLOR]",
-			-- 	"[COLOR_NEGATIVE_TEXT]3[ENDCOLOR]",
-			-- 	"[COLOR_NEGATIVE_TEXT]4[ENDCOLOR]",
-			-- 	"[COLOR_NEGATIVE_TEXT]5[ENDCOLOR]",
-			-- },
-			-- DefaultValue = 1,
-			-- SortPriority = -99,
-			-- },
-			-- {
-			-- Name = "[COLOR:0:185:255:255]Isolation Fix[ENDCOLOR]", -- (40)
-			-- Values = {
-			-- 	"Off - Old Default",
-			-- 	"Warning Only",
-			-- 	"[COLOR:0:185:135:255]5.0 Cutoff (Low Remake Chance)[ENDCOLOR]",
-			-- 	"[COLOR:0:185:255:255]7.0 Cutoff (Medium Remake Chance)[ENDCOLOR]",
-			-- 	"[COLOR:0:185:135:255]9.0 Cutoff (High Remake Chance)[ENDCOLOR]",
-			-- },
-			-- DefaultValue = 4,
-			-- SortPriority = -99,
-			-- },
-			{
-				Name = "Error Notifications", -- (19) -- change
+			{ -- 19
+				Name = "Error Notifications",
 				Values = {
 					"[COLOR_NEGATIVE_TEXT]Off - This Will Make Jacobian Very Sad[ENDCOLOR]",
 					"On",
@@ -610,101 +140,8 @@ function GetMapScriptInfo()
 				DefaultValue = 2,
 				SortPriority = -99,
 			},
-			-- {
-			-- Name = "[COLOR_NEGATIVE_TEXT]More Coal[ENDCOLOR]", -- (42)
-			-- Values = {
-			-- 	"Off",
-			-- 	"[COLOR_NEGATIVE_TEXT]On - 8[ENDCOLOR]",
-			-- 	"[COLOR_NEGATIVE_TEXT]On - 9[ENDCOLOR]",
-			-- 	"[COLOR_NEGATIVE_TEXT]On - 10[ENDCOLOR]",
-			-- 	"[COLOR_NEGATIVE_TEXT]On - 11[ENDCOLOR]",
-			-- 	"[COLOR_NEGATIVE_TEXT]On - 12[ENDCOLOR]",
-			-- },
-			-- DefaultValue = 1,
-			-- SortPriority = -99,
-			-- },
-			-- {
-			-- Name = "[COLOR:0:185:255:255]Min Distance (Req. Isolation Fix)[ENDCOLOR]", -- (43)
-			-- Values = {
-			-- 	"Off - Old Default",
-			-- 	"[COLOR:0:185:135:255]7[ENDCOLOR]",
-			-- 	"[COLOR:0:185:135:255]8[ENDCOLOR]",
-			-- 	"[COLOR:0:185:135:255]9[ENDCOLOR]",
-			-- 	"[COLOR:0:185:135:255]10[ENDCOLOR]",
-			-- 	"[COLOR:0:185:255:255]11[ENDCOLOR]",
-			-- 	"[COLOR:0:185:135:255]12[ENDCOLOR]",
-			-- },
-			-- DefaultValue = 6,
-			-- SortPriority = -99,
-			-- },
-			-- {
-			-- Name = "[COLOR:0:185:255:255]Proximal CS (Req. Isolation Fix)[ENDCOLOR]", -- (44)
-			-- Values = {
-			-- 	"Off - Old Default",
-			-- 	"[COLOR:0:185:255:255]On[ENDCOLOR]",
-			-- },
-			-- DefaultValue = 2,
-			-- SortPriority = -99,
-			-- },
-			-- {
-			-- Name = "[COLOR_POSITIVE_TEXT]Buff Bad Luxes[ENDCOLOR]", -- (47) -- disable
-			-- Values = {
-			-- 	"Off - Old Default",
-			-- 	"[COLOR_POSITIVE_TEXT]+1 Gold Incense/Truffles[ENDCOLOR]",
-			-- },
-			-- DefaultValue = 2,
-			-- SortPriority = -99,
-			-- },
-			-- {
-			-- Name = "[COLOR:225:155:255:230]Tectonic Rework[ENDCOLOR]", -- (45)
-			-- Values = {
-			-- 	"Off - Old Default",
-			-- 	"[COLOR:225:155:255:230]On (DO NOT TURN ON ISLANDS)[ENDCOLOR]",
-			-- },
-			-- DefaultValue = 2,
-			-- SortPriority = -99,
-			-- },
-			-- {
-			-- Name = "[COLOR_POSITIVE_TEXT]Smart Regional Placement[ENDCOLOR]", -- (46)
-			-- Values = {
-			-- 	"Off - Old Default",
-			-- 	"[COLOR_POSITIVE_TEXT]On[ENDCOLOR]",
-			-- },
-			-- DefaultValue = 2,
-			-- SortPriority = -99,
-			-- },
-			-- {
-			-- Name = "[COLOR:0:185:255:255]Reroll Count[ENDCOLOR]", -- (47)
-			-- Values = {
-			-- 	"[COLOR:0:185:135:255]15[ENDCOLOR]",
-			-- 	"[COLOR:0:185:135:255]50[ENDCOLOR]",
-			-- 	"[COLOR:0:185:135:255]100[ENDCOLOR]",
-			-- 	"[COLOR:0:185:255:255]300[ENDCOLOR]",
-			-- 	"[COLOR:0:185:135:255]99999[ENDCOLOR]",
-			-- },
-			-- DefaultValue = 4,
-			-- SortPriority = -99,
-			-- },
-			-- {
-			-- Name = "[COLOR_POSITIVE_TEXT]Better CS Placement[ENDCOLOR]", -- (48)
-			-- Values = {
-			-- 	"Off - Old Default",
-			-- 	"[COLOR_POSITIVE_TEXT]On[ENDCOLOR]",
-			-- },
-			-- DefaultValue = 2,
-			-- SortPriority = -99,
-			-- },
-			-- {
-			-- Name = "[COLOR:0:185:255:255]Spawn Validation (Req. Isolation Fix)[ENDCOLOR]", -- (49)
-			-- Values = {
-			-- 	"Off - Old Default",
-			-- 	"[COLOR:0:185:255:255]On - Turn off If < 6 Players[COLOR:0:185:255:255]",
-			-- },
-			-- DefaultValue = 2,
-			-- SortPriority = -99,
-			-- },
-			{
-				Name = "Mountain Reduction", -- (20)
+			{ -- 20
+				Name = "Mountain Reduction",
 				Values = {
 					"0% - Old Default",
 					"5%",
@@ -716,8 +153,8 @@ function GetMapScriptInfo()
 				DefaultValue = 3,
 				SortPriority = -99,
 			},
-			{
-				Name = "Independent Hill Reduction", -- (21)
+			{ -- 21
+				Name = "Independent Hill Reduction",
 				Values = {
 					"0% - Old Default",
 					"5%",
@@ -730,18 +167,18 @@ function GetMapScriptInfo()
 				DefaultValue = 1,
 				SortPriority = -99,
 			},
-			{
-			Name = "Isolation Fix", -- (22)
-			Values = {
-				"5.0 Cutoff (Low Remake Chance)",
-				"7.0 Cutoff (Medium Remake Chance) - Default",
-				"9.0 Cutoff (High Remake Chance)",
+			{ -- 22
+				Name = "Isolation Fix",
+				Values = {
+					"5.0 Cutoff (Low Remake Chance)",
+					"7.0 Cutoff (Medium Remake Chance) - Default",
+					"9.0 Cutoff (High Remake Chance)",
+				},
+				DefaultValue = 2,
+				SortPriority = -99,
 			},
-			DefaultValue = 2,
-			SortPriority = -99,
-			},
-			{
-				Name = "Non-Coastal-CS Deadband", -- (23)
+			{ -- 23
+				Name = "Non-Coastal-CS Deadband",
 				Values = {
 					"Off - Old Default",
 					"2 Hex",
@@ -751,8 +188,8 @@ function GetMapScriptInfo()
 				DefaultValue = 3,
 				SortPriority = -99,
 			},
-			{
-				Name = "Sea Side Cliffs", -- (24) -- adjust
+			{ -- 24
+				Name = "Sea Side Cliffs",
 				Values = {
 					"Off - Old Default",
 					"On - Default",
@@ -760,7 +197,7 @@ function GetMapScriptInfo()
 				DefaultValue = 2,
 				SortPriority = -99,
 			},
-		},
+		}),
 	};
 end
 ------------------------------------------------------------------------------
@@ -913,65 +350,8 @@ function PangaeaFractalWorld.Create(fracXExp, fracYExp)
 end
 
 
-function FractalWorld:InitFractal(args)
-	if(args == nil) then args = {}; end
-	
-	print("=============== USING NQ PANGAEA FRACTAL ===============");
+-- InitFractal is inherited from the included HBFractalWorld.
 
-	--local continent_grain = args.continent_grain or 2;
-	local continent_grain = 1;
-	--local rift_grain = args.rift_grain or -1; -- Default no rifts. Set grain to between 1 and 3 to add rifts. - Bob
-	local rift_grain = 1;
-	--local invert_heights = args.invert_heights or false;
-	local invert_heights = false;
-	--local polar = args.polar or true;
-	local polar = true;
-	local ridge_flags = args.ridge_flags or self.iFlags;
-	
-	local fracFlags = {};
-	
-	if(invert_heights) then
-		fracFlags.FRAC_INVERT_HEIGHTS = true;
-	end
-	
-	if(polar) then
-		fracFlags.FRAC_POLAR = true;
-	end
-	
-	if(rift_grain > 0 and rift_grain < 4) then
-		self.riftsFrac = Fractal.Create((self.iNumPlotsX), self.iNumPlotsY, rift_grain, {}, self.fracXExp, self.fracYExp);
-		self.continentsFrac = Fractal.CreateRifts((self.iNumPlotsX * 1.1), self.iNumPlotsY, continent_grain, fracFlags, self.riftsFrac, self.fracXExp, self.fracYExp);
-	else
-		self.continentsFrac = Fractal.Create(self.iNumPlotsX, self.iNumPlotsY, continent_grain, fracFlags, self.fracXExp, self.fracYExp);	
-	end
-
-	-- Use Brian's tectonics method to weave ridgelines in to the continental fractal.
-	-- Without fractal variation, the tectonics come out too regular.
-	--
-	--[[ "The principle of the RidgeBuilder code is a modified Voronoi diagram. I 
-	added some minor randomness and the slope might be a little tricky. It was 
-	intended as a 'whole world' modifier to the fractal class. You can modify 
-	the number of plates, but that is about it." ]]-- Brian Wade - May 23, 2009
-	--
-	local WorldSizeTypes = {};
-	for row in GameInfo.Worlds() do
-		WorldSizeTypes[row.Type] = row.ID;
-	end
-	local sizekey = Map.GetWorldSize();
-	local sizevalues = {
-		[WorldSizeTypes.WORLDSIZE_DUEL]     = 4,
-		[WorldSizeTypes.WORLDSIZE_TINY]     = 8,
-		[WorldSizeTypes.WORLDSIZE_SMALL]    = 8,
-		[WorldSizeTypes.WORLDSIZE_STANDARD] = 20,
-		[WorldSizeTypes.WORLDSIZE_LARGE]    = 24,
-		[WorldSizeTypes.WORLDSIZE_HUGE]		= 32
-	}
-	--
-	local numPlates = sizevalues[sizekey] or 4
-	-- Blend a bit of ridge into the fractal.
-	-- This will do things like roughen the coastlines and build inland seas. - Brian
-	self.continentsFrac:BuildRidges(numPlates, ridge_flags, 1, 4);
-end
 -------------------------------------------------------------------------------------------
 function FractalWorld:ShiftPlotTypes()
 	local stripRadius = self.stripRadius;

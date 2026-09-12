@@ -49,6 +49,37 @@ function Plots(sort)
 	return it;
 end
 
+-- For maps whose custom options 11/12 select the same dimensions at every world size.
+function GetCustomSizeMapInitData(worldSize)
+
+	local LandSizeX = 28 + (Map.GetCustomOption(11) * 2);
+	local LandSizeY = 18 + (Map.GetCustomOption(12) * 2);
+
+	local worldsizes = {};
+
+	worldsizes = {
+
+		[GameInfo.Worlds.WORLDSIZE_DUEL.ID] = {LandSizeX, LandSizeY}, -- 720
+		[GameInfo.Worlds.WORLDSIZE_TINY.ID] = {LandSizeX, LandSizeY}, -- 1664
+		[GameInfo.Worlds.WORLDSIZE_SMALL.ID] = {LandSizeX, LandSizeY}, -- 2480
+		[GameInfo.Worlds.WORLDSIZE_STANDARD.ID] = {LandSizeX, LandSizeY}, -- 3900
+		[GameInfo.Worlds.WORLDSIZE_LARGE.ID] = {LandSizeX, LandSizeY}, -- 6076
+		[GameInfo.Worlds.WORLDSIZE_HUGE.ID] = {LandSizeX, LandSizeY} -- 9424
+		}
+
+	local grid_size = worldsizes[worldSize];
+	--
+	local world = GameInfo.Worlds[worldSize];
+	if (world ~= nil) then
+		return {
+			Width = grid_size[1],
+			Height = grid_size[2],
+			WrapX = true,
+		};
+	end
+
+end
+
 function GetCoreMapOptions()
 	--[[ All options have a default SortPriority of 0. Lower values will be shown above
 	higher values. Negative integers are valid. So the Core Map Options, which should 
@@ -175,11 +206,11 @@ function SetPlotTypes(plotTypes)
 	end
 end
 
-function GenerateCoasts(args)
+function GenerateCoasts(args, defaultExpansionDice)
 	print("Setting coasts and oceans (MapGenerator.Lua)");
 	local args = args or {};
 	local bExpandCoasts = args.bExpandCoasts or true;
-	local expansion_diceroll_table = args.expansion_diceroll_table or {2, 4};
+	local expansion_diceroll_table = args.expansion_diceroll_table or defaultExpansionDice or {2, 4};
 	
 	local shallowWater = GameDefines.SHALLOW_WATER_TERRAIN;
 	local deepWater = GameDefines.DEEP_WATER_TERRAIN;

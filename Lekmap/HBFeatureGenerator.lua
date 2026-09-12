@@ -12,7 +12,7 @@ include("HBMapmakerUtilities");
 ------------------------------------------------------------------------------
 FeatureGenerator = {};
 ------------------------------------------------------------------------------
-function FeatureGenerator.Create(args)
+function FeatureGenerator.Create(args, defaults)
 	--[[ Civ4's truncated "Climate" setting has been abandoned. Civ5 has returned to 
 	Civ3-style map options for World Age, Temperature, and Rainfall. Control over the 
 	terrain has been removed from the XML.  - Bob Thomas, March 2010  ]]--
@@ -24,6 +24,7 @@ function FeatureGenerator.Create(args)
 	local grassMoist = Map.GetCustomOption(8);
 
 	local args = args or {};
+	local defaults = defaults or {iJunglePercent = 42, iForestPercent = 20, fMarshPercent = 8};
 	local rainfall = args.rainfall or 2; -- Default is Normal rainfall.
 	local jungle_grain = args.jungle_grain or 5;
 	local forest_grain = args.forest_grain or 6;
@@ -40,7 +41,7 @@ function FeatureGenerator.Create(args)
 	local fracYExp = args.fracYExp or -1;
 	
 	-- Set feature traits.
-	local iJunglePercent = args.iJunglePercent or 42;
+	local iJunglePercent = args.iJunglePercent or defaults.iJunglePercent;
 
 	if grassMoist == 1 then
 		iJunglePercent = iJunglePercent - 5;
@@ -48,9 +49,9 @@ function FeatureGenerator.Create(args)
 		iJunglePercent = iJunglePercent + 5;
 	end
 
-	local iForestPercent = args.iForestPercent or 20;
+	local iForestPercent = args.iForestPercent or defaults.iForestPercent;
 	local iClumpHeight = args.iClumpHeight or 75;
-	local fMarshPercent = args.fMarshPercent or 8;
+	local fMarshPercent = args.fMarshPercent or defaults.fMarshPercent;
 	local iOasisPercent = args.iOasisPercent or 25;
 
 	-- if MapShape == 3 then

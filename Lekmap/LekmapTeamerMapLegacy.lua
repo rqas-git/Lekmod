@@ -16,6 +16,8 @@ include("MultilayeredFractal");
 
 
 ------------------------------------------------------------------------------
+include("HBMapOptions");
+
 function GetMapScriptInfo()
 	local world_age, temperature, rainfall, sea_level, resources = GetCoreMapOptions()
 	return {
@@ -25,143 +27,8 @@ function GetMapScriptInfo()
 		IconIndex = 17,
 		SortIndex = 2,
 		SupportsMultiplayer = true,
-	CustomOptions = {
-			{
-				Name = "TXT_KEY_MAP_OPTION_WORLD_AGE", -- 1
-				Values = {
-					"TXT_KEY_MAP_OPTION_THREE_BILLION_YEARS",
-					"TXT_KEY_MAP_OPTION_FOUR_BILLION_YEARS",
-					"TXT_KEY_MAP_OPTION_FIVE_BILLION_YEARS",
-					"No Mountains",
-					"TXT_KEY_MAP_OPTION_RANDOM",
-				},
-				DefaultValue = 2,
-				SortPriority = -99,
-			},
-
-			{
-				Name = "TXT_KEY_MAP_OPTION_TEMPERATURE",	-- 2 add temperature defaults to random
-				Values = {
-					"TXT_KEY_MAP_OPTION_COOL",
-					"TXT_KEY_MAP_OPTION_TEMPERATE",
-					"TXT_KEY_MAP_OPTION_HOT",
-					"TXT_KEY_MAP_OPTION_RANDOM",
-				},
-				DefaultValue = 2,
-				SortPriority = -98,
-			},
-
-			{
-				Name = "TXT_KEY_MAP_OPTION_RAINFALL",	-- 3 add rainfall defaults to random
-				Values = {
-					"TXT_KEY_MAP_OPTION_ARID",
-					"TXT_KEY_MAP_OPTION_NORMAL",
-					"TXT_KEY_MAP_OPTION_WET",
-					"TXT_KEY_MAP_OPTION_RANDOM",
-				},
-				DefaultValue = 2,
-				SortPriority = -97,
-			},
-
-			{
-				Name = "TXT_KEY_MAP_OPTION_SEA_LEVEL",	-- 4 add sea level defaults to random.
-				Values = {
-					"TXT_KEY_MAP_OPTION_LOW",
-					"TXT_KEY_MAP_OPTION_MEDIUM",
-					"TXT_KEY_MAP_OPTION_HIGH",
-					"TXT_KEY_MAP_OPTION_RANDOM",
-				},
-				DefaultValue = 2,
-				SortPriority = -96,
-			},
-
-			{
-				Name = "Start Quality",	-- 5 add resources defaults to random
-				Values = {
-					"Legendary Start - Strat Balance",
-					"Legendary - Strat Balance + Uranium",
-					"TXT_KEY_MAP_OPTION_STRATEGIC_BALANCE",
-					"Strategic Balance With Coal",
-					"Strategic Balance With Aluminum",
-					"Strategic Balance With Coal & Aluminum",
-					"TXT_KEY_MAP_OPTION_RANDOM",
-				},
-				DefaultValue = 2,
-				SortPriority = -95,
-			},
-
-			{
-				Name = "Start Distance",	-- 6 add resources defaults to random
-				Values = {
-					"Close",
-					"Normal",
-					"Far - Warning: May sometimes crash during map generation",
-				},
-				DefaultValue = 2,
-				SortPriority = -94,
-			},
-
-			{
-				Name = "Natural Wonders", -- 7 number of natural wonders to spawn
-				Values = {
-					"0",
-					"1",
-					"2",
-					"3",
-					"4",
-					"5",
-					"6",
-					"7",
-					"8",
-					"9",
-					"10",
-					"11",
-					"12",
-					"Random",
-					"Default",
-				},
-				DefaultValue = 15,
-				SortPriority = -93,
-			},
-
-			{
-				Name = "Grass Moisture",	-- add setting for grassland mositure (8)
-				Values = {
-					"Wet",
-					"Normal",
-					"Dry",
-				},
-
-				DefaultValue = 2,
-				SortPriority = -92,
-			},
-
-			{
-				Name = "Rivers",	-- add setting for rivers (9)
-				Values = {
-					"Sparse",
-					"Average",
-					"Plentiful",
-				},
-
-				DefaultValue = 2,
-				SortPriority = -91,
-			},
-
-			{
-				Name = "Tundra",	-- add setting for tundra (10)
-				Values = {
-					"Sparse",
-					"Average",
-					"Plentiful",
-				},
-
-				DefaultValue = 2,
-				SortPriority = -90,
-			},
-
-			{
-				Name = "Land Size X",	-- add setting for land type (11) +18
+		CustomOptions = LekmapOptions.Create({
+			[11] = { -- Land Size X
 				Values = {
 					"20 - Duel",
 					"22",
@@ -182,13 +49,9 @@ function GetMapScriptInfo()
 					"52",
 					"54",
 				},
-
 				DefaultValue = 9,
-				SortPriority = -89,
 			},
-
-			{
-				Name = "Land Size Y",	-- add setting for land type (12) +12
+			[12] = { -- Land Size Y
 				Values = {
 					"14 - Duel",
 					"16",
@@ -205,52 +68,20 @@ function GetMapScriptInfo()
 					"38",
 					"40",
 				},
-
 				DefaultValue = 7,
-				SortPriority = -88,
 			},
-
-			{
-				Name = "TXT_KEY_MAP_OPTION_RESOURCES",	-- add setting for resources (13)
-				Values = {
-					"1 -- Nearly Nothing",
-					"2",
-					"3",
-					"4",
-					"5 -- Default",
-					"6",
-					"7",
-					"8",
-					"9",
-					"10 -- Almost no normal tiles left",
-				},
-
-				DefaultValue = 5,
-				SortPriority = -87,
-			},
-
-			{
-				Name = "Balanced Regionals",	-- add setting for removing OP luxes from regional pool (14)
-				Values = {
-					"Yes",
-					"No",
-				},
-
-				DefaultValue = 1,
-				SortPriority = -90,
-			},
-			{
-				Name = "TXT_KEY_MAP_OPTION_TEAM_SETTING", -- (15)
+		}, {
+			{ -- 15
+				Name = "TXT_KEY_MAP_OPTION_TEAM_SETTING",
 				Values = {
 					"TXT_KEY_MAP_OPTION_START_TOGETHER",
---					"TXT_KEY_MAP_OPTION_START_SEPARATED",
 					"TXT_KEY_MAP_OPTION_START_ANYWHERE",
 				},
 				DefaultValue = 1,
 				SortPriority = 1,
 			},
-			{
-				Name = "Frontline Distance", --  minimum distance a capital can spawn from the front (16)
+			{ -- 16
+				Name = "Frontline Distance",
 				Values = {
 					"0",
 					"1",
@@ -263,8 +94,8 @@ function GetMapScriptInfo()
 				DefaultValue = 3,
 				SortPriority = -96,
 			},
-			{
-				Name = "Back Distance", -- minimum distance a capital can spawn from the back (17)
+			{ -- 17
+				Name = "Back Distance",
 				Values = {
 					"0 - Default",
 					"1",
@@ -281,8 +112,8 @@ function GetMapScriptInfo()
 				DefaultValue = 1,
 				SortPriority = -97,
 			},
-			{
-				Name = "Center Split", -- (18)
+			{ -- 18
+				Name = "Center Split",
 				Values = {
 					"Ocean Strip",
 					"Landbridges",
@@ -294,8 +125,8 @@ function GetMapScriptInfo()
 				DefaultValue = 1,
 				SortPriority = -99,
 			},
-			{
-				Name = "Back Coasts", -- decide whether or not the map should have oceans on the x world borders (19)
+			{ -- 19
+				Name = "Back Coasts",
 				Values = {
 					"Yes",
 					"No",
@@ -303,8 +134,8 @@ function GetMapScriptInfo()
 				DefaultValue = 2,
 				SortPriority = -102,
 			},
-			{
-				Name = "North and South Coasts", -- decide whether or not the map should have oceans on the y world borders (20)
+			{ -- 20
+				Name = "North and South Coasts",
 				Values = {
 					"Yes",
 					"No",
@@ -312,8 +143,8 @@ function GetMapScriptInfo()
 				DefaultValue = 2,
 				SortPriority = -103,
 			},
-			{
-				Name = "World Wrap", -- decide whether or not the map should wrap over the x world borders (21)
+			{ -- 21
+				Name = "World Wrap",
 				Values = {
 					"Yes",
 					"No",
@@ -321,7 +152,7 @@ function GetMapScriptInfo()
 				DefaultValue = 2,
 				SortPriority = -104,
 			},
-		},
+		}),
 	};
 end
 ------------------------------------------------------------------------------
@@ -722,246 +553,7 @@ function GetRiverValueAtPlot(plot)
 	return sum;
 end
 ------------------------------------------------------------------------------
-function DoRiver(startPlot, thisFlowDirection, originalFlowDirection, riverID)
-	-- Customizing to handle problems in top row of the map. Only this aspect has been altered.
-
-	local iW, iH = Map.GetGridSize()
-	thisFlowDirection = thisFlowDirection or FlowDirectionTypes.NO_FLOWDIRECTION;
-	originalFlowDirection = originalFlowDirection or FlowDirectionTypes.NO_FLOWDIRECTION;
-
-	-- pStartPlot = the plot at whose SE corner the river is starting
-	if (riverID == nil) then
-		riverID = nextRiverID;
-		nextRiverID = nextRiverID + 1;
-	end
-
-	local otherRiverID = _rivers[startPlot]
-	if (otherRiverID ~= nil and otherRiverID ~= riverID and originalFlowDirection == FlowDirectionTypes.NO_FLOWDIRECTION) then
-		return; -- Another river already exists here; can't branch off of an existing river!
-	end
-
-	local riverPlot;
-	
-	local bestFlowDirection = FlowDirectionTypes.NO_FLOWDIRECTION;
-	if (thisFlowDirection == FlowDirectionTypes.FLOWDIRECTION_NORTH) then
-	
-		riverPlot = startPlot;
-		local adjacentPlot = Map.PlotDirection(riverPlot:GetX(), riverPlot:GetY(), DirectionTypes.DIRECTION_EAST);
-		if ( adjacentPlot == nil or riverPlot:IsWOfRiver() or riverPlot:IsWater() or adjacentPlot:IsWater() ) then
-			return;
-		end
-
-		_rivers[riverPlot] = riverID;
-		riverPlot:SetWOfRiver(true, thisFlowDirection);
-		riverPlot = Map.PlotDirection(riverPlot:GetX(), riverPlot:GetY(), DirectionTypes.DIRECTION_NORTHEAST);
-		
-	elseif (thisFlowDirection == FlowDirectionTypes.FLOWDIRECTION_NORTHEAST) then
-	
-		riverPlot = startPlot;
-		local adjacentPlot = Map.PlotDirection(riverPlot:GetX(), riverPlot:GetY(), DirectionTypes.DIRECTION_SOUTHEAST);
-		if ( adjacentPlot == nil or riverPlot:IsNWOfRiver() or riverPlot:IsWater() or adjacentPlot:IsWater() ) then
-			return;
-		end
-
-		_rivers[riverPlot] = riverID;
-		riverPlot:SetNWOfRiver(true, thisFlowDirection);
-		-- riverPlot does not change
-	
-	elseif (thisFlowDirection == FlowDirectionTypes.FLOWDIRECTION_SOUTHEAST) then
-	
-		riverPlot = Map.PlotDirection(startPlot:GetX(), startPlot:GetY(), DirectionTypes.DIRECTION_EAST);
-		if (riverPlot == nil) then
-			return;
-		end
-		
-		local adjacentPlot = Map.PlotDirection(riverPlot:GetX(), riverPlot:GetY(), DirectionTypes.DIRECTION_SOUTHWEST);
-		if (adjacentPlot == nil or riverPlot:IsNEOfRiver() or riverPlot:IsWater() or adjacentPlot:IsWater()) then
-			return;
-		end
-
-		_rivers[riverPlot] = riverID;
-		riverPlot:SetNEOfRiver(true, thisFlowDirection);
-		-- riverPlot does not change
-	
-	elseif (thisFlowDirection == FlowDirectionTypes.FLOWDIRECTION_SOUTH) then
-	
-		riverPlot = Map.PlotDirection(startPlot:GetX(), startPlot:GetY(), DirectionTypes.DIRECTION_SOUTHWEST);
-		if (riverPlot == nil) then
-			return;
-		end
-		
-		local adjacentPlot = Map.PlotDirection(riverPlot:GetX(), riverPlot:GetY(), DirectionTypes.DIRECTION_EAST);
-		if (adjacentPlot == nil or riverPlot:IsWOfRiver() or riverPlot:IsWater() or adjacentPlot:IsWater()) then
-			return;
-		end
-		
-		_rivers[riverPlot] = riverID;
-		riverPlot:SetWOfRiver(true, thisFlowDirection);
-		-- riverPlot does not change
-	
-	elseif (thisFlowDirection == FlowDirectionTypes.FLOWDIRECTION_SOUTHWEST) then
-
-		riverPlot = startPlot;
-		local adjacentPlot = Map.PlotDirection(riverPlot:GetX(), riverPlot:GetY(), DirectionTypes.DIRECTION_SOUTHEAST);
-		if (adjacentPlot == nil or riverPlot:IsNWOfRiver() or riverPlot:IsWater() or adjacentPlot:IsWater()) then
-			return;
-		end
-		
-		_rivers[riverPlot] = riverID;
-		riverPlot:SetNWOfRiver(true, thisFlowDirection);
-		-- riverPlot does not change
-
-	elseif (thisFlowDirection == FlowDirectionTypes.FLOWDIRECTION_NORTHWEST) then
-		
-		riverPlot = startPlot;
-		local adjacentPlot = Map.PlotDirection(riverPlot:GetX(), riverPlot:GetY(), DirectionTypes.DIRECTION_SOUTHWEST);
-		
-		if ( adjacentPlot == nil or riverPlot:IsNEOfRiver() or riverPlot:IsWater() or adjacentPlot:IsWater()) then
-			return;
-		end
-
-		_rivers[riverPlot] = riverID;
-		riverPlot:SetNEOfRiver(true, thisFlowDirection);
-		riverPlot = Map.PlotDirection(riverPlot:GetX(), riverPlot:GetY(), DirectionTypes.DIRECTION_WEST);
-
-	else
-		-- River is starting here, set the direction in the next step
-		riverPlot = startPlot;		
-	end
-
-	if (riverPlot == nil or riverPlot:IsWater()) then
-		-- The river has flowed off the edge of the map or into the ocean. All is well.
-		return; 
-	end
-
-	-- Storing X,Y positions as locals to prevent redundant function calls.
-	local riverPlotX = riverPlot:GetX();
-	local riverPlotY = riverPlot:GetY();
-	
-	-- Table of methods used to determine the adjacent plot.
-	local adjacentPlotFunctions = {
-		[FlowDirectionTypes.FLOWDIRECTION_NORTH] = function() 
-			return Map.PlotDirection(riverPlotX, riverPlotY, DirectionTypes.DIRECTION_NORTHWEST); 
-		end,
-		
-		[FlowDirectionTypes.FLOWDIRECTION_NORTHEAST] = function() 
-			return Map.PlotDirection(riverPlotX, riverPlotY, DirectionTypes.DIRECTION_NORTHEAST);
-		end,
-		
-		[FlowDirectionTypes.FLOWDIRECTION_SOUTHEAST] = function() 
-			return Map.PlotDirection(riverPlotX, riverPlotY, DirectionTypes.DIRECTION_EAST);
-		end,
-		
-		[FlowDirectionTypes.FLOWDIRECTION_SOUTH] = function() 
-			return Map.PlotDirection(riverPlotX, riverPlotY, DirectionTypes.DIRECTION_SOUTHWEST);
-		end,
-		
-		[FlowDirectionTypes.FLOWDIRECTION_SOUTHWEST] = function() 
-			return Map.PlotDirection(riverPlotX, riverPlotY, DirectionTypes.DIRECTION_WEST);
-		end,
-		
-		[FlowDirectionTypes.FLOWDIRECTION_NORTHWEST] = function() 
-			return Map.PlotDirection(riverPlotX, riverPlotY, DirectionTypes.DIRECTION_NORTHWEST);
-		end	
-	}
-	
-	if(bestFlowDirection == FlowDirectionTypes.NO_FLOWDIRECTION) then
-
-		-- Attempt to calculate the best flow direction.
-		local bestValue = math.huge;
-		for flowDirection, getAdjacentPlot in pairs(adjacentPlotFunctions) do
-			
-			if (GetOppositeFlowDirection(flowDirection) ~= originalFlowDirection) then
-				
-				if (thisFlowDirection == FlowDirectionTypes.NO_FLOWDIRECTION or
-					flowDirection == TurnRightFlowDirections[thisFlowDirection] or 
-					flowDirection == TurnLeftFlowDirections[thisFlowDirection]) then
-				
-					local adjacentPlot = getAdjacentPlot();
-					
-					if (adjacentPlot ~= nil) then
-					
-						local value = GetRiverValueAtPlot(adjacentPlot);
-						if (flowDirection == originalFlowDirection) then
-							value = (value * 3) / 4;
-						end
-						
-						if (value < bestValue) then
-							bestValue = value;
-							bestFlowDirection = flowDirection;
-						end
-
-					-- Custom addition for Highlands, to fix river problems in top row of the map. Any other all-land map may need similar special casing.
-					elseif adjacentPlot == nil and riverPlotY == iH - 1 then -- Top row of map, needs special handling
-						if flowDirection == FlowDirectionTypes.FLOWDIRECTION_NORTH or
-						   flowDirection == FlowDirectionTypes.FLOWDIRECTION_NORTHWEST or
-						   flowDirection == FlowDirectionTypes.FLOWDIRECTION_NORTHEAST then
-							
-							local value = Map.Rand(5, "River Rand");
-							if (flowDirection == originalFlowDirection) then
-								value = (value * 3) / 4;
-							end
-							if (value < bestValue) then
-								bestValue = value;
-								bestFlowDirection = flowDirection;
-							end
-						end
-
-					-- Custom addition for Highlands, to fix river problems in left column of the map. Any other all-land map may need similar special casing.
-					elseif adjacentPlot == nil and riverPlotX == 0 then -- Left column of map, needs special handling
-						if flowDirection == FlowDirectionTypes.FLOWDIRECTION_NORTH or
-						   flowDirection == FlowDirectionTypes.FLOWDIRECTION_SOUTH or
-						   flowDirection == FlowDirectionTypes.FLOWDIRECTION_NORTHWEST or
-						   flowDirection == FlowDirectionTypes.FLOWDIRECTION_SOUTHWEST then
-							
-							local value = Map.Rand(5, "River Rand");
-							if (flowDirection == originalFlowDirection) then
-								value = (value * 3) / 4;
-							end
-							if (value < bestValue) then
-								bestValue = value;
-								bestFlowDirection = flowDirection;
-							end
-						end
-					end
-				end
-			end
-		end
-		
-		-- Try a second pass allowing the river to "flow backwards".
-		if(bestFlowDirection == FlowDirectionTypes.NO_FLOWDIRECTION) then
-		
-			local bestValue = math.huge;
-			for flowDirection, getAdjacentPlot in pairs(adjacentPlotFunctions) do
-			
-				if (thisFlowDirection == FlowDirectionTypes.NO_FLOWDIRECTION or
-					flowDirection == TurnRightFlowDirections[thisFlowDirection] or 
-					flowDirection == TurnLeftFlowDirections[thisFlowDirection]) then
-				
-					local adjacentPlot = getAdjacentPlot();
-					
-					if (adjacentPlot ~= nil) then
-						
-						local value = GetRiverValueAtPlot(adjacentPlot);
-						if (value < bestValue) then
-							bestValue = value;
-							bestFlowDirection = flowDirection;
-						end
-					end	
-				end
-			end
-		end
-	end
-	
-	--Recursively generate river.
-	if (bestFlowDirection ~= FlowDirectionTypes.NO_FLOWDIRECTION) then
-		if  (originalFlowDirection == FlowDirectionTypes.NO_FLOWDIRECTION) then
-			originalFlowDirection = bestFlowDirection;
-		end
-		
-		DoRiver(riverPlot, bestFlowDirection, originalFlowDirection, riverID);
-	end
-end
+include("HBRiverGenerator");
 ------------------------------------------------------------------------------
 function AddRivers()
 
