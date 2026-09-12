@@ -84,10 +84,10 @@ struct Report: Decodable {
     let version: String
     let crossplay: Bool
     let checks: [Check]
-    let ready: Bool
-    let repairable: Bool
-    let running: Bool
-    let launched: Bool?
+    var ready: Bool
+    var repairable: Bool
+    var running: Bool
+    var launched: Bool?
     let message: String?
     let running_message: String?
     let steam_session: SteamSession?
@@ -254,8 +254,28 @@ final class LauncherModel: ObservableObject {
         }
     }
 
-    // Only process discovery runs periodically. Full file validation runs when
-    // the observed game lifecycle changes, including games opened outside here.
+    // Return whether a closed game needs fresh validation before playing again.
+    // Process startup only updates controls, avoiding a full scan while Civ loads.
+    func observeGame(_ running: Bool, at now: Date = Date()) -> Bool {
+        guard !busy, var current = report else { return false }
+        if running {
+            if !current.running || current.launched == true {
+                current.running = true
+                current.launched = false
+                current.ready = false
+                current.repairable = false
+                report = current
+                launchRequestedAt = nil
+            }
+            return false
+        }
+        // Give Steam time to create its process after accepting the URL.
+        if current.launched == true, let requested = launchRequestedAt,
+           now.timeIntervalSince(requested) < 15 { return false }
+        return gameActive
+    }
+
+    // Only process discovery runs periodically; rescan files after the game exits.
     func refreshGameLifecycle() {
         guard !busy, !probingGame, report != nil, !app.isEmpty,
               let repository = Bundle.main.object(forInfoDictionaryKey: "LekmodRepository") as? String,
@@ -281,11 +301,8 @@ final class LauncherModel: ObservableObject {
             let observed = running
             DispatchQueue.main.async {
                 self.probingGame = false
-                guard !self.busy, let observed else { return }
-                // Give Steam time to create its process after accepting the URL.
-                if self.report?.launched == true, !observed,
-                   let requested = self.launchRequestedAt, Date().timeIntervalSince(requested) < 15 { return }
-                if observed != self.gameActive || self.report?.launched == true && observed {
+                guard let observed else { return }
+                if self.observeGame(observed) {
                     self.run("status")
                 }
             }

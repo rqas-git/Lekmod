@@ -1,0 +1,29 @@
+{"trial": 1, "version": "baseline", "action": "status", "seconds": 2.6276, "inspections": 1}
+{"trial": 1, "version": "candidate", "action": "status", "seconds": 1.7821, "inspections": 1}
+{"trial": 1, "version": "baseline", "action": "launch", "seconds": 5.2148, "inspections": 2}
+{"trial": 1, "version": "candidate", "action": "launch", "seconds": 1.8444, "inspections": 1}
+{"trial": 2, "version": "candidate", "action": "status", "seconds": 1.872, "inspections": 1}
+{"trial": 2, "version": "baseline", "action": "status", "seconds": 2.6465, "inspections": 1}
+{"trial": 2, "version": "candidate", "action": "launch", "seconds": 1.9226, "inspections": 1}
+{"trial": 2, "version": "baseline", "action": "launch", "seconds": 5.2344, "inspections": 2}
+{"trial": 3, "version": "baseline", "action": "status", "seconds": 2.5972, "inspections": 1}
+{"trial": 3, "version": "candidate", "action": "status", "seconds": 1.8494, "inspections": 1}
+{"trial": 3, "version": "baseline", "action": "launch", "seconds": 5.2742, "inspections": 2}
+{"trial": 3, "version": "candidate", "action": "launch", "seconds": 1.9241, "inspections": 1}
+{
+  "median_seconds": {
+    "status": {
+      "baseline": 2.6276,
+      "candidate": 1.8494
+    },
+    "launch": {
+      "baseline": 5.2344,
+      "candidate": 1.9226
+    }
+  },
+  "reduction_percent": {
+    "status": 29.6,
+    "launch": 63.3
+  },
+  "note": "Warm repeated validation; Steam handoff intercepted. No game startup or save loading measured."
+}

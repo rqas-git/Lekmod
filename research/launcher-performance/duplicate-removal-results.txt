@@ -1,0 +1,14 @@
+{"trial": 1, "version": "baseline", "seconds": 5.3075, "inspections": 2}
+{"trial": 1, "version": "candidate", "seconds": 2.6069, "inspections": 1}
+{"trial": 2, "version": "candidate", "seconds": 2.6076, "inspections": 1}
+{"trial": 2, "version": "baseline", "seconds": 5.1626, "inspections": 2}
+{"trial": 3, "version": "baseline", "seconds": 5.3528, "inspections": 2}
+{"trial": 3, "version": "candidate", "seconds": 2.5869, "inspections": 1}
+{
+  "median_seconds": {
+    "baseline": 5.3075,
+    "candidate": 2.6069
+  },
+  "reduction_percent": 50.9,
+  "note": "Warm repeated validation; Steam handoff intercepted. No game startup or save loading measured."
+}

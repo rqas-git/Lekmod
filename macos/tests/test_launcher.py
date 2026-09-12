@@ -1,5 +1,5 @@
 """Launch gating, Steam repair recovery, and persisted user intent."""
-from contextlib import ExitStack
+from contextlib import ExitStack, contextmanager
 from datetime import datetime
 import json
 from pathlib import Path
@@ -7,6 +7,7 @@ import plistlib
 import struct
 import sys
 import tempfile
+from threading import Event
 import unittest
 from unittest.mock import patch
 
@@ -90,10 +91,70 @@ class LauncherTests(unittest.TestCase):
         self.assertFalse(report['lekmap_installed'])
 
     def test_healthy_launch_checks_then_opens_only_steam(self):
-        report = launcher.run_action(self.app, True, 'launch')
+        original = launcher.inspect
+        def inspect(*args, **kwargs):
+            self.assert_installation_locked()
+            return original(*args, **kwargs)
+        self.open.side_effect = lambda *args, **kwargs: self.assert_installation_locked()
+        with patch.object(launcher, 'inspect', side_effect=inspect) as inspections:
+            report = launcher.run_action(self.app, True, 'launch')
+        inspections.assert_called_once()
         self.assertTrue(report['launched'])
         self.repair.assert_not_called()
         self.open.assert_called_once_with(['/usr/bin/open', 'steam://rungameid/8930'], check=True, timeout=30)
+        with game.installation_lock(self.app):
+            pass  # The handoff releases the lock for future launcher actions.
+
+    def assert_installation_locked(self):
+        with self.assertRaisesRegex(RuntimeError, 'Another installer'):
+            with game.installation_lock(self.app):
+                self.fail('Inspection and Steam handoff must hold the installation lock')
+
+    def test_inspection_hashes_native_library_once(self):
+        with patch.object(game, 'sha256', wraps=game.sha256) as hashing, \
+                patch.object(launcher, 'sha256', hashing):
+            self.assertTrue(launcher.inspect(self.app, True)['ready'])
+        self.assertEqual(sum(call.args == (self.app / game.CORE,)
+                             for call in hashing.call_args_list), 1)
+
+    def test_signature_and_content_checks_overlap_and_both_finish(self):
+        signature_started, content_started = Event(), Event()
+        def signature(app):
+            signature_started.set()
+            self.assertTrue(content_started.wait(5), 'Content checks should overlap codesign')
+        def content(path):
+            content_started.set()
+            self.assertTrue(signature_started.wait(5), 'codesign should start before content checks finish')
+            return tree_digest(path)
+        with patch.object(launcher, 'verify_signature', side_effect=signature) as signing, \
+                patch.object(launcher, 'tree_digest', side_effect=content):
+            self.assertTrue(launcher.inspect(self.app, True)['ready'])
+        signing.assert_called_once_with(self.app)
+
+    def test_failed_signature_still_requires_repair(self):
+        with patch.object(launcher, 'verify_signature', side_effect=RuntimeError('Invalid signature')):
+            report = launcher.inspect(self.app, True)
+        self.assertFalse(report['ready'])
+        self.assertTrue(report['repairable'])
+        self.assertEqual(next(c['state'] for c in report['checks'] if c['id'] == 'signature'), 'repair')
+
+    def test_invalid_app_does_not_start_signature_verification(self):
+        with patch.object(launcher, 'verify_signature') as signing:
+            self.assertFalse(launcher.inspect(self.root / 'missing.app', True)['repairable'])
+        signing.assert_not_called()
+
+    def test_launch_does_not_use_an_earlier_status_report(self):
+        self.assertTrue(launcher.run_action(self.app, True, 'status')['ready'])
+        write(self.app / crossplay.HOST, 'unknown replacement')
+        with self.assertRaisesRegex(RuntimeError, 'Needs attention'):
+            launcher.run_action(self.app, True, 'launch')
+        self.open.assert_not_called()
+
+    def test_game_starting_during_inspection_prevents_launch(self):
+        with patch.object(launcher, 'ensure_closed', side_effect=[None, RuntimeError('Close Civilization V')]):
+            with self.assertRaisesRegex(RuntimeError, 'Close Civilization V'):
+                launcher.run_action(self.app, True, 'launch')
+        self.open.assert_not_called()
 
     def test_steam_reset_restores_persistent_crossplay_before_launch(self):
         directory = self.root / 'preferences'
@@ -170,12 +231,38 @@ class LauncherTests(unittest.TestCase):
             launcher.run_action(self.app, True, 'launch')
         self.open.assert_not_called()
 
-    def test_change_before_steam_handoff_prevents_launch(self):
-        report = launcher.inspect(self.app, True)
-        changed = dict(report, ready=False)
-        with patch.object(launcher, 'inspect', side_effect=[report, changed]):
-            with self.assertRaisesRegex(RuntimeError, 'changed before launch'):
+    def test_repair_releases_lock_then_validates_once_under_lock(self):
+        write(self.app / game.CORE, 'stock')
+        def repair(*args, **kwargs):
+            with game.installation_lock(self.app):
+                self.restore(*args, **kwargs)
+        self.repair.side_effect = repair
+        original = launcher.inspect
+        def inspect(*args, **kwargs):
+            self.assert_installation_locked()
+            return original(*args, **kwargs)
+        self.open.side_effect = lambda *args, **kwargs: self.assert_installation_locked()
+        with patch.object(launcher, 'inspect', side_effect=inspect) as inspections:
+            self.assertTrue(launcher.run_action(self.app, True, 'launch')['launched'])
+        self.assertEqual(inspections.call_count, 2)
+        self.repair.assert_called_once()
+        self.open.assert_called_once()
+
+    def test_change_between_repair_and_relocking_prevents_launch(self):
+        write(self.app / game.CORE, 'stock')
+        acquisitions = 0
+        @contextmanager
+        def lock(app):
+            nonlocal acquisitions
+            acquisitions += 1
+            if acquisitions == 2:
+                write(app / crossplay.HOST, 'changed after repair')
+            with game.installation_lock(app):
+                yield
+        with patch.object(launcher, 'installation_lock', lock):
+            with self.assertRaisesRegex(RuntimeError, 'Validation did not pass after repair'):
                 launcher.run_action(self.app, True, 'launch')
+        self.repair.assert_called_once()
         self.open.assert_not_called()
 
     def test_bad_manifest_and_external_content_links_do_not_pass(self):

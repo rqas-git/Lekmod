@@ -133,13 +133,14 @@ def installed_state(app):
 
 
 def validate_core(app):
+    """Validate the installed library and return its content digest."""
     digest = sha256(app / CORE)
     if digest == STOCK_CORE_SHA256:
-        return
+        return digest
     state = installed_state(app)
     if (state.get('stock_core_sha256') == STOCK_CORE_SHA256
             and state.get('core_sha256') == digest):
-        return
+        return digest
     raise RuntimeError('The installed gameplay library is not the validated Aspyr build '
                        '180925 or a library installed by this installer. Restore the stock '
                        'game through Steam before installing Lekmod.')
