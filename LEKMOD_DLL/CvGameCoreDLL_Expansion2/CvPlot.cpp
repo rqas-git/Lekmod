@@ -1943,19 +1943,7 @@ void CvPlot::updateSeeFromSight(bool bIncrement)
 	int iDX, iDY;
 
 	int iRange = GC.getUNIT_VISIBILITY_RANGE() + 1;
-#ifdef AUI_WARNING_FIXES
-	for (uint iPromotion = 0; iPromotion < GC.getNumPromotionInfos(); ++iPromotion)
-#else
-	for(int iPromotion = 0; iPromotion < GC.getNumPromotionInfos(); ++iPromotion)
-#endif
-	{
-		const PromotionTypes ePromotion = static_cast<PromotionTypes>(iPromotion);
-		CvPromotionEntry* pkPromotionInfo = GC.getPromotionInfo(ePromotion);
-		if(pkPromotionInfo)
-		{
-			iRange += pkPromotionInfo->GetVisibilityChange();
-		}
-	}
+	iRange += CvPromotionEntry::GetTotalVisibilityChange();
 
 #ifdef NQM_FAST_COMP
 	iRange = MAX(GC.getRECON_VISIBILITY_RANGE() + 1, iRange);
@@ -1980,9 +1968,12 @@ void CvPlot::updateSeeFromSight(bool bIncrement)
 #else
 	for(iDX = -iRange; iDX <= iRange; iDX++)
 	{
-		for(iDY = -iRange; iDY <= iRange; iDY++)
+		// Keep the original DX-major order while skipping offsets outside the hex.
+		const int iMinDY = std::max(-iRange, -iRange - iDX);
+		const int iMaxDY = std::min(iRange, iRange - iDX);
+		for(iDY = iMinDY; iDY <= iMaxDY; iDY++)
 		{
-			pLoopPlot = plotXYWithRangeCheck(getX(), getY(), iDX, iDY, iRange);
+			pLoopPlot = plotXY(getX(), getY(), iDX, iDY);
 #endif
 
 			if(pLoopPlot != NULL)

@@ -472,6 +472,16 @@ bool CvGameTrade::IsValidTradeRoutePath(const CvCity* pOriginCity, const CvCity*
 bool CvGameTrade::IsValidTradeRoutePath (CvCity* pOriginCity, CvCity* pDestCity, DomainTypes eDomain)
 #endif
 {
+	int iCachedRange = -1;
+	return IsValidTradeRoutePathWithCachedRange(pOriginCity, pDestCity, eDomain, iCachedRange);
+}
+
+#ifdef AUI_CONSTIFY
+bool CvGameTrade::IsValidTradeRoutePathWithCachedRange(const CvCity* pOriginCity, const CvCity* pDestCity, DomainTypes eDomain, int& iCachedRange) const
+#else
+bool CvGameTrade::IsValidTradeRoutePathWithCachedRange (CvCity* pOriginCity, CvCity* pDestCity, DomainTypes eDomain, int& iCachedRange)
+#endif
+{
 	// AI_PERF_FORMAT("Trade-route-perf.csv", ("CvGameTrade::IsValidTradeRoutePath, Turn %03d, %s, %s, %d, %d, %s, %d, %d", GC.getGame().getElapsedGameTurns(), pOriginCity->GetPlayer()->getCivilizationShortDescription(), pOriginCity->getName().c_str(), pOriginCity->getX(), pOriginCity->getY(), pDestCity->getName().c_str(), pDestCity->getX(), pDestCity->getY()) );
 
 	PlayerTypes eOriginPlayer = pOriginCity->getOwner();
@@ -521,7 +531,9 @@ bool CvGameTrade::IsValidTradeRoutePath (CvCity* pOriginCity, CvCity* pDestCity,
 
 	// beyond the origin player's trade range
 	int iPathDistance = pPathfinderNode->m_iTotalCost;
-	int iRange = GET_PLAYER(eOriginPlayer).GetTrade()->GetTradeRouteRange(eDomain, pOriginCity) * 100 + 99; // adding 99 so that any movement penalties are ignored
+	if (iCachedRange == -1)
+		iCachedRange = GET_PLAYER(eOriginPlayer).GetTrade()->GetTradeRouteRange(eDomain, pOriginCity);
+	int iRange = iCachedRange * 100 + 99; // adding 99 so that any movement penalties are ignored
 	if (iPathDistance > iRange)
 	{
 		return false;
@@ -5679,6 +5691,9 @@ void CvTradeAI::GetAvailableTR(TradeConnectionList& aTradeConnectionList)
 	CvCity* pOriginCity = NULL;
 	for (pOriginCity = m_pPlayer->firstCity(&iOriginCityLoop); pOriginCity != NULL; pOriginCity = m_pPlayer->nextCity(&iOriginCityLoop))
 	{
+		// Range inputs stay fixed during this read-only origin enumeration.
+		int aiCachedRanges[NUM_DOMAIN_TYPES];
+		std::fill(aiCachedRanges, aiCachedRanges + NUM_DOMAIN_TYPES, -1);
 		PlayerTypes eOtherPlayer = NO_PLAYER;
 		for (uint ui = 0; ui < MAX_CIV_PLAYERS; ui++)
 		{
@@ -5729,7 +5744,7 @@ void CvTradeAI::GetAvailableTR(TradeConnectionList& aTradeConnectionList)
 						// Now test the path
 						if (bCheckPath)
 						{
-							bTradeAvailable = pGameTrade->IsValidTradeRoutePath(pOriginCity, pDestCity, eDomain);
+							bTradeAvailable = pGameTrade->IsValidTradeRoutePathWithCachedRange(pOriginCity, pDestCity, eDomain, aiCachedRanges[eDomain]);
 							if (!bTradeAvailable)
 								break;		// If there is no path for this domain, just skip the rest of the connection tests.
 
@@ -5958,9 +5973,9 @@ int CvTradeAI::ScoreFoodTR (const TradeConnection& kTradeConnection, CvCity* pSm
 
 /// Score Production TR
 #ifdef AUI_CONSTIFY
-int CvTradeAI::ScoreProductionTR(const TradeConnection& kTradeConnection, std::vector<const CvCity*>& aTargetCityList) const
+int CvTradeAI::ScoreProductionTR(const TradeConnection& kTradeConnection, const std::vector<const CvCity*>& aTargetCityList) const
 #else
-int CvTradeAI::ScoreProductionTR (const TradeConnection& kTradeConnection, std::vector<CvCity*> aTargetCityList)
+int CvTradeAI::ScoreProductionTR (const TradeConnection& kTradeConnection, const std::vector<CvCity*>& aTargetCityList)
 #endif
 {
 	// only consider production trades
@@ -5978,7 +5993,7 @@ int CvTradeAI::ScoreProductionTR (const TradeConnection& kTradeConnection, std::
 	// if we're not going to a target production city, ignore
 	bool bValidTarget = false;
 #ifdef AUI_ITERATORIZE
-	for (std::vector<const CvCity*>::iterator it = aTargetCityList.begin(); it != aTargetCityList.end(); ++it)
+	for (std::vector<const CvCity*>::const_iterator it = aTargetCityList.begin(); it != aTargetCityList.end(); ++it)
 	{
 		if (kTradeConnection.m_iDestX == (*it)->getX() && kTradeConnection.m_iDestY == (*it)->getY())
 #else

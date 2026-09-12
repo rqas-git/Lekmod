@@ -35,6 +35,10 @@ public:
 
 	virtual bool CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility);
 
+	// Sum over all loaded definitions, invalidated whenever promotion data changes.
+	static int GetTotalVisibilityChange();
+	static void InvalidateVisibilityChangeCache();
+
 	int	GetLayerAnimationPath() const;
 #if !defined(LEKMOD_RELOCATE_PROMOTION_PREREQ_ORS)
 	int	GetPrereqPromotion() const;

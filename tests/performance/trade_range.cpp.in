@@ -1,0 +1,123 @@
+#include <algorithm>
+#include <cassert>
+#include <iostream>
+#include <random>
+#include <tuple>
+#include <vector>
+typedef unsigned int uint;
+typedef int PlayerTypes;
+const int NO_PLAYER=-1,MAX_CIV_PLAYERS=4;
+enum DomainTypes {NO_DOMAIN=-1,DOMAIN_AIR,DOMAIN_SEA,DOMAIN_LAND,NUM_DOMAIN_TYPES};
+enum TradeConnectionType {TRADE_CONNECTION_INTERNATIONAL,TRADE_CONNECTION_FOOD,TRADE_CONNECTION_PRODUCTION,NUM_TRADE_CONNECTION_TYPES};
+#define CvAssertMsg(a,b) ((void)0)
+struct CvCity {
+    int id,owner; bool coastal;
+    int getOwner()const{return owner;} int getX()const{return id;} int getY()const{return owner;}
+    bool isCoastal(int)const{return coastal;}
+};
+struct TradeConnection {
+    int m_iOriginX,m_iOriginY,m_iDestX,m_iDestY,m_eOriginOwner,m_eDestOwner;
+    TradeConnectionType m_eConnectionType;DomainTypes m_eDomain;
+    std::vector<int> path;
+    bool operator==(const TradeConnection& b)const{
+        return std::tie(m_iOriginX,m_iOriginY,m_iDestX,m_iDestY,m_eOriginOwner,m_eDestOwner,m_eConnectionType,m_eDomain,path)==
+            std::tie(b.m_iOriginX,b.m_iOriginY,b.m_iDestX,b.m_iDestY,b.m_eOriginOwner,b.m_eDestOwner,b.m_eConnectionType,b.m_eDomain,b.path);
+    }
+};
+typedef std::vector<TradeConnection> TradeConnectionList;
+std::vector<std::vector<int>> trace;
+struct CvPlayerTrade {
+    int range[64][NUM_DOMAIN_TYPES];int rangeReads=0;
+    bool allowed[64][64][NUM_DOMAIN_TYPES][NUM_TRADE_CONNECTION_TYPES];
+    int GetTradeRouteRange(DomainTypes d,const CvCity* c){++rangeReads;return range[c->id][d];}
+    bool CanCreateTradeRoute(CvCity* a,CvCity* b,DomainTypes d,TradeConnectionType t,bool ignore,bool check){
+        trace.push_back({0,a->id,b->id,d,t,ignore,check});return allowed[a->id][b->id][d][t];
+    }
+};
+struct CvPlayer {
+    int id;bool alive=true,barbarian=false;
+    std::vector<CvCity> cities;CvPlayerTrade trade;
+    bool isAlive(){return alive;} bool isBarbarian(){return barbarian;}
+    CvPlayerTrade* GetTrade(){return &trade;}
+    CvCity* firstCity(int* i){*i=0;return cities.empty()?NULL:&cities[0];}
+    CvCity* nextCity(int* i){++*i;return *i<int(cities.size())?&cities[*i]:NULL;}
+} players[MAX_CIV_PLAYERS];
+#define GET_PLAYER(i) players[i]
+struct CvAStarNode {int m_iTotalCost;std::vector<int> path;};
+struct Finder {
+    int domain;int outcome[64][64],cost[64][64];CvAStarNode node;bool nullNode=false;
+    bool GeneratePath(int ax,int ay,int bx,int by,int player,bool reuse){
+        trace.push_back({1,domain,ax,ay,bx,by,player,reuse});
+        node.m_iTotalCost=cost[ax][bx];node.path={ax,bx,domain,cost[ax][bx]};
+        nullNode=outcome[ax][bx]==1;return outcome[ax][bx]!=0;
+    }
+    CvAStarNode* GetLastNode(){trace.push_back({2,domain});return nullNode?NULL:&node;}
+};
+struct CvGameTrade {
+#ifdef AUI_CONSTIFY
+    bool IsValidTradeRoutePathBaseline(const CvCity*,const CvCity*,DomainTypes)const;
+    bool IsValidTradeRoutePath(const CvCity*,const CvCity*,DomainTypes)const;
+    bool IsValidTradeRoutePathWithCachedRange(const CvCity*,const CvCity*,DomainTypes,int&)const;
+#else
+    bool IsValidTradeRoutePathBaseline(CvCity*,CvCity*,DomainTypes);
+    bool IsValidTradeRoutePath(CvCity*,CvCity*,DomainTypes);
+    bool IsValidTradeRoutePathWithCachedRange(CvCity*,CvCity*,DomainTypes,int&);
+#endif
+    void CopyPathIntoTradeConnection(CvAStarNode* p,TradeConnection* c){c->path=p->path;}
+};
+struct Game {CvGameTrade trade;CvGameTrade* GetGameTrade(){return &trade;}};
+struct Globals {
+    Finder land,water;Game game;
+    Finder& GetInternationalTradeRouteLandFinder(){return land;}
+    Finder& GetInternationalTradeRouteWaterFinder(){return water;}
+    Game& getGame(){return game;}
+} GC;
+struct CvTradeAI {
+    CvPlayer* m_pPlayer;
+    void GetAvailableTR(TradeConnectionList&);
+    void GetAvailableTRBaseline(TradeConnectionList&);
+};
+@BASELINE_PATH@
+@CURRENT_PATH@
+@BASELINE_CANDIDATES@
+@CURRENT_CANDIDATES@
+int main(){
+    std::mt19937 rng(1903);long long cases=0,oldReads=0,newReads=0,candidates=0;
+    GC.land.domain=DOMAIN_LAND;GC.water.domain=DOMAIN_SEA;
+    for(int world=0;world<100;++world){
+        int id=0;
+        for(int p=0;p<MAX_CIV_PLAYERS;++p){
+            players[p].id=p;players[p].alive=p==0||world%4;players[p].barbarian=p==3;
+            players[p].cities.clear();
+            for(int i=0,n=static_cast<int>(rng()%8);i<n;++i)players[p].cities.push_back({id++,p,rng()%3!=0});
+        }
+        for(int a=0;a<id;++a)for(int b=0;b<id;++b){
+            GC.land.outcome[a][b]=rng()%5;GC.water.outcome[a][b]=rng()%5;
+            GC.land.cost[a][b]=rng()%4001;GC.water.cost[a][b]=rng()%4001;
+            for(int d=0;d<NUM_DOMAIN_TYPES;++d)for(int t=0;t<NUM_TRADE_CONNECTION_TYPES;++t)
+                players[0].trade.allowed[a][b][d][t]=rng()%4!=0;
+        }
+        for(int turn=0;turn<3;++turn){
+            for(int a=0;a<id;++a)for(int d=0;d<NUM_DOMAIN_TYPES;++d)players[0].trade.range[a][d]=static_cast<int>(rng()%44)-3;
+            CvTradeAI ai;ai.m_pPlayer=&players[0];TradeConnectionList old,now;
+            trace.clear();players[0].trade.rangeReads=0;ai.GetAvailableTRBaseline(old);
+            const auto beforeTrace=trace;oldReads+=players[0].trade.rangeReads;
+            trace.clear();players[0].trade.rangeReads=0;ai.GetAvailableTR(now);
+            newReads+=players[0].trade.rangeReads;
+            assert(old==now && beforeTrace==trace);++cases;candidates+=now.size();
+        }
+    }
+    // Cost boundary including the +99 allowance, and standalone calls that must
+    // read changed ranges rather than keeping an enumeration cache.
+    CvCity origin={0,0,true},destination={1,1,true};
+    GC.land.outcome[0][1]=2;
+    for(int range=-3;range<50;++range)for(int extra:{-1,0,1,98,99,100}){
+        players[0].trade.range[0][DOMAIN_LAND]=range;
+        GC.land.cost[0][1]=range*100+extra;
+        bool a=GC.game.trade.IsValidTradeRoutePathBaseline(&origin,&destination,DOMAIN_LAND);
+        bool b=GC.game.trade.IsValidTradeRoutePath(&origin,&destination,DOMAIN_LAND);
+        assert(a==b);++cases;
+    }
+    assert(newReads<oldReads);
+    std::cout<<"{\"cases\":"<<cases<<",\"candidates\":"<<candidates<<",\"range_scans\":["<<oldReads<<","<<newReads<<"]}";
+}

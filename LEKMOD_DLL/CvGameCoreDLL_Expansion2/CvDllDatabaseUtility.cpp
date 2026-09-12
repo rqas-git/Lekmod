@@ -374,6 +374,7 @@ bool CvDllDatabaseUtility::PrefetchGameData()
 	PrefetchCollection(GC.getSpecialUnitInfo(), "SpecialUnits");
 	PrefetchCollection(GC.getUnitClassInfo(), "UnitClasses");
 	PrefetchCollection(GC.getPromotionInfo(), "UnitPromotions");
+	CvPromotionEntry::InvalidateVisibilityChangeCache();
 	PrefetchCollection(GC.getUnitInfo(), "Units");
 
 	//Civilizations - must be after buildings and units
@@ -1262,6 +1263,4 @@ void CvDllDatabaseUtility::LogMsg(const char* format, ...) const
 
 	LOGFILEMGR.GetLog("xml.log", uiFlags)->Msg(buf);
 }
-
-
 

@@ -19,6 +19,22 @@
 // include after all other headers
 #include "LintFree.h"
 
+namespace
+{
+	struct BuilderDirectiveHeapEntry
+	{
+		int m_iWeight;
+		int m_iIndex;
+
+		bool operator<(const BuilderDirectiveHeapEntry& other) const
+		{
+			if (m_iWeight != other.m_iWeight)
+				return m_iWeight < other.m_iWeight;
+			return m_iIndex > other.m_iIndex; // earlier insertion wins equal weights
+		}
+	};
+}
+
 CvWeightedVector<BuilderDirective, 100, true> CvBuilderTaskingAI::m_aDirectives;
 FStaticVector<int, SAFE_ESTIMATE_NUM_EXTRA_PLOTS, true, c_eCiv5GameplayDLL, 0> CvBuilderTaskingAI::m_aiNonTerritoryPlots; // plots that we need to evaluate that are outside of our territory
 
@@ -791,7 +807,14 @@ bool CvBuilderTaskingAI::EvaluateBuilder(CvUnit* pUnit, BuilderDirective* paDire
 	}
 	else
 	{
-		m_aiPlots = m_pPlayer->GetPlots();
+		// Keep a snapshot, including the first sentinel used by the evaluation loop.
+		const CvPlotsVector& aiOwnedPlots = m_pPlayer->GetPlots();
+		for (uint i = 0; i < aiOwnedPlots.size(); ++i)
+		{
+			m_aiPlots.push_back(aiOwnedPlots[i]);
+			if (aiOwnedPlots[i] == -1)
+				break;
+		}
 	}
 
 #ifdef AUI_WORKER_ADD_IMPROVING_MINOR_PLOTS_DIRECTIVES
@@ -929,15 +952,52 @@ bool CvBuilderTaskingAI::EvaluateBuilder(CvUnit* pUnit, BuilderDirective* paDire
 		AddRouteDirectives(pUnit, pPlot, iMoveTurnsAway);
 	}
 
-	m_aDirectives.StableSortItems();
+	// A stable heap produces the same candidate/path-query order without sorting
+	// every directive when the caller only needs one. Preserve full sorted logs.
+	const bool bUseHeap = !m_bLogging && uaDirectives == 1 && m_aDirectives.size() > 32;
+	std::vector<BuilderDirectiveHeapEntry> aDirectiveHeap;
+	if (bUseHeap)
+	{
+		aDirectiveHeap.reserve(m_aDirectives.size());
+		for (int i = 0; i < m_aDirectives.size(); ++i)
+		{
+			BuilderDirectiveHeapEntry entry;
+			entry.m_iWeight = m_aDirectives.GetWeight(i);
+			entry.m_iIndex = i;
+			aDirectiveHeap.push_back(entry);
+		}
+		std::make_heap(aDirectiveHeap.begin(), aDirectiveHeap.end());
+	}
+	else
+	{
+		m_aDirectives.StableSortItems();
+	}
 
 	int iBestWeight = 0;
 
 	int iAssignIndex = 0;
 	for(int i = 0; i < m_aDirectives.size(); i++)
 	{
+		int iDirectiveIndex = i;
+		if (bUseHeap)
+		{
+			// If many candidates fail, sort the remainder once instead of draining
+			// the entire heap. The index tie-break preserves the same stable order.
+			if (i == 32)
+				std::sort(aDirectiveHeap.begin(), aDirectiveHeap.end());
+			if (i < 32)
+			{
+				iDirectiveIndex = aDirectiveHeap.front().m_iIndex;
+				std::pop_heap(aDirectiveHeap.begin(), aDirectiveHeap.end());
+			}
+			else
+			{
+				iDirectiveIndex = aDirectiveHeap.back().m_iIndex;
+			}
+			aDirectiveHeap.pop_back();
+		}
 		// If this target was far away, we only estimated the time to get there.  We need to be sure we have a real path there
-		CvPlot* pTarget = GC.getMap().plot(m_aDirectives.GetElement(i).m_sX, m_aDirectives.GetElement(i).m_sY);
+		CvPlot* pTarget = GC.getMap().plot(m_aDirectives.GetElement(iDirectiveIndex).m_sX, m_aDirectives.GetElement(iDirectiveIndex).m_sY);
 		CvAssertMsg(pTarget != NULL, "Not expecting the target to be NULL");
 		if(!pTarget)
 			continue;
@@ -956,19 +1016,19 @@ bool CvBuilderTaskingAI::EvaluateBuilder(CvUnit* pUnit, BuilderDirective* paDire
 
 		if(iBestWeight == 0)
 		{
-			iBestWeight = m_aDirectives.GetWeight(i);
+			iBestWeight = m_aDirectives.GetWeight(iDirectiveIndex);
 		}
 
 		if(bOnlyKeepBest)
 		{
-			int iWeight = m_aDirectives.GetWeight(i);
+			int iWeight = m_aDirectives.GetWeight(iDirectiveIndex);
 			if(iWeight < iBestWeight * 3 / 4)
 			{
 				break;
 			}
 		}
 
-		BuilderDirective directive = m_aDirectives.GetElement(i);
+		BuilderDirective directive = m_aDirectives.GetElement(iDirectiveIndex);
 		paDirectives[iAssignIndex] = directive;
 		iAssignIndex++;
 

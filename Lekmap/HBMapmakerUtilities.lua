@@ -893,9 +893,42 @@ function GetShuffledCopyOfTable(incoming_table)
 	local len = table.maxn(incoming_table);
 	local copy = {};
 	local shuffledVersion = {};
+	local dense = true;
 	-- Make copy of table.
 	for loop = 1, len do
 		copy[loop] = incoming_table[loop];
+		if copy[loop] == nil then dense = false; end
+	end
+	-- Large dense arrays use live-index ranks instead of shifting the remaining
+	-- entries on every removal. Keep exactly the same random draws and permutation.
+	-- The original path is faster for small arrays and retains sparse-table behavior.
+	if len >= 1024 and len % 1 == 0 and dense then
+		local tree, low = {}, {};
+		for i = 1, len do
+			low[i] = i % 2 == 1 and 1 or 2 * low[i / 2];
+			tree[i] = low[i];
+		end
+		local top = 1;
+		while top * 2 <= len do top = top * 2; end
+		for loop = 1, len do
+			local rank = 1 + Map.Rand(len - loop + 1, "Shuffling table entry - Lua");
+			local index, bit = 0, top;
+			while bit >= 1 do
+				local nextIndex = index + bit;
+				if nextIndex <= len and tree[nextIndex] < rank then
+					rank = rank - tree[nextIndex];
+					index = nextIndex;
+				end
+				bit = bit / 2;
+			end
+			index = index + 1;
+			shuffledVersion[loop] = copy[index];
+			while index <= len do
+				tree[index] = tree[index] - 1;
+				index = index + low[index];
+			end
+		end
+		return shuffledVersion
 	end
 	-- One at a time, choose a random index from Copy to insert in to final table, then remove it from the copy.
 	local left_to_do = table.maxn(copy);

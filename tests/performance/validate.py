@@ -12,6 +12,7 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+from next_checks import cpp_checks, shuffle_checks, normalize_trade_section
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
@@ -58,7 +59,7 @@ def trade_checks(directory, address_sanitizer=False):
     baseline = subprocess.check_output(['git', 'show', f'{TRADE_BASE}:{path}'], cwd=ROOT).decode(errors='replace')
     start, end = baseline.index('/// Get all available TR'), baseline.index('// sort player numbers')
     current_start, current_end = current.index('/// Get all available TR'), current.index('// sort player numbers')
-    assert baseline[start:end] == current[current_start:current_end]
+    assert baseline[start:end] == normalize_trade_section(current[current_start:current_end])
     def ranking(text):
         start = text.index('// sort player numbers\nstruct TRSortElement')
         return text[start:text.index('/// ChooseTradeUnitTargetPlot', start)]
@@ -195,6 +196,7 @@ def lua_checks(lua_path):
                 assert old==now and after==(1 if count else 0)
                 cases+=1; before_calls+=before; after_calls+=after
     result['policies'] = {'contexts': cases, 'rule_table_reads': [before_calls,after_calls]}
+    result['shuffle'] = shuffle_checks(lua)
     return result
 
 
@@ -210,6 +212,7 @@ def main():
         result['connections'] = connections(Path(temp))
         result['metadata_and_coast'] = metadata(Path(temp))
         result['trade'] = trade_checks(Path(temp), args.address_sanitizer)
+        result['next_batch'] = cpp_checks(Path(temp), source, extract, compile_run)
     result['lua'] = lua_checks(args.lua_python_path)
     # Include committed validated sources too, rather than only current dirty files.
     paths = [

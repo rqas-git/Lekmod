@@ -92,6 +92,8 @@ public:
 
 #ifdef AUI_CONSTIFY
 	bool IsValidTradeRoutePath(const CvCity* pOriginCity, const CvCity* pDestCity, DomainTypes eDomain) const;
+	// Internal enumeration cache: initialize to -1 for each origin/domain.
+	bool IsValidTradeRoutePathWithCachedRange(const CvCity* pOriginCity, const CvCity* pDestCity, DomainTypes eDomain, int& iCachedRange) const;
 	CvPlot* GetPlotAdjacentToWater(const CvPlot* pTarget, const CvPlot* pOrigin) const;
 
 	bool IsDestinationExclusive(const TradeConnection& kTradeConnection) const;
@@ -115,6 +117,8 @@ public:
 	bool IsTradeRouteIndexEmpty(int iIndex) const;
 #else
 	bool IsValidTradeRoutePath (CvCity* pOriginCity, CvCity* pDestCity, DomainTypes eDomain);
+	// Internal enumeration cache: initialize to -1 for each origin/domain.
+	bool IsValidTradeRoutePathWithCachedRange (CvCity* pOriginCity, CvCity* pDestCity, DomainTypes eDomain, int& iCachedRange);
 	CvPlot* GetPlotAdjacentToWater (CvPlot* pTarget, CvPlot* pOrigin);
 
 	bool IsDestinationExclusive(const TradeConnection& kTradeConnection);
@@ -426,13 +430,13 @@ public:
 #ifdef AUI_CONSTIFY
 	int	ScoreInternationalTR(const TradeConnection& kTradeConnection) const;
 	int ScoreFoodTR(const TradeConnection& kTradeConnection, const CvCity* pSmallestCity) const;
-	int ScoreProductionTR(const TradeConnection& kTradeConnection, std::vector<const CvCity*>& aTargetCityList) const;
+	int ScoreProductionTR(const TradeConnection& kTradeConnection, const std::vector<const CvCity*>& aTargetCityList) const;
 
 	bool ChooseTradeUnitTargetPlot(CvUnit* pUnit, int& iOriginPlotIndex, int& iDestPlotIndex, TradeConnectionType& eTradeConnectionType, bool& bDisband, const TradeConnectionList& aTradeConnections) const;
 #else
 	int	ScoreInternationalTR (const TradeConnection& kTradeConnection);
 	int ScoreFoodTR(const TradeConnection& kTradeConnection, CvCity* pSmallestCity);
-	int ScoreProductionTR (const TradeConnection& kTradeConnection, std::vector<CvCity*> aTargetCityList);
+	int ScoreProductionTR (const TradeConnection& kTradeConnection, const std::vector<CvCity*>& aTargetCityList);
 
 	bool ChooseTradeUnitTargetPlot(CvUnit* pUnit, int& iOriginPlotIndex, int& iDestPlotIndex, TradeConnectionType& eTradeConnectionType, bool& bDisband, const TradeConnectionList& aTradeConnections);
 #endif

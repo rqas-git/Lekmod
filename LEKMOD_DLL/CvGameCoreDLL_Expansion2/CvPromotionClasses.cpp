@@ -14,6 +14,33 @@
 #include "LintFree.h"
 
 /// Constructor
+namespace
+{
+	int s_iPromotionVisibilityChange = 0;
+	bool s_bPromotionVisibilityChangeValid = false;
+}
+
+void CvPromotionEntry::InvalidateVisibilityChangeCache()
+{
+	s_bPromotionVisibilityChangeValid = false;
+}
+
+int CvPromotionEntry::GetTotalVisibilityChange()
+{
+	if (!s_bPromotionVisibilityChangeValid)
+	{
+		s_iPromotionVisibilityChange = 0;
+		for (int i = 0; i < (int)GC.getNumPromotionInfos(); ++i)
+		{
+			const CvPromotionEntry* pPromotion = GC.getPromotionInfo((PromotionTypes)i);
+			if (pPromotion)
+				s_iPromotionVisibilityChange += pPromotion->GetVisibilityChange();
+		}
+		s_bPromotionVisibilityChangeValid = true;
+	}
+	return s_iPromotionVisibilityChange;
+}
+
 CvPromotionEntry::CvPromotionEntry():
 	m_iLayerAnimationPath(ANIMATIONPATH_NONE),
 #if !defined(LEKMOD_RELOCATE_PROMOTION_PREREQ_ORS)
@@ -225,11 +252,13 @@ CvPromotionEntry::CvPromotionEntry():
 	m_pbCivilianUnitType(NULL),
 	m_pbPostCombatRandomPromotion(NULL)
 {
+	InvalidateVisibilityChangeCache();
 }
 
 /// Destructor
 CvPromotionEntry::~CvPromotionEntry(void)
 {
+	InvalidateVisibilityChangeCache();
 #if defined(FULL_YIELD_FROM_KILLS)
 	SAFE_DELETE_ARRAY(m_paiYieldFromKills);
 	SAFE_DELETE_ARRAY(m_paiKillYieldCap);
@@ -274,6 +303,7 @@ CvPromotionEntry::~CvPromotionEntry(void)
 //------------------------------------------------------------------------------
 bool CvPromotionEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility& kUtility)
 {
+	InvalidateVisibilityChangeCache();
 	if(!CvHotKeyInfo::CacheResults(kResults, kUtility))
 		return false;
 
