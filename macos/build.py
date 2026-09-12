@@ -54,7 +54,7 @@ def main():
     if args.source:
         sources = [args.source]
     header_time = max(p.stat().st_mtime for root in [CORE, HERE / "include"]
-                      for p in root.rglob("*") if p.is_file() and p.suffix in (".h", ".hpp", ".inl", ""))
+                      for p in root.rglob("*") if p.is_file() and p.suffix in (".h", ".hpp", ".inl", ".inc", ""))
     header_time = max(header_time, Path(__file__).stat().st_mtime)
     def compile_source(name):
         src = CORE / name.replace("\\", "/")

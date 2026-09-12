@@ -112,3 +112,21 @@ set `LUA51` to an interpreter beside `liblua.a` and its headers:
 ```sh
 LUA51=/path/to/lua5.1 python3 -B -m unittest discover -s tests -p test_lua_bindings.py -v
 ```
+
+## Global settings
+
+`CvGlobalDefines.inc` defines an ordered block of 672 settings once, including
+their types and constructor defaults. It generates the same fields, getters,
+initializers, and database lookups through the existing `GD_*` macros. Do not add
+an include guard or reorder entries: the order controls object layout and lookup
+order. Exceptional getters and settings outside this block remain explicit, and
+the existing feature flags remain supported.
+
+The C++98 fixture compares every affected field offset, size, default, getter,
+and lookup against the original `perf` definitions in `b3dc1df5`. The Mac build
+tracks `.inc` dependencies in both normal and experimental output directories.
+
+```sh
+python3 -B -m unittest discover -s tests -p test_global_defines.py -v
+python3 -B -m unittest discover -s macos/tests -p test_build.py -v
+```
