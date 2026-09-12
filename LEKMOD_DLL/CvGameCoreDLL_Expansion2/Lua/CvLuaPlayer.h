@@ -35,6 +35,19 @@ public:
 	static const char* GetTypeName();
 
 protected:
+#if defined(LEKMOD_MACOS)
+    template<class R, class Owner, class... Args>
+    static int BasicLuaMethod(lua_State* L, R (Owner::*method)(Args...))
+    {
+        return CvLuaMethodWrapper<CvLuaPlayer, Owner>::BasicLuaMethod(L, method);
+    }
+    template<class R, class Owner, class... Args>
+    static int BasicLuaMethod(lua_State* L, R (Owner::*method)(Args...) const)
+    {
+        return CvLuaMethodWrapper<CvLuaPlayer, Owner>::BasicLuaMethod(L, method);
+    }
+#endif
+
 
 	//! Protected Lua call to register all player instances.
 	static int pRegister(lua_State* L);

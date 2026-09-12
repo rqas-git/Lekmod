@@ -96,3 +96,19 @@ The batch/PowerShell comparison runs on Windows. CI runs the Python suites on
 Linux and Windows, the native fixtures on Linux, and Windows Debug/Release DLL
 builds with Visual Studio 2008. The performance fixtures additionally require
 `tests/performance/requirements.txt`; installer tests require `requests`.
+
+## Native Lua bindings
+
+The Mac-only `CvLuaPlayer::BasicLuaMethod` adapter infers the owning class from
+each member-function pointer. Inherited `CvPlayer` methods and direct `CvPlayerAI`
+methods can use the same call sites, including const and void methods. The
+variadic template is restricted to `LEKMOD_MACOS`; Windows keeps the existing
+Visual Studio 2008-compatible wrapper. The native trade-count and tooltip
+predicates remain separate explicit bindings.
+
+The binding fixture uses a real Lua 5.1 state. Install its development library or
+set `LUA51` to an interpreter beside `liblua.a` and its headers:
+
+```sh
+LUA51=/path/to/lua5.1 python3 -B -m unittest discover -s tests -p test_lua_bindings.py -v
+```
