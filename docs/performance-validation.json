@@ -32,6 +32,244 @@
       6220
     ]
   },
+  "trade": {
+    "baseline": "a90d5bbe07a9cbf521190cdcc33304739f5375f2",
+    "default": {
+      "ranking_cases": 720,
+      "path_copies": [
+        779599,
+        71744
+      ],
+      "path_elements_copied": [
+        27574335,
+        2539745
+      ],
+      "predicate_cases": 175680,
+      "formatted_strings": [
+        404585,
+        0
+      ]
+    },
+    "iterator_const": {
+      "ranking_cases": 720,
+      "path_copies": [
+        779599,
+        71744
+      ],
+      "path_elements_copied": [
+        27574335,
+        2539745
+      ],
+      "predicate_cases": 175680,
+      "formatted_strings": [
+        404585,
+        0
+      ]
+    },
+    "ubsan_checked": {
+      "ranking_cases": 720,
+      "path_copies": [
+        779599,
+        71744
+      ],
+      "path_elements_copied": [
+        27574335,
+        2539745
+      ],
+      "predicate_cases": 175680,
+      "formatted_strings": [
+        404585,
+        0
+      ]
+    }
+  },
+  "next_batch": {
+    "worker": {
+      "default": {
+        "cases": 5040,
+        "path_attempts": 307580,
+        "snapshot_copies": [
+          1001032,
+          501522
+        ],
+        "selection_comparisons": [
+          [
+            1450453,
+            130482
+          ],
+          [
+            1447230,
+            191208
+          ],
+          [
+            1446773,
+            890410
+          ]
+        ]
+      },
+      "ubsan_checked": {
+        "cases": 5040,
+        "path_attempts": 307580,
+        "snapshot_copies": [
+          1001032,
+          501522
+        ],
+        "selection_comparisons": [
+          [
+            4074647,
+            176305
+          ],
+          [
+            4068136,
+            316585
+          ],
+          [
+            4067224,
+            2194706
+          ]
+        ]
+      },
+      "benchmark": {
+        "cases": 5040,
+        "path_attempts": 307580,
+        "snapshot_copies": [
+          1001032,
+          501522
+        ],
+        "selection_comparisons": [
+          [
+            1450453,
+            130482
+          ],
+          [
+            1447230,
+            191208
+          ],
+          [
+            1446773,
+            890410
+          ]
+        ],
+        "timings": [
+          {
+            "directives": 128,
+            "rejection_mode": 0,
+            "before_seconds": 1.42e-06,
+            "after_seconds": 3.3e-07
+          },
+          {
+            "directives": 128,
+            "rejection_mode": 1,
+            "before_seconds": 1.56e-06,
+            "after_seconds": 5e-07
+          },
+          {
+            "directives": 128,
+            "rejection_mode": 2,
+            "before_seconds": 2.13e-06,
+            "after_seconds": 1.51e-06
+          },
+          {
+            "directives": 1024,
+            "rejection_mode": 0,
+            "before_seconds": 9.34e-06,
+            "after_seconds": 2.38e-06
+          },
+          {
+            "directives": 1024,
+            "rejection_mode": 1,
+            "before_seconds": 9.68e-06,
+            "after_seconds": 2.41e-06
+          },
+          {
+            "directives": 1024,
+            "rejection_mode": 2,
+            "before_seconds": 1.273e-05,
+            "after_seconds": 1.208e-05
+          },
+          {
+            "directives": 8192,
+            "rejection_mode": 0,
+            "before_seconds": 0.00014435,
+            "after_seconds": 1.947e-05
+          },
+          {
+            "directives": 8192,
+            "rejection_mode": 1,
+            "before_seconds": 0.00014482,
+            "after_seconds": 2.001e-05
+          },
+          {
+            "directives": 8192,
+            "rejection_mode": 2,
+            "before_seconds": 0.00017155,
+            "after_seconds": 0.00020728
+          }
+        ]
+      }
+    },
+    "sight": {
+      "default": {
+        "cases": 1600,
+        "sight_events": 127483,
+        "promotion_reads": [
+          31040,
+          1940
+        ],
+        "removed_range_checks": 265966
+      },
+      "ubsan_checked": {
+        "cases": 1600,
+        "sight_events": 127483,
+        "promotion_reads": [
+          31040,
+          1940
+        ],
+        "removed_range_checks": 265966
+      }
+    },
+    "trade_range": {
+      "default": {
+        "cases": 618,
+        "candidates": 9476,
+        "range_scans": [
+          8589,
+          1764
+        ]
+      },
+      "ubsan_checked": {
+        "cases": 618,
+        "candidates": 9476,
+        "range_scans": [
+          8589,
+          1764
+        ]
+      },
+      "const": {
+        "cases": 618,
+        "candidates": 9476,
+        "range_scans": [
+          8589,
+          1764
+        ]
+      }
+    }
+  },
+  "additional": {
+    "default": {
+      "build_lookup_comparisons": 17400,
+      "route_count_comparisons": 144000,
+      "sizing_reuses": 100
+    },
+    "ubsan": {
+      "build_lookup_comparisons": 17400,
+      "route_count_comparisons": 144000,
+      "sizing_reuses": 100
+    },
+    "neighbors": {
+      "neighbor_callback_comparisons": 146016
+    }
+  },
   "lua": {
     "runtime": "Lua 5.1",
     "dummy": {
@@ -45,8 +283,10 @@
       "cases": 144,
       "tooltip_calls": [
         4104,
-        2736
-      ]
+        0
+      ],
+      "predicate_calls": 2736,
+      "legacy_fallback_tooltip_calls": 2736
     },
     "policies": {
       "contexts": 20,
@@ -54,19 +294,167 @@
         1008,
         16
       ]
+    },
+    "shuffle": {
+      "cases": 6096,
+      "timings": [
+        {
+          "length": 32,
+          "pattern": "first",
+          "before_seconds": 5.558593749999813e-06,
+          "after_seconds": 5.613281249998783e-06
+        },
+        {
+          "length": 32,
+          "pattern": "middle",
+          "before_seconds": 5.410156249999881e-06,
+          "after_seconds": 5.554687499999267e-06
+        },
+        {
+          "length": 32,
+          "pattern": "last",
+          "before_seconds": 3.882812499999763e-06,
+          "after_seconds": 4.097656250000303e-06
+        },
+        {
+          "length": 128,
+          "pattern": "first",
+          "before_seconds": 3.943750000000301e-05,
+          "after_seconds": 4.0484374999996686e-05
+        },
+        {
+          "length": 128,
+          "pattern": "middle",
+          "before_seconds": 2.9734374999999813e-05,
+          "after_seconds": 3.1093749999995535e-05
+        },
+        {
+          "length": 128,
+          "pattern": "last",
+          "before_seconds": 1.470312500000126e-05,
+          "after_seconds": 1.526562499999662e-05
+        },
+        {
+          "length": 1023,
+          "pattern": "first",
+          "before_seconds": 0.0016142499999999838,
+          "after_seconds": 0.0016131250000000485
+        },
+        {
+          "length": 1023,
+          "pattern": "middle",
+          "before_seconds": 0.0008946249999999822,
+          "after_seconds": 0.0008982499999999893
+        },
+        {
+          "length": 1023,
+          "pattern": "last",
+          "before_seconds": 0.00012762500000002008,
+          "after_seconds": 0.00013024999999999842
+        },
+        {
+          "length": 1024,
+          "pattern": "first",
+          "before_seconds": 0.001612874999999958,
+          "after_seconds": 0.00037324999999999164
+        },
+        {
+          "length": 1024,
+          "pattern": "middle",
+          "before_seconds": 0.0008948750000000172,
+          "after_seconds": 0.00040000000000001146
+        },
+        {
+          "length": 1024,
+          "pattern": "last",
+          "before_seconds": 0.00012375000000003356,
+          "after_seconds": 0.000369750000000002
+        },
+        {
+          "length": 2048,
+          "pattern": "first",
+          "before_seconds": 0.0062592499999999385,
+          "after_seconds": 0.000779500000000044
+        },
+        {
+          "length": 2048,
+          "pattern": "middle",
+          "before_seconds": 0.0032572499999999893,
+          "after_seconds": 0.0008139999999999814
+        },
+        {
+          "length": 2048,
+          "pattern": "last",
+          "before_seconds": 0.00025474999999985926,
+          "after_seconds": 0.0007952499999999141
+        },
+        {
+          "length": 8192,
+          "pattern": "first",
+          "before_seconds": 0.10131749999999995,
+          "after_seconds": 0.00339899999999993
+        },
+        {
+          "length": 8192,
+          "pattern": "middle",
+          "before_seconds": 0.05111700000000008,
+          "after_seconds": 0.003754499999999883
+        },
+        {
+          "length": 8192,
+          "pattern": "last",
+          "before_seconds": 0.0011304999999999232,
+          "after_seconds": 0.0034475000000000477
+        }
+      ]
+    },
+    "additional": {
+      "kilwa_callbacks": 200,
+      "trade_text_cases": 10,
+      "unit_filter_comparisons": 24
     }
   },
   "source_sha256": {
-    "LEKMOD/Lua/Civilizations/Lekmod_uae.lua": "f8b3dc75c22b048ce66549905ecaaa71cb8e8f625473749267a387ada4928bff",
+    "LEKMOD/Lua/Civilizations/Lekmod_uae.lua": "30bc0577e768b3ad20c15922c6b6e6aa53156e3e89f4e63ed6e02ada9f6a9b5f",
     "LEKMOD/Lua/Lekmod_global_dummies.lua": "a7613a75ce42394f8db0b653d63ef078df6cf491086c9af38e3d669d7532a431",
     "LEKMOD/Lua/Lekmod_policies.lua": "fe297f30b70f961394486e258f8f9750f8a153cf63b11ad2c2ed44df10b7d091",
+    "Lekmap/HBMapmakerUtilities.lua": "6d12250b4b05295473e60bcc93c8174d1904bd65ed6f512d41403a5fc9434b77",
+    "LEKMOD/Lua/Civilizations/Lekmod_kilwa.lua": "5deef56c7100c99902cabbd4846fe919ecb548b65dc937ed2d36fa08387e63e2",
+    "LEKMOD/Lua/Lekmod_units.lua": "0ffb466ddb6cd909ee5ecc10f434f2183d639fd680f21342b34433601cda6a1c",
+    "LEKMOD/Lua/tmp/eui/NotificationPanel/NotificationPanel.lua.ignore": "ffe0ccef241fe356b1a1283a374850761a7b3bd24a73b629c150636377e3ea93",
+    "macos/build.py": "280762c7272c04018dc378d7d2a7fc4d875eed09e1306eff85f35a14b017ec60",
     "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvCityConnections.cpp": "f34380a8c1e54e651b50f7ebb47a4f59880d676e7299b2a59c5615d89f886072",
-    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvDllDatabaseUtility.cpp": "e5c4d10de6d5bfe7474cb7ca98293ff13e6b953d3f5318b5773129d5ce6b820f",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvDllDatabaseUtility.cpp": "c6214d8d96d0f0d8233ca7f8dfba0662a784327b96ebe87dc5dcfe7e3082b6be",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvDllDatabaseUtility.h": "0eaa4394711041969aafad43a8794f3c9e76597b01ea1d67e79d244558b3fed6",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvDatabaseUtility.cpp": "3bb0f337994f2b369ee173c120d662feffbe15e99966d387106d7198d4663824",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvAStar.cpp": "a97fac45dd1b5f3ba6db9f244aed45a15de7b9965cab27a34bd4c6debcada123",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvAStar.h": "38bd4131f122034c955cd83aeb556b1cddfb73f86b9f1af2d1e68bcaa5c9e43b",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvBuilderTaskingAI.h": "95dca56e4431dd7d44c945092407a10be43af168571faca781f15fc632f651a4",
     "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvImprovementClasses.cpp": "6864e0ffd858268510eda777e3a7c705b05b3479e06583addaa47736d3879ec7",
     "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvImprovementClasses.h": "fb9a8426e9533d39dcad248a1c1c996a6463e6c1e3e66ad5017cbc39e16dae24",
-    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvPlot.cpp": "bff3fb8709fef472999fbcda4c25331e502231e0eb8207d90e396b628a8a4641",
-    "LekmodInstaller/installer.py": "b683326bf9bdf123626412d69c86ede88c79dc0ba1850e6f9339d06fe586e887",
-    "LekmodInstaller/installer_updater.py": "db58b719fb6250dc5ffb3a4063d5a63c0ce18f45f87a80284b48f42ea6c3c130",
-    "LekmodInstaller/ui_manager.py": "5f7250c27ba92fe10feef11920ebda1905ea247649e9d34686c2f19ca684b7b1"
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvPlot.cpp": "d35db785046b849d0d321554b3e855525d60caea57b1b13e0db0d1fc401812af",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvGameCoreUtils.h": "b1d2e13002ecf44d0a7af114d64a580ce5d0ffd26bd7c86c8b25e67ea4d7b4fb",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvPromotionClasses.cpp": "cf51bcf1b503acf41e06ede12cb60e4b52c21d9f49ad61fd1954d6f2826d22c3",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvPromotionClasses.h": "51d1d71fc8650428490b7086cdd11d5bc07b5b9dbea6fcdb30c459b74b623e0b",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvBuilderTaskingAI.cpp": "ceaa29060fd1a9f6ad7a22ed580b7cda712d8f2bd6d0027bf17713ba3d2b7512",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvTradeClasses.cpp": "08ec466557d91c005e93417481e5e1a78f6b55e993aedaf5310a66b50a99a25b",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/CvTradeClasses.h": "d262b6f8114ab2854e7020e483794c0e525441b78a4c6bd1e4a0dc9a60a6e6eb",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/Lua/CvLuaPlayer.cpp": "314d0d85065b49bec065667d71ea1ac4684d6ba54d6be8b4eb3bf96447ad6182",
+    "LEKMOD_DLL/CvGameCoreDLL_Expansion2/Lua/CvLuaPlayer.h": "150ced63d45a256effed5ba80d0ddc65451e68777e1566da6527db2444e1e6b2"
+  },
+  "fixture_sha256": {
+    "tests/performance/additional.cpp.in": "2f23383f07913e526a3160f47218e8bb891b1bed0f05dfe642105a8365655b15",
+    "tests/performance/additional_checks.py": "da352d77a5559a37ac53e6fcb99ca09bce7c4cc3e34f28301ce7a5edb89f5191",
+    "tests/performance/additional_fixtures.lua": "3c2d98493d4d58c9ce00097a66eb38c3a18d22af6618808aab46fcf38fa5c45b",
+    "tests/performance/connections.cpp.in": "8e2b44a20db717f2db5c8c2cb539f9cf777b7478a169977fc8163c323e4996c4",
+    "tests/performance/lua_fixtures.lua": "2ff7615c997de28db4623c591e2a3bdcef47d00321cb7be0d950ca39cfac7a76",
+    "tests/performance/metadata.cpp.in": "90f28b22fb207f748e3ee43716ae03993835881d10ef4986f1e51c4a91066121",
+    "tests/performance/neighbors.cpp.in": "41a0ee7c4923ce87b26fdf57319b4cc52c2a5e0001a6b717b1ab395b2cb405e4",
+    "tests/performance/next_checks.py": "533ad898e48ddd165cbe5b8b3755c7f54ff957ef80929f34c72c48dc6cc69e73",
+    "tests/performance/sight.cpp.in": "ff57c392582ac6478c9263c069f13f5ac1fa79c4626e5a3cb99e78fc8efa30b0",
+    "tests/performance/trade.cpp.in": "a32753310c3ba2b8421883524e0af5b7b5c3c98eaf4d7e0f90a87fda23f7198e",
+    "tests/performance/trade_range.cpp.in": "37fbbb971b2d58d2b5edf37573cc40014606940ea0a4e8be88b05d709ba0f4db",
+    "tests/performance/validate.py": "1e893a09d0f484abcaaf9b7b9fb225fe6ce4e0b1ed7c97bfd87e1208baf58972",
+    "tests/performance/worker.cpp.in": "87f309ba39dbc2862ef0a12436ca9cf8785151261e7bfbd3ee308c1438438d90"
   }
 }
