@@ -1,0 +1,20 @@
+--prepared:/Users/admin/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app/Contents/MacOS/libCvGameCoreDLL_Expansion2_DLL.dylib
+--validated:/Users/admin/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app/Contents/MacOS/libCvGameCoreDLL_Expansion2_DLL.dylib
+--prepared:/Users/admin/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app/Contents/MacOS/libCvGameCoreDLL_DLL.dylib
+--validated:/Users/admin/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app/Contents/MacOS/libCvGameCoreDLL_DLL.dylib
+--prepared:/Users/admin/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app/Contents/MacOS/libMilesX64.dylib
+--validated:/Users/admin/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app/Contents/MacOS/libMilesX64.dylib
+--prepared:/Users/admin/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app/Contents/MacOS/gglibsteam_api.dylib
+--validated:/Users/admin/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app/Contents/MacOS/gglibsteam_api.dylib
+--prepared:/Users/admin/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app/Contents/MacOS/libtbb.dylib
+--validated:/Users/admin/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app/Contents/MacOS/libtbb.dylib
+--prepared:/Users/admin/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app/Contents/MacOS/libBinkMacx64.dylib
+--validated:/Users/admin/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app/Contents/MacOS/libBinkMacx64.dylib
+--prepared:/Users/admin/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app/Contents/MacOS/libCvGameCoreDLL_Expansion1_DLL.dylib
+--validated:/Users/admin/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app/Contents/MacOS/libCvGameCoreDLL_Expansion1_DLL.dylib
+--prepared:/Users/admin/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app/Contents/MacOS/libsteam_api.dylib
+--validated:/Users/admin/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app/Contents/MacOS/libsteam_api.dylib
+--prepared:/Users/admin/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app/Contents/MacOS/Civilization V
+--validated:/Users/admin/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app/Contents/MacOS/Civilization V
+/Users/admin/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app: valid on disk
+/Users/admin/Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app: satisfies its Designated Requirement

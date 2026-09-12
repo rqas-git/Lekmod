@@ -1,0 +1,678 @@
+{
+  "observed_utc": "2026-09-12T14:51:47.236062+00:00",
+  "timings": [
+    {
+      "operation": "full_signature",
+      "seconds": 1.8191437080022297,
+      "trial": 1,
+      "returncode": 0
+    },
+    {
+      "operation": "code_only_diagnostic",
+      "seconds": 0.0068581250015995465,
+      "trial": 1,
+      "returncode": 0
+    },
+    {
+      "operation": "bundle_metadata_walk",
+      "seconds": 0.09332679199724225,
+      "trial": 1,
+      "entries": 16744
+    },
+    {
+      "operation": "full_signature",
+      "seconds": 1.9142873749951832,
+      "trial": 2,
+      "returncode": 0
+    },
+    {
+      "operation": "code_only_diagnostic",
+      "seconds": 0.006780333002097905,
+      "trial": 2,
+      "returncode": 0
+    },
+    {
+      "operation": "bundle_metadata_walk",
+      "seconds": 0.09212491700600367,
+      "trial": 2,
+      "entries": 16744
+    },
+    {
+      "operation": "full_signature",
+      "seconds": 1.8862428339998587,
+      "trial": 3,
+      "returncode": 0
+    },
+    {
+      "operation": "code_only_diagnostic",
+      "seconds": 0.006868625001516193,
+      "trial": 3,
+      "returncode": 0
+    },
+    {
+      "operation": "bundle_metadata_walk",
+      "seconds": 0.09257329200045206,
+      "trial": 3,
+      "entries": 16744
+    },
+    {
+      "operation": "checkout_digest",
+      "seconds": 0.6414387499971781
+    },
+    {
+      "operation": "installed_mod_digest",
+      "seconds": 0.30533104200003436
+    },
+    {
+      "operation": "native_interface_check",
+      "seconds": 0.08851229200081434
+    }
+  ],
+  "logs": {
+    "system_init.log": {
+      "modified_utc": "2026-09-12T14:50:29.344200+00:00",
+      "text": ""
+    },
+    "stopwatch.log": {
+      "modified_utc": "2026-09-12T14:50:12.779079+00:00",
+      "text": ""
+    },
+    "xml-perf.log": {
+      "modified_utc": "2026-09-12T14:50:16.415170+00:00",
+      "text": "[20.466] , Colors, 0.000258\n[20.466] , PlayerColors, 0.000319\n[20.466] , InterfaceModes, 0.000128\n[20.467] , AICityStrategies, 0.000553\n[20.468] , AIEconomicStrategies, 0.000789\n[20.468] , AIGrandStrategies, 0.000061\n[20.468] , AIMilitaryStrategies, 0.000436\n[20.468] , CitySpecializations, 0.000133\n[20.469] , TacticalMoves, 0.000062\n[20.469] , UnitAIInfos, 0.000073\n[20.469] , UnitCombatInfos, 0.000028\n[20.469] , BuildingClasses, 0.000691\n[20.556] , Buildings, 0.086602\n[20.556] , EmphasizeInfos, 0.000053\n[20.556] , Eras, 0.000115\n[20.556] , GameOptions, 0.000145\n[20.556] , GameSpeeds, 0.000111\n[20.557] , HandicapInfos, 0.000327\n[20.557] , HurryInfos, 0.000013\n[20.557] , MultiplayerOptions, 0.000025\n[20.557] , PlayerOptions, 0.000023\n[20.594] , Policies, 0.037649\n[20.595] , PolicyBranchTypes, 0.000081\n[20.595] , Processes, 0.000065\n[20.595] , Projects, 0.000131\n[20.595] , SmallAwards, 0.000005\n[20.595] , Specialists, 0.000084\n[20.595] , Victories, 0.000049\n[20.595] , Votes, 0.000027\n[20.595] , VoteSources, 0.000013\n[20.595] , Domains, 0.000012\n[20.619] , Leaders, 0.023515\n[20.619] , Routes, 0.000063\n[20.619] , GreatWorkClasses, 0.000023\n[20.619] , Notifications, 0.000042\n[20.619] , TradeConnections, 0.000103\n[20.622] , Technologies, 0.003169\n[20.623] , Features, 0.000676\n[20.629] , Improvements, 0.005998\n[20.629] , ResourceClasses, 0.000018\n[20.632] , Resources, 0.003353\n[20.632] , Terrains, 0.000160\n[20.632] , Yields, 0.000032\n[20.632] , Automates, 0.000026\n[20.634] , Builds, 0.001514\n[20.634] , Commands, 0.000046\n[20.634] , Controls, 0.000152\n[20.634] , EntityEvents, 0.000085\n[20.634] , Missions, 0.000172\n[20.635] , MultiUnitFormations, 0.000259\n[20.635] , SpecialUnits, 0.000064\n[20.635] , UnitClasses, 0.000147\n[20.663] , UnitPromotions, 0.028627\n[20.707] , Units, 0.044013\n[20.744] , Civilizations, 0.036369\n[20.745] , MinorCivilizations, 0.001128\n[20.745] , Minor_Civ_Personalities, 0.000122\n[20.780] , Traits, 0.034864\n[20.780] , Religions, 0.000032\n[20.794] , Beliefs, 0.014240\n[20.794] , LeagueSpecialSessions, 0.000043\n[20.794] , LeagueNames, 0.000009\n[20.794] , LeagueProjects, 0.000022\n[20.794] , LeagueProjectRewards, 0.000028\n[20.794] , Resolutions, 0.000099\n[20.794] , PrefetchGameData, 0.329055\n[20.795] , UpdatePlayableCivilizationCounts, 0.000003\n[20.795] , SetGlobalActionInfo, 0.000272\n[20.816] , Colors, 0.000240\n[20.816] , PlayerColors, 0.000274\n[20.816] , InterfaceModes, 0.000091\n[20.817] , AICityStrategies, 0.000544\n[20.817] , AIEconomicStrategies, 0.000748\n[20.817] , AIGrandStrategies, 0.000059\n[20.818] , AIMilitaryStrategies, 0.000407\n[20.818] , CitySpecializations, 0.000117\n[20.818] , TacticalMoves, 0.000051\n[20.818] , UnitAIInfos, 0.000046\n[20.818] , UnitCombatInfos, 0.000022\n[20.819] , BuildingClasses, 0.000585\n[20.904] , Buildings, 0.085044\n[20.904] , EmphasizeInfos, 0.000034\n[20.904] , Eras, 0.000088\n[20.904] , GameOptions, 0.000104\n[20.904] , GameSpeeds, 0.000087\n[20.904] , HandicapInfos, 0.000282\n[20.904] , HurryInfos, 0.000011\n[20.904] , MultiplayerOptions, 0.000011\n[20.904] , PlayerOptions, 0.000020\n[20.942] , Policies, 0.037582\n[20.942] , PolicyBranchTypes, 0.000077\n[20.942] , Processes, 0.000058\n[20.942] , Projects, 0.000122\n[20.942] , SmallAwards, 0.000005\n[20.942] , Specialists, 0.000076\n[20.942] , Victories, 0.000042\n[20.942] , Votes, 0.000026\n[20.942] , VoteSources, 0.000014\n[20.942] , Domains, 0.000010\n[20.967] , Leaders, 0.024128\n[20.967] , Routes, 0.000064\n[20.967] , GreatWorkClasses, 0.000027\n[20.967] , Notifications, 0.000041\n[20.967] , TradeConnections, 0.000093\n[20.970] , Technologies, 0.002978\n[20.970] , Features, 0.000600\n[20.977] , Improvements, 0.006542\n[20.977] , ResourceClasses, 0.000010\n[20.980] , Resources, 0.003237\n[20.980] , Terrains, 0.000152\n[20.980] , Yields, 0.000031\n[20.980] , Automates, 0.000023\n[20.982] , Builds, 0.001504\n[20.982] , Commands, 0.000044\n[20.982] , Controls, 0.000158\n[20.982] , EntityEvents, 0.000085\n[20.982] , Missions, 0.000174\n[20.983] , Mul"
+    }
+  },
+  "art": {
+    "suffixes": {
+      ".modinfo": {
+        "files": 14,
+        "bytes": 224449
+      },
+      ".txt": {
+        "files": 1,
+        "bytes": 1440
+      },
+      ".xml": {
+        "files": 323,
+        "bytes": 917670
+      },
+      "": {
+        "files": 1,
+        "bytes": 621
+      },
+      ".dds": {
+        "files": 2030,
+        "bytes": 370983568
+      },
+      ".sql": {
+        "files": 40,
+        "bytes": 137473
+      },
+      ".ftsxml": {
+        "files": 61,
+        "bytes": 1187135
+      },
+      ".gr2": {
+        "files": 345,
+        "bytes": 20921940
+      },
+      ".fxsxml": {
+        "files": 272,
+        "bytes": 354141
+      },
+      ".fbx": {
+        "files": 2,
+        "bytes": 706459
+      },
+      ".blend": {
+        "files": 6,
+        "bytes": 2160200
+      },
+      ".dge": {
+        "files": 124,
+        "bytes": 1568256
+      },
+      ".fsmxml": {
+        "files": 6,
+        "bytes": 266438
+      },
+      ".ggxml": {
+        "files": 92,
+        "bytes": 173336
+      },
+      ".lua": {
+        "files": 3,
+        "bytes": 2669
+      },
+      ".png": {
+        "files": 2,
+        "bytes": 757695
+      },
+      ".pdn": {
+        "files": 1,
+        "bytes": 29015
+      },
+      ".indiedefs": {
+        "files": 1,
+        "bytes": 299
+      },
+      ".jpg": {
+        "files": 3,
+        "bytes": 145645
+      }
+    },
+    "files": 3327,
+    "bytes": 400538449,
+    "duplicate_basenames": {
+      "iconatlas.xml": [
+        "Yakutia Civilization (v 1)/XML/IconAtlas.xml",
+        "[BNW] Colonialist Legacies - Malaysia (v 3)/Art/IconAtlas/IconAtlas.xml"
+      ],
+      "civ5artdefines_unitmembers.xml": [
+        "Kongo (Brave New World) (v 48)/XML/Art/civ5artdefines_unitmembers.xml",
+        "Champa (Brave New World) (v 43)/XML/Art/civ5artdefines_unitmembers.xml"
+      ],
+      "civ5artdefines_units.xml": [
+        "Kongo (Brave New World) (v 48)/XML/Art/civ5artdefines_units.xml",
+        "Champa (Brave New World) (v 43)/XML/Art/civ5artdefines_units.xml"
+      ],
+      "edited_fx_triggers_earlytank_1gun.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_EarlyTank_1gun.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_EarlyTank_1gun.ftsxml"
+      ],
+      "edited_aim_ms_death_final_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_death_final_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_death_final_graph.dge"
+      ],
+      "edited_aim_civilian_state_01.fsmxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_civilian_state_01.fsmxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_civilian_state_01.fsmxml"
+      ],
+      "edited_fx_triggers_antiair_vehicle_3gun.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_antiair_vehicle_3gun.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_antiair_vehicle_3gun.ftsxml"
+      ],
+      "edited_aim_enter_sleep_civilian.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_enter_sleep_civilian.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_enter_sleep_civilian.dge"
+      ],
+      "edited_aim_attack_to_run_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_attack_to_run_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_attack_to_run_graph.dge"
+      ],
+      "edited_fx_triggers_tank_mg_2gun.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_tank_mg_2gun.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_tank_mg_2gun.ftsxml"
+      ],
+      "edited_fx_triggers_katyusha.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_Katyusha.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_Katyusha.ftsxml"
+      ],
+      "edited_fx_triggers_infantry.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_infantry.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_infantry.ftsxml"
+      ],
+      "edited_aim_ms_stop_running.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_stop_running.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_stop_running.dge"
+      ],
+      "edited_fx_triggers_cruiser.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_Cruiser.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_Cruiser.ftsxml"
+      ],
+      "edited_aim_ms_civilian_death_final.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_civilian_death_final.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_civilian_death_final.dge"
+      ],
+      "edited_modern_ship_aim_state_01.fsmxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_modern_ship_aim_state_01.fsmxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_modern_ship_aim_state_01.fsmxml"
+      ],
+      "edited_aim_ms_idle_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_idle_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_idle_graph.dge"
+      ],
+      "edited_aim_leave_combat_ready.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_leave_combat_ready.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_leave_combat_ready.dge"
+      ],
+      "edited_aim_ms_run_start_civilian.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_run_start_civilian.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_run_start_civilian.dge"
+      ],
+      "edited_fx_triggers_paratrooper_mg.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_paratrooper_mg.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_paratrooper_mg.ftsxml"
+      ],
+      "edited_aim_ms_fortify_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_fortify_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_fortify_graph.dge"
+      ],
+      "edited_aim_running_loop.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_running_loop.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_running_loop.dge"
+      ],
+      "edited_fx_triggers_paratrooper.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_paratrooper.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_paratrooper.ftsxml"
+      ],
+      "edited_aim_bombard_defend_loop_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_bombard_defend_loop_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_bombard_defend_loop_graph.dge"
+      ],
+      "edited_aim_ms_leave_combat_ready.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_leave_combat_ready.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_leave_combat_ready.dge"
+      ],
+      "edited_aim_run_start_civilian.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_run_start_civilian.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_run_start_civilian.dge"
+      ],
+      "edited_aim_fortify_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_fortify_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_fortify_graph.dge"
+      ],
+      "edited_aim_ms_fortify_fidget_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_fortify_fidget_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_fortify_fidget_graph.dge"
+      ],
+      "edited_fx_triggers_tank_lightfire.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_tank_lightfire.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_tank_lightfire.ftsxml"
+      ],
+      "edited_aim_stop_running_civilian.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_stop_running_civilian.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_stop_running_civilian.dge"
+      ],
+      "edited_aim_idle_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_idle_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_idle_graph.dge"
+      ],
+      "edited_aim_fortify_to_idle_a.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_fortify_to_idle_a.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_fortify_to_idle_a.dge"
+      ],
+      "edited_aim_ms_fortify_leave_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_fortify_leave_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_fortify_leave_graph.dge"
+      ],
+      "edited_aim_ms_death_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_death_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_death_graph.dge"
+      ],
+      "edited_fx_triggers_antiair_vehicle_2gun.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_antiair_vehicle_2gun.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_antiair_vehicle_2gun.ftsxml"
+      ],
+      "edited_aim_ms_bombard_defend_loop_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_bombard_defend_loop_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_bombard_defend_loop_graph.dge"
+      ],
+      "edited_aim_ms_leave_bombard_defend_trans_idle_a_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_leave_bombard_defend_trans_idle_a_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_leave_bombard_defend_trans_idle_a_graph.dge"
+      ],
+      "edited_aim_ms_transitions_for_idles.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_transitions_for_idles.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_transitions_for_idles.dge"
+      ],
+      "edited_fx_triggers_artillery.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_artillery.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_artillery.ftsxml"
+      ],
+      "edited_fx_triggers_battleship.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_battleship.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_battleship.ftsxml"
+      ],
+      "edited_aim_modern_ship_attacks.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_modern_ship_attacks.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_modern_ship_attacks.dge"
+      ],
+      "edited_aim_leave_bombard_defend_trans_idle_a_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_leave_bombard_defend_trans_idle_a_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_leave_bombard_defend_trans_idle_a_graph.dge"
+      ],
+      "edited_fx_triggers_antiair_vehicle_4gun.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_antiair_vehicle_4gun.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_antiair_vehicle_4gun.ftsxml"
+      ],
+      "edited_fx_triggers_tank.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_tank.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_tank.ftsxml"
+      ],
+      "edited_aim_death_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_death_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_death_graph.dge"
+      ],
+      "edited_aim_melee_attacks.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_melee_attacks.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_melee_attacks.dge"
+      ],
+      "edited_aim_combat_ready_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_combat_ready_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_combat_ready_graph.dge"
+      ],
+      "edited_aim_enter_fortify.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_enter_fortify.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_enter_fortify.dge"
+      ],
+      "edited_aim_enter_combat_ready_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_enter_combat_ready_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_enter_combat_ready_graph.dge"
+      ],
+      "edited_aim_ms_fortify_to_idle_a.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_fortify_to_idle_a.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_fortify_to_idle_a.dge"
+      ],
+      "edited_aim_ms_enter_combat_ready_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_enter_combat_ready_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_enter_combat_ready_graph.dge"
+      ],
+      "edited_aim_transitions_for_idles.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_transitions_for_idles.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_transitions_for_idles.dge"
+      ],
+      "edited_aim_fortify_leave_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_fortify_leave_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_fortify_leave_graph.dge"
+      ],
+      "edited_aim_ms_run_no_charge_loop.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_run_no_charge_loop.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_run_no_charge_loop.dge"
+      ],
+      "edited_aim_ms_enter_sleep_civilian.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_enter_sleep_civilian.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_enter_sleep_civilian.dge"
+      ],
+      "edited_fx_triggers_earlyjet.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_EarlyJet.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_EarlyJet.ftsxml"
+      ],
+      "edited_aim_ms_start_running.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_start_running.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_start_running.dge"
+      ],
+      "edited_aim_ms_fidgets_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_fidgets_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_fidgets_graph.dge"
+      ],
+      "edited_fx_triggers_antiair_vehicle_1gun.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_antiair_vehicle_1gun.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_antiair_vehicle_1gun.ftsxml"
+      ],
+      "edited_aim_ms_idle_offset_continue_true_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_idle_offset_continue_true_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_idle_offset_continue_true_graph.dge"
+      ],
+      "edited_fx_triggers_jetfighter.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_jetfighter.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_jetfighter.ftsxml"
+      ],
+      "edited_aim_civilian_death_final.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_civilian_death_final.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_civilian_death_final.dge"
+      ],
+      "edited_aim_ms_enter_bombard_defend_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_enter_bombard_defend_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_enter_bombard_defend_graph.dge"
+      ],
+      "edited_aim_civilian_activate_captured.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_civilian_activate_captured.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_civilian_activate_captured.dge"
+      ],
+      "edited_aim_attack_city_to_run.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_attack_city_to_run.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_attack_city_to_run.dge"
+      ],
+      "edited_aim_ms_civilian_enter_bombard_defend.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_civilian_enter_bombard_defend.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_civilian_enter_bombard_defend.dge"
+      ],
+      "edited_aim_ms_modern_ship_attacks.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_modern_ship_attacks.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_modern_ship_attacks.dge"
+      ],
+      "edited_aim_ms_stop_running_civilian.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_stop_running_civilian.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_stop_running_civilian.dge"
+      ],
+      "edited_mechanized_aim_state_01.fsmxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_mechanized_aim_state_01.fsmxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_mechanized_aim_state_01.fsmxml"
+      ],
+      "edited_aim_civilian_enter_bombard_defend.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_civilian_enter_bombard_defend.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_civilian_enter_bombard_defend.dge"
+      ],
+      "edited_aim_death_final_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_death_final_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_death_final_graph.dge"
+      ],
+      "edited_aim_fortify_fidget_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_fortify_fidget_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_fortify_fidget_graph.dge"
+      ],
+      "edited_fx_triggers_earlytank_2gun.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_EarlyTank_2gun.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_EarlyTank_2gun.ftsxml"
+      ],
+      "edited_fx_triggers_tank_mg_1gun.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_tank_mg_1gun.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_tank_mg_1gun.ftsxml"
+      ],
+      "edited_fx_triggers_modernarmor.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_modernarmor.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_modernarmor.ftsxml"
+      ],
+      "edited_aim_ms_attack_to_run_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_attack_to_run_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_attack_to_run_graph.dge"
+      ],
+      "edited_aim_idle_offset_continue_true_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_idle_offset_continue_true_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_idle_offset_continue_true_graph.dge"
+      ],
+      "edited_aim_ms_attack_city_to_run.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_attack_city_to_run.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_attack_city_to_run.dge"
+      ],
+      "edited_aim_run_no_charge_loop.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_run_no_charge_loop.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_run_no_charge_loop.dge"
+      ],
+      "edited_aim_fidgets_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_fidgets_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_fidgets_graph.dge"
+      ],
+      "edited_aim_start_running.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_start_running.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_start_running.dge"
+      ],
+      "edited_fx_triggers_fighter_2propellers.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_fighter_2Propellers.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_fighter_2Propellers.ftsxml"
+      ],
+      "edited_aim_ms_civilian_activate_captured.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_civilian_activate_captured.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_civilian_activate_captured.dge"
+      ],
+      "edited_aim_enter_bombard_defend_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_enter_bombard_defend_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_enter_bombard_defend_graph.dge"
+      ],
+      "edited_aim_stop_running.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_stop_running.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_stop_running.dge"
+      ],
+      "edited_fx_triggers_destroyer.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_destroyer.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_destroyer.ftsxml"
+      ],
+      "edited_fx_triggers_battleship_4turret.ftsxml": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_fx_triggers_battleship_4turret.ftsxml",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_fx_triggers_battleship_4turret.ftsxml"
+      ],
+      "edited_aim_ms_enter_fortify.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_enter_fortify.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_enter_fortify.dge"
+      ],
+      "edited_aim_ms_melee_attacks.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_melee_attacks.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_melee_attacks.dge"
+      ],
+      "edited_aim_ms_running_loop.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_running_loop.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_running_loop.dge"
+      ],
+      "edited_aim_ms_combat_ready_graph.dge": [
+        "MC's Greek Civilisation Split (v 2)/Art/Unit Models/Edited_Animations/edited_aim_ms_combat_ready_graph.dge",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/Edited_Animations/edited_aim_ms_combat_ready_graph.dge"
+      ],
+      "tomatekh_promotionatlas_64.dds": [
+        "JFD's The Kingdom of Prussia (v 17)/Art/Icon Atlas/Tomatekh_PromotionAtlas_64.dds",
+        "Lekmod (v 1)/ArtReplacementsv20/Kongo/Icons/Tomatekh_PromotionAtlas_64.dds",
+        "Lekmod (v 1)/New Civs/New Zealand/IconAtlas/Tomatekh_PromotionAtlas_64.dds"
+      ],
+      "tomatekh_promotionatlas_45.dds": [
+        "JFD's The Kingdom of Prussia (v 17)/Art/Icon Atlas/Tomatekh_PromotionAtlas_45.dds",
+        "Lekmod (v 1)/ArtReplacementsv20/Kongo/Icons/Tomatekh_PromotionAtlas_45.dds",
+        "Lekmod (v 1)/New Civs/New Zealand/IconAtlas/Tomatekh_PromotionAtlas_45.dds"
+      ],
+      "tomatekh_promotionatlas_256.dds": [
+        "JFD's The Kingdom of Prussia (v 17)/Art/Icon Atlas/Tomatekh_PromotionAtlas_256.dds",
+        "Lekmod (v 1)/ArtReplacementsv20/Kongo/Icons/Tomatekh_PromotionAtlas_256.dds",
+        "Lekmod (v 1)/New Civs/New Zealand/IconAtlas/Tomatekh_PromotionAtlas_256.dds"
+      ],
+      "tomatekh_promotionatlas_32.dds": [
+        "JFD's The Kingdom of Prussia (v 17)/Art/Icon Atlas/Tomatekh_PromotionAtlas_32.dds",
+        "Lekmod (v 1)/ArtReplacementsv20/Kongo/Icons/Tomatekh_PromotionAtlas_32.dds",
+        "Lekmod (v 1)/New Civs/New Zealand/IconAtlas/Tomatekh_PromotionAtlas_32.dds"
+      ],
+      "buildings_icons_45.dds": [
+        "Lekmod (v 1)/UI/buildings_icons_45.dds",
+        "Lekmod (v 1)/Art/Buildings/buildings_icons_45.dds",
+        "Lekmod (v 1)/Art/Non_Civ/Buildings/buildings_icons_45.dds"
+      ],
+      "mc_lite_nubia_icontextureatlases.xml": [
+        "Lekmod (v 1)/ArtReplacementsv20/Armenia/IconAtlas/MC_LITE_Nubia_IconTextureAtlases.xml",
+        "Lekmod (v 1)/ArtReplacementsv20/Nubia/Atlases/MC_LITE_Nubia_IconTextureAtlases.xml",
+        "Lekmod (v 1)/ArtReplacementsv20/Australia/IconAtlases/MC_LITE_Nubia_IconTextureAtlases.xml"
+      ],
+      "buildings_icons_64.dds": [
+        "Lekmod (v 1)/Art/Buildings/buildings_icons_64.dds",
+        "Lekmod (v 1)/Art/Non_Civ/Buildings/buildings_icons_64.dds"
+      ],
+      "buildings_icons_256.dds": [
+        "Lekmod (v 1)/Art/Buildings/buildings_icons_256.dds",
+        "Lekmod (v 1)/Art/Non_Civ/Buildings/buildings_icons_256.dds"
+      ],
+      "buildings_icons_128.dds": [
+        "Lekmod (v 1)/Art/Buildings/buildings_icons_128.dds",
+        "Lekmod (v 1)/Art/Non_Civ/Buildings/buildings_icons_128.dds"
+      ],
+      "units_icons_32.dds": [
+        "Lekmod (v 1)/Art/Units/units_icons_32.dds",
+        "Lekmod (v 1)/Art/Non_Civ/Units/units_icons_32.dds"
+      ],
+      "units_icons_256.dds": [
+        "Lekmod (v 1)/Art/Units/units_icons_256.dds",
+        "Lekmod (v 1)/Art/Non_Civ/Units/units_icons_256.dds"
+      ],
+      "units_icons_45.dds": [
+        "Lekmod (v 1)/Art/Units/units_icons_45.dds",
+        "Lekmod (v 1)/Art/Non_Civ/Units/units_icons_45.dds"
+      ],
+      "units_icons_80.dds": [
+        "Lekmod (v 1)/Art/Units/units_icons_80.dds",
+        "Lekmod (v 1)/Art/Non_Civ/Units/units_icons_80.dds"
+      ],
+      "units_icons_128.dds": [
+        "Lekmod (v 1)/Art/Units/units_icons_128.dds",
+        "Lekmod (v 1)/Art/Non_Civ/Units/units_icons_128.dds"
+      ],
+      "units_icons_64.dds": [
+        "Lekmod (v 1)/Art/Units/units_icons_64.dds",
+        "Lekmod (v 1)/Art/Non_Civ/Units/units_icons_64.dds"
+      ],
+      "fast_worker_64.dds": [
+        "Lekmod (v 1)/Art/Civilizations/Maurya/Fast_Worker_64.dds",
+        "Lekmod (v 1)/New Civs/Indian Collection/Atlases/Fast_Worker_64.dds"
+      ],
+      "fast_worker_256.dds": [
+        "Lekmod (v 1)/Art/Civilizations/Maurya/Fast_Worker_256.dds",
+        "Lekmod (v 1)/New Civs/Maurya/Fast_Worker_256.dds",
+        "Lekmod (v 1)/New Civs/Indian Collection/Atlases/Fast_Worker_256.dds"
+      ],
+      "fast_worker_16.dds": [
+        "Lekmod (v 1)/Art/Civilizations/Maurya/Fast_Worker_16.dds",
+        "Lekmod (v 1)/New Civs/Indian Collection/Atlases/Fast_Worker_16.dds"
+      ],
+      "fast_worker_32.dds": [
+        "Lekmod (v 1)/Art/Civilizations/Maurya/Fast_Worker_32.dds",
+        "Lekmod (v 1)/New Civs/Indian Collection/Atlases/Fast_Worker_32.dds"
+      ],
+      "fast_worker_128.dds": [
+        "Lekmod (v 1)/Art/Civilizations/Maurya/Fast_Worker_128.dds",
+        "Lekmod (v 1)/New Civs/Indian Collection/Atlases/Fast_Worker_128.dds"
+      ],
+      "fast_worker_24.dds": [
+        "Lekmod (v 1)/Art/Civilizations/Maurya/Fast_Worker_24.dds",
+        "Lekmod (v 1)/New Civs/Indian Collection/Atlases/Fast_Worker_24.dds"
+      ],
+      "fast_worker_45.dds": [
+        "Lekmod (v 1)/Art/Civilizations/Maurya/Fast_Worker_45.dds",
+        "Lekmod (v 1)/New Civs/Indian Collection/Atlases/Fast_Worker_45.dds"
+      ],
+      "fast_worker_80.dds": [
+        "Lekmod (v 1)/Art/Civilizations/Maurya/Fast_Worker_80.dds",
+        "Lekmod (v 1)/New Civs/Indian Collection/Atlases/Fast_Worker_80.dds"
+      ],
+      "fonticons_uncheckbox_22.dds": [
+        "Lekmod (v 1)/New Civs/Bolivia/FontIcons_UncheckBox_22.dds",
+        "Lekmod (v 1)/New Civs/Chile/FontIcons_UncheckBox_22.dds"
+      ],
+      "fonticons_checkbox_22.ggxml": [
+        "Lekmod (v 1)/New Civs/Bolivia/FontIcons_CheckBox_22.ggxml",
+        "Lekmod (v 1)/New Civs/Chile/FontIcons_CheckBox_22.ggxml"
+      ],
+      "fonticons_uncheckbox_22.ggxml": [
+        "Lekmod (v 1)/New Civs/Bolivia/FontIcons_UncheckBox_22.ggxml",
+        "Lekmod (v 1)/New Civs/Chile/FontIcons_UncheckBox_22.ggxml"
+      ],
+      "fonticons_checkbox_22.dds": [
+        "Lekmod (v 1)/New Civs/Bolivia/FontIcons_CheckBox_22.dds",
+        "Lekmod (v 1)/New Civs/Chile/FontIcons_CheckBox_22.dds"
+      ],
+      "no_gloss.dds": [
+        "Lekmod (v 1)/New Civs/Finland/Art/Units/no_gloss.dds",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/ANZAC/no_gloss.dds",
+        "Lekmod (v 1)/New Civs/New Zealand/Graphics/Unit/MaoriBattalion/no_gloss.dds",
+        "Lekmod (v 1)/New Civs/Colombia/Models/no_gloss.dds",
+        "Lekmod (v 1)/New Civs/Turkey/Art/no_gloss.dds"
+      ]
+    },
+    "duplicate_basename_analysis": {
+      "identical_groups": 107,
+      "different_content_groups": 12,
+      "different_content_names": [
+        "iconatlas.xml",
+        "civ5artdefines_unitmembers.xml",
+        "civ5artdefines_units.xml",
+        "mc_lite_nubia_icontextureatlases.xml",
+        "units_icons_32.dds",
+        "units_icons_256.dds",
+        "units_icons_45.dds",
+        "units_icons_80.dds",
+        "units_icons_128.dds",
+        "units_icons_64.dds",
+        "fast_worker_256.dds",
+        "no_gloss.dds"
+      ]
+    }
+  },
+  "unused_ui_sources_candidate": {
+    "files": 123,
+    "bytes": 4433286
+  },
+  "system_startup_ms": {}
+}
