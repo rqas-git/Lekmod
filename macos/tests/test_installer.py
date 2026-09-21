@@ -13,6 +13,7 @@ import game_install as game
 import install as installer
 import uninstall as remover
 import crossplay
+from integrity import write_build_manifest, build_manifest_path
 
 
 def write(path, text):
@@ -64,6 +65,8 @@ class InstallerTests(unittest.TestCase):
             'rules': [{'files': [['ui/FrontEnd.lua', 'FrontEnd.lua'],
                                  ['ui/IconSupport.lua', 'IconSupport.lua']]}],
         }))
+        write_build_manifest(self.repo / "macos/build" / game.CORE.name, "fixture-source",
+                             {"release": True, "lto": False, "precompute_neighbors": False})
         stack = ExitStack()
         self.addCleanup(stack.close)
         digest = game.sha256(self.app / game.CORE)
@@ -89,6 +92,34 @@ class InstallerTests(unittest.TestCase):
 
     def install(self, component='both', skip_build=True):
         return installer.install(self.app, component, skip_build=skip_build, log=lambda _: None)
+
+    def test_skip_build_rejects_unverified_library_before_changing_game(self):
+        library = self.repo / 'macos/build' / game.CORE.name
+        configuration = {'release': True, 'lto': False, 'precompute_neighbors': False}
+        for invalid in ('missing', 'changed-library', 'changed-source', 'debug-build'):
+            with self.subTest(invalid=invalid):
+                library.write_text('native')
+                write_build_manifest(library, 'fixture-source', configuration)
+                if invalid == 'missing':
+                    build_manifest_path(library).unlink()
+                elif invalid == 'changed-library':
+                    library.write_text('different build')
+                elif invalid == 'changed-source':
+                    write_build_manifest(library, 'old-source', configuration)
+                else:
+                    write_build_manifest(library, 'fixture-source', dict(configuration, release=False))
+                with self.assertRaisesRegex(RuntimeError, 'Native'):
+                    self.install()
+                self.assertEqual((self.app / game.CORE).read_text(), 'stock')
+                self.assertFalse((self.app / game.MANIFEST).exists())
+
+    def test_library_replacement_after_validation_rolls_back(self):
+        library = self.repo / 'macos/build' / game.CORE.name
+        with patch.object(installer, 'check_imports', side_effect=lambda *_: library.write_text('changed after validation')):
+            with self.assertRaisesRegex(RuntimeError, 'Native library changed'):
+                self.install()
+        self.assertEqual((self.app / game.CORE).read_text(), 'stock')
+        self.assertFalse((self.app / game.MANIFEST).exists())
 
     def test_uninstall_mod_restores_stock_preserves_maps_and_reinstalls(self):
         self.install()
@@ -175,7 +206,7 @@ class InstallerTests(unittest.TestCase):
             self.assertFalse(list(self.root.glob('.lekmod-stage-*')))
 
     def test_checkout_change_during_install_preserves_original(self):
-        with patch.object(installer, 'source_digest', side_effect=['before', 'after']):
+        with patch.object(installer, 'source_digest', side_effect=['fixture-source', 'after']):
             with self.assertRaisesRegex(RuntimeError, 'checkout changed'):
                 self.install()
         self.assertEqual((self.app / game.CORE).read_text(), 'stock')

@@ -40,13 +40,26 @@ function lekmod_bolivia_is_person_expended(player_id, unit_id)
    if not capital then return end
 
 
-   if (unit_id == artist_unit_id or unit_id == writer_unit_id) then
-      lekmod_bolivia_set_persistent_data("bolivia_last_expended", unit_id .. player_id)
+   local key = "bolivia_last_expended_" .. player_id
+   local choice = tonumber(lekmod_bolivia_get_persistent_property(key))
+   if unit_id == artist_unit_id or unit_id == writer_unit_id then
+      choice = unit_id
+   elseif choice == nil then
+      -- Migrate the old shared key, or recover another player's overwritten choice.
+      local legacy = tostring(lekmod_bolivia_get_persistent_property("bolivia_last_expended") or "")
+      if legacy == artist_unit_id .. player_id then
+         choice = artist_unit_id
+      elseif legacy == writer_unit_id .. player_id then
+         choice = writer_unit_id
+      elseif capital:IsHasBuilding(GameInfoTypes["BUILDING_BOLIVIA_TRAIT_PRODUCTION"]) then
+         choice = artist_unit_id
+      elseif capital:IsHasBuilding(GameInfoTypes["BUILDING_BOLIVIA_TRAIT_FOOD"]) then
+         choice = writer_unit_id
+      end
    end
+   if choice ~= nil then lekmod_bolivia_set_persistent_data(key, choice) end
 
-   local bolivia_last_expended = tostring(lekmod_bolivia_get_persistent_property("bolivia_last_expended") or 0)
-
-   if bolivia_last_expended == (artist_unit_id .. player_id) then
+   if choice == artist_unit_id then
       capital:SetNumRealBuilding(GameInfoTypes["BUILDING_BOLIVIA_TRAIT_PRODUCTION"], 1)
       capital:SetNumRealBuilding(GameInfoTypes["BUILDING_BOLIVIA_TRAIT_FOOD"], 0)
       if capital:IsHuman() and unit_id == artist_unit_id and Game.GetActivePlayer() == player_id  then
@@ -54,7 +67,7 @@ function lekmod_bolivia_is_person_expended(player_id, unit_id)
       end
    end
 
-   if bolivia_last_expended == (writer_unit_id .. player_id) then
+   if choice == writer_unit_id then
       capital:SetNumRealBuilding(GameInfoTypes["BUILDING_BOLIVIA_TRAIT_FOOD"], 1)
       capital:SetNumRealBuilding(GameInfoTypes["BUILDING_BOLIVIA_TRAIT_PRODUCTION"], 0)
       if capital:IsHuman() and unit_id == writer_unit_id and Game.GetActivePlayer() == player_id then

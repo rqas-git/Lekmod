@@ -2085,7 +2085,7 @@ local function Draft_ApplyPoolSwap(a, b, broadcast)
 end
 
 local function Draft_TryCompleteMutualSwap(a, b)
-	if a == nil or b == nil then
+	if not Matchmaking.IsHost() or a == nil or b == nil then
 		return false;
 	end
 	if g_DraftSwapDesire[a] == b and g_DraftSwapDesire[b] == a then
@@ -2396,7 +2396,12 @@ function Draft_TrySelectSwapPlayer(playerID)
 
 
 	if IsHumanRequiredSlot(playerID) or IsAISlot(playerID) then
-		Draft_ApplyPoolSwap(localID, playerID, true);
+		g_DraftSwapDesire[localID] = playerID;
+		if Matchmaking.IsHost() then
+			Draft_ApplyPoolSwap(localID, playerID, true);
+		else
+			SendDraftChat("SWAPREQ|" .. tostring(localID) .. "|" .. tostring(playerID));
+		end
 		return true;
 	end
 
@@ -2416,13 +2421,81 @@ end
 
 
 
+local function Draft_ValidPlayerID(pid)
+	return pid ~= nil and pid >= 0 and pid < GameDefines.MAX_MAJOR_CIVS and pid == math.floor(pid);
+end
+
+local function Draft_ValidCivList(text, maximum, allowEmptySlots)
+	if text == "" then return true; end
+	if text == nil or #text > 512 then return false; end
+	local byID = LekmodDrafter.BuildIDIndex();
+	local seen, count = {}, 0;
+	-- Appending a delimiter also exposes empty/trailing fields instead of silently skipping them.
+	for token in string.gmatch(text .. ",", "([^,]*),") do
+		if not string.match(token, "^%-?%d+$") then return false; end
+		local id = tonumber(token);
+		count = count + 1;
+		if count > maximum then return false; end
+		if not (allowEmptySlots and id == -1) then
+			if byID[id] == nil or seen[id] then return false; end
+			seen[id] = true;
+		end
+	end
+	return true;
+end
+
+function Draft_ValidateProtocol(fromPlayer, op, rest)
+	if not Draft_ValidPlayerID(fromPlayer) then return false; end
+	local host = fromPlayer == Matchmaking.GetHostID();
+	if op == "RULES" then
+		if not host then return false; end
+		local bans, picks, coast, inland, vanilla, seasonal = string.match(rest, "^(%d+)|(%d+)|(%-?%d+)|(%-?%d+)|([01])|([01])$");
+		bans, picks, coast, inland = tonumber(bans), tonumber(picks), tonumber(coast), tonumber(inland);
+		return bans ~= nil and bans <= 5 and picks >= 1 and picks <= 10
+			and coast >= -1 and coast <= picks and inland >= -1 and inland <= picks;
+	elseif op == "BAN" or op == "DRAFT" then
+		local pid, list = string.match(rest, "^(%d+)|(.*)$");
+		pid = tonumber(pid);
+		if not Draft_ValidPlayerID(pid) then return false; end
+		if op == "DRAFT" then
+			return host and Draft_ValidCivList(list, 10, false);
+		end
+		local ownerCanEdit = fromPlayer == pid and not g_DraftLocked
+			and not g_DraftBanReady[pid] and not g_DraftBanHostControl[pid] and not PreGame.IsReady(pid);
+		return (host or ownerCanEdit) and Draft_ValidCivList(list, g_DraftRules.bansPerPlayer, true);
+	elseif op == "BANREADY" or op == "BANCTRL" then
+		local pid = tonumber(string.match(rest, "^(%d+)|[01]$"));
+		return Draft_ValidPlayerID(pid) and (host or fromPlayer == pid);
+	elseif op == "READYMASK" then
+		local mask = tonumber(string.match(rest, "^%d+$"));
+		return host and mask ~= nil and mask < 2 ^ GameDefines.MAX_MAJOR_CIVS;
+	elseif op == "LOCK" then
+		return host and (rest == "0" or rest == "1");
+	elseif op == "RESET" then
+		return host and rest == "1";
+	elseif op == "SWAPREQ" then
+		local a, b = string.match(rest, "^(%d+)|(%-?%d+)$");
+		a, b = tonumber(a), tonumber(b);
+		return a == fromPlayer and g_DraftLocked and not Draft_IsHistoryOnly()
+			and IsBanParticipantSlot(a) and (b == -1 or (Draft_ValidPlayerID(b) and a ~= b and IsBanParticipantSlot(b)));
+	elseif op == "SWAP" then
+		local a, b, listA, listB = string.match(rest, "^(%d+)|(%d+)|([^|]*)|(.*)$");
+		a, b = tonumber(a), tonumber(b);
+		return host and g_DraftLocked and Draft_ValidPlayerID(a) and Draft_ValidPlayerID(b) and a ~= b
+			and Draft_ValidCivList(listA, 10, false) and Draft_ValidCivList(listB, 10, false);
+	end
+	return false;
+end
+
 function Draft_HandleProtocol(fromPlayer, text)
+	if not Draft_IsProtocol(text) or #text > 2048 then return true; end
 	local body = string.sub(text, #DRAFT_PREFIX + 1);
 	local op, rest = string.match(body, "^([^|]+)|(.*)$");
 	if op == nil then
 		op = body;
 		rest = "";
 	end
+	if not Draft_ValidateProtocol(fromPlayer, op, rest) then return true; end
 
 	if op == "RULES" then
 		local bans, picks, coast, inland, vanilla, seasonal = string.match(rest, "^(%-?%d+)|(%-?%d+)|(%-?%d+)|(%-?%d+)|(%d+)|(%d+)$");
@@ -2549,6 +2622,13 @@ function Draft_HandleProtocol(fromPlayer, text)
 				g_DraftSwapDesire[fromID] = nil;
 			else
 				g_DraftSwapDesire[fromID] = toID;
+				if Matchmaking.IsHost() then
+					if IsAISlot(toID) or IsHumanRequiredSlot(toID) then
+						Draft_ApplyPoolSwap(fromID, toID, true);
+					else
+						Draft_TryCompleteMutualSwap(fromID, toID);
+					end
+				end
 			end
 
 			Draft_RefreshBanUI();

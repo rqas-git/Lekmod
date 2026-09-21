@@ -94,7 +94,7 @@ function scenarios.defender()
             GetPlot=function() return plot end,
             SetHasPromotion=function(_, id, value) promotions[id]=value end}
          local player = {IsAlive=function() return true end, IsBarbarian=function() return false end,
-            GetTeam=function() return 8 end, Units=function() return iterator({unit}) end,
+            GetCivilizationType=function() return 2 end, GetTeam=function() return 8 end, Units=function() return iterator({unit}) end,
             IsDoF=function() error('Must exclude self from friendship checks') end}
          local friend = {IsAlive=function() return true end, IsDoF=function(_, id)
             assert(id==1, 'Friendship requires player ID, not team ID'); return friendship
@@ -114,7 +114,7 @@ end
 
 local function bolivia()
    local saved, buildings = {}, {}
-   local capital = {SetNumRealBuilding=function(_, id, n) buildings[id]=n end,IsHuman=function() return false end}
+   local capital = {SetNumRealBuilding=function(_, id, n) buildings[id]=n end,IsHasBuilding=function(_, id) return buildings[id]==1 end,IsHuman=function() return false end}
    local captured_buildings = {[10]=1,[11]=1}
    local captured = {SetNumRealBuilding=function(_,id,n) captured_buildings[id]=n end}
    local cities = {capital}
@@ -138,13 +138,13 @@ function scenarios.bolivia()
    env.GameEvents.GreatPersonExpended.fire(1,147)
    assert(buildings[11]==1 and buildings[10]==0)
    env.GameEvents.PlayerCityFounded.fire(1,3,10)
-   assert(saved.bolivia_last_expended=='1471' and buildings[11]==1 and buildings[10]==0)
+   assert(saved.bolivia_last_expended_1==147 and buildings[11]==1 and buildings[10]==0)
    for _, was_capital in ipairs({true, false}) do
       env.GameEvents.CityCaptureComplete.fire(1,was_capital,3,10,2)
-      assert(saved.bolivia_last_expended=='1471' and buildings[11]==1)
+      assert(saved.bolivia_last_expended_1==147 and buildings[11]==1)
       assert(captured[10]==0 and captured[11]==0, 'Captured city retained Bolivia buildings')
       env.GameEvents.CityCaptureComplete.fire(2,was_capital,147,10,1)
-      assert(saved.bolivia_last_expended=='1471' and buildings[11]==1)
+      assert(saved.bolivia_last_expended_1==147 and buildings[11]==1)
    end
    env.GameEvents.GreatPersonExpended.fire(1,3)
    assert(buildings[10]==1 and buildings[11]==0)
@@ -173,7 +173,7 @@ end
 
 function scenarios.mughals()
    local buildings = {}
-   local city = {IsHasBuilding=function(_,id) return buildings[id]==1 end,
+   local city = {GetOriginalOwner=function() return 2 end, IsHasBuilding=function(_,id) return buildings[id]==1 end,
       SetNumRealBuilding=function(_,id,n) buildings[id]=n end,GetReligiousMajority=function() return 4 end}
    local player = {IsAlive=function() return true end,GetCivilizationType=function() return 1 end,
       HasCreatedReligion=function() return false end,Cities=function() return iterator({city}) end}

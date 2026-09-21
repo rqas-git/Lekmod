@@ -56,6 +56,7 @@ class UIAssetsTests(unittest.TestCase):
         self.mod.mkdir(parents=True)
         shutil.copytree(ROOT / 'LEKMOD/Lua', self.mod / 'Lua')
         shutil.copy2(ROOT / 'LEKMOD/ui_manifest.json', self.mod)
+        (self.mod / 'CvGameCore_Expansion2.dll').write_bytes(b'MZ fixture ChangeOverflowResearch GetLekmodCoreVersion')
         self.manifest = load_manifest(self.mod)
 
     def eui_pack(self, game, variant):
@@ -122,6 +123,25 @@ class UIAssetsTests(unittest.TestCase):
         self.assertNotEqual((destination / alias.relative_to(self.mod)).read_text(), 'stale generated copy')
         self.assertFalse((destination / 'Lua/Utilities/LekmodUiConfigured.lua').exists())
         self.assertTrue((destination / 'ui_check.bat').is_file())
+
+    def test_stale_or_missing_dll_is_rejected_before_package_creation(self):
+        library = self.mod / 'CvGameCore_Expansion2.dll'
+        for data in (b'MZ old GetOverflowResearch', b'MZ ChangeOverflowResearch', None):
+            if data is None:
+                library.unlink()
+            else:
+                library.write_bytes(data)
+            destination = self.root / 'invalid-package'
+            with self.assertRaisesRegex(RuntimeError, 'DLL'):
+                package(self.mod, destination)
+            self.assertFalse(destination.exists())
+
+    def test_fresh_build_override_is_the_binary_in_the_package(self):
+        (self.mod / 'CvGameCore_Expansion2.dll').write_bytes(b'MZ old')
+        library = self.root / 'fresh.dll'
+        library.write_bytes(b'MZ current ChangeOverflowResearch GetLekmodCoreVersion')
+        destination = package(self.mod, self.root / 'release', library)
+        self.assertEqual((destination / 'CvGameCore_Expansion2.dll').read_bytes(), library.read_bytes())
 
     def test_missing_source_does_not_clear_existing_ui(self):
         before = contents(self.mod / 'Lua/UI')

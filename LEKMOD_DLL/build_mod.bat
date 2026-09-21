@@ -6,6 +6,6 @@ if not exist "%VCTargetsPath%\Microsoft.Cpp.Default.props" (
   echo MISSING Default.props
   exit /b 2
 )
-"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" "C:\Users\EnormousApplePie\Documents\GitHub\Lekmod\LEKMOD_DLL\CvGameCoreDLL_Expansion2\CvGameCoreDLL_Expansion2.vs2013.sln" /p:Configuration=Mod /p:Platform=x86 /m /v:minimal
+"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" "%~dp0CvGameCoreDLL_Expansion2\CvGameCoreDLL_Expansion2.vs2013.sln" /p:Configuration=Mod /p:Platform=x86 /m /v:minimal
 echo MSBUILD_EXIT=%ERRORLEVEL%
 exit /b %ERRORLEVEL%

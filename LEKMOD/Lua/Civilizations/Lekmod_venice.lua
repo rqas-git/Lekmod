@@ -4,17 +4,20 @@ include("PlotIterators.lua")
 local this_civ = GameInfoTypes["CIVILIZATION_VENEZ"]
 local is_active = LekmodUtilities:is_civilization_active(this_civ)
 local compassTech = GameInfoTypes["TECH_COMPASS"]
+local saved = Modding.OpenSaveData()
 
 
 
 function lekmod_venice_route_compass(team_id, tech_id)
 
-	for _, player in pairs(Players) do
-		if player:IsAlive() and player:GetTeam() == team_id and player:GetCivilizationType() == this_civ then
-			if tech_id == compassTech then
+	if tech_id ~= compassTech then return end
+	for player_id = 0, GameDefines.MAX_MAJOR_CIVS - 1 do
+		local player = Players[player_id]
+		if player and player:IsAlive() and player:GetTeam() == team_id and player:GetCivilizationType() == this_civ then
+			local key = "lekmod_venice_compass_" .. player_id
+			if saved.GetValue(key) ~= 1 then
 				player:ChangeNumMiscTradeRoutes(1)
-				print("venice TR slot added, removing listener")
-				GameEvents.TeamTechResearched.Remove(lekmod_venice_route_compass)
+				saved.SetValue(key, 1)
 			end
 		end
 	end

@@ -456,7 +456,9 @@ class UIManager:
                 return False
             for name in names:
                 lower = name.lower()
-                if lower.endswith(".lua") and (lower.startswith("lekmap") or lower.startswith("hb")):
+                full = Path(path) / name
+                if (lower.endswith(".lua") and lower.startswith("lekmap")
+                        and full.is_file() and full.stat().st_size > 0):
                     return True
             return False
 
@@ -470,7 +472,7 @@ class UIManager:
                 if not dir_name.lower().startswith("lekmap"):
                     continue
                 full = os.path.join(dirpath, dir_name)
-                if is_lekmap_content(full) or self._LEKMAP_FOLDER_VERSION_RE.match(dir_name.strip()):
+                if is_lekmap_content(full):
                     named.append(full)
             if named:
                 break
@@ -551,6 +553,19 @@ class UIManager:
         lua_names = self._collect_lekmap_lua_names(maps_dir)
         return self._infer_lekmap_version_from_names(lua_names)
 
+    @staticmethod
+    def _validate_lekmap_payload(folder):
+        files = {path.name.lower(): path for path in Path(folder).rglob('*')
+                 if path.is_file() and path.suffix.lower() == '.lua'}
+        if not any(name.startswith('lekmap') and path.stat().st_size > 0 for name, path in files.items()):
+            raise RuntimeError('Lekmap payload contains no nonempty map scripts.')
+        for path in files.values():
+            source = path.read_text(encoding='utf-8-sig', errors='replace')
+            for module in re.findall(r'''\binclude\s*\(\s*["']([^"']+)["']\s*\)''', source):
+                name = module.lower().removesuffix('.lua') + '.lua'
+                if name.startswith(('hb', 'lekmap')) and (name not in files or files[name].stat().st_size == 0):
+                    raise RuntimeError(f'Lekmap payload is missing required helper {module} (used by {path.name}).')
+
     def install_lekmap(self, extract_path, version, log_callback, civ5_path=None):
 
         maps_dir = self.find_civ5_maps_folder(civ5_path)
@@ -583,6 +598,7 @@ class UIManager:
         installed = False
         try:
             shutil.copytree(source, replacement, ignore=ignore)
+            self._validate_lekmap_payload(replacement)
             (replacement / "Lekmap VERSION.txt").write_text(folder_name + "\n", encoding="utf-8")
             self._lekmap_dest_folder(maps_dir, version)
             if destination.exists():

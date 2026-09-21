@@ -4,6 +4,7 @@ include("PlotIterators.lua")
 
 local this_civ = GameInfoTypes["CIVILIZATION_MEXICO"]
 local is_active = LekmodUtilities:is_civilization_active(this_civ)
+local saved = Modding.OpenSaveData()
 
 
 
@@ -32,10 +33,12 @@ function lekmod_mexico_ua(player_id)
 
     local player = Players[player_id]
     if player:GetCivilizationType() ~= this_civ or not player:IsAlive() then return end
+	local key = "lekmod_mexico_revealed_" .. player_id
+	if saved.GetValue(key) == 1 then return end
 
 	lekmod_mexico_ua_do_discover(player_id)
 
-	GameEvents.PlayerDoTurn.Remove(lekmod_mexico_ua)
+	saved.SetValue(key, 1)
 
 end
 

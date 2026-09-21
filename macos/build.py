@@ -9,6 +9,7 @@ import subprocess
 import sys
 import xml.etree.ElementTree as ET
 from audit import DEFAULT_APP, check_imports
+from integrity import source_digest, write_build_manifest
 
 HERE = Path(__file__).resolve().parent
 CORE = HERE.parent / "LEKMOD_DLL/CvGameCoreDLL_Expansion2"
@@ -53,6 +54,7 @@ def main():
     sources = [e.attrib["Include"] for e in project.findall(".//{*}ClCompile") if "Include" in e.attrib]
     if args.source:
         sources = [args.source]
+    before_source = source_digest(HERE.parent) if not args.source else None
     header_time = max(p.stat().st_mtime for root in [CORE, HERE / "include"]
                       for p in root.rglob("*") if p.is_file() and p.suffix in (".h", ".hpp", ".inl", ".inc", ""))
     header_time = max(header_time, Path(__file__).stat().st_mtime)
@@ -98,7 +100,12 @@ def main():
         print(error)
         return 1
     output = build / "libCvGameCoreDLL_Expansion2_DLL.dylib"
+    if source_digest(HERE.parent) != before_source:
+        print('The checkout changed during the build. Retry before installing this library.')
+        return 1
     candidate.replace(output)
+    write_build_manifest(output, before_source, {'release': args.release, 'lto': args.lto,
+                                                'precompute_neighbors': args.precompute_neighbors})
     print(f"Linked and audited {output}")
     return 0
 

@@ -21,6 +21,36 @@ from payload_fixture import payload_files
 
 
 class InstallerFlowTests(unittest.TestCase):
+    def test_invalid_map_payload_preserves_working_installation(self):
+        payloads = ({}, {'HBHelper.lua': 'helper'}, {'LekmapPangaea.lua': ''},
+                    {'LekmapPangaea.lua': 'include("HBMissing")'},
+                    {'LekmapPangaea.lua': 'include("HBHelper")', 'HBHelper.lua': ''})
+        for payload in payloads:
+            with self.subTest(payload=payload), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                old = root / 'game/Assets/Maps/Lekmap v6.2'
+                old.mkdir(parents=True)
+                (old / 'LekmapPangaea.lua').write_text('working map')
+                incoming = root / 'archive/Lekmap v6.2'
+                incoming.mkdir(parents=True)
+                for name, value in payload.items():
+                    (incoming / name).write_text(value)
+                with self.assertRaises(Exception):
+                    UIManager().install_lekmap(str(root / 'archive'), 'v6.2', lambda _: None, str(root / 'game'))
+                self.assertEqual((old / 'LekmapPangaea.lua').read_text(), 'working map')
+                self.assertFalse(list((root / 'game/Assets').glob('.lekmap-install-*')))
+
+    def test_map_payload_with_its_helpers_commits_successfully(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            incoming = root / 'archive/Lekmap v6.2'
+            incoming.mkdir(parents=True)
+            (incoming / 'LekmapPangaea.lua').write_text('include("HBHelper")')
+            (incoming / 'HBHelper.lua').write_text('function Generate() end')
+            installed = Path(UIManager().install_lekmap(str(root / 'archive'), 'v6.2', lambda _: None, str(root / 'game')))
+            self.assertTrue((installed / 'HBHelper.lua').is_file())
+            self.assertTrue((installed / 'Lekmap VERSION.txt').is_file())
+
     def test_invalid_map_label_shows_error_without_starting_worker(self):
         app, _, _ = self.make_installer()
         app.lekmap_version_var = SimpleNamespace(get=lambda: 'Lekmap v6.2/../../DLC')
@@ -38,10 +68,80 @@ class InstallerFlowTests(unittest.TestCase):
         app.updater.get_available_versions = Mock(side_effect=RuntimeError('offline'))
         with patch('installer.tk', NORMAL='normal'), patch('installer.messagebox') as dialogs:
             app._check_updates_thread()
-            self.assertEqual(len(callbacks), 1)
-            callbacks[0]()
+            self.assertEqual(len(callbacks), 2)
+            for callback in callbacks:
+                callback()
             dialogs.showerror.assert_called_once()
             self.assertIn('offline', dialogs.showerror.call_args.args[1])
+            self.assertFalse(app._busy)
+
+    def test_self_update_cancel_and_no_update_finish_on_main_thread(self):
+        for update in (None, {'version': '2.0'}):
+            with self.subTest(update=update), patch('installer.messagebox') as dialogs, patch('installer.threading.Thread') as worker:
+                app, callbacks, _ = self.make_installer()
+                app.installer_updater = Mock()
+                app.installer_updater.check_for_installer_update.return_value = update
+                dialogs.askyesno.return_value = False
+                app.update_installer()
+                self.assertTrue(app._busy)
+                self.assertFalse(worker.call_args.kwargs['daemon'])
+                app._update_installer_thread()
+                dialogs.showinfo.assert_not_called()
+                dialogs.askyesno.assert_not_called()
+                self.assertTrue(app._busy)
+                callbacks.pop(0)()
+                self.assertFalse(app._busy)
+                app.hide_progress.assert_called_once()
+                app._set_action_buttons.assert_called_with(True)
+
+    def test_install_self_update_and_close_share_exclusion(self):
+        for first in ('install', 'update'):
+            with self.subTest(first=first), patch('installer.threading.Thread') as worker, patch('installer.messagebox'):
+                app, callbacks, _ = self.make_installer()
+                app.root.destroy = Mock()
+                if first == 'install':
+                    app._start_install(lambda: None)
+                else:
+                    app.update_installer()
+                self.assertTrue(app._busy)
+                app._start_install(lambda: None)
+                app.update_installer()
+                app._on_close()
+                worker.assert_called_once()
+                app.root.destroy.assert_not_called()
+                app._end_operation()
+                app._on_close()
+                app.root.destroy.assert_called_once()
+
+    def test_self_update_errors_release_busy_state_and_do_not_exit(self):
+        for stage in ('check', 'download', 'apply'):
+            with self.subTest(stage=stage), patch('installer.messagebox') as dialogs:
+                app, callbacks, _ = self.make_installer()
+                app.installer_updater = Mock()
+                app._begin_operation()
+                method = {'check': 'check_for_installer_update', 'download': 'download_and_update', 'apply': 'apply_update'}[stage]
+                getattr(app.installer_updater, method).side_effect = RuntimeError('fixture failure')
+                if stage == 'check':
+                    app._update_installer_thread()
+                elif stage == 'download':
+                    app._download_installer_update({'version': '2.0'})
+                else:
+                    app._apply_installer_update('fixture.cmd')
+                for callback in callbacks:
+                    callback()
+                self.assertFalse(app._busy)
+                app.hide_progress.assert_called_once()
+                dialogs.showerror.assert_called_once()
+
+    def test_all_action_buttons_include_self_update(self):
+        app, _, _ = self.make_installer()
+        for name in ('install_btn', 'refresh_btn', 'lekmap_install_btn', 'update_installer_btn'):
+            setattr(app, name, Mock())
+        app.lekmap_version_var = SimpleNamespace(get=lambda: 'v6.2')
+        with patch('installer.tk', NORMAL='normal', DISABLED='disabled'):
+            LekmodInstaller._set_action_buttons(app, False)
+            for name in ('install_btn', 'refresh_btn', 'lekmap_install_btn', 'update_installer_btn'):
+                getattr(app, name).config.assert_called_with(state='disabled')
 
     def make_installer(self, failure=None):
         app = LekmodInstaller.__new__(LekmodInstaller)

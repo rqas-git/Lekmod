@@ -122,8 +122,9 @@ function lekmod_add_dummy_policies()
          local player = Players[player_id]
          if player:IsEverAlive() and player:GetCivilizationType() == GameInfoTypes[civilization_type] then
             if not player:HasPolicy(GameInfoTypes[policy_type]) then
-               player:SetNumFreePolicies(1)
-               player:SetNumFreePolicies(0)
+               local freePolicies = player:GetNumFreePolicies()
+               player:SetNumFreePolicies(freePolicies + 1)
+               player:SetNumFreePolicies(freePolicies)
                player:SetHasPolicy(GameInfoTypes[policy_type], true)
             end
          end

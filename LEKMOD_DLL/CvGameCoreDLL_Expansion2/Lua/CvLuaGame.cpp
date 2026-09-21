@@ -44,8 +44,15 @@ CvGame* CvLuaGame::GetInstance(lua_State* L, int idx)
 	return &GC.getGame();
 }
 
+static int GetLekmodCoreVersion(lua_State* L)
+{
+	lua_pushinteger(L, 20260912);
+	return 1;
+}
+
 void CvLuaGame::RegisterMembers(lua_State* L)
 {
+	RegisterMethod(L, GetLekmodCoreVersion, "GetLekmodCoreVersion");
 	Method(CanHandleAction);
 	Method(HandleAction);
 	Method(UpdateScore);

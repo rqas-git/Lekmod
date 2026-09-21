@@ -1,8 +1,35 @@
 
 import hashlib
+import json
 from pathlib import Path
 
 from game_install import sha256
+
+
+def build_manifest_path(library):
+    return library.with_name(library.name + '.build.json')
+
+
+def write_build_manifest(library, source, configuration):
+    manifest = build_manifest_path(library)
+    temporary = manifest.with_suffix('.tmp')
+    temporary.write_text(json.dumps({'format': 1, 'library_sha256': sha256(library),
+                                    'source_sha256': source, 'configuration': configuration}, indent=2) + '\n')
+    temporary.replace(manifest)
+
+
+def validate_build_manifest(library, source):
+    try:
+        manifest = json.loads(build_manifest_path(library).read_text())
+    except (OSError, ValueError) as error:
+        raise RuntimeError('Native build provenance is missing or invalid. Run without --skip-build.') from error
+    configuration = {'release': True, 'lto': False, 'precompute_neighbors': False}
+    if (not isinstance(manifest, dict) or manifest.get('format') != 1
+            or manifest.get('library_sha256') != sha256(library)
+            or manifest.get('source_sha256') != source
+            or manifest.get('configuration') != configuration):
+        raise RuntimeError('Native library does not match the current source and release configuration. Run without --skip-build.')
+    return manifest
 
 
 def _fingerprint(files):

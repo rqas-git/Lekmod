@@ -51,22 +51,24 @@ function lekmod_ua_mughals_foreign_religion_check(player_id)
          city:SetNumRealBuilding(dummy_building_id, 1)
 
 
-         for other_player_id = 0, GameDefines.MAX_MAJOR_CIVS - 1 do
-            local other_player = Players[other_player_id]
+         if city:GetOriginalOwner() == player_id then
+            for other_player_id = 0, GameDefines.MAX_MAJOR_CIVS - 1 do
+               local other_player = Players[other_player_id]
             
 
-            if other_player and other_player:IsAlive() and other_player_id ~= player_id then
+               if other_player and other_player:IsAlive() and other_player_id ~= player_id then
                
-               for other_city in other_player:Cities() do
+                  for other_city in other_player:Cities() do
 
-                  if other_city:IsHolyCityForReligion(city_religion) then
+                     if other_city:IsHolyCityForReligion(city_religion) then
 
-                     if not other_city:IsHasBuilding(dummy_building_id) then
-                        other_city:SetNumRealBuilding(dummy_building_id, 1)
+                        if not other_city:IsHasBuilding(dummy_building_id) then
+                           other_city:SetNumRealBuilding(dummy_building_id, 1)
+                        end
                      end
                   end
                end
-            end
+         end
          end
       end
    end

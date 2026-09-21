@@ -17,7 +17,7 @@ from game_install import (ASSETS, CORE, MANIFEST, STOCK_CORE_SHA256, app_path,
                           validate_app, validate_core)
 from package_assets import prepare_lekmap, prepare_lekmod
 from crossplay import configure_staged as configure_crossplay
-from integrity import source_digest, tree_digest
+from integrity import source_digest, tree_digest, validate_build_manifest
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -73,6 +73,7 @@ def install(app, component='both', jobs=4, skip_build=False, log=print,
                                 '--jobs', str(jobs), '--app', str(app)], check=True)
             if not library.is_file():
                 raise RuntimeError('Native library missing. Run without --skip-build to build it.')
+            validated_build = validate_build_manifest(library, before_source)
             check_imports(library, app)
         ensure_closed()
 
@@ -102,6 +103,8 @@ def install(app, component='both', jobs=4, skip_build=False, log=print,
                 prepare_lekmod(ROOT / 'LEKMOD', staged / ASSETS / 'DLC/LEKMOD', eui=eui_folder)
             if mod:
                 shutil.copy2(library, staged / CORE)
+                if sha256(staged / CORE) != validated_build['library_sha256']:
+                    raise RuntimeError('Native library changed during installation. Please retry.')
                 sign_core(staged)
                 state.update(stock_core_sha256=STOCK_CORE_SHA256,
                              core_sha256=sha256(staged / CORE), lekmod=True)

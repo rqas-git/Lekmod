@@ -10,9 +10,38 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import build
+from integrity import build_manifest_path, validate_build_manifest
 
 
 class BuildTests(unittest.TestCase):
+    def test_full_build_records_provenance_only_after_audit_and_stable_source(self):
+        for failure in (None, 'audit', 'source-change'):
+            with self.subTest(failure=failure), tempfile.TemporaryDirectory() as temporary:
+                root=Path(temporary)
+                core, here, output=root/'core',root/'macos',root/'build'
+                core.mkdir();(here/'include').mkdir(parents=True)
+                (core/'CvGameCoreDLL_Expansion2.vcxproj').write_text(
+                    '<Project><ItemGroup><ClCompile Include="game.cpp"/></ItemGroup></Project>')
+                (core/'game.cpp').write_text('int game;')
+                (here/'include/native.hpp').write_text('// fixture')
+                def compile_or_link(command, **kwargs):
+                    Path(command[command.index('-o')+1]).write_bytes(b'fixture output')
+                    return subprocess.CompletedProcess(command,0,'','')
+                with patch.object(build,'CORE',core), patch.object(build,'HERE',here), patch.object(build,'BUILD',output), \
+                     patch.object(sys,'argv',['build.py','--release']), \
+                     patch.object(build.subprocess,'run',side_effect=compile_or_link), \
+                     patch.object(build,'source_digest',side_effect=['source','changed' if failure=='source-change' else 'source']), \
+                     patch.object(build,'check_imports',side_effect=RuntimeError('bad ABI') if failure=='audit' else None):
+                    result=build.main()
+                library=output/'libCvGameCoreDLL_Expansion2_DLL.dylib'
+                if failure:
+                    self.assertEqual(result,1)
+                    self.assertFalse(library.exists())
+                    self.assertFalse(build_manifest_path(library).exists())
+                else:
+                    self.assertEqual(result,0)
+                    self.assertEqual(validate_build_manifest(library,'source')['configuration']['release'],True)
+
     def test_catalog_edit_invalidates_a_cached_object(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

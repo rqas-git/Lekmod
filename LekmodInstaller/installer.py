@@ -25,6 +25,8 @@ except ImportError:
 class LekmodInstaller:
     def __init__(self, root):
         self.root = root
+        self._busy = False
+        self.root.protocol("WM_DELETE_WINDOW", self._on_close)
         self.root.title("Lekmod / Lekmap Installer")
         self.root.geometry("640x880")
         self.root.resizable(True, True)
@@ -540,64 +542,56 @@ class LekmodInstaller:
             pass
 
     def update_installer(self):
-
+        if not self._begin_operation():
+            return
         self.log("Checking for installer updates...")
-        self.show_indeterminate_progress()
-        self.update_installer_btn.config(state=tk.DISABLED)
-        threading.Thread(target=self._update_installer_thread,
-                        daemon=True).start()
+        threading.Thread(target=self._update_installer_thread, daemon=False).start()
 
     def _update_installer_thread(self):
-
         try:
-
             update_info = self.installer_updater.check_for_installer_update()
+        except Exception as error:
+            self.root.after(0, lambda message=str(error): self._installer_update_failed(message))
+        else:
+            self.root.after(0, lambda: self._confirm_installer_update(update_info))
 
-            if not update_info:
-                self.log("✓ Installer is up to date!")
-                messagebox.showinfo("No Updates",
-                                   "You're already using the latest version of the installer!")
-                self.update_installer_btn.config(state=tk.NORMAL)
-                return
+    def _confirm_installer_update(self, update_info):
+        if not update_info:
+            self._end_operation()
+            self.log("✓ Installer is up to date!")
+            messagebox.showinfo("No Updates", "You're already using the latest version of the installer!")
+            return
+        version = update_info.get('version')
+        changelog = update_info.get('changelog', 'No changelog available')
+        confirm = messagebox.askyesno(
+            "Update Available",
+            f"New installer version available: v{version}\n\n"
+            f"Current version: v{self.config.get('installer_version', '1.0.0')}\n\n"
+            f"Changes:\n{changelog}\n\nUpdate now?\n\nThe installer will restart after updating.")
+        if not confirm:
+            self._end_operation()
+            return
+        threading.Thread(target=self._download_installer_update, args=(update_info,), daemon=False).start()
 
-            new_version = update_info.get('version')
-            changelog = update_info.get('changelog', 'No changelog available')
+    def _download_installer_update(self, update_info):
+        try:
+            update_script, _temporary = self.installer_updater.download_and_update(update_info, self.log)
+        except Exception as error:
+            self.root.after(0, lambda message=str(error): self._installer_update_failed(message))
+        else:
+            self.root.after(0, lambda: self._apply_installer_update(update_script))
 
+    def _apply_installer_update(self, update_script):
+        self.log("Restarting installer...")
+        try:
+            self.installer_updater.apply_update(update_script)
+        except Exception as error:
+            self._installer_update_failed(str(error))
 
-            confirm = messagebox.askyesno(
-                "Update Available",
-                f"New installer version available: v{new_version}\n\n"
-                f"Current version: v{self.config.get('installer_version', '1.0.0')}\n\n"
-                f"Changes:\n{changelog}\n\n"
-                f"Update now?\n\n"
-                f"The installer will restart after updating."
-            )
-
-            if not confirm:
-                self.update_installer_btn.config(state=tk.NORMAL)
-                return
-
-
-            update_script, temp_installer = self.installer_updater.download_and_update(
-                update_info, self.log
-            )
-
-            self.log("✓ Update ready!")
-            self.log("Restarting installer...")
-
-
-            import time
-            time.sleep(1)
-
-
-            self.root.after(0, self.installer_updater.apply_update, update_script)
-
-        except Exception as e:
-            self.log(f"❌ Installer update failed: {e}")
-            messagebox.showerror("Update Failed",
-                               f"Failed to update installer:\n\n{str(e)}")
-            self.hide_progress()
-            self.update_installer_btn.config(state=tk.NORMAL)
+    def _installer_update_failed(self, message):
+        self._end_operation()
+        self.log(f"Installer update failed: {message}")
+        messagebox.showerror("Update Failed", f"Failed to update installer:\n\n{message}")
 
     def detect_installation(self):
 
@@ -671,6 +665,7 @@ class LekmodInstaller:
         state = tk.NORMAL if enabled else tk.DISABLED
         self.install_btn.config(state=state)
         self.refresh_btn.config(state=state)
+        self.update_installer_btn.config(state=state)
         lekmap_state = state
         if enabled and not self.lekmap_version_var.get():
             lekmap_state = tk.DISABLED
@@ -679,9 +674,9 @@ class LekmodInstaller:
 
     def check_updates(self):
 
+        if not self._begin_operation():
+            return
         self.log("Checking Google Drive for available versions...")
-        self.show_indeterminate_progress()
-        self.refresh_btn.config(state=tk.DISABLED)
         threading.Thread(target=self._check_updates_thread,
                         daemon=True).start()
 
@@ -730,7 +725,6 @@ class LekmodInstaller:
                 self.lekmap_version_combo['values'] = lekmap_display
                 if lekmap_display:
                     self.lekmap_version_combo.current(0)
-                    self.lekmap_install_btn.config(state=tk.NORMAL)
                 else:
                     self.lekmap_version_var.set("")
                     self.lekmap_install_btn.config(state=tk.DISABLED)
@@ -749,8 +743,7 @@ class LekmodInstaller:
                 f"Please check your internet connection."
             ))
         finally:
-            self.hide_progress()
-            self.refresh_btn.config(state=tk.NORMAL)
+            self.root.after(0, self._end_operation)
 
     @contextmanager
     def _download_release(self, version, info, prefix):
@@ -763,10 +756,29 @@ class LekmodInstaller:
             self.log('Extracting files...')
             yield self.ui_manager.extract_mod(archive, self.log, extract_name=prefix.lower() + '_temp')
 
-    def _start_install(self, operation):
+    def _begin_operation(self):
+        if getattr(self, '_busy', False):
+            return False
+        self._busy = True
         self._set_action_buttons(False)
         self.show_indeterminate_progress()
-        threading.Thread(target=self._run_install, args=(operation,), daemon=True).start()
+        return True
+
+    def _end_operation(self):
+        self._busy = False
+        self.hide_progress()
+        self._set_action_buttons(True)
+
+    def _on_close(self):
+        if getattr(self, '_busy', False):
+            messagebox.showinfo('Operation in progress', 'Please wait for the current operation to finish before closing.')
+            return
+        self.root.destroy()
+
+    def _start_install(self, operation):
+        if not self._begin_operation():
+            return
+        threading.Thread(target=self._run_install, args=(operation,), daemon=False).start()
 
     def _run_install(self, operation):
         error = None
@@ -779,8 +791,7 @@ class LekmodInstaller:
             self.log(f'Installation failed: {error}')
 
         def finish():
-            self.hide_progress()
-            self._set_action_buttons(True)
+            self._end_operation()
             self.check_installed_version()
             if error is None:
                 messagebox.showinfo('Success', message)

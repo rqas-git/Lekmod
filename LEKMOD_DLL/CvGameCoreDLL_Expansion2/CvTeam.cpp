@@ -1850,7 +1850,7 @@ void CvTeam::DoMakePeace(TeamTypes eTeam, bool bBumpUnits, bool bSuppressNotific
 									eMakingPeaceWithMinor = (PlayerTypes) iMakingPeaceWithMinorLoop;
 
 
-									if(!GET_PLAYER(eMakingPeaceWithMinor).getTeam() == eTeamWeMadePeaceWith)
+									if(GET_PLAYER(eMakingPeaceWithMinor).getTeam() != eTeamWeMadePeaceWith)
 										continue;
 
 
