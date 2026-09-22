@@ -175,6 +175,12 @@ def _inspect(app, desired, log, worker, desired_eui):
         nonlocal digest
         digest = validate_core(app)
     known = checked('core', 'Native Lekmod library', core, 'Installed library recognized')
+    if not known:
+        try:
+            digest = sha256(app / CORE)
+        except OSError:
+            pass
+    result['core_sha256'] = digest
     if known and (digest == STOCK_CORE_SHA256 or not state.get('lekmod')):
         checks[-1].update(state='repair', detail='Steam restored the original library, or Lekmod has not been installed yet.')
     elif known:

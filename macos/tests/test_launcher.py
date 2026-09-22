@@ -123,11 +123,21 @@ class LauncherTests(unittest.TestCase):
                 self.fail('Inspection and Steam handoff must hold the installation lock')
 
     def test_inspection_hashes_native_library_once(self):
+        expected = game.sha256(self.app / game.CORE)
         with patch.object(game, 'sha256', wraps=game.sha256) as hashing, \
                 patch.object(launcher, 'sha256', hashing):
-            self.assertTrue(launcher.inspect(self.app, True)['ready'])
+            report = launcher.inspect(self.app, True)
+            self.assertTrue(report['ready'])
+            self.assertEqual(report['core_sha256'], expected)
         self.assertEqual(sum(call.args == (self.app / game.CORE,)
                              for call in hashing.call_args_list), 1)
+
+    def test_diagnostics_include_hash_of_unrecognized_library(self):
+        write(self.app / game.CORE, 'unknown replacement')
+        report = launcher.inspect(self.app, True)
+        self.assertFalse(report['ready'])
+        self.assertEqual(report['core_sha256'], game.sha256(self.app / game.CORE))
+        self.assertEqual(next(c['state'] for c in report['checks'] if c['id'] == 'core'), 'blocked')
 
     def test_signature_and_content_checks_overlap_and_both_finish(self):
         signature_started, content_started = Event(), Event()

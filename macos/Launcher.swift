@@ -83,6 +83,7 @@ struct Check: Identifiable, Decodable {
 struct Report: Decodable {
     let app: String
     let version: String
+    let core_sha256: String?
     let crossplay: Bool
     let checks: [Check]
     var ready: Bool
@@ -153,6 +154,35 @@ final class LauncherModel: ObservableObject {
         if report?.ready == true { return "Play" }
         if report?.repairable == true { return report?.lekmod_installed == false ? "Install & Play" : "Repair & Play" }
         return app.isEmpty ? "Choose Civilization V" : "Check Again"
+    }
+
+    func diagnostics(at date: Date = Date()) -> String {
+        var lines = ["Lekmod Launcher Diagnostics",
+                     "Generated: \(ISO8601DateFormatter().string(from: date))"]
+        if let report {
+            lines += ["Game: \(report.app.isEmpty ? "Not selected" : report.app)",
+                      "Checkout version: \(report.version)",
+                      "Status: \(error != nil ? "Launcher error (last check shown below)" : report.ready ? "Ready" : report.running ? "Game running" : report.repairable ? "Repair needed" : "Needs attention")",
+                      "Native library SHA-256: \(report.core_sha256 ?? "Unavailable")",
+                      "UI: \(report.eui_enabled == true ? "EUI 1.28g" : report.eui_enabled == false ? "Standard" : "Unknown")",
+                      "Lekmod assets: \(report.lekmod_installed == true ? "Installed" : "Not installed")",
+                      "Lekmap: \(report.lekmap_installed == true ? "Installed" : "Not installed")",
+                      "Windows cross-play preference: \(report.crossplay ? "Enabled (experimental)" : "Disabled")",
+                      "Steam: \(report.steam_session?.label ?? "Unknown")",
+                      "Checks:"]
+            lines += report.checks.map { "[\($0.state)] \($0.title): \($0.detail)" }
+            if report.checks.isEmpty { lines.append("No checks available.") }
+        } else {
+            lines += ["Game: \(app.isEmpty ? "Not selected" : app)",
+                      "No installation report. Run Check to collect diagnostics."]
+        }
+        if let error { lines.append("Launcher error: \(error)") }
+        return lines.joined(separator: "\n") + "\n"
+    }
+
+    func copyDiagnostics() {
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(diagnostics(), forType: .string)
     }
 
     func append(_ text: String) {
@@ -730,6 +760,11 @@ struct LauncherView: View {
                 Button { model.showLog = true } label: { Label("Activity", systemImage: "text.alignleft") }
                     .help("Activity log")
                     .frame(maxWidth: .infinity)
+                Button(action: model.copyDiagnostics) {
+                    Label("Copy Report", systemImage: "doc.on.doc")
+                }.disabled(model.busy)
+                    .help("Copy installation checks and versions; includes your local game path.")
+                    .frame(maxWidth: .infinity)
             }.buttonStyle(FooterIconStyle()).padding(.top, 8)
         }.padding(24).frame(maxHeight: .infinity)
             .background(DecoFrame().fill(navy.opacity(0.75)))
@@ -754,6 +789,8 @@ struct LauncherView: View {
                     NSPasteboard.general.clearContents()
                     NSPasteboard.general.setString(model.log, forType: .string)
                 }
+                Button("Copy Diagnostics", action: model.copyDiagnostics).disabled(model.busy)
+                    .help("Copy installation checks and versions; includes your local game path.")
                 Spacer()
                 Button("Open Settings Folder") {
                     NSWorkspace.shared.open(FileManager.default.homeDirectoryForCurrentUser
