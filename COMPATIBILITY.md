@@ -43,8 +43,12 @@ change or independent evidence that it preserves behavior with stock peers.
   registration prototype.
 - Launcher startup optimizations, EUI selection, installation repair, backups,
   rollback, operation locking, download validation, and source/build provenance.
+- Launcher save browsing and explicit copy-only backups outside the game save
+  folder; backup creation never replaces an existing file.
 - UI query and text-generation improvements, shared UI packaging, and source
   refactors whose outputs are covered by regression tests.
+- Yellow city headers in trade-route tooltips for both supported UI modes; all
+  route values and gameplay queries remain unchanged.
 - City-connection metadata caches; improvement and promotion metadata caches;
   reduced trade-ranking copies and cached trade ranges; stable worker selection
   and plot snapshots; prepared database queries and build-type caches.

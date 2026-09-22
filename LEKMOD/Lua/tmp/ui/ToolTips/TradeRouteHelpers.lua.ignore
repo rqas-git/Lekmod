@@ -489,8 +489,8 @@ function BuildTradeRouteToolTipString(pPlayer, pOriginCity, pTargetCity, eConnec
 	local pOriginOwner = Players[pOriginCity:GetOwner()]
 	local pDestOwner   = Players[pTargetCity:GetOwner()]
 
-	local header1 = string.format("=== %s (%s) ===", pOriginCity:GetName(), Locale.Lookup(GameInfo.Civilizations[pOriginOwner:GetCivilizationType()].Description) )
-	local header2 = string.format("=== %s (%s) ===", pTargetCity:GetName(), Locale.Lookup(GameInfo.Civilizations[pDestOwner:GetCivilizationType()].Description) )
+	local header1 = "[COLOR_YELLOW]" .. string.format("=== %s (%s) ===", pOriginCity:GetName(), Locale.Lookup(GameInfo.Civilizations[pOriginOwner:GetCivilizationType()].Description) ) .. "[ENDCOLOR]"
+	local header2 = "[COLOR_YELLOW]" .. string.format("=== %s (%s) ===", pTargetCity:GetName(), Locale.Lookup(GameInfo.Civilizations[pDestOwner:GetCivilizationType()].Description) ) .. "[ENDCOLOR]"
 
 	local originBlock, originSum = BuildSingleSide(pOriginOwner, pOriginCity, pTargetCity, eConnectionType, eDomain, true)
 	local destBlock, destSum = BuildSingleSide(pDestOwner, pOriginCity, pTargetCity, eConnectionType, eDomain, false)

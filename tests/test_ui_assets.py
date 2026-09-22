@@ -36,6 +36,29 @@ def contents(folder):
 
 
 class UIAssetsTests(unittest.TestCase):
+    def assert_ui_matches_previous(self, old, new):
+        before, after = contents(old), contents(new)
+        self.assertEqual(set(before), set(after))
+        helper = 'TradeRouteHelpers.lua'
+        self.assertIn(helper, before)
+        before.pop(helper)
+        after.pop(helper)
+        self.assertEqual(before, after)
+
+        # The one deliberate presentation change colors the two city headers.
+        old_text = (old / helper).read_text()
+        new_text = (new / helper).read_text()
+        for name in ('header1', 'header2'):
+            old_line = next(line for line in old_text.splitlines()
+                            if line.lstrip().startswith('local ' + name + ' ='))
+            new_line = next(line for line in new_text.splitlines()
+                            if line.lstrip().startswith('local ' + name + ' ='))
+            self.assertEqual(new_line,
+                             old_line.replace('= string.format(', '= "[COLOR_YELLOW]" .. string.format(')
+                             + ' .. "[ENDCOLOR]"')
+            new_text = new_text.replace(new_line, old_line, 1)
+        self.assertEqual(canonical(old_text, 'lua'), canonical(new_text, 'lua'))
+
     @classmethod
     def setUpClass(cls):
         cls.temporary = tempfile.TemporaryDirectory()
@@ -89,7 +112,7 @@ class UIAssetsTests(unittest.TestCase):
                     'Enhanced UI' if want_eui else 'Standard UI', lambda _: None,
                     civ5_path=str(self.root / variant / 'game'))
                 configure_ui(new, want_eui, eui, log=lambda _: None)
-                self.assertEqual(contents(old / 'Lua/UI'), contents(new / 'Lua/UI'))
+                self.assert_ui_matches_previous(old / 'Lua/UI', new / 'Lua/UI')
 
     def test_older_archive_uses_original_paths(self):
         old = self.root / 'old/LEKMOD'
@@ -173,4 +196,4 @@ class UIAssetsTests(unittest.TestCase):
                     result = subprocess.run(['cmd', '/c', str(mod / 'ui_check.bat')],
                                             capture_output=True, text=True)
                     self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-                self.assertEqual(contents(old / 'Lua/UI'), contents(new / 'Lua/UI'))
+                self.assert_ui_matches_previous(old / 'Lua/UI', new / 'Lua/UI')

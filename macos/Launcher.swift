@@ -105,6 +105,25 @@ struct SteamSession: Decodable {
     let label: String
 }
 
+struct SaveInfo: Identifiable, Decodable {
+    let path: String
+    let name: String
+    let category: String
+    let modified: Double
+    let modified_ns: Int64
+    let size: Int64
+    var id: String { path }
+}
+
+private struct SaveList: Decodable {
+    let saves: [SaveInfo]
+    let root: String
+}
+
+private struct SaveBackup: Decodable {
+    let destination: String
+}
+
 final class LauncherModel: ObservableObject {
     @Published var report: Report?
     @Published var busy = false
@@ -116,6 +135,12 @@ final class LauncherModel: ObservableObject {
     @Published var logos: [String: NSImage] = [:]
     @Published var log = ""
     @Published var showLog = false
+    @Published var showSaves = false
+    @Published var saves: [SaveInfo] = []
+    @Published var savesRoot = ""
+    @Published var saveBusy = false
+    @Published var saveMessage: String?
+    @Published var lastBackup: String?
     private var process: Process?
     private var buffer = Data()
     private var gotResult = false
@@ -183,6 +208,88 @@ final class LauncherModel: ObservableObject {
     func copyDiagnostics() {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(diagnostics(), forType: .string)
+    }
+
+    private func savesCommand(_ arguments: [String], completion: @escaping (Data?, String?) -> Void) {
+        guard let repository = Bundle.main.object(forInfoDictionaryKey: "LekmodRepository") as? String,
+              let python = Bundle.main.object(forInfoDictionaryKey: "LekmodPython") as? String else {
+            completion(nil, "Launcher configuration is missing. Reopen Lekmod Launcher.command from your checkout.")
+            return
+        }
+        let task = Process()
+        task.executableURL = URL(fileURLWithPath: python)
+        task.arguments = [repository + "/macos/saves.py"] + arguments
+        task.currentDirectoryURL = URL(fileURLWithPath: repository)
+        let pipe = Pipe()
+        task.standardOutput = pipe
+        task.standardError = FileHandle.nullDevice
+        DispatchQueue.global(qos: .utility).async {
+            do {
+                try task.run()
+                let data = pipe.fileHandleForReading.readDataToEndOfFile()
+                task.waitUntilExit()
+                let status = task.terminationStatus
+                DispatchQueue.main.async {
+                    if status == 0 {
+                        completion(data, nil)
+                    } else {
+                        let response = try? JSONSerialization.jsonObject(with: data) as? [String: String]
+                        completion(nil, response?["error"] ?? "The save browser could not finish.")
+                    }
+                }
+            } catch {
+                DispatchQueue.main.async { completion(nil, "Could not start the save browser: \(error.localizedDescription)") }
+            }
+        }
+    }
+
+    func browseSaves() {
+        guard !saveBusy else { return }
+        showSaves = true
+        saveBusy = true
+        saveMessage = nil
+        lastBackup = nil
+        saves = []
+        savesRoot = ""
+        savesCommand(["list"]) { data, error in
+            self.saveBusy = false
+            if let error { self.saveMessage = error; return }
+            do {
+                let list = try JSONDecoder().decode(SaveList.self, from: data ?? Data())
+                self.saves = list.saves
+                self.savesRoot = list.root
+            } catch {
+                self.saveMessage = "Could not read the save list: \(error.localizedDescription)"
+            }
+        }
+    }
+
+    func backupSave(_ save: SaveInfo) {
+        guard !saveBusy else { return }
+        let panel = NSSavePanel()
+        panel.title = "Back Up Civilization V Save"
+        panel.message = "The game save stays in place. Choose a separate backup folder."
+        panel.prompt = "Copy Save"
+        panel.canCreateDirectories = true
+        panel.directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+        let stamp = DateFormatter()
+        stamp.dateFormat = "yyyyMMdd-HHmmss"
+        panel.nameFieldStringValue = "\((save.name as NSString).deletingPathExtension)-backup-\(stamp.string(from: Date())).Civ5Save"
+        guard panel.runModal() == .OK, let destination = panel.url else { return }
+        saveBusy = true
+        saveMessage = nil
+        lastBackup = nil
+        savesCommand(["backup", save.path, destination.path, String(save.size), String(save.modified_ns)]) { data, error in
+            self.saveBusy = false
+            if let error { self.saveMessage = error; return }
+            do {
+                let result = try JSONDecoder().decode(SaveBackup.self, from: data ?? Data())
+                self.lastBackup = result.destination
+                self.saveMessage = "Backup saved to \(result.destination)"
+            } catch {
+                self.saveMessage = "Could not read the backup result: \(error.localizedDescription)"
+            }
+        }
     }
 
     func append(_ text: String) {
@@ -598,6 +705,7 @@ struct LauncherView: View {
         .ignoresSafeArea()
         .preferredColorScheme(.dark).tint(gold).multilineTextAlignment(.center)
         .sheet(isPresented: $model.showLog) { activitySheet }
+        .sheet(isPresented: $model.showSaves) { savesSheet }
     }
 
     @ViewBuilder private func mark(_ name: String, size: CGFloat = 16) -> some View {
@@ -765,6 +873,11 @@ struct LauncherView: View {
                 }.disabled(model.busy)
                     .help("Copy installation checks and versions; includes your local game path.")
                     .frame(maxWidth: .infinity)
+                Button(action: model.browseSaves) {
+                    Label("Saves", systemImage: "externaldrive")
+                }.disabled(model.busy || model.saveBusy)
+                    .help("Browse local saves and copy one to a backup folder")
+                    .frame(maxWidth: .infinity)
             }.buttonStyle(FooterIconStyle()).padding(.top, 8)
         }.padding(24).frame(maxHeight: .infinity)
             .background(DecoFrame().fill(navy.opacity(0.75)))
@@ -798,6 +911,58 @@ struct LauncherView: View {
                 }
             }
         }.padding(24).frame(width: 720, height: 470).background(navy)
+    }
+
+    private var savesSheet: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                Text("Civilization V saves").font(.title2).foregroundStyle(parchment)
+                Spacer()
+                Button("Refresh", action: model.browseSaves).disabled(model.saveBusy)
+                Button("Done") { model.showSaves = false }.keyboardShortcut(.cancelAction)
+            }
+            Text("Browse the newest 200 local saves. Backups go where you choose and never replace an existing file.")
+                .font(.system(size: 12)).foregroundStyle(muted)
+            if model.saveBusy { ProgressView().frame(maxWidth: .infinity) }
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 0) {
+                    ForEach(model.saves) { save in
+                        HStack(spacing: 12) {
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(save.name).font(.system(size: 12, weight: .medium))
+                                    .lineLimit(1).help(save.path)
+                                Text(save.category).font(.system(size: 10)).foregroundStyle(muted)
+                            }.frame(maxWidth: .infinity, alignment: .leading)
+                            Text(Date(timeIntervalSince1970: save.modified).formatted(date: .abbreviated, time: .shortened))
+                                .font(.system(size: 10)).foregroundStyle(muted)
+                            Text(ByteCountFormatter.string(fromByteCount: save.size, countStyle: .file))
+                                .font(.system(size: 10)).foregroundStyle(muted).frame(width: 66, alignment: .trailing)
+                            Button("Back Up…") { model.backupSave(save) }.disabled(model.saveBusy)
+                        }.padding(.horizontal, 10).padding(.vertical, 7)
+                        Rectangle().fill(gold.opacity(0.12)).frame(height: 1)
+                    }
+                    if model.saves.isEmpty && !model.saveBusy && model.saveMessage == nil {
+                        Text("No local saves found.").foregroundStyle(muted).padding(12)
+                    }
+                }
+            }.background(.black.opacity(0.3))
+            if let message = model.saveMessage {
+                Text(message).font(.system(size: 11)).foregroundStyle(parchment)
+                    .lineLimit(2).help(message)
+            }
+            HStack {
+                Text(model.savesRoot.isEmpty ? "" : model.savesRoot)
+                    .font(.system(size: 10)).foregroundStyle(muted).lineLimit(1)
+                    .help(model.savesRoot)
+                Spacer()
+                if let backup = model.lastBackup {
+                    Button("Show Backup") {
+                        NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: backup)])
+                    }
+                }
+            }
+        }.padding(24).frame(width: 720, height: 470).background(navy)
+            .multilineTextAlignment(.leading)
     }
 }
 
