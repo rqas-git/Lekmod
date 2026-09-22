@@ -60,9 +60,9 @@ local function load(e, source)
     setfenv(f, e); f()
 end
 
-function run_dummy(source, count, capital, flags, duplicate)
+function run_dummy(source, count, capital, flags, duplicate, player_id)
     local e = environment()
-    local p = e.Players[0]
+    local p = e.Players[player_id]
     p.alive=true; p.policy=flags%2==1; p.tech=math.floor(flags/2)%2==1
     p.golden=math.floor(flags/4)%2==1; p.branch=math.floor(flags/8)%2==1
     local writes=0
@@ -82,7 +82,7 @@ function run_dummy(source, count, capital, flags, duplicate)
     if duplicate then rows[#rows+1]=rows[1] end
     e.GameInfo.Global_Dummy_Buildings=function() return iterator(rows) end
     load(e,source)
-    e.GameEvents.PlayerAdoptPolicy.Fire(0,3)
+    e.GameEvents.PlayerAdoptPolicy.Fire(player_id,3)
     local state={}
     for i,c in ipairs(p.cities) do
         state[#state+1]=(c.buildings[1] or 0)..':'..(c.buildings[2] or 0)

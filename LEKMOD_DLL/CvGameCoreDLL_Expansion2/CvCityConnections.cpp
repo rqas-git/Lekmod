@@ -272,10 +272,9 @@ void CvCityConnections::UpdateRouteInfo(void)
 		}
 	}
 
-	if(m_aiCityPlotIDs.size() > m_uiRouteInfosDimension)
+	if(vpCities.size() > m_uiRouteInfosDimension)
 	{
-		ResizeRouteInfo(std::max<uint>((uint)m_aiCityPlotIDs.size(),
-		                              m_uiRouteInfosDimension + m_uiRouteInfosDimension / 2));
+		ResizeRouteInfo((uint)((float)m_uiRouteInfosDimension * 1.5f));
 	}
 	ResetRouteInfo();
 

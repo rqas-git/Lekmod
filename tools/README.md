@@ -1,23 +1,35 @@
-# Building a Windows release
+# Packaging for standard Lekmod v35.3
 
-The checked-in `LEKMOD/CvGameCore_Expansion2.dll` predates the current source. Do not distribute it as a current release. The New Zealand Lua preserves science awards when running on an older core, but native engine fixes still require rebuilding the DLL.
+The checked-in `LEKMOD/CvGameCore_Expansion2.dll` is the official v35.3 binary.
+The packager pins its SHA-256 to
+`c8c265d26e6d67bab7c99371692a5b001d274cea6e80a3d9794b5626c994f357`.
+It accepts that binary and rejects custom or modified Windows DLLs, including
+the previous audit build, before creating the package.
 
-On Windows with the project's Visual C++ v90 toolchain and MSBuild installed, build the `Mod` configuration. From the repository root in a configured developer command prompt:
-
-```bat
-MSBuild LEKMOD_DLL\CvGameCoreDLL_Expansion2\CvGameCoreDLL_Expansion2.vs2013.sln /p:Configuration=Mod /p:Platform=x86 /m
+```sh
+python3 tools/package_lekmod.py --destination /path/to/new/release/LEKMOD
 ```
 
-`LEKMOD_DLL\build_mod.bat` also supports the repository's existing Visual Studio 2008/MSBuild 12 installation layout and resolves the solution relative to the script.
+The destination must be a new directory outside the source `LEKMOD` folder.
+`--dll /path/to/official/CvGameCore_Expansion2.dll` accepts another copy of the
+same official binary. UI materialization and packaging improvements are retained.
 
-Package the actual build output, using the output path reported by MSBuild:
+The native C++ sources retain tested performance improvements and Mac adapters.
+A Windows source build is a development artifact, not an accepted substitute for
+the public-release binary. The Visual C++ v90 `Mod` configuration and
+`LEKMOD_DLL/build_mod.bat` remain available for development.
 
-```bat
-python tools\package_lekmod.py --dll "path\to\built\CvGameCore_Expansion2.dll" --destination "path\to\release\LEKMOD"
+# Building and reusing a macOS core
+
+```sh
+python3 macos/build.py --release
 ```
 
-The destination must be a new directory outside the source `LEKMOD` folder. The packager checks the PE signature and the `ChangeOverflowResearch` and `GetLekmodCoreVersion` capability names before creating the package, then copies the supplied DLL. These checks prevent accidentally packaging the known older core; they are not a substitute for a Windows build and in-game validation. `Game.GetLekmodCoreVersion()` returns `20260912` for the core containing this audit's native fixes.
+This rebuilds the native library and records provenance after the import and ABI
+checks pass. `macos/install.py --skip-build` requires matching source, library
+bytes, and release configuration. A library from before the stock-behavior
+restoration is rejected. Build validation does not establish Mac–Windows
+multiplayer compatibility; the cross-play option remains experimental.
 
-# Reusing a macOS build
-
-`python3 macos/build.py --release` records a manifest beside the linked library only after the import/ABI checks pass and the source fingerprint remains stable. A subsequent `python3 macos/install.py --skip-build` requires matching source, library bytes, and release configuration. Missing manifests, old builds, debug builds, and libraries replaced during installation are rejected before the staged app is committed. Rebuild without `--skip-build` when provenance is missing or stale.
+See [the compatibility policy](../COMPATIBILITY.md) for the restored rules,
+retained improvements, test commands, and remaining live validation.

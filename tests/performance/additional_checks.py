@@ -4,7 +4,7 @@ import subprocess
 from source_text import canonical
 
 PREFIX = 'LEKMOD_DLL/CvGameCoreDLL_Expansion2/'
-BASE = '2742e9d29bcf184d41d31272b0e5f07f18dfecf1'
+BASE = '70aa6ad5e343845903719aea48f55bbba8edebb8'
 
 
 def cpp_checks(directory, source, extract, compile_run):

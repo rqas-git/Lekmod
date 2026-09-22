@@ -56,7 +56,7 @@ class UIAssetsTests(unittest.TestCase):
         self.mod.mkdir(parents=True)
         shutil.copytree(ROOT / 'LEKMOD/Lua', self.mod / 'Lua')
         shutil.copy2(ROOT / 'LEKMOD/ui_manifest.json', self.mod)
-        (self.mod / 'CvGameCore_Expansion2.dll').write_bytes(b'MZ fixture ChangeOverflowResearch GetLekmodCoreVersion')
+        shutil.copy2(ROOT / 'LEKMOD/CvGameCore_Expansion2.dll', self.mod)
         self.manifest = load_manifest(self.mod)
 
     def eui_pack(self, game, variant):
@@ -124,9 +124,9 @@ class UIAssetsTests(unittest.TestCase):
         self.assertFalse((destination / 'Lua/Utilities/LekmodUiConfigured.lua').exists())
         self.assertTrue((destination / 'ui_check.bat').is_file())
 
-    def test_stale_or_missing_dll_is_rejected_before_package_creation(self):
+    def test_modified_or_missing_dll_is_rejected_before_package_creation(self):
         library = self.mod / 'CvGameCore_Expansion2.dll'
-        for data in (b'MZ old GetOverflowResearch', b'MZ ChangeOverflowResearch', None):
+        for data in (b'MZ old GetOverflowResearch', b'MZ ChangeOverflowResearch GetLekmodCoreVersion', None):
             if data is None:
                 library.unlink()
             else:
@@ -136,10 +136,10 @@ class UIAssetsTests(unittest.TestCase):
                 package(self.mod, destination)
             self.assertFalse(destination.exists())
 
-    def test_fresh_build_override_is_the_binary_in_the_package(self):
+    def test_official_release_override_is_the_binary_in_the_package(self):
         (self.mod / 'CvGameCore_Expansion2.dll').write_bytes(b'MZ old')
-        library = self.root / 'fresh.dll'
-        library.write_bytes(b'MZ current ChangeOverflowResearch GetLekmodCoreVersion')
+        library = self.root / 'official.dll'
+        shutil.copy2(ROOT / 'LEKMOD/CvGameCore_Expansion2.dll', library)
         destination = package(self.mod, self.root / 'release', library)
         self.assertEqual((destination / 'CvGameCore_Expansion2.dll').read_bytes(), library.read_bytes())
 

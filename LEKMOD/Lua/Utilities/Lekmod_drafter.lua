@@ -409,30 +409,35 @@ function LekmodDrafter.CreateDraft(rules, playerOrder, bansByPlayer)
 	end
 
 	local drafts = {}
-	local function addPick(pid, pool)
-		local selected = takeRandom(pool)
-		if selected == nil then return false end
-		removeFrom(workingAllowed, selected)
-		removeFrom(workingCoastal, selected)
-		removeFrom(workingInland, selected)
-		table.insert(drafts[pid], selected)
-		return true
-	end
-	-- Reserve every player's guarantees before any unrestricted pick can consume them.
+	local warning = nil
 	for _, pid in ipairs(playerOrder) do
-		drafts[pid] = {}
-		for _ = 1, coastNeed do addPick(pid, workingCoastal) end
-		for _ = 1, inlandNeed do addPick(pid, workingInland) end
-	end
-	for _, pid in ipairs(playerOrder) do
-		while #drafts[pid] < picks do
-			if not addPick(pid, workingAllowed) then
-				return { ok = false, error = "Not enough civilizations to complete the draft." }
+		local picksForPlayer = {}
+		local cLeft = coastNeed
+		local iLeft = inlandNeed
+		for _ = 1, picks do
+			local selected = nil
+			if cLeft > 0 and #workingCoastal > 0 then
+				selected = takeRandom(workingCoastal)
+				cLeft = cLeft - 1
+			elseif iLeft > 0 and #workingInland > 0 then
+				selected = takeRandom(workingInland)
+				iLeft = iLeft - 1
+			else
+				selected = takeRandom(workingAllowed)
+			end
+			if selected ~= nil then
+				removeFrom(workingAllowed, selected)
+				removeFrom(workingCoastal, selected)
+				removeFrom(workingInland, selected)
+				table.insert(picksForPlayer, selected)
+			else
+				warning = "Draft filled incompletely for some players."
 			end
 		end
+		drafts[pid] = picksForPlayer
 	end
 
-	return { ok = true, error = nil, drafts = drafts }
+	return { ok = true, error = nil, drafts = drafts, warning = warning }
 end
 
 

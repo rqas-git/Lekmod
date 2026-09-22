@@ -22,9 +22,13 @@ from payload_fixture import payload_files
 
 class InstallerFlowTests(unittest.TestCase):
     def test_invalid_map_payload_preserves_working_installation(self):
+        legacy = 'include("HBMapGeneratorMirrored"); include("HBFeatureGeneratorMirrored");'
         payloads = ({}, {'HBHelper.lua': 'helper'}, {'LekmapPangaea.lua': ''},
                     {'LekmapPangaea.lua': 'include("HBMissing")'},
-                    {'LekmapPangaea.lua': 'include("HBHelper")', 'HBHelper.lua': ''})
+                    {'LekmapPangaea.lua': 'include("HBHelper")', 'HBHelper.lua': ''},
+                    {'Lekmap_Config.lua': 'configuration only'},
+                    {'LekmapTeamerMapLegacy.lua': legacy},
+                    {'LekmapTeamerMapLegacy.lua': legacy, 'Lekmap_Config.lua': 'configuration only'})
         for payload in payloads:
             with self.subTest(payload=payload), tempfile.TemporaryDirectory() as temporary:
                 root = Path(temporary)
@@ -50,6 +54,19 @@ class InstallerFlowTests(unittest.TestCase):
             installed = Path(UIManager().install_lekmap(str(root / 'archive'), 'v6.2', lambda _: None, str(root / 'game')))
             self.assertTrue((installed / 'HBHelper.lua').is_file())
             self.assertTrue((installed / 'Lekmap VERSION.txt').is_file())
+
+    def test_stock_legacy_teamer_dependency_gap_does_not_reject_other_maps(self):
+        UIManager._validate_lekmap_payload(ROOT / 'Lekmap')
+        with tempfile.TemporaryDirectory() as directory:
+            folder = Path(directory)
+            (folder / 'LekmapPangaea.lua').write_text('working map')
+            legacy = folder / 'LekmapTeamerMapLegacy.lua'
+            legacy.write_text('include("HBMapGeneratorMirrored"); include("HBFeatureGeneratorMirrored");')
+            UIManager._validate_lekmap_payload(folder)
+            # The exception belongs only to the two absent stock legacy dependencies.
+            legacy.rename(folder / 'LekmapUnexpected.lua')
+            with self.assertRaisesRegex(RuntimeError, 'missing required helper'):
+                UIManager._validate_lekmap_payload(folder)
 
     def test_invalid_map_label_shows_error_without_starting_worker(self):
         app, _, _ = self.make_installer()

@@ -51,31 +51,29 @@ function lekmod_ua_mughals_foreign_religion_check(player_id)
          city:SetNumRealBuilding(dummy_building_id, 1)
 
 
-         if city:GetOriginalOwner() == player_id then
-            for other_player_id = 0, GameDefines.MAX_MAJOR_CIVS - 1 do
-               local other_player = Players[other_player_id]
+         for other_player_id = 0, GameDefines.MAX_MAJOR_CIVS - 1 do
+            local other_player = Players[other_player_id]
             
 
-               if other_player and other_player:IsAlive() and other_player_id ~= player_id then
+            if other_player and other_player:IsAlive() and other_player_id ~= player_id then
                
-                  for other_city in other_player:Cities() do
+               for other_city in other_player:Cities() do
 
-                     if other_city:IsHolyCityForReligion(city_religion) then
+                  if other_city:IsHolyCityForReligion(city_religion) then
 
-                        if not other_city:IsHasBuilding(dummy_building_id) then
-                           other_city:SetNumRealBuilding(dummy_building_id, 1)
-                        end
+                     if not other_city:IsHasBuilding(dummy_building_id) then
+                        other_city:SetNumRealBuilding(dummy_building_id, 1)
                      end
                   end
                end
-         end
+            end
          end
       end
    end
 end
 
 
-function lekmod_ua_mughals_religion_changed(player_id, religion_id, x, y)
+function lekmod_ua_mughals_religion_changed(player_id, city_id, religion_id, majority)
    lekmod_ua_mughals_foreign_religion_check(player_id)
 end
 
@@ -85,14 +83,14 @@ function lekmod_ua_mughals_turn_start(player_id)
 end
 
 
-function lekmod_ua_mughals_city_acquired(old_owner_id, was_capital, x, y, new_owner_id)
+function lekmod_ua_mughals_city_acquired(old_owner_id, new_owner_id, city_id)
    lekmod_ua_mughals_foreign_religion_check(new_owner_id)
 end
 
 
 if is_active then
    GameEvents.PlayerDoTurn.Add(lekmod_ua_mughals_turn_start)
-   GameEvents.CityConvertsReligion.Add(lekmod_ua_mughals_religion_changed)
+   GameEvents.CityReligionChanged.Add(lekmod_ua_mughals_religion_changed)
    GameEvents.CityCaptureComplete.Add(lekmod_ua_mughals_city_acquired)
    GameEvents.PlayerCityFounded.Add(function(player_id) lekmod_ua_mughals_foreign_religion_check(player_id) end)
 end

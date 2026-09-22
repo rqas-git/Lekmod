@@ -533,7 +533,6 @@ void CvLuaPlayer::PushMethods(lua_State* L, int t)
 
 	Method(GetMaxConscript);
 	Method(GetOverflowResearch);
-	Method(ChangeOverflowResearch);
 	Method(GetExpInBorderModifier);
 
 	Method(GetLevelExperienceModifier);
@@ -6383,11 +6382,6 @@ int CvLuaPlayer::lGetMaxConscript(lua_State* L)
 	return BasicLuaMethod(L, &CvPlayerAI::getMaxConscript);
 }
 
-
-int CvLuaPlayer::lChangeOverflowResearch(lua_State* L)
-{
-	return BasicLuaMethod(L, &CvPlayerAI::changeOverflowResearch);
-}
 
 int CvLuaPlayer::lGetOverflowResearch(lua_State* L)
 {

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import hashlib
 from pathlib import Path
 import shutil
 import sys
@@ -9,15 +10,18 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'LekmodInstaller'))
 from ui_assets import load_manifest, materialize_release
 
+STOCK_VERSION = 'v35.3'
+STOCK_DLL_SHA256 = 'c8c265d26e6d67bab7c99371692a5b001d274cea6e80a3d9794b5626c994f357'
+
 
 def validate_native(library):
     if not library.is_file():
-        raise RuntimeError(f'Windows gameplay DLL is missing: {library}. Build the Mod configuration first.')
+        raise RuntimeError(f'Windows gameplay DLL is missing: {library}. Use the official {STOCK_VERSION} DLL.')
     data = library.read_bytes()
-    required = (b'ChangeOverflowResearch', b'GetLekmodCoreVersion')
-    if not data.startswith(b'MZ') or any(method not in data for method in required):
-        raise RuntimeError('Windows gameplay DLL is stale or incompatible. Rebuild the current Mod configuration '
-                           'and pass its output with --dll; the checked-in DLL must not be released.')
+    if hashlib.sha256(data).hexdigest() != STOCK_DLL_SHA256:
+        raise RuntimeError(f'Windows gameplay DLL does not match official Lekmod {STOCK_VERSION}. '
+                           'Use the checked-in DLL or an identical release copy with --dll. '
+                           'A custom build has not been validated against unchanged stock peers.')
 
 
 def package(source, destination, dll=None):
@@ -43,7 +47,7 @@ def package(source, destination, dll=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source', type=Path, default=ROOT / 'LEKMOD')
-    parser.add_argument('--dll', type=Path, help='Fresh Windows Mod build to package instead of the checked-in DLL')
+    parser.add_argument('--dll', type=Path, help='Official v35.3 DLL; must match the pinned release hash')
     destination = parser.add_mutually_exclusive_group(required=True)
     destination.add_argument('--destination', type=Path, help='New package directory')
     destination.add_argument('--materialize', action='store_true', help='Restore generated paths in the checkout')

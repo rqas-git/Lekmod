@@ -28,38 +28,36 @@ end
 
 
 
-function lekmod_bolivia_is_person_expended(player_id, unit_id)
+function lekmod_bolivia_is_person_expended(player_id, unit_id, arg3, arg4, new_player_id)
 
    local artist_unit_id = GameInfoTypes["UNIT_ARTIST"]
    local writer_unit_id = GameInfoTypes["UNIT_WRITER"]
 
 
    local player = Players[player_id]
-   if not player or not player:IsAlive() or player:GetCivilizationType() ~= this_civ then return end
-   local capital = player:GetCapitalCity()
-   if not capital then return end
+   local new_player
+   if new_player_id ~= nil then
+	   new_player = Players[new_player_id]
+   end
 
-
-   local key = "bolivia_last_expended_" .. player_id
-   local choice = tonumber(lekmod_bolivia_get_persistent_property(key))
-   if unit_id == artist_unit_id or unit_id == writer_unit_id then
-      choice = unit_id
-   elseif choice == nil then
-      -- Migrate the old shared key, or recover another player's overwritten choice.
-      local legacy = tostring(lekmod_bolivia_get_persistent_property("bolivia_last_expended") or "")
-      if legacy == artist_unit_id .. player_id then
-         choice = artist_unit_id
-      elseif legacy == writer_unit_id .. player_id then
-         choice = writer_unit_id
-      elseif capital:IsHasBuilding(GameInfoTypes["BUILDING_BOLIVIA_TRAIT_PRODUCTION"]) then
-         choice = artist_unit_id
-      elseif capital:IsHasBuilding(GameInfoTypes["BUILDING_BOLIVIA_TRAIT_FOOD"]) then
-         choice = writer_unit_id
+	local capital = player:GetCapitalCity()
+   if (not player:IsAlive()) or player:GetCivilizationType() ~= this_civ then
+      if new_player ~= nil and new_player:IsAlive() and new_player:GetCivilizationType() == this_civ then
+         capital = new_player:GetCapitalCity()
+         player_id = new_player_id
+      else
+         return
       end
    end
-   if choice ~= nil then lekmod_bolivia_set_persistent_data(key, choice) end
 
-   if choice == artist_unit_id then
+
+   if (unit_id == artist_unit_id or unit_id == writer_unit_id) then
+      lekmod_bolivia_set_persistent_data("bolivia_last_expended", unit_id .. player_id)
+   end
+
+   local bolivia_last_expended = tostring(lekmod_bolivia_get_persistent_property("bolivia_last_expended") or 0)
+
+   if bolivia_last_expended == (artist_unit_id .. player_id) then
       capital:SetNumRealBuilding(GameInfoTypes["BUILDING_BOLIVIA_TRAIT_PRODUCTION"], 1)
       capital:SetNumRealBuilding(GameInfoTypes["BUILDING_BOLIVIA_TRAIT_FOOD"], 0)
       if capital:IsHuman() and unit_id == artist_unit_id and Game.GetActivePlayer() == player_id  then
@@ -67,7 +65,7 @@ function lekmod_bolivia_is_person_expended(player_id, unit_id)
       end
    end
 
-   if choice == writer_unit_id then
+   if bolivia_last_expended == (writer_unit_id .. player_id) then
       capital:SetNumRealBuilding(GameInfoTypes["BUILDING_BOLIVIA_TRAIT_FOOD"], 1)
       capital:SetNumRealBuilding(GameInfoTypes["BUILDING_BOLIVIA_TRAIT_PRODUCTION"], 0)
       if capital:IsHuman() and unit_id == writer_unit_id and Game.GetActivePlayer() == player_id then
@@ -76,18 +74,12 @@ function lekmod_bolivia_is_person_expended(player_id, unit_id)
    end
 
 
-   lekmod_bolivia_retain_building_capture(player_id)
+   if new_player ~= nil then
+      lekmod_bolivia_retain_building_capture(new_player_id)
+   else
+      lekmod_bolivia_retain_building_capture(player_id)
+   end
 
-end
-
-function lekmod_bolivia_city_founded(player_id)
-   lekmod_bolivia_is_person_expended(player_id)
-end
-
-function lekmod_bolivia_city_captured(old_owner_id, was_capital, x, y, new_owner_id)
-   lekmod_bolivia_is_person_expended(old_owner_id)
-   lekmod_bolivia_is_person_expended(new_owner_id)
-   lekmod_bolivia_retain_building_capture(new_owner_id)
 end
 
 function lekmod_bolivia_retain_building_capture(player_id)
@@ -111,11 +103,9 @@ function lekmod_bolivia_uu_combat_strength(player_id, unit_id)
 
 
    local colorado_unit_id = GameInfoTypes["UNIT_COLORADO"]
+   if unit_id ~= nil and unit_id ~= colorado_unit_id then return end
+
 	local player = Players[player_id]
-   if unit_id ~= nil then
-      local created_unit = player:GetUnitByID(unit_id)
-      if not created_unit or created_unit:GetUnitType() ~= colorado_unit_id then return end
-   end
 	local colorado_base_strength = GameInfo.Units[colorado_unit_id].Combat
 	local happiness_number = player:GetExcessHappiness()
 	local bonus_combat_strength = math.min(LekmodUtilities:get_round(happiness_number/5))
@@ -135,8 +125,8 @@ if is_active then
 
 
 	GameEvents.GreatPersonExpended.Add(lekmod_bolivia_is_person_expended)
-   GameEvents.CityCaptureComplete.Add(lekmod_bolivia_city_captured)
-   GameEvents.PlayerCityFounded.Add(lekmod_bolivia_city_founded)
+   GameEvents.CityCaptureComplete.Add(lekmod_bolivia_is_person_expended)
+   GameEvents.PlayerCityFounded.Add(lekmod_bolivia_is_person_expended)
 end
 GameEvents.PlayerHappinessChanged.Add(lekmod_bolivia_uu_combat_strength)
 GameEvents.UnitCreated.Add(lekmod_bolivia_uu_combat_strength)

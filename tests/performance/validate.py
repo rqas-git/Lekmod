@@ -20,8 +20,8 @@ import additional_checks
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 CORE = ROOT / 'LEKMOD_DLL/CvGameCoreDLL_Expansion2'
-BASE = '1bc2ff423a51a0b5740acf77c7b6c31d1d245c8b'
-TRADE_BASE = 'a90d5bbe07a9cbf521190cdcc33304739f5375f2'
+BASE = '70aa6ad5e343845903719aea48f55bbba8edebb8'
+TRADE_BASE = BASE
 
 
 def source(path, baseline=False):
@@ -110,9 +110,7 @@ def connections(directory):
     current, baseline = source(path), source(path, True)
     old_method = extract(baseline, 'void CvCityConnections::UpdateRouteInfo(')
 
-    old_growth = extract(old_method, 'if(vpCities.size() > m_uiRouteInfosDimension)')
-    new_growth = extract(current, 'if(m_aiCityPlotIDs.size() > m_uiRouteInfosDimension)')
-    old_method = old_method.replace(old_growth, new_growth).replace('::UpdateRouteInfo(', '::UpdateRouteInfoBaseline(')
+    old_method = old_method.replace('::UpdateRouteInfo(', '::UpdateRouteInfoBaseline(')
     return compile_run('connections.cpp.in', {
         'BASELINE': old_method,
         'CURRENT': extract(current, 'void CvCityConnections::UpdateRouteInfo('),
@@ -167,16 +165,18 @@ def lua_checks(lua_path):
     dummy = source('LEKMOD/Lua/Lekmod_global_dummies.lua')
     optimized_line = 'break'
     assert dummy.count(optimized_line) == 1
-    dummy_before = dummy.replace(optimized_line, '')
+    dummy_before = source('LEKMOD/Lua/Lekmod_global_dummies.lua', True)
+    assert canonical(dummy.replace(optimized_line, ''), 'lua') == canonical(dummy_before, 'lua')
     cases = old_writes = new_writes = 0
     for count in (0,1,2,5,20,64):
         for capital in {1,count}:
             for flags in range(16):
                 for duplicate in (False,True):
-                    old, before = funcs.run_dummy(dummy_before,count,capital,flags,duplicate)
-                    now, after = funcs.run_dummy(dummy,count,capital,flags,duplicate)
-                    assert old == now
-                    cases+=1; old_writes+=before; new_writes+=after
+                    for player_id in (0, 1, 3):
+                        old, before = funcs.run_dummy(dummy_before,count,capital,flags,duplicate,player_id)
+                        now, after = funcs.run_dummy(dummy,count,capital,flags,duplicate,player_id)
+                        assert old == now
+                        cases+=1; old_writes+=before; new_writes+=after
     assert new_writes < old_writes
     result['dummy'] = {'cases': cases, 'building_setter_calls': [old_writes,new_writes]}
     current, baseline = (source('LEKMOD/Lua/Civilizations/Lekmod_uae.lua', b) for b in (False,True))

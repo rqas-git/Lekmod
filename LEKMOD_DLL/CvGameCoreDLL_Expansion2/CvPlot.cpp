@@ -1120,18 +1120,12 @@ bool CvPlot::isPseudoLake() const
 }
 void CvPlot::setPseudoLake(bool bValue)
 {
-	if (m_bPseudoLake == bValue)
+	if (isPseudoLake() == bValue)
 	{
 		return;
 	}
 	m_bPseudoLake = bValue;
 	updateYield();
-	for (int i = 0; i < NUM_DIRECTION_TYPES; ++i)
-	{
-		CvPlot* pAdjacent = plotDirection(getX(), getY(), (DirectionTypes)i);
-		if (pAdjacent != NULL)
-			pAdjacent->updateYield();
-	}
 }
 #endif
 
@@ -1176,11 +1170,7 @@ bool CvPlot::isFreshWater() const
 
 			if(pLoopPlot != NULL)
 			{
-				if(pLoopPlot->isLake()
-#if defined(LEKMOD_BUGANDA_LAKE)
-					|| pLoopPlot->isPseudoLake()
-#endif
-				)
+				if(pLoopPlot->isLake())
 				{
 					return true;
 				}
@@ -1205,12 +1195,12 @@ bool CvPlot::isFreshWater() const
 
 void CvPlot::setFreshWater(bool bValue)
 {
-	if (m_bIsSetFreshWater == bValue)
+	if (isFreshWater() == bValue || (bValue != true && bValue != false))
 	{
 		return;
 	}
 	m_bIsSetFreshWater = bValue;
-	updateYield();
+
 }
 
 #endif
@@ -7116,10 +7106,6 @@ void CvPlot::setImprovementType(ImprovementTypes eNewValue, PlayerTypes eBuilder
 
 		SetImprovementPillaged(false);
 #endif
-#if defined(LEKMOD_BUGANDA_LAKE)
-		CvImprovementEntry* pkFreshWaterImprovement = eNewValue == NO_IMPROVEMENT ? NULL : GC.getImprovementInfo(eNewValue);
-		setPseudoLake(pkFreshWaterImprovement != NULL && pkFreshWaterImprovement->IsFreshWaterSource());
-#endif
 
 		for (iI = 0; iI < MAX_TEAMS; ++iI)
 		{
@@ -7443,8 +7429,18 @@ void CvPlot::SetImprovementPillaged(bool bPillaged)
 		if (getImprovementType() != NO_IMPROVEMENT)
 		{
 			CvImprovementEntry* pkImprovementEntry = GC.getImprovementInfo(getImprovementType());
-			if (pkImprovementEntry && pkImprovementEntry->IsFreshWaterSource())
-				setPseudoLake(!bPillaged);
+			if (pkImprovementEntry->IsFreshWaterSource())
+			{
+				setPseudoLake(bPillaged);
+				for (int iI = 0; iI < NUM_DIRECTION_TYPES; iI++)
+				{
+					CvPlot* pAdjacentPlot = plotDirection(getX(), getY(), (DirectionTypes)iI);
+					if (pAdjacentPlot != NULL)
+					{
+						pAdjacentPlot->setFreshWater(bPillaged);
+					}
+				}
+			}
 		}
 #endif
 
@@ -10621,6 +10617,21 @@ bool CvPlot::changeBuildProgress(BuildTypes eBuild, int iChange, PlayerTypes ePl
 #endif
 					}
 				}
+#if defined(LEKMOD_BUGANDA_LAKE)
+				if (newImprovementEntry.IsFreshWaterSource())
+				{
+					setPseudoLake(true);
+					for (int iI = 0; iI < NUM_DIRECTION_TYPES; ++iI)
+					{
+						CvPlot* pLoopPlot = plotDirection(getX(), getY(), ((DirectionTypes)iI));
+						if (pLoopPlot != NULL)
+						{
+							pLoopPlot->setFreshWater(true);
+						}
+					}
+				}
+#endif
+
 				if (newImprovementEntry.IsPromptWhenComplete())
 				{
 					CvAssertMsg (GetArchaeologicalRecord().m_eArtifactType != NO_GREAT_WORK_ARTIFACT_CLASS, "Archaeological dig complete but no archeology data found!");

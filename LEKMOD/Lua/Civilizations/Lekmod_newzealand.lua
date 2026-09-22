@@ -6,27 +6,6 @@ include("FLuaVector.lua")
 local this_civ = GameInfoTypes["CIVILIZATION_NEW_ZEALAND"]
 local is_active = LekmodUtilities:is_civilization_active(this_civ)
 
-local function pendingScienceKey(player)
-   return "lekmod_new_zealand_pending_science_" .. player:GetID()
-end
-
-function lekmod_new_zealand_apply_pending_science(player_id)
-   local player = Players[player_id]
-   if not player or not player:IsAlive() or player:GetCivilizationType() ~= this_civ then return end
-   local saved = Modding.OpenSaveData()
-   local key = pendingScienceKey(player)
-   local amount = tonumber(saved.GetValue(key)) or 0
-   if amount == 0 then return end
-   if player.ChangeOverflowResearch then
-      player:ChangeOverflowResearch(amount)
-   elseif player:GetCurrentResearch() ~= -1 then
-      Teams[player:GetTeam()]:GetTeamTechs():ChangeResearchProgress(player:GetCurrentResearch(), amount, player_id)
-   else
-      return
-   end
-   saved.SetValue(key, 0)
-end
-
 
 
 
@@ -47,14 +26,7 @@ function lekmod_new_zealand_ua_award_bonus(player, other_player)
    if rewards[random].method == "ChangeResearchProgress" then
 
       if player:GetCurrentResearch() == -1 then
-         if player.ChangeOverflowResearch then
-            player:ChangeOverflowResearch(rewards[random].reward)
-         else
-            -- Preserve the award in saves made with older Windows cores.
-            local saved = Modding.OpenSaveData()
-            local key = pendingScienceKey(player)
-            saved.SetValue(key, (tonumber(saved.GetValue(key)) or 0) + rewards[random].reward)
-         end
+         Teams[player:GetTeam()]:GetTeamTechs():ChangeResearchProgress(player:GetOverflowResearch(), rewards[random].reward, player:GetID())
       else
          Teams[player:GetTeam()]:GetTeamTechs():ChangeResearchProgress(player:GetCurrentResearch(), rewards[random].reward, player:GetID())
       end
@@ -77,17 +49,8 @@ function lekmod_new_zealand_ua_on_meet(team_met_id, player_team_id)
 	local player_id = player_team:GetLeaderID()
 	local met_player_id = team_met:GetLeaderID()
 
-	-- First contact is a team event; each eligible teammate gets its own reward.
-	for id = 0, GameDefines.MAX_MAJOR_CIVS - 1 do
-		local player = Players[id]
-		if player and player:IsAlive() then
-			if player:GetTeam() == player_team_id then
-				lekmod_new_zealand_ua_award_bonus(player, Players[met_player_id])
-			elseif player:GetTeam() == team_met_id then
-				lekmod_new_zealand_ua_award_bonus(player, Players[player_id])
-			end
-		end
-	end
+	lekmod_new_zealand_ua_award_bonus(Players[player_id], Players[met_player_id])
+	lekmod_new_zealand_ua_award_bonus(Players[met_player_id], Players[player_id])
 
 end
 
@@ -148,9 +111,9 @@ function lekmod_new_zealand_uu_defender(player_id)
 			else
 				for loop_player_id = 0, GameDefines.MAX_MAJOR_CIVS-1, 1 do
 					local loop_player = Players[loop_player_id]
-					if not loop_player:IsAlive() or loop_player_id == player_id then
-               elseif loop_player:IsDoF(player_id) then
-                  if plot:IsPlayerCityRadius(loop_player_id) then
+					if not loop_player:IsAlive() or loop_player == player_id then
+               elseif loop_player:IsDoF(player:GetTeam()) then
+                  if plot:IsPlayerCityRadius(loop_player) then
                      is_promotion_valid = true
                      break
                   end
@@ -172,7 +135,6 @@ end
 
 if is_active then
 	GameEvents.TeamMeet.Add(lekmod_new_zealand_ua_on_meet)
-	GameEvents.PlayerDoTurn.Add(lekmod_new_zealand_apply_pending_science)
 end
 
 GameEvents.PlayerDoTurn.Add(lekmod_new_zealand_uu_batallion)

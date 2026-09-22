@@ -4528,7 +4528,7 @@ bool MilitaryAIHelpers::IsTestStrategy_EradicateBarbarians(MilitaryAIStrategyTyp
 	{
 		if(pPlayer->GetMilitaryAI()->IsUsingStrategy(eStrategyAtWar))
 		{
-			if(pPlayer->GetDiplomacyAI()->GetStateAllWars() != STATE_ALL_WARS_WINNING)
+			if(!pPlayer->GetDiplomacyAI()->GetStateAllWars() == STATE_ALL_WARS_WINNING)
 			{
 				return false;
 			}

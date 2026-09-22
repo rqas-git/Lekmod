@@ -158,16 +158,7 @@ int CvLuaTeamTech::lGetResearchProgressTimes100(lua_State* L)
 
 int CvLuaTeamTech::lChangeResearchProgress(lua_State* L)
 {
-	CvTeamTechs* pkTechs = GetInstance(L);
-	const int iTech = luaL_checkint(L, 2);
-	const int iChange = luaL_checkint(L, 3);
-	const int iPlayer = luaL_checkint(L, 4);
-	if (iTech < 0 || iTech >= GC.getNumTechInfos())
-		return luaL_error(L, "Invalid technology ID");
-	if (iPlayer < 0 || iPlayer >= MAX_PLAYERS)
-		return luaL_error(L, "Invalid player ID");
-	pkTechs->ChangeResearchProgress((TechTypes)iTech, iChange, (PlayerTypes)iPlayer);
-	return 0;
+	return BasicLuaMethod(L, &CvTeamTechs::ChangeResearchProgress);
 }
 
 

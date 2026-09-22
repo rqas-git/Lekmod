@@ -7,10 +7,9 @@
 
 
 
--- Mirroring is applied by this script after generation and start placement.
-include("HBMapGenerator");
+include("HBMapGeneratorMirrored");
 include("HBFractalWorld");
-include("HBFeatureGenerator");
+include("HBFeatureGeneratorMirrored");
 include("HBTerrainGenerator");
 include("IslandMaker");
 include("MultilayeredFractal");

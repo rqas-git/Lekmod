@@ -5,7 +5,7 @@
 
 
 
-function lekmod_add_global_dummy_buildings(player_id)
+function lekmod_add_global_dummy_buildings(player_or_team_id)
 
    local valid_buildings = {}
 
@@ -21,11 +21,10 @@ function lekmod_add_global_dummy_buildings(player_id)
       local policy_branch_finished = dummy_data.PolicyBranchFinished
       local policy_branch_chosen = dummy_data.PolicyBranchChosen
 
-      for loop_player_id = 0, GameDefines.MAX_MAJOR_CIVS - 1 do
-         local player = Players[loop_player_id]
+      for _, player in ipairs(Players) do
 
          if player:IsAlive() and not player:IsBarbarian() and not player:IsMinorCiv() and
-         player:GetID() == player_id then
+         (player == player_or_team_id or player:GetTeam() == player_or_team_id) then
 
 
             for city in player:Cities() do
@@ -86,13 +85,6 @@ function lekmod_add_global_dummy_buildings(player_id)
    end
 
 end
-function lekmod_add_global_dummy_buildings_on_tech(team_id)
-   for player_id = 0, GameDefines.MAX_MAJOR_CIVS - 1 do
-      if Players[player_id]:GetTeam() == team_id then
-         lekmod_add_global_dummy_buildings(player_id)
-      end
-   end
-end
 function lekmod_add_global_dummy_buildings_on_capture(old_owner_id, _,_,_, new_owner_id)
 
    lekmod_add_global_dummy_buildings(old_owner_id)
@@ -101,7 +93,7 @@ function lekmod_add_global_dummy_buildings_on_capture(old_owner_id, _,_,_, new_o
 end
 GameEvents.PlayerCityFounded.Add(lekmod_add_global_dummy_buildings)
 GameEvents.CityCaptureComplete.Add(lekmod_add_global_dummy_buildings_on_capture)
-GameEvents.TeamSetHasTech.Add(lekmod_add_global_dummy_buildings_on_tech)
+GameEvents.TeamSetHasTech.Add(lekmod_add_global_dummy_buildings)
 GameEvents.PlayerAdoptPolicy.Add(lekmod_add_global_dummy_buildings)
 
 GameEvents.PlayerPolicyBranchUnlocked.Add(lekmod_add_global_dummy_buildings)
@@ -118,13 +110,11 @@ function lekmod_add_dummy_policies()
       local civilization_type = dummy_data.Type
       local policy_type = dummy_data.PolicyType
 
-      for player_id = 0, GameDefines.MAX_MAJOR_CIVS - 1 do
-         local player = Players[player_id]
+      for _, player in ipairs(Players) do
          if player:IsEverAlive() and player:GetCivilizationType() == GameInfoTypes[civilization_type] then
             if not player:HasPolicy(GameInfoTypes[policy_type]) then
-               local freePolicies = player:GetNumFreePolicies()
-               player:SetNumFreePolicies(freePolicies + 1)
-               player:SetNumFreePolicies(freePolicies)
+               player:SetNumFreePolicies(1)
+               player:SetNumFreePolicies(0)
                player:SetHasPolicy(GameInfoTypes[policy_type], true)
             end
          end

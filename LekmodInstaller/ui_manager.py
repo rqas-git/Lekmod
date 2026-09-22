@@ -557,14 +557,24 @@ class UIManager:
     def _validate_lekmap_payload(folder):
         files = {path.name.lower(): path for path in Path(folder).rglob('*')
                  if path.is_file() and path.suffix.lower() == '.lua'}
-        if not any(name.startswith('lekmap') and path.stat().st_size > 0 for name, path in files.items()):
+        usable_maps = {name for name, path in files.items() if name.startswith('lekmap')
+                       and name != 'lekmap_config.lua' and path.stat().st_size > 0}
+        if not usable_maps:
             raise RuntimeError('Lekmap payload contains no nonempty map scripts.')
         for path in files.values():
             source = path.read_text(encoding='utf-8-sig', errors='replace')
             for module in re.findall(r'''\binclude\s*\(\s*["']([^"']+)["']\s*\)''', source):
                 name = module.lower().removesuffix('.lua') + '.lua'
                 if name.startswith(('hb', 'lekmap')) and (name not in files or files[name].stat().st_size == 0):
+                    # Official v6.2 ships this legacy entry point without its mirrored
+                    # generators. Preserve it rather than substitute different map rules.
+                    if (path.name.lower() == 'lekmapteamermaplegacy.lua' and name not in files
+                            and name in ('hbmapgeneratormirrored.lua', 'hbfeaturegeneratormirrored.lua')):
+                        usable_maps.discard(path.name.lower())
+                        continue
                     raise RuntimeError(f'Lekmap payload is missing required helper {module} (used by {path.name}).')
+        if not usable_maps:
+            raise RuntimeError('Lekmap payload contains no usable map scripts.')
 
     def install_lekmap(self, extract_path, version, log_callback, civ5_path=None):
 

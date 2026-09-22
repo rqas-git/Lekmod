@@ -103,7 +103,7 @@
 			<Type>MINOR_CIV_PERSONALITY_FRIENDLY</Type>
 			<Description>TXT_KEY_CITY_STATE_PERSONALITY_FRIENDLY</Description>
 			<Help>TXT_KEY_CITY_STATE_PERSONALITY_FRIENDLY_TT</Help>
-			<ForbiddenMinorCivTrait>MINOR_TRAIT_MILITARISTIC</ForbiddenMinorCivTrait>
+			<ForbiddenMinorCivTrait>MINOR_CIV_TRAIT_MILITARISTIC</ForbiddenMinorCivTrait>
 			<FriendshipDecayModifierPercent>75</FriendshipDecayModifierPercent>
 			<QuestInfluenceModifierPercent>125</QuestInfluenceModifierPercent>
 			<StripPersonalityBonusesIfAttackedMinor>true</StripPersonalityBonusesIfAttackedMinor>
@@ -149,7 +149,7 @@
 			<Type>MINOR_CIV_PERSONALITY_PIRATE_REPUBLIC</Type>
 			<Description>TXT_KEY_MINOR_CIV_PERSONALITY_PIRATE_REPUBLIC</Description>
 			<Help>TXT_KEY_MINOR_CIV_PERSONALITY_PIRATE_REPUBLIC_HELP</Help>
-			<RequiredMinorCivTrait>MINOR_TRAIT_MILITARISTIC</RequiredMinorCivTrait>
+			<RequiredMinorCivTrait>MINOR_CIV_TRAIT_MILITARISTIC</RequiredMinorCivTrait>
 			<RequiresCoastal>true</RequiresCoastal>
 			<SpawnNavalUnits>true</SpawnNavalUnits>
 		</Row>
@@ -165,7 +165,7 @@
 			<Type>MINOR_CIV_PERSONALITY_PACIFISTIC</Type>
 			<Description>TXT_KEY_MINOR_CIV_PERSONALITY_PACIFISTIC</Description>
 			<Help>TXT_KEY_MINOR_CIV_PERSONALITY_PACIFISTIC_HELP</Help>
-			<ForbiddenMinorCivTrait>MINOR_TRAIT_MILITARISTIC</ForbiddenMinorCivTrait>
+			<ForbiddenMinorCivTrait>MINOR_CIV_TRAIT_MILITARISTIC</ForbiddenMinorCivTrait>
 			<NeverAlliedWarSupport>true</NeverAlliedWarSupport>
 			<TributeGoldModifierPercent>120</TributeGoldModifierPercent>
 		</Row>
