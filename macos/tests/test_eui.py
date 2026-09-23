@@ -184,7 +184,7 @@ class EUITests(unittest.TestCase):
 
 
 class OverlayTests(unittest.TestCase):
-    def test_existing_windows_rules_select_native_eui_files(self):
+    def test_existing_windows_rules_keep_eui_except_for_macos_city_banners(self):
         root = Path(__file__).resolve().parents[2]
         with tempfile.TemporaryDirectory() as temporary:
             directory = Path(temporary)
@@ -205,8 +205,15 @@ class OverlayTests(unittest.TestCase):
             for source, target in (
                     ('Core/CityStateStatusHelper.lua.ignore', 'CityStateStatusHelper.lua'),
                     ('CityView/CityView.lua.ignore', 'CityView.lua'),
-                    ('UnitPanel/UnitPanel.lua.ignore', 'UnitPanel.lua'),
-                    ('CityBanners/CityBannerManager_1.lua.ignore', 'CityBannerManager.lua')):
+                    ('UnitPanel/UnitPanel.lua.ignore', 'UnitPanel.lua')):
                 self.assertEqual((ui / target).read_bytes(), (root / 'LEKMOD/Lua/tmp/eui' / source).read_bytes())
+            self.assertEqual((ui / 'CityBannerManager.xml').read_bytes(),
+                             (root / 'LEKMOD/Lua/tmp/ui/CityBanners/CityBannerManager.xml.ignore').read_bytes())
+            city_banners = (ui / 'CityBannerManager.lua').read_text()
+            self.assertEqual(city_banners.count('SetAnchorAtGrid('), 5)
+            self.assertNotIn('HexToWorld(', city_banners)
+            self.assertIn('GridToWorld( gridX, gridY )', city_banners)
+            self.assertIn('local gridPosX, gridPosY = city:GetX(), city:GetY()', city_banners)
+            self.assertNotIn('ToGridFromHex( instance.Hex', city_banners)
             self.assertIn('local LEKMOD_UI_CHECK_DONE = true', (ui / 'FrontEnd.lua').read_text())
             self.assertIn('return false', (destination / 'Lua/Utilities/Lekmod_version.lua').read_text())
