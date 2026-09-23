@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import tempfile
@@ -9,6 +10,15 @@ from reference import BASELINE, ROOT, original
 
 
 class MapTests(unittest.TestCase):
+    def test_helper_includes_do_not_prefix_match_their_own_filename(self):
+        for path in (ROOT / 'Lekmap').glob('*.lua'):
+            source = path.read_text(encoding='utf-8-sig')
+            for included in re.findall(r'include\(["\']([^"\']+)["\']\)', source):
+                self.assertFalse(
+                    path.stem.startswith(included) and path.stem != included,
+                    f'{path.name} can recursively include itself on the Mac port via {included}',
+                )
+
     def test_regional_maps_match_original_rivers_starts_sizes_and_fractals(self):
         self._compare_scenarios('regional_map_scenarios.lua', 468)
 
