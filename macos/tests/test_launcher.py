@@ -73,7 +73,7 @@ class LauncherTests(unittest.TestCase):
     def restore(self, app, crossplay_enabled=True, **kwargs):
         write(app / game.CORE, crossplay.CORE_MARKER)
         write(app / game.ASSETS / 'DLC/LEKMOD/rules.xml', 'rules')
-        write(app / game.ASSETS / 'Maps/Lekmap/LekmapPangaea.lua', 'map')
+        write(app / game.LEKMAP / 'LekmapPangaea.lua', 'map')
         if crossplay_enabled:
             write(app / crossplay.FLAG, '403694 FINAL_RELEASE\n')
         else:
@@ -84,13 +84,13 @@ class LauncherTests(unittest.TestCase):
                      crossplay={'enabled': crossplay_enabled},
                      validation=dict(format=1, source_sha256='source',
                                      lekmod_sha256=tree_digest(app / game.ASSETS / 'DLC/LEKMOD'),
-                                     lekmap_sha256=tree_digest(app / game.ASSETS / 'Maps/Lekmap'),
+                                     lekmap_sha256=tree_digest(app / game.LEKMAP),
                                      lekmap_source_sha256=tree_digest(self.repo / 'Lekmap')))
         write(app / game.MANIFEST, json.dumps(state))
 
     def test_intentionally_removed_maps_do_not_reinstall_on_launch(self):
         import shutil
-        shutil.rmtree(self.app / game.ASSETS / 'Maps/Lekmap')
+        shutil.rmtree(self.app / game.LEKMAP)
         state = game.installed_state(self.app)
         state['lekmap'] = False
         state['validation'].pop('lekmap_sha256')
@@ -215,7 +215,7 @@ class LauncherTests(unittest.TestCase):
         self.open.assert_not_called()
 
     def test_missing_map_and_changed_checkout_require_update(self):
-        (self.app / game.ASSETS / 'Maps/Lekmap/LekmapPangaea.lua').unlink()
+        (self.app / game.LEKMAP / 'LekmapPangaea.lua').unlink()
         self.source.return_value = 'new-source'
         report = launcher.inspect(self.app, True)
         self.assertEqual({c['id'] for c in report['checks'] if c['state'] == 'repair'}, {'lekmap_assets', 'source'})

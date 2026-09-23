@@ -12,6 +12,8 @@ import tempfile
 
 CORE = Path('Contents/MacOS/libCvGameCoreDLL_Expansion2_DLL.dylib')
 ASSETS = Path('Contents/Assets/Assets')
+LEKMAP = ASSETS / 'Maps/Lekmap v6.2'
+LEGACY_LEKMAP = ASSETS / 'Maps/Lekmap'
 MANIFEST = Path('Contents/Resources/lekmod-install.json')
 STOCK_CORE_SHA256 = '0da6a5ffc283c3f147b20a7ec426e4ed85a6838ab891faf61b50af4e25c4a09c'
 

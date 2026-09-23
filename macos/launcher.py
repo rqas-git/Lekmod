@@ -16,7 +16,7 @@ import sys
 import crossplay
 import eui
 from audit import check_imports
-from game_install import (ASSETS, CORE, STOCK_CORE_SHA256, app_path, detect_apps,
+from game_install import (ASSETS, CORE, LEKMAP, STOCK_CORE_SHA256, app_path, detect_apps,
                           ensure_closed, game_running, installed_state, installation_lock, read_vdf,
                           sha256, validate_app, validate_core)
 from integrity import source_digest, tree_digest
@@ -189,11 +189,11 @@ def _inspect(app, desired, log, worker, desired_eui):
                 check_imports(app / CORE, app)
         checked('abi', 'Game interfaces', abi, 'Native library matches the game interfaces', 'repair')
     result['lekmod_installed'] = digest != STOCK_CORE_SHA256 and bool(state.get('lekmod'))
-    result['lekmap_installed'] = (app / ASSETS / 'Maps/Lekmap').is_dir()
+    result['lekmap_installed'] = (app / LEKMAP).is_dir()
     validation = state.get('validation', {})
     for identifier, title, key, directory, optional in (
             ('lekmod_assets', 'Lekmod Assets', 'lekmod_sha256', app / ASSETS / 'DLC/LEKMOD', False),
-            ('lekmap_assets', 'Lekmap Assets', 'lekmap_sha256', app / ASSETS / 'Maps/Lekmap', True)):
+            ('lekmap_assets', 'Lekmap Assets', 'lekmap_sha256', app / LEKMAP, True)):
         if optional and state.get('lekmap') is False and not directory.exists():
             add(identifier, title, 'ok', 'Lekmap is not installed; its assets are optional.')
             continue

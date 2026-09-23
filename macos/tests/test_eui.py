@@ -59,7 +59,7 @@ class EUITests(unittest.TestCase):
         eui.check(self.app, state, True)
         self.assertEqual(game.sha256(self.app / game.CORE), core)
         self.assertEqual(state['validation']['ui'], 'eui')
-        self.assertTrue((self.app / game.ASSETS / 'Maps/Lekmap').is_dir())
+        self.assertTrue((self.app / game.LEKMAP).is_dir())
         backup = self.switch(False)
         self.assertTrue((backup / eui.PACKAGE).is_dir())
         state = game.installed_state(self.app)
@@ -150,7 +150,7 @@ class EUITests(unittest.TestCase):
         eui.check(self.app, game.installed_state(self.app), False)
         self.assertEqual((self.app / game.CORE).read_text(), 'stock')
         self.assertFalse((self.app / game.ASSETS / 'DLC/LEKMOD').exists())
-        self.assertTrue((self.app / game.ASSETS / 'Maps/Lekmap').is_dir())
+        self.assertTrue((self.app / game.LEKMAP).is_dir())
 
     def test_custom_text_is_preserved_and_missing_text_restored(self):
         self.install()

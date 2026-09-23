@@ -128,7 +128,7 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual((self.app / game.CORE).read_text(), 'stock')
         self.assertFalse((self.app / game.ASSETS / 'DLC/LEKMOD').exists())
         self.assertFalse((self.app / crossplay.FLAG).exists())
-        self.assertTrue((self.app / game.ASSETS / 'Maps/Lekmap/LekmapPangaea.lua').exists())
+        self.assertTrue((self.app / game.LEKMAP / 'LekmapPangaea.lua').exists())
         self.assertFalse(game.installed_state(self.app)['lekmod'])
         self.assertEqual((backup / game.CORE).read_text(), 'native signed')
         self.install('lekmod')
@@ -138,10 +138,12 @@ class InstallerTests(unittest.TestCase):
     def test_uninstall_maps_preserves_native_core_and_other_maps(self):
         self.install()
         write(self.app / game.ASSETS / 'Maps/other.lua', 'keep')
+        write(self.app / game.LEGACY_LEKMAP / 'obsolete.lua', 'old')
         digest = game.sha256(self.app / game.CORE)
         remover.uninstall(self.app, 'lekmap', log=lambda _: None)
         self.assertEqual(game.sha256(self.app / game.CORE), digest)
-        self.assertFalse((self.app / game.ASSETS / 'Maps/Lekmap').exists())
+        self.assertFalse((self.app / game.LEKMAP).exists())
+        self.assertFalse((self.app / game.LEGACY_LEKMAP).exists())
         self.assertEqual((self.app / game.ASSETS / 'Maps/other.lua').read_text(), 'keep')
         self.assertFalse(game.installed_state(self.app)['lekmap'])
         self.install('lekmap')
@@ -176,6 +178,7 @@ class InstallerTests(unittest.TestCase):
         dlc, maps = self.app / game.ASSETS / 'DLC', self.app / game.ASSETS / 'Maps'
         write(dlc / 'LEKMOD_old/old.txt', 'previous')
         write(maps / 'unrelated.lua', 'keep')
+        write(self.app / game.LEGACY_LEKMAP / 'obsolete.lua', 'old')
         backup = self.install()
         self.assertEqual((backup / game.CORE).read_text(), 'stock')
         self.assertTrue((backup / game.ASSETS / 'DLC/LEKMOD_old/old.txt').exists())
@@ -187,8 +190,9 @@ class InstallerTests(unittest.TestCase):
         self.assertFalse((dlc / 'LEKMOD/Lua/UI/old-eui.lua').exists())
         self.assertFalse((dlc / 'LEKMOD/Windows.DLL').exists())
         self.assertIn('return false', (dlc / 'LEKMOD/Lua/Utilities/Lekmod_version.lua').read_text())
+        self.assertFalse((self.app / game.LEGACY_LEKMAP).exists())
         self.install()
-        self.assertEqual((maps / 'Lekmap/HBHelper.lua').read_text(), 'helper')
+        self.assertEqual((maps / 'Lekmap v6.2/HBHelper.lua').read_text(), 'helper')
         self.assertEqual((maps / 'unrelated.lua').read_text(), 'keep')
 
     def test_failure_preserves_original(self):
@@ -229,7 +233,7 @@ class InstallerTests(unittest.TestCase):
         self.assertFalse(any(str(self.repo / 'macos/build.py') in call.args[0]
                              for call in run.call_args_list))
         self.assertFalse((self.app / game.ASSETS / 'DLC/LEKMOD').exists())
-        self.assertEqual((self.app / game.ASSETS / 'Maps/Lekmap/LekmapPangaea.lua').read_text(), 'map')
+        self.assertEqual((self.app / game.LEKMAP / 'LekmapPangaea.lua').read_text(), 'map')
 
     def test_maps_update_cannot_authorize_unknown_core(self):
         self.install()

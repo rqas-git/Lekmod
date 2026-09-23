@@ -11,7 +11,7 @@ import sys
 import eui
 
 from audit import check_imports
-from game_install import (ASSETS, CORE, MANIFEST, STOCK_CORE_SHA256, app_path,
+from game_install import (ASSETS, CORE, LEKMAP, LEGACY_LEKMAP, MANIFEST, STOCK_CORE_SHA256, app_path,
                           detect_apps, ensure_closed, installation_lock,
                           installed_state, replace_app, sha256, sign_app, sign_core, sign_nested,
                           validate_app, validate_core)
@@ -44,7 +44,7 @@ def describe(app, component):
         if existing:
             lines.append('Replace existing Lekmod packages: ' + ', '.join(sorted(existing)))
     if component in ('lekmap', 'both'):
-        lines.append(f'Lekmap: {app / ASSETS / "Maps/Lekmap"}')
+        lines.append(f'Lekmap: {app / LEKMAP}')
     lines += ['Uses the versions in this checkout.',
               f'Previous app retained under: {app.parent / ".lekmod-backups"}',
               'Steam updates or Verify Files may undo the installation.']
@@ -109,11 +109,12 @@ def install(app, component='both', jobs=4, skip_build=False, log=print,
                 state.update(stock_core_sha256=STOCK_CORE_SHA256,
                              core_sha256=sha256(staged / CORE), lekmod=True)
             if maps:
-                destination = staged / ASSETS / 'Maps/Lekmap'
-                if destination.is_symlink() or destination.is_file():
-                    destination.unlink()
-                elif destination.exists():
-                    shutil.rmtree(destination)
+                destination = staged / LEKMAP
+                for existing in (staged / LEGACY_LEKMAP, destination):
+                    if existing.is_symlink() or existing.is_file():
+                        existing.unlink()
+                    elif existing.exists():
+                        shutil.rmtree(existing)
                 prepare_lekmap(ROOT / 'Lekmap', destination)
                 state['lekmap'] = True
             if mod and (crossplay_enabled is not None or state.get('crossplay', {}).get('enabled')):
@@ -134,7 +135,7 @@ def install(app, component='both', jobs=4, skip_build=False, log=print,
             if maps:
                 if tree_digest(ROOT / 'Lekmap') != before_maps:
                     raise RuntimeError('Lekmap changed during installation. Please retry.')
-                validation.update(lekmap_sha256=tree_digest(staged / ASSETS / 'Maps/Lekmap'),
+                validation.update(lekmap_sha256=tree_digest(staged / LEKMAP),
                                   lekmap_source_sha256=before_maps)
             sign_nested(staged)
             if before_core == STOCK_CORE_SHA256:
