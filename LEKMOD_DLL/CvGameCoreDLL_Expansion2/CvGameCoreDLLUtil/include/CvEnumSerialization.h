@@ -247,4 +247,4 @@ FDataStream & operator<<(FDataStream&, const ResolutionDecisionTypes&);
 FDataStream & operator>>(FDataStream&, ResolutionDecisionTypes&);
 
 
-#endif
+#endif//INCLUDED_CvEnumSerialization_H

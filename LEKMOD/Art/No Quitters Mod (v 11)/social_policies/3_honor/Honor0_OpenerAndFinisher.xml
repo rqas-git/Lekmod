@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<!-- Created by ModBuddy on 6/9/2015 11:28:46 PM -->
 <GameData>
 
-
+	<!-- Branch tooltip -->
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_POLICY_BRANCH_HONOR_HELP" />
 		<Row Tag="TXT_KEY_POLICY_BRANCH_HONOR_HELP">
@@ -29,7 +29,7 @@
 	</Language_RU_RU>
 	
 
-
+	<!-- HONOR OPENER -->
 	<Policies>
 		<Update>
 			<Set CultureFromKills="100" CultureFromBarbarianKills="0" />
@@ -88,8 +88,8 @@
 	</Language_RU_RU>
 
 
-
-
+	<!-- HONOR FINISHER -->
+	<!-- *** NOTE: Help text updated with Honor Opener. -->
 	<Policies>
 		<Update>
 			<Set GoldFromKills="0" ScienceFromKills="100" />
@@ -97,7 +97,7 @@
 		</Update>
 	</Policies>
 	
-
+	<!-- 44 potential techs will be affected Honor Finisher -->
 	<Technologies>
 		<Update>
 			<Set PolicyDiscountPercent="10" />
@@ -113,7 +113,7 @@
 		</Update>
 		<Update>
 			<Set PolicyDiscountPercent="10" />
-			<Where Type="TECH_SAILING" />
+			<Where Type="TECH_SAILING" /> <!-- naval -->
 		</Update>
 		<Update>
 			<Set PolicyDiscountPercent="10" />
@@ -153,7 +153,7 @@
 		</Update>
 		<Update>
 			<Set PolicyDiscountPercent="10" />
-			<Where Type="TECH_COMPASS" />
+			<Where Type="TECH_COMPASS" /> <!-- naval -->
 		</Update>
 		<Update>
 			<Set PolicyDiscountPercent="10" />
@@ -169,11 +169,11 @@
 		</Update>
 		<Update>
 			<Set PolicyDiscountPercent="10" />
-			<Where Type="TECH_ASTRONOMY" />
+			<Where Type="TECH_ASTRONOMY" /> <!-- naval -->
 		</Update>
 		<Update>
 			<Set PolicyDiscountPercent="10" />
-			<Where Type="TECH_NAVIGATION" />
+			<Where Type="TECH_NAVIGATION" /> <!-- naval -->
 		</Update>
 		<Update>
 			<Set PolicyDiscountPercent="10" />
@@ -193,7 +193,7 @@
 		</Update>
 		<Update>
 			<Set PolicyDiscountPercent="10" />
-			<Where Type="TECH_STEAM_POWER" />
+			<Where Type="TECH_STEAM_POWER" /> <!-- naval -->
 		</Update>
 		<Update>
 			<Set PolicyDiscountPercent="10" />
@@ -213,11 +213,11 @@
 		</Update>
 		<Update>
 			<Set PolicyDiscountPercent="10" />
-			<Where Type="TECH_REFRIGERATION" />
+			<Where Type="TECH_REFRIGERATION" /> <!-- naval -->
 		</Update>
 		<Update>
 			<Set PolicyDiscountPercent="10" />
-			<Where Type="TECH_FLIGHT" />
+			<Where Type="TECH_FLIGHT" /> <!-- air -->
 		</Update>
 		<Update>
 			<Set PolicyDiscountPercent="10" />
@@ -241,7 +241,7 @@
 		</Update>
 		<Update>
 			<Set PolicyDiscountPercent="10" />
-			<Where Type="TECH_COMPUTERS" />
+			<Where Type="TECH_COMPUTERS" /> <!-- air (helicopter) -->
 		</Update>
 		<Update>
 			<Set PolicyDiscountPercent="10" />
@@ -257,7 +257,7 @@
 		</Update>
 		<Update>
 			<Set PolicyDiscountPercent="10" />
-			<Where Type="TECH_TELECOM" />
+			<Where Type="TECH_TELECOM" /> <!-- naval -->
 		</Update>
 		<Update>
 			<Set PolicyDiscountPercent="10" />
@@ -269,7 +269,7 @@
 		</Update>
 		<Update>
 			<Set PolicyDiscountPercent="10" />
-			<Where Type="TECH_STEALTH" />
+			<Where Type="TECH_STEALTH" /> <!-- air -->
 		</Update>
 		<Update>
 			<Set PolicyDiscountPercent="10" />

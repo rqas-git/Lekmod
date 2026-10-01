@@ -1,11 +1,11 @@
-
-
-
-
-
-
-
-
+------------------------------------------------------------------------------
+--	FILE:	 Lekmapv2.2.lua (Modified Pangaea_Plus.lua)
+--	AUTHOR:  Original Bob Thomas, Changes HellBlazer, lek10, EnormousApplePie, Cirra, Meota
+--	PURPOSE: Global map script - Simulates a Pan-Earth Supercontinent, with
+--           numerous tectonic island chains.
+------------------------------------------------------------------------------
+--	Copyright (c) 2011 Firaxis Games, Inc. All rights reserved.
+------------------------------------------------------------------------------
 
 include("HBMapGenerator");
 include("FractalWorld");
@@ -14,9 +14,10 @@ include("HBTerrainGenerator");
 include("IslandMaker");
 include("MultilayeredFractal");
 
-
+------------------------------------------------------------------------------
 include("HBMapOptions");
 
+------------------------------------------------------------------------------
 function GetMapScriptInfo()
 	local world_age, temperature, rainfall, sea_level, resources = GetCoreMapOptions()
 	return {
@@ -29,14 +30,14 @@ function GetMapScriptInfo()
 		CustomOptions = LekmapOptions.Create(),
 	};
 end
-
+------------------------------------------------------------------------------
 GetMapInitData = GetCustomSizeMapInitData;
-
-
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 function GeneratePlotTypes()
 	print("Generating Plot Types (Lua Archipelago) ...");
 
-
+	-- Fetch Sea Level and World Age user selections.
 	local sea = Map.GetCustomOption(4)
 	if sea == 4 then
 		sea = 1 + Map.Rand(3, "Random Sea Level - Lua");
@@ -67,12 +68,12 @@ function GeneratePlotTypes()
 	local args = {expansion_diceroll_table = {10, 4, 4}};
 	GenerateCoasts(args);
 end
-
+------------------------------------------------------------------------------
 function GenerateTerrain()
 
 	local DesertPercent = 28;
 
-
+	-- Get Temperature setting input by user.
 	local temp = Map.GetCustomOption(2)
 	if temp == 4 then
 		temp = 1 + Map.Rand(3, "Random Temperature - Lua");
@@ -95,10 +96,10 @@ function GenerateTerrain()
 
 end
 
-
+------------------------------------------------------------------------------
 function AddFeatures()
 
-
+	-- Get Rainfall setting input by user.
 	local rain = Map.GetCustomOption(3)
 	if rain == 4 then
 		rain = 1 + Map.Rand(3, "Random Rainfall - Lua");
@@ -107,23 +108,23 @@ function AddFeatures()
 	local args = {rainfall = rain}
 	local featuregen = FeatureGenerator.Create(args);
 
-
+	-- False parameter removes mountains from coastlines.
 	featuregen:AddFeatures(false);
 end
+------------------------------------------------------------------------------
 
-
-
+------------------------------------------------------------------------------
 function StartPlotSystem()
 	local RegionalMethod = 3;
 
-
+	-- Get Resources setting input by user.
 	local res = Map.GetCustomOption(13)
 	local starts = Map.GetCustomOption(5)
+	--if starts == 7 then
+		--starts = 1 + Map.Rand(8, "Random Resources Option - Lua");
+	--end
 
-
-
-
-
+	-- Handle coastal spawns and start bias
 	MixedBias = false;
 	BalancedCoastal = false;
 	OnlyCoastal = false;
@@ -133,7 +134,7 @@ function StartPlotSystem()
 	local start_plot_database = AssignStartingPlots.Create()
 	
 	print("Dividing the map in to Regions.");
-
+	-- Regional Division Method 1: Biggest Landmass
 	local args = {
 		method = RegionalMethod,
 		start_locations = starts,
@@ -169,9 +170,10 @@ function StartPlotSystem()
 	print("Placing Resources and City States.");
 	start_plot_database:PlaceResourcesAndCityStates()
 
-
+	-- tell the AI that we should treat this as a naval expansion map
 	Map.ChangeAIMapHint(1+4);
 	if (PreGame.IsMultiplayerGame()) then
     	Network.SendChat("[COLOR_POSITIVE_TEXT]Lekmap v3.3[ENDCOLOR]", -1, -1 );
 	end
 end
+------------------------------------------------------------------------------

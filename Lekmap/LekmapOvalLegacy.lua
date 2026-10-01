@@ -1,11 +1,11 @@
-
-
-
-
-
-
-
-
+------------------------------------------------------------------------------
+--	FILE:	 Lekmapv2.2.lua (Modified Pangaea_Plus.lua)
+--	AUTHOR:  Original Bob Thomas, Changes HellBlazer, lek10, EnormousApplePie, Cirra, Meota
+--	PURPOSE: Global map script - Simulates a Pan-Earth Supercontinent, with
+--           numerous tectonic island chains.
+------------------------------------------------------------------------------
+--	Copyright (c) 2011 Firaxis Games, Inc. All rights reserved.
+------------------------------------------------------------------------------
 
 include("HBMapGenerator");
 include("HBFractalWorld");
@@ -14,9 +14,10 @@ include("HBTerrainGenerator");
 include("IslandMaker");
 include("MultilayeredFractal");
 
-
+------------------------------------------------------------------------------
 include("HBMapOptions");
 
+------------------------------------------------------------------------------
 function GetMapScriptInfo()
 	local world_age, temperature, rainfall, sea_level, resources = GetCoreMapOptions()
 	return {
@@ -27,53 +28,58 @@ function GetMapScriptInfo()
 		SortIndex = 2,
 		SupportsMultiplayer = true,
 		CustomOptions = LekmapOptions.Create({
-			[11] = {
+			[11] = { -- Land Size X
 				DefaultValue = 8,
-			},
-			[12] = {
+				},
+			[12] = { -- Land Size Y
 				DefaultValue = 13,
 			},
 		}, {
 			{
-				Name = "Coastal Spawns",
+				Name = "Coastal Spawns",	-- Can inland civ spawn on the coast (15)
 				Values = {
 					"Coastal Civs Only",
 					"Random",
 					"Random+ (~2 coastals)",
 				},
+
 				DefaultValue = 1,
 				SortPriority = -85,
 			},
+
 			{
-				Name = "Coastal Luxes",
+				Name = "Coastal Luxes",	-- Can coast spawns have non-coastal luxes (16)
 				Values = {
 					"Guaranteed",
 					"Random",
 				},
+
 				DefaultValue = 1,
 				SortPriority = -84,
 			},
+
 			{
-				Name = "Inland Sea Spawns",
+				Name = "Inland Sea Spawns",	-- Can coastal civ spawn on inland seas (17)
 				Values = {
 					"Allowed",
 					"Not Allowed for Coastal Civs",
 				},
+
 				DefaultValue = 2,
 				SortPriority = -83,
 			},
 		}),
 	};
 end
-
+------------------------------------------------------------------------------
 GetMapInitData = GetCustomSizeMapInitData;
-
-
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 function MultilayeredFractal:GeneratePlotsByRegion()
-
-
-
-
+	-- Sirian's MultilayeredFractal controlling function.
+	-- You -MUST- customize this function for each script using MultilayeredFractal.
+	--
+	-- This implementation is specific to Oval.
 	local iW, iH = Map.GetGridSize();
 	local fracFlags = {FRAC_POLAR = true};
 
@@ -90,10 +96,10 @@ function MultilayeredFractal:GeneratePlotsByRegion()
 	local cohesion_list = {0.41, 0.38, 0.35};
 	local cohesion_multiplier = cohesion_list[sea_level];
 
-
+	-- Fill all rows with water plots.
 	self.wholeworldPlotTypes = table.fill(PlotTypes.PLOT_OCEAN, iW * iH);
 
-
+	-- Add the main oval as land plots.
 	local centerX = iW / 2;
 	local centerY = iH / 2;
 	local majorAxis = centerX * axis_multiplier;
@@ -113,8 +119,8 @@ function MultilayeredFractal:GeneratePlotsByRegion()
 			end
 		end
 	end
-
-
+	
+	-- Now add bays, fjords, inland seas, etc, but not inside the cohesion area.
 	local baysFrac = Fractal.Create(iW, iH, 3, fracFlags, -1, -1);
 	local iBaysThreshold = baysFrac:GetHeight(82);
 	local centerX = iW / 2;
@@ -140,35 +146,35 @@ function MultilayeredFractal:GeneratePlotsByRegion()
 		end
 	end
 
-
+	-- Land and water are set. Now apply hills and mountains.
 	local args = {
 		adjust_plates = 1.5,
 		world_age = world_age,
 	};
 	self:ApplyTectonics(args)
-
-
+		
+	-- Plot Type generation completed. Return global plot array.
 	return self.wholeworldPlotTypes
 end
-
+------------------------------------------------------------------------------
 function GeneratePlotTypes()
 	print("Setting Plot Types (Lua Oval) ...");
 
 	local layered_world = MultilayeredFractal.Create();
 	local plot_list = layered_world:GeneratePlotsByRegion();
-
+	
 	SetPlotTypes(plot_list);
 
 	local args = {bExpandCoasts = false};
 	GenerateCoasts(args);
 end
+------------------------------------------------------------------------------
 
-
-
+------------------------------------------------------------------------------
 function GenerateTerrain()
 	print("Adding Terrain (Lua Oval) ...");
-
-
+	
+	-- Get Temperature setting input by user.
 	local temp = Map.GetCustomOption(2)
 	if temp == 4 then
 		temp = 1 + Map.Rand(3, "Random Temperature - Lua");
@@ -178,9 +184,10 @@ function GenerateTerrain()
 	local terraingen = TerrainGenerator.Create(args);
 
 	terrainTypes = terraingen:GenerateTerrain();
-
+	
 	SetTerrainTypes(terrainTypes);
 end
 
-
+------------------------------------------------------------------------------
 include("HBRegionalStartPlotSystem");
+------------------------------------------------------------------------------
