@@ -501,4 +501,4 @@ different teams if combat is required. Host only after MainMenu RestoreUI, then
 verify which OPEN slots the host and joining client actually claimed. A preset
 SS_TAKEN slot caused a phantom human and blocked drafting. Record the final
 players after initialization; slot configuration alone is not participant proof.
-See coverage.md for the basic player hook’s missing expansion/combat behaviors.
+See [coverage.md](coverage.md) for the basic player hook’s missing expansion/combat behaviors.

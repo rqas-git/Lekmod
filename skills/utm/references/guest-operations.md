@@ -57,3 +57,17 @@ script/result files as evidence. Avoid scripts that call `exit`, launch detached
 work, or suppress errors if the envelope must prove the whole operation completed.
 It does not select a VM, start an interactive session or grant authorization for
 the supplied commands. Do not print sensitive command results into public logs.
+
+Use -LiteralPath for PowerShell reads, enumeration and hashing of actual filenames.
+Civ V asset folders contain brackets, which ordinary -Path parameters interpret
+as wildcard expressions. A failed/empty hash is an audit failure, not proof that
+the asset is missing. UTM 4.7.5 file pull can also return process status 0 while
+printing a guest open-file error; validate the expected payload, not status alone.
+
+If guest execution and file transfer both time out, inspect fresh VM status and
+owned processes before retrying. A cached started state is not proof of a working
+guest-agent connection. Preserve completed evidence; classify a disconnected run
+as incomplete. Recover only the owned VM, prefer graceful shutdown and verify its
+actual state afterward. In one 4.7.5 recovery, `start --hide` returned Operation not
+available for the stopped test VM, while normal `start` succeeded; the cause was
+not established. Do not assume a timeout means an operation had no effect.

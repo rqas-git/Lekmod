@@ -33,8 +33,15 @@ Configure human slots as OPEN before HostGame claims its slot; pre-setting a slo
 TAKEN produced a phantom third human in one four-player test and blocked drafting.
 Inspect actual slot claims and readiness before blaming the game or network.
 
-The bundled multiplayer player is a basic smoke-test bot: it does not produce
+The basic multiplayer player is a smoke-test bot: it does not produce
 additional settlers, explore toward enemies, declare war or attack. Adapt its
 normal network orders for those scenarios and verify results. Three seconds
 without issuing orders is not a synchronization barrier; final acceptance needs
 repeated unchanged per-peer snapshots or an acknowledged settled checkpoint.
+
+For programmatic custom-map hosting, select the canonical map filename found
+in MapScriptOptions, initialize every custom option from the ordered possible
+values and DefaultValue, and broadcast the settings. A v6.3 lobby without those
+defaults produced nil-option map errors and an empty game whose turns advanced
+automatically. Require living civilizations and the expected map dimensions
+before accepting turn progress.

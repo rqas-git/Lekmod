@@ -168,3 +168,9 @@ engine crashed during terrain initialization before the Mac gameplay hook ran.
 The faulting engine frames concern Voronoi polygon fixup, outside the native mod
 core. This identifies the failing subsystem, not its cause; retain the crash
 report and do not count the Windows-only turn-0 snapshot as a passed test.
+
+Give each retry a distinct bundle identifier and corresponding private preference
+file. Repair nested signatures before signing the application. Reused bundle
+identifiers and app-only re-signing preceded early exit-255 attempts; a fresh
+identifier plus nested signing restored startup, but those changes were not
+isolated individually. Avoid claiming either alone was the confirmed cause.

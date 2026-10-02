@@ -3,7 +3,7 @@
 For installation on another machine, see [the Mac/UTM setup guide](utm-setup.md).
 This reference covers running and diagnosing tests after provisioning.
 
-## Current demonstrated capability
+## Historical v35.3 capability
 
 A local Windows/UTM host and native macOS client completed turns 0–30
 continuously after launch. Both clients recorded all 31 turn IDs, produced
@@ -177,3 +177,39 @@ as another game process, replaced the tracked game PID, then unregistered itself
 Its effect on packet delivery is unconfirmed; the client-pipe helper produced no
 game-process registration update. Keep debugger detachment/cleanup reachable
 if debugging is independently needed.
+
+## Expanded actions and entity snapshots
+
+Use `assets/multiplayer-expanded-player.lua` instead of the basic player when
+expansion, worker improvements and combat are requested. It prioritizes settlers
+and workers, moves combat units toward an opposing capital, and has the host
+request war from turn 12 and peace from turn 24 for contacted opponents. Actual
+results still depend on production, terrain and contact: check coverage rather
+than assuming every requested action occurred. This hook completed a v35.4
+30-turn local run with AI expansion and actual unit/city damage; that run also
+reported synchronization findings, so this is not proof of clean compatibility.
+
+Its snapshots include sorted unitIDs/cityIDs. Filter entity fields through those
+current rosters: same-turn keys from consumed settlers or killed units otherwise
+remain in SimpleValues and create false differences. Compare all live entities
+and primitive state after repeated unchanged snapshots on both peers. Record
+resyncs and state differences explicitly; matching population/score is insufficient.
+
+Before upgrading map versions, archive the old versioned map folder outside
+active Maps on each peer. Duplicate helper filenames can be discovered from the
+old folder. Verify the staged app as well as the ordinary installation; cloning
+an older installed app otherwise carries v6.2 into a v6.3 validation run.
+
+## v35.4 validation findings
+
+A two-human, two-AI v35.4 run reached turns 0–30 on both peers and wrote
+independently verified turn-30 saves. Expanded actions exercised AI city founding,
+worker improvements, policies, unit/city damage, war and peace. Initial map and
+starting-state differences triggered automatic resynchronization. A later live
+probe still found one AI worker at different coordinates on the peers at turn 30.
+A repeat founded an additional human city at turn 27, then lost its Windows peer
+at turn 28; both ledgers stopped there. These are findings, not clean acceptance.
+Removing duplicate v6.2 map folders did not eliminate the initial resync. Do not
+attribute it to a particular seed, map helper or platform until diagnostics prove
+the cause. Reload/reconnect and release-specific capture, belief and yield
+scenarios remain separate coverage requirements.

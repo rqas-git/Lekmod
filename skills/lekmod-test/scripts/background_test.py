@@ -256,16 +256,18 @@ def stage(run):
                  'CFBundleExecutable': 'Civilization V', 'LSBackgroundOnly': True})
     data.pop('LSUIElement', None)
     plist.write_bytes(plistlib.dumps(data))
-    map_script = 'Assets/Maps/Lekmap v6.3/' + request['map']
+    map_script = (installer.LEKMAP / request['map']).relative_to(ASSETS.parent).as_posix()
     profile = create_profile(run, bundle_id, map_script)
     eui = app / ASSETS / 'DLC/UI_bc1'
     eui = eui if eui.is_dir() else None
-    for target in (app / ASSETS / 'DLC/LEKMOD', app / ASSETS / 'Maps/Lekmap v6.3'):
+    legacy_maps = getattr(installer, 'LEGACY_LEKMAPS', (installer.LEGACY_LEKMAP,))
+    for target in (app / ASSETS / 'DLC/LEKMOD', app / installer.LEKMAP,
+                   *[app / path for path in legacy_maps]):
         target = private_path(run, target)
         if target.exists():
             shutil.rmtree(target)
     modules['package_assets'].prepare_lekmod(frozen / 'LEKMOD', app / ASSETS / 'DLC/LEKMOD', eui=eui)
-    modules['package_assets'].prepare_lekmap(frozen / 'Lekmap', app / ASSETS / 'Maps/Lekmap v6.3')
+    modules['package_assets'].prepare_lekmap(frozen / 'Lekmap', app / installer.LEKMAP)
     install_telemetry(app, request['turn_target'], eui)
     modules['audit'].check_imports(library, app)
     shutil.copy2(library, app / CORE)
