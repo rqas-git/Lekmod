@@ -1,0 +1,4 @@
+interface:
+  display_name: "Lekmod Test"
+  short_description: "Run hidden Civ V AI smoke tests and preserve evidence"
+  default_prompt: "Use $lekmod-test to validate the current Lekmod checkout for 30 turns in the background."
