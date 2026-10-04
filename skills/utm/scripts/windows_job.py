@@ -18,13 +18,14 @@ def run_job(cli, vm, script, timeout):
     remote = 'C:\\Windows\\Temp\\utm-job-' + token
     result_path = remote + '.json'
     wrapper = f"""$ErrorActionPreference='Stop'
-$r=@{{id={literal(token)};startedUtc=(Get-Date).ToUniversalTime().ToString('o');ok=$false}}
+$r=@{{id={literal(token)};processId=$PID;startedUtc=(Get-Date).ToUniversalTime().ToString('o');ok=$false}}
 try {{
+[IO.File]::WriteAllText({literal(remote + '.started.json')},($r|ConvertTo-Json -Depth 10))
 $r.result=@(& {{
 {script}
 }})
 $r.ok=$true
-}} catch {{$r.error=$_.Exception.ToString()}}
+}} catch {{$r.error=$_.Exception.ToString();$r.errorMessage=$_.Exception.Message;$r.errorRecord=$_.ToString();$r.scriptStackTrace=$_.ScriptStackTrace}}
 finally {{
 $r.finishedUtc=(Get-Date).ToUniversalTime().ToString('o')
 [IO.File]::WriteAllText({literal(result_path)},($r|ConvertTo-Json -Depth 10))
@@ -51,7 +52,7 @@ $r.finishedUtc=(Get-Date).ToUniversalTime().ToString('o')
             if result and result.get('id') == token and result.get('finishedUtc'):
                 return result
         time.sleep(min(1, max(0, deadline - time.monotonic())))
-    raise TimeoutError(f'No completed guest envelope: {result_path}')
+    raise TimeoutError(f'No completed guest envelope: {result_path}; owned process record: {remote}.started.json')
 
 
 def main():

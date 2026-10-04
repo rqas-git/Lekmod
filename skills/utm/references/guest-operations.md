@@ -85,3 +85,11 @@ commit space rose from about 0.8 GB to 13.9 GB, and the game created its lobby.
 Use an already verified install/user record or a small independent probe instead
 of rediscovering account paths with that query on the affected VM. Keep actual
 Steam identities private and verify distinct peers without dumping account files.
+
+The job envelope now records the guest process ID and writes a matching
+.started.json breadcrumb before executing the script. A timeout reports its
+path; inspect that fresh ID/start time and verify the live process before
+cleanup. The helper bounds transport/polling but does not automatically stop a
+hung guest script. Failure envelopes retain errorMessage, errorRecord and
+scriptStackTrace as well as the exception string: a plain PowerShell throw
+sometimes supplied only RuntimeException through Exception.ToString().
