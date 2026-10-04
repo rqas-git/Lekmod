@@ -52,4 +52,21 @@ require(diagnostics.contains("[ok] Native Lekmod library: Installed library reco
 require(diagnostics.contains("Generated: 1970-01-01T00:00:00Z"), "Diagnostics must be timestamped")
 require(LauncherModel().diagnostics().contains("No installation report"),
         "Diagnostics must explain when Check has not run")
+let temporary = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+defer { try? FileManager.default.removeItem(at: temporary) }
+for name in ["Original.app", "Moved Launcher.app"] {
+    let app = temporary.appendingPathComponent(name)
+    let contents = app.appendingPathComponent("Contents")
+    try! FileManager.default.createDirectory(at: contents.appendingPathComponent("Resources"), withIntermediateDirectories: true)
+    let info: [String: Any] = ["CFBundleIdentifier": "org.lekmod.commandtest.\(UUID().uuidString)",
+                              "CFBundlePackageType": "APPL", "LekmodService": "payload/macos/Lekmod Service"]
+    try! PropertyListSerialization.data(fromPropertyList: info, format: .xml, options: 0)
+        .write(to: contents.appendingPathComponent("Info.plist"))
+    let command = launcherCommand("saves", bundle: Bundle(url: app)!)!
+    require(command.executable.path == contents.appendingPathComponent("Resources/payload/macos/Lekmod Service").path,
+            "The bundled service must resolve relative to the moved app")
+    require(command.arguments == ["saves"], "Service routing must preserve the command")
+    require(command.directory.path == contents.appendingPathComponent("Resources/payload").path,
+            "Working directory must follow the bundled payload")
+}
 print("Launcher lifecycle checks passed")

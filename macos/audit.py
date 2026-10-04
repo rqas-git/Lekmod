@@ -1,52 +1,74 @@
 #!/usr/bin/env python3
 
 from pathlib import Path
-import subprocess
+import struct
 
 DEFAULT_APP = Path.home() / "Library/Application Support/Steam/steamapps/common/Sid Meier's Civilization V/Civilization V.app"
 
+
+def read_macho(path):
+    data = Path(path).read_bytes()
+    try:
+        if struct.unpack_from('<I', data)[0] != 0xfeedfacf:
+            raise RuntimeError('Expected a thin 64-bit Mach-O binary')
+        segments = []
+        symbol_table = None
+        offset = 32
+        for _ in range(struct.unpack_from('<I', data, 16)[0]):
+            command, size = struct.unpack_from('<II', data, offset)
+            if size < 8 or offset + size > len(data):
+                raise RuntimeError('Invalid Mach-O load command')
+            if command == 0x19:
+                vmaddr, _, fileoff, filesize = struct.unpack_from('<QQQQ', data, offset + 24)
+                segments.append((vmaddr, fileoff, filesize))
+            elif command == 2:
+                symbol_table = struct.unpack_from('<IIII', data, offset + 8)
+            offset += size
+        if symbol_table is None:
+            raise RuntimeError('Mach-O symbol table is missing')
+        symoff, count, stroff, strsize = symbol_table
+        if symoff + count * 16 > len(data) or stroff + strsize > len(data):
+            raise RuntimeError('Invalid Mach-O symbol table')
+        strings = data[stroff:stroff + strsize]
+        symbols, exports, imports = {}, set(), []
+        for index in range(count):
+            name_offset, kind, _, description, address = struct.unpack_from('<IBBHQ', data, symoff + index * 16)
+            if kind & 0xe0 or not name_offset:
+                continue
+            end = strings.find(b'\0', name_offset)
+            if end < 0:
+                raise RuntimeError('Invalid Mach-O symbol name')
+            name = strings[name_offset:end].decode('utf-8')
+            undefined = kind & 0x0e == 0
+            if not undefined:
+                symbols[name] = address
+                if kind & 1:
+                    exports.add(name)
+            elif description >> 8 == 0xfe:
+                imports.append(name)
+        return data, symbols, exports, imports, segments
+    except (struct.error, UnicodeError) as error:
+        raise RuntimeError(f'Invalid Mach-O binary: {path}') from error
+
+
 def check_imports(library, app=DEFAULT_APP):
     host = app / "Contents/MacOS/Civilization V"
-    exports = {line.split()[-1] for line in subprocess.check_output(
-        ["nm", "-gU", str(host)], text=True).splitlines() if line.strip()}
-    imports = [line.split(" (dynamically")[0].split()[-1] for line in subprocess.check_output(
-        ["nm", "-m", "-u", str(library)], text=True).splitlines() if "dynamically looked up" in line]
+    exports = read_macho(host)[2]
+    parsed = read_macho(library)
+    imports = parsed[3]
     missing = sorted(set(imports) - exports)
     if missing:
-        demangled = subprocess.check_output(["c++filt"], input="\n".join(missing), text=True)
-        raise RuntimeError("Imports absent from the Mac host:\n" + demangled)
+        raise RuntimeError("Imports absent from the Mac host:\n" + '\n'.join(missing))
     print(f"Verified {len(imports)} engine imports against {host}")
-    check_pregame_abi(library)
+    check_pregame_abi(library, parsed)
     return imports
 
 
-
-def check_pregame_abi(library):
-
-    import struct
-    data = Path(library).read_bytes()
-    if struct.unpack_from('<I', data)[0] != 0xfeedfacf:
-        raise RuntimeError('Expected a thin 64-bit Mach-O gameplay library')
-    symbols = {}
-    for line in subprocess.check_output(['nm', '-n', str(library)], text=True).splitlines():
-        parts = line.split()
-        if len(parts) == 3 and parts[0] != 'U':
-            try:
-                symbols[parts[2]] = int(parts[0], 16)
-            except ValueError:
-                pass
-    segments = []
-    offset = 32
-    for _ in range(struct.unpack_from('<I', data, 16)[0]):
-        command, size = struct.unpack_from('<II', data, offset)
-        if command == 0x19:
-            vmaddr, _, fileoff, filesize = struct.unpack_from('<QQQQ', data, offset + 24)
-            segments.append((vmaddr, fileoff, filesize))
-        offset += size
+def check_pregame_abi(library, parsed=None):
+    data, symbols, _, _, segments = parsed or read_macho(library)
     address = symbols['__ZTV12CvDllPreGame'] + 16
     table = next(fileoff + address - vmaddr for vmaddr, fileoff, filesize in segments
                  if vmaddr <= address < vmaddr + filesize)
-
     expected = {
         28: '__ZN12CvDllPreGame6eraKeyEv',
         29: '__ZN12CvDllPreGame20findPlayerByNicknameEPKc',

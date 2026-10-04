@@ -128,7 +128,7 @@ def _inspect(app, desired, log, worker, desired_eui):
 
     version_file = ROOT / 'LEKMOD/Lua/Utilities/Lekmod_version.lua'
     match = re.search(r'LOCAL_VERSION\s*=\s*"([^"]+)"', version_file.read_text())
-    result = dict(app=str(app), version=match[1] if match else 'Local checkout',
+    result = dict(app=str(app), version=match[1] if match else 'Local version',
                   crossplay=desired, checks=checks, running=False, steam_session=steam_session())
     if not checked('game', 'Civilization V', lambda: validate_app(app), 'Game files found'):
         result.update(ready=False, repairable=False)
@@ -201,7 +201,7 @@ def _inspect(app, desired, log, worker, desired_eui):
             if validation.get('format') != 1 or not validation.get(key):
                 raise RuntimeError(f'Install or repair {title} to enable file validation.')
             if tree_digest(directory) != validation[key]:
-                raise RuntimeError(f'{title} are missing or changed. Repair will restore them from this checkout.')
+                raise RuntimeError(f'{title} are missing or changed. Repair will restore them from this launcher.')
         checked(identifier, title, content, f'{title} verified against the installed fingerprints', 'repair')
     if validation.get('format') != 1:
         add('source', 'Lekmod version', 'repair', 'Refresh your existing installation to enable version checks.')
@@ -209,8 +209,8 @@ def _inspect(app, desired, log, worker, desired_eui):
         def source():
             if (source_digest(ROOT) != validation.get('source_sha256')
                     or (state.get('lekmap') is not False and tree_digest(ROOT / 'Lekmap') != validation.get('lekmap_source_sha256'))):
-                raise RuntimeError('This checkout has changed. Update the installed game before playing.')
-        checked('source', 'Lekmod version', source, 'Installed game matches this checkout', 'repair')
+                raise RuntimeError("The installed game needs an update. Choose Repair to apply this launcher's Lekmod files.")
+        checked('source', 'Lekmod version', source, 'Installed game matches this launcher', 'repair')
     def crossplay_setting():
         flag = app / crossplay.FLAG
         enabled = state.get('crossplay', {}).get('enabled', False)

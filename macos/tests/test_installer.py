@@ -93,6 +93,14 @@ class InstallerTests(unittest.TestCase):
     def install(self, component='both', skip_build=True):
         return installer.install(self.app, component, skip_build=skip_build, log=lambda _: None)
 
+    def test_packaged_service_installs_verified_core_without_compiling(self):
+        with patch.object(sys, 'frozen', True, create=True), \
+                patch.object(installer.subprocess, 'run', wraps=subprocess.run) as run:
+            self.install(skip_build=False)
+        self.assertFalse(any(any(str(value).endswith('build.py') for value in call.args[0])
+                             for call in run.call_args_list))
+        self.assertTrue(game.installed_state(self.app)['lekmod'])
+
     def test_skip_build_rejects_unverified_library_before_changing_game(self):
         library = self.repo / 'macos/build' / game.CORE.name
         configuration = {'release': True, 'lto': False, 'precompute_neighbors': False}

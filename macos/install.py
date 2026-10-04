@@ -67,7 +67,7 @@ def install(app, component='both', jobs=4, skip_build=False, log=print,
         before_source = source_digest(ROOT) if assets else None
         before_maps = tree_digest(ROOT / 'Lekmap') if maps else None
         if mod:
-            if not skip_build:
+            if not skip_build and not getattr(sys, 'frozen', False):
                 log('Building native Lekmod (first build may take several minutes)…')
                 subprocess.run([sys.executable, str(HERE / 'build.py'), '--release',
                                 '--jobs', str(jobs), '--app', str(app)], check=True)

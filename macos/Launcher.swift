@@ -2,6 +2,17 @@ import AppKit
 import SwiftUI
 import UniformTypeIdentifiers
 
+func launcherCommand(_ name: String, bundle: Bundle = .main) -> (executable: URL, arguments: [String], directory: URL)? {
+    if let path = bundle.object(forInfoDictionaryKey: "LekmodService") as? String,
+       let resources = bundle.resourceURL {
+        let service = resources.appendingPathComponent(path)
+        return (service, [name], service.deletingLastPathComponent().deletingLastPathComponent())
+    }
+    guard let repository = bundle.object(forInfoDictionaryKey: "LekmodRepository") as? String,
+          let python = bundle.object(forInfoDictionaryKey: "LekmodPython") as? String else { return nil }
+    return (URL(fileURLWithPath: python), [repository + "/macos/" + name + ".py"],
+            URL(fileURLWithPath: repository))
+}
 
 func writeIcons(to directory: String) {
     for pixels in [16, 32, 64, 128, 256, 512, 1024] {
@@ -211,15 +222,14 @@ final class LauncherModel: ObservableObject {
     }
 
     private func savesCommand(_ arguments: [String], completion: @escaping (Data?, String?) -> Void) {
-        guard let repository = Bundle.main.object(forInfoDictionaryKey: "LekmodRepository") as? String,
-              let python = Bundle.main.object(forInfoDictionaryKey: "LekmodPython") as? String else {
-            completion(nil, "Launcher configuration is missing. Reopen Lekmod Launcher.command from your checkout.")
+        guard let command = launcherCommand("saves") else {
+            completion(nil, "Launcher configuration is missing. Rebuild or reinstall Lekmod Launcher.")
             return
         }
         let task = Process()
-        task.executableURL = URL(fileURLWithPath: python)
-        task.arguments = [repository + "/macos/saves.py"] + arguments
-        task.currentDirectoryURL = URL(fileURLWithPath: repository)
+        task.executableURL = command.executable
+        task.arguments = command.arguments + arguments
+        task.currentDirectoryURL = command.directory
         let pipe = Pipe()
         task.standardOutput = pipe
         task.standardError = FileHandle.nullDevice
@@ -357,9 +367,8 @@ final class LauncherModel: ObservableObject {
 
     func run(_ action: String, preference: Bool? = nil, archive: String? = nil) {
         guard !busy else { return }
-        guard let repository = Bundle.main.object(forInfoDictionaryKey: "LekmodRepository") as? String,
-              let python = Bundle.main.object(forInfoDictionaryKey: "LekmodPython") as? String else {
-            error = "Launcher configuration is missing. Reopen Lekmod Launcher.command from your checkout."
+        guard let command = launcherCommand("launcher") else {
+            error = "Launcher configuration is missing. Rebuild or reinstall Lekmod Launcher."
             return
         }
         busy = true
@@ -369,12 +378,12 @@ final class LauncherModel: ObservableObject {
         activity = action == "status" ? "Checking your installation…" : "Validating before continuing…"
         append("\n\(Date().formatted()) — \(action)")
         let task = Process()
-        task.executableURL = URL(fileURLWithPath: python)
-        task.arguments = [repository + "/macos/launcher.py", action]
+        task.executableURL = command.executable
+        task.arguments = command.arguments + [action]
         if !app.isEmpty { task.arguments! += ["--app", app] }
         if let preference { task.arguments! += ["--crossplay", preference ? "on" : "off"] }
         if let archive { task.arguments! += ["--eui-archive", archive] }
-        task.currentDirectoryURL = URL(fileURLWithPath: repository)
+        task.currentDirectoryURL = command.directory
         var environment = ProcessInfo.processInfo.environment
         environment["PYTHONUNBUFFERED"] = "1"
         environment["PATH"] = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
@@ -435,13 +444,13 @@ final class LauncherModel: ObservableObject {
 
     func refreshGameLifecycle() {
         guard !busy, !probingGame, report != nil, !app.isEmpty,
-              let repository = Bundle.main.object(forInfoDictionaryKey: "LekmodRepository") as? String,
-              let python = Bundle.main.object(forInfoDictionaryKey: "LekmodPython") as? String else { return }
+              let command = launcherCommand("launcher") else { return }
         probingGame = true
         DispatchQueue.global(qos: .utility).async {
             let probe = Process()
-            probe.executableURL = URL(fileURLWithPath: python)
-            probe.arguments = [repository + "/macos/launcher.py", "process-status"]
+            probe.executableURL = command.executable
+            probe.arguments = command.arguments + ["process-status"]
+            probe.currentDirectoryURL = command.directory
             let pipe = Pipe()
             probe.standardOutput = pipe
             probe.standardError = FileHandle.nullDevice
