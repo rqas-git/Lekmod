@@ -322,6 +322,22 @@ including supplementary counters. Compare fresh repeated probes from both peers
 with processing=false and verify each nonce. Matching live state does not erase
 earlier synchronization warnings or unrelated runtime errors.
 
+Game turn and processing=false alone did not settle the R19 checkpoint: its
+first turn-60 probes differed in 96 fields, then a later pair matched 4,150
+normalized fields. Require unchanged fresh probes within each peer as well as
+between peers. Normalize technology/policy sets on the comparison host; Lua
+string sorting put THE_WHEEL/THEOLOGY in different orders on the two platforms
+without different membership. Preserve the early probes instead of relabeling
+them as persistent state divergence.
+
+The staging hook must check PreGame.GameStarted before its draft flow. For a
+started game, use the normal OnReadyCheck(true) action when not ready, then
+leave hot-join progression to the engine. The old hook waited for a new draft
+and did not resume the game. The corrected R21 retry reached turn 60 as the
+original human slot, produced a separate save and received NetHotJoinCompleted
+from the still-running Windows R19 host. Check fresh registration/initialization
+and state; lobby connection alone is insufficient evidence.
+
 Compare synchronized RNG calls after removing process-local instance addresses
 and turn-slice timing. Check log headers, turn resets, fresh initialization and
 process ownership before comparing a shared Windows log with a private Mac log.
@@ -329,7 +345,9 @@ Ignore an incomplete trailing CSV row while a writer is active. A matching seed
 with a different range is a compatibility finding even if gameplay continues.
 The R19 continuation first differed at turn 44 in city-production selection
 (Mac range 2491, Windows 3324); the preceding 3,835 calls matched. Its cause was
-not established. Compare actual technology/policy sets and plot state as well
+not established. Later network logs confirmed RNG desynchronization and a full
+resynchronization, plus AI unit-state differences. Compare actual
+technology/policy sets and plot state as well
 as aggregate counts; do not change simulation ordering based on a hypothesis.
 
 

@@ -122,9 +122,18 @@ The corrected-hook R19 continuation retained another compatibility finding:
 3,835 synchronized RNG calls matched before city-production selection at turn 44
 used the same seed with different ranges (Mac 2491, Windows 3324). Matching
 loaded difficulty and speed did not explain it. Log headers and turn progression
-excluded a retained earlier-run prefix. An automation supervisor should retain
+excluded a retained earlier-run prefix. Network logs confirmed later RNG
+desynchronization and a full resynchronization. An automation supervisor should retain
 the first divergent call and preceding state, not accept eventual turn completion
 or patch simulation ordering without a demonstrated cause.
+
+For that failure, the next focused diagnostic is a checkpoint immediately before
+the first divergence with the existing AILog and PlayerAndCityAILogSplit options
+enabled. CvCityStrategyAI already logs flavors and possible builds before its
+choice. Compare candidate weights, construction times and preceding worker
+orders before adding instrumentation or changing shared simulation behavior.
+The final R19 state matched 4,150 normalized fields twice, but only after two
+resynchronizations; matching the eventual checkpoint is not clean acceptance.
 
 Movement needs engine pathfinding, not a greedy adjacent-tile walk. The exposed
 `unit:GeneratePath` binding is explicitly NYI in this release and raises a Lua

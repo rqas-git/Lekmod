@@ -170,7 +170,7 @@ The patched fresh Pangaea crossplay run matched 64 bounded random calls and four
 fractal samples and had no initial resynchronization. This fixes a demonstrated
 initial map divergence; it does not establish complete determinism.
 
-- Main suite: 55 tests, one Windows-only test skipped on macOS; macOS: 84 passed;
+- Main suite: 57 tests, one Windows-only test skipped on macOS; macOS: 84 passed;
   installer: 22 passed. The skipped batch behavior was separately executed on
   real Windows for all five UI fixture variants (ten batch executions), and each
   output matched the canonical package comparison.
@@ -206,6 +206,42 @@ initial map divergence; it does not establish complete determinism.
 - Checkpoint attempt R15 loaded the prior turn-30 save but stopped progressing
   at native turn 43/Windows ledger turn 42. The cause is unestablished; it is
   incomplete, not a successful sustained reload validation.
+- R18 reloaded turn 30 and recorded actual combat damage on both peers: a
+  human scout reached 95 damage and an AI spearman eight damage. Human expansion,
+  improvements, research and policies progressed. It stopped at native turn 47
+  and Windows ledger turn 46, with independent incomplete checkpoint saves;
+  this is not a completed 30–60 validation. A signed ProcDump capture and Lua
+  call metadata identified the Windows update hook blocked at
+  `Network.HasSentNetTurnComplete()` while processing messages with an inactive
+  player. Both supplied test hooks now omit that diagnostic query. The old
+  hook fails the new regression scenario and the corrected hook passes; the
+  underlying engine wait's cause remains unestablished.
+- The corrected-hook R19 checkpoint continuation found a further simulation
+  difference at turn 44: after 3,835 matching synchronized RNG calls, AI city
+  production used the same seed with ranges 2491 on Mac and 3324 on Windows.
+  Later calls also diverged, and network logs recorded RNG desynchronization
+  followed by a full resynchronization, plus AI unit-state differences. Loaded
+  difficulty and speed matched; fresh log
+  headers and monotonic turns excluded a retained earlier-run prefix. The cause
+  is unresolved, and removing the blocking diagnostic does not establish clean
+  crossplay compatibility.
+- The corrected-hook R19 continuation recorded all turns 30–60 on both peers
+  with separate verified turn-60 saves. Two fresh settled probes matched 4,150
+  normalized fields, including all plots, live major/minor entities, technology
+  and policy sets, production counters and city-state relationships; state was
+  unchanged within each peer. The first probe pair was too early in the turn
+  transition and differed in 96 fields. Locale-dependent technology-list order
+  was normalized as set membership. Human cities grew 1→2 and 2→5; AIs expanded,
+  and policies, research, improvements, war and acknowledged peace progressed.
+  No actual combat damage occurred in R19. Matching the final state does not
+  erase its two RNG desynchronizations/full resynchronizations or AI unit warnings.
+- Real reconnect was exercised with the Windows R19 host left running at turn
+  60. The first fresh client waited in the test hook's draft path; the staging
+  hook now readies started games through the normal ready action. The R21 retry
+  resumed the original human slot, received NetHotJoinCompleted and produced
+  an independent turn-60 save. Two fresh probes matched all 4,150 normalized
+  fields with unchanged state within each peer. This validates that reconnect
+  scenario, not every reconnect/rule combination.
 - An initial team attempt R16 crashed at turn zero in the upstream tourism
   calculation after raw founding requests had not produced human capitals.
   The native code now checks for a capital before reading its city culture.
@@ -223,6 +259,11 @@ initial map divergence; it does not establish complete determinism.
 Evidence is retained in `macos/build/validation-20261004/`, including source/core
 hashes, crash reproduction, independent saves, per-peer ledgers and network logs,
 real Windows batch results, final build checks and launcher DMG verification.
+Temporary Windows UI/settings were restored against five exact backup hashes,
+the owned tasks removed, and all 24 map hashes verified. Windows retains
+v35.4.003 and the official DLL. The ordinary Mac installation has the current
+core and no temporary menu/gameplay hooks. The self-contained launcher DMG passed
+image verification, strict code signing and relocated service checks.
 The [automation research](research/game-automation/README.md) describes checkpoint
 fixtures and a scenario matrix; the generalized framework was not implemented.
 
