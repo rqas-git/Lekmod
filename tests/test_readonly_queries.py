@@ -31,6 +31,76 @@ class ReadOnlyQueryTests(unittest.TestCase):
             run = subprocess.run([str(path / 'queries')], capture_output=True, text=True, timeout=20)
             self.assertEqual(run.returncode, 0, run.stderr)
 
+    def test_tourism_without_a_capital_keeps_the_unmodified_yield(self):
+        body = method('CvCultureClasses.cpp', 'int CvPlayerCulture::GetInfluencePerTurn(PlayerTypes')
+        self.compile_and_run(r'''
+#include <cassert>
+#include <cstddef>
+#define LEKMOD_GREAT_FIREWALL_PLAYER_EFFECT
+#define STANDARDIZE_YIELDS
+using PlayerTypes = int;
+using TechTypes = int;
+const int YIELD_TOURISM = 7;
+struct CityCulture {
+    int GetTourismMultiplier(int, bool, bool, bool, bool, bool) const { return 33; }
+};
+struct City {
+    CityCulture culture;
+    const CityCulture* GetCityCulture() const { return &culture; }
+};
+struct Player {
+    int id;
+    bool alive = true, minor = false;
+    City* capital = nullptr;
+    int yield = 0, cityYield = 0;
+    int GetID() const { return id; }
+    int getTeam() const { return id; }
+    bool isAlive() const { return alive; }
+    bool isMinorCiv() const { return minor; }
+    bool IsNullifyInfluenceModifier() const { return false; }
+    City* getCapitalCity() const { return capital; }
+    int getYieldTimes100(int, bool) const { return yield; }
+    int getYieldFromCitiesTimes100(int, bool) const { return cityYield; }
+};
+struct Techs { bool HasTech(int) const { return false; } };
+struct CvTeam {
+    bool met = true;
+    Techs techs;
+    bool isHasMet(int) const { return met; }
+    const Techs* GetTeamTechs() const { return &techs; }
+};
+struct Globals { int getInfoTypeForString(const char*) const { return 0; } } GC;
+using CvPlayer = Player;
+using CvCity = City;
+Player players[] = {{0}, {1}};
+CvTeam teams[2];
+#define GET_PLAYER(id) players[id]
+#define GET_TEAM(id) teams[id]
+struct CvPlayerCulture {
+    Player* m_pPlayer;
+    int GetInfluencePerTurn(PlayerTypes) const;
+};
+''' + body + r'''
+int main() {
+    CvPlayerCulture culture{&players[0]};
+    assert(culture.GetInfluencePerTurn(1) == 0);
+    players[0].yield = 1000;
+    assert(culture.GetInfluencePerTurn(1) == 10);
+    City capital;
+    players[0].capital = &capital;
+    assert(culture.GetInfluencePerTurn(1) == 13);
+    assert(culture.GetInfluencePerTurn(0) == 0);
+    teams[1].met = false;
+    assert(culture.GetInfluencePerTurn(1) == 0);
+    teams[1].met = true;
+    players[1].alive = false;
+    assert(culture.GetInfluencePerTurn(1) == 0);
+    players[1].alive = true;
+    players[1].minor = true;
+    assert(culture.GetInfluencePerTurn(1) == 0);
+}
+''')
+
     def test_observer_without_leader_has_no_traits(self):
         body = method('CvTraitClasses.cpp', 'bool CvPlayerTraits::HasTrait(TraitTypes')
         self.compile_and_run(r'''
