@@ -37,7 +37,7 @@ local function mpSpecialOrder(unit,p)
   if unit:CanFound(unit:GetPlot()) then
    local unitID=unit:GetID()
    mpOrder(unit,MissionTypes.MISSION_FOUND,-1,-1)
-   mpMark("founded."..Game.GetGameTurn().."."..unitID,true)
+   mpMark("foundRequest."..Game.GetGameTurn().."."..unitID,true)
    return true
   end
   local capital=p:GetCapitalCity()
@@ -128,6 +128,7 @@ local function mpSnapshot()
     mpMark(k.."city."..city:GetID()..".population",city:GetPopulation())
     mpMark(k.."city."..city:GetID()..".damage",city:GetDamage())
     mpMark(k.."city."..city:GetID()..".owner",city:GetOwner())
+    mpMark(k.."city."..city:GetID()..".position",city:GetX()..","..city:GetY())
    end
    table.sort(cityIDs)
    mpMark(k.."cityIDs",table.concat(cityIDs,","))
@@ -199,11 +200,12 @@ local function mpTick()
      or (name=="UNIT_WORKER" and p:GetNumCities()>=2 and not worker)
      or (p:GetNumCities()>=2 and worker and (name=="UNIT_ARCHER" or name=="UNIT_WARRIOR"))
     if wanted and u and city:CanTrain(u.ID) then
+     chosen=u
      Game.CityPushOrder(city,OrderTypes.ORDER_TRAIN,u.ID,false,false,false)
      mpMark("lastProduction",u.Type);break
     end
    end
-   if city:GetOrderQueueLength()==0 then
+   if not chosen and city:GetOrderQueueLength()==0 then
    for _,name in ipairs({"BUILDING_MONUMENT","BUILDING_SHRINE","BUILDING_GRANARY","BUILDING_LIBRARY","BUILDING_WATERMILL","BUILDING_BARRACKS"}) do
     local b=GameInfo.Buildings[name]
     if b and city:CanConstruct(b.ID) then chosen=b;break end
