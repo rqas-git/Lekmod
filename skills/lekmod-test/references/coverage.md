@@ -23,7 +23,9 @@ Lake Victoria yields, early/later city-state gold and crossbow ranged defense.
 Exact source equivalence and focused behavioral tests complement runtime evidence;
 they do not prove the gameplay event occurred in the network session.
 
-Keep per-peer turn IDs 0–30 and independently parsed final save headers. Compare
+Keep every per-peer turn ID in the requested interval and independently parsed
+final save headers. A 30-turn checkpoint continuation is, for example, 30–60;
+record its initial turn and verify the loaded participants before proceeding. Compare
 settled snapshots of every civilization, not snapshots captured at different
 points during simultaneous turns. Include source/core hashes and actual Windows
 version. Report runtime findings separately from synchronization success.
@@ -45,3 +47,21 @@ values and DefaultValue, and broadcast the settings. A v6.3 lobby without those
 defaults produced nil-option map errors and an empty game whose turns advanced
 automatically. Require living civilizations and the expected map dimensions
 before accepting turn progress.
+
+## Planning broader validation
+
+Choose explicit fixtures for combat/capture, religion/beliefs, city-state rewards,
+embarkation and unit upgrades, trade routes, elimination and victory conditions.
+Check that prerequisites actually exist and that each action completed. Include
+both values of changed game rules, relevant map wraps/sizes, and save/reload or
+reconnect across those states. Pairwise setup combinations help control cost;
+changed mechanics and prior crashes still need individual regression fixtures.
+A random full game cannot replace those assertions.
+
+The October 4 numeric adapter removed the demonstrated initial Pangaea mismatch:
+64 bounded random calls and four fractal samples matched, without an initial
+resync. The 0–30 run still logged one late AI building-class-making warning,
+despite repeated matching final live-entity snapshots. Retain that finding and
+inspect production counters/queues at a settled checkpoint; matching aggregate
+scores or raw save hashes are insufficient. Raw saves also contain platform build
+headers, so compare normalized state rather than requiring identical save bytes.
