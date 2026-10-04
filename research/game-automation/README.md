@@ -112,6 +112,11 @@ plot for every major and writes individual SQLite fields once per second, even
 while messages are processing. A future runner should use turn/event snapshots,
 compact grouped records and full settled comparisons at checkpoints. This could
 reduce test overhead; no speedup is claimed without a controlled measurement.
+Read-only telemetry can also block execution: an R18 Windows dump and Lua call
+metadata located an infinite engine wait in the hook's
+`Network.HasSentNetTurnComplete()` query during message processing. The existing
+hooks now omit that query and use subsequent turns and network-log acknowledgements.
+The underlying engine wait is not explained by locating the blocked call.
 
 Movement needs engine pathfinding, not a greedy adjacent-tile walk. The exposed
 `unit:GeneratePath` binding is explicitly NYI in this release and raises a Lua

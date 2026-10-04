@@ -93,3 +93,12 @@ cleanup. The helper bounds transport/polling but does not automatically stop a
 hung guest script. Failure envelopes retain errorMessage, errorRecord and
 scriptStackTrace as well as the exception string: a plain PowerShell throw
 sometimes supplied only RuntimeException through Exception.ToString().
+
+For an owned Windows x86 hang, a bounded capture with Microsoft's signed
+[ProcDump](https://learn.microsoft.com/en-us/sysinternals/downloads/procdump)
+produced usable x86 thread contexts on the ARM guest, whereas an earlier native
+PowerShell dump had unusable contexts. Verify the tool's signature and the
+process path/start time; bound capture and retain its output. A responsive window
+does not establish that gameplay callbacks are advancing. Dumps can be large:
+this mini dump was about 100 MB before compression, and one stack snapshot alone
+does not establish the underlying wait's cause.
