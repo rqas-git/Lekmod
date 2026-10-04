@@ -7,9 +7,9 @@ The Windows reference is the official release DLL with SHA-256
 `a5ac79567eff7c738f12c655457d2255199ef5da1e9e43aeb0e2b688b9161fd2`.
 
 This policy removes known gameplay differences in the fork. It does **not**
-certify native Mac–Windows multiplayer: joining, initial-state transfer, sustained
-gameplay, save/load, and reconnect still need testing against an unchanged Windows
-v35.4 installation. The existing Mac cross-play switch only adapts the registration
+certify native Mac–Windows multiplayer. Real two-peer testing has covered joining,
+initialization and sustained gameplay, with the findings below. Save reload,
+reconnect and individual release mechanics require their own evidence. The existing Mac cross-play switch only adapts the registration
 boundary. No installed game is changed by editing or building this checkout.
 
 ## Restored stock behavior
@@ -28,11 +28,9 @@ boundary. No installed game is changed by editing or building this checkout.
   setter and audit-version marker are removed.
 - City-connection storage growth, which affects serialized state; per-update
   lookup caches remain.
-- Legacy Teamer generator dependencies. Official Lekmap v6.3 lacks its two
-  mirrored helpers, so that legacy entry point remains unsupported. The installer
-  allows this specific known stock packaging gap only alongside usable maps,
-  without substituting different generators; validation of other required helpers
-  remains in place. An unusable payload cannot replace a working installation.
+- Legacy Teamer generator dependencies now use the shared HBMapGenerator and
+  HBFeatureGenerator helpers; its own mirroring logic remains unchanged. Both
+  peers need the complete matching fork map folder, including its shared helpers.
 
 Several restored behaviors are upstream bugs. Fixing them only on this machine
 can produce different shared game state. Any future fix needs an upstream release
@@ -117,7 +115,7 @@ Validation also caught and fixed the legacy-Teamer-only installer case: an
 unusable payload is rejected before replacing existing maps, while the complete
 official v6.2 map archive remained accepted.
 
-### v35.4 validation: October 2, 2026
+### Historical v35.4 validation: October 2, 2026
 
 The upstream v35.4 source, Lua/UI, official Windows DLL and Lekmap v6.3
 updates are integrated. The installer removes older Lekmap folders from its
@@ -156,3 +154,82 @@ diagnostic did not reach map initialization and established no seed cause.
 All test clients were stopped and the Windows VM returned to its original
 stopped state, retaining v35.4 and v6.3.
 Native Mac–Windows compatibility is not certified.
+
+### Current v35.4 validation: October 4, 2026
+
+The reported stale-unit crash was reproduced from the user's turn-80 save at
+turn 85. EUI flag callbacks now resolve the current unit instead of retaining a
+removed unit wrapper. The same untraced save completed turns 80–110 after the
+fix, with an independently verified turn-110 save. A separate allocator-abort
+report has no established cause; this fix does not claim to explain it.
+
+Native Lua bindings now reproduce the Windows Lua 5.1 nearest-even 32-bit
+integer conversion, including checked/optional arguments and invalid/range
+behavior. Previously Aspyr truncated fractional fractal sizes and ridge counts.
+The patched fresh Pangaea crossplay run matched 64 bounded random calls and four
+fractal samples and had no initial resynchronization. This fixes a demonstrated
+initial map divergence; it does not establish complete determinism.
+
+- Main suite: 55 tests, one Windows-only test skipped on macOS; macOS: 84 passed;
+  installer: 22 passed. The skipped batch behavior was separately executed on
+  real Windows for all five UI fixture variants (ten batch executions), and each
+  output matched the canonical package comparison.
+- Stock performance/output/RNG comparisons and native undefined-behavior checks
+  passed. Swift launcher lifecycle checks passed. The final native release passed
+  356 engine imports and six pregame anchors. The latest R17 run retained the
+  exact source/build manifest and staged core hash.
+- Explicit native Teamer setup used four major AIs, two teams and a reserved
+  observer. It recorded all turns 0–30 and an independently verified final save,
+  with AI expansion, research and policies. The observer trait lookup now safely
+  rejects an unassigned leader. Reserving the observer before creation remains
+  necessary; a late-observer setup encountered a separate engine crash.
+- The patched R13 Windows-host/Mac-client run had two humans, two major AIs and
+  four living city-states, every turn 0–30 on both peers, and independent turn-30
+  saves. A repeated settled comparison of recorded live entities found zero
+  differences. Human/AI expansion, policy/research progress, AI improvements,
+  war and peace occurred; actual combat damage did not occur in this run.
+- R13 still logged one late AI `CvPlayer::m_paiBuildingClassMaking` sync warning.
+  It is **completed with findings**, not clean crossplay acceptance. A generic
+  Windows lobby Lua nil-call error also remains unattributed. Neither finding
+  is suppressed or explained by matching final aggregate statistics.
+- A fresh latest-core R17 Teamer run used two humans and two AIs on opposing
+  teams, recording every turn 0–30 and independent saves on both platforms.
+  Both humans reached two cities and both AIs three. Research, policies and
+  improvements progressed. Two repeated settled probes matched 962 recorded
+  live-state and supplemental counter fields, with unchanged state between probes.
+  Consumed-unit rows were excluded using the current entity rosters.
+- R17 retained one AI unit synchronization event covering five movement/mission
+  variables and the generic Windows lobby Lua error. There was no initial full
+  resync. Actual combat damage was absent, so this is **completed with findings**
+  and incomplete combat coverage, not clean acceptance. Normal exploration and
+  auto-move interventions were recorded rather than attributed to a proven cause.
+- Checkpoint attempt R15 loaded the prior turn-30 save but stopped progressing
+  at native turn 43/Windows ledger turn 42. The cause is unestablished; it is
+  incomplete, not a successful sustained reload validation.
+- An initial team attempt R16 crashed at turn zero in the upstream tourism
+  calculation after raw founding requests had not produced human capitals.
+  The native code now checks for a capital before reading its city culture.
+  Extracted-function undefined-behavior tests cover absent and valid capitals;
+  R17 uses normal founding actions and waits for acknowledgement before ending
+  turn zero. The official Windows DLL remains unchanged and retains that
+  unguarded upstream path. The Windows process also exited during R16, but no
+  Windows stack established the same cause.
+- Reserved Pangaea Dummy 1–9 options are hidden without renumbering subsequent
+  options. Legacy Teamer now loads existing shared helpers; both peers require
+  the full matching 24-script map folder. Connected-region fixture outputs are
+  unchanged, with 72 cases taking 1.84 seconds before and 0.087 seconds after;
+  this measures that routine, not overall map startup.
+
+Evidence is retained in `macos/build/validation-20261004/`, including source/core
+hashes, crash reproduction, independent saves, per-peer ledgers and network logs,
+real Windows batch results, final build checks and launcher DMG verification.
+The [automation research](research/game-automation/README.md) describes checkpoint
+fixtures and a scenario matrix; the generalized framework was not implemented.
+
+The upstream diff review restored stock comments, license/vendor notes and
+installation documentation, removed redundant platform branches, and restored
+unrelated generated reports rather than leaving large report deletions in the
+functional comparison. Remaining large changes include shared UI materialization,
+ordered source/map refactors with equivalence fixtures, native Mac support,
+installer/launcher work, and tests/skills/research. The generalized automation
+framework remains research only.
