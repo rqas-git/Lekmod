@@ -45,4 +45,10 @@ local foundChunk=assert(loadstring(special..'\nreturn mpSpecialOrder'));setfenv(
 local settler={GetUnitType=function()return 0 end,CanFound=function()return true end,GetPlot=function()return {} end,GetID=function()return 123 end}
 assert(found(settler,{}) and founders==0,'must wait for founding action readiness')
 ready=true;assert(found(settler,{}) and founders==1,'must use normal founding action')
-print('multiplayer team, movement, command and founding scenarios passed')
+local skip=assert(source:match('(   if not ordered and unit:Can.-\n   end)'))
+local held=0;local canHold=true
+local skipEnv={ordered=false,MissionTypes={MISSION_SKIP=4},unit={GetPlot=function()return {} end,CanHold=function()return canHold end,CanSleep=function()return false end},mpOrder=function(_,mission,x,y)assert(mission==4 and x==-1 and y==-1);held=held+1 end}
+local skipChunk=assert(loadstring(skip));setfenv(skipChunk,skipEnv);skipChunk()
+assert(held==1,'a fortifiable unit can hold even when it cannot sleep')
+canHold=false;skipChunk();assert(held==1,'must not hold an illegally stacked unit')
+print('multiplayer team, movement, command, founding and hold scenarios passed')
