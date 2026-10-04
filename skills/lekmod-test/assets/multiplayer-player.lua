@@ -62,7 +62,6 @@ local function mpTick()
  mpMark("tickTime",os.time())
  mpMark("processing",Game.IsProcessingMessages())
  mpMark("turnActive",p and p:IsTurnActive())
- mpMark("sentComplete",Network.HasSentNetTurnComplete())
  mpMark("currentBlocking",p and p:GetEndTurnBlockingType())
  if not p or not p:IsAlive() or not p:IsTurnActive() or Game.IsProcessingMessages() then return end
  UI.SetDontShowPopups(true)

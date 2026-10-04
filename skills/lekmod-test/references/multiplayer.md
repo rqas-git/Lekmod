@@ -306,7 +306,12 @@ team run acknowledged both human capitals and completed turns 0–30.
 
 Game.CanDoControl(CONTROL_ENDTURN) is not an acknowledgement: DoControl also
 checks engine AI and unit-update completion before sending turn complete.
-Read Network.HasSentNetTurnComplete and subsequent turn state. Normal
+Use subsequent per-peer turn state and network-log acknowledgements. Do not poll
+Network.HasSentNetTurnComplete from the update hook: an R18 Windows process dump
+and Lua call metadata identified that query blocked in an infinite engine wait
+while processing messages with an inactive player. Both supplied hooks omit it.
+The dump established the blocked call, not the underlying engine wait's cause.
+Normal
 CONTROL_AUTOMOVES sends the game's queued movement request; explicit requests
 helped a test continue, but the cause of its waiting end-turn requests was not
 isolated. Record interventions and do not bypass engine gates.

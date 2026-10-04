@@ -7,6 +7,17 @@ from reference import ROOT
 
 
 class MultiplayerHookTests(unittest.TestCase):
+    def test_turn_diagnostics_avoid_blocking_network_getter(self):
+        lua = os.environ.get('LUA51') or shutil.which('lua5.1')
+        if not lua:
+            self.skipTest('Requires Lua 5.1')
+        assets = ROOT / 'skills/lekmod-test/assets'
+        result = subprocess.run([lua, str(ROOT / 'tests/multiplayer_turn_diagnostics.lua'),
+                                 str(assets / 'multiplayer-player.lua'),
+                                 str(assets / 'multiplayer-expanded-player.lua')],
+                                capture_output=True, text=True, timeout=20)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_production_waits_for_network_acknowledgement(self):
         lua = os.environ.get('LUA51') or shutil.which('lua5.1')
         if not lua:
