@@ -102,3 +102,18 @@ error. Normal destination missions use the game’s pathfinder; use those and
 verify arrival or a blocker. Select a living opposing team already at war for
 combat scenarios, rather than the first other player. Record actual damage;
 a declaration or an attack request alone does not establish combat coverage.
+
+Verify rules through named runtime queries. GameInfo.GameOptions database IDs
+are not the engine’s GameOptionTypes enum in this release; using them with
+Game.IsOption can falsely report an enabled custom rule as disabled. Prefer
+Game.IsOption("GAMEOPTION_...") and retain the actual loaded values. Quick
+combat/movement must also be verified, not inferred from profile preferences.
+
+The latest team run completed turns 0–30 with matching recorded live state,
+including supplemental production counters, but retained an AI unit sync warning.
+Its combat coverage remained absent despite expansion and ordinary movement.
+This supports dedicated saved scenarios with opposing units already near the
+trigger, rather than expecting a general early-game bot to exercise every rule.
+End-turn requests also need acknowledgement: CanDoControl can succeed while
+DoControl waits for AI/unit processing. A future supervisor should report that
+state and bound recovery through normal game controls, not bypass engine gates.
