@@ -291,7 +291,7 @@ local function mpTick()
      end
     end
    end
-   if not ordered and unit:CanSleep(unit:GetPlot()) then
+   if not ordered and unit:CanHold(unit:GetPlot()) then
     mpOrder(unit,MissionTypes.MISSION_SKIP,-1,-1)
    end
    mpUnitActions[unitID]=turn

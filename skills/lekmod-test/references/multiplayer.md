@@ -312,3 +312,15 @@ Filter every unit/city field against the current checkpoint's unitIDs/cityIDs,
 including supplementary counters. Compare fresh repeated probes from both peers
 with processing=false and verify each nonce. Matching live state does not erase
 earlier synchronization warnings or unrelated runtime errors.
+
+
+Use CanHold for MISSION_SKIP; CanSleep checks a different mission. For a waiting
+human, the normal GameInfoActions MISSION_SKIP action through Game.HandleAction
+can hold currently movable units without bypassing end-turn checks. In the
+checkpoint continuation, those normal actions cleared a long turn wait;
+record the selected units, command completion and subsequent turn progress.
+Do not equate this recovery with a proven core fix. Blocker values are cached:
+one diagnostic had a selected technology and no active research notification
+while the cached blocker still said research. Inspect live prerequisites and
+notifications before assuming a choice is missing. Core-update timestamps also
+continued, so a fresh UI ledger alone could not establish an engine hang.
