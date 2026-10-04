@@ -4194,7 +4194,7 @@ bool CvPlayerTraits::HasTrait(TraitTypes eTrait) const
 {
 	CvAssert(m_pPlayer);
 
-	if(m_pPlayer != NULL)
+	if(m_pPlayer != NULL && m_pPlayer->getLeaderType() >= 0)
 	{
 		CvAssertMsg((m_pPlayer->getLeaderType() >= 0), "getLeaderType() is less than zero");
 		CvAssertMsg((eTrait >= 0), "eTrait is less than zero");

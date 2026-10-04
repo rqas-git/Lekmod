@@ -31,6 +31,50 @@ class ReadOnlyQueryTests(unittest.TestCase):
             run = subprocess.run([str(path / 'queries')], capture_output=True, text=True, timeout=20)
             self.assertEqual(run.returncode, 0, run.stderr)
 
+    def test_observer_without_leader_has_no_traits(self):
+        body = method('CvTraitClasses.cpp', 'bool CvPlayerTraits::HasTrait(TraitTypes')
+        self.compile_and_run(r'''
+#include <cassert>
+#include <cstddef>
+#define CvAssert(x) ((void)0)
+#define CvAssertMsg(x, message) ((void)0)
+using TraitTypes = int;
+struct Leader { bool hasTrait(int) const { return true; } };
+struct Player {
+    int leader;
+    int getLeaderType() const { return leader; }
+    int getTeam() const { return 0; }
+    Leader getLeaderInfo() const { assert(leader >= 0); return {}; }
+};
+struct Trait {
+    bool obsolete, enabled;
+    bool IsObsoleteByTech(int) const { return obsolete; }
+    bool IsEnabledByTech(int) const { return enabled; }
+};
+struct Traits { Trait trait; Trait* GetEntry(int) { return &trait; } };
+struct CvPlayerTraits {
+    Player* m_pPlayer;
+    Traits* m_pTraits;
+    bool HasTrait(TraitTypes) const;
+};
+''' + body + r'''
+int main() {
+    Traits traits{{false, true}};
+    Player observer{-1}, player{0};
+    CvPlayerTraits query{nullptr, &traits};
+    assert(!query.HasTrait(0));
+    query.m_pPlayer = &observer;
+    assert(!query.HasTrait(0));
+    query.m_pPlayer = &player;
+    assert(query.HasTrait(0));
+    traits.trait.obsolete = true;
+    assert(!query.HasTrait(0));
+    traits.trait.obsolete = false;
+    traits.trait.enabled = false;
+    assert(!query.HasTrait(0));
+}
+''')
+
     def test_trade_countdown_matches_movement_without_changing_the_route(self):
         countdown = method('CvTradeClasses.cpp', 'int TradeConnection::GetTurnsRemaining(')
         source = '''
