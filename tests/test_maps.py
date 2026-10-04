@@ -21,6 +21,16 @@ class MapTests(unittest.TestCase):
                     f'{path.name} can recursively include itself on the Mac port via {included}',
                 )
 
+    def test_custom_map_helper_dependencies_are_present(self):
+        for path in (ROOT / 'Lekmap').glob('*.lua'):
+            for included in re.findall(r'include\(["\']([^"\']+)["\']\)', path.read_text(encoding='utf-8-sig')):
+                if included.startswith('HB'):
+                    self.assertTrue((ROOT / 'Lekmap' / (included + '.lua')).is_file(),
+                                    f'{path.name} includes missing helper {included}')
+
+    def test_connected_regions_match_original(self):
+        self._compare_scenarios('map_blob_scenarios.lua', 72)
+
     def test_regional_maps_match_original_rivers_starts_sizes_and_fractals(self):
         self._compare_scenarios('regional_map_scenarios.lua', 468)
 
@@ -41,7 +51,12 @@ class MapTests(unittest.TestCase):
                 if name.endswith('.lua'):
                     (Path(directory) / Path(name).name).write_bytes(original(name, BASELINE))
             def run(folder):
-                result = subprocess.run([lua, str(ROOT / 'tests' / script), str(folder)],
+                command = [lua, str(ROOT / 'tests' / script), str(folder)]
+                if script == 'map_blob_scenarios.lua':
+                    command[-1] = str(Path(folder) / 'LekmapPangaeaFractalv6.3.lua')
+                if script == 'map_metadata_scenarios.lua' and folder == ROOT / 'Lekmap':
+                    command.append('hidden-placeholders')
+                result = subprocess.run(command,
                                         capture_output=True, text=True)
                 self.assertEqual(result.returncode, 0, result.stderr)
                 return result.stdout.splitlines()

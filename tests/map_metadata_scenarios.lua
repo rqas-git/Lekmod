@@ -10,6 +10,18 @@ local function serialize(value)
     for _, key in ipairs(keys) do parts[#parts + 1] = serialize(key)..'='..serialize(value[key]) end
     return '{'..table.concat(parts, ',')..'}'
 end
+local function comparable(info, name)
+    if name == 'LekmapPangaeaFractalv6.3' then
+        for i = 1, 9 do
+            local option = info.CustomOptions[i]
+            assert(option.Name == 'Dummy-'..i and option.DefaultValue == 1 and #option.Values == 1)
+            if arg[2] == 'hidden-placeholders' then assert(option.Hidden == true) end
+            option.Hidden = nil
+        end
+        assert(info.CustomOptions[10].Name == 'TXT_KEY_MAP_OPTION_WORLD_AGE')
+    end
+    return serialize(info)
+end
 local seen = {}
 local function assertFresh(value)
     if type(value) ~= 'table' then return end
@@ -37,7 +49,7 @@ for _, name in ipairs({
     end
     setfenv(assert(loadfile(directory..'/'..name..'.lua')), env)()
     local info = env.GetMapScriptInfo()
-    local expected = serialize(info)
+    local expected = comparable(info, name)
     assertFresh(info)
     for _, option in ipairs(info.CustomOptions) do
         option.Values[1], option.DefaultValue = 'mutated', -1
@@ -45,7 +57,7 @@ for _, name in ipairs({
     info.Name = 'mutated'
     local again = env.GetMapScriptInfo()
     assertFresh(again)
-    assert(serialize(again) == expected, name..' retained a previous menu edit')
+    assert(comparable(again, name) == expected, name..' retained a previous menu edit')
     assert(coreCalls == 2, name..' changed calls to GetCoreMapOptions')
     print(name..':'..expected)
 end

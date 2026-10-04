@@ -133,8 +133,12 @@ class StockCompatibilityTests(unittest.TestCase):
         self.assertEqual(canonical(current(path)[current(path).index(marker):], 'lua'),
                          canonical(stock(path)[stock(path).index(marker):], 'lua'))
 
-    def test_teamer_keeps_stock_generator_dependencies(self):
+    def test_teamer_uses_available_generators_and_retains_mirroring(self):
         path = 'Lekmap/LekmapTeamerMapLegacy.lua'
-        for module in ('HBMapGeneratorMirrored', 'HBFeatureGeneratorMirrored'):
+        for module in ('HBMapGenerator', 'HBFeatureGenerator'):
             self.assertIn('include("' + module + '")', current(path))
-            self.assertIn('include("' + module + '")', stock(path))
+            self.assertIn('include("' + module + 'Mirrored")', stock(path))
+            self.assertFalse((ROOT / 'Lekmap' / (module + 'Mirrored.lua')).exists())
+        marker = 'function StartPlotSystem()'
+        self.assertEqual(canonical(current(path)[current(path).index(marker):], 'lua'),
+                         canonical(stock(path)[stock(path).index(marker):], 'lua'))

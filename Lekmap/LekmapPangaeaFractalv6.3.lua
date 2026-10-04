@@ -33,6 +33,7 @@ function GetMapScriptInfo()
 
 			{
 				Name = "Dummy-1",
+				Hidden = true,
 				Values = {
 					"",
 				},
@@ -41,6 +42,7 @@ function GetMapScriptInfo()
 			},
 			{
 				Name = "Dummy-2",
+				Hidden = true,
 				Values = {
 					"",
 				},
@@ -49,6 +51,7 @@ function GetMapScriptInfo()
 			},
 			{
 				Name = "Dummy-3",
+				Hidden = true,
 				Values = {
 					"",
 				},
@@ -57,6 +60,7 @@ function GetMapScriptInfo()
 			},
 			{
 				Name = "Dummy-4",
+				Hidden = true,
 				Values = {
 					"",
 				},
@@ -65,6 +69,7 @@ function GetMapScriptInfo()
 			},
 			{
 				Name = "Dummy-5",
+				Hidden = true,
 				Values = {
 					"",
 				},
@@ -73,6 +78,7 @@ function GetMapScriptInfo()
 			},
 			{
 				Name = "Dummy-6",
+				Hidden = true,
 				Values = {
 					"",
 				},
@@ -81,6 +87,7 @@ function GetMapScriptInfo()
 			},
 			{
 				Name = "Dummy-7",
+				Hidden = true,
 				Values = {
 					"",
 				},
@@ -89,6 +96,7 @@ function GetMapScriptInfo()
 			},
 			{
 				Name = "Dummy-8",
+				Hidden = true,
 				Values = {
 					"",
 				},
@@ -97,6 +105,7 @@ function GetMapScriptInfo()
 			},
 			{
 				Name = "Dummy-9",
+				Hidden = true,
 				Values = {
 					"",
 				},
@@ -1472,8 +1481,6 @@ function impassable_check(i, map)
 end
 
 function get_blobs(map)
-	local blob_to_region = {}
-	local blob_count = {}
 	local blob_graph = table.fill(0, iW * iH)
 	local blob_number = 1
 
@@ -1487,14 +1494,10 @@ function get_blobs(map)
 			else
 				if map[i] > 0 then
 					if blob_graph[i] == 0 then
-						blob_to_region[blob_number] = map[i]
 						local blob_fill = {}
 						PlotDFS(i, blob_fill, map, map[i])
-						blob_count[blob_number] = tablelength(blob_fill)
-						for l = 1, table.maxn(blob_fill) do
-							if blob_fill[l] ~= nil then
-								blob_graph[l] = blob_number
-							end
+						for l in pairs(blob_fill) do
+							blob_graph[l] = blob_number
 						end
 						blob_number = blob_number+1
 					end
