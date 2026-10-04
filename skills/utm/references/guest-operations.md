@@ -72,6 +72,11 @@ actual state afterward. In one 4.7.5 recovery, `start --hide` returned Operation
 available for the stopped test VM, while normal `start` succeeded; the cause was
 not established. Do not assume a timeout means an operation had no effect.
 
+Verify shutdown state rather than trusting a successful request. In the 4.7.5
+Windows test, `stop --request` returned successfully but the VM remained started.
+A guest `shutdown.exe /s /t 0` request then returned it to stopped, without a
+forced VM power-off. The reason the first request did not stop it was not isolated.
+
 In an October 2026 Windows 11 ARM validation, two owned PowerShell preflights
 containing Get-CimInstance Win32_ComputerSystem grew to roughly 10 GB private
 memory each. Guest commit space was nearly exhausted and DWM/Game Bar crashed.

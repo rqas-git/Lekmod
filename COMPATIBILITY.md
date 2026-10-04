@@ -264,6 +264,8 @@ the owned tasks removed, and all 24 map hashes verified. Windows retains
 v35.4.003 and the official DLL. The ordinary Mac installation has the current
 core and no temporary menu/gameplay hooks. The self-contained launcher DMG passed
 image verification, strict code signing and relocated service checks.
+All owned test clients were stopped and the VM returned to its original stopped
+state. Repository and installed skill copies match.
 The [automation research](research/game-automation/README.md) describes checkpoint
 fixtures and a scenario matrix; the generalized framework was not implemented.
 
