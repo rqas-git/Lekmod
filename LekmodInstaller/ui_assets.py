@@ -93,8 +93,10 @@ def configure_ui(lekmod, want_eui=False, eui_folder=None, preserve_all=True, log
             if strict:
                 raise
             log(str(error))
+    selected_names = {target for _, target in plan}
     preserved = {p.name: p.read_bytes() for p in ui.glob('*') if p.is_file()
-                 and (preserve_all or p.name in manifest['preserve'])}
+                 and (preserve_all or p.name in manifest['preserve'])
+                 and (p.name != 'CityStateGreetingPopup.lua' or p.name in selected_names)}
     if ui.exists():
         shutil.rmtree(ui)
     ui.mkdir(parents=True)

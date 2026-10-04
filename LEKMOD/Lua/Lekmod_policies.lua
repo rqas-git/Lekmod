@@ -85,7 +85,7 @@ local function AwardConsulatesVotesForEra(player, eraID)
     if eraID >= GameInfoTypes["ERA_POSTMODERN"] then   player:ChangeNumPolicyLeagueVotes(1) end
     if eraID >= GameInfoTypes["ERA_FUTURE"] then       player:ChangeNumPolicyLeagueVotes(1) end
 end
--- 1) On policy adoption: backfill votes for all eras you've already passed if applicable
+
 function Lekmod_OnAdoptConsulates(playerID, policyID)
     if policyID ~= GameInfoTypes["POLICY_CONSULATES"] then return end
     local player = Players[playerID]
@@ -93,23 +93,20 @@ function Lekmod_OnAdoptConsulates(playerID, policyID)
 
     local currentEra = player:GetCurrentEra()
     AwardConsulatesVotesForEra(player, currentEra)
+    GameEvents.PlayerAdoptPolicy.Remove(Lekmod_OnAdoptConsulates)
 end
--- 2) On era change: if you already have Consulates, give +1 vote for that new era
-function Lekmod_OnEraChangeGiveConsulatesVote(teamID, newEraID)
 
-    -- Only give the incremental vote for the *new* era
+function Lekmod_OnEraChangeGiveConsulatesVote(playerID, newEraID)
+    local player = Players[playerID]
+    if not player:IsAlive() then return end
+    if not player:HasPolicy(GameInfoTypes["POLICY_CONSULATES"]) then return end
+
     if     newEraID == GameInfoTypes["ERA_INDUSTRIAL"]
         or newEraID == GameInfoTypes["ERA_MODERN"]
         or newEraID == GameInfoTypes["ERA_POSTMODERN"]
         or newEraID == GameInfoTypes["ERA_FUTURE"]
     then
-        for playerID = 0, GameDefines.MAX_MAJOR_CIVS - 1 do
-            local player = Players[playerID]
-            if player:IsAlive() and player:GetTeam() == teamID
-                and player:HasPolicy(GameInfoTypes["POLICY_CONSULATES"]) then
         player:ChangeNumPolicyLeagueVotes(1)
-            end
-        end
     end
 end
 

@@ -38,7 +38,16 @@ def contents(folder):
 class UIAssetsTests(unittest.TestCase):
     def assert_ui_matches_previous(self, old, new):
         before, after = contents(old), contents(new)
-        self.assertEqual(set(before), set(after))
+        self.assertEqual(set(after) - set(before),
+                         {'DiploRelationships.lua', 'CityStateGreetingPopup.lua'} & set(after))
+        self.assertFalse(set(before) - set(after))
+        for name in ('DiploRelationships.lua', 'CityStateGreetingPopup.lua'):
+            after.pop(name, None)
+        for name in ('CityBannerManager.xml', 'NotificationPanel.xml', 'TechPopup.xml',
+                     'TopPanel.lua', 'CultureOverview.lua', 'MPGameOptions.lua',
+                     'VictoryProgress.lua', 'EUI_tooltip_library.lua'):
+            before.pop(name, None)
+            after.pop(name, None)
         helper = 'TradeRouteHelpers.lua'
         self.assertIn(helper, before)
         before.pop(helper)
@@ -113,6 +122,18 @@ class UIAssetsTests(unittest.TestCase):
                     civ5_path=str(self.root / variant / 'game'))
                 configure_ui(new, want_eui, eui, log=lambda _: None)
                 self.assert_ui_matches_previous(old / 'Lua/UI', new / 'Lua/UI')
+
+    def test_personality_contexts_follow_eui_ownership(self):
+        configure_ui(self.mod, log=lambda _: None)
+        ui = self.mod / 'Lua/UI'
+        for name in ('DiploRelationships.lua', 'CityStateGreetingPopup.lua'):
+            self.assertIn('GetMinorCivPersonalityDisplayText(pPlayer)', (ui / name).read_text())
+        pack = self.root / 'UI_bc1/CityStatePopup'
+        pack.mkdir(parents=True)
+        (pack / 'CityStateGreetingPopup.lua').write_text('')
+        configure_ui(self.mod, True, pack.parent, log=lambda _: None)
+        self.assertFalse((ui / 'CityStateGreetingPopup.lua').exists())
+        self.assertTrue((ui / 'DiploRelationships.lua').exists())
 
     def test_older_archive_uses_original_paths(self):
         old = self.root / 'old/LEKMOD'

@@ -3,6 +3,14 @@
 ----------------------------------------------------------------
 local g_NextProposalRequestTurn = -1;
 REQUEST_PROPOSALS_COOLDOWN = 1;
+local function UpdateMPProposalVisibility()
+    local visible = Game.IsGameMultiPlayer()
+    for _, name in ipairs({"MPProposeIrrButton", "MPProposeCCButton", "MPProposeScrapButton"}) do
+        local control = Controls[name]
+        if control then control:SetHide(not visible) end
+    end
+    return visible
+end
 ----------------------------------------------------------------
 ----------------------------------------------------------------
 include( "IconSupport" );
@@ -44,6 +52,7 @@ local g_ScoreList = {};
 ----------------------------------------------------------------
 ----------------------------------------------------------------
 function OnProposeIrr()
+    if not Game.IsGameMultiPlayer() then return end
 	Controls.MPProposeIrrButton:SetDisabled(true)
 	Controls.MPProposeCCButton:SetDisabled(true)
 	Controls.MPProposeScrapButton:SetDisabled(true)
@@ -56,6 +65,7 @@ end
 Controls.MPProposeIrrButton:RegisterCallback( Mouse.eLClick, OnProposeIrr );
 
 function OnProposeCC()
+    if not Game.IsGameMultiPlayer() then return end
 	Controls.MPProposeIrrButton:SetDisabled(true)
 	Controls.MPProposeCCButton:SetDisabled(true)
 	Controls.MPProposeScrapButton:SetDisabled(true)
@@ -68,6 +78,7 @@ end
 Controls.MPProposeCCButton:RegisterCallback( Mouse.eLClick, OnProposeCC );
 
 function OnProposeScrap()
+    if not Game.IsGameMultiPlayer() then return end
 	Controls.MPProposeIrrButton:SetDisabled(true)
 	Controls.MPProposeCCButton:SetDisabled(true)
 	Controls.MPProposeScrapButton:SetDisabled(true)
@@ -730,6 +741,7 @@ function SetupScreen()
 	-- Set Player Score
 	PopulateScoreBreakdown();
 	-- Proposal buttons
+	if UpdateMPProposalVisibility() then
 	local pPlayer = Game.GetActivePlayer();
 	local bAnyProposalOngoing = false;
 	if Game.GetLastProposalID then
@@ -837,6 +849,7 @@ function SetupScreen()
 	end
 
 	-- Populate Victories
+	end
 	PopulateDomination();
 	PopulateSpaceRace();
 	PopulateDiplomatic();

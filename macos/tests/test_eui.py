@@ -15,7 +15,7 @@ import eui
 import game_install as game
 import install as installer
 import launcher
-from package_assets import prepare_lekmod
+from package_assets import configure_mac_layouts, prepare_lekmod
 import test_installer as fixtures
 
 
@@ -184,6 +184,29 @@ class EUITests(unittest.TestCase):
 
 
 class OverlayTests(unittest.TestCase):
+    def test_mac_layouts_preserve_windows_sources_and_external_contexts(self):
+        root = Path(__file__).resolve().parents[2]
+        tree = root / 'LEKMOD/Lua/tmp/shared/TechTree/TechTree.xml.ignore'
+        original = tree.read_bytes()
+        self.assertIn(b'Size="Full,1020"', original)
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            destination = directory / 'LEKMOD'
+            prepare_lekmod(root / 'LEKMOD', destination)
+            ui = destination / 'Lua/UI'
+            self.assertIn('Size="Full,740"', (ui / 'TechTree.xml').read_text())
+            self.assertIn('Offset="36,-76"', (ui / 'CivilopediaScreen.xml').read_text())
+            self.assertTrue((ui / 'CityStateGreetingPopup.lua').exists())
+            pack = directory / 'UI_bc1'
+            pack.mkdir()
+            (pack / 'CivilopediaScreen.xml').write_text('external')
+            (pack / 'CityStateGreetingPopup.lua').write_text('')
+            (ui / 'CivilopediaScreen.xml').write_text('preserved')
+            configure_mac_layouts(destination, pack)
+            self.assertEqual((ui / 'CivilopediaScreen.xml').read_text(), 'preserved')
+            self.assertFalse((ui / 'CityStateGreetingPopup.lua').exists())
+        self.assertEqual(tree.read_bytes(), original)
+
     def test_existing_windows_rules_keep_eui_except_for_macos_city_banners(self):
         root = Path(__file__).resolve().parents[2]
         with tempfile.TemporaryDirectory() as temporary:

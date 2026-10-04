@@ -2388,7 +2388,7 @@ local function GetMoodInfo( playerID )
 				if route.ToID == activePlayerID then
 					tip = tip .. " ".. routeBonus( route, "To" )
 				end
-				tradeRoutes:insert( tip .. " ("..(route.TurnsLeft-1)..")" )
+				tradeRoutes:insert( tip .. " ("..(route.TurnsLeft - (route.TurnsLeftIncludesCurrentTurn and 0 or 1))..")" )
 			end
 		end
 		for _, route in ipairs( activePlayer:GetTradeRoutesToYou() ) do

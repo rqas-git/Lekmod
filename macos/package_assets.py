@@ -7,6 +7,26 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "LekmodInstaller"))
 from ui_assets import configure_ui
 
 
+def configure_mac_layouts(destination, eui=None):
+    ui = destination / 'Lua/UI'
+    tree = ui / 'TechTree.xml'
+    if tree.is_file():
+        contents = tree.read_text()
+        for old, new in (('Full,1020', 'Full,740'), ('Full,985', 'Full,705'),
+                         ('1650,1020', '1650,740'), ('4,1000', '4,722'),
+                         ('1650,1000', '1650,722')):
+            contents = contents.replace('Size="' + old + '"', 'Size="' + new + '"')
+        tree.write_text(contents)
+
+    civilopedia = destination / 'Lua/tmp/macos/CivilopediaScreen.xml.ignore'
+    has_civilopedia = eui is not None and (
+        any(eui.rglob('CivilopediaScreen.xml')) or any(eui.rglob('CivilopediaScreen.lua')))
+    if civilopedia.is_file() and not has_civilopedia:
+        shutil.copy2(civilopedia, ui / 'CivilopediaScreen.xml')
+    if eui is not None and any(eui.rglob('CityStateGreetingPopup.lua')):
+        (ui / 'CityStateGreetingPopup.lua').unlink(missing_ok=True)
+
+
 def restore_stock_city_banners(destination):
     """Use stock banner controls with grid-based Aspyr world positioning."""
     source = destination / 'Lua/tmp/ui/CityBanners'
@@ -62,6 +82,7 @@ def prepare_lekmod(source, destination, eui=None):
                     ignore=lambda _path, names: [n for n in names
                         if n.startswith('.') or Path(n).suffix.lower() in ('.dll', '.pdb', '.bat')])
     configure_ui(destination, want_eui=eui is not None, eui_folder=eui, preserve_all=False)
+    configure_mac_layouts(destination, eui)
     if eui is not None:
         # EUI's banner controls do not render in Aspyr's macOS build. Stock
         # controls work, but use event hexes that misplace banners on Lekmap;

@@ -23,7 +23,8 @@
     "eui/TechTree/TechTree.xml": "shared/TechTree/TechTree.xml"
   },
   "rules": [
-    {"files": ["ui/AncientRuins/GoodyHutPopup.lua"]},
+    {"files": ["ui/AncientRuins/GoodyHutPopup.lua", "ui/DiploRelationships.lua"]},
+    {"eui": "CityStatePopup/CityStateGreetingPopup.lua", "files": ["ui/CityStatePopup/CityStateGreetingPopup.lua"], "overlay": []},
     {"eui": "CityBanners/CityBannerManager.lua", "files": ["ui/CityBanners/CityBannerManager.lua", "ui/CityBanners/CityBannerManager.xml"], "overlay": [["eui/CityBanners/CityBannerManager_1.lua", "CityBannerManager.lua"], ["eui/CityBanners/CityBannerManager_1.xml", "CityBannerManager.xml"]], "contains": "CityBannerProductionBox = function( city )", "fallback_overlay": [["eui/CityBanners/CityBannerManager_2.lua", "CityBannerManager.lua"], ["eui/CityBanners/CityBannerManager_2.xml", "CityBannerManager.xml"]]},
     {"eui": "CityStatePopup/CityStateDiploPopup.lua", "files": ["ui/CityStatePopup/CityStateDiploPopup.lua"], "overlay": ["eui/CityStatePopup/CityStateDiploPopup.lua"]},
     {"eui": "CityView/CityView.lua", "files": ["ui/CityView/CityView.lua", "ui/CityView/CityView.xml", "ui/CityView/CityView_small.xml"], "overlay": ["eui/CityView/CityView.lua", "eui/CityView/CityView.xml", "eui/CityView/CityView_small.xml"], "contains": "-- coded by bc1 from 1.0.3.276 brave new world code"},
