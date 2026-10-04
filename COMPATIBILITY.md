@@ -1,15 +1,15 @@
 # Standard Lekmod gameplay target
 
-This checkout targets **Lekmod v35.3**, upstream commit
-`70aa6ad5e343845903719aea48f55bbba8edebb8`, released September 5, 2026.
+This checkout targets **Lekmod v35.4**, upstream commit
+`201df6c56b41cc353ec01b2523bf852733d922e8`, released October 1, 2026.
 Local improvements must preserve that release's shared simulation behavior.
 The Windows reference is the official release DLL with SHA-256
-`c8c265d26e6d67bab7c99371692a5b001d274cea6e80a3d9794b5626c994f357`.
+`a5ac79567eff7c738f12c655457d2255199ef5da1e9e43aeb0e2b688b9161fd2`.
 
 This policy removes known gameplay differences in the fork. It does **not**
 certify native Mac–Windows multiplayer: joining, initial-state transfer, sustained
 gameplay, save/load, and reconnect still need testing against an unchanged Windows
-v35.3 installation. The existing Mac cross-play switch only adapts the registration
+v35.4 installation. The existing Mac cross-play switch only adapts the registration
 boundary. No installed game is changed by editing or building this checkout.
 
 ## Restored stock behavior
@@ -23,11 +23,12 @@ boundary. No installed game is changed by editing or building this checkout.
 - City-state personality trait identifiers, lake and freshwater behavior,
   improvement pillage/repair handling, AI specialization iteration, peace filters,
   and the barbarian-strategy war-state condition.
+- Consulates vote awards and event callback removal, matching stock peers.
 - Research Lua argument handling and the stock Lua game API. The added overflow
   setter and audit-version marker are removed.
 - City-connection storage growth, which affects serialized state; per-update
   lookup caches remain.
-- Legacy Teamer generator dependencies. Official Lekmap v6.2 lacks its two
+- Legacy Teamer generator dependencies. Official Lekmap v6.3 lacks its two
   mirrored helpers, so that legacy entry point remains unsupported. The installer
   allows this specific known stock packaging gap only alongside usable maps,
   without substituting different generators; validation of other required helpers
@@ -47,8 +48,7 @@ change or independent evidence that it preserves behavior with stock peers.
   folder; backup creation never replaces an existing file.
 - UI query and text-generation improvements, shared UI packaging, and source
   refactors whose outputs are covered by regression tests.
-- Yellow city headers in trade-route tooltips for both supported UI modes; all
-  route values and gameplay queries remain unchanged.
+- Yellow city headers in trade-route tooltips for both supported UI modes.
 - City-connection metadata caches; improvement and promotion metadata caches;
   reduced trade-ranking copies and cached trade ranges; stable worker selection
   and plot snapshots; prepared database queries and build-type caches.
@@ -56,6 +56,9 @@ change or independent evidence that it preserves behavior with stock peers.
   caching, and early unit filtering.
 - Rank-based map shuffling and map helper refactors that preserve tested seeded
   outputs and random-call traces.
+- Pointer-width allocator alignment, read-only Lua query fixes, fractional trade
+  tooltips, route countdown displays, UI control guards, and corrected visual assets.
+  Mac layout overrides are applied during packaging; the Windows DLL remains stock.
 - Owning-string lifetime protection for `unit:GetScriptData()`, preserving its
   intended return value without reading freed memory.
 
@@ -87,7 +90,7 @@ Windows packages use the exact public DLL by default. The packager rejects
 unverified replacements. Mac native builds remain separate artifacts with
 source/build manifests and must be rebuilt after changing gameplay source.
 
-### Validation snapshot: September 21, 2026
+### Historical v35.3 validation: September 21, 2026
 
 - 125 unit/regression tests passed across the main, macOS, and installer suites.
   The Windows batch/PowerShell test was skipped on macOS.
@@ -112,4 +115,44 @@ source/build manifests and must be rebuilt after changing gameplay source.
 
 Validation also caught and fixed the legacy-Teamer-only installer case: an
 unusable payload is rejected before replacing existing maps, while the complete
-official v6.2 map archive remains accepted.
+official v6.2 map archive remained accepted.
+
+### v35.4 validation: October 2, 2026
+
+The upstream v35.4 source, Lua/UI, official Windows DLL and Lekmap v6.3
+updates are integrated. The installer removes older Lekmap folders from its
+staged installation so duplicate helper files are not discovered.
+
+- Main tests: 47 run, one Windows-only check skipped; macOS: 81 passed;
+  installer: 22 passed. Stock performance comparisons and undefined-behavior
+  checks passed. The release build passed 358 imports and six pregame ABI anchors.
+- Native AI smoke test recorded turns 0–30 with active civilizations and a
+  verified final save. It is supplementary single-player coverage.
+- Windows was upgraded to v35.4.003 using the official DLL hash above; the
+  official payload and v6.3 maps were audited, allowing only text line-ending
+  differences and the documented temporary test hooks.
+- A real Windows-host/native-Mac session with two humans, two major AIs and four
+  configured city-states recorded all turns 0–30 on both peers. Independent final saves
+  identify turn 30. Observed actions included research, production, policies,
+  improvements, AI expansion, unit/city damage, war and peace.
+- This **failed clean crossplay acceptance**: initial map/starting-state
+  divergence required automatic resynchronization, and a later live turn-30
+  probe found one Huns worker at different coordinates on the peers. Matching
+  population/score and completing 30 turns do not erase that difference.
+- A repeat with only v6.3 maps founded an additional human city at turn 27, then
+  lost its Windows peer at turn 28. Both ledgers stopped there. Guest-agent calls
+  also timed out; the disconnect's cause is unestablished. Removing duplicate
+  maps did not eliminate the initial synchronization finding.
+- Legacy Teamer's missing FeatureGenerator, an absent adjacency-yield table
+  warning and duplicate StrategicView registration remain runtime findings.
+  Capture/recapture, Tithe, specific civilization/wonder yields, crossbow defense,
+  save reload and reconnect still require targeted current-release scenarios.
+
+Evidence is retained under `macos/build/upstream-v35.4/`, including the R8 and
+R9 ledgers/reports, independent R8 saves, Windows integrity audit, test/build
+logs and guest restoration hashes. Temporary hooks/settings were restored and
+the owned guest task removed again after the separate seed diagnostic. The
+diagnostic did not reach map initialization and established no seed cause.
+All test clients were stopped and the Windows VM returned to its original
+stopped state, retaining v35.4 and v6.3.
+Native Mac–Windows compatibility is not certified.
