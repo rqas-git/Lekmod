@@ -11,6 +11,7 @@ local mpUnitActions={}
 local mpCityOrders={}
 local mpTargetSince=nil
 local mpSaved=false
+local mpQuickRequested=false
 local mpCommand=nil
 
 local function mpOrder(unit,mission,x,y)
@@ -30,6 +31,9 @@ local function mpMoveTowards(unit,target)
   end
  end
  if best then mpOrder(unit,MissionTypes.MISSION_MOVE_TO,best:GetX(),best:GetY());return true end
+ if not target:IsCity() or Teams[unit:GetTeam()]:IsAtWar(target:GetTeam()) then
+  mpOrder(unit,MissionTypes.MISSION_MOVE_TO,target:GetX(),target:GetY());return true
+ end
  return false
 end
 local function mpSpecialOrder(unit,p)
@@ -37,9 +41,17 @@ local function mpSpecialOrder(unit,p)
  if row.Found then
   if unit:CanFound(unit:GetPlot()) then
    local unitID=unit:GetID()
-   mpOrder(unit,MissionTypes.MISSION_FOUND,-1,-1)
-   mpMark("foundRequest."..Game.GetGameTurn().."."..unitID,true)
-   return true
+   for actionID,action in pairs(GameInfoActions) do
+    if action.Type=="MISSION_FOUND" then
+     if Game.CanHandleAction(actionID) then
+      UI.SelectUnit(unit)
+      Game.HandleAction(actionID)
+      mpMark("foundRequest."..Game.GetGameTurn().."."..unitID,true)
+     end
+     return true
+    end
+   end
+   return false
   end
   local capital=p:GetCapitalCity()
   if capital then
@@ -78,7 +90,13 @@ local function mpSpecialOrder(unit,p)
   local target=nil
   for id=0,GameDefines.MAX_MAJOR_CIVS-1 do
    local other=Players[id]
-   if id~=p:GetID() and other and other:IsAlive() then target=other:GetCapitalCity();if target then break end end
+   if other and other:IsAlive() and other:GetTeam()~=p:GetTeam() then
+    local capital=other:GetCapitalCity()
+    if capital then
+     target=target or capital
+     if Teams[p:GetTeam()]:IsAtWar(other:GetTeam()) then target=capital;break end
+    end
+   end
   end
   if target then
    local team=Teams[p:GetTeam()]
@@ -138,6 +156,10 @@ local function mpSnapshot()
    end
   end
  end
+ mpMark("quickCombat",PreGame.GetQuickCombat())
+ mpMark("quickMovement",PreGame.GetQuickMovement())
+ mpMark("simultaneousTurns",Game.IsOption("GAMEOPTION_SIMULTANEOUS_TURNS"))
+ mpMark("noDestructiveRecapture",Game.IsOption("GAMEOPTION_NO_DESTRUCTIVE_RECAPTURE"))
  mpMark("turn",turn)
 end
 local function mpTick()
@@ -145,9 +167,10 @@ local function mpTick()
  local command=mpLedger and mpLedger.GetValue("command")
  if command and command~=mpCommand then
   mpCommand=command
-  local chunk,err=loadstring(command)
+  local chunk,err=loadstring("return function(validationLedger)\n"..command.."\nend")
   if not chunk then error(err) end
-  local ok,result=pcall(chunk)
+  local execute=chunk()
+  local ok,result=pcall(execute,mpLedger)
   mpMark("commandResult",tostring(ok).." | "..tostring(result))
   mpMark("commandCompleted",command)
  end
@@ -175,13 +198,17 @@ local function mpTick()
  if id==0 and turn>=12 then
   for other=1,GameDefines.MAX_MAJOR_CIVS-1 do
    local rival=Players[other]
-   if rival and rival:IsAlive() and Teams[p:GetTeam()]:IsHasMet(rival:GetTeam()) then
+   if rival and rival:IsAlive() and rival:GetTeam()~=p:GetTeam() and Teams[p:GetTeam()]:IsHasMet(rival:GetTeam()) then
     local war=turn<24
     if Teams[p:GetTeam()]:IsAtWar(rival:GetTeam())~=war then
      Network.SendChangeWar(rival:GetTeam(),war);mpMark("warRequest."..turn,war);return
     end
    end
   end
+ end
+ if not mpQuickRequested and p:GetNumCities()>0 and Matchmaking.IsHost() then
+  Network.SendGameOptions({{"GAMEOPTION_QUICK_COMBAT",true},{"GAMEOPTION_QUICK_MOVEMENT",true}})
+  mpQuickRequested=true
  end
  if p:GetCurrentResearch()<0 then
   local best=nil
@@ -253,7 +280,7 @@ local function mpTick()
  for u in p:Units() do unitIDs[#unitIDs+1]=u:GetID() end
  for _,unitID in ipairs(unitIDs) do
   local unit=p:GetUnitByID(unitID)
-  if unit and unit:MovesLeft()>0 and not unit:IsWaiting() and mpUnitActions[unitID]~=turn then
+  if unit and unit:MovesLeft()>0 and not unit:IsWaiting() and (mpUnitActions[unitID]~=turn or (turn==0 and p:GetNumCities()==0 and GameInfo.Units[unit:GetUnitType()].Found)) then
    UI.SelectUnit(unit)
    local ordered=mpSpecialOrder(unit,p)
    if not ordered and unit:GetPlot():GetNumUnits()>1 then
@@ -270,6 +297,7 @@ local function mpTick()
    mpUnitActions[unitID]=turn
   end
  end
+ if turn==0 and p:GetNumCities()==0 then return end
  if Game.CanDoControl(ControlTypes.CONTROL_ENDTURN) then
   Game.DoControl(ControlTypes.CONTROL_ENDTURN)
   mpMark("lastEndTurnRequest",turn)

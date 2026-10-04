@@ -15,3 +15,12 @@ class MultiplayerHookTests(unittest.TestCase):
                                  str(ROOT / 'skills/lekmod-test/assets/multiplayer-expanded-player.lua')],
                                 capture_output=True, text=True, timeout=20)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_team_actions_ignore_allies_and_prefer_war_opponents(self):
+        lua = os.environ.get('LUA51') or shutil.which('lua5.1')
+        if not lua:
+            self.skipTest('Requires Lua 5.1')
+        result = subprocess.run([lua, str(ROOT / 'tests/multiplayer_team_scenarios.lua'),
+                                 str(ROOT / 'skills/lekmod-test/assets/multiplayer-expanded-player.lua')],
+                                capture_output=True, text=True, timeout=20)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
