@@ -117,3 +117,13 @@ trigger, rather than expecting a general early-game bot to exercise every rule.
 End-turn requests also need acknowledgement: CanDoControl can succeed while
 DoControl waits for AI/unit processing. A future supervisor should report that
 state and bound recovery through normal game controls, not bypass engine gates.
+
+
+For sustained throughput, benchmark a Windows peer on x86 hardware as well as
+this Windows 11 ARM VM. [Microsoft documents that x86 applications run through
+emulation on Windows ARM](https://learn.microsoft.com/en-us/windows/arm/apps-on-arm-x86-emulation).
+The current Civ V Windows executable is x86; an x86 worker is therefore a useful
+engineering candidate for avoiding that translation layer, not a measured speedup.
+Keep the Mac client and official DLL in the acceptance pair. Increasing VM CPU
+count alone does not demonstrate improved game or harness throughput. [UTM also
+distinguishes guest CPU architecture from hardware virtualization](https://docs.getutm.app/settings-qemu/system/).
