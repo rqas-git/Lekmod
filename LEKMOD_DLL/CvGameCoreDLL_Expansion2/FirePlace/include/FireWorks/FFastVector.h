@@ -322,11 +322,7 @@ public:
 #ifdef BREAK_ON_REPEATED_RESIZE
 		m_nResizeTimes = 0;
 #endif
-#if defined(LEKMOD_MACOS)
 		this->Copy(RHS);
-#else
-		Copy(RHS);
-#endif
 	};
 	FFastVector(unsigned int uiStartingMaxSize = 0)
 	{
@@ -630,11 +626,7 @@ public:
 #ifdef BREAK_ON_STATIC_RESIZE
 		m_iNumResized = 0;
 #endif
-#if defined(LEKMOD_MACOS)
 		this->Copy(RHS);
-#else
-		Copy(RHS);
-#endif
 	};
 	FStaticVector()
     {
@@ -662,11 +654,7 @@ public:
 		}else{
 			Destroy(m_pData, m_uiCurrSize);
 		}
-#if defined(LEKMOD_MACOS)
 		this->Copy(RHS);
-#else
-		Copy(RHS);
-#endif
 	};
 
     bool operator == (const THIS_TYPE& RHS) const {
