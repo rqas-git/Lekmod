@@ -150,6 +150,7 @@ void CvLuaPlayer::PushMethods(lua_State* L, int t)
 	Method(GetImprovementGoldMaintenance);
 	Method(CalculateGoldRate);
 	Method(CalculateGoldRateTimes100);
+	Method(GetLastGoldChangeTimes100);
 	Method(CalculateGrossGoldTimes100);
 	Method(CalculateInflatedCosts);
 	Method(CalculateResearchModifier);
@@ -1930,6 +1931,13 @@ int CvLuaPlayer::lCalculateGoldRateTimes100(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlayerAI::calculateGoldRateTimes100);
 }
+int CvLuaPlayer::lGetLastGoldChangeTimes100(lua_State* L)
+{
+	CvPlayerAI* player = GetInstance(L);
+	lua_pushinteger(L, player->GetTreasury()->GetLastGoldChangeTimes100());
+	return 1;
+}
+
 //------------------------------------------------------------------------------
 //int CalculateGrossGoldTimes100();
 int CvLuaPlayer::lCalculateGrossGoldTimes100(lua_State* L)
@@ -4404,22 +4412,22 @@ int CvLuaPlayer::lGetTradeYourRoutesTTString(lua_State* L)
 					switch (eYield)
 					{
 					case YIELD_FOOD:
-						strOriginYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_FOOD_YIELD_TT", iYieldQuantity / 100);
+						strOriginYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_FOOD_YIELD_TT", iYieldQuantity / 100.0f);
 						break;
 					case YIELD_PRODUCTION:
-						strOriginYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_PRODUCTION_YIELD_TT", iYieldQuantity / 100);
+						strOriginYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_PRODUCTION_YIELD_TT", iYieldQuantity / 100.0f);
 						break;
 					case YIELD_GOLD:
-						strOriginYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_GOLD_YIELD_TT", iYieldQuantity / 100);
+						strOriginYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_GOLD_YIELD_TT", iYieldQuantity / 100.0f);
 						break;
 					case YIELD_SCIENCE:
-						strOriginYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_SCIENCE_YIELD_TT", iYieldQuantity / 100);
+						strOriginYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_SCIENCE_YIELD_TT", iYieldQuantity / 100.0f);
 						break;
 					case YIELD_CULTURE:
-						strOriginYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_CULTURE_YIELD_TT", iYieldQuantity / 100);
+						strOriginYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_CULTURE_YIELD_TT", iYieldQuantity / 100.0f);
 						break;
 					case YIELD_FAITH:
-						strOriginYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_FAITH_YIELD_TT", iYieldQuantity / 100);
+						strOriginYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_FAITH_YIELD_TT", iYieldQuantity / 100.0f);
 						break;
 					}
 				}
@@ -4435,22 +4443,22 @@ int CvLuaPlayer::lGetTradeYourRoutesTTString(lua_State* L)
 					switch (eYield)
 					{
 					case YIELD_FOOD:
-						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_FOOD_YIELD_TT", iYieldQuantity / 100);
+						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_FOOD_YIELD_TT", iYieldQuantity / 100.0f);
 						break;
 					case YIELD_PRODUCTION:
-						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_PRODUCTION_YIELD_TT", iYieldQuantity / 100);
+						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_PRODUCTION_YIELD_TT", iYieldQuantity / 100.0f);
 						break;
 					case YIELD_GOLD:
-						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_GOLD_YIELD_TT", iYieldQuantity / 100);
+						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_GOLD_YIELD_TT", iYieldQuantity / 100.0f);
 						break;
 					case YIELD_SCIENCE:
-						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_SCIENCE_YIELD_TT", iYieldQuantity / 100);
+						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_SCIENCE_YIELD_TT", iYieldQuantity / 100.0f);
 						break;
 					case YIELD_CULTURE:
-						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_CULTURE_YIELD_TT", iYieldQuantity / 100);
+						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_CULTURE_YIELD_TT", iYieldQuantity / 100.0f);
 						break;
 					case YIELD_FAITH:
-						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_FAITH_YIELD_TT", iYieldQuantity / 100);
+						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_FAITH_YIELD_TT", iYieldQuantity / 100.0f);
 						break;
 					}
 				}
@@ -4615,22 +4623,22 @@ int CvLuaPlayer::lGetTradeToYouRoutesTTString(lua_State* L)
 					switch (eYield)
 					{
 					case YIELD_FOOD:
-						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_FOOD_YIELD_TT", iYieldQuantity / 100);
+						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_FOOD_YIELD_TT", iYieldQuantity / 100.0f);
 						break;
 					case YIELD_PRODUCTION:
-						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_PRODUCTION_YIELD_TT", iYieldQuantity / 100);
+						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_PRODUCTION_YIELD_TT", iYieldQuantity / 100.0f);
 						break;
 					case YIELD_GOLD:
-						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_GOLD_YIELD_TT", iYieldQuantity / 100);
+						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_GOLD_YIELD_TT", iYieldQuantity / 100.0f);
 						break;
 					case YIELD_SCIENCE:
-						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_SCIENCE_YIELD_TT", iYieldQuantity / 100);
+						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_SCIENCE_YIELD_TT", iYieldQuantity / 100.0f);
 						break;
 					case YIELD_CULTURE:
-						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_CULTURE_YIELD_TT", iYieldQuantity / 100);
+						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_CULTURE_YIELD_TT", iYieldQuantity / 100.0f);
 						break;
 					case YIELD_FAITH:
-						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_FAITH_YIELD_TT", iYieldQuantity / 100);
+						strDestYieldsStr += GetLocalizedText("TXT_KEY_TOP_PANEL_ITR_FAITH_YIELD_TT", iYieldQuantity / 100.0f);
 						break;
 					}
 				}
@@ -4797,8 +4805,10 @@ int CvLuaPlayer::lGetTradeRoutes(lua_State* L)
 		lua_pushinteger(L, iToDelta);
 		lua_setfield(L, t, "ToTourism");
 
-		lua_pushinteger(L, pConnection->m_iTurnRouteComplete - GC.getGame().getGameTurn());
+		lua_pushinteger(L, pConnection->GetTurnsRemaining(GET_PLAYER(pConnection->m_eOriginOwner).GetTrade()->GetTradeRouteSpeed(pConnection->m_eDomain)));
 		lua_setfield(L, t, "TurnsLeft");
+		lua_pushboolean(L, true);
+		lua_setfield(L, t, "TurnsLeftIncludesCurrentTurn");
 
 		lua_rawseti(L, -2, index++);
 	}
@@ -4893,7 +4903,7 @@ int CvLuaPlayer::lGetTradeRoutesAvailable(lua_State* L)
 						TradeConnection* pConnection = pPlayerTrade->GetTradeConnection(pOriginCity, pDestCity);
 						if (pConnection && pConnection->m_eDomain == eDomain)
 						{
-							iTurnsLeft = pConnection->m_iTurnRouteComplete - GC.getGame().getGameTurn();
+							iTurnsLeft = pConnection->GetTurnsRemaining(GET_PLAYER(pConnection->m_eOriginOwner).GetTrade()->GetTradeRouteSpeed(pConnection->m_eDomain));
 						}
 
 						lua_pushinteger(L, eDomain);
@@ -4971,6 +4981,8 @@ int CvLuaPlayer::lGetTradeRoutesAvailable(lua_State* L)
 
 						lua_pushinteger(L, iTurnsLeft);
 						lua_setfield(L, t, "TurnsLeft");
+						lua_pushboolean(L, true);
+						lua_setfield(L, t, "TurnsLeftIncludesCurrentTurn");
 
 						lua_rawseti(L, -2, index++);
 
@@ -5028,7 +5040,7 @@ int CvLuaPlayer::lGetTradeRoutesToYou(lua_State* L)
 		lua_pushinteger(L, pConnection->m_eConnectionType);
 		lua_setfield(L, t, "ConnectionType");
 #endif
-		lua_pushinteger(L, pkPlayer->getCivilizationType());
+		lua_pushinteger(L, pFromPlayer->getCivilizationType());
 		lua_setfield(L, t, "FromCivilizationType");
 		lua_pushinteger(L , pFromCity->getOwner());
 		lua_setfield(L, t, "FromID");
@@ -5079,14 +5091,16 @@ int CvLuaPlayer::lGetTradeRoutesToYou(lua_State* L)
 		lua_setfield(L, t, "FromPressure");
 
 		int iToDelta = pFromCity->GetCityCulture()->GetBaseTourism() * pFromCity->GetCityCulture()->GetTourismMultiplier(pToPlayer->GetID(), true, true, false, true, true);
-		int iFromDelta = pToCity->GetCityCulture()->GetBaseTourism() * pToCity->GetCityCulture()->GetTourismMultiplier(pkPlayer->GetID(), true, true, false, true, true);
+		int iFromDelta = pToCity->GetCityCulture()->GetBaseTourism() * pToCity->GetCityCulture()->GetTourismMultiplier(pFromPlayer->GetID(), true, true, false, true, true);
 		lua_pushinteger(L, iFromDelta);
 		lua_setfield(L, t, "FromTourism");
 		lua_pushinteger(L, iToDelta);
 		lua_setfield(L, t, "ToTourism");
 
-		lua_pushinteger(L, GC.getGame().getGameTurn() - pConnection->m_iTurnRouteComplete);
+		lua_pushinteger(L, pConnection->GetTurnsRemaining(GET_PLAYER(pConnection->m_eOriginOwner).GetTrade()->GetTradeRouteSpeed(pConnection->m_eDomain)));
 		lua_setfield(L, t, "TurnsLeft");
+		lua_pushboolean(L, true);
+		lua_setfield(L, t, "TurnsLeftIncludesCurrentTurn");
 
 		lua_rawseti(L, -2, index++);
 	}

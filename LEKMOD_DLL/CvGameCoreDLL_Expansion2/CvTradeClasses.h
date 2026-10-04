@@ -51,6 +51,8 @@ struct TradeConnection
 	int m_aiOriginYields[NUM_YIELD_TYPES];
 	int m_aiDestYields[NUM_YIELD_TYPES];
 
+	int GetTurnsRemaining(int routeSpeed) const;
+
 #ifdef AUI_EXPLICIT_DESTRUCTION
 	~TradeConnection()
 	{

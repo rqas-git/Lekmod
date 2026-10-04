@@ -1777,6 +1777,20 @@ int CvGameTrade::GetTechDifference (PlayerTypes ePlayer, PlayerTypes ePlayer2)
 	return m_aaiTechDifference[ePlayer][ePlayer2];
 }
 
+int TradeConnection::GetTurnsRemaining(int routeSpeed) const
+{
+	if (m_iCircuitsCompleted >= m_iCircuitsToComplete)
+		return 0;
+	if (routeSpeed <= 0 || m_aPlotList.size() < 2)
+		return -1;
+
+	const int circuitSteps = (static_cast<int>(m_aPlotList.size()) - 1) * 2;
+	const int location = static_cast<int>(m_iTradeUnitLocationIndex);
+	const int progress = m_bTradeUnitMovingForward || location == 0 ? location : circuitSteps - location;
+	const int remainingSteps = (m_iCircuitsToComplete - m_iCircuitsCompleted) * circuitSteps - progress;
+	return (remainingSteps + routeSpeed - 1) / routeSpeed;
+}
+
 //	--------------------------------------------------------------------------------
 /// move a trade unit along its path for all its movement points
 bool CvGameTrade::MoveUnit (int iIndex) 

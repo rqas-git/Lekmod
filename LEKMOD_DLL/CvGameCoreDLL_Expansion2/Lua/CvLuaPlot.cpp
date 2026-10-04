@@ -647,7 +647,13 @@ int CvLuaPlot::lDefenseModifier(lua_State* L)
 //int movementCost(CyUnit* pUnit, CyPlot* pFromPlot);
 int CvLuaPlot::lMovementCost(lua_State* L)
 {
-	return BasicLuaMethod(L, &CvPlot::movementCost);
+	CvPlot* pkPlot = GetInstance(L);
+	CvUnit* pkUnit = CvLuaUnit::GetInstance(L, 2);
+	CvPlot* pkFromPlot = CvLuaPlot::GetInstance(L, 3);
+	const int iMovesRemaining = luaL_optint(L, 4, 0);
+
+	lua_pushinteger(L, pkPlot->movementCost(pkUnit, pkFromPlot, iMovesRemaining));
+	return 1;
 }
 
 //------------------------------------------------------------------------------
@@ -1412,7 +1418,7 @@ int CvLuaPlot::lCalculateImprovementYieldChange(lua_State* L)
 	const YieldTypes eYield = (YieldTypes)lua_tointeger(L,3);
 	const PlayerTypes ePlayer = (PlayerTypes)lua_tointeger(L, 4);
 	const bool bOptional = luaL_optbool(L, 5, false);
-	const RouteTypes eRoute = (RouteTypes)luaL_optint(L, 5, NUM_ROUTE_TYPES);
+	const RouteTypes eRoute = (RouteTypes)luaL_optint(L, 6, NUM_ROUTE_TYPES);
 
 	const int iResult = pkPlot->calculateImprovementYieldChange(eImprovement, eYield, ePlayer, bOptional, eRoute);
 	lua_pushinteger(L, iResult);
