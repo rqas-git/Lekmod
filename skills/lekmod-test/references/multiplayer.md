@@ -322,6 +322,16 @@ including supplementary counters. Compare fresh repeated probes from both peers
 with processing=false and verify each nonce. Matching live state does not erase
 earlier synchronization warnings or unrelated runtime errors.
 
+Compare synchronized RNG calls after removing process-local instance addresses
+and turn-slice timing. Check log headers, turn resets, fresh initialization and
+process ownership before comparing a shared Windows log with a private Mac log.
+Ignore an incomplete trailing CSV row while a writer is active. A matching seed
+with a different range is a compatibility finding even if gameplay continues.
+The R19 continuation first differed at turn 44 in city-production selection
+(Mac range 2491, Windows 3324); the preceding 3,835 calls matched. Its cause was
+not established. Compare actual technology/policy sets and plot state as well
+as aggregate counts; do not change simulation ordering based on a hypothesis.
+
 
 Use CanHold for MISSION_SKIP; CanSleep checks a different mission. For a waiting
 human, the normal GameInfoActions MISSION_SKIP action through Game.HandleAction

@@ -86,6 +86,13 @@ Use an already verified install/user record or a small independent probe instead
 of rediscovering account paths with that query on the affected VM. Keep actual
 Steam identities private and verify distinct peers without dumping account files.
 
+A later metadata job without that CIM query also timed out and reached about
+3.7 GB private memory. Its individual failing operation was not isolated. The
+matching breadcrumb identified the owned PowerShell process; stopping only that
+process preserved the game. Direct .NET FileInfo/ReadAllText queries and
+Diagnostics.Process.GetProcessById then succeeded. Prefer these small probes
+after a timeout rather than repeating broad process or file metadata collection.
+
 The job envelope now records the guest process ID and writes a matching
 .started.json breadcrumb before executing the script. A timeout reports its
 path; inspect that fresh ID/start time and verify the live process before
