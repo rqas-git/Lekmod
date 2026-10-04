@@ -19,6 +19,12 @@ function OnStagingUpdate(dt)
  local ok,err=pcall(function()
   local id=Matchmaking.GetLocalID()
   stageMark("localID",id)
+  stageMark("gameStarted",PreGame.GameStarted())
+  if PreGame.GameStarted() then
+   if not PreGame.IsReady(id) then OnReadyCheck(true) end
+   stageMark("phase","hot join ready")
+   return
+  end
   local connected=0
   for i=0,GameDefines.MAX_MAJOR_CIVS-1 do
    if Network.IsPlayerConnected(i) then connected=connected+1 end

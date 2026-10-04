@@ -7,6 +7,15 @@ from reference import ROOT
 
 
 class MultiplayerHookTests(unittest.TestCase):
+    def test_staging_readies_reconnects_without_redrafting(self):
+        lua = os.environ.get('LUA51') or shutil.which('lua5.1')
+        if not lua:
+            self.skipTest('Requires Lua 5.1')
+        result = subprocess.run([lua, str(ROOT / 'tests/multiplayer_staging_scenarios.lua'),
+                                 str(ROOT / 'skills/lekmod-test/assets/multiplayer-staging.lua')],
+                                capture_output=True, text=True, timeout=20)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_turn_diagnostics_avoid_blocking_network_getter(self):
         lua = os.environ.get('LUA51') or shutil.which('lua5.1')
         if not lua:
