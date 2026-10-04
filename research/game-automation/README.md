@@ -118,6 +118,14 @@ metadata located an infinite engine wait in the hook's
 hooks now omit that query and use subsequent turns and network-log acknowledgements.
 The underlying engine wait is not explained by locating the blocked call.
 
+The corrected-hook R19 continuation retained another compatibility finding:
+3,835 synchronized RNG calls matched before city-production selection at turn 44
+used the same seed with different ranges (Mac 2491, Windows 3324). Matching
+loaded difficulty and speed did not explain it. Log headers and turn progression
+excluded a retained earlier-run prefix. An automation supervisor should retain
+the first divergent call and preceding state, not accept eventual turn completion
+or patch simulation ordering without a demonstrated cause.
+
 Movement needs engine pathfinding, not a greedy adjacent-tile walk. The exposed
 `unit:GeneratePath` binding is explicitly NYI in this release and raises a Lua
 error. Normal destination missions use the game’s pathfinder; use those and
