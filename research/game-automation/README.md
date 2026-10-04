@@ -158,6 +158,14 @@ Keep the Mac client and official DLL in the acceptance pair. Increasing VM CPU
 count alone does not demonstrate improved game or harness throughput. [UTM also
 distinguishes guest CPU architecture from hardware virtualization](https://docs.getutm.app/settings-qemu/system/).
 
+Native `Game.SetAIAutoPlay` is the quickest demonstrated route for AI soaks,
+with an observer reserved before creation. It is not a drop-in replacement for
+the multiplayer human controller: `CvGame::setAIAutoPlay` changes the active
+player to an observer, or kills that player's units and cities if it cannot.
+The existing isolated runner covers the observer path; two-peer autoplay needs
+its own slot/state validation before it can be trusted. Retain normal human
+actions in targeted policy, diplomacy and combat scenarios.
+
 
 Separate cold application/database initialization, map-generation time, turns,
 and telemetry/transfer overhead in measurements. The current launcher does not
