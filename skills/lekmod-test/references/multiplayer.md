@@ -253,6 +253,10 @@ still-empty local queue as permission to request fallback production. The hook
 now records its choice before sending it; otherwise a settler could be replaced
 by a building or scout before the first request was acknowledged.
 
+External commands are deduplicated by their full Lua text. Include a fresh nonce
+when repeating an action, wait for that exact `commandCompleted`, and inspect
+`commandResult`; rewriting identical text does not execute another request.
+
 Install revised hooks before a fresh launch. After a live replacement, later external native-ledger
 command updates did not persist; multiple userdata handles were present, but the precise cause was
 not isolated. Use a new prefix and checkpoint reload instead of
