@@ -45,7 +45,7 @@ class UIAssetsTests(unittest.TestCase):
             after.pop(name, None)
         for name in ('CityBannerManager.xml', 'NotificationPanel.xml', 'TechPopup.xml',
                      'TopPanel.lua', 'CultureOverview.lua', 'MPGameOptions.lua',
-                     'VictoryProgress.lua', 'EUI_tooltip_library.lua'):
+                     'VictoryProgress.lua', 'EUI_tooltip_library.lua', 'UnitFlagManager.lua'):
             before.pop(name, None)
             after.pop(name, None)
         helper = 'TradeRouteHelpers.lua'
@@ -67,6 +67,15 @@ class UIAssetsTests(unittest.TestCase):
                              + ' .. "[ENDCOLOR]"')
             new_text = new_text.replace(new_line, old_line, 1)
         self.assertEqual(canonical(old_text, 'lua'), canonical(new_text, 'lua'))
+
+    def test_eui_unit_flags_resolve_live_units_after_removal(self):
+        lua = os.environ.get('LUA51') or shutil.which('lua5.1')
+        if not lua:
+            self.skipTest('Lua 5.1 is required')
+        result = subprocess.run([lua, str(ROOT / 'tests/unit_flag_scenarios.lua'),
+                                 str(ROOT / 'LEKMOD/Lua/tmp/eui/UnitFlagManager/UnitFlagManager.lua.ignore')],
+                                capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
 
     @classmethod
     def setUpClass(cls):
