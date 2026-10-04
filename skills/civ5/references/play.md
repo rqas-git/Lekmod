@@ -31,3 +31,8 @@ record actions actually observed, not merely enabled in the scenario.
 For scripted movement in this v35.4 build, send the normal network destination
 mission and inspect the result. The exposed unit:GeneratePath Lua method is NYI;
 it cannot provide a route. A greedy one-hex walk can stall at terrain or borders.
+
+Inspect game options by name with Game.IsOption("GAMEOPTION_..."). In this
+Lekmod build, GameInfo.GameOptions database IDs differ from the engine enum;
+passing a row ID can report the wrong rule. Confirm loaded quick-combat and
+quick-movement settings when planning background tests.

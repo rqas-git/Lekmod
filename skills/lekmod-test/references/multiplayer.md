@@ -272,3 +272,43 @@ actual damage; war declarations alone are insufficient. Do not call
 unit:GeneratePath: the exposed v35.4 Lua binding raises NYI. Normal destination
 missions use the engine pathfinder. Changing a running hook is not a substitute
 for validating a revised hook from a fresh launch.
+
+Query active game rules by name: Game.IsOption("GAMEOPTION_..."). In the
+October 4 v35.4 runtime, GameInfo.GameOptions.QUICK_COMBAT.ID was 18 but the
+engine enum was 15; a custom rule had database ID 66 and no exported enum.
+Passing a database row ID falsely reported simultaneous turns and No Destructive
+Recapture as disabled. Name queries agreed with PreGame.GetGameOption. Verify
+quick combat/movement in the loaded game too; configuration preferences alone
+did not enable them in the network checkpoint.
+
+The command hook supplies validationLedger as a parameter. Reuse that existing
+handle for final probes instead of opening the same namespace again. This avoids
+unnecessary competing handles; the cause of the observed stopped callbacks is
+still unestablished. The revised hook records named active rules and requests
+quick combat/movement through the stock host-only Network.SendGameOptions path.
+Verify acknowledgement before attributing animation delays to the core.
+For team games, skip own-team war requests and prefer an opponent already at war.
+The local movement helper now falls back to a normal destination mission when
+it stalls, while refusing a fallback into a peaceful enemy city.
+
+In the v35.4 team scenario, raw found-mission requests were not acknowledged
+before the hook ended turn zero. The native crash stack reached
+CvPlayerCulture::GetInfluencePerTurn with a null capital; this upstream path
+assumes a capital exists once tourism modifiers are queried. The native guard
+now leaves the capital modifier at zero when no capital exists. The official
+Windows DLL remains unchanged. Use the normal Game.HandleAction founding action
+and wait for GetNumCities()>0 before ending the initial turn; the revised fresh
+team run acknowledged both human capitals and completed turns 0–30.
+
+Game.CanDoControl(CONTROL_ENDTURN) is not an acknowledgement: DoControl also
+checks engine AI and unit-update completion before sending turn complete.
+Read Network.HasSentNetTurnComplete and subsequent turn state. Normal
+CONTROL_AUTOMOVES sends the game's queued movement request; explicit requests
+helped a test continue, but the cause of its waiting end-turn requests was not
+isolated. Record interventions and do not bypass engine gates.
+
+Final counter probes can retain rows for consumed settlers or destroyed units.
+Filter every unit/city field against the current checkpoint's unitIDs/cityIDs,
+including supplementary counters. Compare fresh repeated probes from both peers
+with processing=false and verify each nonce. Matching live state does not erase
+earlier synchronization warnings or unrelated runtime errors.
