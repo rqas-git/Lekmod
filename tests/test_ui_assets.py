@@ -74,6 +74,9 @@ class UIAssetsTests(unittest.TestCase):
         cls.addClassCleanup(cls.temporary.cleanup)
         cls.reference = Path(cls.temporary.name)
         extract_lua(cls.reference, BASELINE)
+        for name in ('StagingRoom.lua', 'StagingRoom.xml', 'EnemyUnitPanel.lua'):
+            path = 'LEKMOD/Lua/tmp/ui/' + ('UnitPanel/' if name == 'EnemyUnitPanel.lua' else 'Lobby/') + name + '.ignore'
+            (cls.reference / path).write_bytes(reference_original(path, '201df6c56b41cc353ec01b2523bf852733d922e8'))
         module_path = cls.reference / 'original_ui_manager.py'
         module_path.write_bytes(original('LekmodInstaller/ui_manager.py'))
         spec = importlib.util.spec_from_file_location('original_ui_manager', module_path)

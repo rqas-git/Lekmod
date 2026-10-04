@@ -4,7 +4,7 @@ import subprocess
 from source_text import canonical
 
 PREFIX = 'LEKMOD_DLL/CvGameCoreDLL_Expansion2/'
-BASE = '70aa6ad5e343845903719aea48f55bbba8edebb8'
+BASE = '201df6c56b41cc353ec01b2523bf852733d922e8'
 
 
 def cpp_checks(directory, source, extract, compile_run):
@@ -42,7 +42,11 @@ def cpp_checks(directory, source, extract, compile_run):
     assert 'Method(GetNumInternationalTradeRoutesFromCity);' in binding
     assert 'CvLuaCity::GetInstance(L, 2)' in extract(binding, 'int CvLuaPlayer::lGetNumInternationalTradeRoutesFromCity(')
 
-    assert canonical(extract(binding, 'int CvLuaPlayer::lGetTradeRoutes(')) == canonical(extract(old(PREFIX+'Lua/CvLuaPlayer.cpp'), 'int CvLuaPlayer::lGetTradeRoutes('))
+    routes = extract(binding, 'int CvLuaPlayer::lGetTradeRoutes(')
+    routes = routes.replace('pConnection->GetTurnsRemaining(GET_PLAYER(pConnection->m_eOriginOwner).GetTrade()->GetTradeRouteSpeed(pConnection->m_eDomain))',
+                            'pConnection->m_iTurnRouteComplete - GC.getGame().getGameTurn()')
+    routes = routes.replace('\t\tlua_pushboolean(L, true);\n\t\tlua_setfield(L, t, "TurnsLeftIncludesCurrentTurn");\n', '')
+    assert canonical(routes) == canonical(extract(old(PREFIX+'Lua/CvLuaPlayer.cpp'), 'int CvLuaPlayer::lGetTradeRoutes('))
 
     astar = source(PREFIX+'CvAStar.cpp')
     header = source(PREFIX+'CvAStar.h')

@@ -10,8 +10,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'LekmodInstaller'))
 from ui_assets import load_manifest, materialize_release
 
-STOCK_VERSION = 'v35.3'
-STOCK_DLL_SHA256 = 'c8c265d26e6d67bab7c99371692a5b001d274cea6e80a3d9794b5626c994f357'
+STOCK_VERSION = 'v35.4'
+STOCK_DLL_SHA256 = 'a5ac79567eff7c738f12c655457d2255199ef5da1e9e43aeb0e2b688b9161fd2'
 
 
 def validate_native(library):
@@ -47,7 +47,7 @@ def package(source, destination, dll=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source', type=Path, default=ROOT / 'LEKMOD')
-    parser.add_argument('--dll', type=Path, help='Official v35.3 DLL; must match the pinned release hash')
+    parser.add_argument('--dll', type=Path, help='Official v35.4 DLL; must match the pinned release hash')
     destination = parser.add_mutually_exclusive_group(required=True)
     destination.add_argument('--destination', type=Path, help='New package directory')
     destination.add_argument('--materialize', action='store_true', help='Restore generated paths in the checkout')

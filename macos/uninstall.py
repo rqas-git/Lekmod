@@ -3,7 +3,7 @@ import json
 import shutil
 
 import crossplay
-from game_install import (ASSETS, CORE, LEKMAP, LEGACY_LEKMAP, MANIFEST, STOCK_CORE_SHA256, ensure_closed,
+from game_install import (ASSETS, CORE, LEKMAP, LEGACY_LEKMAPS, MANIFEST, STOCK_CORE_SHA256, ensure_closed,
                           installation_lock, installed_state, replace_app, sha256,
                           sign_app, validate_app, validate_core)
 
@@ -56,7 +56,8 @@ def uninstall(app, component, log=print):
                     validation.pop(key, None)
             else:
                 remove(staged / LEKMAP)
-                remove(staged / LEGACY_LEKMAP)
+                for path in LEGACY_LEKMAPS:
+                    remove(staged / path)
                 for key in ('lekmap_sha256', 'lekmap_source_sha256'):
                     validation.pop(key, None)
             state.update(installer='lekmod-macos')

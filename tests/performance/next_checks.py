@@ -8,7 +8,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
 PREFIX = 'LEKMOD_DLL/CvGameCoreDLL_Expansion2/'
-BASE = '70aa6ad5e343845903719aea48f55bbba8edebb8'
+BASE = '201df6c56b41cc353ec01b2523bf852733d922e8'
 
 
 def baseline(path):

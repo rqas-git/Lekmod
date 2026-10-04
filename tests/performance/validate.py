@@ -20,7 +20,7 @@ import additional_checks
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 CORE = ROOT / 'LEKMOD_DLL/CvGameCoreDLL_Expansion2'
-BASE = '70aa6ad5e343845903719aea48f55bbba8edebb8'
+BASE = '201df6c56b41cc353ec01b2523bf852733d922e8'
 TRADE_BASE = BASE
 
 

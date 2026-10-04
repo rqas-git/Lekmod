@@ -127,7 +127,7 @@ for _,name in ipairs({'LekmapOvalLegacy','LekmapArchipelagoLegacy','LekmapTinyIs
 end
 for seed=1,8 do
     for _,custom in ipairs({false,true}) do
-        local env,_,snapshot = environment('LekmapPangaeaFractalv6.2',seed,{})
+        local env,_,snapshot = environment('LekmapPangaeaFractalv6.3',seed,{})
         local instance = {iNumPlotsX=22+seed, iNumPlotsY=18, iFlags=7, fracXExp=6, fracYExp=5}
         env.FractalWorld.InitFractal(instance,custom and {ridge_flags=3,continent_grain=4,polar=false} or nil)
         print('fractal:'..seed..':'..tostring(custom)..':'..snapshot())

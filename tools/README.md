@@ -1,8 +1,8 @@
-# Packaging for standard Lekmod v35.3
+# Packaging for standard Lekmod v35.4
 
-The checked-in `LEKMOD/CvGameCore_Expansion2.dll` is the official v35.3 binary.
+The checked-in `LEKMOD/CvGameCore_Expansion2.dll` is the official v35.4 binary.
 The packager pins its SHA-256 to
-`c8c265d26e6d67bab7c99371692a5b001d274cea6e80a3d9794b5626c994f357`.
+`a5ac79567eff7c738f12c655457d2255199ef5da1e9e43aeb0e2b688b9161fd2`.
 It accepts that binary and rejects custom or modified Windows DLLs, including
 the previous audit build, before creating the package.
 
@@ -33,3 +33,11 @@ multiplayer compatibility; the cross-play option remains experimental.
 
 See [the compatibility policy](../COMPATIBILITY.md) for the restored rules,
 retained improvements, test commands, and remaining live validation.
+
+# Agent runtime testing
+
+The repository includes the complete [Lekmod test skill](../skills/lekmod-test/SKILL.md),
+including its native runner, background guard, multiplayer Lua hooks, and Steam
+peer reader. Follow the [Mac and UTM Windows setup guide](../skills/lekmod-test/references/utm-setup.md)
+to provision another testing machine and install the skill. The AI runner is a
+CLI; two-client multiplayer still requires per-run host/join orchestration.

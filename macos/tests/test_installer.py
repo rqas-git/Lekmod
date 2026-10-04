@@ -138,12 +138,14 @@ class InstallerTests(unittest.TestCase):
     def test_uninstall_maps_preserves_native_core_and_other_maps(self):
         self.install()
         write(self.app / game.ASSETS / 'Maps/other.lua', 'keep')
-        write(self.app / game.LEGACY_LEKMAP / 'obsolete.lua', 'old')
+        for path in game.LEGACY_LEKMAPS:
+            write(self.app / path / 'obsolete.lua', 'old')
         digest = game.sha256(self.app / game.CORE)
         remover.uninstall(self.app, 'lekmap', log=lambda _: None)
         self.assertEqual(game.sha256(self.app / game.CORE), digest)
         self.assertFalse((self.app / game.LEKMAP).exists())
-        self.assertFalse((self.app / game.LEGACY_LEKMAP).exists())
+        for path in game.LEGACY_LEKMAPS:
+            self.assertFalse((self.app / path).exists())
         self.assertEqual((self.app / game.ASSETS / 'Maps/other.lua').read_text(), 'keep')
         self.assertFalse(game.installed_state(self.app)['lekmap'])
         self.install('lekmap')
@@ -178,7 +180,8 @@ class InstallerTests(unittest.TestCase):
         dlc, maps = self.app / game.ASSETS / 'DLC', self.app / game.ASSETS / 'Maps'
         write(dlc / 'LEKMOD_old/old.txt', 'previous')
         write(maps / 'unrelated.lua', 'keep')
-        write(self.app / game.LEGACY_LEKMAP / 'obsolete.lua', 'old')
+        for path in game.LEGACY_LEKMAPS:
+            write(self.app / path / 'obsolete.lua', 'old')
         backup = self.install()
         self.assertEqual((backup / game.CORE).read_text(), 'stock')
         self.assertTrue((backup / game.ASSETS / 'DLC/LEKMOD_old/old.txt').exists())
@@ -190,9 +193,10 @@ class InstallerTests(unittest.TestCase):
         self.assertFalse((dlc / 'LEKMOD/Lua/UI/old-eui.lua').exists())
         self.assertFalse((dlc / 'LEKMOD/Windows.DLL').exists())
         self.assertIn('return false', (dlc / 'LEKMOD/Lua/Utilities/Lekmod_version.lua').read_text())
-        self.assertFalse((self.app / game.LEGACY_LEKMAP).exists())
+        for path in game.LEGACY_LEKMAPS:
+            self.assertFalse((self.app / path).exists())
         self.install()
-        self.assertEqual((maps / 'Lekmap v6.2/HBHelper.lua').read_text(), 'helper')
+        self.assertEqual((maps / 'Lekmap v6.3/HBHelper.lua').read_text(), 'helper')
         self.assertEqual((maps / 'unrelated.lua').read_text(), 'keep')
 
     def test_failure_preserves_original(self):

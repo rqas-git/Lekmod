@@ -7,7 +7,7 @@ import xml.etree.ElementTree as ET
 from reference import ROOT, original
 from source_text import canonical
 
-STOCK = '70aa6ad5e343845903719aea48f55bbba8edebb8'
+STOCK = '201df6c56b41cc353ec01b2523bf852733d922e8'
 CORE = 'LEKMOD_DLL/CvGameCoreDLL_Expansion2/'
 
 
@@ -65,6 +65,31 @@ class StockCompatibilityTests(unittest.TestCase):
             with self.subTest(signature=signature):
                 self.assertEqual(canonical(function(current(path), signature)),
                                  canonical(function(stock(path), signature)))
+
+    def test_v354_capture_contact_and_lake_yields_match_stock(self):
+        methods = {
+            'CvPlayer.cpp': ('void CvPlayer::acquireCity(',),
+            'CvMinorCivAI.cpp': ('void CvMinorCivAI::DoFirstContactWithMajor(',),
+            'CvGlobals.cpp': ('int CvGlobals::getNoDestructiveRecaptureTurns(',
+                              'bool CvGlobals::isNoDestructiveRecaptureObsolete('),
+            'CvPlot.cpp': ('int CvPlot::calculateNatureYield(', 'int CvPlot::calculateYield(',
+                           'int CvPlot::getYieldWithBuild('),
+        }
+        for name, signatures in methods.items():
+            for signature in signatures:
+                with self.subTest(signature=signature):
+                    self.assertEqual(canonical(function(current(CORE + name), signature)),
+                                     canonical(function(stock(CORE + name), signature)))
+
+    def test_v354_tithe_and_improvement_defaults_match_stock(self):
+        path = CORE + 'CvBeliefClasses.cpp'
+        def tithe(source):
+            start = source.index('\t\tif (results != NULL)', source.index('std::string key("Belief_YieldChangePerXFollowers")'))
+            return source[start:source.index('\n\t}\n#endif', start)]
+        self.assertEqual(canonical(tithe(current(path))), canonical(tithe(stock(path))))
+        line = 'kUtility.Initialize2DArray(m_piImprovementAdjacentBonusCivilization, 200, iImprovementTypes, -1);'
+        for source in (current(CORE + 'CvImprovementClasses.cpp'), stock(CORE + 'CvImprovementClasses.cpp')):
+            self.assertIn(line, source)
 
     def test_research_binding_preserves_stock_argument_behavior(self):
         self.assert_stock(CORE + 'Lua/CvLuaTeamTech.cpp')

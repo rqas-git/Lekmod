@@ -6,7 +6,9 @@ import subprocess
 import tempfile
 import unittest
 
-from reference import BASELINE, ROOT, original
+from reference import ROOT, original
+
+BASELINE = '201df6c56b41cc353ec01b2523bf852733d922e8'
 
 
 class MapTests(unittest.TestCase):
@@ -37,7 +39,7 @@ class MapTests(unittest.TestCase):
                 ['git', 'ls-tree', '-r', '--name-only', BASELINE, 'Lekmap'], cwd=ROOT, text=True)
             for name in names.splitlines():
                 if name.endswith('.lua'):
-                    (Path(directory) / Path(name).name).write_bytes(original(name))
+                    (Path(directory) / Path(name).name).write_bytes(original(name, BASELINE))
             def run(folder):
                 result = subprocess.run([lua, str(ROOT / 'tests' / script), str(folder)],
                                         capture_output=True, text=True)

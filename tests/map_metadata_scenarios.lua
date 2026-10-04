@@ -20,7 +20,7 @@ end
 for _, name in ipairs({
     'LekmapArchipelagoLegacy', 'LekmapContinentsLegacy', 'LekmapDonutLegacy',
     'LekmapFourCornersv1.2', 'LekmapInlandSeaLegacy', 'LekmapLakesLegacy',
-    'LekmapOvalLegacy', 'LekmapPangaeaFractalv6.2', 'LekmapPangaeaRectangularv4',
+    'LekmapOvalLegacy', 'LekmapPangaeaFractalv6.3', 'LekmapPangaeaRectangularv4',
     'LekmapSmallContinentsLegacy', 'LekmapTeamerMapLegacy', 'LekmapTinyIslandsLegacy',
 }) do
     local env = setmetatable({AssignStartingPlots={}, MultilayeredFractal={},

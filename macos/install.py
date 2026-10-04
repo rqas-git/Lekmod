@@ -11,7 +11,7 @@ import sys
 import eui
 
 from audit import check_imports
-from game_install import (ASSETS, CORE, LEKMAP, LEGACY_LEKMAP, MANIFEST, STOCK_CORE_SHA256, app_path,
+from game_install import (ASSETS, CORE, LEKMAP, LEGACY_LEKMAPS, MANIFEST, STOCK_CORE_SHA256, app_path,
                           detect_apps, ensure_closed, installation_lock,
                           installed_state, replace_app, sha256, sign_app, sign_core, sign_nested,
                           validate_app, validate_core)
@@ -110,7 +110,8 @@ def install(app, component='both', jobs=4, skip_build=False, log=print,
                              core_sha256=sha256(staged / CORE), lekmod=True)
             if maps:
                 destination = staged / LEKMAP
-                for existing in (staged / LEGACY_LEKMAP, destination):
+                for path in (*LEGACY_LEKMAPS, LEKMAP):
+                    existing = staged / path
                     if existing.is_symlink() or existing.is_file():
                         existing.unlink()
                     elif existing.exists():

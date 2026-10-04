@@ -36,7 +36,7 @@ extern "C" ICvGameContext1* DllGetGameContext()
 #if defined(LEKMOD_MACOS)
 __attribute__((constructor)) static void LekmodInitialize()
 {
-    fprintf(stderr, "[Lekmod macOS] Initializing native v35.3 game core\n");
+    fprintf(stderr, "[Lekmod macOS] Initializing native v35.4 game core\n");
     timeBeginPeriod(1);
     CvDllGameContext::InitializeSingleton();
     fprintf(stderr, "[Lekmod macOS] Game context initialized\n");
