@@ -75,8 +75,12 @@ Patch only the copy's EUI `GameSetup/LoadScreen.lua` (or stock
 `UI/FrontEnd/LoadScreen.lua`) to call the existing `OnActivateButtonClicked`
 path for single-player too. Require exactly one matching conditional.
 The initialization event must close the loading screen and unpause before
-starting AI autoplay. Hidden MainMenu update callbacks were unreliable;
-do not try to configure slots through that unverified mechanism.
+starting AI autoplay. Hidden MainMenu SetUpdate callbacks were unreliable.
+An explicit SystemUpdateUI/MainMenu event setup initialized four specified
+civilizations and two teams; verify actual participants after initialization.
+Configure an observer and valid civilization before creation when resetting slots;
+turning a blank closed slot into the observer after creation exposed an invalid
+leader lookup and then a separate engine crash. Keep failed setups as findings.
 
 `Modding.OpenUserData('LekmodBackgroundValidation', 1)` produces a userdata
 with **dot-call** methods: `ledger.SetValue(key, tostring(value))`.
@@ -174,3 +178,35 @@ file. Repair nested signatures before signing the application. Reused bundle
 identifiers and app-only re-signing preceded early exit-255 attempts; a fresh
 identifier plus nested signing restored startup, but those changes were not
 isolated individually. Avoid claiming either alone was the confirmed cause.
+
+## Reproducing an existing-save crash
+
+Copy the user's latest pre-crash save into a fresh isolated profile; preserve the
+original. In the staged MainMenu context, request Events.PlayerChoseToLoadGame
+only after SystemUpdateUI reaches MainMenu. Replace quick-play Automation with a
+waiting stub. Adapt telemetry to require the saved initial turn and autoplay only
+target minus initial turns, retaining the unused observer requirement. Verify
+every saved-turn-to-target snapshot and independently parse the final save.
+Re-sign and update staged hashes after adding hooks. This is an adapted regression
+run, not the runner's default fresh-game acceptance.
+
+On Aspyr 180925/v35.4 with EUI, a turn-80 save reproduced a SIGSEGV in
+CvLuaUnit::lIsGarrisoned/CvUnit::IsGarrisoned at turn 85. Resolving flag units
+through player:GetUnitByID instead of retaining their Lua wrappers completed
+80–110 with a verified turn-110 save. Trace instrumentation altered timing and
+also passed without the repair, so the untraced regression and removed-unit
+callback fixture are the meaningful evidence. A separate allocator abort remains
+unexplained; do not label all crash reports as this same bug.
+
+The InGame/EUI Lua context had no debug table in this test. Avoid debug.traceback
+in temporary hooks unless availability is checked: tracing must not create its
+own runtime errors. MapScriptOptions.OptionID was a string even though Hidden
+was numeric. Convert database IDs with tonumber before numeric comparisons.
+Inspect the engine database and the setup UI query to prove hidden map options;
+source metadata alone is not runtime validation.
+
+A correctly initialized v35.4 Teamer scenario completed turns 0–30 with four
+verified majors on teams 0/1/0/1 and an independent save. Reserve the observer
+before starting, with an explicit civilization, UNASSIGNED claim and observer
+team; then keep the usual autoplay safety check. The earlier post-creation
+conversion of a blank closed slot was not a valid custom-scenario setup.

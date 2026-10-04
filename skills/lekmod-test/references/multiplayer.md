@@ -213,3 +213,62 @@ Removing duplicate v6.2 map folders did not eliminate the initial resync. Do not
 attribute it to a particular seed, map helper or platform until diagnostics prove
 the cause. Reload/reconnect and release-specific capture, belief and yield
 scenarios remain separate coverage requirements.
+
+When a fork adds shared map helpers, compare the entire map-folder inventory and
+hashes on both peers. Uploading only a changed map is insufficient. In the October
+4 validation, public Windows v6.3 had 21 scripts and lacked HBMapOptions, while
+the fork had 24. Updating only Teamer caused LekmapOptions=nil during discovery.
+Install the complete folder and verify every helper before restarting the game.
+An existing lobby's option cache is not evidence that new disk files were loaded.
+Keep any diagnostic map instrumentation separate from the permanent map payload.
+
+A read-only integer-conversion probe narrowed an October 4 map divergence:
+Map.GetPlotByIndex(61.6) returned index 61 on native Aspyr and 62 on Windows;
+86.666... returned 86 versus 87. Windows also rounded 2.5 to 2 and 3.5 to 4,
+while native truncated. The same first random values and initial fractal samples
+preceded a differing shallow-water random call. Fractional fractal dimensions
+and ridge counts therefore need explicit compatibility validation. Do not assume
+Lua 5.1 versions use identical number-to-integer conversion. The pinned Windows
+Lua header contains its x87 nearest-even conversion; test inputs, checked/optional
+arguments, negative values and boundaries when adapting native bindings. The
+native compatibility adapter passed this probe in a staged Teamer game; a fresh
+Pangaea network run then matched all 64 bounded random calls and four fractal
+samples without an initial resync. Sustained gameplay remains a separate check.
+
+For frequent polling, transfer compressed ledger copies and keep full log
+collection for checkpoints or shutdown. In one run, Base64 gzip reduced guest
+SQLite telemetry enough to avoid repeated large pulls. Decode and verify SQLite
+readability and fresh timestamps; compression does not make a live copy atomic.
+RandLog bit 2 includes pregame calls, but map RNG is asynchronous and also needs
+bit 3 to log it. Full fractal/ridge traces can be enormous and slow generation;
+prefer bounded Lua probes and retain only necessary diagnostics for routine runs.
+
+Treat foundRequest/action markers as requests. Confirm city founding, movement,
+construction and damage from subsequent state snapshots; an accepted-looking Lua
+call can precede a rejected or delayed network action. GameInfoActions is a table;
+use pairs when inspecting the normal Game.HandleAction path.
+
+Production requests are asynchronous: after selecting a unit, do not treat a
+still-empty local queue as permission to request fallback production. The hook
+now records its choice before sending it; otherwise a settler could be replaced
+by a building or scout before the first request was acknowledged.
+
+Install revised hooks before a fresh launch. After a live replacement, later external native-ledger
+command updates did not persist; multiple userdata handles were present, but the precise cause was
+not isolated. Use a new prefix and checkpoint reload instead of
+counting a hot-patched harness as a reproducible acceptance run. Track pending
+city production until a nonempty queue acknowledges it, including between ticks.
+
+Build test lobby names from Locale.ConvertTextKey("TXT_KEY_LEKMOD_VERSION").
+JoiningRoom compares that exact token; a v35.4-only label failed when the
+installed token was v35.4.003. For checkpoint hosts, use SetLoadFileName,
+GetFileHeader and ReadActiveSlotCountFromSaveGame as the stock LoadMenu does.
+When reusing a private profile, filter telemetry by the new exact prefix;
+old databases are not evidence that the new client initialized.
+
+The expanded hook’s greedy movement can stall behind obstacles, and its first
+other-player target may be peaceful. Arrange combat deliberately and verify
+actual damage; war declarations alone are insufficient. Do not call
+unit:GeneratePath: the exposed v35.4 Lua binding raises NYI. Normal destination
+missions use the engine pathfinder. Changing a running hook is not a substitute
+for validating a revised hook from a fresh launch.

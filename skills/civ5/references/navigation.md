@@ -28,3 +28,11 @@ Discover redirected Documents and private test profiles rather than assuming pat
 Aspyr documents Steam Internet play versus App Store Hotseat/LAN support;
 experimental cross-platform mod tests need their own evidence.
 [Aspyr Mac FAQ](https://support.aspyr.com/hc/en-us/articles/360020548611-Civilization-V-Mac-FAQ).
+
+Lekmap v6.3's Dummy-1 through Dummy-9 preserve custom-option slots; World Age
+starts at slot 10. Hiding those placeholders preserves save/lobby option IDs;
+deleting them shifts every later option. Updated fork metadata marks them Hidden,
+and both advanced single-player and multiplayer setup filter Hidden=0. Initialize
+all options, including hidden ones, when constructing a lobby programmatically.
+The map can retry generation up to 300 times. Reusing a suitable save avoids
+regeneration; lowering the cap changes generation quality and random consumption.

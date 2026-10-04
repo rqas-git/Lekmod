@@ -71,3 +71,17 @@ as incomplete. Recover only the owned VM, prefer graceful shutdown and verify it
 actual state afterward. In one 4.7.5 recovery, `start --hide` returned Operation not
 available for the stopped test VM, while normal `start` succeeded; the cause was
 not established. Do not assume a timeout means an operation had no effect.
+
+In an October 2026 Windows 11 ARM validation, two owned PowerShell preflights
+containing Get-CimInstance Win32_ComputerSystem grew to roughly 10 GB private
+memory each. Guest commit space was nearly exhausted and DWM/Game Bar crashed.
+Minimal file/hash envelopes worked. The individual query's cause was not isolated;
+avoid repeating a stalled broad preflight or assuming every timeout is an agent
+disconnect. Track each owned guest process and start timestamp; inspect memory
+and task/crash evidence, then stop only confirmed owned jobs. A lightweight
+taskkill recovered memory when another PowerShell cleanup could not start.
+After stopping those two jobs, guest memory load fell from 91% to 31%, available
+commit space rose from about 0.8 GB to 13.9 GB, and the game created its lobby.
+Use an already verified install/user record or a small independent probe instead
+of rediscovering account paths with that query on the affected VM. Keep actual
+Steam identities private and verify distinct peers without dumping account files.

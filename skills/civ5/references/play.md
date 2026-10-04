@@ -27,3 +27,7 @@ The [official vanilla manual](https://downloads.2kgames.com/civ5/site13/communit
 is a starting point, not an exact reference for Brave New World or Lekmod. For a
 mod regression, separate ordinary gameplay coverage from changed mechanics and
 record actions actually observed, not merely enabled in the scenario.
+
+For scripted movement in this v35.4 build, send the normal network destination
+mission and inspect the result. The exposed unit:GeneratePath Lua method is NYI;
+it cannot provide a route. A greedy one-hex walk can stall at terrain or borders.
