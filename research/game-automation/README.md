@@ -29,6 +29,23 @@ Choose pairwise combinations for broad coverage, plus explicit regression cases
 for every changed rule. Random full-game play is supplementary: it rarely reaches
 all conditions and must report unobserved actions as uncovered.
 
+A practical first scenario set:
+
+| Scenario | Required observations | Fast setup |
+| --- | --- | --- |
+| Fresh generation | Matching RNG/starting state and living participants | Small fixed seed, then separate representative Pangaea seeds |
+| Expansion/economy | Founding, workers, research, policies, trade | Checkpoint just before completions |
+| War/combat | Human/AI contact, melee/ranged damage, promotions, peace | Opposing units and cities already within reach |
+| Capture/recapture | Ownership, population, buildings and both rule values | Two fixtures before the capture action |
+| Religion/yields | Tithe, modified civilization/natural-wonder and adjacency yields | Relevant belief, civilization and tiles already present |
+| City-states/upgrades | Rewards at relevant eras, crossbow defense, embarkation | Fixtures on either side of the affected transition |
+| Persistence/network | Save/reload, disconnect/reconnect, settled state | Reuse the action checkpoints with both peers |
+| Full-game soak | AI interaction, elimination and actual victory outcome | Quick speed, explicit outcome and timeout predicates |
+
+These are a proposed implementation sequence, not scenarios all validated by
+this task. Keep assertions for changed mechanics explicit even when choosing
+pairwise setup combinations for the broader matrix.
+
 Retain per-peer RNG traces, network/resync logs, current entity rosters, saves,
 crash reports, map/source/core hashes and a replay manifest. Keep UI rendering
 checks separate from background simulations. Run one native Steam client at a
@@ -127,3 +144,11 @@ engineering candidate for avoiding that translation layer, not a measured speedu
 Keep the Mac client and official DLL in the acceptance pair. Increasing VM CPU
 count alone does not demonstrate improved game or harness throughput. [UTM also
 distinguishes guest CPU architecture from hardware virtualization](https://docs.getutm.app/settings-qemu/system/).
+
+
+Separate cold application/database initialization, map-generation time, turns,
+and telemetry/transfer overhead in measurements. The current launcher does not
+clear the game's cache on every launch; a new test profile is intentionally cold.
+Checkpoint loading avoids fresh map generation, while application startup still
+has a cost. Reusing an already running client could reduce that cost, but needs
+proven scenario-state reset and fresh acknowledgements before it is trustworthy.
