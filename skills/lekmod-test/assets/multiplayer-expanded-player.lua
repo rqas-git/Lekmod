@@ -8,6 +8,7 @@ local mpOldUpdate=OnUpdate
 local mpElapsed=0
 local mpReady=false
 local mpUnitActions={}
+local mpCityOrders={}
 local mpTargetSince=nil
 local mpSaved=false
 local mpCommand=nil
@@ -190,7 +191,9 @@ local function mpTick()
   if best then Network.SendResearch(best.ID,0,-1,false);mpMark("lastResearch",best.Type) end
  end
  for city in p:Cities() do
-  if city:GetOrderQueueLength()==0 then
+  local cityID=city:GetID()
+  if city:GetOrderQueueLength()>0 then mpCityOrders[cityID]=nil end
+  if city:GetOrderQueueLength()==0 and not mpCityOrders[cityID] then
    local chosen=nil
    local settler,worker=false,false
    for unit in p:Units() do local r=GameInfo.Units[unit:GetUnitType()];settler=settler or r.Found;worker=worker or (r.WorkRate and r.WorkRate>0) end
@@ -201,6 +204,7 @@ local function mpTick()
      or (p:GetNumCities()>=2 and worker and (name=="UNIT_ARCHER" or name=="UNIT_WARRIOR"))
     if wanted and u and city:CanTrain(u.ID) then
      chosen=u
+     mpCityOrders[cityID]=true
      Game.CityPushOrder(city,OrderTypes.ORDER_TRAIN,u.ID,false,false,false)
      mpMark("lastProduction",u.Type);break
     end
@@ -211,11 +215,13 @@ local function mpTick()
     if b and city:CanConstruct(b.ID) then chosen=b;break end
    end
    if chosen then
+    mpCityOrders[cityID]=true
     Game.CityPushOrder(city,OrderTypes.ORDER_CONSTRUCT,chosen.ID,false,false,false)
     mpMark("lastProduction",chosen.Type)
    else
     for unit in GameInfo.Units() do
      if city:CanTrain(unit.ID) and unit.Combat>0 then
+      mpCityOrders[cityID]=true
       Game.CityPushOrder(city,OrderTypes.ORDER_TRAIN,unit.ID,false,false,false)
       mpMark("lastProduction",unit.Type);break
      end

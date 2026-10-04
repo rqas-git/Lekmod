@@ -32,7 +32,9 @@ function OnStagingUpdate(dt)
   if PreGame.GetLoadFileName()~="" then
    if not PreGame.IsReady(id) then OnReadyCheck(true) end
    stageMark("phase","checkpoint ready")
-   if Matchmaking.IsHost() and not stageRules then stageRules=true;LaunchGame();stageMark("phase","checkpoint launch requested") end
+   if Matchmaking.IsHost() and not stageRules and PreGame.IsReady(0) and PreGame.IsReady(1) then
+    stageRules=true;LaunchGame();stageMark("phase","checkpoint launch requested")
+   end
    return
   end
   if Matchmaking.IsHost() and not stageRules then

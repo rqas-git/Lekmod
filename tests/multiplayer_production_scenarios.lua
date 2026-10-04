@@ -27,7 +27,8 @@ local cases={
 }
 for _,case in ipairs(cases) do
  local requests={}
- local city={GetOrderQueueLength=function() return case.queued or 0 end,
+ mpCityOrders={}
+ local city={GetID=function() return 1 end,GetOrderQueueLength=function() return case.queued or 0 end,
   GetPopulation=function() return case.population end,
   CanTrain=function() return true end,CanConstruct=function() return true end}
  p={Cities=function() return iterator({city}) end,GetNumCities=function() return case.cities end,
@@ -38,7 +39,12 @@ for _,case in ipairs(cases) do
   end}
  Game={CityPushOrder=function(_,order,id) requests[#requests+1]={order,id} end}
  produce()
+ produce()
  assert(#requests==(case.expected and 1 or 0),'production overwritten before acknowledgement')
- if case.expected then assert(requests[1][2]==case.expected,'wrong production priority') end
+ if case.expected then
+  assert(requests[1][2]==case.expected,'wrong production priority')
+  case.queued=1;produce();case.queued=0;produce()
+  assert(#requests==2,'next completed queue did not allow new production')
+ end
 end
 print('5 asynchronous production scenarios passed')
