@@ -88,3 +88,5 @@ inline int _itoa_s(int value,char* dst,size_t n,int radix) {
 template<size_t N> int _itoa_s(int value,char (&dst)[N],int radix) {return _itoa_s(value,dst,N,radix);}
 template<size_t N> int vsprintf_s(char (&dst)[N],const char* fmt,va_list args) {return vsnprintf(dst,N,fmt,args);}
 #define MAXINT INT_MAX
+
+#include "lua_compat.hpp"

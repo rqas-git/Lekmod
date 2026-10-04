@@ -10,6 +10,21 @@ from reference import ROOT
 
 
 class LuaBindingTests(unittest.TestCase):
+    def test_native_integer_conversion_matches_observed_windows_rounding(self):
+        local = Path(os.environ.get('LUA51', '/nonexistent')).parent
+        if not (local / 'liblua.a').is_file():
+            self.skipTest('Set LUA51 to a Lua 5.1 build with liblua.a')
+        with tempfile.TemporaryDirectory() as directory:
+            executable = Path(directory) / 'lua-integer-conversion'
+            command = ['c++', '-std=c++14', '-fsanitize=undefined',
+                       '-I' + str(ROOT / 'macos/include'), '-I' + str(local),
+                       str(ROOT / 'tests/lua_integer_conversion.cpp'),
+                       str(local / 'liblua.a'), '-lm', '-o', str(executable)]
+            build = subprocess.run(command, capture_output=True, text=True)
+            self.assertEqual(build.returncode, 0, build.stdout + build.stderr)
+            result = subprocess.run([str(executable)], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_inherited_const_void_and_argument_wrappers(self):
         compiler = os.environ.get('CXX') or shutil.which('c++')
         if not compiler or os.name == 'nt':
@@ -32,7 +47,8 @@ class LuaBindingTests(unittest.TestCase):
             (directory / 'player_adapter.h').write_text(adapter)
             executable = directory / 'lua-bindings'
             command = [compiler, '-std=c++14', '-DLEKMOD_MACOS', '-I' + str(directory),
-                       '-I' + str(core / 'CvGameCoreDLLUtil/include'), str(ROOT / 'tests/lua_bindings.cpp'),
+                       '-I' + str(core / 'CvGameCoreDLLUtil/include'), '-I' + str(ROOT / 'macos/include'),
+                       str(ROOT / 'tests/lua_bindings.cpp'),
                        *flags, '-o', str(executable)]
             build = subprocess.run(command, capture_output=True, text=True)
             self.assertEqual(build.returncode, 0, build.stdout + build.stderr)

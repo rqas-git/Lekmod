@@ -4,6 +4,7 @@ extern "C" {
 #include <lua.h>
 #include <lauxlib.h>
 }
+#include "lua_compat.hpp"
 #include "CvLuaMethodWrapper.h"
 
 struct CvPlayer {
@@ -53,5 +54,10 @@ int main() {
     lua_pushlightuserdata(L, &player);
     for (int i = 1; i <= 4; ++i) lua_pushinteger(L, i);
     assert(lua_pcall(L, 5, LUA_MULTRET, 0) == 0 && lua_gettop(L) == 1 && lua_tointeger(L, -1) == 18);
+    lua_settop(L, 0);
+    lua_pushcfunction(L, CvLuaPlayer::set);
+    lua_pushlightuserdata(L, &player);
+    lua_pushnumber(L, 3.5);
+    assert(lua_pcall(L, 2, LUA_MULTRET, 0) == 0 && player.value == 4);
     lua_close(L);
 }
